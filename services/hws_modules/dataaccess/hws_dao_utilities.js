@@ -13,7 +13,7 @@ const options = {
   multipleStatements: true
 };
 
-if (config.INSTANCE_CONNECTION_NAME && config.NODE_ENV === 'production') {
+if (config.INSTANCE_CONNECTION_NAME && config.NODE_ENV === 'development') {
   options.socketPath = `/cloudsql/${config.INSTANCE_CONNECTION_NAME}`;
 }
 
