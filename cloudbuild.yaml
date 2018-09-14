@@ -1,8 +1,8 @@
 steps:
 - name: gcr.io/cloud-builders/git
   args: ['clone', '-b', 'stg', ' https://bitbucket.org/tripdizer/tripdizer']
-  id: 1
+  id: 'CHECKOUT'
 
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'public/app.yaml', '--project', 'tripdizer-stg', '--promote']
-  id: 2
+  id: 'GCLOUD DEPLOY'
