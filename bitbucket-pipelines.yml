@@ -28,8 +28,8 @@ pipelines:
                       - echo ${GOOGLE_CLIENT_SECRET_DEV} > client-secret.json
                       - gcloud auth activate-service-account --key-file client-secret.json
                       - echo "Deploying Public"
-                      - gcloud app deploy public/app.yaml --project tripdizer-dev --promote
-                      #- echo "Deploying Services"
-                      #- gcloud --quiet --verbosity=error app deploy services/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
-                      #- echo "Deploying Dashboard"
-                      #- gcloud --quiet --verbosity=error app deploy dashboard/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
+                      - gcloud --quiet --verbosity=error app deploy public/app.yaml --project tripdizer-dev --promote
+                      - echo "Deploying Services"
+                      - gcloud --quiet --verbosity=error app deploy services/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
+                      - echo "Deploying Dashboard"
+                      - gcloud --quiet --verbosity=error app deploy dashboard/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
