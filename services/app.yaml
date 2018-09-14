@@ -15,7 +15,7 @@ runtime: nodejs
 env: flex
 service: tripdizer-backend
 beta_settings:
-  cloud_sql_instances: feisty-parity-188109:europe-west1:tripdizer
+  cloud_sql_instances: tripdizer-stg:europe-west2:tripdizer-stg
 
 manual_scaling:
   instances: 1
