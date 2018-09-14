@@ -6,32 +6,41 @@ image: node:6.9.4
 pipelines:
   default:
     - step:
-       name: Test Node JS
+       name: Download Google Cloud SDK
        trigger: automatic
        script:
-         - node --version
-
-  branches:
-    master:
-    - step:
-          name: Deploying to dev
-          deployment: test
-          trigger: automatic
-          script:
                       # Install Google App Engine SDK
                       - curl -o /tmp/google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-155.0.0-linux-x86_64.tar.gz
                       - tar -xvf /tmp/google-cloud-sdk.tar.gz -C /tmp/
                       - /tmp/google-cloud-sdk/install.sh -q
                       - source /tmp/google-cloud-sdk/path.bash.inc
-                      # deploy & test deployment
-                      # - echo "key = '${GOOGLE_API_KEY_DEV}'" > api_key.py
-                      - echo ${GOOGLE_CLIENT_SECRET_DEV} > client-secret.json
-                      - echo ${GOOGLE_CLIENT_SECRET_DEV}
-                      - gcloud auth activate-service-account --key-file client-secret.json
-                      - gcloud projects list
-                      - echo "Deploying Public"
+  branches:
+    master:
+    - parallel:
+     - step:
+          name: Deploy Public to DEV environment
+          deployment: test
+          trigger: automatic
+          script:
+                      - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
+                      - gcloud auth activate-service-account --key-file dev-client-secret.json
+                      - echo "Deploy"
                       - gcloud --quiet --verbosity=error app deploy public/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
-                      - echo "Deploying Services"
+     - step:
+          name: Deploy Services to DEV environment
+          deployment: test
+          trigger: automatic
+          script:
+                      - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
+                      - gcloud auth activate-service-account --key-file dev-client-secret.json
+                      - echo "Deploy"
                       - gcloud --quiet --verbosity=error app deploy services/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
-                      - echo "Deploying Dashboard"
+     - step:
+          name: Deploy Dashboard to DEV environment
+          deployment: test
+          trigger: automatic
+          script:
+                      - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
+                      - gcloud auth activate-service-account --key-file dev-client-secret.json
+                      - echo "Deploy"
                       - gcloud --quiet --verbosity=error app deploy dashboard/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
