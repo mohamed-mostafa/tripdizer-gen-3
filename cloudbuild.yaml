@@ -1,6 +1,6 @@
 steps:
   - name: gcr.io/cloud-builders/git
-      args: ['clone', '-b', 'stg', ' https://bitbucket.org/tripdizer/tripdizer']
+      args: ['clone', ' https://bitbucket.org/tripdizer/tripdizer']
       id: 1
 
   - name: gcr.io/cloud-builders/gcloud
