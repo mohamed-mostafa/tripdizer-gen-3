@@ -8,6 +8,7 @@ pipelines:
     - step:
        name: Download Google Cloud SDK
        trigger: automatic
+       deployment: test
        script:
                       # Install Google App Engine SDK
                       - curl -o /tmp/google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-155.0.0-linux-x86_64.tar.gz
@@ -17,28 +18,22 @@ pipelines:
   branches:
     master:
     - parallel:
-     - step:
+      - step:
           name: Deploy Public to DEV environment
-          deployment: test
-          trigger: automatic
           script:
                       - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
                       - gcloud auth activate-service-account --key-file dev-client-secret.json
                       - echo "Deploy"
                       - gcloud --quiet --verbosity=error app deploy public/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
-     - step:
+      - step:
           name: Deploy Services to DEV environment
-          deployment: test
-          trigger: automatic
           script:
                       - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
                       - gcloud auth activate-service-account --key-file dev-client-secret.json
                       - echo "Deploy"
                       - gcloud --quiet --verbosity=error app deploy services/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
-     - step:
+      - step:
           name: Deploy Dashboard to DEV environment
-          deployment: test
-          trigger: automatic
           script:
                       - echo ${GOOGLE_CLIENT_SECRET_DEV} > dev-client-secret.json
                       - gcloud auth activate-service-account --key-file dev-client-secret.json
