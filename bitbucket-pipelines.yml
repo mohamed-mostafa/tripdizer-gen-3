@@ -26,9 +26,11 @@ pipelines:
                       # deploy & test deployment
                       # - echo "key = '${GOOGLE_API_KEY_DEV}'" > api_key.py
                       - echo ${GOOGLE_CLIENT_SECRET_DEV} > client-secret.json
+                      - echo ${GOOGLE_CLIENT_SECRET_DEV}
                       - gcloud auth activate-service-account --key-file client-secret.json
+                      - gcloud projects list
                       - echo "Deploying Public"
-                      - gcloud --quiet --verbosity=error app deploy public/app.yaml --project tripdizer-dev --promote
+                      - gcloud --quiet --verbosity=error app deploy public/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
                       - echo "Deploying Services"
                       - gcloud --quiet --verbosity=error app deploy services/app.yaml --project ${CLOUDSDK_CORE_PROJECT_DEV} --promote
                       - echo "Deploying Dashboard"
