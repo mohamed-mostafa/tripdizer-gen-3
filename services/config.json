@@ -1,9 +1,8 @@
 {
-  "GCLOUD_PROJECT": "feisty-parity-188109",
+  "GCLOUD_PROJECT": "tripdizer-prod",
   "DATA_BACKEND": "cloudsql",
   "MYSQL_USER": "application",
-  "MYSQL_PASSWORD": "P@ssw0rd",
-  "INSTANCE_CONNECTION_NAME": "feisty-parity-188109:europe-west1:tripdizer",
-  "NODE_ENV": "production",
-  "SECRET": "TRIPDIZER-JWT-SECRET"
+  "MYSQL_PASSWORD": "tr1pd1zerP@ssw0rd",
+  "INSTANCE_CONNECTION_NAME": "tripdizer-prod:europe-west2:tripdizer-prod",
+  "NODE_ENV": "production"
 }
