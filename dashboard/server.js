@@ -12,6 +12,10 @@ var start = () => {
 	var passport = auth.passport;
 	var bodyParser = require('body-parser');
 	var flash = require('express-flash');
+	var locals = {
+		// serverURL: 'http://localhost:8080' // local backend server
+		serverURL: 'https://tripdizer-backend-dot-tripdizer-dev.appspot.com' // remote test backend server
+	};
 
 	// your express configuration here
 	app.use('/', express.static(path.join(__dirname, 'static'))); // let the static folder be static exposed folder
@@ -34,6 +38,7 @@ var start = () => {
 	// routes
 	app.get('/admin/login', (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Log in'
 		};
 		res.render('pages/login', {
@@ -59,6 +64,7 @@ var start = () => {
 	});
 	app.get('/admin/home', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Home',
 			controller: 'HomePageContent'
 		};
@@ -68,6 +74,7 @@ var start = () => {
 	});
 	app.get('/admin/users', auth.isAuthenticatedAsAdmin, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Users',
 			controller: 'UsersPageContent'
 		};
@@ -77,6 +84,7 @@ var start = () => {
 	});
 	app.get('/admin/partners', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Partners',
 			controller: 'PartnersPageContent'
 		};
@@ -86,6 +94,7 @@ var start = () => {
 	});
 	app.get('/admin/countries', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Countries',
 			controller: 'CountriesPageContent'
 		};
@@ -95,6 +104,7 @@ var start = () => {
 	});
 	app.get('/admin/itineraries', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Itineraries',
 			controller: 'ItinerariesPageContent'
 		};
@@ -104,6 +114,7 @@ var start = () => {
 	});
 	app.get('/admin/group-trips', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Group Trips',
 			controller: 'GroupTrips'
 		};
@@ -113,6 +124,7 @@ var start = () => {
 	});
 	app.get('/admin/videos', auth.isAuthenticated, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Videos',
 			controller: 'Videos'
 		};
@@ -122,6 +134,7 @@ var start = () => {
 	});
 	app.get('/admin/statuses', auth.isAuthenticatedAsAdmin, (req, res) => {
 		res.locals = {
+			...locals,
 			title: 'Folders',
 			controller: 'Statuses'
 		};
