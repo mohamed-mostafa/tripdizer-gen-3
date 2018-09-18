@@ -23,9 +23,9 @@
                   <th>Traveler Mobile</th>
                   <th>Request Date</th>
                   <th>Request Status</th>
-                  <%if (user.isAdmin) { %>
+                  
                   <th></th>
-                  <% } %>
+                  
                   <th>Request Details</th>
                   <th>User</th>
                 </tr>
@@ -45,7 +45,6 @@
                       <option ng-repeat="status in statuses" ng-value="status.id" ng-selected="status.id == order.status">{{status.title}}</option>
                     </select>
                   </td>
-                  <%if (user.isAdmin) { %>
                   <td>
                     <label>
                       <input type="checkbox" name="orderEdit" ng-checked="order.edit" ng-click="toggleOptions(order.id, 'edit')"> Edit
@@ -57,7 +56,6 @@
                       <input type="checkbox" name="orderPackageSent" ng-checked="order.packageSent" ng-click="toggleOptions(order.id, 'Package_Sent')"> Package Sent
                     </label>
                   </td>
-                  <% } %>
                   <td>
                     <i class="ion-clipboard cursor" ng-click="openFullDetailsDialog(order.id)"> Full Details</i>
                   </td>
