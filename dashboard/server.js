@@ -14,7 +14,7 @@ var start = () => {
 	var flash = require('express-flash');
 	var locals = {
 		// serverURL: 'http://localhost:8080' // local backend server
-		serverURL: 'https://tripdizer-backend-dot-tripdizer-dev.appspot.com' // remote test backend server
+		serverURL: 'https://tripdizer-backend-dot-tripdizer-stg.appspot.com' // remote test backend server
 	};
 
 	// your express configuration here
