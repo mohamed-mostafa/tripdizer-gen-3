@@ -3,8 +3,7 @@
  */
 var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", ['textAngular'])
 	.run(function ($rootScope) {
-		// $rootScope.serverURL = 'http://localhost:8080'; // local backend server
-		$rootScope.serverURL = 'https://tripdizer-backend-dot-tripdizer-stg.appspot.com'; // remote test backend server
+		$rootScope.serverURL = globalVariables.serverURL;
 	})
 	.config(['$locationProvider', function ($locationProvider) {
 		$locationProvider.html5Mode(false);
@@ -16,7 +15,7 @@ var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", 
 			return {
 				request: function (config) {
 					config.headers = config.headers || {};
-					const JWToken = cuurentGlobalToken;
+					const JWToken = globalVariables.curentGlobalToken;
 					if (JWToken) {
 						config.headers['Authorization'] = JWToken;
 					}
