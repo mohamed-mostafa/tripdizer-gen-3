@@ -18,6 +18,9 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 	$scope.currentOrder = null;
 	$scope.selectedUser = null;
 	$scope.searchCriteria = {};
+	$scope.totalItems = 0;
+	$scope.currentPage = 1;
+	$scope.numPerPage = 10;
 	$scope.users = [];
 	$scope.loading = false;
 	$scope.serverError = false;
@@ -88,6 +91,9 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 		});
 	};
 	$scope.refreshOrders = function (statusId) {
+		if ($scope.currentRequest != statusId) {
+			$scope.currentPage = 1;
+		}
 		$scope.currentRequest = statusId;
 		const statusIndex = $scope.statuses.findIndex(state => state.id === statusId);
 		const statusTitle = statusIndex !== -1 ? $scope.statuses[statusIndex].title : '';
@@ -99,9 +105,10 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 		$scope.refreshingOrders = true;
 		$scope.collapseAdvancedSearchIfExpanded();
 
-		$http.get($rootScope.serverURL + "/request/statuses/summaries?statuses=" + $scope.currentRequest).success(
+		$http.get($rootScope.serverURL + "/request/statuses/summaries?statuses=" + $scope.currentRequest + "&page=" + $scope.currentPage + "&size=" + $scope.numPerPage).success(
 			function (response) {
-				response = response.sort((a, b) => b.id - a.id).map(function (request) {
+				$scope.totalItems = response.totalRows;
+				response = response.requests.sort((a, b) => b.id - a.id).map(function (request) {
 					if (request.date) request.date = new Date(request.date);
 					if (request.traveler) request.traveler.dateOfBirth = new Date(request.traveler.dateOfBirth);
 					if (request.departureDate) request.departureDate = new Date(request.departureDate);
@@ -489,6 +496,10 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 			$scope.serverErrorMessage = err;
 			$scope.loading = false;
 		});
+	}
+
+	$scope.pageChanged = function () {
+		$scope.refreshOrders($scope.currentRequest);
 	}
 
 	// initialize the date range picker

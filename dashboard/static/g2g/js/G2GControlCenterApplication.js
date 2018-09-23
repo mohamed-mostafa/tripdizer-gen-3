@@ -1,7 +1,7 @@
 /**
  * 
  */
-var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", ['textAngular'])
+var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", ['textAngular', 'ui.bootstrap'])
 	.run(function ($rootScope) {
 		$rootScope.serverURL = globalVariables.serverURL;
 	})

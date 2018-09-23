@@ -77,7 +77,7 @@ var createNewRequest = function (request, onSuccess, onFailure) {
 	});
 };
 
-var getRequestSummariesByStatus = function (statuses, onSuccess, onFailure) {
+var getRequestSummariesByStatus = function (statuses, page, size, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
@@ -86,9 +86,11 @@ var getRequestSummariesByStatus = function (statuses, onSuccess, onFailure) {
 			console.log(err);
 			onFailure(err);
 		} else {
+			var limit = isNaN(size) ? 10 : size * 1;
+			var offset = ((isNaN(page) ? 1 : page) - 1) * limit;
 			// execute the query
-			var query = 'SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id WHERE tr.Status in (?) ORDER BY tr.Date DESC, ti.Interest_Id';
-			connection.query(query, [statuses], function (err, rows) {
+			var query = 'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?);SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY tr.Date DESC, ti.Interest_Id';
+			connection.query(query, [statuses, statuses, offset, limit], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					console.log("An error occurred while trying to find requests with statuses " + statuses);
@@ -98,6 +100,8 @@ var getRequestSummariesByStatus = function (statuses, onSuccess, onFailure) {
 				} else {
 					// no error is thrown
 					var requests = [];
+					var totalRows = rows[0][0].Total_Rows;
+					rows = rows[1];
 					if (rows.length != 0) {
 						// populate the user attributes
 						for (var i = 0; i < rows.length; i++) {
@@ -158,7 +162,10 @@ var getRequestSummariesByStatus = function (statuses, onSuccess, onFailure) {
 						}
 					}
 					connection.end();
-					onSuccess(requests);
+					onSuccess({
+						totalRows: totalRows,
+						requests: requests
+					});
 				}
 			});
 		}

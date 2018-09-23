@@ -42,7 +42,9 @@ var getRequestSummaries = function (req, res) {
 	try {
 		// call the business function and give it a callback function 
 		var statuses = req.query.statuses;
-		requestsBusiness.getRequestSummaries(statuses.split(','),
+		var page = req.query.page;
+		var size = req.query.size;
+		requestsBusiness.getRequestSummaries(statuses.split(','), page, size,
 			function (requestSummaries) {
 				res.json(requestSummaries);
 			},
