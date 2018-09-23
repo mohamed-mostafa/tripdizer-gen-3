@@ -87,8 +87,8 @@
           </tr>
         </tbody>
       </table>
-      <pagination total-items="totalItems" ng-model="currentPage" items-per-page="numPerPage" boundary-links="true"
-        ng-change="pageChanged()" class="pull-right"></pagination>
+      <pagination total-items="totalItems" ng-model="currentPage" items-per-page="numPerPage" max-size="10"
+        boundary-links="true" ng-change="pageChanged()" class="pull-right"></pagination>
     </div>
     <!-- /.box-body -->
   </div>

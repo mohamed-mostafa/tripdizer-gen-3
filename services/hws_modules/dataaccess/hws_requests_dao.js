@@ -89,7 +89,7 @@ var getRequestSummariesByStatus = function (statuses, page, size, onSuccess, onF
 			var limit = isNaN(size) ? 10 : size * 1;
 			var offset = ((isNaN(page) ? 1 : page) - 1) * limit;
 			// execute the query
-			var query = 'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?);SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY tr.Date DESC, ti.Interest_Id';
+			var query = 'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?);SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) ORDER BY Date DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY ti.Interest_Id';
 			connection.query(query, [statuses, statuses, offset, limit], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
