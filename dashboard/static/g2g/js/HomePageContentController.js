@@ -20,7 +20,7 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 	$scope.searchCriteria = {};
 	$scope.totalItems = 0;
 	$scope.currentPage = 1;
-	$scope.numPerPage = 10;
+	$scope.numPerPage = 50;
 	$scope.users = [];
 	$scope.loading = false;
 	$scope.serverError = false;
