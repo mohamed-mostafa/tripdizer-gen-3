@@ -93,6 +93,7 @@ var start = function () {
 	app.get('/itinerary/:id', auth.isAuthenticated, itinerariesInterface.getById);
 	app.put('/itinerary', auth.isAuthenticated, itinerariesInterface.create);
 	app.post('/itinerary', auth.isAuthenticated, itinerariesInterface.update);
+	app.post('/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
 
 	//		Purposes
 	app.get('/purposes', purposesInterface.getAll);
