@@ -142,6 +142,17 @@ var start = () => {
 			user: req.user
 		});
 	});
+
+	app.get('/admin/agents-notes', auth.isAuthenticatedAsAdmin, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Agent Notes',
+			controller: 'AgentNotes'
+		};
+		res.render('pages/agents-notes', {
+			user: req.user
+		});
+	});
 	app.get('*', auth.isAuthenticated, auth.renderTo404);
 
 	// routes end

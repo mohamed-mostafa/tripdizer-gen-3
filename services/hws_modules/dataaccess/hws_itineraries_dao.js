@@ -51,6 +51,7 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							excludes: rows[0][0].Excludes,
 							image1: rows[0][0].Image1,
 							image2: rows[0][0].Image2,
+							agentNotes: rows[0][0].Agent_Notes,
 							countries: rows[1],
 							ferries: rows[2],
 							flights: rows[3],
@@ -270,6 +271,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 							excludes: rows[i].Excludes,
 							image1: rows[i].Image1,
 							image2: rows[i].Image2,
+							agentNotes: rows[i].Agent_Notes,
 							longitudes: rows[i].longitude,
 							latitudes: rows[i].latitude,
 							countries_en_descriptions: rows[i].country_en_description,
@@ -329,8 +331,52 @@ var getAllLong = function (onSuccess, onFailure) {
 	});
 };
 
+var updateAgentNotes = function (id, note, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function (err) {
+		if (err) {
+			console.log("An error occurred while trying to open a database connection");
+			console.log(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to update the itinerary 
+			connection.beginTransaction(function (err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log("An error occurred while trying to begin a database transaction");
+					console.log(err);
+					onFailure(err);
+				} else {
+					var updateQuery = `UPDATE iternary SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
+					
+					connection.query(updateQuery, [], function (err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) { // if the statement fails
+							console.log("An error occurred while trying to update the existing itinerary: " + id + " with note: " + note);
+							console.log(err);
+							connection.rollback(); // rollback the transaction
+							// end the connection
+							connection.end();
+							onFailure(err);
+						} else {
+							connection.commit();
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess();
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
 exports.getAllLong = getAllLong;
+exports.updateAgentNotes = updateAgentNotes;
