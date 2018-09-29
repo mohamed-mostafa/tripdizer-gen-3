@@ -143,7 +143,7 @@ var start = () => {
 		});
 	});
 
-	app.get('/admin/agents-notes', auth.isAuthenticatedAsAdmin, (req, res) => {
+	app.get('/admin/agents-notes', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,
 			title: 'Agent Notes',
