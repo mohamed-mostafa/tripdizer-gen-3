@@ -5,13 +5,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --aot",
-    "build-dev": "ng build --aot --prod --configuration=development",
+    "prebuild-dev": "npm install -g",
+	"build-dev": "ng build --aot --prod --configuration=development",
     "build-prod": "ng build --aot --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "prebuild-dev": "npm install -g && npm run lint",
-    "prebuild-prod": "npm run lint"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
