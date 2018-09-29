@@ -7,7 +7,8 @@
     "start": "ng serve --aot",
     "prebuild-dev": "npm install -g --unsafe-perm",
 	"build-dev": "ng build --aot --prod --configuration=development",
-    "build-prod": "ng build --aot --prod",
+    "build-stg": "ng build --aot --prod",
+	"build-prod": "ng build --aot --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

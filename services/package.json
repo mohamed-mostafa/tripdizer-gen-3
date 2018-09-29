@@ -40,6 +40,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-	"build-dev" : "echo 'Build not needed'"
+	"build-dev" : "echo 'Build not needed'",
+	"build-stg" : "echo 'Build not needed'",
+	"build-prod" : "echo 'Build not needed'"
   }
 }
