@@ -1,4 +1,7 @@
 steps:
+- name: gcr.io/cloud-builders/npm
+  args: ['run', 'build-${_COMPONENT_NAME}']
+  id: 'NPM BUILD'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', '${_COMPONENT_NAME}/app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version']
   id: 'GCLOUD DEPLOY'

@@ -1,0 +1,12 @@
+{
+  "name": "tripdizer-parent",
+  "description": "Tripdizer Parent Project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build-website": "cd website && npm run build-stg",
+	"build-public": "cd public && npm run build-stg",
+	"build-services": "cd services && npm run build-stg",
+	"build-dashboard": "cd dashboard && npm run build-stg"
+  }
+}
