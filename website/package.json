@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --aot",
-    "prebuild-dev": "npm install -g && npm list -g",
+    "prebuild-dev": "npm install -g --only=dev && npm list -g",
 	"build-dev": "ng build --aot --prod --configuration=development",
     "build-prod": "ng build --aot --prod",
     "test": "ng test",
