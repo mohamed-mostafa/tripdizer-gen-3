@@ -1,7 +1,6 @@
 const jwt = require('jwt-simple');
 
 const user = require('../../business/hws_users_business');
-const config = require('../../../config.json');
 
 const getToken = (headers) => {
     if (headers && headers.authorization) {
@@ -18,7 +17,7 @@ const getToken = (headers) => {
 
 const getDecodedToken = (headers) => {
     try {
-        return jwt.decode(getToken(headers), config.SECRET);
+        return jwt.decode(getToken(headers), process.env.SECRET || 'TRIPDIZER-JWT-SECRET');
     } catch (ex) {
         return null;
     }

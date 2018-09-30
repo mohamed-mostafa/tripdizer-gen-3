@@ -6,7 +6,6 @@ var jwt = require('jwt-simple');
 var md5 = require('md5');
 
 var hwsUsersDao = require('../dataaccess/hws_users_dao.js');
-var config = require('../../config.json');
 
 // calls the onSuccess with a user object if the user exists
 // calls onUserNotFound without parameters if the username doesn't exist
@@ -19,7 +18,7 @@ var login = function (username, password, onSuccess, onUserNotFound, onIncorrect
 		} else if ((encrypted && md5(password) === user.password) || (!encrypted && password === user.password)) { // compare the passwords 
 			onSuccess({
 				...user,
-				token: 'JWT ' + jwt.encode(user, config.SECRET)
+				token: 'JWT ' + jwt.encode(user, process.env.SECRET || 'TRIPDIZER-JWT-SECRET')
 			});
 		} else {
 			onIncorrectPassword();

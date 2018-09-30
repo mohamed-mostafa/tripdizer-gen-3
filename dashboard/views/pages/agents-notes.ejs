@@ -14,16 +14,14 @@
         <thead>
           <tr>
             <th>Destination</th>
-            <th>Notes</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="destination in destinations">
             <td>{{destination.en_name}}</td>
-            <td>{{destination.agentNotes}}</td>
             <td>
-              <i class="fa fa-edit cursor" ng-click="openEditDialog(destination.id)"> Edit</i>
+              <i class="fa fa-edit cursor" ng-click="openEditDialog(destination.id)"> Edit notes</i>
             </td>
           </tr>
         </tbody>
@@ -66,8 +64,8 @@
               </div>
               <div class="form-group" ng-show="saving==false">
                 <label for="note">Note</label>
-                <input type="text" required class="form-control" id="note" ng-model="destination.agentNotes" placeholder="Enter note"
-                  required>
+                <textarea rows="16" cols="100" required class="form-control" id="note" ng-model="destination.agentNotes" placeholder="Enter note"
+                  required></textarea>
               </div>              <!-- /.form group -->
             </div>
             <!-- /.box-body -->

@@ -13,8 +13,7 @@ var start = () => {
 	var bodyParser = require('body-parser');
 	var flash = require('express-flash');
 	var locals = {
-		// serverURL: 'http://localhost:8080' // local backend server
-		serverURL: 'https://tripdizer-backend-dot-tripdizer-prod.appspot.com' // remote test backend server
+		serverURL: process.env.SERVICES_URL || 'http://localhost:8080' // remote test backend server
 	};
 
 	// your express configuration here
@@ -25,7 +24,7 @@ var start = () => {
 	}));
 	app.use(bodyParser.json()); // for parsing application/json
 	app.use(express.session({
-		secret: 'TRIPDIZER-JWT-SECRET'
+		secret: process.env.SECRET || 'TRIPDIZER-JWT-SECRET'
 	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
