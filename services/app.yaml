@@ -24,7 +24,6 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  GCLOUD_PROJECT: "tripdizer-dev"
   DATA_BACKEND: "cloudsql"
   MYSQL_USER: "application"
   MYSQL_PASSWORD: "tripdizer"
