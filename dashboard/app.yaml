@@ -21,3 +21,6 @@ resources:
   cpu: 0.2
   memory_gb: 0.6
   disk_size_gb: 10
+env_variables:
+  SERVICES_URL: "https://tripdizer-backend-dot-tripdizer-dev.appspot.com"
+  SECRET: "TRIPDIZER-JWT-SECRET"
