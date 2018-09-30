@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { SectionLandingComponent } from './home/section-landing/section-landing.component';
 import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.component';
 import { SectionVideosComponent } from './home/section-videos/section-videos.component';
+import { VideosCarouselComponent } from './shared/components/videos-carousel/videos-carousel.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SectionVideosComponent } from './home/section-videos/section-videos.com
     HomeComponent,
     SectionLandingComponent,
     NavBarComponent,
-    SectionVideosComponent
+    SectionVideosComponent,
+    VideosCarouselComponent
   ],
   imports: [
     BrowserModule,
