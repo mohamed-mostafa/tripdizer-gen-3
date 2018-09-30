@@ -1,7 +1,6 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 /* Modules */
 import { AppRoutingModule, COMPONENTS as AppComponents } from './app-routing.module';
@@ -23,7 +22,7 @@ import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.componen
   ],
   imports: [
     BrowserModule,
-    NgbModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [
