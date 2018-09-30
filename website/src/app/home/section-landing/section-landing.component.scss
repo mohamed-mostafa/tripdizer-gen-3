@@ -1,0 +1,42 @@
+:host::after {
+  content: "";
+  background: url('../../../assets/img/bg.png');
+  background-color: #1e90ff;
+  // opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.lets-go {
+  font-size: 12.86rem;
+  line-height: 15.7rem;
+}
+
+.traveller {
+  font-size: 28.75rem;
+  font-family: Qwigley, Regular;
+  color: #FFC640;
+  position: absolute;
+  display: block;
+  top: -60px;
+  left: 21%;
+}
+
+.landing-question {
+  font-size: 2.25rem
+}
+
+.scroll-down {
+  font-size: 0.62rem;
+  letter-spacing: 1rem;
+  position: absolute;
+  bottom: 1.5rem;
+
+  >a {
+    text-decoration: none;
+  }
+}
