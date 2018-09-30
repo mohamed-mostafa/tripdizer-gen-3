@@ -12,13 +12,15 @@ import { JWTokenInterceptor } from './http.interceptor';
 import { HomeComponent } from './home/home.component';
 import { SectionLandingComponent } from './home/section-landing/section-landing.component';
 import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.component';
+import { SectionVideosComponent } from './home/section-videos/section-videos.component';
 
 @NgModule({
   declarations: [
     ...AppComponents,
     HomeComponent,
     SectionLandingComponent,
-    NavBarComponent
+    NavBarComponent,
+    SectionVideosComponent
   ],
   imports: [
     BrowserModule,
