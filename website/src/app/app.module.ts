@@ -1,7 +1,6 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 /* Modules */
 import { AppRoutingModule, COMPONENTS as AppComponents } from './app-routing.module';
@@ -13,17 +12,21 @@ import { JWTokenInterceptor } from './http.interceptor';
 import { HomeComponent } from './home/home.component';
 import { SectionLandingComponent } from './home/section-landing/section-landing.component';
 import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.component';
+import { SectionVideosComponent } from './home/section-videos/section-videos.component';
+import { VideosCarouselComponent } from './shared/components/videos-carousel/videos-carousel.component';
 
 @NgModule({
   declarations: [
     ...AppComponents,
     HomeComponent,
     SectionLandingComponent,
-    NavBarComponent
+    NavBarComponent,
+    SectionVideosComponent,
+    VideosCarouselComponent
   ],
   imports: [
     BrowserModule,
-    NgbModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [

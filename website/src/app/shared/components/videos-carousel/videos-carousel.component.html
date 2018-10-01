@@ -1,0 +1,9 @@
+<div class="videos-carousel owl-carousel owl-theme">
+  <span *ngFor="let video of videos">
+    <a class="owl-video" [href]="sanitizer.bypassSecurityTrustResourceUrl(video.uri)"></a>
+    <div class="video-caption">
+      <h3 class="text-uppercase video-name">{{video.en_name}}</h3>
+      <span class="video-desc">{{video.en_description}}</span>
+    </div>
+  </span>
+</div>
