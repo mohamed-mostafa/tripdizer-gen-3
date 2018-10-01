@@ -11,9 +11,26 @@ declare var $: any;
 })
 export class VideosCarouselComponent implements OnInit {
 
-  @Input() videos: Array<any> = [];
+  _videos: Array<any> = [];
+
+  get videos(): Array<any> {
+    return this._videos;
+  }
+
+  @Input('videos') set videos(value: Array<any>) {
+    if (Array.isArray(value) && value.length > 0) {
+      this._videos = value;
+      this.initOwlCarousel();
+    }
+  }
 
   constructor(public sanitizer: DomSanitizer) {
+  }
+
+  ngOnInit() {
+  }
+
+  initOwlCarousel() {
     $(document).ready(function () {
       const screenWidth = $('.owl-carousel').width();
       const videoRatio = 560 / 315;
@@ -45,8 +62,4 @@ export class VideosCarouselComponent implements OnInit {
       });
     });
   }
-
-  ngOnInit() {
-  }
-
 }
