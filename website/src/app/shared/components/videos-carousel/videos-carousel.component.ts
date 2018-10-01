@@ -32,13 +32,13 @@ export class VideosCarouselComponent implements OnInit {
 
   initOwlCarousel() {
     $(document).ready(function () {
-      const screenWidth = $('.owl-carousel').width();
+      const screenWidth = $('.videos-carousel.owl-carousel').width();
       const videoRatio = 560 / 315;
-      $('.owl-carousel').width(screenWidth).owlCarousel({
+      $('.videos-carousel.owl-carousel').width(screenWidth).owlCarousel({
         items: 3,
         center: true,
+        loop: true,
         autoWidth: true,
-        startPosition: 1,
         nav: true,
         dots: false,
         responsive: {

@@ -6,3 +6,12 @@
 #testimonials {
   height: 100%;
 }
+
+#videos,
+#why-us,
+#our-team,
+#testimonials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
