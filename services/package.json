@@ -28,6 +28,11 @@
     "socketio-auth": "0.0.5",
     "stripe": "3.3.2"
   },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "chai": "^4.2.0",
+    "mockery": "^2.1.0"
+  },
   "author": {
     "name": "Mohamed Mostafa",
     "email": "eng.mmustafa84@gmail.com",
@@ -40,8 +45,9 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-	"build-dev" : "echo 'Build not needed'",
-	"build-stg" : "echo 'Build not needed'",
-	"build-prod" : "echo 'Build not needed'"
+    "test": "mocha --no-timeouts",
+    "build-dev": "echo 'Build not needed'",
+    "build-stg": "echo 'Build not needed'",
+    "build-prod": "echo 'Build not needed'"
   }
 }
