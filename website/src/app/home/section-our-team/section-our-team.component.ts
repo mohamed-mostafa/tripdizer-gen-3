@@ -27,8 +27,7 @@ export class SectionOurTeamComponent implements OnInit {
 
   initOwlCarousel() {
     $(document).ready(function () {
-      const screenWidth = $('.our-team-carousel.owl-carousel').width();
-      $('.our-team-carousel.owl-carousel').width(screenWidth).owlCarousel({
+      $('.our-team-carousel.owl-carousel').width(document.body.clientWidth).owlCarousel({
         items: 5,
         center: true,
         loop: true,

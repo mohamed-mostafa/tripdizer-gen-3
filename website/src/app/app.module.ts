@@ -15,6 +15,8 @@ import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.componen
 import { SectionVideosComponent } from './home/section-videos/section-videos.component';
 import { VideosCarouselComponent } from './shared/components/videos-carousel/videos-carousel.component';
 import { SectionOurTeamComponent } from './home/section-our-team/section-our-team.component';
+import { SectionTestimonialsComponent } from './home/section-testimonials/section-testimonials.component';
+import { TestimonialsCarouselComponent } from './shared/components/testimonials-carousel/testimonials-carousel.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { SectionOurTeamComponent } from './home/section-our-team/section-our-tea
     NavBarComponent,
     SectionVideosComponent,
     VideosCarouselComponent,
-    SectionOurTeamComponent
+    SectionOurTeamComponent,
+    SectionTestimonialsComponent,
+    TestimonialsCarouselComponent
   ],
   imports: [
     BrowserModule,
