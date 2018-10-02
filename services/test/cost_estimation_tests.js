@@ -1,5 +1,6 @@
 var assert = require('assert');
 var mockery = require('mockery');
+var costEstimationTestsMocks = require("./utilities/cost_estimation_test_mocks.js")
 
 describe('hws_request_business', function() {
   describe('budgetCalculation', function() {
@@ -8,16 +9,7 @@ describe('hws_request_business', function() {
   		mockery.enable({ useCleanCache: true });
 		mockery.warnOnUnregistered(false);
 		mockery.warnOnReplace(false);
-  		mockery.registerMock('../dataaccess/hws_itineraries_dao.js', {
-	    	getById: function (requestId, language, onSuccess, onFailure) { 
-	    		var itinerary = {
-					ferries: [{JAN: 300}],
-					flights: [{aJAN: 7000, iJAN: 1000, kJAN: 5000}],
-					hotels: [{budget_category_id: 1, JAN: 100}],
-				};
-	    		onSuccess(itinerary);
-	    	}
-		});
+  		mockery.registerMock('../dataaccess/hws_itineraries_dao.js', costEstimationTestsMocks.itirnaryDaoMock);
 		done();
   	})
 
@@ -27,7 +19,7 @@ describe('hws_request_business', function() {
 		done();
   	})
 
-    it('should return 8800 egp when: 1 adult, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+    it('should estimate 8800 egp for 1 adult, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -43,7 +35,7 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
-    it('should return 12800 egp when: 1 adult, 4 infants, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+    it('should estimate 12800 egp for 1 adult, 4 infants, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -59,7 +51,7 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
-  it('should return 15300 egp when: 2 adults, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+  it('should estimate 15300 egp for 2 adults, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -74,7 +66,7 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
-  it('should return 25129.5 egp when: 3 adults, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+  it('should estimate 25129.5 egp for 3 adults, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -90,7 +82,7 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
-  it('should return 28429.5 egp when: 3 adults, 3 infants, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+  it('should estimate 28429.5 egp for 3 adults, 3 infants, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -106,7 +98,7 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
-  it('should return 47190 egp when: 3 adults, 3 kids, 3 infants, 7 days in month with costs: 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
+  it('should estimate 47190 egp for 3 adults, 3 kids, 3 infants, 7 days during a month that costs 100 egp per night, 7000 egp 1 flight, 300 egp 1 ferry', function(done) {
 		var request = {
 			itinerary_id: 1,
 			return_date: '01-18-2015', departure_date: '01-11-2015',
@@ -122,5 +114,65 @@ describe('hws_request_business', function() {
 		}, null, null);
     });
 
+  it('should estimate 100 egp daily sepding when budget category is super-economy', function(done) {
+		var request = {
+			itinerary_id: 1,
+			return_date: '01-18-2015', departure_date: '01-11-2015',
+			number_of_adults: 3, number_of_kids: 3, number_of_infants: 3,
+			budget_category: 2
+		};
+		
+		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		requestsBusiness.budgetCalculation(request, function(result) {
+			assert.equal(result.dailySpendings, 100);
+			done();
+		}, null, null);
+    });
+
+  it('should estimate 100 egp daily sepding when budget category is economy', function(done) {
+		var request = {
+			itinerary_id: 1,
+			return_date: '01-18-2015', departure_date: '01-11-2015',
+			number_of_adults: 3, number_of_kids: 3, number_of_infants: 3,
+			budget_category: 3
+		};
+		
+		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		requestsBusiness.budgetCalculation(request, function(result) {
+			assert.equal(result.dailySpendings, 100);
+			done();
+		}, null, null);
+    });
+
+  it('should estimate 150 egp daily sepding when budget category is mid-range', function(done) {
+		var request = {
+			itinerary_id: 1,
+			return_date: '01-18-2015', departure_date: '01-11-2015',
+			number_of_adults: 3, number_of_kids: 3, number_of_infants: 3,
+			budget_category: 4
+		};
+		
+		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		requestsBusiness.budgetCalculation(request, function(result) {
+			assert.equal(result.dailySpendings, 150);
+			done();
+		}, null, null);
+    });
+
+  it('should estimate 200 egp daily sepding when budget category is splurge', function(done) {
+		var request = {
+			itinerary_id: 1,
+			return_date: '01-18-2015', departure_date: '01-11-2015',
+			number_of_adults: 3, number_of_kids: 3, number_of_infants: 3,
+			budget_category: 5
+		};
+		
+		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		requestsBusiness.budgetCalculation(request, function(result) {
+			assert.equal(result.dailySpendings, 200);
+			done();
+		}, null, null);
+    });
+  
   }); // end function describe
 }); // end module describe
