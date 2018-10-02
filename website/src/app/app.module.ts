@@ -17,6 +17,7 @@ import { VideosCarouselComponent } from './shared/components/videos-carousel/vid
 import { SectionOurTeamComponent } from './home/section-our-team/section-our-team.component';
 import { SectionTestimonialsComponent } from './home/section-testimonials/section-testimonials.component';
 import { TestimonialsCarouselComponent } from './shared/components/testimonials-carousel/testimonials-carousel.component';
+import { FooterComponent } from './home/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { TestimonialsCarouselComponent } from './shared/components/testimonials-
     VideosCarouselComponent,
     SectionOurTeamComponent,
     SectionTestimonialsComponent,
-    TestimonialsCarouselComponent
+    TestimonialsCarouselComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
