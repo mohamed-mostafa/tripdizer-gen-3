@@ -27,7 +27,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((100 * 7) + 7000 + 300) * 1.1);
 			assert.equal(result.totalBudget, 8800);
@@ -43,7 +43,7 @@ describe('hws_request_business', function() {
 			budget_category: 3 // economy
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((150 * 7) + 7500 + 350) * 1.1);
 			assert.equal(result.totalBudget, 9790);
@@ -59,7 +59,7 @@ describe('hws_request_business', function() {
 			budget_category: 5 // splurge
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((1500 * 7) + 7500 + 350) * 1.1);
 			assert.equal(result.totalBudget, 20185);
@@ -75,7 +75,7 @@ describe('hws_request_business', function() {
 			budget_category: 3 // economy
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((150 * 7) + 7000 + 8000 + 300 + 400) * 1.1);
 			assert.equal(result.totalBudget, 18425);
@@ -91,7 +91,7 @@ describe('hws_request_business', function() {
 			budget_category: 3 // economy
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((150 * 7) + 7000 + 8000 + 5000 + 6000 + 1000 + 2000 + 300 + 400 + 300 + 400) * 1.1);
 			assert.equal(result.totalBudget, 34595);
@@ -107,7 +107,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((100 * 7) + 7000 + 4000 + 300) * 1.1);
 			assert.equal(result.totalBudget, 13200);
@@ -123,7 +123,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			assert.equal(result.totalBudget, ((100 * 7) + (7000 * 2) + (300 * 2) )* 1.1);
 			done();
@@ -138,7 +138,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((100 * 7 * 1.35) + (7000 * 3) + (300 * 3) ) * 1.1);
 			assert.equal(result.totalBudget, 25129.5);
@@ -154,7 +154,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((100 * 7 * 1.35) + (7000 * 3) + (1000 * 3) + (300 * 3) ) * 1.1);
 			assert.equal(result.totalBudget, 28429.5);
@@ -170,7 +170,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			// assert.equal(result.totalBudget, ((100 * 7 * 3) + (7000 * 3) + (1000 * 3) + (5000 * 3) + (300 * 6) ) * 1.1);
 			assert.equal(result.totalBudget, 47190);
@@ -206,7 +206,7 @@ describe('hws_request_business', function() {
 			budget_category: 2
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			assert.equal(result.dailySpendings, 100);
 			done();
@@ -221,7 +221,7 @@ describe('hws_request_business', function() {
 			budget_category: 3
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			assert.equal(result.dailySpendings, 100);
 			done();
@@ -236,7 +236,7 @@ describe('hws_request_business', function() {
 			budget_category: 4
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			assert.equal(result.dailySpendings, 150);
 			done();
@@ -251,7 +251,7 @@ describe('hws_request_business', function() {
 			budget_category: 5
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
 			assert.equal(result.dailySpendings, 200);
 			done();

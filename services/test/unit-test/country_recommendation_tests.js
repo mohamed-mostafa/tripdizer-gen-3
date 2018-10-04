@@ -36,7 +36,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "BALI");
 			done(); } catch(e) {done(e)}
@@ -60,7 +60,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "EGYPT");
 			done(); } catch(e) {done(e)}
@@ -84,7 +84,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "NIPAL");
 			done(); } catch(e) {done(e)}
@@ -108,7 +108,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "DUBAI");
 			done(); } catch(e) {done(e)}
@@ -132,7 +132,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "PARIS");
 			done(); } catch(e) {done(e)}
@@ -156,7 +156,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[0].enName, "BANGKOK");
 			done(); } catch(e) {done(e)}
@@ -180,7 +180,7 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
 			try { assert.equal(result[1].enName, "KUALALUMPUR");
 			done(); } catch(e) {done(e)}
