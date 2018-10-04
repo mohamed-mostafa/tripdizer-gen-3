@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
-  selector: 'tripdizer-c-testimonials-carousel',
+  selector: 'c-shared-testimonials-carousel',
   templateUrl: './testimonials-carousel.component.html',
   styleUrls: ['./testimonials-carousel.component.scss'],
   encapsulation: ViewEncapsulation.None

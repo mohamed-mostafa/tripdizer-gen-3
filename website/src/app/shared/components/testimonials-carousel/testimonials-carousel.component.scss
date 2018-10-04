@@ -19,6 +19,7 @@
 
       .testimonial-info {
         font-size: 1rem;
+        height: 100%;
 
         .testimonial-text {
           max-height: 90%;
@@ -48,6 +49,7 @@
         .testimonial-name {
           position: absolute;
           bottom: 0;
+          left: 1rem;
         }
       }
     }

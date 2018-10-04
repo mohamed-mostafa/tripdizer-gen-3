@@ -4,13 +4,13 @@
         "directive-selector": [
             true,
             "attribute",
-            "tripdizer-d",
+            "d",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "tripdizer-c",
+            "c",
             "kebab-case"
         ]
     }

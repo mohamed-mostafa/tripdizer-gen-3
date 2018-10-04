@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SectionVideosService } from './section-videos.service';
 
 @Component({
-  selector: 'tripdizer-c-section-videos',
+  selector: 'c-home-section-videos',
   templateUrl: './section-videos.component.html',
   styleUrls: ['./section-videos.component.scss']
 })

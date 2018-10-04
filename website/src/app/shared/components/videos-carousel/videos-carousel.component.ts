@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
-  selector: 'tripdizer-c-videos-carousel',
+  selector: 'c-shared-videos-carousel',
   templateUrl: './videos-carousel.component.html',
   styleUrls: ['./videos-carousel.component.scss'],
   encapsulation: ViewEncapsulation.None
