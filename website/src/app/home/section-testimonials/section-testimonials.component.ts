@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SectionTestimonialService } from './section-testimonials.service';
 
 @Component({
-  selector: 'tripdizer-c-section-testimonials',
+  selector: 'c-home-section-testimonials',
   templateUrl: './section-testimonials.component.html',
   styleUrls: ['./section-testimonials.component.scss']
 })

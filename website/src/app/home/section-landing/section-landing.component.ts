@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'tripdizer-c-section-landing',
+  selector: 'c-home-section-landing',
   templateUrl: './section-landing.component.html',
   styleUrls: ['./section-landing.component.scss']
 })

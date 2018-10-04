@@ -5,7 +5,7 @@ import { SectionOurTeamService } from './section-our-team.service';
 declare var $: any;
 
 @Component({
-  selector: 'tripdizer-c-section-our-team',
+  selector: 'c-home-section-our-team',
   templateUrl: './section-our-team.component.html',
   styleUrls: ['./section-our-team.component.scss'],
   encapsulation: ViewEncapsulation.None
