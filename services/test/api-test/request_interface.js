@@ -3,7 +3,7 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-var newRequestId = 0;
+const serverURL = 'http://tripdizer-backend-dot-tripdizer-dev.appspot.com';
 
 describe('public website request interface', function() {
   describe('place request', function() {
@@ -29,7 +29,7 @@ describe('public website request interface', function() {
 				"interests":[{"id":1,"percentage":"18"},{"id":2,"percentage":"45"},{"id":3,"percentage":"62"},{"id":4,"percentage":"79"},{"id":5,"percentage":"91"},{"id":6,"percentage":"100"}]
 				}
 		
-		chai.request('http://localhost:8080')
+		chai.request(serverURL)
 		  .put('/request/place')
 		  .send({
 		    'request': request
@@ -64,7 +64,7 @@ describe('public website request interface', function() {
 				"interests":[{"id":1,"percentage":"18"},{"id":2,"percentage":"45"},{"id":3,"percentage":"62"},{"id":4,"percentage":"79"},{"id":5,"percentage":"91"},{"id":6,"percentage":"100"}]
 				}
 		
-		chai.request('http://localhost:8080')
+		chai.request(serverURL)
 		  .put('/request/place')
 		  .send({
 		    'request': request
@@ -99,7 +99,7 @@ describe('public website request interface', function() {
 				"interests":[{"id":1,"percentage":"18"},{"id":2,"percentage":"45"},{"id":3,"percentage":"62"},{"id":4,"percentage":"79"},{"id":5,"percentage":"91"},{"id":6,"percentage":"100"}]
 				}
 		
-		chai.request('http://localhost:8080')
+		chai.request(serverURL)
 		  .put('/request/place')
 		  .send({
 		    'request': request
