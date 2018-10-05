@@ -3,7 +3,7 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-const serverURL = 'http://tripdizer-backend-dot-tripdizer-dev.appspot.com';
+const serverURL = process.env.server_url || 'http://tripdizer-backend-dot-tripdizer-dev.appspot.com';
 
 describe('public website request interface', function() {
   describe('place request', function() {
