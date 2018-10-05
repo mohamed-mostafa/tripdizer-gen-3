@@ -4,5 +4,22 @@
 #why-us,
 #our-team,
 #testimonials {
-  height: 100%;
+  min-height: 100%;
+
+  @media (min-width: 576px) {
+    height: 100%;
+  }
+}
+
+#videos,
+#our-team,
+#testimonials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#why-us,
+#our-team {
+  background-color: #2989FF;
 }

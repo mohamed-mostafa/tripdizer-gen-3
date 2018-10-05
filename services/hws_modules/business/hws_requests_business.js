@@ -272,7 +272,7 @@ var recommendation = function (request, onSuccess, onFailure, onUserError) {
 			}
 			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
-		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => a.rank - a.rank).map(i => ({
+		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,
 			enName: i.en_name,
 			enDescription: i.en_description,
@@ -289,10 +289,14 @@ var recommendation = function (request, onSuccess, onFailure, onUserError) {
 var recommendationFuncs = {
 	season: (requestDepartureDate, requestReturnDate, seasons) => {
 		requestDepartureDate = new Date(requestDepartureDate);
+		requestDepartureDate.setFullYear(1970);
 		requestReturnDate = new Date(requestReturnDate);
+		requestReturnDate.setFullYear(1970);
 		for (let i = 0; i < seasons.length; i++) {
 			const start = new Date(seasons[i].start),
 				end = new Date(seasons[i].end);
+				start.setFullYear(1970);
+				end.setFullYear(1970);
 			if ((requestDepartureDate > start && requestDepartureDate < end) || (requestReturnDate > start && requestReturnDate < end))
 				return seasons[i].type == 0 ? 100 : seasons[i].type == 2 ? 50 : 0;
 		}
@@ -323,12 +327,13 @@ var recommendationFuncs = {
 	interest: (requestInterests, itineraryInterests) => {
 		let sumOfInterests = 0;
 		for (let i = 0; i < requestInterests.length; i++) {
-			itineraryInterest = itineraryInterests.find(ii => ii.interests_Id == requestInterests[i].id);
+			itineraryInterest = itineraryInterests.find(ii => ii.interest_Id == requestInterests[i].id);
 			if (itineraryInterest) {
 				sumOfInterests += requestInterests[i].percentage * itineraryInterest.Percentage / 100;
 			}
 		}
-		return sumOfInterests / requestInterests.length;
+		var nonZeroPercentInterestsInRequest = requestInterests.filter(ri => ri.percentage > 0);
+		return sumOfInterests / nonZeroPercentInterestsInRequest.length;
 	},
 	needsVisa: (request, itinerary) => {
 		request = request ? 1 : 0;

@@ -4,9 +4,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-website": "cd website && npm run build-stg",
-	"build-public": "cd public && npm run build-stg",
-	"build-services": "cd services && npm run build-stg",
-	"build-dashboard": "cd dashboard && npm run build-stg"
+  "build-website": "cd website && npm run build-dev",
+	"build-public": "cd public && npm run build-dev",
+	"build-services": "cd services && npm run build-dev",
+	"build-dashboard": "cd dashboard && npm run build-dev",
+  "unit-test-services" : "cd services && npm install && npm test",
+  "api-test-services" : "cd services && npm run api-test",
+  "unit-test-dashboard" : "echo 'No tests defined'",
+  "api-test-dashboard" : "echo 'No tests defined'",
+  "unit-test-public" : "echo 'No tests defined'",
+  "api-test-public" : "echo 'No tests defined'",
+  "unit-test-website" : "echo 'No tests defined'",
+  "api-test-website" : "echo 'No tests defined'"
   }
 }

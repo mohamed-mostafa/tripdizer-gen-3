@@ -10,12 +10,22 @@
     <!-- /.box-header -->
     <div class="box-body">
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
+                <label>Request's ID</label>
+                <input type="text" placeHolder="Search by Request ID" class="form-control" ng-model="searchCriteria.id" />
+            </div>
+
+            <div class="col-xs-3">
                 <label>Request's Traveller Name</label>
                 <input type="text" placeHolder="Search by Traveller Name" class="form-control" ng-model="searchCriteria.name" />
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
+                <label>Traveller Phone</label>
+                 <input type="text" placeHolder="Search by Traveller Phone" class="form-control" ng-model="searchCriteria.phone" />
+            </div>
+
+             <div class="col-xs-3">
                 <label>Request's Status</label>
                 <select class="form-control" ng-model="searchCriteria.status">
                     <option value="">Select Status</option>
@@ -24,30 +34,29 @@
             </div>
         </div>
 
+
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request Placed From</label>
                 <input type="date" ng-model="searchCriteria.from" class="form-control" aria-describedby="basic-from">
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request Placed To</label>
                 <input type="date" ng-model="searchCriteria.to" class="form-control" aria-describedby="basic-to">
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Departure Date From</label>
                 <input type="date" ng-model="searchCriteria.departureDateFrom" class="form-control" aria-describedby="basic-from">
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Departure Date To</label>
                 <input type="date" ng-model="searchCriteria.departureDateTo" class="form-control" aria-describedby="basic-to">
             </div>
         </div>
 
+
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Country</label>
                 <select class="form-control" ng-model="searchCriteria.destination" ng-change="searchCriteria.itinerary = null">
                     <option value="">Select Country</option>
@@ -55,17 +64,14 @@
                 </select>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Itinerary</label>
                 <select class="form-control" ng-model="searchCriteria.itinerary" ng-change="searchCriteria.destination = null">
                     <option value="">Select Itinerary</option>
                     <option ng-repeat="itinerary in itineraries" ng-value="itinerary.id">{{itinerary.en_name}}</option>
                 </select>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Travel Purpose</label>
                 <select class="form-control" ng-model="searchCriteria.travelPurpose">
                     <option value="">Select Travel Purpose</option>
@@ -73,7 +79,7 @@
                 </select>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Budget Category</label>
                 <select class="form-control" ng-model="searchCriteria.budgetCategory">
                     <option value="">Select Budget Category</option>
@@ -83,7 +89,7 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Edit</label>
                 <select class="form-control" ng-model="searchCriteria.edit">
                     <option value="">Select Edit</option>
@@ -92,7 +98,7 @@
                 </select>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Reachable</label>
                 <select class="form-control" ng-model="searchCriteria.reachable">
                     <option value="">Select Reachable</option>
@@ -100,10 +106,8 @@
                     <option ng-value="0">False</option>
                 </select>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Is Package Sent</label>
                 <select class="form-control" ng-model="searchCriteria.packageSent">
                     <option value="">Select Edit</option>
@@ -112,7 +116,7 @@
                 </select>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Request's Referral Type</label>
                 <select class="form-control" ng-model="searchCriteria.referralType">
                     <option value="">Select Referral Type</option>
@@ -122,11 +126,11 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Estimated Cost From</label>
                 <input type="number" ng-model="searchCriteria.estimatedFrom" class="form-control" aria-describedby="basic-from">
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <label>Estimated Cost To</label>
                 <input type="number" ng-model="searchCriteria.estimatedTo" class="form-control" aria-describedby="basic-to">
             </div>

@@ -1,0 +1,12 @@
+<div class="testimonials-carousel owl-carousel owl-theme">
+  <div *ngFor="let testimonial of testimonials" class="row testimonial-item">
+    <div class="col-12 col-sm-3 d-none d-sm-block">
+      <img [src]="sanitizer.bypassSecurityTrustResourceUrl(testimonial.picture)" class="img-fluid rounded-circle testimonial-picture"
+        [alt]="testimonial.enName + '\' picture'">
+    </div>
+    <div class="col-12 col-sm-9 row testimonial-info">
+      <span class="col-12 testimonial-text" [title]="testimonial.enText">{{testimonial.enText}}</span>
+      <h5 class="col-12 testimonial-name">{{testimonial.enName}}</h5>
+    </div>
+  </div>
+</div>

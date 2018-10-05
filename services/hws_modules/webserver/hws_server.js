@@ -87,6 +87,8 @@ var start = function () {
 	app.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
 	app.put('/country', auth.isAuthenticated, countriesInterface.create);
 	app.post('/country', auth.isAuthenticated, countriesInterface.update);
+	app.post('/country/note', auth.isAuthenticated, countriesInterface.updateAgentNotes);
+
 
 	//		itineraries
 	app.get('/itineraries', itinerariesInterface.getAll);

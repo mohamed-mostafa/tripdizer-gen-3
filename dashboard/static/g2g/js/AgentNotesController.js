@@ -2,15 +2,15 @@
  * 
  */
 
-g2gControlCenterApplication.controller("AgentNotesController", ['$rootScope', '$scope', '$http', 'ItinerariesService', function ($rootScope, $scope, $http, ItinerariesService) {
+g2gControlCenterApplication.controller("AgentNotesController", ['$rootScope', '$scope', '$http', 'CountriesService', function ($rootScope, $scope, $http, CountriesService) {
 	// fields
-	$scope.destinations = [];
+	$scope.countries = [];
 
 	// validation flags
 	$scope.serverError = false;
 	$scope.serverErrorMessage = "";
 	// form fields
-	$scope.destination = {};
+	$scope.country = {};
 	$scope.editMode = true;
 
 	$scope.loading = false;
@@ -23,18 +23,18 @@ g2gControlCenterApplication.controller("AgentNotesController", ['$rootScope', '$
 		$scope.serverErrorMessage = "";
 	};
 	
-	$scope.editDestination = function (id) {
+	$scope.editCountry = function (id) {
 		$scope.resetValidationFlags();
 		$scope.saving = true;
-		$http.post($rootScope.serverURL + "/itinerary/note", { id: $scope.destination.id, note: $scope.destination.agentNotes }
+		$http.post($rootScope.serverURL + "/country/note", { id: $scope.country.id, note: $scope.country.agentNotes }
 		).success(
 			function (response) {
 				$scope.saving = false;
 				$scope.editMode = false;
-				$('#editDestinationModal').modal('hide');
+				$('#editCountryModal').modal('hide');
 			}
 			).error(function (err) {
-				$scope.destination = {};
+				$scope.country = {};
 				$scope.editMode = false;
 				$scope.saving = false;
 				$scope.serverError = true;
@@ -43,17 +43,17 @@ g2gControlCenterApplication.controller("AgentNotesController", ['$rootScope', '$
 	};
 	$scope.openEditDialog = function (id) {
 		$scope.editMode = true;
-		for (var i = 0; i < $scope.destinations.length; i++) {
-			if ($scope.destinations[i].id == id) {
-				$scope.destination = $scope.destinations[i];
+		for (var i = 0; i < $scope.countries.length; i++) {
+			if ($scope.countries[i].id == id) {
+				$scope.country = $scope.countries[i];
 			}
 		}
-		$('#editDestinationModal').modal('show');
+		$('#editCountryModal').modal('show');
 	};
 	
 	$scope.initialize = function () {
-		ItinerariesService.getAll().then(function (destinations) {
-			$scope.destinations = destinations;
+		CountriesService.getAll().then(function (countries) {
+			$scope.countries = countries;
 		});
 	};
 
