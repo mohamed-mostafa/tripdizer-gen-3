@@ -25,11 +25,7 @@
     "properties-reader": "0.0.15",
     "request": "2.55.0",
     "socket.io": "1.4.5",
-    "socketio-auth": "0.0.5",
-    "mocha": "^5.2.0",
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
-    "mockery": "^2.1.0"
+    "socketio-auth": "0.0.5"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
@@ -50,9 +46,6 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha test/unit-test --no-timeouts",
-    "api-test": "mocha test/api-test --no-timeouts",
-    "build-dev": "echo 'Build not needed'",
-    "build-stg": "echo 'Build not needed'",
-    "build-prod": "echo 'Build not needed'"
+    "api-test": "mocha test/api-test --no-timeouts"
   }
 }

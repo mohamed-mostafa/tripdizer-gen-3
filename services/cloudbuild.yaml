@@ -1,0 +1,14 @@
+steps:
+- name: gcr.io/cloud-builders/npm
+  args: ['install-test', '--only=dev', '--unsafe-perm']
+  dir: services
+  id: 'UNIT TEST'
+- name: gcr.io/cloud-builders/gcloud
+  args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
+  dir: services
+  id: 'GCLOUD DEPLOY'
+- name: gcr.io/cloud-builders/npm
+  args: ['run', 'api-test', 'npm_config_server_url=${_API_TEST_SERVER_URL}']
+  dir: services
+  id: 'API TEST'
+timeout: 1800s
