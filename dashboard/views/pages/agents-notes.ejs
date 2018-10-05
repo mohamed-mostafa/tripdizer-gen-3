@@ -10,18 +10,18 @@
       <i class="fa fa-refresh fa-spin"></i>
     </div>
     <div class="box-body table-responsive no-padding" ng-show="loading == false">
-      <table id="destinationsTable" class="table table-bordered table-striped">
+      <table id="countriesTable" class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th>Destination</th>
+            <th>Country</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="destination in destinations">
-            <td>{{destination.en_name}}</td>
+          <tr ng-repeat="country in countries">
+            <td>{{country.en_name}}</td>
             <td>
-              <i class="fa fa-edit cursor" ng-click="openEditDialog(destination.id)"> Edit notes</i>
+              <i class="fa fa-edit cursor" ng-click="openEditDialog(country.id)"> Edit notes</i>
             </td>
           </tr>
         </tbody>
@@ -43,28 +43,28 @@
 
   <!-- MODALS -->
 
-  <div class="modal fade" id="editDestinationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editCountryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title" id="myModalLabel">Edit Destination</h4>
+          <h4 class="modal-title" id="myModalLabel">Edit Country</h4>
         </div>
         <div class="modal-body">
           <div class="callout callout-danger" ng-show="serverError==true">
             <h4>Saving failed!</h4>
             <p>{{serverErrorMessage}}</p>
           </div>
-          <form role="form" id="destinationForm">
+          <form role="form" id="countryForm">
             <div class="box-body">
               <div class="overlay" ng-show="saving == true">
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
               <div class="form-group" ng-show="saving==false">
                 <label for="note">Note</label>
-                <textarea rows="16" cols="100" required class="form-control" id="note" ng-model="destination.agentNotes" placeholder="Enter note"
+                <textarea rows="16" cols="100" required class="form-control" id="note" ng-model="country.agentNotes" placeholder="Enter note"
                   required></textarea>
               </div>              <!-- /.form group -->
             </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" ng-click="editDestination()" ng-show="editMode==true">Save</button>
+          <button type="button" class="btn btn-primary" ng-click="editCountry()" ng-show="editMode==true">Save</button>
         </div>
       </div>
     </div>

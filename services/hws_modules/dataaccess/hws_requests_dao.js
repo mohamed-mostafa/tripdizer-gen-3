@@ -89,7 +89,7 @@ var getRequestSummariesByStatus = function (statuses, page, size, onSuccess, onF
 			var limit = isNaN(size) ? 10 : size * 1;
 			var offset = ((isNaN(page) ? 1 : page) - 1) * limit;
 			// execute the query
-			var query = 'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?);SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) ORDER BY Date DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY ti.Interest_Id';
+			var query = 'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?) AND Archived = 0;SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) AND Archived = 0 ORDER BY Date DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY ti.Interest_Id';
 			connection.query(query, [statuses, statuses, offset, limit], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
@@ -199,7 +199,7 @@ var getRequestSummariesCountByStatus = function (statuses, filter, onSuccess, on
 			if (filter.packageSent) query += " AND `Package_Sent` = " + connection.escape(filter.packageSent);
 			if (filter.referralType) query += " AND `Referral_Type` = " + connection.escape(filter.referralType);
 			// execute the query
-			connection.query('SELECT count(id) as count, sum(revenue) as revenue, sum(profit) as profit, sum(Number_Of_Adults + Number_Of_Kids + Number_Of_Infants) as numberOfTravelers FROM traveler_request WHERE status IN (?)' + query, [statuses], function (err, rows) {
+			connection.query('SELECT count(id) as count, sum(revenue) as revenue, sum(profit) as profit, sum(Number_Of_Adults + Number_Of_Kids + Number_Of_Infants) as numberOfTravelers FROM traveler_request WHERE status IN (?) AND Archived = 0' + query, [statuses], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					console.log("An error occurred while trying to count order summaries with statuses " + statuses);
@@ -226,7 +226,7 @@ var getRequestById = function (requestId, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.id = ?', [requestId], function (err, rows) {
+			connection.query('SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.id = ? AND tr.Archived = 0', [requestId], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					console.log("An error occurred while trying to find a request with id " + requestId);
@@ -491,7 +491,7 @@ var getRequestCounts = function (onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('SELECT `s`.`Title` AS `Status`, COUNT(*) AS `Count`, SUM(`tr`.`Number_Of_Adults` + `tr`.`Number_Of_Kids` + `tr`.`Number_Of_Infants`) AS `Total_Travellers`, SUM(`tr`.`Number_Of_Adults`) AS `Adults`, SUM(`tr`.`Number_Of_Kids`) AS `Kids`, SUM(`tr`.`Number_Of_Infants`) AS `Infants` FROM `traveler_request` `tr` JOIN `statuses` `s` ON `tr`.`Status` = `s`.`Id` GROUP BY `tr`.`Status`', function (err, result) {
+					connection.query('SELECT `s`.`Title` AS `Status`, COUNT(*) AS `Count`, SUM(`tr`.`Number_Of_Adults` + `tr`.`Number_Of_Kids` + `tr`.`Number_Of_Infants`) AS `Total_Travellers`, SUM(`tr`.`Number_Of_Adults`) AS `Adults`, SUM(`tr`.`Number_Of_Kids`) AS `Kids`, SUM(`tr`.`Number_Of_Infants`) AS `Infants` FROM `traveler_request` `tr` JOIN `statuses` `s` ON `tr`.`Status` = `s`.`Id` WHERE `tr`.`Archived` = 0 GROUP BY `tr`.`Status`', function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							// end the connection

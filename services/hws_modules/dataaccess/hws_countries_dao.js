@@ -253,8 +253,52 @@ var getAllCountriesInIternaries = function (lang, onSuccess, onFailure) {
 	});
 };
 
+var updateAgentNotes = function (id, note, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function (err) {
+		if (err) {
+			console.log("An error occurred while trying to open a database connection");
+			console.log(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to update the itinerary 
+			connection.beginTransaction(function (err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log("An error occurred while trying to begin a database transaction");
+					console.log(err);
+					onFailure(err);
+				} else {
+					var updateQuery = `UPDATE countries SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
+					
+					connection.query(updateQuery, [], function (err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) { // if the statement fails
+							console.log("An error occurred while trying to update the existing country: " + id + " with note: " + note);
+							console.log(err);
+							connection.rollback(); // rollback the transaction
+							// end the connection
+							connection.end();
+							onFailure(err);
+						} else {
+							connection.commit();
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess();
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
 exports.getAllCountriesInIternaries = getAllCountriesInIternaries;
+exports.updateAgentNotes = updateAgentNotes;
