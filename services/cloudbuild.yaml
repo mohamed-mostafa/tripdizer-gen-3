@@ -1,6 +1,6 @@
 steps:
 - name: gcr.io/cloud-builders/npm
-  args: ['install-test', '--only=dev', '--unsafe-perm']
+  args: ['install-test', '--dev', '--unsafe-perm']
   dir: services
   id: 'UNIT TEST'
 - name: gcr.io/cloud-builders/gcloud
