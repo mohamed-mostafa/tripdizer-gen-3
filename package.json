@@ -9,6 +9,12 @@
 	"build-services": "cd services && npm run build-dev",
 	"build-dashboard": "cd dashboard && npm run build-dev",
   "unit-test-services" : "cd services && npm install && npm test",
-  "api-test-services" : "cd services && npm run api-test"
+  "api-test-services" : "cd services && npm run api-test",
+  "unit-test-dashboard" : "ehco 'No tests defined'",
+  "api-test-dashboard" : "ehco 'No tests defined'",
+  "unit-test-public" : "ehco 'No tests defined'",
+  "api-test-public" : "ehco 'No tests defined'",
+  "unit-test-website" : "ehco 'No tests defined'",
+  "api-test-website" : "ehco 'No tests defined'"
   }
 }
