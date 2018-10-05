@@ -10,5 +10,5 @@ steps:
   id: 'GCLOUD DEPLOY'
 - name: gcr.io/cloud-builders/npm
   args: ['run', 'api-test']
-  id: 'UNIT TEST'
+  id: 'API TEST'
 timeout: 1800s
