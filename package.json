@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-website": "cd website && npm run build-dev",
+  "build-website": "cd website && npm run build-dev",
 	"build-public": "cd public && npm run build-dev",
 	"build-services": "cd services && npm run build-dev",
-	"build-dashboard": "cd dashboard && npm run build-dev"
+	"build-dashboard": "cd dashboard && npm run build-dev",
+  "unit-test-services" : "cd services && npm test",
+  "api-test-services" : "cd services && npm run api-test"
   }
 }

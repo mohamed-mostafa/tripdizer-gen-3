@@ -3,12 +3,12 @@ steps:
   args: ['run', 'build-${_COMPONENT_NAME}']
   id: 'BUILD'
 - name: gcr.io/cloud-builders/npm
-  args: ['test']
+  args: ['run' 'unit-test-${_COMPONENT_NAME}']
   id: 'UNIT TEST'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', '${_COMPONENT_NAME}/app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
   id: 'GCLOUD DEPLOY'
 - name: gcr.io/cloud-builders/npm
-  args: ['run', 'api-test']
+  args: ['run', 'api-test-${_COMPONENT_NAME}']
   id: 'API TEST'
 timeout: 1800s
