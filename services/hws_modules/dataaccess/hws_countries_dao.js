@@ -272,7 +272,7 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					var updateQuery = `UPDATE countries SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
+					var updateQuery = `UPDATE Countries SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
 					
 					connection.query(updateQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
