@@ -8,6 +8,10 @@ steps:
   dir: services
   id: 'GCLOUD DEPLOY'
 - name: gcr.io/cloud-builders/npm
+  args: ['set', 'server_url=${_API_TEST_SERVER_URL}']
+  dir: services
+  id: 'PREPARE API TEST'
+- name: gcr.io/cloud-builders/npm
   args: ['run', 'api-test', 'npm_config_server_url=${_API_TEST_SERVER_URL}']
   dir: services
   id: 'API TEST'
