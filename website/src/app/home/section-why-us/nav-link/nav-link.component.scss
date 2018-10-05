@@ -3,7 +3,7 @@
     overflow-x: auto;
     display: -webkit-box;
     height: 100%;
-    padding: 10% 0;
+    padding: 5% 0;
   }
 
   &.v-nav {
@@ -19,6 +19,7 @@
 
   .nav-link {
     font-size: 1.625rem;
+    line-height: 1rem;
     font-weight: 700;
     text-align: center;
     opacity: 0.56;

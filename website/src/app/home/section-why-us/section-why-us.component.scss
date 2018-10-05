@@ -31,6 +31,12 @@
       left: 50%;
       margin-left: -150px;
     }
+
+    @media (max-width: 576px) {
+      font-size: 3rem;
+      top: -36px;
+      margin-left: -115px;
+    }
   }
 
   .why-us-nav:before {
