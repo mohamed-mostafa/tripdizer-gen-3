@@ -9,20 +9,12 @@ import { AppRoutingModule, COMPONENTS as AppComponents } from './app-routing.mod
 import { JWTokenInterceptor } from './http.interceptor';
 
 /* Components */
-import { HomeComponent } from './home/home.component';
-import { SectionLandingComponent } from './home/section-landing/section-landing.component';
-import { NavBarComponent } from './home/section-landing/nav-bar/nav-bar.component';
-import { SectionVideosComponent } from './home/section-videos/section-videos.component';
-import { VideosCarouselComponent } from './shared/components/videos-carousel/videos-carousel.component';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
     ...AppComponents,
-    HomeComponent,
-    SectionLandingComponent,
-    NavBarComponent,
-    SectionVideosComponent,
-    VideosCarouselComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +24,6 @@ import { VideosCarouselComponent } from './shared/components/videos-carousel/vid
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JWTokenInterceptor, multi: true }
   ],
-  bootstrap: [HomeComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

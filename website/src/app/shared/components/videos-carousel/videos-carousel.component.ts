@@ -4,24 +4,41 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 
 @Component({
-  selector: 'tripdizer-c-videos-carousel',
+  selector: 'c-shared-videos-carousel',
   templateUrl: './videos-carousel.component.html',
   styleUrls: ['./videos-carousel.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class VideosCarouselComponent implements OnInit {
 
-  @Input() videos: Array<any> = [];
+  _videos: Array<any> = [];
+
+  get videos(): Array<any> {
+    return this._videos;
+  }
+
+  @Input('videos') set videos(value: Array<any>) {
+    if (Array.isArray(value) && value.length > 0) {
+      this._videos = value;
+      this.initOwlCarousel();
+    }
+  }
 
   constructor(public sanitizer: DomSanitizer) {
+  }
+
+  ngOnInit() {
+  }
+
+  initOwlCarousel() {
     $(document).ready(function () {
-      const screenWidth = $('.owl-carousel').width();
+      const screenWidth = document.body.clientWidth;
       const videoRatio = 560 / 315;
-      $('.owl-carousel').width(screenWidth).owlCarousel({
+      $('.videos-carousel.owl-carousel').width(screenWidth).owlCarousel({
         items: 3,
         center: true,
+        loop: true,
         autoWidth: true,
-        startPosition: 1,
         nav: true,
         dots: false,
         responsive: {
@@ -45,8 +62,4 @@ export class VideosCarouselComponent implements OnInit {
       });
     });
   }
-
-  ngOnInit() {
-  }
-
 }

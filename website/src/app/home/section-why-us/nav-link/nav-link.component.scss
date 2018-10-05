@@ -1,0 +1,44 @@
+.nav {
+  &.h-nav {
+    overflow-x: auto;
+    display: -webkit-box;
+    height: 100%;
+    padding: 5% 0;
+  }
+
+  &.v-nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-img {
+    height: 3.8125rem;
+  }
+
+  .nav-link {
+    font-size: 1.625rem;
+    line-height: 1rem;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0.56;
+
+    .img-active {
+      display: none;
+    }
+
+    &.active {
+      opacity: 1;
+
+      .img-inactive {
+        display: none;
+      }
+
+      .img-active {
+        display: inline-block;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,9 @@
+<div class="testimonials">
+  <c-shared-testimonials-carousel [testimonials]="testimonials"></c-shared-testimonials-carousel>
+</div>
+
+<div class="featured-in row text-center">
+  <span class="col-12">Featured In</span>
+  <img *ngFor="let sponsor of sponsors" [src]="sponsor.picture" class="col mx-md-4 mx-sm-3 mx-2 img-fluid sponsor-image"
+    alt="">
+</div>

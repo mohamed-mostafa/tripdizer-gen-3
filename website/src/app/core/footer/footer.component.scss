@@ -1,0 +1,44 @@
+.footer {
+  color: #464646 !important;
+  background-color: #191917;
+
+  .brand {
+    display: flex;
+    align-items: center;
+  }
+
+  .contact-info {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  ul>li {
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  .footer-icons {
+    width: 2.5rem;
+  }
+
+  .footer-btn {
+    font-size: 0.8rem;
+  }
+
+  @media (min-width: 576px) {
+    padding: 5rem 7rem !important;
+  }
+
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) {}
+
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) {
+    padding: 5rem 10rem !important
+  }
+
+  // Extra large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) {
+    padding: 5rem 15rem !important;
+  }
+}

@@ -1,0 +1,11 @@
+<div class="our-team-carousel owl-carousel owl-theme">
+  <span *ngFor="let member of teamMembers" class="team-member text-center">
+    <span class="img-fluid member-picture-wrapper">
+      <img [src]="sanitizer.bypassSecurityTrustResourceUrl(member.picture)" class="member-picture" [alt]="member.enName + '\' picture'">
+    </span>
+    <div class="member-info mt-lg-5 pt-lg-5 mt-md-4 pt-md-4 mt-sm-3 pt-sm-3 mt-2 pt-2">
+      <h3 class="text-uppercase text-white member-name">{{member.enName}}</h3>
+      <span class="member-job-title">{{member.enJobTitle}}</span>
+    </div>
+  </span>
+</div>

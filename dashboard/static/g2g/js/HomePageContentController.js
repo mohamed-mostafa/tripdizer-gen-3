@@ -104,8 +104,15 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 		}
 		$scope.refreshingOrders = true;
 		$scope.collapseAdvancedSearchIfExpanded();
+		
+		var pageSize = 50;
+		if ($scope.numPerPage == "All") {
+			pageSize = Number.MAX_SAFE_INTEGER || Number.MAX_VALUE;
+		} else {
+			pageSize = $scope.numPerPage;
+		}
 
-		$http.get($rootScope.serverURL + "/request/statuses/summaries?statuses=" + $scope.currentRequest + "&page=" + $scope.currentPage + "&size=" + $scope.numPerPage).success(
+		$http.get($rootScope.serverURL + "/request/statuses/summaries?statuses=" + $scope.currentRequest + "&page=" + $scope.currentPage + "&size=" + pageSize).success(
 			function (response) {
 				$scope.totalItems = response.totalRows;
 				response = response.requests.sort((a, b) => b.id - a.id).map(function (request) {
@@ -234,6 +241,20 @@ g2gControlCenterApplication.controller("HomePageContentController", ['$rootScope
 				if ($scope.currentOrders[i].traveler.name.toLowerCase().includes($scope.searchCriteria.name.toLowerCase())) ordersArr.push($scope.currentOrders[i]);
 			$scope.currentOrders = ordersArr;
 		} else delete $scope.searchCriteria.name;
+
+		if ($scope.searchCriteria.id) {
+			var ordersArr = [];
+			for (let i = 0; i < $scope.currentOrders.length; ++i)
+				if ($scope.currentOrders[i].id == $scope.searchCriteria.id) ordersArr.push($scope.currentOrders[i]);
+			$scope.currentOrders = ordersArr;
+		} else delete $scope.searchCriteria.id;
+
+		if ($scope.searchCriteria.phone) {
+			var ordersArr = [];
+			for (let i = 0; i < $scope.currentOrders.length; ++i)
+				if ($scope.currentOrders[i].traveler.mobile.toLowerCase().includes($scope.searchCriteria.phone.toLowerCase())) ordersArr.push($scope.currentOrders[i]);
+			$scope.currentOrders = ordersArr;
+		} else delete $scope.searchCriteria.phone;
 
 		if ($scope.searchCriteria.status) {
 			$scope.currentRequest = $scope.searchCriteria.status;

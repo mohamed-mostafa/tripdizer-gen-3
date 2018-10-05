@@ -1,7 +1,6 @@
 .videos-carousel {
   .video-caption {
     display: none;
-    font-family: 'Montserrat Subrayada', sans-serif;
 
     .video-name {
       font-size: 2rem;
@@ -22,6 +21,8 @@
       .owl-video-wrapper {
         padding: 8%;
         background-color: transparent;
+        border-radius: 1.5rem;
+        overflow: hidden;
 
         .owl-video-tn {
           background-size: cover;
@@ -66,7 +67,7 @@
       font-size: 7rem !important;
       color: #FFF !important;
       font-weight: lighter !important;
-      top: calc(50% - 4.45rem);
+      top: calc(50% - 6.4rem);
     }
 
     .owl-next {
