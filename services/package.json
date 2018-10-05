@@ -31,6 +31,7 @@
   "devDependencies": {
     "mocha": "^5.2.0",
     "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "mockery": "^2.1.0"
   },
   "author": {
@@ -45,7 +46,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --no-timeouts",
+    "test": "mocha test/unit-test --no-timeouts",
+    "api-test": "mocha test/api-test --no-timeouts",
     "build-dev": "echo 'Build not needed'",
     "build-stg": "echo 'Build not needed'",
     "build-prod": "echo 'Build not needed'"

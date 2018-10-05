@@ -5,7 +5,7 @@ var countryRecommendationMocks = require("./utilities/country_recommendation_tes
 describe('hws_request_business', function() {
   describe('recommendation', function() {
 
-  	before(function(done) {
+  	before(done => {
   		mockery.enable({ useCleanCache: true });
 		mockery.warnOnUnregistered(false);
 		mockery.warnOnReplace(true);
@@ -13,7 +13,7 @@ describe('hws_request_business', function() {
 		done();
   	});
 
-	after(function(done) {
+	after(done => {
   		mockery.deregisterAll();
   		mockery.disable();
 		done();
@@ -36,10 +36,10 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "BALI");
-			done();
+			try { assert.equal(result[0].enName, "BALI");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
@@ -60,10 +60,10 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "EGYPT");
-			done();
+			try { assert.equal(result[0].enName, "EGYPT");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
@@ -84,10 +84,10 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "EGYPT");
-			done();
+			try { assert.equal(result[0].enName, "NIPAL");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
@@ -108,10 +108,10 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "DUBAI");
-			done();
+			try { assert.equal(result[0].enName, "DUBAI");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
@@ -132,10 +132,10 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "PARIS");
-			done();
+			try { assert.equal(result[0].enName, "PARIS");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
@@ -156,21 +156,45 @@ describe('hws_request_business', function() {
 			visa_assistance_needed: false
 		};
 		
-		var requestsBusiness = require('../hws_modules/business/hws_requests_business.js')
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.recommendation(request, function(result) {
-			assert.equal(result[0].enName, "PARIS");
-			done();
+			try { assert.equal(result[0].enName, "BANGKOK");
+			done(); } catch(e) {done(e)}
+		}, null, null);
+    });
+
+    it('should recommend KUALALUMPUR after BANGKOK when travelling in June, mid-range, group, for night life and shopping', function(done) {
+		var request = {
+			itinerary_id: 1,
+			return_date: '06-18-2015', departure_date: '06-11-2015',
+			travel_purpose: 4, // group
+			interests: [
+				{id: 1, percentage: 0}, // activities
+				{id: 2, percentage: 0}, // history
+				{id: 3, percentage: 100}, // night life
+				{id: 4, percentage: 0}, // beaches
+				{id: 5, percentage: 0}, // nature
+				{id: 6, percentage: 100}, // shopping
+			],
+			budget_category: 4, // mid range 
+			visa_assistance_needed: false
+		};
+		
+		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
+		requestsBusiness.recommendation(request, function(result) {
+			try { assert.equal(result[1].enName, "KUALALUMPUR");
+			done(); } catch(e) {done(e)}
 		}, null, null);
     });
 
     it('should re-consider the interests ranking ? better be according to whether users exceeds or below the interest rating ?', function(done) {
-		assert.equal(true, true);
-		done();
+		try { assert.equal(true, true);
+		done(); } catch(e) {done(e)}
     });
 
     it('should re-consider the budget category ranking ? better be according to whether users exceeds or below a budget rating ?', function(done) {
-		assert.equal(true, true);
-		done();	
+		try { assert.equal(true, true);
+		done(); } catch(e) {done(e)}	
     });
 
   }); // end function describe

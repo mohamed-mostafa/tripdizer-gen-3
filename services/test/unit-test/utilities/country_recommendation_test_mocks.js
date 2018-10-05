@@ -199,7 +199,39 @@ var itirnaryDaoMock = {
 				{interest_Id: 6, Percentage: 100} // shopping
 			]
 		};
-		onSuccess([BALI, EGYPT, DUBAI, PARIS]);
+
+		var KUALALUMPUR = {
+			id:7,
+			en_name: "KUALALUMPUR",
+			needsVisa: false,
+			seasons: [
+				{start: '01-01-2018', end: '03-31-2018', type: 2}, // shoulder season
+				{start: '04-01-2018', end: '09-30-2018', type: 0},// high season
+				{start: '10-01-2018', end: '12-31-2018', type: 1} // low season
+			], 
+			budgetCategories: [
+				{budget_category_Id: 2, Percentage: 25}, // super economy
+				{budget_category_Id: 3, Percentage: 50}, // economy
+				{budget_category_Id: 4, Percentage: 75}, // mid-range
+				{budget_category_Id: 5, Percentage: 100} // splurge
+			],
+			purposes: [
+				{travel_purpose_Id: 2, Percentage: 100}, // solo
+				{travel_purpose_Id: 3, Percentage: 100}, // family
+				{travel_purpose_Id: 4, Percentage: 100}, // group
+				{travel_purpose_Id: 5, Percentage: 50}, // honeymoon
+				{travel_purpose_Id: 6, Percentage: 100} // business
+			],
+			interests: [
+				{interest_Id: 1, Percentage: 100}, // activities
+				{interest_Id: 2, Percentage: 0}, // history
+				{interest_Id: 3, Percentage: 100}, // night life
+				{interest_Id: 4, Percentage: 0}, // beaches
+				{interest_Id: 5, Percentage: 0}, // nature
+				{interest_Id: 6, Percentage: 99} // shopping
+			]
+		};
+		onSuccess([BALI, EGYPT, DUBAI, PARIS, BANGKOK, NIPAL, KUALALUMPUR]);
 	}
 }
 
