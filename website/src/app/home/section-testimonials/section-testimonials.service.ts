@@ -21,7 +21,7 @@ export class SectionTestimonialService {
         {
             enName: 'Test Name2',
             enText: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-            picture: 'https://i.imgur.com/o6ele3c.jpg'
+            picture: 'https://i.imgur.com/uAOptZ5.jpg'
         },
         {
             enName: 'Test Name3',
