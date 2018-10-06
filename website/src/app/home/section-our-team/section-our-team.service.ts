@@ -18,7 +18,7 @@ export class SectionOurTeamService {
         },
         {
             enName: 'Test Name2', enJobTitle: 'Test Job Title 2',
-            picture: 'https://i.imgur.com/Eta1tBs.jpg'
+            picture: 'https://i.imgur.com/o6ele3c.jpg'
         },
         {
             enName: 'Test Name3', enJobTitle: 'Test Job Title 3',
@@ -34,7 +34,7 @@ export class SectionOurTeamService {
         },
         {
             enName: 'Test Name6', enJobTitle: 'Test Job Title 6',
-            picture: 'https://i.imgur.com/RXlW5wn.jpg'
+            picture: 'https://i.imgur.com/jNBgVU9.jpg'
         }
     ];
 

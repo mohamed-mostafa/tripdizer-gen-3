@@ -21,7 +21,7 @@ export class SectionTestimonialService {
         {
             enName: 'Test Name2',
             enText: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-            picture: 'https://i.imgur.com/Eta1tBs.jpg'
+            picture: 'https://i.imgur.com/o6ele3c.jpg'
         },
         {
             enName: 'Test Name3',
@@ -41,13 +41,13 @@ export class SectionTestimonialService {
         {
             enName: 'Test Name6',
             enText: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.',
-            picture: 'https://i.imgur.com/RXlW5wn.jpg'
+            picture: 'https://i.imgur.com/jNBgVU9.jpg'
         }
     ];
     private sponsors: Array<any> = [
-        { picture: 'https://i.imgur.com/DYhlM87.png' },
-        { picture: 'https://i.imgur.com/377MwOq.jpg' },
-        { picture: 'https://i.imgur.com/dr7Xt4b.jpg' }
+        { picture: 'https://i.imgur.com/8QVRpzj.png' },
+        { picture: 'https://i.imgur.com/wd0fhgr.jpg' },
+        { picture: 'https://i.imgur.com/o6ele3c.jpg' }
     ];
 
     constructor(private http: HttpClient) { }
