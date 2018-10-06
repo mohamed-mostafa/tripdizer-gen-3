@@ -1,9 +1,19 @@
 .sections-container,
-#landing,
+#landing {
+  height: 100%;
+}
+
+#testimonials {
+  min-height: 100%;
+
+  @media (min-width: 355px) {
+    height: 100%;
+  }
+}
+
 #videos,
 #why-us,
-#our-team,
-#testimonials {
+#our-team {
   min-height: 100%;
 
   @media (min-width: 576px) {
@@ -12,8 +22,7 @@
 }
 
 #videos,
-#our-team,
-#testimonials {
+#our-team {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -33,18 +33,35 @@
     }
 
     .member-picture-wrapper {
-      width: 22rem;
-      height: 22rem;
+      width: 15rem;
+      height: 15rem;
       display: block;
       padding: 20%;
 
       .member-picture {
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        border-radius: 50%;
         object-fit: cover;
         width: 100%;
         height: 100%;
+      }
+
+      @media (min-width: 576px) {
+        width: 18rem;
+        height: 18rem;
+      }
+
+      @media (min-width: 768px) {
+        width: 21rem;
+        height: 21rem;
+      }
+
+      @media (min-width: 992px) {
+        width: 24rem;
+        height: 24rem;
+      }
+
+      @media (min-width: 1200px) {
+        width: 27rem;
+        height: 27rem;
       }
     }
   }
