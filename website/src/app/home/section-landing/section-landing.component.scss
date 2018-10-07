@@ -1,14 +1,32 @@
-:host::after {
-  content: "";
-  background: url('../../../assets/img/bg.png');
-  background-color: #1e90ff;
-  // opacity: 0.5;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;
+:host {
+  height: 100%;
+
+  @media (min-height: 530px) {
+    padding-bottom: 2.12rem;
+  }
+
+  &:after {
+    content: "";
+    background: url('../../../assets/img/bg.png');
+    background-color: #1e90ff;
+    // opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+  }
+}
+
+.lets-go-traveller-img {
+  @media (min-aspect-ratio: 1360 / 768) {
+    height: 50%;
+  }
+
+  img {
+    max-height: 100%;
+  }
 }
 
 .lets-go {
@@ -27,7 +45,12 @@
 }
 
 .landing-question {
-  font-size: 2.25rem
+  font-size: 2.25rem;
+
+  @media (max-height: 720px) {
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 }
 
 .scroll-down {
@@ -35,6 +58,10 @@
   letter-spacing: 1rem;
   position: absolute;
   bottom: 1.5rem;
+
+  @media (max-height: 530px) {
+    display: none;
+  }
 
   >a {
     text-decoration: none;

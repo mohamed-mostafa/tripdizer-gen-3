@@ -34,10 +34,20 @@ export class TestimonialsCarouselComponent implements OnInit {
   initOwlCarousel() {
     $(document).ready(function () {
       $('.testimonials-carousel.owl-carousel').width(document.body.clientWidth).owlCarousel({
-        items: 2,
         dots: false,
         responsive: {
-          0: { items: 1 }
+          0: {
+            items: 1,
+            margin: 10
+          },
+          768: {
+            items: 2,
+            margin: 30
+          },
+          992: {
+            items: 2,
+            margin: 40
+          }
         }
       });
     });
