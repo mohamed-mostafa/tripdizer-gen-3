@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 /* Modules */
-import { AppRoutingModule, COMPONENTS as AppComponents } from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 /* Interceptors */
 import { JWTokenInterceptor } from './http.interceptor';
@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    ...AppComponents,
     AppComponent
   ],
   imports: [
