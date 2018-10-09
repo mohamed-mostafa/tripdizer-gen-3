@@ -1,0 +1,15 @@
+:host {
+  .main-container {
+    height: 100%;
+
+    >div:after {
+      content: "";
+      background-image: url('../../assets/img/request-bg.png');
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      opacity: 0.1;
+      z-index: -1;
+    }
+  }
+}
