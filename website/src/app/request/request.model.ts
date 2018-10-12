@@ -1,6 +1,15 @@
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
 
 export class Request {
+  private _travelingFrom: string;
+
+  set travelingFrom(value: string) {
+    this._travelingFrom = value;
+  }
+  get travelingFrom() {
+    return this._travelingFrom;
+  }
+
   get navBar(): IRequestNavBar {
     return {
       travelingFrom: { title: 'Traveling from', value: '', path: 'traveling-from', order: 0 },
@@ -14,5 +23,10 @@ export class Request {
       travelAssistance: { title: 'Travel Assistance', value: '', path: 'travel-assistance', order: 8 },
       information: { title: 'One more step', value: 'Information', path: 'information', order: 9 }
     };
+  }
+
+  isValid(): boolean {
+    if (!this.travelingFrom) { return false; }
+    return true;
   }
 }

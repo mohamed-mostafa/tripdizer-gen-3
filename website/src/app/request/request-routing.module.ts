@@ -4,19 +4,22 @@ import { RouterModule, Routes } from '@angular/router';
 /* Components */
 import { RequestComponent } from './request.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
+import { TravelingFromComponent } from './traveling-from/traveling-from.component';
 
 const routes: Routes = [
     {
         path: '', component: RequestComponent,
         children: [
-            { path: '', redirectTo: 'first-step', pathMatch: 'full' }
+            { path: '', redirectTo: 'traveling-from', pathMatch: 'full' },
+            { path: 'traveling-from', component: TravelingFromComponent }
         ]
     }
 ];
 
 export const COMPONENTS = [
     RequestComponent,
-    RequestNavBarComponent
+    RequestNavBarComponent,
+    TravelingFromComponent
 ];
 
 @NgModule({

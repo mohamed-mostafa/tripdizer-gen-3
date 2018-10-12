@@ -1,0 +1,16 @@
+<div class="h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <form [formGroup]="formGroup" class="col-12 col-md-12 col-lg-7">
+      <mat-form-field class="custom-bs form-control-xl">
+        <mat-hint>Required</mat-hint>
+        <input matInput type="text" id="traveling-from" class="custom-bs text-yellow text-uppercase font-weight-bold"
+          placeholder="Traveling From" formControlName="travelingFrom">
+        <mat-error *ngIf="formGroup.controls.travelingFrom.invalid">Required</mat-error>
+      </mat-form-field>
+    </form>
+    <div class="offset-lg-1">
+      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
+        <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
