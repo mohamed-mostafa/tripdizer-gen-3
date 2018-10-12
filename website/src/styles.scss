@@ -4,6 +4,12 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+/* START Variables */
+$color-yellow: #FFC640;
+$color-blue: #2989FF;
+
+/* END Variables */
+
 html,
 body {
   height: 100%;
@@ -20,7 +26,64 @@ body {
       -webkit-border-radius: 10em;
       border-radius: 10em;
     }
+
+    &.btn-xl {
+      padding: 2rem 3rem;
+      font-size: 1.56rem;
+    }
+  }
+
+  &.form-control-xl {
+    width: 100%;
+    font-size: 4.5rem;
+  }
+
+  &.text-yellow {
+    color: $color-yellow;
+  }
+
+  &.text-blue {
+    color: $color-blue;
   }
 }
 
 /* END Extend Bootstrap */
+
+/* START Extend Angular Material */
+.mat-focused {
+  .mat-form-field-label {
+    color: $color-blue !important;
+  }
+}
+
+.mat-input-element {
+  caret-color: $color-blue !important;
+}
+
+.mat-form-field-underline {
+  display: none;
+}
+
+.form-control-xl {
+  .mat-form-field-wrapper {
+    padding: 0;
+
+    .mat-form-field-infix {
+      padding: .1em 0 0;
+      border-top: 0;
+
+      .mat-form-field-label-wrapper {
+        font-size: 3.5rem;
+        top: -1.25em;
+      }
+    }
+  }
+
+  .mat-form-field-subscript-wrapper {
+    font-size: 1rem;
+    margin-top: 0;
+    top: -1rem;
+  }
+}
+
+/* END Extend Angular Material */

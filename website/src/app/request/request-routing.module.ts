@@ -3,18 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 
 /* Components */
 import { RequestComponent } from './request.component';
+import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 
 const routes: Routes = [
     {
         path: '', component: RequestComponent,
         children: [
-            { path: '', redirectTo: 'traveling-from', pathMatch: 'full' }
+            { path: '', redirectTo: 'first-step', pathMatch: 'full' }
         ]
     }
 ];
 
 export const COMPONENTS = [
-    RequestComponent
+    RequestComponent,
+    RequestNavBarComponent
 ];
 
 @NgModule({

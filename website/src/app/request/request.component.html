@@ -1,7 +1,7 @@
 <div class="container-fluid main-container">
   <div class="row">
     <div id="nav-bar" class="col-12">
-      <div></div>
+      <c-request-nav-bar [data]="request.navBar" (navBarDimensionChanged)="setDevHeights()"></c-request-nav-bar>
     </div>
     <div id="body-container" class="col-12">
       <router-outlet></router-outlet>

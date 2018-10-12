@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Request } from './request.model';
 
+/* Services */
+import { RequestService } from './request.service';
+
 @Component({
   selector: 'c-request',
   templateUrl: './request.component.html',
@@ -9,7 +12,10 @@ import { Request } from './request.model';
 export class RequestComponent implements OnInit {
   request = new Request();
 
-  constructor() {
+  constructor(private requestService: RequestService) {
+    requestService.requestDataChanged.subscribe(obj => {
+      this.request[obj.key] = obj.value;
+    });
   }
 
   ngOnInit() {

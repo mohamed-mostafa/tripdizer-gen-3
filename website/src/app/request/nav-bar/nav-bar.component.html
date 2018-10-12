@@ -1,0 +1,8 @@
+<div id="request-nav-bar-container" class="row request-nav-bar">
+  <div class="nav-brand"></div>
+  <div *ngFor="let navLink of navLinks" class="col nav-link" [routerLink]="[navLink.path]" [class.active]="isActive(navLink.path)">
+    <div class="col-12 title">{{navLink.title}}</div>
+    <div class="col-12 value">{{navLink.value}}</div>
+  </div>
+  <a class="col nav-login-link" href="#">Login <i class="fas fa-lock"></i></a>
+</div>
