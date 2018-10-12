@@ -12,8 +12,13 @@ body {
 }
 
 /* START Extend Bootstrap */
-.btn.btn-rounded {
-  border-radius: 2rem;
+.custom-bs {
+  &.btn {
+    &.btn-rounded {
+      -webkit-border-radius: 10em;
+      border-radius: 10em;
+    }
+  }
 }
 
 /* END Extend Bootstrap */

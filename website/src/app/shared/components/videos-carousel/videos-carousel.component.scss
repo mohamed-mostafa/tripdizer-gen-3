@@ -3,7 +3,6 @@
     display: none;
     letter-spacing: 0.1rem;
     max-width: 90%;
-    display: inline-block;
 
     .video-name {
       font-size: 1.25rem;
@@ -55,7 +54,7 @@
           }
 
           .video-caption {
-            display: block;
+            display: inline-block;
           }
 
           &:not(.owl-video-playing) {
