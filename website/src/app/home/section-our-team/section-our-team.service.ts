@@ -9,32 +9,24 @@ export class SectionOurTeamService {
     private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
     private team: Array<any> = [
         {
-            enName: 'Yara Yehia', enJobTitle: 'Operation Manager',
+            enName: 'Yara Yehia', enJobTitle: 'Cheif Operations Officer',
             picture: 'https://i.imgur.com/snNiy42.jpg'
         },
         {
-            enName: 'Test Name1', enJobTitle: 'Test Job Title 1',
+            enName: 'Sameh Saleh', enJobTitle: 'Cheif Executive Officer',
             picture: 'https://i.imgur.com/fXRay2S.jpg'
         },
         {
-            enName: 'Test Name2', enJobTitle: 'Test Job Title 2',
+            enName: 'Ziad El-Adawy', enJobTitle: 'Business Development Manager',
             picture: 'https://i.imgur.com/uAOptZ5.jpg'
         },
         {
-            enName: 'Test Name3', enJobTitle: 'Test Job Title 3',
+            enName: 'Hatem Ayoub', enJobTitle: 'Cheif Marketing Officer',
             picture: 'https://i.imgur.com/PukqOzK.jpg'
         },
         {
-            enName: 'Test Name4', enJobTitle: 'Test Job Title 4',
+            enName: 'Mohamed Mostafa', enJobTitle: 'Cheif Technical Officer',
             picture: 'https://i.imgur.com/R00WwU5.jpg'
-        },
-        {
-            enName: 'Test Name5', enJobTitle: 'Test Job Title 5',
-            picture: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPPQHwJh2uUXJAUZPBlC0E7C1Qea2436wd6oBCzolmoWJG-W6'
-        },
-        {
-            enName: 'Test Name6', enJobTitle: 'Test Job Title 6',
-            picture: 'https://i.imgur.com/jNBgVU9.jpg'
         }
     ];
 

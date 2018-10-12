@@ -7,12 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
   menuItems: Array<string> = [
-    'Menu Item 1',
-    'Menu Item 1',
-    'Menu Item 1',
-    'Menu Item 1',
-    'Menu Item 1',
-    'Menu Item 1'
+//    'FAQ',
+//    'Careers',
+//    'Press Releases'
+//    'Privacy Policy',
   ];
 
   constructor() { }
