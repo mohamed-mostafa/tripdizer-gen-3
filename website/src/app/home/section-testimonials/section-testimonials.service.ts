@@ -15,12 +15,14 @@ export class SectionTestimonialService {
         },
         {
             enName: 'Shahd Taha',
-            enText: 'I really enjoyed Bali’s trip so much, you guys made my Honeymoon perfect by recommending the best things ever which totally matched what we love. Thanks a million.',
+            enText: `I really enjoyed Bali’s trip so much, you guys made my Honeymoon perfect by recommending the best
+            things ever which totally matched what we love. Thanks a million.`,
             picture: '../../../assets/img/shahd_taha.jpg'
         },
         {
             enName: 'Tamer Mohamed',
-            enText: 'Best website to use if you are looking for a plan that matches your travel style, I travelled to Malaysia and Bali and I couldn’t enjoy it more.',
+            enText: `Best website to use if you are looking for a plan that matches your travel style,
+            I travelled to Malaysia and Bali and I couldn’t enjoy it more.`,
             picture: '../../../assets/img/tamer_mohamed.jpg'
         },
     ];
