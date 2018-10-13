@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prebuild-dev": "npm install -g --unsafe-perm && npm run lint",
+    "prebuild-dev": "npm install -g --unsafe-perm",
     "prebuild-stg": "npm run lint",
     "prebuild-prod": "npm run lint"
   },
