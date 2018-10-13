@@ -12,16 +12,65 @@ export class Request {
 
   get navBar(): IRequestNavBar {
     return {
-      travelingFrom: { title: 'Traveling from', value: '', path: 'traveling-from', order: 0 },
-      departureReturn: { title: 'Departure & Return', value: '', path: 'departure-return', order: 1 },
-      travelers: { title: 'Travelers', value: '', path: 'travelers', order: 2 },
-      budget: { title: 'Budget', value: '', path: 'budget', order: 3 },
-      purpose: { title: 'Purpose', value: '', path: 'purpose', order: 4 },
-      preferences: { title: 'Preferences', value: '', path: 'preferences', order: 5 },
-      destinations: { title: 'Destinations', value: '', path: 'destinations', order: 6 },
-      estimatedCost: { title: 'Estimated Cost', value: '', path: 'estimated-cost', order: 7 },
-      travelAssistance: { title: 'Travel Assistance', value: '', path: 'travel-assistance', order: 8 },
-      information: { title: 'One more step', value: 'Information', path: 'information', order: 9 }
+      travelingFrom: {
+        title: 'Traveling from', path: 'traveling-from', order: 0,
+        value: ((): string => {
+          if (!this.travelingFrom) { return ''; }
+          return this.travelingFrom;
+        })()
+      },
+      departureReturn: {
+        title: 'Departure & Return', path: 'departure-return', order: 1,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      travelers: {
+        title: 'Travelers', path: 'travelers', order: 2,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      budget: {
+        title: 'Budget', path: 'budget', order: 3,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      purpose: {
+        title: 'Purpose', path: 'purpose', order: 4,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      preferences: {
+        title: 'Preferences', path: 'preferences', order: 5,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      destinations: {
+        title: 'Destinations', path: 'destinations', order: 6,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      estimatedCost: {
+        title: 'Estimated Cost', path: 'estimated-cost', order: 7,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      travelAssistance: {
+        title: 'Travel Assistance', path: 'travel-assistance', order: 8,
+        value: ((): string => {
+          return '';
+        })()
+      },
+      information: {
+        title: 'One more step', path: 'information', order: 9,
+        value: 'Information'
+      }
     };
   }
 
