@@ -10,7 +10,7 @@ handlers:
   static_files: dist/website/index.html
   upload: dist/website/index.html
 
-- url: /request/*
+- url: /request/(.*)
   static_files: dist/website/index.html
   upload: dist/website/index.html
 
