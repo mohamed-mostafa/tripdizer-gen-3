@@ -15,6 +15,10 @@
   .nav-links {
     overflow: hidden;
 
+    @media (max-width: 576px) {
+      overflow: auto;
+    }
+
     .nav-link {
       padding: 1.75rem 0;
       font-size: 0.875rem;
