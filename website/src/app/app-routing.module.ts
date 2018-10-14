@@ -4,10 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 /* Components */
 
 const routes: Routes = [
-    { path: '', loadChildren: './home/home.module#HomeModule' }
-];
-
-export const COMPONENTS = [
+    { path: '', loadChildren: './home/home.module#HomeModule' },
+    { path: 'request', loadChildren: './request/request.module#RequestModule' }
 ];
 
 @NgModule({

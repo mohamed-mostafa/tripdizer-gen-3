@@ -1,0 +1,54 @@
+.request-nav-bar {
+  .nav-brand {
+    background-color: #2989FF;
+
+    &:after {
+      content: "";
+      background: url('../../../assets/img/icon-white.svg');
+      width: 50%;
+      height: 50%;
+      margin: 25%;
+      display: inline-block;
+    }
+  }
+
+  .nav-links {
+    overflow: hidden;
+
+    .nav-link {
+      padding: 1.75rem 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #CCCCCC;
+      white-space: nowrap;
+      box-sizing: content-box;
+      border-top: 2px solid #2989FF;
+      cursor: pointer;
+      display: inline-grid;
+
+      &.active {
+        &~.nav-link {
+          border-color: transparent;
+        }
+
+        .title {
+          color: #191917;
+        }
+
+        .value {
+          color: #2989FF;
+        }
+      }
+    }
+  }
+
+  .nav-login-link {
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+}

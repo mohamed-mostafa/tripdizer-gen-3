@@ -1,0 +1,26 @@
+<div class="h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <form [formGroup]="formGroup" class="col-11 col-lg-7">
+      <mat-form-field class="custom-bs form-control-xl">
+        <mat-hint>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-hint>
+        <mat-error>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-error>
+        <input matInput [matDatepicker]="departureDatePicker" id="departure-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
+          placeholder="Departure" (click)="departureDatePicker.open()" formControlName="departureDate">
+        <mat-datepicker #departureDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="custom-bs form-control-xl">
+        <mat-hint>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-hint>
+        <mat-error>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-error>
+        <input matInput [matDatepicker]="returnDatePicker" id="return-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
+          placeholder="Return" (click)="returnDatePicker.open()" formControlName="returnDate">
+        <mat-datepicker #returnDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-checkbox formControlName="isFlexibleDates" labelPosition="after">Flexible dates ( +/- 3 days )</mat-checkbox>
+    </form>
+    <div class="offset-lg-1">
+      <a [routerLink]="['/request', 'traveling-from']" class="mr-5">Back</a>
+      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
+        <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>

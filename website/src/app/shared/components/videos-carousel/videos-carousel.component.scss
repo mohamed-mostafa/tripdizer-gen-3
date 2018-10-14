@@ -1,16 +1,28 @@
 .videos-carousel {
   .video-caption {
     display: none;
+    letter-spacing: 0.1rem;
+    max-width: 90%;
 
     .video-name {
-      font-size: 2rem;
+      font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 0;
     }
 
     .video-desc {
-      font-size: 1.375rem;
+      font-size: 1rem;
       color: #787878;
+    }
+
+    @media (min-width: 576px) {
+      .video-name {
+        font-size: 2rem;
+      }
+
+      .video-desc {
+        font-size: 1.375rem;
+      }
     }
   }
 }
@@ -42,7 +54,7 @@
           }
 
           .video-caption {
-            display: block;
+            display: inline-block;
           }
 
           &:not(.owl-video-playing) {
