@@ -12,27 +12,32 @@
     }
   }
 
-  .nav-link {
-    padding: 1.75rem 0;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #CCCCCC;
-    white-space: nowrap;
-    box-sizing: content-box;
-    border-top: 2px solid #2989FF;
-    cursor: pointer;
+  .nav-links {
+    overflow: hidden;
 
-    &.active {
-      &~.nav-link {
-        border-color: transparent;
-      }
+    .nav-link {
+      padding: 1.75rem 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #CCCCCC;
+      white-space: nowrap;
+      box-sizing: content-box;
+      border-top: 2px solid #2989FF;
+      cursor: pointer;
+      display: inline-grid;
 
-      .title {
-        color: #191917;
-      }
+      &.active {
+        &~.nav-link {
+          border-color: transparent;
+        }
 
-      .value {
-        color: #2989FF;
+        .title {
+          color: #191917;
+        }
+
+        .value {
+          color: #2989FF;
+        }
       }
     }
   }
