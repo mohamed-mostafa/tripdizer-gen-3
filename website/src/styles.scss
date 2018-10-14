@@ -33,11 +33,6 @@ body {
     }
   }
 
-  &.form-control-xl {
-    width: 100%;
-    font-size: 4.5rem;
-  }
-
   &.text-yellow {
     color: $color-yellow;
   }
@@ -69,37 +64,124 @@ body {
   background-color: $color-blue;
 }
 
-.mat-ripple-element {
-  background-color: rgba($color-blue, 0.3) !important;
-}
-
 .mat-form-field-label {
   border-left: 5px solid;
   padding-left: 1rem;
 }
 
 .form-control-xl {
-  padding-top: 4rem;
+  &.mat-form-field {
+    width: 100%;
+    font-size: 4.5rem;
+    padding-top: 4rem;
 
-  .mat-form-field-wrapper {
-    padding: 0;
+    .mat-form-field-wrapper {
+      padding: 0;
 
-    .mat-form-field-infix {
-      padding: .1em 0 0;
-      border-top: 0;
+      .mat-form-field-infix {
+        padding: .1em 0 0;
+        border-top: 0;
 
-      .mat-form-field-label-wrapper {
-        font-size: 3.5rem;
-        top: -1.25em;
+        .mat-form-field-label-wrapper {
+          top: -0.8em;
+        }
+      }
+
+      .mat-form-field-subscript-wrapper {
+        font-size: 1rem;
+        margin-top: 0;
+        top: -1rem;
+        padding-left: 1.1rem;
       }
     }
   }
 
-  .mat-form-field-subscript-wrapper {
-    font-size: 1rem;
-    margin-top: 0;
-    top: -1rem;
+  &.mat-radio-group {
+    .mat-radio-button {
+      .mat-radio-label {
+
+        .mat-radio-container,
+        .mat-radio-outer-circle,
+        .mat-radio-inner-circle {
+          width: 64px;
+          height: 64px;
+        }
+
+        .mat-radio-label-content {
+          position: absolute;
+          padding: 0;
+          color: rgba(0, 0, 0, .54);
+          font-size: 1.75rem;
+          font-weight: 600;
+          text-align: center;
+          width: 64px;
+        }
+      }
+
+      &.mat-radio-checked {
+        .mat-radio-inner-circle {
+          transform: scale(1);
+        }
+
+        .mat-radio-label-content {
+          color: #FFF;
+        }
+      }
+    }
+
+    .mat-radio-ripple {
+      left: calc(50% - 40px);
+      top: calc(50% - 40px);
+      height: 80px;
+      width: 80px;
+
+      .mat-ripple-element {
+        top: 2px !important;
+        left: 2px !important;
+        height: 76px !important;
+        width: 76px !important;
+      }
+    }
+
+    .mat-radio-group-label-wrapper {
+      color: rgba(0, 0, 0, .54);
+
+      .mat-radio-group-label {
+        border-left: 5px solid;
+        padding-left: 1rem;
+        display: block;
+      }
+
+      .mat-radio-group-subscript {
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.125;
+        padding-left: 1.1rem;
+      }
+    }
   }
+}
+
+.mat-checkbox {
+  .mat-ripple-element {
+    background-color: rgba($color-blue, 0.3) !important;
+  }
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label,
+.mat-form-field-label,
+.mat-radio-group-label {
+  font-size: 3.5rem;
+  line-height: 4rem;
+  letter-spacing: 2.5px;
+  color: $color-blue;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.mat-calendar-body-selected {
+  background-color: $color-blue;
 }
 
 /* END Extend Angular Material */

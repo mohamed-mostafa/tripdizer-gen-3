@@ -1,0 +1,32 @@
+<div class="h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <form [formGroup]="formGroup" class="col-11 col-lg-7">
+      <mat-radio-group class="custom-bs form-control-xl" formControlName="adultsNumber">
+        <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.adultsNumber.invalid">
+          <span class="mat-radio-group-label">Adults</span>
+          <span class="mat-radio-group-subscript">{{formGroup.controls.adultsNumber.errors | errorMessage}}</span>
+        </div>
+        <mat-radio-button *ngFor="let radioValue of radioValues | keyvalue" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-radio-group class="custom-bs form-control-xl" formControlName="kidsNumber">
+        <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.kidsNumber.invalid">
+          <span class="mat-radio-group-label">Kids</span>
+          <span class="mat-radio-group-subscript">{{formGroup.controls.kidsNumber.errors | errorMessage}}</span>
+        </div>
+        <mat-radio-button *ngFor="let radioValue of radioValues | keyvalue" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-radio-group class="custom-bs form-control-xl" formControlName="infantsNumber">
+        <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.infantsNumber.invalid">
+          <span class="mat-radio-group-label">Infants</span>
+          <span class="mat-radio-group-subscript">{{formGroup.controls.infantsNumber.errors | errorMessage}}</span>
+        </div>
+        <mat-radio-button *ngFor="let radioValue of radioValues | keyvalue" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+      </mat-radio-group>
+    </form>
+    <div class="offset-lg-1">
+      <a [routerLink]="['/request', 'departure-return']" class="mr-5">Back</a>
+      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
+        <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>

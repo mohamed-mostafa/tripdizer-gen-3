@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 
 /* Modules */
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
@@ -19,7 +20,8 @@ import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
     ReactiveFormsModule,
     MatInputModule,
     MatDatepickerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatRadioModule
   ],
   declarations: [
     ...RequestComponents,
