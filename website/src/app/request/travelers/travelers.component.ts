@@ -18,12 +18,12 @@ export class TravelersComponent {
     'kidsNumber': new FormControl(),
     'infantsNumber': new FormControl()
   };
-  radioValues = {
-    1: '1',
-    2: '2',
-    3: '3',
-    4: '+4'
-  };
+  radioValues: Array<{ key: number, value: string }> = [
+    { key: 1, value: '1' },
+    { key: 2, value: '2' },
+    { key: 3, value: '3' },
+    { key: 4, value: '+4' }
+  ];
 
   constructor(
     private router: Router,
