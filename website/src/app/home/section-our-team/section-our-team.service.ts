@@ -17,16 +17,16 @@ export class SectionOurTeamService {
             picture: '../../../assets/img/sameh.jpg'
         },
         {
-            enName: 'Ziad El-Adawy', enJobTitle: 'Business Development Manager',
-            picture: '../../../assets/img/ziad.jpg'
-        },
-        {
             enName: 'Hatem Ayoub', enJobTitle: 'Cheif Marketing Officer',
             picture: '../../../assets/img/hatem.jpg'
         },
         {
             enName: 'Mohamed Mostafa', enJobTitle: 'Cheif Technical Officer',
             picture: '../../../assets/img/mohamed.jpg'
+        },
+        {
+            enName: 'Ziad El-Adawy', enJobTitle: 'Business Development Manager',
+            picture: '../../../assets/img/ziad.jpg'
         }
     ];
 
