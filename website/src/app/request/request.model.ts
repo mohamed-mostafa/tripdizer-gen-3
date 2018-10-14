@@ -1,13 +1,36 @@
+import { Moment } from 'moment';
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
 
 export class Request {
   private _travelingFrom: string;
+  private _departureDate: Moment;
+  private _returnDate: Moment;
+  private _isFlexibleDates: boolean;
 
   set travelingFrom(value: string) {
     this._travelingFrom = value;
   }
-  get travelingFrom() {
+  get travelingFrom(): string {
     return this._travelingFrom;
+  }
+  set departureDate(value) {
+    console.log(value.isValid());
+    this._departureDate = value;
+  }
+  get departureDate(): Moment {
+    return this._departureDate;
+  }
+  set returnDate(value: Moment) {
+    this._returnDate = value;
+  }
+  get returnDate(): Moment {
+    return this._returnDate;
+  }
+  set isFlexibleDates(value: boolean) {
+    this._isFlexibleDates = value;
+  }
+  get isFlexibleDates(): boolean {
+    return this._isFlexibleDates;
   }
 
   get navBar(): IRequestNavBar {
@@ -22,7 +45,8 @@ export class Request {
       departureReturn: {
         title: 'Departure & Return', path: 'departure-return', order: 1,
         value: ((): string => {
-          return '';
+          if (!this.departureDate || !this.returnDate) { return ''; }
+          return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
         })()
       },
       travelers: {
@@ -76,6 +100,8 @@ export class Request {
 
   isValid(): boolean {
     if (!this.travelingFrom) { return false; }
+    if (!this._departureDate.isValid()) { return false; }
+    if (!this._returnDate.isValid()) { return false; }
     return true;
   }
 }
