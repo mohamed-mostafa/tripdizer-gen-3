@@ -10,23 +10,23 @@ export class SectionOurTeamService {
     private team: Array<any> = [
         {
             enName: 'Yara Yehia', enJobTitle: 'Cheif Operations Officer',
-            picture: 'https://i.imgur.com/snNiy42.jpg'
+            picture: '../../../assets/img/yara.jpg'
         },
         {
             enName: 'Sameh Saleh', enJobTitle: 'Cheif Executive Officer',
-            picture: 'https://i.imgur.com/fXRay2S.jpg'
+            picture: '../../../assets/img/sameh.jpg'
         },
         {
             enName: 'Ziad El-Adawy', enJobTitle: 'Business Development Manager',
-            picture: 'https://i.imgur.com/uAOptZ5.jpg'
+            picture: '../../../assets/img/ziad.jpg'
         },
         {
             enName: 'Hatem Ayoub', enJobTitle: 'Cheif Marketing Officer',
-            picture: 'https://i.imgur.com/PukqOzK.jpg'
+            picture: '../../../assets/img/hatem.jpg'
         },
         {
             enName: 'Mohamed Mostafa', enJobTitle: 'Cheif Technical Officer',
-            picture: 'https://i.imgur.com/R00WwU5.jpg'
+            picture: '../../../assets/img/mohamed.jpg'
         }
     ];
 
