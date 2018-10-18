@@ -1,6 +1,6 @@
+import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
-import { CurrencyPipe } from '@angular/common';
 
 export class Request {
   private _travelingFrom: string;

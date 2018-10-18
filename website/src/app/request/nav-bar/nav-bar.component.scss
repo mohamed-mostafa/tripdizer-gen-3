@@ -30,6 +30,13 @@
       cursor: pointer;
       display: inline-grid;
 
+      &>* {
+        max-width: 10rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
       &.active {
         &~.nav-link {
           border-color: transparent;

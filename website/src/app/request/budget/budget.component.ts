@@ -32,6 +32,11 @@ export class BudgetComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    if (this.formGroup.controls['budgetCategory'].value !== 1) {
+      this.formGroup.controls['budget'].disable();
+    } else {
+      this.formGroup.controls['budget'].enable();
+    }
     this.formGroup.controls['budgetCategory'].valueChanges.subscribe(data => {
       if (data !== 1) {
         this.formGroup.controls['budget'].disable();

@@ -1,32 +1,47 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 /* Models */
-import { INavLink } from './nav-bar.model';
+import { Request } from '../request.model';
+import { INavLink, IRequestNavBar } from './nav-bar.model';
+
+/* Services */
+import { RequestService } from '../request.service';
 
 @Component({
   selector: 'c-request-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
-export class RequestNavBarComponent {
-  navLinks: Array<INavLink> = [];
+export class RequestNavBarComponent implements AfterViewInit {
+  navBar: IRequestNavBar = new Request().navBar;
 
-  @Input() set data(navLinks: any) {
-    this.navLinks = Object.keys(navLinks).map(key => ({
+  @Output() navBarDimensionChanged = new EventEmitter();
+
+  constructor(
+    private router: Router,
+    private requestService: RequestService) {
+    requestService.requestNavBarDataChanged.subscribe(obj => {
+      this.navBar = obj.navBar;
+      this.setNavLinksWidth();
+      this.setNavBrandWidth();
+    });
+  }
+
+  ngAfterViewInit() {
+    this.setNavLinksWidth();
+    this.setNavBrandWidth();
+  }
+
+  convertNavBarObjectToArray(navLinks: IRequestNavBar): Array<INavLink> {
+    return Object.keys(navLinks).map(key => ({
       key: key,
       title: navLinks[key].title,
       value: navLinks[key].value,
       path: navLinks[key].path,
       order: navLinks[key].order
     })).sort((a, b) => a.order - b.order);
-    this.setNavLinksWidth();
-    this.setNavBrandWidth();
   }
-
-  @Output() navBarDimensionChanged = new EventEmitter();
-
-  constructor(private router: Router) { }
 
   setNavLinksWidth() {
     let navLinksContainerWidth = 0;
@@ -35,7 +50,7 @@ export class RequestNavBarComponent {
       const navLinkElement = navLinksContainer.children[i] as HTMLElement;
       navLinksContainerWidth += navLinkElement.offsetWidth;
     }
-    navLinksContainer.style.width = `${navLinksContainerWidth * 1.01}px`;
+    navLinksContainer.style.width = `${navLinksContainerWidth * 1.1}px`;
   }
 
   setNavBrandWidth() {

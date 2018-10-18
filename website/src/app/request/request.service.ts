@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /* Models */
-import { Request } from './request.model';
 import { BudgetCategory } from './budget/budget-category.model';
 import { Purpose } from './purpose/purpose.model';
+import { Request } from './request.model';
 
 @Injectable({
     providedIn: 'root',
@@ -16,12 +16,14 @@ export class RequestService {
     private requestData = new Request();
 
     requestDataChanged = new Subject<{ key: string, value: any }>();
+    requestNavBarDataChanged = new Subject<{ key: string, value: any }>();
 
     constructor(private http: HttpClient) { }
 
     setProperty(key: string, value: any): void {
         this.requestData[key] = value;
         this.requestDataChanged.next({ key: key, value: this.requestData[key] });
+        this.requestNavBarDataChanged.next({ key: key, value: this.requestData.navBar[key] });
     }
 
     getProperty(key: string): any {

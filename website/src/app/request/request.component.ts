@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Request } from './request.model';
-
-/* Services */
-import { RequestService } from './request.service';
 
 @Component({
   selector: 'c-request',
@@ -10,13 +6,8 @@ import { RequestService } from './request.service';
   styleUrls: ['./request.component.scss']
 })
 export class RequestComponent implements OnInit {
-  request = new Request();
 
-  constructor(private requestService: RequestService) {
-    requestService.requestDataChanged.subscribe(obj => {
-      this.request[obj.key] = obj.value;
-    });
-  }
+  constructor() { }
 
   ngOnInit() {
     this.setDevHeights();
