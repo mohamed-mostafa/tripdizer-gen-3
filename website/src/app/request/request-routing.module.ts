@@ -8,6 +8,7 @@ import { RequestComponent } from './request.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
 import { BudgetComponent } from './budget/budget.component';
+import { PurposeComponent } from './purpose/purpose.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,7 @@ const routes: Routes = [
             { path: 'departure-return', component: DepartureReturnComponent },
             { path: 'travelers', component: TravelersComponent },
             { path: 'budget', component: BudgetComponent },
+            { path: 'purpose', component: PurposeComponent },
         ]
     }
 ];
@@ -29,6 +31,7 @@ export const COMPONENTS = [
     DepartureReturnComponent,
     TravelersComponent,
     BudgetComponent,
+    PurposeComponent,
 ];
 
 @NgModule({

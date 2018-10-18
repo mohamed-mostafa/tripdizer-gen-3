@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 /* Models */
 import { Request } from './request.model';
 import { BudgetCategory } from './budget/budget-category.model';
+import { Purpose } from './purpose/purpose.model';
 
 @Injectable({
     providedIn: 'root',
@@ -33,4 +35,13 @@ export class RequestService {
     getBudgetCategories(lang: string): Observable<Array<BudgetCategory>> {
         return this.http.get<Array<BudgetCategory>>('budgetcategories' + (lang ? '?lang=' + lang : ''));
     }
+
+    getPurposes(lang: string): Observable<Array<Purpose>> {
+        return this.http.get<Array<Purpose>>('purposes' + (lang ? '?lang=' + lang : ''))
+            .pipe(map(purposes => purposes.map(purpose => ({
+                ...purpose,
+                image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
+            }))));
+    }
+
 }

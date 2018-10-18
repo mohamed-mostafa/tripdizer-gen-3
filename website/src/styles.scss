@@ -206,6 +206,75 @@ body {
       }
     }
 
+    &.image {
+      .mat-radio-button {
+        .mat-radio-label {
+
+          .mat-radio-container,
+          .mat-radio-inner-circle {
+            width: 235px;
+            height: 235px;
+          }
+
+          .mat-radio-outer-circle {
+            display: none;
+          }
+
+          .mat-radio-label-content {
+            color: #FFF;
+            font-size: 1.75rem;
+            width: 235px;
+            white-space: normal;
+
+            .label-content-img {
+              top: calc(-193px / 2);
+
+              &,
+              &:after {
+                position: absolute;
+                width: 235px;
+                height: 235px;
+                left: 0;
+                border-radius: 50%;
+                z-index: -1;
+              }
+
+              &:after {
+                content: "";
+                background-color: rgba(0, 0, 0, .35);
+                top: 0;
+              }
+            }
+          }
+        }
+
+        &.mat-radio-checked {
+          .mat-radio-inner-circle {
+            transform: scale(0);
+          }
+
+          .mat-radio-label-content {
+            .label-content-img:after {
+              background-color: rgba(255, 255, 255, .35);
+            }
+          }
+        }
+      }
+
+      .mat-radio-ripple {
+        left: calc(50% - 130px);
+        top: calc(50% - 130px);
+        height: 260px;
+        width: 260px;
+
+        .mat-ripple-element {
+          height: 256px !important;
+          width: 256px !important;
+          background-color: rgba($color-blue, 0.3) !important;
+        }
+      }
+    }
+
     .mat-radio-group-label-wrapper {
       color: rgba(0, 0, 0, .54);
 

@@ -13,6 +13,8 @@ export class Request {
   private _budget: number;
   private _budgetCategory: number;
   private _budgetCategoryName: string;
+  private _purpose: number;
+  private _purposeName: string;
 
   set travelingFrom(value: string) {
     this._travelingFrom = value;
@@ -72,7 +74,19 @@ export class Request {
     this._budgetCategoryName = value;
   }
   get budgetCategoryName(): string {
-    return this._budgetCategoryName;
+    return this._budgetCategory ? this._budgetCategoryName : '';
+  }
+  set purpose(value: number) {
+    this._purpose = value;
+  }
+  get purpose(): number {
+    return this._purpose;
+  }
+  set purposeName(value: string) {
+    this._purposeName = value;
+  }
+  get purposeName(): string {
+    return this._purpose ? this._purposeName : '';
   }
 
   get navBar(): IRequestNavBar {
@@ -108,7 +122,8 @@ export class Request {
       purpose: {
         title: 'Purpose', path: 'purpose', order: 4,
         value: ((): string => {
-          return null;
+          if (!this._purpose) { return null; }
+          return this.purposeName;
         })()
       },
       preferences: {
