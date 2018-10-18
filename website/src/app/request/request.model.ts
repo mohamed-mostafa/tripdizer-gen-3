@@ -1,6 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
+import { Preference } from './preferences/Preference.model';
 
 export class Request {
   private _travelingFrom: string;
@@ -15,6 +16,8 @@ export class Request {
   private _budgetCategoryName: string;
   private _purpose: number;
   private _purposeName: string;
+  private _preferences: Array<number>;
+  private _preferenceNames: Array<string>;
 
   set travelingFrom(value: string) {
     this._travelingFrom = value;
@@ -129,7 +132,7 @@ export class Request {
       preferences: {
         title: 'Preferences', path: 'preferences', order: 5,
         value: ((): string => {
-          return null;
+          return this._preferenceNames.join(', ');
         })()
       },
       destinations: {
@@ -155,6 +158,25 @@ export class Request {
         value: 'Information'
       }
     };
+  }
+
+  constructor() {
+    this._preferences = [];
+    this._preferenceNames = [];
+  }
+
+  addPreference(preference: Preference): void {
+    this._preferences.push(preference.id);
+    this._preferenceNames.push(preference.name);
+  }
+
+  resetPreference(): void {
+    this._preferences = [];
+    this._preferenceNames = [];
+  }
+
+  isPreferenceSelected(preferenceId: number): boolean {
+    return this._preferences.indexOf(preferenceId) !== -1;
   }
 
   isValid(): boolean {

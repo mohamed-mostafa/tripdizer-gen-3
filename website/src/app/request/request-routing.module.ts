@@ -9,6 +9,7 @@ import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
 import { BudgetComponent } from './budget/budget.component';
 import { PurposeComponent } from './purpose/purpose.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 const routes: Routes = [
     {
@@ -20,6 +21,7 @@ const routes: Routes = [
             { path: 'travelers', component: TravelersComponent },
             { path: 'budget', component: BudgetComponent },
             { path: 'purpose', component: PurposeComponent },
+            { path: 'preferences', component: PreferencesComponent },
         ]
     }
 ];
@@ -32,6 +34,7 @@ export const COMPONENTS = [
     TravelersComponent,
     BudgetComponent,
     PurposeComponent,
+    PreferencesComponent,
 ];
 
 @NgModule({
