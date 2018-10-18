@@ -58,21 +58,21 @@ export class Request {
       travelingFrom: {
         title: 'Traveling from', path: 'traveling-from', order: 0,
         value: ((): string => {
-          if (!this.travelingFrom) { return null; }
+          if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
         })()
       },
       departureReturn: {
         title: 'Departure & Return', path: 'departure-return', order: 1,
         value: ((): string => {
-          if (!this.departureDate || !this.returnDate) { return null; }
+          if (!this._departureDate || !this._returnDate) { return null; }
           return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
         })()
       },
       travelers: {
         title: 'Travelers', path: 'travelers', order: 2,
         value: ((): string => {
-          if (!this.adultsNumber) { return null; }
+          if (!this._adultsNumber) { return null; }
           return `${this.adultsNumber} adults`;
         })()
       },

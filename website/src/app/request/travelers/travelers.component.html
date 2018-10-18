@@ -1,21 +1,21 @@
 <div class="h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <form [formGroup]="formGroup" class="col-11 col-lg-7">
-      <mat-radio-group class="custom-bs form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="adultsNumber">
+      <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="adultsNumber">
         <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.adultsNumber.invalid">
           <span class="mat-radio-group-label">Adults</span>
           <span class="mat-radio-group-subscript">{{formGroup.controls.adultsNumber.errors | errorMessage}}</span>
         </div>
         <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
       </mat-radio-group>
-      <mat-radio-group class="custom-bs form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="kidsNumber">
+      <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="kidsNumber">
         <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.kidsNumber.invalid">
           <span class="mat-radio-group-label">Kids</span>
           <span class="mat-radio-group-subscript">{{formGroup.controls.kidsNumber.errors | errorMessage}}</span>
         </div>
         <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
       </mat-radio-group>
-      <mat-radio-group class="custom-bs form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="infantsNumber">
+      <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="infantsNumber">
         <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.infantsNumber.invalid">
           <span class="mat-radio-group-label">Infants</span>
           <span class="mat-radio-group-subscript">{{formGroup.controls.infantsNumber.errors | errorMessage}}</span>

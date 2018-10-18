@@ -99,47 +99,61 @@ body {
   &.mat-radio-group {
     .mat-radio-button {
       .mat-radio-label {
-
-        .mat-radio-container,
-        .mat-radio-outer-circle,
-        .mat-radio-inner-circle {
-          width: 64px;
-          height: 64px;
-        }
-
         .mat-radio-label-content {
           position: absolute;
           padding: 0;
           color: rgba(0, 0, 0, .54);
-          font-size: 1.75rem;
           font-weight: 600;
           text-align: center;
-          width: 64px;
-        }
-      }
-
-      &.mat-radio-checked {
-        .mat-radio-inner-circle {
-          transform: scale(1);
-        }
-
-        .mat-radio-label-content {
-          color: #FFF;
         }
       }
     }
 
     .mat-radio-ripple {
-      left: calc(50% - 40px);
-      top: calc(50% - 40px);
-      height: 80px;
-      width: 80px;
-
       .mat-ripple-element {
         top: 2px !important;
         left: 2px !important;
-        height: 76px !important;
-        width: 76px !important;
+      }
+    }
+
+    &.number {
+      .mat-radio-button {
+        .mat-radio-label {
+
+          .mat-radio-container,
+          .mat-radio-outer-circle,
+          .mat-radio-inner-circle {
+            width: 64px;
+            height: 64px;
+          }
+
+          .mat-radio-label-content {
+            font-size: 1.75rem;
+            width: 64px;
+          }
+        }
+
+        &.mat-radio-checked {
+          .mat-radio-inner-circle {
+            transform: scale(1);
+          }
+
+          .mat-radio-label-content {
+            color: #FFF;
+          }
+        }
+      }
+
+      .mat-radio-ripple {
+        left: calc(50% - 40px);
+        top: calc(50% - 40px);
+        height: 80px;
+        width: 80px;
+
+        .mat-ripple-element {
+          height: 76px !important;
+          width: 76px !important;
+        }
       }
     }
 
