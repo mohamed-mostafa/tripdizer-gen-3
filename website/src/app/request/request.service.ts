@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+
+/* Models */
 import { Request } from './request.model';
+import { BudgetCategory } from './budget/budget-category.model';
 
 @Injectable({
     providedIn: 'root',
@@ -25,5 +28,9 @@ export class RequestService {
 
     getNavBarProperty(key: string): any {
         return this.requestData.navBar[key];
+    }
+
+    getBudgetCategories(lang: string): Observable<Array<BudgetCategory>> {
+        return this.http.get<Array<BudgetCategory>>('budgetcategories' + (lang ? '?lang=' + lang : ''));
     }
 }

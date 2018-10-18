@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
+import { CurrencyPipe } from '@angular/common';
 
 export class Request {
   private _travelingFrom: string;
@@ -9,6 +10,9 @@ export class Request {
   private _adultsNumber: number;
   private _kidsNumber: number;
   private _infantsNumber: number;
+  private _budget: number;
+  private _budgetCategory: number;
+  private _budgetCategoryName: string;
 
   set travelingFrom(value: string) {
     this._travelingFrom = value;
@@ -52,6 +56,24 @@ export class Request {
   get infantsNumber(): number {
     return this._infantsNumber || 0;
   }
+  set budget(value) {
+    this._budget = parseInt(value.toString(), 10);
+  }
+  get budget(): number {
+    return this.budgetCategory === 1 ? this._budget || 1 : 1;
+  }
+  set budgetCategory(value) {
+    this._budgetCategory = parseInt(value.toString(), 10);
+  }
+  get budgetCategory(): number {
+    return this._budgetCategory || 1;
+  }
+  set budgetCategoryName(value: string) {
+    this._budgetCategoryName = value;
+  }
+  get budgetCategoryName(): string {
+    return this._budgetCategoryName;
+  }
 
   get navBar(): IRequestNavBar {
     return {
@@ -79,7 +101,8 @@ export class Request {
       budget: {
         title: 'Budget', path: 'budget', order: 3,
         value: ((): string => {
-          return null;
+          if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
+          return this.budgetCategory === 1 ? new CurrencyPipe('EN').transform(this.budget, 'EGP', true, '0.0-0') : this.budgetCategoryName;
         })()
       },
       purpose: {
@@ -124,6 +147,7 @@ export class Request {
     if (!this._departureDate.isValid()) { return false; }
     if (!this._returnDate.isValid()) { return false; }
     if (!this._adultsNumber) { return false; }
+    if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return false; }
     return true;
   }
 }
