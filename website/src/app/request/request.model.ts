@@ -1,7 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { IRequestNavBar } from './nav-bar/nav-bar.model';
-import { Preference } from './preferences/Preference.model';
+import { Preference } from './preferences/preference.model';
 
 export class Request {
   private _travelingFrom: string;
