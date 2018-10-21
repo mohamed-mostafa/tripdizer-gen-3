@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
+import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
 import { Request } from './request.model';
@@ -41,6 +42,17 @@ export class RequestService {
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         return prevSteps[0] ? prevSteps[0].path : currentStep.path;
+    }
+
+    getPrevInvalidStepForEstimateCalc(stepPath: string): string {
+        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.steps
+                .filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
+                .sort((a, b) => b.order - a.order);
+        for (let i = 0; i < prevSteps.length; ++i) {
+            if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
+        }
+        return currentStep.path;
     }
 
     getPrevInvalidStep(stepPath: string): string {
@@ -112,6 +124,22 @@ export class RequestService {
                 ...preference,
                 image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
             }))));
+    }
+
+    isValidForEstimatedCost(): boolean {
+        return this.requestData.isValidForEstimatedCost();
+    }
+
+    getEstimatedCost(): Observable<EstimatedCostResponse | null> {
+        if (this.isValidForEstimatedCost()) {
+            const estimatedCostRequest = EstimatedCostRequest.getEstimatedCostRequestFromRequest(this.requestData);
+            return this.http.post<EstimatedCostResponse>(`${this.endPoint}/budgetcalc`, { request: estimatedCostRequest })
+                .pipe(map((estimatedCostResponse: EstimatedCostResponse) => {
+                    this.setProperty('estimatedCost', estimatedCostResponse.totalBudget);
+                    return estimatedCostResponse;
+                }));
+        }
+        return of(null);
     }
 
 }

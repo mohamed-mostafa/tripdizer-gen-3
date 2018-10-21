@@ -19,6 +19,7 @@ export class Request {
   private _purposeName: string;
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
+  private _estimatedCost: number;
 
   set touchedSteps(value: number) {
     this._touchedSteps.push(value);
@@ -98,6 +99,12 @@ export class Request {
   get preferences(): Array<number> {
     return this._preferences;
   }
+  set estimatedCost(value: number) {
+    this._estimatedCost = value;
+  }
+  get estimatedCost(): number {
+    return this._estimatedCost;
+  }
 
   get steps(): Array<Step> {
     return [
@@ -142,7 +149,7 @@ export class Request {
         value: ((): string => {
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
           return this.budgetCategory === 1 ?
-            new CurrencyPipe('EN').transform(this.budget, 'EGP', 'code', '0.0-0') : this.budgetCategoryName;
+            new CurrencyPipe('EN').transform(this.budget, 'EGP', 'symbol', '0.0-0') : this.budgetCategoryName;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(4) === -1) { return false; }
@@ -185,10 +192,12 @@ export class Request {
       {
         key: 'estimatedCost', title: 'Estimated Cost', path: 'estimated-cost', order: 8,
         value: ((): string => {
-          return null;
+          if (this._estimatedCost == null) { return null; }
+          return new CurrencyPipe('EN').transform(this.estimatedCost, 'EGP', 'symbol', '0.0-0');
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(8) === -1) { return false; }
+          if (!this._estimatedCost) { return false; }
           return true;
         }
       },
@@ -231,6 +240,14 @@ export class Request {
 
   isPreferenceSelected(preferenceId: number): boolean {
     return this._preferences.indexOf(preferenceId) !== -1;
+  }
+
+  isValidForEstimatedCost(): boolean {
+    const steps = this.steps.filter(s => s.requiredForEstimateCalc);
+    for (let i = 0; i < steps.length; ++i) {
+      return steps[i].isValid();
+    }
+    return true;
   }
 
   isValid(): boolean {
