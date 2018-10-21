@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateValidators } from '../../shared/utils';
 
 /* Services */
@@ -12,6 +12,7 @@ import { RequestService } from '../request.service';
   styleUrls: ['./departure-return.component.scss']
 })
 export class DepartureReturnComponent {
+  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'departureDate': new FormControl('', [Validators.required, DateValidators.valid()]),
@@ -20,6 +21,7 @@ export class DepartureReturnComponent {
   };
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -32,6 +34,8 @@ export class DepartureReturnComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    this.currentStepPath = this.route.routeConfig.path;
+    requestService.stepVisited(this.currentStepPath);
   }
 
   save(): boolean {
@@ -45,7 +49,11 @@ export class DepartureReturnComponent {
     return true;
   }
 
+  goToPrevStep() {
+    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  }
+
   goToNextStep() {
-    if (this.save()) { this.router.navigate(['request', 'travelers']); }
+    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 }

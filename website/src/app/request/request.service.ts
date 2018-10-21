@@ -8,7 +8,7 @@ import { BudgetCategory } from './budget/budget-category.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
 import { Request } from './request.model';
-import { IRequestNavBar } from './nav-bar/nav-bar.model';
+import { Step } from './step.model';
 
 @Injectable({
     providedIn: 'root',
@@ -18,9 +18,41 @@ export class RequestService {
     private requestData = new Request();
 
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
-    requestNavBarDataChanged = new Subject<{ key: string, value: any, navBar: IRequestNavBar }>();
+    requestNavBarDataChanged = new Subject<{ key: string, value: any, navBar: Array<Step> }>();
 
     constructor(private http: HttpClient) { }
+
+    stepVisited(stepPath: string): void {
+        const step = this.requestData.steps.find(s => s.path === stepPath);
+        if (step) { this.requestData.touchedSteps = step.order; }
+    }
+
+    getNextStep(stepPath: string): string {
+        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
+            nextSteps = this.requestData.steps
+                .filter(s => s.order > currentStep.order)
+                .sort((a, b) => a.order - b.order);
+        return nextSteps[0] ? nextSteps[0].path : currentStep.path;
+    }
+
+    getPrevStep(stepPath: string): string {
+        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.steps
+                .filter(s => s.order < currentStep.order)
+                .sort((a, b) => b.order - a.order);
+        return prevSteps[0] ? prevSteps[0].path : currentStep.path;
+    }
+
+    getPrevInvalidStep(stepPath: string): string {
+        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.steps
+                .filter(s => s.order < currentStep.order)
+                .sort((a, b) => b.order - a.order);
+        for (let i = 0; i < prevSteps.length; ++i) {
+            if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
+        }
+        return currentStep.path;
+    }
 
     setProperty(key: string, value: any): void {
         this.requestData[key] = value;
@@ -31,17 +63,13 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: key,
-            value: this.requestData.navBar[key],
-            navBar: this.requestData.navBar
+            value: this.requestData.steps.find(s => s.key === key),
+            navBar: this.requestData.steps
         });
     }
 
     getProperty(key: string): any {
         return this.requestData[key];
-    }
-
-    getNavBarProperty(key: string): any {
-        return this.requestData.navBar[key];
     }
 
     getBudgetCategories(lang: string): Observable<Array<BudgetCategory>> {
@@ -65,8 +93,8 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: 'preferences',
-            value: this.requestData.navBar['preferences'],
-            navBar: this.requestData.navBar
+            value: this.requestData.steps.find(s => s.key === 'preferences'),
+            navBar: this.requestData.steps
         });
     }
 

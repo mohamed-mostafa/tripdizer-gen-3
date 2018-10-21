@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,6 +14,7 @@ import { Purpose } from './purpose.model';
   styleUrls: ['./purpose.component.scss']
 })
 export class PurposeComponent {
+  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'purpose': new FormControl('', [Validators.required]),
@@ -21,6 +22,7 @@ export class PurposeComponent {
   purposes: Array<Purpose>;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -31,6 +33,8 @@ export class PurposeComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    this.currentStepPath = this.route.routeConfig.path;
+    requestService.stepVisited(this.currentStepPath);
     requestService.getPurposes('EN')
       .subscribe((purposes: Array<Purpose>) => this.purposes = purposes);
   }
@@ -48,8 +52,12 @@ export class PurposeComponent {
     return true;
   }
 
+  goToPrevStep() {
+    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  }
+
   goToNextStep() {
-    if (this.save()) { this.router.navigate(['request', 'preferences']); }
+    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 
 }

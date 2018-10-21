@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,6 +14,7 @@ import { BudgetCategory } from './budget-category.model';
   styleUrls: ['./budget.component.scss']
 })
 export class BudgetComponent {
+  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'budgetCategory': new FormControl(),
@@ -22,6 +23,7 @@ export class BudgetComponent {
   budgetCategories: Array<BudgetCategory>;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -44,6 +46,8 @@ export class BudgetComponent {
         this.formGroup.controls['budget'].enable();
       }
     });
+    this.currentStepPath = this.route.routeConfig.path;
+    requestService.stepVisited(this.currentStepPath);
     requestService.getBudgetCategories('EN')
       .subscribe((budgetCategories: Array<BudgetCategory>) => this.budgetCategories = budgetCategories);
   }
@@ -61,7 +65,11 @@ export class BudgetComponent {
     return true;
   }
 
+  goToPrevStep() {
+    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  }
+
   goToNextStep() {
-    if (this.save()) { this.router.navigate(['request', 'purpose']); }
+    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 }

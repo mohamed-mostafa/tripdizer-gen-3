@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 /* Models */
 import { Request } from '../request.model';
-import { INavLink, IRequestNavBar } from './nav-bar.model';
+import { Step } from '../step.model';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,7 +14,7 @@ import { RequestService } from '../request.service';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class RequestNavBarComponent implements AfterViewInit {
-  navBar: IRequestNavBar = new Request().navBar;
+  navBar: Array<Step> = new Request().steps;
 
   @Output() navBarDimensionChanged = new EventEmitter();
 
@@ -22,7 +22,7 @@ export class RequestNavBarComponent implements AfterViewInit {
     private router: Router,
     private requestService: RequestService) {
     requestService.requestNavBarDataChanged.subscribe(obj => {
-      this.navBar = obj.navBar;
+      this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
       this.setNavLinksWidth();
       this.setNavBrandWidth();
     });
@@ -31,16 +31,6 @@ export class RequestNavBarComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.setNavLinksWidth();
     this.setNavBrandWidth();
-  }
-
-  convertNavBarObjectToArray(navLinks: IRequestNavBar): Array<INavLink> {
-    return Object.keys(navLinks).map(key => ({
-      key: key,
-      title: navLinks[key].title,
-      value: navLinks[key].value,
-      path: navLinks[key].path,
-      order: navLinks[key].order
-    })).sort((a, b) => a.order - b.order);
   }
 
   setNavLinksWidth() {

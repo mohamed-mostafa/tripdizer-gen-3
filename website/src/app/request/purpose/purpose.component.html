@@ -9,7 +9,7 @@
       </mat-radio-group>
     </form>
     <div class="offset-lg-1">
-      <a [routerLink]="['/request', 'budget']" class="mr-5">Back</a>
+      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
       <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
         <i class="fas fa-chevron-right"></i></button>
     </div>

@@ -1,9 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
-import { IRequestNavBar } from './nav-bar/nav-bar.model';
 import { Preference } from './preferences/preference.model';
+import { Step } from './step.model';
 
 export class Request {
+  private _touchedSteps: Array<number>;
   private _travelingFrom: string;
   private _departureDate: Moment;
   private _returnDate: Moment;
@@ -19,6 +20,9 @@ export class Request {
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
 
+  set touchedSteps(value: number) {
+    this._touchedSteps.push(value);
+  }
   set travelingFrom(value: string) {
     this._travelingFrom = value;
   }
@@ -91,76 +95,126 @@ export class Request {
   get purposeName(): string {
     return this._purpose ? this._purposeName : '';
   }
+  get preferences(): Array<number> {
+    return this._preferences;
+  }
 
-  get navBar(): IRequestNavBar {
-    return {
-      travelingFrom: {
-        title: 'Traveling from', path: 'traveling-from', order: 0,
+  get steps(): Array<Step> {
+    return [
+      {
+        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 1,
         value: ((): string => {
           if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(1) === -1) { return false; }
+          if (!this._travelingFrom) { return false; }
+          return true;
+        }
       },
-      departureReturn: {
-        title: 'Departure & Return', path: 'departure-return', order: 1,
+      {
+        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
           return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(2) === -1) { return false; }
+          if (!this._departureDate || !this._returnDate) { return false; }
+          return true;
+        }
       },
-      travelers: {
-        title: 'Travelers', path: 'travelers', order: 2,
+      {
+        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
           return `${this.adultsNumber} adults`;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(3) === -1) { return false; }
+          if (!this._adultsNumber) { return false; }
+          return true;
+        }
       },
-      budget: {
-        title: 'Budget', path: 'budget', order: 3,
+      {
+        key: 'budget', title: 'Budget', path: 'budget', order: 4, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
-          return this.budgetCategory === 1 ? new CurrencyPipe('EN').transform(this.budget, 'EGP', true, '0.0-0') : this.budgetCategoryName;
-        })()
+          return this.budgetCategory === 1 ?
+            new CurrencyPipe('EN').transform(this.budget, 'EGP', 'code', '0.0-0') : this.budgetCategoryName;
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(4) === -1) { return false; }
+          if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return false; }
+          return true;
+        }
       },
-      purpose: {
-        title: 'Purpose', path: 'purpose', order: 4,
+      {
+        key: 'purpose', title: 'Purpose', path: 'purpose', order: 5,
         value: ((): string => {
           if (!this._purpose) { return null; }
           return this.purposeName;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(5) === -1) { return false; }
+          if (!this._purpose) { return false; }
+          return true;
+        }
       },
-      preferences: {
-        title: 'Preferences', path: 'preferences', order: 5,
+      {
+        key: 'preferences', title: 'Preferences', path: 'preferences', order: 6,
         value: ((): string => {
           return this._preferenceNames.join(', ');
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(6) === -1) { return false; }
+          return true;
+        }
       },
-      destinations: {
-        title: 'Destinations', path: 'destinations', order: 6,
+      {
+        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7, requiredForEstimateCalc: true,
         value: ((): string => {
           return null;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(7) === -1) { return false; }
+          return true;
+        }
       },
-      estimatedCost: {
-        title: 'Estimated Cost', path: 'estimated-cost', order: 7,
+      {
+        key: 'estimatedCost', title: 'Estimated Cost', path: 'estimated-cost', order: 8,
         value: ((): string => {
           return null;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(8) === -1) { return false; }
+          return true;
+        }
       },
-      travelAssistance: {
-        title: 'Travel Assistance', path: 'travel-assistance', order: 8,
+      {
+        key: 'travelAssistance', title: 'Travel Assistance', path: 'travel-assistance', order: 9,
         value: ((): string => {
           return null;
-        })()
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(9) === -1) { return false; }
+          return true;
+        }
       },
-      information: {
-        title: 'One more step', path: 'information', order: 9,
-        value: 'Information'
+      {
+        key: 'information', title: 'One more step', path: 'information', order: 10,
+        value: 'Information',
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(10) === -1) { return false; }
+          return true;
+        }
       }
-    };
+    ];
   }
 
   constructor() {
+    this._touchedSteps = [];
     this._preferences = [];
     this._preferenceNames = [];
   }
@@ -180,11 +234,10 @@ export class Request {
   }
 
   isValid(): boolean {
-    if (!this._travelingFrom) { return false; }
-    if (!this._departureDate.isValid()) { return false; }
-    if (!this._returnDate.isValid()) { return false; }
-    if (!this._adultsNumber) { return false; }
-    if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return false; }
+    for (let i = 0; i < this.steps.length; ++i) {
+      return this.steps[i].isValid();
+    }
     return true;
   }
+
 }

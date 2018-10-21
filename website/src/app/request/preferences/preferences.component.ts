@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,11 +14,13 @@ import { Preference } from './preference.model';
   styleUrls: ['./preferences.component.scss']
 })
 export class PreferencesComponent {
+  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {};
   preferences: Array<Preference>;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -36,6 +38,8 @@ export class PreferencesComponent {
           }
         }
       });
+    this.currentStepPath = this.route.routeConfig.path;
+    requestService.stepVisited(this.currentStepPath);
   }
 
   save(): boolean {
@@ -53,8 +57,12 @@ export class PreferencesComponent {
     return true;
   }
 
+  goToPrevStep() {
+    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  }
+
   goToNextStep() {
-    if (this.save()) { this.router.navigate(['request', 'destinations']); }
+    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 
 }
