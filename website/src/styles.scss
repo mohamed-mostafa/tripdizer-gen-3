@@ -1,8 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import url('https://fonts.googleapis.com/css?family=Qwigley');
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Qwigley|Montserrat|Material+Icons|Roboto');
 
 /* START Variables */
 $color-yellow: #FFC640;
@@ -358,8 +356,6 @@ body {
       }
 
       &.mat-checkbox-checked {
-        .mat-checkbox-inner-container {}
-
         .mat-checkbox-label {
           .label-content-img:after {
             background-color: rgba(255, 255, 255, .35);
@@ -371,6 +367,49 @@ body {
 }
 
 .mat-checkbox {
+  &.mat-checkbox-md {
+    .mat-checkbox-layout {
+      .mat-checkbox-inner-container {
+        width: 32px;
+        height: 32px;
+        margin-right: 20px;
+
+        .mat-checkbox-ripple {
+          left: calc(50% - 30px);
+          top: calc(50% - 30px);
+          height: 60px;
+          width: 60px;
+
+          .mat-ripple-element {
+            height: 56px !important;
+            width: 56px !important;
+            top: 2px !important;
+            left: 2px !important;
+          }
+        }
+
+        .mat-checkbox-frame {
+          border-color: $color-blue;
+        }
+
+        .mat-checkbox-background {
+          background-color: transparent;
+        }
+
+        .mat-checkbox-checkmark-path {
+          stroke: $color-blue !important;
+        }
+      }
+
+      .mat-checkbox-label {
+        font-size: 1.5rem;
+        line-height: 32px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+      }
+    }
+  }
+
   .mat-ripple-element {
     background-color: rgba($color-blue, 0.3) !important;
   }

@@ -11,6 +11,7 @@ import { BudgetComponent } from './budget/budget.component';
 import { PurposeComponent } from './purpose/purpose.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { EstimatedCostComponent } from './estimated-cost/estimated-cost.component';
+import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
 
 const routes: Routes = [
     {
@@ -24,6 +25,7 @@ const routes: Routes = [
             { path: 'purpose', component: PurposeComponent },
             { path: 'preferences', component: PreferencesComponent },
             { path: 'estimated-cost', component: EstimatedCostComponent },
+            { path: 'travel-assistance', component: TravelAssistanceComponent },
         ]
     }
 ];
@@ -38,6 +40,7 @@ export const COMPONENTS = [
     PurposeComponent,
     PreferencesComponent,
     EstimatedCostComponent,
+    TravelAssistanceComponent,
 ];
 
 @NgModule({
