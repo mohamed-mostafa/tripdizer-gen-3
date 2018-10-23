@@ -107,6 +107,9 @@ export class Request {
   set estimatedCost(value: number) {
     this._estimatedCost = value;
   }
+  get estimatedCost(): number {
+    return this._estimatedCost;
+  }
   set visaAssistanceNeeded(value: boolean) {
     this._visaAssistanceNeeded = value;
   }
