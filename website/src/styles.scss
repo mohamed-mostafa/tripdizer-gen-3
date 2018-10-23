@@ -364,6 +364,58 @@ body {
       }
     }
   }
+
+  .mat-form-field-appearance-legacy .mat-form-field-label,
+  .mat-form-field-label,
+  .mat-radio-group-label {
+    font-size: 3.5rem;
+    line-height: 4rem;
+  }
+}
+
+.form-control-lg {
+  &.mat-form-field {
+    width: 100%;
+    font-size: 2.25rem;
+    padding-top: 2rem;
+
+    .mat-form-field-wrapper {
+      padding: 0;
+
+      .mat-form-field-infix {
+        padding: .35em 0 0;
+        border-top: 0;
+
+        .mat-form-field-label-wrapper {
+          top: -0.9em;
+        }
+      }
+
+      .mat-form-field-subscript-wrapper {
+        font-size: 0.8rem;
+        margin-top: 0;
+        top: -0.25rem;
+        padding-left: 1.1rem;
+      }
+    }
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-label,
+  .mat-form-field-label,
+  .mat-radio-group-label {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label,
+.mat-form-field-label,
+.mat-radio-group-label {
+  letter-spacing: 2.5px;
+  color: $color-blue;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .mat-checkbox {
@@ -413,18 +465,6 @@ body {
   .mat-ripple-element {
     background-color: rgba($color-blue, 0.3) !important;
   }
-}
-
-.mat-form-field-appearance-legacy .mat-form-field-label,
-.mat-form-field-label,
-.mat-radio-group-label {
-  font-size: 3.5rem;
-  line-height: 4rem;
-  letter-spacing: 2.5px;
-  color: $color-blue;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .mat-calendar-body-selected {
