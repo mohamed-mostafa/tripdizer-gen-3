@@ -9,12 +9,16 @@ import { environment } from '../environments/environment';
 @Injectable()
 export class JWTokenInterceptor implements HttpInterceptor {
     private baseUri = environment.apiUrl;
+    private lang = 'EN';
 
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // Clone the request to add baseUri.
-        request = request.clone({ url: `${this.baseUri}${request.url}` });
+        request = request.clone({
+            url: `${this.baseUri}${request.url}`,
+            setParams: { lang: this.lang }
+        });
 
         // if (localStorage.getItem('token') ? true : false) {
         //     request = request.clone({ headers: request.headers.set('Authorization', localStorage.getItem('token')) });
