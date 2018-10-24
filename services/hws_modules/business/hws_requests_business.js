@@ -48,7 +48,7 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		}
 
 		if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
-			googlePeopleAdapter.createNewContact(request.traveler.emailAddress, request.traveler.mobile, request.traveler.name, request.id);
+			googlePeopleAdapter.createNewContact(request.traveler.emailAddress, request.traveler.mobile, request.traveler.name, request.id.toString());
 
 	}, function (err) {
 		// respond to caller
