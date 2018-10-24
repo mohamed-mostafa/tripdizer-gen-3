@@ -7,11 +7,6 @@
     align-items: center;
   }
 
-  .contact-info {
-    display: flex;
-    justify-content: flex-end;
-  }
-
   ul>li {
     list-style: none;
     white-space: nowrap;
@@ -21,8 +16,14 @@
     width: 2.5rem;
   }
 
-  .footer-btn {
-    font-size: 0.8rem;
+  .footer-li-btn {
+    @media (max-width: 992px) {
+      text-align: center;
+    }
+
+    >a {
+      font-size: 0.8rem;
+    }
   }
 
   @media (min-width: 576px) {

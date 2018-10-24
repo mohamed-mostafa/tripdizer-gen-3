@@ -17,9 +17,6 @@ import { TabContentComponent } from './section-why-us/tab-content/tab-content.co
     SharedModule,
     CoreModule
   ],
-  exports: [
-    ...HomeComponents
-  ],
   declarations: [
     ...HomeComponents,
     NavLinkComponent,

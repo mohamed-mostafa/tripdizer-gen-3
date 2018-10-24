@@ -1,8 +1,7 @@
 .testimonials-carousel {
   .owl-item {
-    width: 11rem !important;
-    height: 20rem !important;
-    padding: 0.5rem;
+    height: 11rem !important;
+    padding: 2rem 0;
     box-sizing: content-box;
 
     .testimonial-item {
@@ -22,11 +21,19 @@
         height: 100%;
 
         .testimonial-text {
-          max-height: 90%;
+          max-height: 7.6rem;
           overflow: hidden;
           position: relative;
           text-align: justify;
           padding-right: 1em;
+
+          @media (min-width: 768px) {
+            max-height: 6rem !important;
+          }
+
+          @media (min-width: 1200px) {
+            max-height: 7.6rem !important;
+          }
 
           &:before {
             content: '...';
@@ -55,45 +62,25 @@
     }
 
     @media (min-width: 576px) {
-      width: 16rem !important;
-      height: 8rem !important;
-      padding: 0.8rem;
-
       .testimonial-item {
         padding: 0.5rem;
-
-        .testimonial-text {
-          max-height: 66% !important;
-        }
       }
     }
 
-    // Medium devices (tablets, 768px and up)
     @media (min-width: 768px) {
-      width: 22rem !important;
-      height: 9rem !important;
-      padding: 1rem;
-
       .testimonial-item {
         padding: 1rem;
       }
     }
 
-    // Large devices (desktops, 992px and up)
     @media (min-width: 992px) {
-      width: 28rem !important;
-      height: 10rem !important;
-      padding: 1.5rem;
-
       .testimonial-item {
         padding: 1.5rem;
       }
     }
 
-    // Extra large devices (large desktops, 1200px and up)
     @media (min-width: 1200px) {
-      width: 34rem !important;
-      height: 11rem !important;
+      height: 15rem !important;
 
       .testimonial-item {
         padding: 2rem;
