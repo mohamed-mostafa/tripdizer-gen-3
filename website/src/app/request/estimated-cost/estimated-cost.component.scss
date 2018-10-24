@@ -1,0 +1,32 @@
+.total-budget {
+  font-size: 4.75rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+}
+
+.hint-1,
+.hint-2,
+.hint-3 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.hint-1 {
+  color: #FF0000;
+}
+
+.detailed-budget {
+  li {
+    list-style: none;
+    padding: 6px 0;
+
+    .details-info {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.hint-2,
+.hint-3 {
+  color: #2989FF;
+}

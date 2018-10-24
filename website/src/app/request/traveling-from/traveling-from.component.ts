@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -11,12 +11,14 @@ import { RequestService } from '../request.service';
   styleUrls: ['./traveling-from.component.scss']
 })
 export class TravelingFromComponent {
+  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'travelingFrom': new FormControl('', [Validators.required])
   };
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -27,6 +29,8 @@ export class TravelingFromComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    this.currentStepPath = this.route.routeConfig.path;
+    requestService.stepVisited(this.currentStepPath);
   }
 
   save(): boolean {
@@ -40,7 +44,11 @@ export class TravelingFromComponent {
     return true;
   }
 
+  goToPrevStep() {
+    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  }
+
   goToNextStep() {
-    if (this.save()) { this.router.navigate(['request', 'departure-return']); }
+    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 }

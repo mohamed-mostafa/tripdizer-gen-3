@@ -2,7 +2,7 @@
   <div class="nav-brand"></div>
   <div class="nav-links col p-0">
     <div>
-      <div *ngFor="let navLink of navLinks;let i = index" [routerLink]="[navLink.path]" class="nav-link text-capitalize"
+      <div *ngFor="let navLink of navBar;let i = index" [routerLink]="[navLink.path]" class="nav-link text-capitalize"
         [class.active]="isActive(navLink.path)">
         <div class="col-12 title">{{navLink.title}}</div>
         <div class="col-12 value">{{navLink.value}}</div>
