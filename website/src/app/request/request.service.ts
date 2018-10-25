@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
+import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
@@ -15,7 +16,7 @@ import { Step } from './step.model';
     providedIn: 'root',
 })
 export class RequestService {
-    private endPoint = 'request' /*+ (lang ? '?lang=' + lang : '')*/;
+    private endPoint = 'request';
     private requestData = new Request();
 
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
@@ -42,6 +43,17 @@ export class RequestService {
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         return prevSteps[0] ? prevSteps[0].path : currentStep.path;
+    }
+
+    getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
+        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.steps
+                .filter(s => s.requiredForRecommendation && s.order < currentStep.order)
+                .sort((a, b) => b.order - a.order);
+        for (let i = 0; i < prevSteps.length; ++i) {
+            if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
+        }
+        return currentStep.path;
     }
 
     getPrevInvalidStepForEstimateCalc(stepPath: string): string {
@@ -84,12 +96,12 @@ export class RequestService {
         return this.requestData[key];
     }
 
-    getBudgetCategories(lang: string): Observable<Array<BudgetCategory>> {
-        return this.http.get<Array<BudgetCategory>>('budgetcategories' + (lang ? '?lang=' + lang : ''));
+    getBudgetCategories(): Observable<Array<BudgetCategory>> {
+        return this.http.get<Array<BudgetCategory>>('budgetcategories');
     }
 
-    getPurposes(lang: string): Observable<Array<Purpose>> {
-        return this.http.get<Array<Purpose>>('purposes' + (lang ? '?lang=' + lang : ''))
+    getPurposes(): Observable<Array<Purpose>> {
+        return this.http.get<Array<Purpose>>('purposes')
             .pipe(map(purposes => purposes.map(purpose => ({
                 ...purpose,
                 image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
@@ -118,12 +130,26 @@ export class RequestService {
         return this.requestData.isPreferenceSelected(parseInt(preferenceId, 10));
     }
 
-    getPreferences(lang: string): Observable<Array<Preference>> {
-        return this.http.get<Array<Preference>>('interests' + (lang ? '?lang=' + lang : ''))
+    getPreferences(): Observable<Array<Preference>> {
+        return this.http.get<Array<Preference>>('interests')
             .pipe(map(preferences => preferences.map(preference => ({
                 ...preference,
                 image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
             }))));
+    }
+
+    isValidForRecommendedDestinations(): boolean {
+        return this.requestData.isValidForRecommendedDestinations();
+    }
+
+    getRecommendedDestinations(): Observable<Array<RecommendedDestinationsResponse> | null> {
+        if (this.isValidForRecommendedDestinations()) {
+            const recommendedDestinationsRequest =
+                RecommendedDestinationsRequest.getRecommendedDestinationsRequestFromRequest(this.requestData);
+            return this.http.post<Array<RecommendedDestinationsResponse>>
+                (`${this.endPoint}/recommendation`, { request: recommendedDestinationsRequest });
+        }
+        return of(null);
     }
 
     isValidForEstimatedCost(): boolean {
@@ -140,6 +166,43 @@ export class RequestService {
                 }));
         }
         return of(null);
+    }
+
+    oldObject() {
+        return {
+            traveler: {
+                name: 'Essawy',
+                mobile: '561651',
+                emailAddress: 'sdasda@sds.com',
+                dateOfBirth: '2 October, 2018'
+            },
+            referralType: 2,
+            itinerary_id: 5,
+            first_country: 1,
+            second_country: 0,
+            third_country: 0,
+            departure_date: '12 October, 2018',
+            return_date: '13 October, 2018',
+            flexible_dates: false,
+            leaving_country: 'Cairo',
+            travel_purpose: 4,
+            number_of_adults: 1,
+            number_of_kids: 2,
+            number_of_infants: 3,
+            budget_category: 3,
+            budget: null,
+            visa_assistance_needed: true,
+            tour_guide_needed: true,
+            specialRequests: 'dfdsfd',
+            interests: [
+                { id: 1, percentage: 50 },
+                { id: 2, percentage: 32 },
+                { id: 3, percentage: 36 },
+                { id: 4, percentage: 37 },
+                { id: 5, percentage: 52 },
+                { id: 6, percentage: 31 }
+            ]
+        };
     }
 
 }

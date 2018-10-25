@@ -1,8 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import url('https://fonts.googleapis.com/css?family=Qwigley');
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Qwigley|Montserrat|Material+Icons|Roboto');
 
 /* START Variables */
 $color-yellow: #FFC640;
@@ -301,7 +299,7 @@ body {
           height: 235px;
 
           .mat-checkbox-frame {
-            border-radius: 50%;
+            border-radius: 1rem;
             border: 0;
           }
 
@@ -320,6 +318,7 @@ body {
               width: 256px !important;
               top: 2px !important;
               left: 2px !important;
+              border-radius: 1rem;
             }
           }
         }
@@ -345,7 +344,7 @@ body {
               height: 235px;
               top: 0;
               left: 0;
-              border-radius: 50%;
+              border-radius: 1rem;
               z-index: -1;
             }
 
@@ -358,8 +357,6 @@ body {
       }
 
       &.mat-checkbox-checked {
-        .mat-checkbox-inner-container {}
-
         .mat-checkbox-label {
           .label-content-img:after {
             background-color: rgba(255, 255, 255, .35);
@@ -367,25 +364,118 @@ body {
         }
       }
     }
+
+    &.mat-checkbox-rounded {
+
+      .mat-checkbox-frame,
+      .label-content-img,
+      .label-content-img:after,
+      .mat-ripple-element {
+        border-radius: 50% !important;
+      }
+    }
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-label,
+  .mat-form-field-label,
+  .mat-radio-group-label {
+    font-size: 3.5rem;
+    line-height: 4rem;
   }
 }
 
-.mat-checkbox {
-  .mat-ripple-element {
-    background-color: rgba($color-blue, 0.3) !important;
+.form-control-lg {
+  &.mat-form-field {
+    width: 100%;
+    font-size: 2.25rem;
+    padding-top: 2rem;
+
+    .mat-form-field-wrapper {
+      padding: 0;
+
+      .mat-form-field-infix {
+        padding: .35em 0 0;
+        border-top: 0;
+
+        .mat-form-field-label-wrapper {
+          top: -0.9em;
+        }
+      }
+
+      .mat-form-field-subscript-wrapper {
+        font-size: 0.8rem;
+        margin-top: 0;
+        top: -0.25rem;
+        padding-left: 1.1rem;
+      }
+    }
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-label,
+  .mat-form-field-label,
+  .mat-radio-group-label {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 }
 
 .mat-form-field-appearance-legacy .mat-form-field-label,
 .mat-form-field-label,
 .mat-radio-group-label {
-  font-size: 3.5rem;
-  line-height: 4rem;
   letter-spacing: 2.5px;
   color: $color-blue;
   font-weight: 700;
   text-transform: uppercase;
   font-family: 'Montserrat', sans-serif;
+}
+
+.mat-checkbox {
+  &.mat-checkbox-md {
+    .mat-checkbox-layout {
+      .mat-checkbox-inner-container {
+        width: 32px;
+        height: 32px;
+        margin-right: 20px;
+
+        .mat-checkbox-ripple {
+          left: calc(50% - 30px);
+          top: calc(50% - 30px);
+          height: 60px;
+          width: 60px;
+
+          .mat-ripple-element {
+            height: 56px !important;
+            width: 56px !important;
+            top: 2px !important;
+            left: 2px !important;
+          }
+        }
+
+        .mat-checkbox-frame {
+          border-color: $color-blue;
+        }
+
+        .mat-checkbox-background {
+          background-color: transparent;
+        }
+
+        .mat-checkbox-checkmark-path {
+          stroke: $color-blue !important;
+        }
+      }
+
+      .mat-checkbox-label {
+        font-size: 1.5rem;
+        line-height: 32px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .mat-ripple-element {
+    background-color: rgba($color-blue, 0.3) !important;
+  }
 }
 
 .mat-calendar-body-selected {

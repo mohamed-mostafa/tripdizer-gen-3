@@ -14,7 +14,13 @@ import { EstimatedCostResponse } from './estimated-cost.model';
 })
 export class EstimatedCostComponent implements OnInit {
   currentStepPath: string;
-  estimatedCost: EstimatedCostResponse;
+  estimatedCost: EstimatedCostResponse = {
+    flightsBudget: null,
+    dailySpending: null,
+    accommodationBudget: null,
+    ferriesBudget: null,
+    totalBudget: null
+  };
 
   constructor(
     private route: ActivatedRoute,

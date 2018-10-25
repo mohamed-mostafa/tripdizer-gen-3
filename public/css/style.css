@@ -31498,3 +31498,21 @@ a.pswp__share--download:hover {
     display: block;
   }
 }
+
+.float{
+  position:fixed;
+  width:60px;
+  height:60px;
+  bottom:25px;
+  right:100px;
+  background-color:#25d366;
+  color:#FFF;
+  border-radius:50px;
+  text-align:center;
+  font-size:30px;
+  z-index:100;
+}
+
+.my-float{
+  margin-top:16px;
+}
