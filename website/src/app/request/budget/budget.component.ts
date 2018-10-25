@@ -48,8 +48,7 @@ export class BudgetComponent {
     });
     this.currentStepPath = this.route.routeConfig.path;
     requestService.stepVisited(this.currentStepPath);
-    requestService.getBudgetCategories('EN')
-      .subscribe((budgetCategories: Array<BudgetCategory>) => this.budgetCategories = budgetCategories);
+    requestService.getBudgetCategories().subscribe((budgetCategories: Array<BudgetCategory>) => this.budgetCategories = budgetCategories);
   }
 
   save(): boolean {

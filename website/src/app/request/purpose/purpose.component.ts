@@ -35,8 +35,7 @@ export class PurposeComponent {
     }
     this.currentStepPath = this.route.routeConfig.path;
     requestService.stepVisited(this.currentStepPath);
-    requestService.getPurposes('EN')
-      .subscribe((purposes: Array<Purpose>) => this.purposes = purposes);
+    requestService.getPurposes().subscribe((purposes: Array<Purpose>) => this.purposes = purposes);
   }
 
   save(): boolean {
