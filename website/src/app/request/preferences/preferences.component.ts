@@ -25,19 +25,18 @@ export class PreferencesComponent {
     private requestService: RequestService
   ) {
     this.formGroup = new FormGroup({});
-    requestService.getPreferences('EN')
-      .subscribe((preferences: Array<Preference>) => {
-        this.preferences = preferences;
-        this.preferences.forEach(preference => {
-          this.controls[preference.id] = new FormControl();
-        });
-        for (const controlName in this.controls) {
-          if (this.controls.hasOwnProperty(controlName)) {
-            (this.controls[controlName] as FormControl).setValue(this.requestService.isPreferenceSelected(controlName));
-            this.formGroup.addControl(controlName, this.controls[controlName]);
-          }
-        }
+    requestService.getPreferences().subscribe((preferences: Array<Preference>) => {
+      this.preferences = preferences;
+      this.preferences.forEach(preference => {
+        this.controls[preference.id] = new FormControl();
       });
+      for (const controlName in this.controls) {
+        if (this.controls.hasOwnProperty(controlName)) {
+          (this.controls[controlName] as FormControl).setValue(this.requestService.isPreferenceSelected(controlName));
+          this.formGroup.addControl(controlName, this.controls[controlName]);
+        }
+      }
+    });
     this.currentStepPath = this.route.routeConfig.path;
     requestService.stepVisited(this.currentStepPath);
   }

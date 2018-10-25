@@ -2,15 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* Components */
+import { BudgetComponent } from './budget/budget.component';
 import { DepartureReturnComponent } from './departure-return/departure-return.component';
+import { EstimatedCostComponent } from './estimated-cost/estimated-cost.component';
+import { InformationComponent } from './information/information.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { PurposeComponent } from './purpose/purpose.component';
 import { RequestComponent } from './request.component';
+import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
-import { BudgetComponent } from './budget/budget.component';
-import { PurposeComponent } from './purpose/purpose.component';
-import { PreferencesComponent } from './preferences/preferences.component';
-import { EstimatedCostComponent } from './estimated-cost/estimated-cost.component';
 
 const routes: Routes = [
     {
@@ -24,6 +26,8 @@ const routes: Routes = [
             { path: 'purpose', component: PurposeComponent },
             { path: 'preferences', component: PreferencesComponent },
             { path: 'estimated-cost', component: EstimatedCostComponent },
+            { path: 'travel-assistance', component: TravelAssistanceComponent },
+            { path: 'information', component: InformationComponent }
         ]
     }
 ];
@@ -38,6 +42,8 @@ export const COMPONENTS = [
     PurposeComponent,
     PreferencesComponent,
     EstimatedCostComponent,
+    TravelAssistanceComponent,
+    InformationComponent
 ];
 
 @NgModule({

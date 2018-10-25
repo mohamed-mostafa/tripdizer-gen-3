@@ -1,6 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { Preference } from './preferences/preference.model';
+import { IRequester } from './requester.model';
 import { Step } from './step.model';
 
 export class Request {
@@ -20,6 +21,10 @@ export class Request {
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
   private _estimatedCost: number;
+  private _visaAssistanceNeeded: boolean;
+  private _tourGuideNeeded: boolean;
+  private _specialRequests: string;
+  private _traveler: IRequester;
 
   set touchedSteps(value: number) {
     this._touchedSteps.push(value);
@@ -104,6 +109,48 @@ export class Request {
   }
   get estimatedCost(): number {
     return this._estimatedCost;
+  }
+  set visaAssistanceNeeded(value: boolean) {
+    this._visaAssistanceNeeded = value;
+  }
+  get visaAssistanceNeeded(): boolean {
+    return this._visaAssistanceNeeded;
+  }
+  set tourGuideNeeded(value: boolean) {
+    this._tourGuideNeeded = value;
+  }
+  get tourGuideNeeded(): boolean {
+    return this._tourGuideNeeded;
+  }
+  set specialRequests(value: string) {
+    this._specialRequests = value;
+  }
+  get specialRequests(): string {
+    return this._specialRequests;
+  }
+  set travelerName(value: string) {
+    this._traveler.name = value;
+  }
+  get travelerName(): string {
+    return this._traveler.name;
+  }
+  set travelerMobile(value: string) {
+    this._traveler.mobile = value;
+  }
+  get travelerMobile(): string {
+    return this._traveler.mobile;
+  }
+  set travelerEmail(value: string) {
+    this._traveler.email = value;
+  }
+  get travelerEmail(): string {
+    return this._traveler.email;
+  }
+  set travelerBirthday(value: Moment) {
+    this._traveler.birthday = value;
+  }
+  get travelerBirthday(): Moment {
+    return this._traveler.birthday;
   }
 
   get steps(): Array<Step> {
@@ -204,7 +251,10 @@ export class Request {
       {
         key: 'travelAssistance', title: 'Travel Assistance', path: 'travel-assistance', order: 9,
         value: ((): string => {
-          return null;
+          const travelAssistanceParams = [];
+          if (this.visaAssistanceNeeded) { travelAssistanceParams.push('Visa'); }
+          if (this.tourGuideNeeded) { travelAssistanceParams.push('Tour guide'); }
+          return travelAssistanceParams.join(', ');
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(9) === -1) { return false; }
@@ -226,6 +276,12 @@ export class Request {
     this._touchedSteps = [];
     this._preferences = [];
     this._preferenceNames = [];
+    this._traveler = {
+      name: null,
+      mobile: null,
+      email: null,
+      birthday: null,
+    };
   }
 
   addPreference(preference: Preference): void {

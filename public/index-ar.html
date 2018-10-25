@@ -67,6 +67,25 @@
 </head>
 
 <body ng-app="LandingPageApplication">
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1';
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+  <!-- Your customer chat code -->
+  <div class="fb-customerchat"
+    attribution=setup_tool
+    page_id="342164609476212" greeting_dialog_delay="300">
+  </div>
+   <!-- Whatsapp icon -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <a href="https://wa.me/201019075876" class="float" target="_blank">
+    <i class="fa fa-whatsapp my-float"></i>
+    </a>
   <!-- Page-->
   <div class="page text-center" ng-controller="GroupTripsController">
     <!-- Page Head-->
@@ -469,6 +488,7 @@
           <!-- {%FOOTER_LINK} -->
         </div>
       </div>
+     
     </footer>
   </div>
   <!-- Global Mailform Output-->
@@ -527,7 +547,7 @@
       $('#groupTripsRegistrationModal').modal('show');
     }
   </script>
-  <!--Start of Tawk.to Script-->
+  <!--Start of Tawk.to Script
 <script type="text/javascript">
   var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   (function(){
@@ -538,7 +558,7 @@
   s1.setAttribute('crossorigin','*');
   s0.parentNode.insertBefore(s1,s0);
   })();
-</script>
+</script>-->
 
 <!--End of Tawk.to Script-->
 </body>

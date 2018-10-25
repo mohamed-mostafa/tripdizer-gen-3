@@ -7,7 +7,9 @@ export class ErrorMessagePipe implements PipeTransform {
     CUSTOM_ERROR_MESSAGES = {
         'required': 'Required',
         'validDate': 'Date format D / M / Y',
-        'compareDates': 'Dates are invalid',
+        'compareDates': 'Invalid dates',
+        'email': 'Invalid email address',
+        'numericOnly': 'Numeric only',
     };
 
     transform(obj: Object, separator: string = ', '): string {
