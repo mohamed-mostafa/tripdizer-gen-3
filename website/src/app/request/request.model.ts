@@ -20,6 +20,8 @@ export class Request {
   private _purposeName: string;
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
+  private _destination: number;
+  private _destinationName: string;
   private _estimatedCost: number;
   private _visaAssistanceNeeded: boolean;
   private _tourGuideNeeded: boolean;
@@ -104,6 +106,18 @@ export class Request {
   get preferences(): Array<number> {
     return this._preferences;
   }
+  set destination(value: number) {
+    this._destination = value;
+  }
+  get destination(): number {
+    return this._destination;
+  }
+  set destinationName(value: string) {
+    this._destinationName = value;
+  }
+  get destinationName(): string {
+    return this._destination ? this._destinationName : '';
+  }
   set estimatedCost(value: number) {
     this._estimatedCost = value;
   }
@@ -168,7 +182,8 @@ export class Request {
         }
       },
       {
-        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2, requiredForEstimateCalc: true,
+        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
           return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
@@ -180,7 +195,8 @@ export class Request {
         }
       },
       {
-        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3, requiredForEstimateCalc: true,
+        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3,
+        requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
           return `${this.adultsNumber} adults`;
@@ -192,7 +208,8 @@ export class Request {
         }
       },
       {
-        key: 'budget', title: 'Budget', path: 'budget', order: 4, requiredForEstimateCalc: true,
+        key: 'budget', title: 'Budget', path: 'budget', order: 4,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
           return this.budgetCategory === 1 ?
@@ -206,6 +223,7 @@ export class Request {
       },
       {
         key: 'purpose', title: 'Purpose', path: 'purpose', order: 5,
+        requiredForRecommendation: true,
         value: ((): string => {
           if (!this._purpose) { return null; }
           return this.purposeName;
@@ -218,6 +236,7 @@ export class Request {
       },
       {
         key: 'preferences', title: 'Preferences', path: 'preferences', order: 6,
+        requiredForRecommendation: true,
         value: ((): string => {
           return this._preferenceNames.join(', ');
         })(),
@@ -227,12 +246,15 @@ export class Request {
         }
       },
       {
-        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7, requiredForEstimateCalc: true,
+        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7,
+        requiredForEstimateCalc: true,
         value: ((): string => {
-          return null;
+          if (!this._destination) { return null; }
+          return this.destinationName;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(7) === -1) { return false; }
+          if (!this._destination) { return false; }
           return true;
         }
       },
@@ -296,6 +318,14 @@ export class Request {
 
   isPreferenceSelected(preferenceId: number): boolean {
     return this._preferences.indexOf(preferenceId) !== -1;
+  }
+
+  isValidForRecommendedDestinations(): boolean {
+    const steps = this.steps.filter(s => s.requiredForRecommendation);
+    for (let i = 0; i < steps.length; ++i) {
+      return steps[i].isValid();
+    }
+    return true;
   }
 
   isValidForEstimatedCost(): boolean {

@@ -5,5 +5,6 @@ export interface Step {
     path: string;
     order: number;
     requiredForEstimateCalc?: boolean;
+    requiredForRecommendation?: boolean;
     isValid(): boolean;
 }

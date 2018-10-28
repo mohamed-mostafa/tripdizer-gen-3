@@ -18,7 +18,7 @@ export class EstimatedCostRequest {
       kidsNumber: request.kidsNumber,
       infantsNumber: request.infantsNumber,
       budgetCategory: request.budgetCategory,
-      destination: 1
+      destination: request.destination
     };
   }
 }
