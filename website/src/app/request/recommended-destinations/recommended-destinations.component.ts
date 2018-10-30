@@ -6,14 +6,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../request.service';
 
 /* Models */
-import { RecommendedDestinationsResponse } from './destination.model';
+import { RecommendedDestinationsResponse } from './recommended-destination.model';
 
 @Component({
-  selector: 'c-request-destinations',
-  templateUrl: './destinations.component.html',
-  styleUrls: ['./destinations.component.scss']
+  selector: 'c-request-recommended-destinations',
+  templateUrl: './recommended-destinations.component.html',
+  styleUrls: ['./recommended-destinations.component.scss']
 })
-export class DestinationsComponent {
+export class RecommendedDestinationsComponent {
   currentStepPath: string;
   destinations: Array<RecommendedDestinationsResponse>;
 

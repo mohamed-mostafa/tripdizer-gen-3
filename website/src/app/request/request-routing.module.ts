@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 /* Components */
 import { BudgetComponent } from './budget/budget.component';
 import { DepartureReturnComponent } from './departure-return/departure-return.component';
-import { DestinationsComponent } from './destinations/destinations.component';
+import { RecommendedDestinationsComponent } from './recommended-destinations/recommended-destinations.component';
 import { EstimatedCostComponent } from './estimated-cost/estimated-cost.component';
 import { InformationComponent } from './information/information.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
@@ -26,7 +26,7 @@ const routes: Routes = [
             { path: 'budget', component: BudgetComponent },
             { path: 'purpose', component: PurposeComponent },
             { path: 'preferences', component: PreferencesComponent },
-            { path: 'destinations', component: DestinationsComponent },
+            { path: 'destinations', component: RecommendedDestinationsComponent },
             { path: 'estimated-cost', component: EstimatedCostComponent },
             { path: 'travel-assistance', component: TravelAssistanceComponent },
             { path: 'information', component: InformationComponent }
@@ -43,7 +43,7 @@ export const COMPONENTS = [
     BudgetComponent,
     PurposeComponent,
     PreferencesComponent,
-    DestinationsComponent,
+    RecommendedDestinationsComponent,
     EstimatedCostComponent,
     TravelAssistanceComponent,
     InformationComponent

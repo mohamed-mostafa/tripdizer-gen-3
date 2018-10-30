@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
-import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './destinations/destination.model';
+import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './recommended-destinations/recommended-destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
@@ -166,43 +166,6 @@ export class RequestService {
                 }));
         }
         return of(null);
-    }
-
-    oldObject() {
-        return {
-            traveler: {
-                name: 'Essawy',
-                mobile: '561651',
-                emailAddress: 'sdasda@sds.com',
-                dateOfBirth: '2 October, 2018'
-            },
-            referralType: 2,
-            itinerary_id: 5,
-            first_country: 1,
-            second_country: 0,
-            third_country: 0,
-            departure_date: '12 October, 2018',
-            return_date: '13 October, 2018',
-            flexible_dates: false,
-            leaving_country: 'Cairo',
-            travel_purpose: 4,
-            number_of_adults: 1,
-            number_of_kids: 2,
-            number_of_infants: 3,
-            budget_category: 3,
-            budget: null,
-            visa_assistance_needed: true,
-            tour_guide_needed: true,
-            specialRequests: 'dfdsfd',
-            interests: [
-                { id: 1, percentage: 50 },
-                { id: 2, percentage: 32 },
-                { id: 3, percentage: 36 },
-                { id: 4, percentage: 37 },
-                { id: 5, percentage: 52 },
-                { id: 6, percentage: 31 }
-            ]
-        };
     }
 
 }
