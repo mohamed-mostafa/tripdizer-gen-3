@@ -170,14 +170,26 @@ export class Request {
   get steps(): Array<Step> {
     return [
       {
-        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 1,
+        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 0,
         value: ((): string => {
           if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
         })(),
         isValid: (): boolean => {
-          if (this._touchedSteps.indexOf(1) === -1) { return false; }
+          if (this._touchedSteps.indexOf(0) === -1) { return false; }
           if (!this._travelingFrom) { return false; }
+          return true;
+        }
+      },
+      {
+        key: 'travelingTo', title: 'Traveling to', path: 'traveling-to', order: 1,
+        value: ((): string => {
+          if (!this._destination) { return null; }
+          return this.destinationName;
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(1) === -1) { return false; }
+          if (!this._destination) { return false; }
           return true;
         }
       },

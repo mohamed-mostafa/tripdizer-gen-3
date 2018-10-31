@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { Request } from '../request.model';
+import { Destination } from '../destinations/destination.model';
 
 export class RecommendedDestinationsRequest {
     departureDate: Moment;
@@ -21,17 +22,7 @@ export class RecommendedDestinationsRequest {
     }
 }
 
-export class RecommendedDestinationsResponse {
-    id: number;
-    name: string;
-    description: string;
-    enName?: string;
-    enDescription?: string;
-    arName?: string;
-    arDescription?: string;
-    image: string;
-    temperatureLo?: number;
-    temperatureHi?: number;
+export class RecommendedDestinationsResponse extends Destination {
     estimatedCost: number;
     recommendationRanks: {
         budget: number,

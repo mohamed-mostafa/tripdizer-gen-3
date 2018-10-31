@@ -5,10 +5,11 @@ import { map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
-import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './recommended-destinations/recommended-destination.model';
+import { Destination } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
+import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './recommended-destinations/recommended-destination.model';
 import { Request } from './request.model';
 import { Step } from './step.model';
 
@@ -94,6 +95,10 @@ export class RequestService {
 
     getProperty(key: string): any {
         return this.requestData[key];
+    }
+
+    getDestinations(): Observable<Array<Destination>> {
+        return this.http.get<Array<Destination>>('itineraries');
     }
 
     getBudgetCategories(): Observable<Array<BudgetCategory>> {
