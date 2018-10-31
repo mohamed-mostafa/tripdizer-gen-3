@@ -271,6 +271,7 @@ export class Request {
           return this.destinationName;
         })(),
         isValid: (): boolean => {
+          debugger
           if (this._touchedSteps.indexOf(7) === -1) { return false; }
           if (!this._destination) { return false; }
           return true;
@@ -345,25 +346,16 @@ export class Request {
 
   isValidForRecommendedDestinations(): boolean {
     const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForRecommendation);
-    for (let i = 0; i < steps.length; ++i) {
-      return steps[i].isValid();
-    }
-    return true;
+    return steps.length === steps.filter(s => s.isValid()).length;
   }
 
   isValidForEstimatedCost(): boolean {
     const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForEstimateCalc);
-    for (let i = 0; i < steps.length; ++i) {
-      return steps[i].isValid();
-    }
-    return true;
+    return steps.length === steps.filter(s => s.isValid()).length;
   }
 
   isValid(): boolean {
-    for (let i = 0; i < this.navBar.length; ++i) {
-      return this.navBar[i].isValid();
-    }
-    return true;
+    return this.navBar.length === this.navBar.filter(s => s.isValid()).length;
   }
 
 }
