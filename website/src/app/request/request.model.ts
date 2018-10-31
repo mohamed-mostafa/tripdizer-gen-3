@@ -214,7 +214,7 @@ export class Request {
       },
       {
         key: 'travelers', title: 'Travelers', path: 'travelers', order: 3,
-        requiredForEstimateCalc: true,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
           return `${this.adultsNumber} adults`;

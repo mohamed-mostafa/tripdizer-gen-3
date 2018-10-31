@@ -5,6 +5,9 @@ import { Destination } from '../destinations/destination.model';
 export class RecommendedDestinationsRequest {
     departureDate: Moment;
     returnDate: Moment;
+    adultsNumber: number;
+    kidsNumber: number;
+    infantsNumber: number;
     budget: number;
     budgetCategory: number;
     purpose: number;
@@ -14,6 +17,9 @@ export class RecommendedDestinationsRequest {
         return {
             departureDate: request.departureDate,
             returnDate: request.returnDate,
+            adultsNumber: request.adultsNumber,
+            kidsNumber: request.kidsNumber,
+            infantsNumber: request.infantsNumber,
             budget: request.budget,
             budgetCategory: request.budgetCategory,
             purpose: request.purpose,
