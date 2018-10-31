@@ -14,13 +14,14 @@ import { RequestService } from '../request.service';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class RequestNavBarComponent implements AfterViewInit {
-  navBar: Array<Step> = new Request().steps;
+  navBar: Array<Step>;
 
   @Output() navBarDimensionChanged = new EventEmitter();
 
   constructor(
     private router: Router,
     private requestService: RequestService) {
+    this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
       this.setNavLinksWidth();

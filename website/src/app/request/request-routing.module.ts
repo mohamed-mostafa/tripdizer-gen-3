@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+/* Guards */
+import { RequestGuard } from './request.guard';
+
 /* Components */
 import { BudgetComponent } from './budget/budget.component';
 import { DepartureReturnComponent } from './departure-return/departure-return.component';
@@ -18,7 +21,7 @@ import { TravelingFromComponent } from './traveling-from/traveling-from.componen
 
 const routes: Routes = [
     {
-        path: '', component: RequestComponent,
+        path: '', component: RequestComponent, canActivate: [RequestGuard],
         children: [
             { path: '', redirectTo: 'traveling-from', pathMatch: 'full' },
             { path: 'traveling-from', component: TravelingFromComponent },

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,6 +11,7 @@ import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/es
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
 import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './recommended-destinations/recommended-destination.model';
+import { RequestType } from './request-type.model';
 import { Request } from './request.model';
 import { Step } from './step.model';
 
@@ -25,30 +27,48 @@ export class RequestService {
 
     constructor(private http: HttpClient) { }
 
+    setRequestType(params: Params): boolean {
+        let requestType = RequestType.HavePlan;
+        if (params.hasOwnProperty('surprise')) {
+            requestType = RequestType.SurpriseMe;
+        }
+        this.requestData.setRequestType(requestType);
+        this.requestNavBarDataChanged.next({
+            key: 'requestType',
+            value: requestType,
+            navBar: this.requestData.navBar
+        });
+        return true;
+    }
+
+    getNavBar(): Array<Step> {
+        return this.requestData.navBar;
+    }
+
     stepVisited(stepPath: string): void {
-        const step = this.requestData.steps.find(s => s.path === stepPath);
+        const step = this.requestData.navBar.find(s => s.path === stepPath);
         if (step) { this.requestData.touchedSteps = step.order; }
     }
 
     getNextStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            nextSteps = this.requestData.steps
+        const currentStep = this.requestData.navBar.find(s => s.path === stepPath),
+            nextSteps = this.requestData.navBar
                 .filter(s => s.order > currentStep.order)
                 .sort((a, b) => a.order - b.order);
         return nextSteps[0] ? nextSteps[0].path : currentStep.path;
     }
 
     getPrevStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.navBar.find(s => s.path === stepPath),
+            prevSteps = this.requestData.navBar
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         return prevSteps[0] ? prevSteps[0].path : currentStep.path;
     }
 
     getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.navBar.find(s => s.path === stepPath),
+            prevSteps = this.requestData.navBar
                 .filter(s => s.requiredForRecommendation && s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -58,8 +78,8 @@ export class RequestService {
     }
 
     getPrevInvalidStepForEstimateCalc(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.navBar.find(s => s.path === stepPath),
+            prevSteps = this.requestData.navBar
                 .filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -69,8 +89,8 @@ export class RequestService {
     }
 
     getPrevInvalidStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.navBar.find(s => s.path === stepPath),
+            prevSteps = this.requestData.navBar
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -88,8 +108,8 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: key,
-            value: this.requestData.steps.find(s => s.key === key),
-            navBar: this.requestData.steps
+            value: this.requestData.navBar.find(s => s.key === key),
+            navBar: this.requestData.navBar
         });
     }
 
@@ -122,8 +142,8 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: 'preferences',
-            value: this.requestData.steps.find(s => s.key === 'preferences'),
-            navBar: this.requestData.steps
+            value: this.requestData.navBar.find(s => s.key === 'preferences'),
+            navBar: this.requestData.navBar
         });
     }
 

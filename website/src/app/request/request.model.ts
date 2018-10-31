@@ -1,10 +1,12 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { Preference } from './preferences/preference.model';
+import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 
 export class Request {
+  private _requestType: RequestType;
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
   private _departureDate: Moment;
@@ -167,6 +169,9 @@ export class Request {
     return this._traveler.birthday;
   }
 
+  get navBar(): Array<Step> {
+    return this.steps.filter(s => !s.isHiddenInNavBar);
+  }
   get steps(): Array<Step> {
     return [
       {
@@ -183,6 +188,7 @@ export class Request {
       },
       {
         key: 'travelingTo', title: 'Traveling to', path: 'traveling-to', order: 1,
+        isHiddenInNavBar: this._requestType !== RequestType.HavePlan, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
           return this.destinationName;
@@ -259,7 +265,7 @@ export class Request {
       },
       {
         key: 'destinations', title: 'Destinations', path: 'destinations', order: 7,
-        requiredForEstimateCalc: true,
+        isHiddenInNavBar: this._requestType !== RequestType.SurpriseMe, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
           return this.destinationName;
@@ -307,6 +313,7 @@ export class Request {
   }
 
   constructor() {
+    this._requestType = RequestType.HavePlan;
     this._touchedSteps = [];
     this._preferences = [];
     this._preferenceNames = [];
@@ -316,6 +323,10 @@ export class Request {
       email: null,
       birthday: null,
     };
+  }
+
+  setRequestType(requestType: RequestType): void {
+    this._requestType = requestType;
   }
 
   addPreference(preference: Preference): void {
@@ -333,7 +344,7 @@ export class Request {
   }
 
   isValidForRecommendedDestinations(): boolean {
-    const steps = this.steps.filter(s => s.requiredForRecommendation);
+    const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForRecommendation);
     for (let i = 0; i < steps.length; ++i) {
       return steps[i].isValid();
     }
@@ -341,7 +352,7 @@ export class Request {
   }
 
   isValidForEstimatedCost(): boolean {
-    const steps = this.steps.filter(s => s.requiredForEstimateCalc);
+    const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForEstimateCalc);
     for (let i = 0; i < steps.length; ++i) {
       return steps[i].isValid();
     }
@@ -349,8 +360,8 @@ export class Request {
   }
 
   isValid(): boolean {
-    for (let i = 0; i < this.steps.length; ++i) {
-      return this.steps[i].isValid();
+    for (let i = 0; i < this.navBar.length; ++i) {
+      return this.navBar[i].isValid();
     }
     return true;
   }
