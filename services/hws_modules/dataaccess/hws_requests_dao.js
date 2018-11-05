@@ -23,9 +23,9 @@ var createNewRequest = function (request, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					request.departure_date = new Date(new Date(request.departure_date).setHours(0, 0, 0, 0));
-					request.return_date = new Date(new Date(request.return_date).setHours(0, 0, 0, 0));
-					connection.query('INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Birth_Date`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [request.date, request.traveler.emailAddress, request.traveler.name, request.traveler.mobile, request.traveler.dateOfBirth, request.departure_date, request.return_date, request.flexible_dates, request.leaving_country, request.first_country, request.other_country, request.second_country, request.third_country, request.travel_purpose, request.number_of_adults, request.number_of_kids, request.number_of_infants, request.budget_category, request.budget || 0, request.visa_assistance_needed, request.tour_guide_needed, request.itinerary_id, request.specialRequests, request.estimatedCost, request.referralType],
+					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
+					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
+					connection.query('INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Birth_Date`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [request.date, request.traveler.email, request.traveler.name, request.traveler.mobile, request.traveler.birthday, request.departureDate, request.returnDate, request.isFlexibleDates || false, request.travelingFrom, request.first_country, request.other_country, request.second_country, request.third_country, request.purpose, request.adultsNumber, request.kidsNumber, request.infantsNumber, request.budgetCategory, request.budget || 0, request.visaAssistanceNeeded || false, request.tourGuideNeeded || false, request.destination, request.specialRequests, request.estimatedCost, request.referralType],
 						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) { // if the first insert statement fails
@@ -39,11 +39,11 @@ var createNewRequest = function (request, onSuccess, onFailure) {
 								// set the id to the order
 								request.id = result.insertId;
 								// insert the answers
-								if (request.interests.length > 0) {
-									var batchInsertStatement = "INSERT INTO `Traveler_Interests` (`Interest_Id`, `Request_Id`, `Percentage`) VALUES (" + connection.escape(request.interests[0].id) + ", " + request.id + ", " + connection.escape(request.interests[0].percentage) + ")";
-									for (var i = 1; i < request.interests.length; ++i) {
+								if (request.preferences.length > 0) {
+									var batchInsertStatement = "INSERT INTO `Traveler_Interests` (`Interest_Id`, `Request_Id`, `Percentage`) VALUES (" + connection.escape(request.preferences[0].id) + ", " + request.id + ", " + connection.escape(request.preferences[0].percentage) + ")";
+									for (var i = 1; i < request.preferences.length; ++i) {
 										// for each other answer, 
-										batchInsertStatement += ", (" + connection.escape(request.interests[i].id) + ", " + request.id + ", " + connection.escape(request.interests[i].percentage) + ")";
+										batchInsertStatement += ", (" + connection.escape(request.preferences[i].id) + ", " + request.id + ", " + connection.escape(request.preferences[i].percentage) + ")";
 									}
 									connection.query(batchInsertStatement, function (err, result) {
 										// if an error is thrown, end the connection and throw an error

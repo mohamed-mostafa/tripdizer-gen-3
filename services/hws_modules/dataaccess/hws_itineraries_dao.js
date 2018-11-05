@@ -49,6 +49,9 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							introduction: rows[0][0].Introduction,
 							includes: rows[0][0].Includes,
 							excludes: rows[0][0].Excludes,
+							temperatureLo: rows[0][0].temperatureLo,
+							temperatureHi: rows[0][0].temperatureHi,
+							image: rows[0][0].Image1,
 							image1: rows[0][0].Image1,
 							image2: rows[0][0].Image2,
 							agentNotes: rows[0][0].Agent_Notes,
@@ -351,7 +354,7 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					var updateQuery = `UPDATE iternary SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
-					
+
 					connection.query(updateQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the statement fails
