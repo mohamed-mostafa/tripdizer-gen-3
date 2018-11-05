@@ -55,7 +55,7 @@ export class Request {
     this._isFlexibleDates = value;
   }
   get isFlexibleDates(): boolean {
-    return this._isFlexibleDates;
+    return this._isFlexibleDates || false;
   }
   set adultsNumber(value) {
     this._adultsNumber = parseInt(value.toString(), 10);
@@ -108,6 +108,9 @@ export class Request {
   get preferences(): Array<number> {
     return this._preferences;
   }
+  get preferenceNames(): Array<string> {
+    return this._preferenceNames;
+  }
   set destination(value: number) {
     this._destination = value;
   }
@@ -130,13 +133,13 @@ export class Request {
     this._visaAssistanceNeeded = value;
   }
   get visaAssistanceNeeded(): boolean {
-    return this._visaAssistanceNeeded;
+    return this._visaAssistanceNeeded || false;
   }
   set tourGuideNeeded(value: boolean) {
     this._tourGuideNeeded = value;
   }
   get tourGuideNeeded(): boolean {
-    return this._tourGuideNeeded;
+    return this._tourGuideNeeded || false;
   }
   set specialRequests(value: string) {
     this._specialRequests = value;
@@ -168,11 +171,19 @@ export class Request {
   get travelerBirthday(): Moment {
     return this._traveler.birthday;
   }
+  get traveler(): IRequester {
+    return this._traveler;
+  }
+
+  get validSteps(): Array<Step> {
+    return this.steps.filter(s => !s.isDisabled);
+  }
 
   get navBar(): Array<Step> {
-    return this.steps.filter(s => !s.isHiddenInNavBar);
+    return this.validSteps.filter(s => !s.isHiddenOnNavBar);
   }
-  get steps(): Array<Step> {
+
+  private get steps(): Array<Step> {
     return [
       {
         key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 0,
@@ -188,7 +199,7 @@ export class Request {
       },
       {
         key: 'travelingTo', title: 'Traveling to', path: 'traveling-to', order: 1,
-        isHiddenInNavBar: this._requestType !== RequestType.HavePlan, requiredForEstimateCalc: true,
+        isDisabled: this._requestType !== RequestType.HavePlan, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
           return this.destinationName;
@@ -265,13 +276,12 @@ export class Request {
       },
       {
         key: 'destinations', title: 'Destinations', path: 'destinations', order: 7,
-        isHiddenInNavBar: this._requestType !== RequestType.SurpriseMe, requiredForEstimateCalc: true,
+        isDisabled: this._requestType !== RequestType.SurpriseMe, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
           return this.destinationName;
         })(),
         isValid: (): boolean => {
-          debugger
           if (this._touchedSteps.indexOf(7) === -1) { return false; }
           if (!this._destination) { return false; }
           return true;
@@ -307,6 +317,15 @@ export class Request {
         value: 'Information',
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
+          return true;
+        }
+      },
+      {
+        key: 'ticket', title: '', path: 'ticket', order: 99,
+        value: '',
+        isHiddenOnNavBar: true,
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(99) === -1) { return false; }
           return true;
         }
       }
@@ -345,17 +364,17 @@ export class Request {
   }
 
   isValidForRecommendedDestinations(): boolean {
-    const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForRecommendation);
+    const steps = this.validSteps.filter(s => !s.isHiddenOnNavBar && s.requiredForRecommendation);
     return steps.length === steps.filter(s => s.isValid()).length;
   }
 
   isValidForEstimatedCost(): boolean {
-    const steps = this.steps.filter(s => !s.isHiddenInNavBar && s.requiredForEstimateCalc);
+    const steps = this.validSteps.filter(s => !s.isHiddenOnNavBar && s.requiredForEstimateCalc);
     return steps.length === steps.filter(s => s.isValid()).length;
   }
 
   isValid(): boolean {
-    return this.navBar.length === this.navBar.filter(s => s.isValid()).length;
+    return this.validSteps.length === this.validSteps.filter(s => s.isValid()).length;
   }
 
 }

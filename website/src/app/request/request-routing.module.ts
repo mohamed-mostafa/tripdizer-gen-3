@@ -15,6 +15,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { PurposeComponent } from './purpose/purpose.component';
 import { RecommendedDestinationsComponent } from './recommended-destinations/recommended-destinations.component';
 import { RequestComponent } from './request.component';
+import { TicketComponent } from './ticket/ticket.component';
 import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
@@ -34,7 +35,8 @@ const routes: Routes = [
             { path: 'destinations', component: RecommendedDestinationsComponent },
             { path: 'estimated-cost', component: EstimatedCostComponent },
             { path: 'travel-assistance', component: TravelAssistanceComponent },
-            { path: 'information', component: InformationComponent }
+            { path: 'information', component: InformationComponent },
+            { path: 'ticket', component: TicketComponent }
         ]
     }
 ];
@@ -52,7 +54,8 @@ export const COMPONENTS = [
     RecommendedDestinationsComponent,
     EstimatedCostComponent,
     TravelAssistanceComponent,
-    InformationComponent
+    InformationComponent,
+    TicketComponent
 ];
 
 @NgModule({
