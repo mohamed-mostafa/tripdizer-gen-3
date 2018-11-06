@@ -33,4 +33,17 @@ export class TicketComponent {
     requestService.stepVisited(this.currentStepPath);
   }
 
+  serializeSVG(elementId: string): string {
+    return 'data:image/svg+xml;base64,' +
+      window.btoa(unescape(encodeURIComponent(new XMLSerializer().serializeToString(document.getElementById(elementId)))));
+  }
+
+  saveAsPDF() {
+    console.log(this.serializeSVG('v-ticket'));
+  }
+
+  shareWithFriends() {
+    console.log(this.serializeSVG('v-ticket'));
+  }
+
 }

@@ -1,7 +1,38 @@
 <div class="h-100">
   <div class="row h-100 justify-content-center align-items-center">
-    <svg class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    <svg id="v-ticket" class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 1300 550">
+      <style>
+        .svg-fa {
+          font-family: FontAwesome;
+        }
+
+        .fill-blue {
+          fill: #2989ff;
+        }
+
+        .fill-white {
+          fill: #ffffff;
+        }
+
+        .splitter {
+          fill: none;
+          stroke: #fff;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .splitter.l-splitter {
+          stroke-width: 4px;
+          stroke-dasharray: 0 10.205;
+        }
+
+        .splitter.s-splitter {
+          stroke-width: 3px;
+          stroke-dasharray: 0 7;
+        }
+
+      </style>
       <defs>
         <filter id="left-part" filterUnits="userSpaceOnUse">
           <feOffset input="SourceAlpha" />
@@ -53,7 +84,7 @@
                 <circle cx="105" cy="0" r="45" stroke="#fff" stroke-width="1" fill="transparent" />
                 <circle cx="105" cy="0" r="40" class="fill-white" fill-opacity="0.5" />
                 <circle cx="105" cy="0" r="30" class="fill-white" />
-                <text class="fa fill-blue" font-size="32" transform="translate(89 12)">&#xf072;</text>
+                <text class="svg-fa fill-blue" font-size="32" transform="translate(89 12)">&#xf072;</text>
                 <line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
               </g>
               <text y="27" font-size="84">
@@ -68,10 +99,51 @@
             </text>
           </g>
         </g>
+        <g transform="translate(1025 690)" display="none" class="ticket-links" font-size="16">
+          <a (click)="saveAsPDF()" xlink:href="javascript:void(0)">
+            <text x="0" class="fill-blue fa">&#xf1c1;</text>
+            <text x="25" class="fill-blue">Save as PDF</text>
+          </a>
+          <a (click)="shareWithFriends()" xlink:href="javascript:void(0)">
+            <text x="175" class="fill-blue fa">&#xf1e0;</text>
+            <text x="200" class="fill-blue">Share with friends</text>
+          </a>
+        </g>
       </g>
     </svg>
-    <svg class="h-100 h-ticket d-block d-md-none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    <svg id="h-ticket" class="h-100 h-ticket d-block d-md-none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 400 710">
+      <style>
+        .svg-fa {
+          font-family: FontAwesome;
+        }
+
+        .fill-blue {
+          fill: #2989ff;
+        }
+
+        .fill-white {
+          fill: #ffffff;
+        }
+
+        .splitter {
+          fill: none;
+          stroke: #fff;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .splitter.l-splitter {
+          stroke-width: 4px;
+          stroke-dasharray: 0 10.205;
+        }
+
+        .splitter.s-splitter {
+          stroke-width: 3px;
+          stroke-dasharray: 0 7;
+        }
+
+      </style>
       <defs>
         <filter id="top-part" filterUnits="userSpaceOnUse">
           <feOffset input="SourceAlpha" />
@@ -122,7 +194,7 @@
                 <circle cx="0" cy="60" r="27.5" stroke="#fff" stroke-width="0.5" fill="transparent" />
                 <circle cx="0" cy="60" r="25" class="fill-white" fill-opacity="0.5" />
                 <circle cx="0" cy="60" r="20" class="fill-white" />
-                <text class="fa fill-blue" font-size="24" text-anchor="middle" transform="translate(2.5 67.5)">&#xf072;</text>
+                <text class="svg-fa fill-blue" font-size="24" text-anchor="middle" transform="translate(2.5 67.5)">&#xf072;</text>
                 <line class="splitter s-splitter" y2="20" transform="translate(0 100)" />
               </g>
               <text text-anchor="middle" x="140" font-size="36">
