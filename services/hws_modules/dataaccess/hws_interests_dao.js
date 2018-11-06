@@ -170,7 +170,8 @@ var getAll = function (lang, onSuccess, onFailure) {
 						var interest = {
 							id: rows[i].Id,
 							en_name: rows[i].EN_Name,
-							ar_name: rows[i].AR_Name
+							ar_name: rows[i].AR_Name,
+							image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
 						};
 						if (lang) {
 							interest.name = interest[lang.toLowerCase() + '_name'];

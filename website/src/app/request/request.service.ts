@@ -1,16 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
-import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './destinations/destination.model';
+import { Destination } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { Purpose } from './purpose/purpose.model';
+import { RecommendedDestinationsRequest, RecommendedDestinationsResponse } from './recommended-destinations/recommended-destination.model';
+import { RequestRequest, RequestResponse } from './request-dto.model';
+import { RequestType } from './request-type.model';
 import { Request } from './request.model';
 import { Step } from './step.model';
+import { Ticket } from './ticket/ticket.model';
 
 @Injectable({
     providedIn: 'root',
@@ -18,36 +23,60 @@ import { Step } from './step.model';
 export class RequestService {
     private endPoint = 'request';
     private requestData = new Request();
+    private Lookups: {
+        destinations: Array<Destination>,
+        budgetCategories: Array<BudgetCategory>,
+        purposes: Array<Purpose>,
+        preferences: Array<Preference>
+    } = {} as any;
 
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
     requestNavBarDataChanged = new Subject<{ key: string, value: any, navBar: Array<Step> }>();
 
     constructor(private http: HttpClient) { }
 
+    setRequestType(params: Params): boolean {
+        let requestType = RequestType.HavePlan;
+        if (params.hasOwnProperty('surprise')) {
+            requestType = RequestType.SurpriseMe;
+        }
+        this.requestData.setRequestType(requestType);
+        this.requestNavBarDataChanged.next({
+            key: 'requestType',
+            value: requestType,
+            navBar: this.requestData.navBar
+        });
+        return true;
+    }
+
+    getNavBar(): Array<Step> {
+        return this.requestData.navBar;
+    }
+
     stepVisited(stepPath: string): void {
-        const step = this.requestData.steps.find(s => s.path === stepPath);
+        const step = this.requestData.validSteps.find(s => s.path === stepPath);
         if (step) { this.requestData.touchedSteps = step.order; }
     }
 
     getNextStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            nextSteps = this.requestData.steps
+        const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
+            nextSteps = this.requestData.validSteps
                 .filter(s => s.order > currentStep.order)
                 .sort((a, b) => a.order - b.order);
         return nextSteps[0] ? nextSteps[0].path : currentStep.path;
     }
 
     getPrevStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.validSteps
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         return prevSteps[0] ? prevSteps[0].path : currentStep.path;
     }
 
     getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.validSteps
                 .filter(s => s.requiredForRecommendation && s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -57,8 +86,8 @@ export class RequestService {
     }
 
     getPrevInvalidStepForEstimateCalc(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.validSteps
                 .filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -68,8 +97,8 @@ export class RequestService {
     }
 
     getPrevInvalidStep(stepPath: string): string {
-        const currentStep = this.requestData.steps.find(s => s.path === stepPath),
-            prevSteps = this.requestData.steps
+        const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
+            prevSteps = this.requestData.validSteps
                 .filter(s => s.order < currentStep.order)
                 .sort((a, b) => b.order - a.order);
         for (let i = 0; i < prevSteps.length; ++i) {
@@ -87,8 +116,8 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: key,
-            value: this.requestData.steps.find(s => s.key === key),
-            navBar: this.requestData.steps
+            value: this.requestData.validSteps.find(s => s.key === key),
+            navBar: this.requestData.navBar
         });
     }
 
@@ -96,16 +125,22 @@ export class RequestService {
         return this.requestData[key];
     }
 
+    getDestinations(): Observable<Array<Destination>> {
+        if (this.Lookups.destinations) { return of(this.Lookups.destinations); }
+        return this.http.get<Array<Destination>>('itineraries')
+            .pipe(map(destinations => { this.Lookups.destinations = destinations; return destinations; }));
+    }
+
     getBudgetCategories(): Observable<Array<BudgetCategory>> {
-        return this.http.get<Array<BudgetCategory>>('budgetcategories');
+        if (this.Lookups.budgetCategories) { return of(this.Lookups.budgetCategories); }
+        return this.http.get<Array<BudgetCategory>>('budgetcategories')
+            .pipe(map(budgetCategories => { this.Lookups.budgetCategories = budgetCategories; return budgetCategories; }));
     }
 
     getPurposes(): Observable<Array<Purpose>> {
+        if (this.Lookups.purposes) { return of(this.Lookups.purposes); }
         return this.http.get<Array<Purpose>>('purposes')
-            .pipe(map(purposes => purposes.map(purpose => ({
-                ...purpose,
-                image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
-            }))));
+            .pipe(map(purposes => { this.Lookups.purposes = purposes; return purposes; }));
     }
 
     addPreference(preference: Preference): void {
@@ -117,8 +152,8 @@ export class RequestService {
         });
         this.requestNavBarDataChanged.next({
             key: 'preferences',
-            value: this.requestData.steps.find(s => s.key === 'preferences'),
-            navBar: this.requestData.steps
+            value: this.requestData.validSteps.find(s => s.key === 'preferences'),
+            navBar: this.requestData.navBar
         });
     }
 
@@ -131,11 +166,9 @@ export class RequestService {
     }
 
     getPreferences(): Observable<Array<Preference>> {
+        if (this.Lookups.preferences) { return of(this.Lookups.preferences); }
         return this.http.get<Array<Preference>>('interests')
-            .pipe(map(preferences => preferences.map(preference => ({
-                ...preference,
-                image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
-            }))));
+            .pipe(map(preferences => { this.Lookups.preferences = preferences; return preferences; }));
     }
 
     isValidForRecommendedDestinations(): boolean {
@@ -168,41 +201,17 @@ export class RequestService {
         return of(null);
     }
 
-    oldObject() {
-        return {
-            traveler: {
-                name: 'Essawy',
-                mobile: '561651',
-                emailAddress: 'sdasda@sds.com',
-                dateOfBirth: '2 October, 2018'
-            },
-            referralType: 2,
-            itinerary_id: 5,
-            first_country: 1,
-            second_country: 0,
-            third_country: 0,
-            departure_date: '12 October, 2018',
-            return_date: '13 October, 2018',
-            flexible_dates: false,
-            leaving_country: 'Cairo',
-            travel_purpose: 4,
-            number_of_adults: 1,
-            number_of_kids: 2,
-            number_of_infants: 3,
-            budget_category: 3,
-            budget: null,
-            visa_assistance_needed: true,
-            tour_guide_needed: true,
-            specialRequests: 'dfdsfd',
-            interests: [
-                { id: 1, percentage: 50 },
-                { id: 2, percentage: 32 },
-                { id: 3, percentage: 36 },
-                { id: 4, percentage: 37 },
-                { id: 5, percentage: 52 },
-                { id: 6, percentage: 31 }
-            ]
-        };
+    isValid(): boolean {
+        return this.requestData.isValid();
+    }
+
+    submitRequest(): Observable<Ticket | null> {
+        if (this.isValid()) {
+            const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
+            return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request })
+                .pipe(map(requestResponse => Ticket.getTicketFromRequestResponse(this.requestData, requestResponse)));
+        }
+        return of(null);
     }
 
 }

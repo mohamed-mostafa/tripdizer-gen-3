@@ -1,10 +1,12 @@
 import { CurrencyPipe } from '@angular/common';
 import { Moment } from 'moment';
 import { Preference } from './preferences/preference.model';
+import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 
 export class Request {
+  private _requestType: RequestType;
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
   private _departureDate: Moment;
@@ -20,6 +22,8 @@ export class Request {
   private _purposeName: string;
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
+  private _destination: number;
+  private _destinationName: string;
   private _estimatedCost: number;
   private _visaAssistanceNeeded: boolean;
   private _tourGuideNeeded: boolean;
@@ -51,7 +55,7 @@ export class Request {
     this._isFlexibleDates = value;
   }
   get isFlexibleDates(): boolean {
-    return this._isFlexibleDates;
+    return this._isFlexibleDates || false;
   }
   set adultsNumber(value) {
     this._adultsNumber = parseInt(value.toString(), 10);
@@ -104,6 +108,21 @@ export class Request {
   get preferences(): Array<number> {
     return this._preferences;
   }
+  get preferenceNames(): Array<string> {
+    return this._preferenceNames;
+  }
+  set destination(value: number) {
+    this._destination = value;
+  }
+  get destination(): number {
+    return this._destination;
+  }
+  set destinationName(value: string) {
+    this._destinationName = value;
+  }
+  get destinationName(): string {
+    return this._destination ? this._destinationName : '';
+  }
   set estimatedCost(value: number) {
     this._estimatedCost = value;
   }
@@ -114,13 +133,13 @@ export class Request {
     this._visaAssistanceNeeded = value;
   }
   get visaAssistanceNeeded(): boolean {
-    return this._visaAssistanceNeeded;
+    return this._visaAssistanceNeeded || false;
   }
   set tourGuideNeeded(value: boolean) {
     this._tourGuideNeeded = value;
   }
   get tourGuideNeeded(): boolean {
-    return this._tourGuideNeeded;
+    return this._tourGuideNeeded || false;
   }
   set specialRequests(value: string) {
     this._specialRequests = value;
@@ -152,23 +171,48 @@ export class Request {
   get travelerBirthday(): Moment {
     return this._traveler.birthday;
   }
+  get traveler(): IRequester {
+    return this._traveler;
+  }
 
-  get steps(): Array<Step> {
+  get validSteps(): Array<Step> {
+    return this.steps.filter(s => !s.isDisabled);
+  }
+
+  get navBar(): Array<Step> {
+    return this.validSteps.filter(s => !s.isHiddenOnNavBar);
+  }
+
+  private get steps(): Array<Step> {
     return [
       {
-        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 1,
+        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 0,
         value: ((): string => {
           if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
         })(),
         isValid: (): boolean => {
-          if (this._touchedSteps.indexOf(1) === -1) { return false; }
+          if (this._touchedSteps.indexOf(0) === -1) { return false; }
           if (!this._travelingFrom) { return false; }
           return true;
         }
       },
       {
-        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2, requiredForEstimateCalc: true,
+        key: 'travelingTo', title: 'Traveling to', path: 'traveling-to', order: 1,
+        isDisabled: this._requestType !== RequestType.HavePlan, requiredForEstimateCalc: true,
+        value: ((): string => {
+          if (!this._destination) { return null; }
+          return this.destinationName;
+        })(),
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(1) === -1) { return false; }
+          if (!this._destination) { return false; }
+          return true;
+        }
+      },
+      {
+        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
           return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
@@ -180,7 +224,8 @@ export class Request {
         }
       },
       {
-        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3, requiredForEstimateCalc: true,
+        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
           return `${this.adultsNumber} adults`;
@@ -192,7 +237,8 @@ export class Request {
         }
       },
       {
-        key: 'budget', title: 'Budget', path: 'budget', order: 4, requiredForEstimateCalc: true,
+        key: 'budget', title: 'Budget', path: 'budget', order: 4,
+        requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
           return this.budgetCategory === 1 ?
@@ -206,6 +252,7 @@ export class Request {
       },
       {
         key: 'purpose', title: 'Purpose', path: 'purpose', order: 5,
+        requiredForRecommendation: true,
         value: ((): string => {
           if (!this._purpose) { return null; }
           return this.purposeName;
@@ -218,6 +265,7 @@ export class Request {
       },
       {
         key: 'preferences', title: 'Preferences', path: 'preferences', order: 6,
+        requiredForRecommendation: true,
         value: ((): string => {
           return this._preferenceNames.join(', ');
         })(),
@@ -227,12 +275,15 @@ export class Request {
         }
       },
       {
-        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7, requiredForEstimateCalc: true,
+        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7,
+        isDisabled: this._requestType !== RequestType.SurpriseMe, requiredForEstimateCalc: true,
         value: ((): string => {
-          return null;
+          if (!this._destination) { return null; }
+          return this.destinationName;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(7) === -1) { return false; }
+          if (!this._destination) { return false; }
           return true;
         }
       },
@@ -268,11 +319,21 @@ export class Request {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
           return true;
         }
+      },
+      {
+        key: 'ticket', title: '', path: 'ticket', order: 99,
+        value: '',
+        isHiddenOnNavBar: true,
+        isValid: (): boolean => {
+          if (this._touchedSteps.indexOf(99) === -1) { return false; }
+          return true;
+        }
       }
     ];
   }
 
   constructor() {
+    this._requestType = RequestType.HavePlan;
     this._touchedSteps = [];
     this._preferences = [];
     this._preferenceNames = [];
@@ -282,6 +343,10 @@ export class Request {
       email: null,
       birthday: null,
     };
+  }
+
+  setRequestType(requestType: RequestType): void {
+    this._requestType = requestType;
   }
 
   addPreference(preference: Preference): void {
@@ -298,19 +363,18 @@ export class Request {
     return this._preferences.indexOf(preferenceId) !== -1;
   }
 
+  isValidForRecommendedDestinations(): boolean {
+    const steps = this.validSteps.filter(s => !s.isHiddenOnNavBar && s.requiredForRecommendation);
+    return steps.length === steps.filter(s => s.isValid()).length;
+  }
+
   isValidForEstimatedCost(): boolean {
-    const steps = this.steps.filter(s => s.requiredForEstimateCalc);
-    for (let i = 0; i < steps.length; ++i) {
-      return steps[i].isValid();
-    }
-    return true;
+    const steps = this.validSteps.filter(s => !s.isHiddenOnNavBar && s.requiredForEstimateCalc);
+    return steps.length === steps.filter(s => s.isValid()).length;
   }
 
   isValid(): boolean {
-    for (let i = 0; i < this.steps.length; ++i) {
-      return this.steps[i].isValid();
-    }
-    return true;
+    return this.validSteps.length === this.validSteps.filter(s => s.isValid()).length;
   }
 
 }

@@ -31,7 +31,6 @@ export class JWTokenInterceptor implements HttpInterceptor {
                 errMsg = 'Failed to connect to the server!';
             } else if (error.status === 401) { // Unauthorized
                 errMsg = 'Unauthorized request to the server!';
-                location.reload(true);
             } else {
                 errMsg = error.error.message || error.statusText;
             }

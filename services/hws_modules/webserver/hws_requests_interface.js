@@ -231,8 +231,9 @@ var budgetCalculation = function (req, res) {
 var recommendation = function (req, res) {
 	try {
 		var request = req.body.request;
+		var lang = req.query.lang;
 		// call the business function and give it a callback function 
-		requestsBusiness.recommendation(request, function (request) {
+		requestsBusiness.recommendation(request, lang, function (request) {
 				res.json(request);
 			},
 			function (error) {

@@ -176,7 +176,8 @@ var getAll = function (lang, onSuccess, onFailure) {
 							ar_name: rows[i].AR_Name,
 							numberOfAdults: rows[i].Number_Of_Adults,
 							numberOfKids: rows[i].Number_Of_Kids,
-							numberOfInfants: rows[i].Number_Of_Infants
+							numberOfInfants: rows[i].Number_Of_Infants,
+							image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
 						};
 						if (lang) {
 							purpose.name = purpose[lang.toLowerCase() + '_name'];

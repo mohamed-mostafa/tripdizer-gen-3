@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import url('https://fonts.googleapis.com/css?family=Qwigley|Montserrat|Material+Icons|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Qwigley|Montserrat|Material+Icons|Roboto|Space+Mono');
 
 /* START Variables */
 $color-yellow: #FFC640;
@@ -269,6 +269,15 @@ body {
           height: 256px !important;
           width: 256px !important;
           background-color: rgba($color-blue, 0.3) !important;
+        }
+      }
+
+      &.mat-radio-square {
+
+        .label-content-img,
+        .label-content-img:after,
+        .mat-ripple-element {
+          border-radius: 1rem !important;
         }
       }
     }
