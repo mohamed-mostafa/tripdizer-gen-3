@@ -16,9 +16,8 @@ export class RequestComponent implements OnInit {
 
   setDevHeights() {
     const navBarHeight = document.getElementById('nav-bar').offsetHeight;
-    document.getElementById('body-container').style.height = `calc(100% - ${navBarHeight}px)`;
+    document.getElementById('body-container').style.height = `${document.body.offsetHeight - navBarHeight}px`;
     document.getElementById('body-container').style.marginTop = `${navBarHeight}px`;
-    document.getElementById('body-container').parentElement.style.height = '100%';
   }
 
 }
