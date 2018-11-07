@@ -2,9 +2,9 @@
   <form [formGroup]="formGroup" class="col-11 col-lg-7">
     <ng-content></ng-content>
   </form>
-  <div class="offset-lg-1">
-    <a href="javascript:void(0)" (click)="goToPrevStep()" *ngIf="!isBackHidden" class="mr-5">{{backLabel}}</a>
-    <button (click)="goToNextStep()" [disabled]="formGroup.invalid || isNextDisabled" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">{{nextLabel}}
+  <div class="offset-lg-1 mt-4 mt-lg-0">
+    <a href="javascript:void(0)" (click)="goToPrevStep()" *ngIf="!isBackHidden" class="mr-4 mr-lg-5">{{backLabel}}</a>
+    <button (click)="goToNextStep()" [disabled]="formGroup.invalid || isNextDisabled" class="btn btn-primary custom-bs btn-rounded text-uppercase">{{nextLabel}}
       <i class="fas fa-chevron-right"></i></button>
   </div>
 </div>
