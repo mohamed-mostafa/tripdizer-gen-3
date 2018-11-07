@@ -20,25 +20,6 @@ body {
 /* START Extend Bootstrap */
 .custom-bs {
   &.btn {
-    padding: 1rem 1.5rem;
-    font-size: 1.25rem;
-
-    @media (min-width: 576px) {
-      padding: 1.25rem 1.88rem;
-    }
-
-    @media (min-width: 768px) {
-      padding: 1.5rem 2.25rem;
-    }
-
-    @media (min-width: 992px) {
-      padding: 1.75rem 2.63rem;
-    }
-
-    @media (min-width: 1200px) {
-      padding: 2rem 3rem;
-    }
-
     &.btn-rounded {
       -webkit-border-radius: 10em;
       border-radius: 10em;
