@@ -1,21 +1,15 @@
-<div class="h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <form [formGroup]="formGroup" class="col-11 col-lg-7 row">
-      <mat-checkbox class="col-12 my-1 my-sm-2 my-md-3 my-lg-4 mat-checkbox-md" formControlName="visaAssistanceNeeded"
-        labelPosition="after">I need assistance with getting the visas</mat-checkbox>
-      <mat-checkbox class="col-12 my-1 my-sm-2 my-md-3 my-lg-4 mat-checkbox-md" formControlName="tourGuideNeeded"
-        labelPosition="after">I need a tour guide</mat-checkbox>
-      <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
-        <mat-hint>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-hint>
-        <mat-error>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-error>
-        <textarea matInput type="text" id="special-requests" class="custom-bs text-yellow text-uppercase font-weight-bold"
-          placeholder="Special Request" formControlName="specialRequests"></textarea>
-      </mat-form-field>
-    </form>
-    <div class="offset-lg-1">
-      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
-      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Submit
-        <i class="fas fa-chevron-right"></i></button>
-    </div>
+<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()"
+  nextLabel="Submit">
+  <div class="row">
+    <mat-checkbox class="col-12 my-1 my-sm-2 my-md-3 my-lg-4 mat-checkbox-md" formControlName="visaAssistanceNeeded"
+      labelPosition="after">I need assistance with getting the visas</mat-checkbox>
+    <mat-checkbox class="col-12 my-1 my-sm-2 my-md-3 my-lg-4 mat-checkbox-md" formControlName="tourGuideNeeded"
+      labelPosition="after">I need a tour guide</mat-checkbox>
+    <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
+      <mat-hint>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-hint>
+      <mat-error>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-error>
+      <textarea matInput type="text" id="special-requests" class="custom-bs text-yellow text-uppercase font-weight-bold"
+        placeholder="Special Request" formControlName="specialRequests"></textarea>
+    </mat-form-field>
   </div>
-</div>
+</c-request-form-layout>

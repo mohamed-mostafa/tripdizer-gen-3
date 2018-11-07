@@ -1,20 +1,18 @@
-<div class="h-100">
-  <div class="h-100 justify-content-center align-items-center d-flex">
-    <div class="destination-container text-center m-auto">
-      <div *ngFor="let destination of destinations" (click)="goToNextStep(destination.id)" class="destination m-2 m-sm-3">
-        <div class="destination-info">
-          <div class="dest-temp w-50 clearfix">
-            <span class="float-left">{{destination.temperatureLo}}</span>
-            <span class="float-right">{{destination.temperatureHi}}</span>
-          </div>
-          <div class="dest-data">
-            <div class="dest-name text-uppercase">
-              {{destination.name}},<br>{{destination.description}}
-            </div>
+<div class="h-100 justify-content-center align-items-center d-flex">
+  <div class="destination-container text-center m-auto">
+    <div *ngFor="let destination of destinations" (click)="goToNextStep(destination.id)" class="destination m-2 m-sm-3">
+      <div class="destination-info">
+        <div class="dest-temp w-50 clearfix">
+          <span class="float-left">{{destination.temperatureLo}}</span>
+          <span class="float-right">{{destination.temperatureHi}}</span>
+        </div>
+        <div class="dest-data">
+          <div class="dest-name text-uppercase">
+            {{destination.name}},<br>{{destination.description}}
           </div>
         </div>
-        <img class="destination-img" [src]="destination.image" alt="">
       </div>
+      <img class="destination-img" [src]="destination.image" alt="">
     </div>
   </div>
 </div>

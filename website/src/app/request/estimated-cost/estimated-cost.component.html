@@ -1,37 +1,31 @@
-<div class="h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="col-11 col-lg-7 row">
-      <div class="col-12 my-1 p-0 total-budget">{{estimatedCost.totalBudget | currency:'EGP':'symbol':'0.0-0'}}</div>
-      <div class="col-12 p-2 hint-1">The costs are estimates and subject to change in the actual package</div>
-      <ul class="col-12 px-0 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
-        <li class="row">
-          <i class="col-1 p-0 text-center fas fa-plane fa-2x"></i>
-          <span class="col-11 p-0 details-info">Flights: {{estimatedCost.flightsBudget |
-            currency:'EGP':'symbol':'0.0-0'}}</span>
-        </li>
-        <li class="row">
-          <i class="col-1 p-0 text-center fas fa-dollar-sign fa-2x"></i>
-          <span class="col-11 p-0 details-info">Daily Spending: {{estimatedCost.dailySpending |
-            currency:'EGP':'symbol':'0.0-0'}}</span>
-        </li>
-        <li class="row">
-          <i class="col-1 p-0 text-center fas fa-home fa-2x"></i>
-          <span class="col-11 p-0 details-info">Accommodation: {{estimatedCost.accommodationBudget |
-            currency:'EGP':'symbol':'0.0-0'}}</span>
-        </li>
-        <li class="row">
-          <i class="col-1 p-0 text-center fas fa-ship fa-2x"></i>
-          <span class="col-11 p-0 details-info">Ferries: {{estimatedCost.ferriesBudget |
-            currency:'EGP':'symbol':'0.0-0'}}</span>
-        </li>
-      </ul>
-      <div class="col-12 font-italic hint-2">* International + Domestic flights</div>
-      <div class="col-12 font-italic hint-3">** Just a hint, not included in the final cost</div>
-    </div>
-    <div class="offset-lg-1">
-      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
-      <button (click)="goToNextStep()" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Submit <i
-          class="fas fa-chevron-right"></i></button>
-    </div>
+<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath"
+  nextLabel="Submit">
+  <div class="row">
+    <div class="col-12 my-1 p-0 total-budget">{{estimatedCost?.totalBudget | currency:'EGP':'symbol':'0.0-0'}}</div>
+    <div class="col-12 p-2 hint-1">The costs are estimates and subject to change in the actual package</div>
+    <ul class="col-12 px-0 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-plane fa-2x"></i>
+        <span class="col-11 p-0 details-info">Flights: {{estimatedCost?.flightsBudget |
+          currency:'EGP':'symbol':'0.0-0'}}</span>
+      </li>
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-dollar-sign fa-2x"></i>
+        <span class="col-11 p-0 details-info">Daily Spending: {{estimatedCost?.dailySpending |
+          currency:'EGP':'symbol':'0.0-0'}}</span>
+      </li>
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-home fa-2x"></i>
+        <span class="col-11 p-0 details-info">Accommodation: {{estimatedCost?.accommodationBudget |
+          currency:'EGP':'symbol':'0.0-0'}}</span>
+      </li>
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-ship fa-2x"></i>
+        <span class="col-11 p-0 details-info">Ferries: {{estimatedCost?.ferriesBudget |
+          currency:'EGP':'symbol':'0.0-0'}}</span>
+      </li>
+    </ul>
+    <div class="col-12 font-italic hint-2">* International + Domestic flights</div>
+    <div class="col-12 font-italic hint-3">** Just a hint, not included in the final cost</div>
   </div>
-</div>
+</c-request-form-layout>

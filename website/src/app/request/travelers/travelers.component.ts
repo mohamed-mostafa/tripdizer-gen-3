@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -11,7 +11,8 @@ import { RequestService } from '../request.service';
   styleUrls: ['./travelers.component.scss']
 })
 export class TravelersComponent {
-  currentStepPath: string;
+  nextStepPath: string;
+  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'adultsNumber': new FormControl('', [Validators.required]),
@@ -26,10 +27,10 @@ export class TravelersComponent {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    route: ActivatedRoute,
     private requestService: RequestService
   ) {
+    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -37,26 +38,17 @@ export class TravelersComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.currentStepPath = this.route.routeConfig.path;
-    requestService.stepVisited(this.currentStepPath);
+    this.nextStepPath = requestService.getNextStep(currentStepPath);
+    this.prevStepPath = requestService.getPrevStep(currentStepPath);
+    requestService.stepVisited(currentStepPath);
   }
 
-  save(): boolean {
-    if (this.formGroup.invalid) { return false; }
-
+  save(): void {
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
     }
-    return true;
   }
 
-  goToPrevStep() {
-    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-  }
-
-  goToNextStep() {
-    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
-  }
 }
