@@ -128,7 +128,10 @@ export class RequestService {
 
     getDestinations(): Observable<Array<Destination>> {
         this.isLoading.next(true);
-        if (this.Lookups.destinations) { return of(this.Lookups.destinations); }
+        if (this.Lookups.destinations) {
+            this.isLoading.next(false);
+            return of(this.Lookups.destinations);
+        }
         return this.http.get<Array<Destination>>('itineraries')
             .pipe(map(destinations => { this.Lookups.destinations = destinations; return destinations; }),
                 finalize(() => this.isLoading.next(false)));
@@ -136,7 +139,10 @@ export class RequestService {
 
     getBudgetCategories(): Observable<Array<BudgetCategory>> {
         this.isLoading.next(true);
-        if (this.Lookups.budgetCategories) { return of(this.Lookups.budgetCategories); }
+        if (this.Lookups.budgetCategories) {
+            this.isLoading.next(false);
+            return of(this.Lookups.budgetCategories);
+        }
         return this.http.get<Array<BudgetCategory>>('budgetcategories')
             .pipe(map(budgetCategories => { this.Lookups.budgetCategories = budgetCategories; return budgetCategories; }),
                 finalize(() => this.isLoading.next(false)));
@@ -144,7 +150,10 @@ export class RequestService {
 
     getPurposes(): Observable<Array<Purpose>> {
         this.isLoading.next(true);
-        if (this.Lookups.purposes) { return of(this.Lookups.purposes); }
+        if (this.Lookups.purposes) {
+            this.isLoading.next(false);
+            return of(this.Lookups.purposes);
+        }
         return this.http.get<Array<Purpose>>('purposes')
             .pipe(map(purposes => { this.Lookups.purposes = purposes; return purposes; }),
                 finalize(() => this.isLoading.next(false)));
@@ -174,7 +183,10 @@ export class RequestService {
 
     getPreferences(): Observable<Array<Preference>> {
         this.isLoading.next(true);
-        if (this.Lookups.preferences) { return of(this.Lookups.preferences); }
+        if (this.Lookups.preferences) {
+            this.isLoading.next(false);
+            return of(this.Lookups.preferences);
+        }
         return this.http.get<Array<Preference>>('interests')
             .pipe(map(preferences => { this.Lookups.preferences = preferences; return preferences; }),
                 finalize(() => this.isLoading.next(false)));
