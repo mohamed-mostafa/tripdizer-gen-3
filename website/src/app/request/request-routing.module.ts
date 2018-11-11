@@ -9,9 +9,7 @@ import { BudgetComponent } from './budget/budget.component';
 import { DepartureReturnComponent } from './departure-return/departure-return.component';
 import { DestinationsComponent } from './destinations/destinations.component';
 import { EstimatedCostComponent } from './estimated-cost/estimated-cost.component';
-import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
 import { InformationComponent } from './information/information.component';
-import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { PurposeComponent } from './purpose/purpose.component';
 import { RecommendedDestinationsComponent } from './recommended-destinations/recommended-destinations.component';
@@ -43,9 +41,6 @@ const routes: Routes = [
 ];
 
 export const COMPONENTS = [
-    RequestComponent,
-    RequestNavBarComponent,
-    RequestFormLayoutComponent,
     TravelingFromComponent,
     DestinationsComponent,
     DepartureReturnComponent,

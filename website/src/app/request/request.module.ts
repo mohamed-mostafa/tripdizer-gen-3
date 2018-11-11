@@ -13,6 +13,12 @@ import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request
 /* Pipes */
 import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
 
+/* Components */
+import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
+import { RequestLoadingComponent } from './loading/loading.component';
+import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
+import { RequestComponent } from './request.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -27,6 +33,10 @@ import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
   ],
   declarations: [
     ...RequestComponents,
+    RequestComponent,
+    RequestNavBarComponent,
+    RequestFormLayoutComponent,
+    RequestLoadingComponent,
     ErrorMessagePipe
   ]
 })
