@@ -61,20 +61,20 @@
         <line class="splitter l-splitter" y2="350" />
       </g>
       <g class="fill-white" transform="translate(222 238)">
-        <text class="fill-white" [attr.transform]="'translate(30 ' + (35 + (6 - ticket.preferences.length) * 17.5) + ')'"
+        <text class="fill-white" [attr.transform]="'translate(30 ' + (35 + (6 - ticket?.preferenceNames.length) * 17.5) + ')'"
           font-size="18">
-          <tspan x="0" y="0">{{ticket.departureDate | date: 'd / M / y'}}</tspan>
-          <tspan x="0" y="35">{{ticket.returnDate | date: 'd / M / y'}}</tspan>
-          <tspan x="0" y="70">{{ticket.adultsNumber}} adults</tspan>
-          <tspan x="0" y="105">{{ticket.estimatedCost | currency:'EGP':'symbol':'0.0-0'}}</tspan>
-          <tspan x="0" [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket.preferenceNames; index as i">{{preference}}</tspan>
+          <tspan x="0" y="0">{{ticket?.departureDate | date: 'd / M / y'}}</tspan>
+          <tspan x="0" y="35">{{ticket?.returnDate | date: 'd / M / y'}}</tspan>
+          <tspan x="0" y="70">{{ticket?.adultsNumber}} adults</tspan>
+          <tspan x="0" y="105">{{ticket?.estimatedCost | currency:'EGP':'symbol':'0.0-0'}}</tspan>
+          <tspan x="0" [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</tspan>
         </text>
         <g class="fill-white" transform="translate(400 20)">
           <text font-size="24">
             <tspan y="30">Request No.</tspan>
             <tspan y="70">
               <tspan x="0">#</tspan>
-              <tspan x="30">{{ticket.id}}</tspan>
+              <tspan x="30">{{ticket?.id}}</tspan>
             </tspan>
           </text>
           <g transform="translate(0 148)">
@@ -87,8 +87,8 @@
               <line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
             </g>
             <text y="27" font-size="84">
-              <tspan x="0">{{ticket.travelingFrom | slice:0:3 | uppercase}}</tspan>
-              <tspan x="380">{{ticket.destinationName | slice:0:3 | uppercase}}</tspan>
+              <tspan x="0">{{ticket?.travelingFrom | slice:0:3 | uppercase}}</tspan>
+              <tspan x="380">{{ticket?.destinationName | slice:0:3 | uppercase}}</tspan>
             </text>
           </g>
           <text font-size="19">
@@ -173,18 +173,18 @@
       </g>
       <g class="fill-white" transform="translate(98 113)">
         <text class="fill-white" transform="translate(25 15)" font-size="14">
-          <tspan x="0" y="0">{{ticket.departureDate | date: 'd / M / y'}}</tspan>
-          <tspan x="120" y="0">{{ticket.returnDate | date: 'd / M / y'}}</tspan>
-          <tspan x="0" y="35">{{ticket.adultsNumber}} adults</tspan>
-          <tspan x="120" y="35">{{ticket.estimatedCost | currency:'EGP':'symbol':'0.0-0'}}</tspan>
-          <tspan [attr.x]="(i > 2 ? i - 3 : i) * 80" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket.preferenceNames; index as i">{{preference}}</tspan>
+          <tspan x="0" y="0">{{ticket?.departureDate | date: 'd / M / y'}}</tspan>
+          <tspan x="120" y="0">{{ticket?.returnDate | date: 'd / M / y'}}</tspan>
+          <tspan x="0" y="35">{{ticket?.adultsNumber}} adults</tspan>
+          <tspan x="120" y="35">{{ticket?.estimatedCost | currency:'EGP':'symbol':'0.0-0'}}</tspan>
+          <tspan [attr.x]="(i > 2 ? i - 3 : i) * 80" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</tspan>
         </text>
         <g class="fill-white" transform="translate(10 175)">
           <text font-size="16">
             <tspan y="30">Request No.</tspan>
             <tspan y="60">
               <tspan x="0">#</tspan>
-              <tspan x="15">{{ticket.id}}</tspan>
+              <tspan x="15">{{ticket?.id}}</tspan>
             </tspan>
           </text>
           <g transform="translate(0 110)">
@@ -197,8 +197,8 @@
               <line class="splitter s-splitter" y2="20" transform="translate(0 100)" />
             </g>
             <text text-anchor="middle" x="140" font-size="36">
-              <tspan y="0">{{ticket.travelingFrom | slice:0:3 | uppercase}}</tspan>
-              <tspan x="140" y="175">{{ticket.destinationName | slice:0:3 | uppercase}}</tspan>
+              <tspan y="0">{{ticket?.travelingFrom | slice:0:3 | uppercase}}</tspan>
+              <tspan x="140" y="175">{{ticket?.destinationName | slice:0:3 | uppercase}}</tspan>
             </text>
           </g>
           <text font-size="12">

@@ -324,10 +324,7 @@ export class Request {
         key: 'ticket', title: '', path: 'ticket', order: 99,
         value: '',
         isHiddenOnNavBar: true,
-        isValid: (): boolean => {
-          if (this._touchedSteps.indexOf(99) === -1) { return false; }
-          return true;
-        }
+        isValid: (): boolean => true
       }
     ];
   }
