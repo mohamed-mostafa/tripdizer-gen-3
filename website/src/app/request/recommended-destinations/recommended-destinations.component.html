@@ -7,8 +7,9 @@
           <span class="float-right">{{destination.temperatureHi}}</span>
         </div>
         <div class="dest-data">
-          <div class="dest-name text-uppercase">
-            {{destination.name}},<br>{{destination.description}}
+          <div class="dest-data-wrapper text-uppercase">
+            <div class="dest-name">{{destination.name}},</div>
+            <div class="dest-desc">{{destination.description}}</div>
           </div>
           <span class="estimated-cost">{{(destination.estimatedCost) | currency:'EGP':'symbol':'0.0-0'}}</span>
         </div>
