@@ -1,23 +1,23 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()">
-  <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="adultsNumber">
+<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()" marginTop="3">
+  <mat-radio-group class="number form-control-xl" formControlName="adultsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.adultsNumber.invalid">
       <span class="mat-radio-group-label">Adults</span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.adultsNumber.errors | errorMessage}}</span>
     </div>
-    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="mx-1 mx-sm-2 mb-4 mb-md-4">{{radioValue.value}}</mat-radio-button>
   </mat-radio-group>
-  <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="kidsNumber">
+  <mat-radio-group class="number form-control-xl" formControlName="kidsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.kidsNumber.invalid">
       <span class="mat-radio-group-label">Kids</span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.kidsNumber.errors | errorMessage}}</span>
     </div>
-    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="mx-1 mx-sm-2 mb-4 mb-md-4">{{radioValue.value}}</mat-radio-button>
   </mat-radio-group>
-  <mat-radio-group class="number form-control-xl my-1 my-sm-2 my-md-3 my-lg-4" formControlName="infantsNumber">
+  <mat-radio-group class="number form-control-xl" formControlName="infantsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.infantsNumber.invalid">
       <span class="mat-radio-group-label">Infants</span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.infantsNumber.errors | errorMessage}}</span>
     </div>
-    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="m-2">{{radioValue.value}}</mat-radio-button>
+    <mat-radio-button *ngFor="let radioValue of radioValues" [value]="radioValue.key" class="mx-1 mx-sm-2">{{radioValue.value}}</mat-radio-button>
   </mat-radio-group>
 </c-request-form-layout>

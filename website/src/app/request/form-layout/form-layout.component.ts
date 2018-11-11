@@ -16,6 +16,7 @@ export class RequestFormLayoutComponent {
   @Input() isBackHidden = false;
   @Input() nextStepPath: string;
   @Input() prevStepPath: string;
+  @Input() marginTop = 0;
 
   @Output() next = new EventEmitter();
   @Output() back = new EventEmitter();

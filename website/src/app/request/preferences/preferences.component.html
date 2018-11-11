@@ -1,6 +1,6 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()">
+<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()" marginTop="3">
   <div class="mat-checkbox-group mat-checkbox-rounded form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row">
-    <mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id">
+    <mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
       {{preference.name}}
       <span class="label-content-img" [style.background]="'url(' + preference.image + ')'"></span>
     </mat-checkbox>

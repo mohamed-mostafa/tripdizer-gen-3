@@ -172,7 +172,7 @@
         <line class="splitter l-splitter" x2="270" />
       </g>
       <g class="fill-white" transform="translate(98 113)">
-        <text class="fill-white" transform="translate(25 15)" font-size="12">
+        <text class="fill-white" transform="translate(25 15)" font-size="14">
           <tspan x="0" y="0">{{ticket.departureDate | date: 'd / M / y'}}</tspan>
           <tspan x="120" y="0">{{ticket.returnDate | date: 'd / M / y'}}</tspan>
           <tspan x="0" y="35">{{ticket.adultsNumber}} adults</tspan>
@@ -180,7 +180,7 @@
           <tspan [attr.x]="(i > 2 ? i - 3 : i) * 80" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket.preferenceNames; index as i">{{preference}}</tspan>
         </text>
         <g class="fill-white" transform="translate(10 175)">
-          <text font-size="14">
+          <text font-size="16">
             <tspan y="30">Request No.</tspan>
             <tspan y="60">
               <tspan x="0">#</tspan>

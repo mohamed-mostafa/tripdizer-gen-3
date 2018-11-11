@@ -13,6 +13,5 @@
       placeholder="Return" (focus)="returnDatePicker.open()" formControlName="returnDate">
     <mat-datepicker #returnDatePicker></mat-datepicker>
   </mat-form-field>
-  <mat-checkbox class="my-1 my-sm-2 my-md-3 my-lg-4" formControlName="isFlexibleDates" labelPosition="after">Flexible
-    dates ( +/- 3 days )</mat-checkbox>
+  <mat-checkbox formControlName="isFlexibleDates" labelPosition="after">Flexible dates ( +/- 3 days )</mat-checkbox>
 </c-request-form-layout>
