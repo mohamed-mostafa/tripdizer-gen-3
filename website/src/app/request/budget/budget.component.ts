@@ -22,6 +22,7 @@ export class BudgetComponent {
     'budget': new FormControl('', [Validators.required])
   };
   budgetCategories: Array<BudgetCategory>;
+  isOwnBudget;
 
   constructor(
     route: ActivatedRoute,
@@ -35,16 +36,17 @@ export class BudgetComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    if (this.formGroup.controls['budgetCategory'].value !== 1) {
-      this.formGroup.controls['budget'].disable();
-    } else {
-      this.formGroup.controls['budget'].enable();
-    }
+    this.isOwnBudget = this.formGroup.controls['budgetCategory'].value === 1;
     this.formGroup.controls['budgetCategory'].valueChanges.subscribe(data => {
-      if (data !== 1) {
-        this.formGroup.controls['budget'].disable();
-      } else {
-        this.formGroup.controls['budget'].enable();
+      this.isOwnBudget = data === 1;
+      if (!this.isOwnBudget) {
+        this.formGroup.controls['budget'].setValue(0);
+      }
+    });
+    this.formGroup.controls['budget'].valueChanges.subscribe(data => {
+      this.isOwnBudget = data > 0;
+      if (this.isOwnBudget) {
+        this.formGroup.controls['budgetCategory'].setValue(1);
       }
     });
     requestService.getBudgetCategories().subscribe((budgetCategories: Array<BudgetCategory>) => this.budgetCategories = budgetCategories);
