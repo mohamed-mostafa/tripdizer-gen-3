@@ -1,5 +1,4 @@
-<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath"
-  nextLabel="Submit">
+<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath">
   <div class="row">
     <div class="col-12 my-1 p-0 total-budget">{{estimatedCost?.totalBudget | currency:'EGP':'symbol':'0.0-0'}}</div>
     <div class="col-12 p-2 hint-1">The costs are estimates and subject to change in the actual package</div>
