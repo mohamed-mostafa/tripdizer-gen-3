@@ -51,4 +51,10 @@ export class TravelersComponent {
     }
   }
 
+  clearValueIfDoubleClicked(controlName: string, newControlValue): void {
+    if (newControlValue === this.formGroup.controls[controlName].value) {
+      setTimeout(() => { (this.controls[controlName] as FormControl).setValue(0); }, 1);
+    }
+  }
+
 }
