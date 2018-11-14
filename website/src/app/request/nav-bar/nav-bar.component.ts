@@ -20,12 +20,14 @@ export class RequestNavBarComponent implements AfterViewInit {
 
   constructor(
     private router: Router,
-    private requestService: RequestService) {
+    requestService: RequestService) {
     this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
-      this.setNavLinksWidth();
-      this.setNavBrandWidth();
+      setTimeout(() => {
+        this.setNavLinksWidth();
+        this.setNavBrandWidth();
+      }, 0);
     });
   }
 
@@ -41,7 +43,7 @@ export class RequestNavBarComponent implements AfterViewInit {
       const navLinkElement = navLinksContainer.children[i] as HTMLElement;
       navLinksContainerWidth += navLinkElement.offsetWidth;
     }
-    navLinksContainer.style.width = `${navLinksContainerWidth * 1.1}px`;
+    navLinksContainer.style.width = `${navLinksContainerWidth + 1}px`;
   }
 
   setNavBrandWidth() {
