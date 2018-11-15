@@ -450,13 +450,14 @@ $color-blue: #2989FF;
         .mat-radio-label {
 
           .mat-radio-container,
+          .mat-radio-outer-circle,
           .mat-radio-inner-circle {
             width: 128px;
             height: 128px;
           }
 
           .mat-radio-outer-circle {
-            display: none;
+            border-color: transparent;
           }
 
           .mat-radio-label-content {
@@ -480,7 +481,7 @@ $color-blue: #2989FF;
 
               &:after {
                 content: "";
-                background-color: rgba(0, 0, 0, .35);
+                background-color: rgba(255, 255, 255, .35);
                 top: 0;
               }
             }
@@ -488,13 +489,18 @@ $color-blue: #2989FF;
         }
 
         &.mat-radio-checked {
+          .mat-radio-outer-circle {
+            border-color: transparent;
+            box-shadow: 0 0 25px 0 $color-blue;
+          }
+
           .mat-radio-inner-circle {
             transform: scale(0);
           }
 
           .mat-radio-label-content {
             .label-content-img:after {
-              background-color: rgba(255, 255, 255, .35);
+              background-color: rgba(0, 0, 0, .35);
             }
           }
         }
@@ -527,6 +533,7 @@ $color-blue: #2989FF;
           .mat-radio-label {
 
             .mat-radio-container,
+            .mat-radio-outer-circle,
             .mat-radio-inner-circle {
               width: 154.75px;
               height: 154.75px;
@@ -567,6 +574,7 @@ $color-blue: #2989FF;
           .mat-radio-label {
 
             .mat-radio-container,
+            .mat-radio-outer-circle,
             .mat-radio-inner-circle {
               width: 181.5px;
               height: 181.5px;
@@ -607,6 +615,7 @@ $color-blue: #2989FF;
           .mat-radio-label {
 
             .mat-radio-container,
+            .mat-radio-outer-circle,
             .mat-radio-inner-circle {
               width: 208.25px;
               height: 208.25px;
@@ -647,6 +656,7 @@ $color-blue: #2989FF;
           .mat-radio-label {
 
             .mat-radio-container,
+            .mat-radio-outer-circle,
             .mat-radio-inner-circle {
               width: 235px;
               height: 235px;
@@ -777,7 +787,7 @@ $color-blue: #2989FF;
 
             &:after {
               content: "";
-              background-color: rgba(0, 0, 0, .35);
+              background-color: rgba(255, 255, 255, .35);
             }
           }
         }
@@ -925,8 +935,11 @@ $color-blue: #2989FF;
 
       &.mat-checkbox-checked {
         .mat-checkbox-label {
-          .label-content-img:after {
-            background-color: rgba(255, 255, 255, .35);
+          .label-content-img {
+            box-shadow: 0 0 25px 0 $color-blue;
+            &:after {
+              background-color: rgba(0, 0, 0, .35);
+            }
           }
         }
       }
