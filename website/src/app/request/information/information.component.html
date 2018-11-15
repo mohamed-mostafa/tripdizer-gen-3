@@ -31,4 +31,9 @@
       placeholder="Birthday" (focus)="travelerBirthdayPicker.open()" formControlName="travelerBirthday">
     <mat-datepicker #travelerBirthdayPicker></mat-datepicker>
   </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-select formControlName="referralType" placeholder="How did you know about us?">
+      <mat-option *ngFor="let type of referralTypes" [value]="type.id">{{type.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </c-request-form-layout>

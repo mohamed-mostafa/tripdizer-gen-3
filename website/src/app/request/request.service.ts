@@ -27,7 +27,8 @@ export class RequestService {
         destinations: Array<Destination>,
         budgetCategories: Array<BudgetCategory>,
         purposes: Array<Purpose>,
-        preferences: Array<Preference>
+        preferences: Array<Preference>,
+        referralTypes: Array<{ id: number, name: string }>
     } = {} as any;
 
     isLoading = new Subject<boolean>();
@@ -223,6 +224,17 @@ export class RequestService {
                 }), finalize(() => this.isLoading.next(false)));
         }
         return of(null).pipe(finalize(() => this.isLoading.next(false)));
+    }
+
+    getReferralTypes(): Observable<Array<any> | null> {
+        this.isLoading.next(true);
+        if (this.Lookups.referralTypes) {
+            this.isLoading.next(false);
+            return of(this.Lookups.referralTypes);
+        }
+        return this.http.get<Array<any>>('referralTypes')
+            .pipe(map(referralTypes => { this.Lookups.referralTypes = referralTypes; return referralTypes; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     isValid(): boolean {

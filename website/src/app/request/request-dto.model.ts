@@ -20,6 +20,7 @@ export class RequestRequest {
   tourGuideNeeded: boolean;
   specialRequests: string;
   traveler: IRequester;
+  referralType: number;
 
   static getRequestRequestFromRequest(request: Request): RequestRequest {
     return {
@@ -39,7 +40,8 @@ export class RequestRequest {
       visaAssistanceNeeded: request.visaAssistanceNeeded,
       tourGuideNeeded: request.tourGuideNeeded,
       specialRequests: request.specialRequests,
-      traveler: request.traveler
+      traveler: request.traveler,
+      referralType: request.referralType
     };
   }
 }

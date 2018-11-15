@@ -5,6 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 
 /* Modules */
@@ -29,6 +30,7 @@ import { RequestComponent } from './request.component';
     MatDatepickerModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatSelectModule,
     MatSliderModule
   ],
   declarations: [

@@ -29,6 +29,7 @@ export class Request {
   private _tourGuideNeeded: boolean;
   private _specialRequests: string;
   private _traveler: IRequester;
+  private _referralType: number;
 
   set touchedSteps(value: number) {
     this._touchedSteps.push(value);
@@ -174,6 +175,12 @@ export class Request {
   get traveler(): IRequester {
     return this._traveler;
   }
+  set referralType(value: number) {
+    this._referralType = value;
+  }
+  get referralType(): number {
+    return this._referralType || 1;
+  }
 
   get validSteps(): Array<Step> {
     return this.steps.filter(s => !s.isDisabled);
@@ -317,6 +324,13 @@ export class Request {
         value: 'Information',
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
+          if (!this._traveler
+            || !this._traveler.name
+            || !this._traveler.mobile
+            || !this._traveler.email
+            || !this._traveler.birthday
+          ) { return false; }
+          if (!this._referralType) { return false; }
           return true;
         }
       },

@@ -21,7 +21,9 @@ export class InformationComponent {
     'travelerEmail': new FormControl('', [Validators.required, Validators.email]),
     'travelerEmailConfirmation': new FormControl('', [CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match')]),
     'travelerBirthday': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
+    'referralType': new FormControl('', [Validators.required]),
   };
+  referralTypes: Array<{ id: number, name: string }>;
 
   constructor(
     route: ActivatedRoute,
@@ -35,6 +37,7 @@ export class InformationComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    requestService.getReferralTypes().subscribe((referralTypes: Array<any>) => this.referralTypes = referralTypes);
     this.nextStepPath = requestService.getNextStep(currentStepPath);
     this.prevStepPath = requestService.getPrevStep(currentStepPath);
     requestService.stepVisited(currentStepPath);
