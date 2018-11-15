@@ -54,6 +54,11 @@
           color: #2989FF;
         }
       }
+      
+      &.disabled {
+        pointer-events: none;
+        cursor: default;
+      }
     }
   }
 

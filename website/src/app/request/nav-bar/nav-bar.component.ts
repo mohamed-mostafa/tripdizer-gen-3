@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 /* Models */
-import { Request } from '../request.model';
 import { Step } from '../step.model';
 
 /* Services */
@@ -15,6 +14,7 @@ import { RequestService } from '../request.service';
 })
 export class RequestNavBarComponent implements AfterViewInit {
   navBar: Array<Step>;
+  currentPath: string;
 
   @Output() navBarDimensionChanged = new EventEmitter();
 
@@ -28,6 +28,16 @@ export class RequestNavBarComponent implements AfterViewInit {
         this.setNavLinksWidth();
         this.setNavBrandWidth();
       }, 0);
+    });
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentPath = event.urlAfterRedirects;
+        const splittedUrl = this.currentPath.split('/');
+        if (this.currentPath && splittedUrl) {
+          this.currentPath = splittedUrl[splittedUrl.length - 1];
+        }
+        setTimeout(() => this.scrollIntoView(), 0);
+      }
     });
   }
 
@@ -50,11 +60,6 @@ export class RequestNavBarComponent implements AfterViewInit {
     const componentHeight = document.getElementById('request-nav-bar-container').offsetHeight;
     (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.width = `${componentHeight}px`;
     this.navBarDimensionChanged.emit();
-  }
-
-  isActive(path: string): boolean {
-    this.scrollIntoView();
-    return this.router.url.endsWith(path);
   }
 
   scrollIntoView(): void {
