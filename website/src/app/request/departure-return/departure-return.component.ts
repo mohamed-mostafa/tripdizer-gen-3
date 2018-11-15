@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DateValidators } from '../../shared/utils';
+import { CustomValidators } from '../../shared/utils';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -16,8 +16,8 @@ export class DepartureReturnComponent {
   prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
-    'departureDate': new FormControl('', [Validators.required, DateValidators.valid()]),
-    'returnDate': new FormControl('', [Validators.required, DateValidators.valid()]),
+    'departureDate': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
+    'returnDate': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
     'isFlexibleDates': new FormControl()
   };
 
@@ -27,7 +27,7 @@ export class DepartureReturnComponent {
   ) {
     const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({}, {
-      validators: DateValidators.greaterThan('departureDate', 'returnDate', 'Return Date must be greater than departure date')
+      validators: CustomValidators.dateGreaterThan('departureDate', 'returnDate', 'Return Date must be greater than departure date')
     });
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {

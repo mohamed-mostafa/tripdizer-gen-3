@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DateValidators, NumberValidators } from 'src/app/shared/utils';
+import { CustomValidators } from 'src/app/shared/utils';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -17,9 +17,10 @@ export class InformationComponent {
   formGroup: FormGroup;
   controls: any = {
     'travelerName': new FormControl('', [Validators.required]),
-    'travelerMobile': new FormControl('', [Validators.required, NumberValidators.numericOnly()]),
+    'travelerMobile': new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
     'travelerEmail': new FormControl('', [Validators.required, Validators.email]),
-    'travelerBirthday': new FormControl('', [Validators.required, DateValidators.valid()]),
+    'travelerEmailConfirmation': new FormControl('', [CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match')]),
+    'travelerBirthday': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
   };
 
   constructor(
