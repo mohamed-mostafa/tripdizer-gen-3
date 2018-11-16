@@ -13,7 +13,8 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 
 // Global site tag (gtag.js) - Google Analytics
 document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-64294535-1"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?${environment.googleAnalyticsTrackingID}">
+</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
