@@ -10,9 +10,7 @@ import { MatSliderModule } from '@angular/material/slider';
 
 /* Modules */
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
-
-/* Pipes */
-import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 /* Components */
 import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
@@ -26,9 +24,10 @@ import { RequestComponent } from './request.component';
     RequestRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatDatepickerModule,
+    SharedModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatInputModule,
     MatRadioModule,
     MatSelectModule,
     MatSliderModule
@@ -38,8 +37,7 @@ import { RequestComponent } from './request.component';
     RequestComponent,
     RequestNavBarComponent,
     RequestFormLayoutComponent,
-    RequestLoadingComponent,
-    ErrorMessagePipe
+    RequestLoadingComponent
   ]
 })
 export class RequestModule { }
