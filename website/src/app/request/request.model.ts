@@ -29,6 +29,7 @@ export class Request {
   private _tourGuideNeeded: boolean;
   private _specialRequests: string;
   private _traveler: IRequester;
+  private _referralType: number;
 
   set touchedSteps(value: number) {
     this._touchedSteps.push(value);
@@ -174,6 +175,12 @@ export class Request {
   get traveler(): IRequester {
     return this._traveler;
   }
+  set referralType(value: number) {
+    this._referralType = value;
+  }
+  get referralType(): number {
+    return this._referralType || 1;
+  }
 
   get validSteps(): Array<Step> {
     return this.steps.filter(s => !s.isDisabled);
@@ -215,7 +222,9 @@ export class Request {
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
-          return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
+          const departureMonthString: string = this.departureDate.format('M') === this.returnDate.format('M') ? '' : ' / M';
+          const departureYearString: string = this.departureDate.format('Y') === this.returnDate.format('Y') ? '' : ' / Y';
+          return this.departureDate.format(`D${departureMonthString}${departureYearString}`) + ' - ' + this.returnDate.format('D / M / Y');
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(2) === -1) { return false; }
@@ -317,6 +326,13 @@ export class Request {
         value: 'Information',
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
+          if (!this._traveler
+            || !this._traveler.name
+            || !this._traveler.mobile
+            || !this._traveler.email
+            || !this._traveler.birthday
+          ) { return false; }
+          if (!this._referralType) { return false; }
           return true;
         }
       },
@@ -324,10 +340,7 @@ export class Request {
         key: 'ticket', title: '', path: 'ticket', order: 99,
         value: '',
         isHiddenOnNavBar: true,
-        isValid: (): boolean => {
-          if (this._touchedSteps.indexOf(99) === -1) { return false; }
-          return true;
-        }
+        isValid: (): boolean => true
       }
     ];
   }

@@ -261,11 +261,7 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
 	});
 
 	ItinerariesService.getAll('EN').then(function (itineraries) {
-		$scope.itineraries = itineraries
-		// move the 'others' to the end of the list
-		var otherCountry = $scope.itineraries[0];
-		$scope.itineraries.splice(0, 1);
-		$scope.itineraries.push(otherCountry);
+		$scope.itineraries = itineraries;
 	});
 
 	ReferralTypesService.getAll('EN').then(function (referralTypes) {

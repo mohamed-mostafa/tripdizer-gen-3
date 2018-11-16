@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/'
+  apiUrl: 'https://tripdizer-backend-dot-tripdizer-prod.appspot.com/',
+  googleAnalyticsTrackingID: 'UA-106443087-1'
 };

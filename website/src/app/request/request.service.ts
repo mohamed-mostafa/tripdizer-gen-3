@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
@@ -27,9 +27,11 @@ export class RequestService {
         destinations: Array<Destination>,
         budgetCategories: Array<BudgetCategory>,
         purposes: Array<Purpose>,
-        preferences: Array<Preference>
+        preferences: Array<Preference>,
+        referralTypes: Array<{ id: number, name: string }>
     } = {} as any;
 
+    isLoading = new Subject<boolean>();
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
     requestNavBarDataChanged = new Subject<{ key: string, value: any, navBar: Array<Step> }>();
 
@@ -126,21 +128,36 @@ export class RequestService {
     }
 
     getDestinations(): Observable<Array<Destination>> {
-        if (this.Lookups.destinations) { return of(this.Lookups.destinations); }
+        this.isLoading.next(true);
+        if (this.Lookups.destinations) {
+            this.isLoading.next(false);
+            return of(this.Lookups.destinations);
+        }
         return this.http.get<Array<Destination>>('itineraries')
-            .pipe(map(destinations => { this.Lookups.destinations = destinations; return destinations; }));
+            .pipe(map(destinations => { this.Lookups.destinations = destinations; return destinations; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     getBudgetCategories(): Observable<Array<BudgetCategory>> {
-        if (this.Lookups.budgetCategories) { return of(this.Lookups.budgetCategories); }
+        this.isLoading.next(true);
+        if (this.Lookups.budgetCategories) {
+            this.isLoading.next(false);
+            return of(this.Lookups.budgetCategories);
+        }
         return this.http.get<Array<BudgetCategory>>('budgetcategories')
-            .pipe(map(budgetCategories => { this.Lookups.budgetCategories = budgetCategories; return budgetCategories; }));
+            .pipe(map(budgetCategories => { this.Lookups.budgetCategories = budgetCategories; return budgetCategories; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     getPurposes(): Observable<Array<Purpose>> {
-        if (this.Lookups.purposes) { return of(this.Lookups.purposes); }
+        this.isLoading.next(true);
+        if (this.Lookups.purposes) {
+            this.isLoading.next(false);
+            return of(this.Lookups.purposes);
+        }
         return this.http.get<Array<Purpose>>('purposes')
-            .pipe(map(purposes => { this.Lookups.purposes = purposes; return purposes; }));
+            .pipe(map(purposes => { this.Lookups.purposes = purposes; return purposes; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     addPreference(preference: Preference): void {
@@ -166,9 +183,14 @@ export class RequestService {
     }
 
     getPreferences(): Observable<Array<Preference>> {
-        if (this.Lookups.preferences) { return of(this.Lookups.preferences); }
+        this.isLoading.next(true);
+        if (this.Lookups.preferences) {
+            this.isLoading.next(false);
+            return of(this.Lookups.preferences);
+        }
         return this.http.get<Array<Preference>>('interests')
-            .pipe(map(preferences => { this.Lookups.preferences = preferences; return preferences; }));
+            .pipe(map(preferences => { this.Lookups.preferences = preferences; return preferences; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     isValidForRecommendedDestinations(): boolean {
@@ -176,13 +198,15 @@ export class RequestService {
     }
 
     getRecommendedDestinations(): Observable<Array<RecommendedDestinationsResponse> | null> {
+        this.isLoading.next(true);
         if (this.isValidForRecommendedDestinations()) {
             const recommendedDestinationsRequest =
                 RecommendedDestinationsRequest.getRecommendedDestinationsRequestFromRequest(this.requestData);
             return this.http.post<Array<RecommendedDestinationsResponse>>
-                (`${this.endPoint}/recommendation`, { request: recommendedDestinationsRequest });
+                (`${this.endPoint}/recommendation`, { request: recommendedDestinationsRequest })
+                .pipe(finalize(() => this.isLoading.next(false)));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
     isValidForEstimatedCost(): boolean {
@@ -190,15 +214,27 @@ export class RequestService {
     }
 
     getEstimatedCost(): Observable<EstimatedCostResponse | null> {
+        this.isLoading.next(true);
         if (this.isValidForEstimatedCost()) {
             const estimatedCostRequest = EstimatedCostRequest.getEstimatedCostRequestFromRequest(this.requestData);
             return this.http.post<EstimatedCostResponse>(`${this.endPoint}/budgetcalc`, { request: estimatedCostRequest })
                 .pipe(map((estimatedCostResponse: EstimatedCostResponse) => {
                     this.setProperty('estimatedCost', estimatedCostResponse.totalBudget);
                     return estimatedCostResponse;
-                }));
+                }), finalize(() => this.isLoading.next(false)));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
+    }
+
+    getReferralTypes(): Observable<Array<any> | null> {
+        this.isLoading.next(true);
+        if (this.Lookups.referralTypes) {
+            this.isLoading.next(false);
+            return of(this.Lookups.referralTypes);
+        }
+        return this.http.get<Array<any>>('referralTypes')
+            .pipe(map(referralTypes => { this.Lookups.referralTypes = referralTypes; return referralTypes; }),
+                finalize(() => this.isLoading.next(false)));
     }
 
     isValid(): boolean {
@@ -206,12 +242,14 @@ export class RequestService {
     }
 
     submitRequest(): Observable<Ticket | null> {
+        this.isLoading.next(true);
         if (this.isValid()) {
             const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
             return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request })
-                .pipe(map(requestResponse => Ticket.getTicketFromRequestResponse(this.requestData, requestResponse)));
+                .pipe(map(requestResponse => Ticket.getTicketFromRequestResponse(this.requestData, requestResponse)),
+                    finalize(() => this.isLoading.next(false)));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
 }

@@ -272,6 +272,9 @@ var getAll = function (lang, onSuccess, onFailure) {
 							introduction: rows[i].Introduction,
 							includes: rows[i].Includes,
 							excludes: rows[i].Excludes,
+							temperatureLo: rows[i].temperatureLo,
+							temperatureHi: rows[i].temperatureHi,
+							image: rows[i].Image1,
 							image1: rows[i].Image1,
 							image2: rows[i].Image2,
 							agentNotes: rows[i].Agent_Notes,
@@ -291,6 +294,9 @@ var getAll = function (lang, onSuccess, onFailure) {
 					// end the connection
 					connection.end();
 					// call the callback function provided by the caller, and give it the response
+					if (itineraries[0] && itineraries[0].id === -1) {
+						itineraries.push(itineraries.shift());
+					}
 					onSuccess(itineraries);
 				}
 			});

@@ -10,3 +10,15 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+// Global site tag (gtag.js) - Google Analytics
+document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?${environment.googleAnalyticsTrackingID}">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${environment.googleAnalyticsTrackingID}');
+</script>`);

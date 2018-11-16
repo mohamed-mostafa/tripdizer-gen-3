@@ -20,7 +20,7 @@
     }
 
     .nav-link {
-      padding: 1.75rem 0;
+      padding: 3vh 0;
       font-size: 0.875rem;
       font-weight: 600;
       color: #CCCCCC;
@@ -29,6 +29,10 @@
       border-top: 2px solid #2989FF;
       cursor: pointer;
       display: inline-grid;
+
+      @media (max-width: 576px) {
+        overflow: auto;
+      }
 
       &>* {
         max-width: 10rem;
@@ -49,6 +53,11 @@
         .value {
           color: #2989FF;
         }
+      }
+      
+      &.disabled {
+        pointer-events: none;
+        cursor: default;
       }
     }
   }
