@@ -222,7 +222,9 @@ export class Request {
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
-          return this.departureDate.format('D') + ' - ' + this.returnDate.format('D / M / Y');
+          const departureMonthString: string = this.departureDate.format('M') === this.returnDate.format('M') ? '' : ' / M';
+          const departureYearString: string = this.departureDate.format('Y') === this.returnDate.format('Y') ? '' : ' / Y';
+          return this.departureDate.format(`D${departureMonthString}${departureYearString}`) + ' - ' + this.returnDate.format('D / M / Y');
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(2) === -1) { return false; }
