@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   apiUrl: 'https://tripdizer-backend-dot-tripdizer-dev.appspot.com/',
-  googleAnalyticsTrackingID: 'UA-000000-0'
+  googleAnalyticsTrackingID: 'UA-106443087-2'
 };
