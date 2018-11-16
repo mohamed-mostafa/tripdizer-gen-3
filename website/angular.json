@@ -8,7 +8,12 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "spec": false,
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -39,8 +44,8 @@
           "configurations": {
             "production": {
               "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
               }],
               "optimization": true,
               "outputHashing": "all",
@@ -50,12 +55,17 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "budgets": [{
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+              }]
             },
             "development": {
               "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.dev.ts"
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
               }],
               "optimization": true,
               "outputHashing": "all",
@@ -65,7 +75,12 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "budgets": [{
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+              }]
             },
             "staging": {
               "fileReplacements": [{
@@ -80,7 +95,12 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "budgets": [{
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+              }]
             }
           }
         },
@@ -94,7 +114,10 @@
               "browserTarget": "website:build:production"
             },
             "development": {
-              "browserTarget": "projectName:build:development"
+              "browserTarget": "website:build:development"
+            },
+            "staging": {
+              "browserTarget": "website:build:staging"
             }
           }
         },
@@ -138,6 +161,7 @@
     "website-e2e": {
       "root": "e2e/",
       "projectType": "application",
+      "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
@@ -163,13 +187,5 @@
       }
     }
   },
-  "defaultProject": "website",
-  "schematics": {
-    "@schematics/angular": {
-      "component": {
-        "spec": false,
-        "styleext": "scss"
-      }
-    }
-  }
+  "defaultProject": "website"
 }
