@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { TestimonialsCarouselComponent } from './components/testimonials-carousel/testimonials-carousel.component';
 import { VideosCarouselComponent } from './components/videos-carousel/videos-carousel.component';
+import { SocialComponent } from './components/social/social.component';
 
 /* Pipes */
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
@@ -24,13 +25,15 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
     ErrorMessagePipe,
     DialogComponent,
     TestimonialsCarouselComponent,
-    VideosCarouselComponent
+    VideosCarouselComponent,
+    SocialComponent
   ],
   declarations: [
     ErrorMessagePipe,
     DialogComponent,
     TestimonialsCarouselComponent,
-    VideosCarouselComponent
+    VideosCarouselComponent,
+    SocialComponent
   ],
   entryComponents: [
     DialogComponent
