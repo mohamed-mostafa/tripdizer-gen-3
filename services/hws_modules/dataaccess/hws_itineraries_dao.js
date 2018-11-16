@@ -294,6 +294,9 @@ var getAll = function (lang, onSuccess, onFailure) {
 					// end the connection
 					connection.end();
 					// call the callback function provided by the caller, and give it the response
+					if (itineraries[0] && itineraries[0].id === -1) {
+						itineraries.push(itineraries.shift());
+					}
 					onSuccess(itineraries);
 				}
 			});
