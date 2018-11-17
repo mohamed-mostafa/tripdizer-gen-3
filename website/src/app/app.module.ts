@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Modules */
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
 
 /* Interceptors */
 import { JWTokenInterceptor } from './http.interceptor';
@@ -27,6 +28,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    CoreModule,
     MatMomentDateModule,
     MatSliderModule
   ],

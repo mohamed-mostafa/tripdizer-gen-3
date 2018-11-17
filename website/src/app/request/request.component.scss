@@ -939,6 +939,7 @@ $color-blue: #2989FF;
         .mat-checkbox-label {
           .label-content-img {
             box-shadow: 0 0 25px 0 $color-blue;
+
             &:after {
               background-color: rgba(0, 0, 0, .35);
             }
@@ -989,7 +990,7 @@ $color-blue: #2989FF;
 .form-control-lg {
   &.mat-form-field {
     width: 100%;
-    font-size: 2.25rem;
+    font-size: 1.5rem;
     padding-top: 2rem;
 
     .mat-form-field-wrapper {
@@ -1016,8 +1017,64 @@ $color-blue: #2989FF;
   .mat-form-field-appearance-legacy .mat-form-field-label,
   .mat-form-field-label,
   .mat-radio-group-label {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  @media (min-width: 576px) {
+    &.mat-form-field {
+      font-size: 1.69rem;
+      // padding-top: 1.44rem;
+    }
+
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-form-field-label,
+    .mat-radio-group-label {
+      font-size: 1.69rem;
+      line-height: 1.94rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    &.mat-form-field {
+      font-size: 1.88rem;
+      // padding-top: 1.63rem;
+    }
+
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-form-field-label,
+    .mat-radio-group-label {
+      font-size: 1.88rem;
+      line-height: 2.13rem;
+    }
+  }
+
+  @media (min-width: 992px) {
+    &.mat-form-field {
+      font-size: 2.06rem;
+      // padding-top: 1.81rem;
+    }
+
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-form-field-label,
+    .mat-radio-group-label {
+      font-size: 2.06rem;
+      line-height: 2.31rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    &.mat-form-field {
+      font-size: 2.25rem;
+      // padding-top: 2rem;
+    }
+
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-form-field-label,
+    .mat-radio-group-label {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
   }
 }
 
