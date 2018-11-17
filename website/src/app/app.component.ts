@@ -5,7 +5,7 @@ declare const gtag: Function;
 
 @Component({
   selector: 'c-root',
-  template: `<router-outlet></router-outlet>`
+  template: `<router-outlet></router-outlet><c-core-social></c-core-social>`
 })
 export class AppComponent {
   constructor(router: Router) {
