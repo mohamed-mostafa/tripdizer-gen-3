@@ -991,7 +991,7 @@ $color-blue: #2989FF;
   &.mat-form-field {
     width: 100%;
     font-size: 1.5rem;
-    padding-top: 1.25rem;
+    padding-top: 2rem;
 
     .mat-form-field-wrapper {
       padding: 0;
@@ -1024,7 +1024,7 @@ $color-blue: #2989FF;
   @media (min-width: 576px) {
     &.mat-form-field {
       font-size: 1.69rem;
-      padding-top: 1.44rem;
+      // padding-top: 1.44rem;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-label,
@@ -1038,7 +1038,7 @@ $color-blue: #2989FF;
   @media (min-width: 768px) {
     &.mat-form-field {
       font-size: 1.88rem;
-      padding-top: 1.63rem;
+      // padding-top: 1.63rem;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-label,
@@ -1052,7 +1052,7 @@ $color-blue: #2989FF;
   @media (min-width: 992px) {
     &.mat-form-field {
       font-size: 2.06rem;
-      padding-top: 1.81rem;
+      // padding-top: 1.81rem;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-label,
@@ -1066,7 +1066,7 @@ $color-blue: #2989FF;
   @media (min-width: 1200px) {
     &.mat-form-field {
       font-size: 2.25rem;
-      padding-top: 2rem;
+      // padding-top: 2rem;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-label,
