@@ -19,12 +19,11 @@ export class TravelersComponent {
     'kidsNumber': new FormControl(),
     'infantsNumber': new FormControl()
   };
-  radioValues: Array<{ key: number, value: string }> = [
-    { key: 1, value: '1' },
-    { key: 2, value: '2' },
-    { key: 3, value: '3' },
-    { key: 4, value: '+4' }
-  ];
+  radioValuesStart: any = {
+    adultsNumber: 0,
+    kidsNumber: 0,
+    infantsNumber: 0
+  };
 
   constructor(
     route: ActivatedRoute,
@@ -48,6 +47,20 @@ export class TravelersComponent {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
+    }
+  }
+
+  getRadioValues(controlName: string): Array<number> {
+    return [1, 2, 3, 4].map(val => this.radioValuesStart[controlName] + val);
+  }
+
+  setRadioValuesStart(controlName: string, isFirst = false, isLast = false): void {
+    const increaseBy = 2;
+    if (isFirst && this.radioValuesStart[controlName] >= increaseBy) {
+      this.radioValuesStart[controlName] -= increaseBy;
+    }
+    if (isLast) {
+      this.radioValuesStart[controlName] += increaseBy;
     }
   }
 
