@@ -55,13 +55,17 @@ export class TravelersComponent {
   }
 
   setRadioValuesStart(controlName: string, isFirst = false, isLast = false): void {
-    const increaseBy = 2;
-    if (isFirst && this.radioValuesStart[controlName] >= increaseBy) {
-      this.radioValuesStart[controlName] -= increaseBy;
-    }
-    if (isLast) {
-      this.radioValuesStart[controlName] += increaseBy;
-    }
+    const times = 2;
+    this.calcRadioValuesStartWithAnimation(controlName, times, isLast, isFirst && this.radioValuesStart[controlName] >= times);
+  }
+
+  calcRadioValuesStartWithAnimation(controlName, counter, increase, decrease) {
+    if (counter <= 0) { return; }
+    setTimeout(() => {
+      if (increase) { ++this.radioValuesStart[controlName]; }
+      if (decrease) { --this.radioValuesStart[controlName]; }
+      this.calcRadioValuesStartWithAnimation(controlName, --counter, increase, decrease);
+    }, 100);
   }
 
   clearValueIfDoubleClicked(controlName: string, newControlValue): void {
