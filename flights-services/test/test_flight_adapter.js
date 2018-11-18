@@ -11,7 +11,7 @@ var fs = require('fs');
 // 	});
 // }
 console.log("Starting at: " + new Date().toString());
-updater.updateAllMonthPricesForAllFlightsForAllIteneraries();
+updater.updateAllFlightsCosts();
 // flightsFaresAdapter.getFamilyFaresForCarriers("CAI", "CMB", "2018-12-19", null, "A3")
 // .then(flightFares => {
 // 		fs.writeFileSync('./flightFares.json', JSON.stringify(flightFares) , 'utf-8'); 

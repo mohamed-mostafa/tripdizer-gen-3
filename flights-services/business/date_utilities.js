@@ -59,7 +59,6 @@ var getDatePairsForMonth = function(month) {
 		{departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
 	]
 
 	return datePairs;
