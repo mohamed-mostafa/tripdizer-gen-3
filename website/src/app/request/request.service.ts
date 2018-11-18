@@ -30,6 +30,7 @@ export class RequestService {
         preferences: Array<Preference>,
         referralTypes: Array<{ id: number, name: string }>
     } = {} as any;
+    private travelersRadioButtonsStart = {};
 
     isLoading = new Subject<boolean>();
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
@@ -136,6 +137,21 @@ export class RequestService {
         return this.http.get<Array<Destination>>('itineraries')
             .pipe(map(destinations => { this.Lookups.destinations = destinations; return destinations; }),
                 finalize(() => this.isLoading.next(false)));
+    }
+
+    setTravelersRadioButtonsStart(controlName: string, increase: boolean, decrease: boolean): void {
+        if (!this.travelersRadioButtonsStart[controlName]) {
+            this.travelersRadioButtonsStart[controlName] = 0;
+        }
+        if (increase) { ++this.travelersRadioButtonsStart[controlName]; }
+        if (decrease) { --this.travelersRadioButtonsStart[controlName]; }
+        if (this.travelersRadioButtonsStart[controlName] < 0) {
+            this.travelersRadioButtonsStart[controlName] = 0;
+        }
+    }
+
+    getTravelersRadioButtonsStart(controlName: string): number {
+        return this.travelersRadioButtonsStart[controlName] || 0;
     }
 
     getBudgetCategories(): Observable<Array<BudgetCategory>> {
