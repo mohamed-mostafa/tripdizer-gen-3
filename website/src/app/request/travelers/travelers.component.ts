@@ -19,11 +19,6 @@ export class TravelersComponent {
     'kidsNumber': new FormControl(),
     'infantsNumber': new FormControl()
   };
-  radioValuesStart: any = {
-    adultsNumber: 0,
-    kidsNumber: 0,
-    infantsNumber: 0
-  };
 
   constructor(
     route: ActivatedRoute,
@@ -51,19 +46,19 @@ export class TravelersComponent {
   }
 
   getRadioValues(controlName: string): Array<number> {
-    return [1, 2, 3, 4].map(val => this.radioValuesStart[controlName] + val);
+    return [1, 2, 3, 4].map(val => this.requestService.getTravelersRadioButtonsStart(controlName) + val);
   }
 
   setRadioValuesStart(controlName: string, isFirst = false, isLast = false): void {
     const times = 2;
-    this.calcRadioValuesStartWithAnimation(controlName, times, isLast, isFirst && this.radioValuesStart[controlName] >= times);
+    this.calcRadioValuesStartWithAnimation(controlName, times, isLast,
+      isFirst && this.requestService.getTravelersRadioButtonsStart(controlName) >= times);
   }
 
   calcRadioValuesStartWithAnimation(controlName, counter, increase, decrease) {
     if (counter <= 0) { return; }
     setTimeout(() => {
-      if (increase) { ++this.radioValuesStart[controlName]; }
-      if (decrease) { --this.radioValuesStart[controlName]; }
+      this.requestService.setTravelersRadioButtonsStart(controlName, increase, decrease);
       this.calcRadioValuesStartWithAnimation(controlName, --counter, increase, decrease);
     }, 100);
   }
