@@ -52,14 +52,13 @@ var getDatePairsForMonth = function(month) {
 
 	var datePairs = [
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: thirdWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
+		// {departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: thirdWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekend"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
+		// {departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
+		// {departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
+		// {departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"}
 	]
 
 	return datePairs;
@@ -72,18 +71,28 @@ var getDatesForMonth = function(month) {
 	
 	var firstWeekdayOfMonth = getFirstWeekdayOfMonth(month);
 	var oneWeekAhedFromFirstWeekdayOfMonth = new Date(firstWeekdayOfMonth); oneWeekAhedFromFirstWeekdayOfMonth.setDate(oneWeekAhedFromFirstWeekdayOfMonth.getDate() + 7);
-	var twoWeeksAheadFromFirstWeekdayOfMonth =new Date(firstWeekdayOfMonth); twoWeeksAheadFromFirstWeekdayOfMonth.setDate(twoWeeksAheadFromFirstWeekdayOfMonth.getDate() + 14);
+	var twoWeeksAheadFromFirstWeekdayOfMonth = new Date(firstWeekdayOfMonth); twoWeeksAheadFromFirstWeekdayOfMonth.setDate(twoWeeksAheadFromFirstWeekdayOfMonth.getDate() + 14);
 
 	var dates = [
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
+		// {departureDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"},
 		{departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"},
-		{departureDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"}
+		// {departureDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"}
 	]
 
 	return dates;
 }
 
+var getMonthsListStaringNextMonth = function(numberOfMonths) {
+	var today = new Date();
+	var months = [];
+	var currentMonth = today.getMonth();
+	for (var i = 0; i < numberOfMonths; i++) {
+		months.push((++currentMonth % 12) + 1);
+	}
+	return months;
+}
 exports.getDatesForMonth = getDatesForMonth;
 exports.getDatePairsForMonth = getDatePairsForMonth;
+exports.getMonthsListStaringNextMonth = getMonthsListStaringNextMonth;

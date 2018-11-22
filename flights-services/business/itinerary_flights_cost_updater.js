@@ -1,72 +1,75 @@
-var itenerariesDao = require('../dataaccess/itineraries_dao.js');
+var flightsDao = require('../dataaccess/iternary_flights_dao.js');
 var dateUtilities = require('./date_utilities.js');
 var flightFaresAdapter = require('../adapters/flight_fares_adapter.js');
 var fs = require('fs');
+var Bottleneck = require('bottleneck');
 
-var updateAllMonthPricesForAllFlightsForAllIteneraries = function() {
-	itenerariesDao.getAllLong(function(iteneraries) {
-		iteneraries.forEach((itenerary, index) => {
-			if (index != 1) return ; // for testing purpose
-			// wait 1 second between each itenerary and the next
-			setTimeout(() => {
-				console.log(itenerary.en_name);
-				updateAllMonthPricesForAllFlightsForItenerary(itenerary);
-			}, 1000 * 180 * index); // 180 seconds for each itenerary 
-		});		
-	}, function(error) {
-		console.log(error);
+const limiter = new Bottleneck({
+  reservoir: 2, // initial value
+  reservoirRefreshAmount: 2,
+  reservoirRefreshInterval: 1000 // must be divisible by 250
+});
+const wrapper = limiter.wrap(flightFaresAdapter.getFamilyFaresForCarriers);
+
+
+var updateAllFlightsCosts = function() {
+	flightsDao.getAllFlights(function(flights) {
+		flights.forEach(flight => {
+			updateFlight(flight);	
+		})
+	}, function(err) {
+		console.log(err);
 	})
-}
-
-var updateAllMonthPricesForAllFlightsForItenerary = function(itenerary) {
-	var flights = itenerary.flights;
-	flights.forEach((flight, index) => {
-		// wait 1 second between each flight and the next 
-		 setTimeout(() => {
-		 	console.log("-- flight " + flight.departing_from + " => " + flight.arriving_to + " => " + flight.airline_name);
-		 	updateAllMonthPricesForFlightForItenerary(itenerary, flight);
-		 }, 1000 * 60 * index); // 60 seconds for each flight
-	});
-}
-
-var updateAllMonthPricesForFlightForItenerary = function(itenerary, flight) {
-	// var months = [1,2,3,4,5,6,7,8,9,10,11,12];
-	var months = [1,2,3];
-	months.forEach((month, index) => {
-		// wait 1 second between each month and the next 
-		 setTimeout(() => {
-		 	console.log("---- month " + month);
-		 	udpateMonthPricesForFlightForItenerary(itenerary, flight, month);
-		 }, 1000 * 10 * index); // 10 seconds for each month
-	});
 };
 
-var udpateMonthPricesForFlightForItenerary = function(itenerary, flight, month) {
+var updateFlight = function(flight) {
+	var numberOfMonths = 1;
+	try {
+		numberOfMonths = parseInt(process.env.MONTHS_AHEAD || 1);
+	} catch (err) {
+		console.log("Number of months is not valid: " + process.env.MONTHS_AHEAD);
+	}
+	var months = dateUtilities.getMonthsListStaringNextMonth(numberOfMonths);
+	months.forEach(month => {
+		updateFlightMonth(flight, month);
+	});
+}
+
+var updateFlightMonth = function(flight, month) {
 	var dates = [];
 	if (flight["return"] == 0) { // one way flight
 		dates = dateUtilities.getDatePairsForMonth(month);
 	} else { // return flight
 		dates = dateUtilities.getDatesForMonth(month);
 	}
+	var monthName = monthsMap[month+""];
 
-	dates.forEach((date, index) => {
-		// wait 1 second between each date or datePair and the next
-		setTimeout(() => {
-			console.log("------ " + date.departureDate + " - " + date.type);
-			var origin = flight.departing_from;
-			var destination = flight.arriving_to;
-			var carrierIata = flight.airline_name;
-			flightFaresAdapter.getFamilyFaresForCarriers(origin, destination, date.departureDate, date.returnDate, carrierIata)
+	dates.forEach((date, index) => { // make this loop synchoronous
+			wrapper(flight.origin, flight.destination, date.departureDate, date.returnDate, flight.carrierIata)
 			.then(flightFares => {
-				var fileName = itenerary.en_name + "-" + flight.departing_from + "-" + flight.arriving_to + "-month" + month; 
-				// console.log("received response and writing it to " + fileName);
-				fs.writeFileSync('./' + fileName + ".json", JSON.stringify(flightFares, null, '\t') , 'utf-8'); 
-			}).catch(error => {
-				console.log("-------- " + extractAmadeusError(error));
-			});
-		}, 1000 * index); // 1 second for each date / date pair. this will make us do 1 request per second. the limit is 5 per second so we should be safe
-	})
+				console.log("Recieved response for flight " + flight.id + " from " + flight.origin + " to " + flight.destination + " on " + flight.carrierIata + " for month " + monthName);
+				var infant = 0; var kid = 0; var adult = 0;
+				flightFares.forEach(flightFare => {
+					infant += parseInt(flightFare.infantPrice);
+					kid += parseInt(flightFare.childPrice);
+					adult += parseInt(flightFare.adultPrice);
+				});
+				flight["i"+monthName] = infant / flightFares.length;
+				flight["k"+monthName] = kid / flightFares.length;
+				flight["a"+monthName] = adult / flightFares.length;
+
+				flightsDao.update(flight, () => {}, (err) => {
+					console.log("Flight " + flight.id + " update failed!");
+					console.log(err);
+				});
+			}).catch(err => {
+				console.log("Recieved error for flight " + flight.id + " from " + flight.origin + " to " + flight.destination + " on " + flight.carrierIata + " for month " + monthName + ": " + extractAmadeusError(err));
+			})
+	});
 }
+
+var monthsMap = {"1": "JAN","2": "FEB","3": "MAR","4": "APR","5": "MAY","6": "JUN","7": "JUL","8": "AUG",
+"9": "SEP","10": "OCT","11": "NOV","12": "DEC"}
 
 var extractAmadeusError = function(error) {
 	var errorMessage = "";
@@ -74,18 +77,19 @@ var extractAmadeusError = function(error) {
 		if (error.description) {
 			if (error.description.length > 0) {
 				error.description.forEach(description => {
-					var errorParameter = "";
-					if (description.source && description.source.parameter) errorParameter = description.source.parameter; 
-					errorMessage += "[" + description.detail + " - " + errorParameter + "] ";
+					errorMessage += "[" + description.detail;
+					if (description.source && description.source.parameter)
+						errorMessage += ": " + description.source.parameter;
+					errorMessage += "]";
 				})
 			} else {
-				errorMessage = "Unknown Error";
+				errorMessage = "Unknown Error"; //JSON.stringify(error);
 			}
 		}
 	} else {
-		errorMessage = "Unknown Error";
+		errorMessage = "Unknown Error"; //JSON.stringify(error);
 	}
 	return errorMessage;
 }
 
-exports.updateAllMonthPricesForAllFlightsForAllIteneraries = updateAllMonthPricesForAllFlightsForAllIteneraries;
+exports.updateAllFlightsCosts = updateAllFlightsCosts;
