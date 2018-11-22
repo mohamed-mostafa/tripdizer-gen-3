@@ -19,3 +19,10 @@ updater.updateAllFlightsCosts();
 // 		console.log(error.description[0].detail + " - " + error.description[0].source.parameter);
 // 	});
 // setTimeout(test2, 5000);
+
+// flightsFaresAdapter.getFamilyFaresForCarriers("KUL", "HKT", "2018-12-12", "2018-12-18", null)
+// 			.then(flightFares => {
+// 				// console.log(flightFares);
+// 			}).catch(err => {
+// 				console.log(err);
+// 			})
