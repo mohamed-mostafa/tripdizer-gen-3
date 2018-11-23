@@ -9,23 +9,23 @@ export class SectionOurTeamService {
     private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
     private team: Array<any> = [
         {
-            enName: 'Yara Yehia', enJobTitle: 'Cheif Operations Officer',
+            name: 'Yara Yehia', jobTitle: 'Cheif Operations Officer',
             picture: '../../../assets/img/yara.jpg'
         },
         {
-            enName: 'Sameh Saleh', enJobTitle: 'Cheif Executive Officer',
+            name: 'Sameh Saleh', jobTitle: 'Cheif Executive Officer',
             picture: '../../../assets/img/sameh.jpg'
         },
         {
-            enName: 'Hatem Ayoub', enJobTitle: 'Cheif Marketing Officer',
+            name: 'Hatem Ayoub', jobTitle: 'Cheif Marketing Officer',
             picture: '../../../assets/img/hatem.jpg'
         },
         {
-            enName: 'Mohamed Mostafa', enJobTitle: 'Cheif Technical Officer',
+            name: 'Mohamed Mostafa', jobTitle: 'Cheif Technical Officer',
             picture: '../../../assets/img/mohamed.jpg'
         },
         {
-            enName: 'Ziad El-Adawy', enJobTitle: 'Business Development Manager',
+            name: 'Ziad El-Adawy', jobTitle: 'Business Development Manager',
             picture: '../../../assets/img/ziad.jpg'
         }
     ];
