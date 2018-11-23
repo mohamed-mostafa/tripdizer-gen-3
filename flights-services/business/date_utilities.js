@@ -1,11 +1,13 @@
 var getFirstWeekendOfMonth = function(month) {
 	var date = new Date();
-	date.setDate(1); // set the date to the start day of the month
 	var currentMonth = date.getMonth() + 1; // getMonth is 0 based
+	if (currentMonth != month) {
+		date.setDate(1); // set the date to the start day of the month
+	}
 	
-	// if the required month is smaller than or equal the current month, assume it is in the next year.
+	// if the required month is smaller than the current month, assume it is in the next year.
 	// current month in current year is never used, because we'll not handle in which day are we in current month. it might be last day !)
-	if (month <= currentMonth) {
+	if (month < currentMonth) {
 		date.setFullYear(date.getFullYear() + 1);
 	}
 
@@ -22,10 +24,12 @@ var getFirstWeekendOfMonth = function(month) {
 
 var getFirstWeekdayOfMonth = function(month) {
 	var date = new Date();
-	date.setDate(1); // set the date to the start day of the month
 	var currentMonth = date.getMonth() + 1; // getMonth is 0 based
+	if (currentMonth != month) {
+		date.setDate(1); // set the date to the start day of the month
+	}
 	
-	if (month <= currentMonth) { // if the required month is smaller than or equal the current month, assume it is in the next year
+	if (month < currentMonth) { // if the required month is smaller than the current month, assume it is in the next year
 		date.setFullYear(date.getFullYear() + 1);
 	}
 
@@ -84,15 +88,15 @@ var getDatesForMonth = function(month) {
 	return dates;
 }
 
-var getMonthsListStaringNextMonth = function(numberOfMonths) {
+var getMonthsListStaringCurrentMonth = function(numberOfMonths) {
 	var today = new Date();
 	var months = [];
 	var currentMonth = today.getMonth();
 	for (var i = 0; i < numberOfMonths; i++) {
-		months.push((++currentMonth % 12) + 1);
+		months.push((currentMonth++ % 12) + 1);
 	}
 	return months;
 }
 exports.getDatesForMonth = getDatesForMonth;
 exports.getDatePairsForMonth = getDatePairsForMonth;
-exports.getMonthsListStaringNextMonth = getMonthsListStaringNextMonth;
+exports.getMonthsListStaringCurrentMonth = getMonthsListStaringCurrentMonth;

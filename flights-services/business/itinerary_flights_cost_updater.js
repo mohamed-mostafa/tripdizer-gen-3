@@ -29,7 +29,7 @@ var updateFlight = function(flight) {
 	} catch (err) {
 		console.log("Number of months is not valid: " + process.env.MONTHS_AHEAD);
 	}
-	var months = dateUtilities.getMonthsListStaringNextMonth(numberOfMonths);
+	var months = dateUtilities.getMonthsListStaringCurrentMonth(numberOfMonths);
 	months.forEach(month => {
 		updateFlightMonth(flight, month);
 	});

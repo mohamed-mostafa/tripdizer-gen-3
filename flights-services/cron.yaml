@@ -1,7 +1,7 @@
 cron:
 - description: "before beginning of month update-flights-prices job"
   url: /update-flights-prices
-  schedule: 28 of month 03:00
+  schedule: 1 of month 03:00
   timezone: Africa/Cairo
   target: flights-services
 - description: "mid-month update-flights-prices job"
