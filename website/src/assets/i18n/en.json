@@ -1,10 +1,21 @@
 {
   "dir": "ltr",
   "core": {
-
+    "footer": {
+      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
+      "location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
+      "plan_trip": "Plan your trip"
+    }
   },
   "shared": {
-
+    "error_messages": {
+      "required": "Required",
+      "validDate": "Date format D / M / Y",
+      "compareDates": "Invalid dates",
+      "email": "Invalid email address",
+      "numericOnly": "Numeric only",
+      "equalTo": "Value doesn't match"
+    }
   },
   "home": {
 
