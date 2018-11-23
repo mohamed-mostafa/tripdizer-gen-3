@@ -1,4 +1,4 @@
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS, HttpBackend } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 /* Modules */
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
+import { AppTranslateLoader, LangChangeEvent, TranslateLoader, TranslateModule, TranslateService } from './app-translate.loader';
 
 /* Interceptors */
 import { JWTokenInterceptor } from './http.interceptor';
@@ -28,6 +29,13 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useClass: AppTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     CoreModule,
     MatMomentDateModule,
     MatSliderModule
@@ -40,4 +48,16 @@ import { AppComponent } from './app.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(translate: TranslateService) {
+    const defaultLang = translate.getBrowserLang() || 'en';
+    translate.addLangs(['en', 'ar']);
+    translate.setDefaultLang(defaultLang);
+    translate.use(localStorage.getItem('localization-lang') || defaultLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      localStorage.setItem('localization-lang', event.lang);
+    });
+  }
+
+}
