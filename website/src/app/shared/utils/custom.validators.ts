@@ -44,11 +44,11 @@ export class CustomValidators {
         };
     }
     static equalTo(controlName: string, errorMessage?: string): ValidatorFn {
-        return (c: AbstractControl): { [key: string]: string } | null => {
+        return (c: AbstractControl): { [key: string]: string | boolean } | null => {
             if (c.parent && c.parent.controls[controlName] && c.value === c.parent.controls[controlName].value) {
                 return null;
             }
-            return { 'equalTo': errorMessage || `Value doesn\'t match` };
+            return { 'equalTo': errorMessage || true };
         };
     }
 }

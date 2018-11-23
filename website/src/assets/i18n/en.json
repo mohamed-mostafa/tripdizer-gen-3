@@ -1,0 +1,51 @@
+{
+  "dir": "ltr",
+  "core": {
+    "footer": {
+      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
+      "location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
+      "plan_trip": "Plan your trip"
+    }
+  },
+  "shared": {
+    "error_messages": {
+      "required": "Required",
+      "validDate": "Date format D / M / Y",
+      "compareDates": "Invalid dates",
+      "email": "Invalid email address",
+      "numericOnly": "Numeric only",
+      "equalTo": "Value doesn't match"
+    }
+  },
+  "home": {
+    "landing": {
+      "landing_question": "Do you know where to travel?",
+      "have_plan": "Yes, I have a plan",
+      "surprise_me": "NO, Surprise me",
+      "scroll_down": "ScrollDown"
+    },
+    "testimonials": {
+      "featured_in": "Featured In"
+    },
+    "videos": {
+      "watch_videos": "Watch our videos on"
+    },
+    "why_us": {
+      "tailor_made": {
+        "label": "Tailor-made trips",
+        "description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
+      },
+      "enhanced_travel_experience": {
+        "label": "Enhanced travel experience",
+        "description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
+      },
+      "hassle_free": {
+        "label": "Hassle-free",
+        "description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+      }
+    }
+  },
+  "request": {
+
+  }
+}

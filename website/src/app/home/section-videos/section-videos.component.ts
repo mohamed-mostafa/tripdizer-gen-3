@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+
+/* Services */
 import { SectionVideosService } from './section-videos.service';
 
 @Component({
@@ -6,16 +9,19 @@ import { SectionVideosService } from './section-videos.service';
   templateUrl: './section-videos.component.html',
   styleUrls: ['./section-videos.component.scss']
 })
-export class SectionVideosComponent implements OnInit {
+export class SectionVideosComponent {
   videos: Array<any> = [];
 
-  constructor(service: SectionVideosService) {
+  constructor(service: SectionVideosService, translate: TranslateService) {
     service.getVideos().subscribe(videos => {
       this.videos = videos;
     });
-  }
 
-  ngOnInit() {
+    translate.onLangChange.subscribe(() => {
+      service.getVideos().subscribe(videos => {
+        this.videos = videos;
+      });
+    });
   }
 
 }

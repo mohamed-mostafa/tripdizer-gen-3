@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SectionOurTeamService } from './section-our-team.service';
 
@@ -10,7 +10,7 @@ declare var $: any;
   styleUrls: ['./section-our-team.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SectionOurTeamComponent implements OnInit {
+export class SectionOurTeamComponent {
 
   teamMembers: Array<any> = [];
 
@@ -20,9 +20,6 @@ export class SectionOurTeamComponent implements OnInit {
       this.teamMembers = teamMembers;
       this.initOwlCarousel();
     });
-  }
-
-  ngOnInit() {
   }
 
   initOwlCarousel() {

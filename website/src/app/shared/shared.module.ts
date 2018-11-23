@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
 
 /* Components */
 import { DialogComponent } from './components/dialog/dialog.component';
@@ -18,10 +19,12 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    TranslateModule
   ],
   exports: [
     ErrorMessagePipe,
+    TranslateModule,
     DialogComponent,
     TestimonialsCarouselComponent,
     VideosCarouselComponent
