@@ -25,12 +25,51 @@ var update = function (flight, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					var flightsQuery = `DELETE FROM month_price WHERE id in (SELECT adult_price FROM iternary_flight WHERE id = ${connection.escape(flight.id)}) OR id in (SELECT kid_price FROM iternary_flight WHERE id = ${connection.escape(flight.id)}) OR id in (SELECT infant_price FROM iternary_flight WHERE id = ${connection.escape(flight.id)});`;
-					flightsQuery += `INSERT INTO month_price VALUES (0, ${connection.escape(flight.aJAN || 0)}, ${connection.escape(flight.aFEB || 0)}, ${connection.escape(flight.aMAR || 0)}, ${connection.escape(flight.aAPR || 0)}, ${connection.escape(flight.aMAY || 0)}, ${connection.escape(flight.aJUN || 0)}, ${connection.escape(flight.aJUL || 0)}, ${connection.escape(flight.aAUG || 0)}, ${connection.escape(flight.aSEP || 0)}, ${connection.escape(flight.aOCT || 0)}, ${connection.escape(flight.aNOV || 0)}, ${connection.escape(flight.aDEC || 0)})`;
-					flightsQuery += `, (0, ${connection.escape(flight.kJAN || 0)}, ${connection.escape(flight.kFEB || 0)}, ${connection.escape(flight.kMAR || 0)}, ${connection.escape(flight.kAPR || 0)}, ${connection.escape(flight.kMAY || 0)}, ${connection.escape(flight.kJUN || 0)}, ${connection.escape(flight.kJUL || 0)}, ${connection.escape(flight.kAUG || 0)}, ${connection.escape(flight.kSEP || 0)}, ${connection.escape(flight.kOCT || 0)}, ${connection.escape(flight.kNOV || 0)}, ${connection.escape(flight.kDEC || 0)})`;
-					flightsQuery += `, (0, ${connection.escape(flight.iJAN || 0)}, ${connection.escape(flight.iFEB || 0)}, ${connection.escape(flight.iMAR || 0)}, ${connection.escape(flight.iAPR || 0)}, ${connection.escape(flight.iMAY || 0)}, ${connection.escape(flight.iJUN || 0)}, ${connection.escape(flight.iJUL || 0)}, ${connection.escape(flight.iAUG || 0)}, ${connection.escape(flight.iSEP || 0)}, ${connection.escape(flight.iOCT || 0)}, ${connection.escape(flight.iNOV || 0)}, ${connection.escape(flight.iDEC || 0)});`;
-					flightsQuery += `UPDATE iternary_flight SET adult_price = (SELECT id FROM month_price ORDER BY id DESC LIMIT 2, 1) , kid_price = (SELECT id FROM month_price ORDER BY id DESC LIMIT 1, 1) , infant_price = (SELECT id FROM month_price ORDER BY id DESC LIMIT 0, 1) WHERE id = ${connection.escape(flight.id)};`;
-					connection.query(flightsQuery, [], function (err, result) {
+					// the flight object here has only the updated months, so we have to be careful when we build the query not to erase existing prices
+					var flightsAdultPricesUpdateStatement = 'UPDATE month_price SET '
+					+ 'JAN = ' + (flight.aJAN || 'JAN') + ' , ' 
+					+ 'FEB = ' + (flight.aFEB || 'FEB') + ' , '
+					+ 'MAR = ' + (flight.aMAR || 'MAR') + ' , '
+					+ 'APR = ' + (flight.aAPR || 'APR') + ' , '
+					+ 'MAY = ' + (flight.aMAY || 'MAY') + ' , '
+					+ 'JUN = ' + (flight.aJUN || 'JUN') + ' , '
+					+ 'JUL = ' + (flight.aJUL || 'JUL') + ' , '
+					+ 'AUG = ' + (flight.aAUG || 'AUG') + ' , '
+					+ 'SEP = ' + (flight.aSEP || 'SEP') + ' , '
+					+ 'OCT = ' + (flight.aOCT || 'OCT') + ' , '
+					+ 'NOV = ' + (flight.aNOV || 'NOV') + ' , '
+					+ '`DEC` = ' + (flight.aDEC || '`DEC`') + ' WHERE id = ' + flight.adultMonthPriceId + ';';
+
+					var flightsChildPricesUpdateStatement = 'UPDATE month_price SET '
+					+ 'JAN = ' + (flight.kJAN || 'JAN') + ' , '
+					+ 'FEB = ' + (flight.kFEB || 'FEB') + ' , '
+					+ 'MAR = ' + (flight.kMAR || 'MAR') + ' , '
+					+ 'APR = ' + (flight.kAPR || 'APR') + ' , '
+					+ 'MAY = ' + (flight.kMAY || 'MAY') + ' , '
+					+ 'JUN = ' + (flight.kJUN || 'JUN') + ' , '
+					+ 'JUL = ' + (flight.kJUL || 'JUL') + ' , '
+					+ 'AUG = ' + (flight.kAUG || 'AUG') + ' , '
+					+ 'SEP = ' + (flight.kSEP || 'SEP') + ' , '
+					+ 'OCT = ' + (flight.kOCT || 'OCT') + ' , '
+					+ 'NOV = ' + (flight.kNOV || 'NOV') + ' , '
+					+ '`DEC` = ' + (flight.kDEC || '`DEC`') + ' WHERE id = ' + flight.childMonthPriceId + ';';
+
+					var flightsInfantPricesUpdateStatement = 'UPDATE month_price SET '
+					+ 'JAN = ' + (flight.iJAN || 'JAN') + ' , '
+					+ 'FEB = ' + (flight.iFEB || 'FEB') + ' , '
+					+ 'MAR = ' + (flight.iMAR || 'MAR') + ' , '
+					+ 'APR = ' + (flight.iAPR || 'APR') + ' , '
+					+ 'MAY = ' + (flight.iMAY || 'MAY') + ' , '
+					+ 'JUN = ' + (flight.iJUN || 'JUN') + ' , '
+					+ 'JUL = ' + (flight.iJUL || 'JUL') + ' , '
+					+ 'AUG = ' + (flight.iAUG || 'AUG') + ' , '
+					+ 'SEP = ' + (flight.iSEP || 'SEP') + ' , '
+					+ 'OCT = ' + (flight.iOCT || 'OCT') + ' , '
+					+ 'NOV = ' + (flight.iNOV || 'NOV') + ' , '
+					+ '`DEC` = ' + (flight.iDEC || '`DEC`') + ' WHERE id = ' + flight.infantMonthPriceId + ';';
+					var flightQuery = flightsAdultPricesUpdateStatement  + flightsChildPricesUpdateStatement  + flightsInfantPricesUpdateStatement;
+					console.log(flightQuery);
+					connection.query(flightQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							console.log("An error occurred while trying to update the existing flight: " + flight.id);
@@ -82,7 +121,10 @@ var getAllFlights = function (onSuccess, onFailure) {
 							origin: row.departing_from,
 							destination: row.arriving_to,
 							"return": row["return"],
-							carrierIata: row.airline_name
+							carrierIata: row.airline_name,
+							adultMonthPriceId: row.adult_price,
+							childMonthPriceId: row.kid_price,
+							infantMonthPriceId: row.infant_price
 						};
 						flights.push(flight);
 					})
