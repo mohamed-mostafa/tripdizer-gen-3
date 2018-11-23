@@ -1,11 +1,13 @@
 var getFirstWeekendOfMonth = function(month) {
 	var date = new Date();
-	date.setDate(1); // set the date to the start day of the month
 	var currentMonth = date.getMonth() + 1; // getMonth is 0 based
+	if (currentMonth != month) {
+		date.setDate(1); // set the date to the start day of the month
+	}
 	
-	// if the required month is smaller than or equal the current month, assume it is in the next year.
+	// if the required month is smaller than the current month, assume it is in the next year.
 	// current month in current year is never used, because we'll not handle in which day are we in current month. it might be last day !)
-	if (month <= currentMonth) {
+	if (month < currentMonth) {
 		date.setFullYear(date.getFullYear() + 1);
 	}
 
@@ -22,10 +24,12 @@ var getFirstWeekendOfMonth = function(month) {
 
 var getFirstWeekdayOfMonth = function(month) {
 	var date = new Date();
-	date.setDate(1); // set the date to the start day of the month
 	var currentMonth = date.getMonth() + 1; // getMonth is 0 based
+	if (currentMonth != month) {
+		date.setDate(1); // set the date to the start day of the month
+	}
 	
-	if (month <= currentMonth) { // if the required month is smaller than or equal the current month, assume it is in the next year
+	if (month < currentMonth) { // if the required month is smaller than the current month, assume it is in the next year
 		date.setFullYear(date.getFullYear() + 1);
 	}
 
@@ -52,13 +56,13 @@ var getDatePairsForMonth = function(month) {
 
 	var datePairs = [
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: thirdWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
+		// {departureDate: secondWeekendOfMonth.toISOString().split('T')[0], returnDate: thirdWeekendOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekend"},
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekend"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
-		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"},
+		// {departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
+		// {departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday_to_weekday"},
+		// {departureDate: firstWeekendOfMonth.toISOString().split('T')[0], returnDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekend_to_weekday"}
 	]
 
 	return datePairs;
@@ -71,18 +75,28 @@ var getDatesForMonth = function(month) {
 	
 	var firstWeekdayOfMonth = getFirstWeekdayOfMonth(month);
 	var oneWeekAhedFromFirstWeekdayOfMonth = new Date(firstWeekdayOfMonth); oneWeekAhedFromFirstWeekdayOfMonth.setDate(oneWeekAhedFromFirstWeekdayOfMonth.getDate() + 7);
-	var twoWeeksAheadFromFirstWeekdayOfMonth =new Date(firstWeekdayOfMonth); twoWeeksAheadFromFirstWeekdayOfMonth.setDate(twoWeeksAheadFromFirstWeekdayOfMonth.getDate() + 14);
+	var twoWeeksAheadFromFirstWeekdayOfMonth = new Date(firstWeekdayOfMonth); twoWeeksAheadFromFirstWeekdayOfMonth.setDate(twoWeeksAheadFromFirstWeekdayOfMonth.getDate() + 14);
 
 	var dates = [
 		{departureDate: firstWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
-		{departureDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
+		// {departureDate: secondWeekendOfMonth.toISOString().split('T')[0], type: "Weekend"},
 		{departureDate: firstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"},
 		{departureDate: oneWeekAhedFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"},
-		{departureDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"}
+		// {departureDate: twoWeeksAheadFromFirstWeekdayOfMonth.toISOString().split('T')[0], type: "Weekday"}
 	]
 
 	return dates;
 }
 
+var getMonthsListStaringCurrentMonth = function(numberOfMonths) {
+	var today = new Date();
+	var months = [];
+	var currentMonth = today.getMonth();
+	for (var i = 0; i < numberOfMonths; i++) {
+		months.push((currentMonth++ % 12) + 1);
+	}
+	return months;
+}
 exports.getDatesForMonth = getDatesForMonth;
 exports.getDatePairsForMonth = getDatePairsForMonth;
+exports.getMonthsListStaringCurrentMonth = getMonthsListStaringCurrentMonth;

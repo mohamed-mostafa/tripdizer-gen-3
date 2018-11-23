@@ -1,8 +1,8 @@
 var Amadeus = require('amadeus');
 
 var amadeus = new Amadeus({
-  clientId: 'dNt2lgOTmxgQ6UMSiEHYxetOxsbEgqp1',
-  clientSecret: 'a4u1TaQUSdKO4mm6'
+  clientId: process.env.AMADEUS_CLIENT_ID || '7V6h03uLKAO2yDe4i6xY3qSSMESY2L2a',
+  clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'HDtEfFan1632SjZ2'
 });
 
 var getAirlineNameByIATACode = function(iataCode) {
@@ -28,6 +28,7 @@ var getFamilyFaresForCarriers = function(originCityIata, destinationCityIata, de
 		includeAirlines: carriersCommaSeparatedIata
 	};
 	if (returnDate == null) delete amadeusRequest.returnDate;
+	if (carriersCommaSeparatedIata == null) delete amadeusRequest.includeAirlines;
 
 	return new Promise(function(resolve, reject) {
 		amadeus.shopping.flightOffers.get(amadeusRequest).then(response => {
