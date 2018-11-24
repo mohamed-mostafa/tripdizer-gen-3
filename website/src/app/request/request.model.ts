@@ -1,4 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
 import { Preference } from './preferences/preference.model';
 import { RequestType } from './request-type.model';
@@ -7,6 +8,21 @@ import { Step } from './step.model';
 
 export class Request {
   private _requestType: RequestType;
+  private _localeLabels: {
+    currency?: any,
+    traveling_from?: string,
+    traveling_to?: string,
+    departure_return?: string,
+    travelers?: string,
+    budget?: string,
+    purpose?: string,
+    preferences?: string,
+    destinations?: string,
+    estimated_cost?: string,
+    travel_assistance?: string,
+    information?: string,
+    ticket?: string
+  } = {};
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
   private _departureDate: Moment;
@@ -193,7 +209,7 @@ export class Request {
   private get steps(): Array<Step> {
     return [
       {
-        key: 'travelingFrom', title: 'Traveling from', path: 'traveling-from', order: 0,
+        key: 'travelingFrom', title: this._localeLabels.traveling_from, path: 'traveling-from', order: 0,
         value: ((): string => {
           if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
@@ -205,7 +221,7 @@ export class Request {
         }
       },
       {
-        key: 'travelingTo', title: 'Traveling to', path: 'traveling-to', order: 1,
+        key: 'travelingTo', title: this._localeLabels.traveling_to, path: 'traveling-to', order: 1,
         isDisabled: this._requestType !== RequestType.HavePlan, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
@@ -218,7 +234,7 @@ export class Request {
         }
       },
       {
-        key: 'departureReturn', title: 'Departure & Return', path: 'departure-return', order: 2,
+        key: 'departureReturn', title: this._localeLabels.departure_return, path: 'departure-return', order: 2,
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._departureDate || !this._returnDate) { return null; }
@@ -233,7 +249,7 @@ export class Request {
         }
       },
       {
-        key: 'travelers', title: 'Travelers', path: 'travelers', order: 3,
+        key: 'travelers', title: this._localeLabels.travelers, path: 'travelers', order: 3,
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
@@ -246,12 +262,12 @@ export class Request {
         }
       },
       {
-        key: 'budget', title: 'Budget', path: 'budget', order: 4,
+        key: 'budget', title: this._localeLabels.budget, path: 'budget', order: 4,
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return null; }
           return this.budgetCategory === 1 ?
-            new CurrencyPipe('EN').transform(this.budget, 'EGP', 'symbol', '0.0-0') : this.budgetCategoryName;
+            this.currencyPipe.transform(this.budget, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0') : this.budgetCategoryName;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(4) === -1) { return false; }
@@ -260,7 +276,7 @@ export class Request {
         }
       },
       {
-        key: 'purpose', title: 'Purpose', path: 'purpose', order: 5,
+        key: 'purpose', title: this._localeLabels.purpose, path: 'purpose', order: 5,
         requiredForRecommendation: true,
         value: ((): string => {
           if (!this._purpose) { return null; }
@@ -273,7 +289,7 @@ export class Request {
         }
       },
       {
-        key: 'preferences', title: 'Preferences', path: 'preferences', order: 6,
+        key: 'preferences', title: this._localeLabels.preferences, path: 'preferences', order: 6,
         requiredForRecommendation: true,
         value: ((): string => {
           return this._preferenceNames.join(', ');
@@ -284,7 +300,7 @@ export class Request {
         }
       },
       {
-        key: 'destinations', title: 'Destinations', path: 'destinations', order: 7,
+        key: 'destinations', title: this._localeLabels.destinations, path: 'destinations', order: 7,
         isDisabled: this._requestType !== RequestType.SurpriseMe, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._destination) { return null; }
@@ -297,10 +313,10 @@ export class Request {
         }
       },
       {
-        key: 'estimatedCost', title: 'Estimated Cost', path: 'estimated-cost', order: 8,
+        key: 'estimatedCost', title: this._localeLabels.estimated_cost, path: 'estimated-cost', order: 8,
         value: ((): string => {
           if (this._estimatedCost == null) { return null; }
-          return new CurrencyPipe('EN').transform(this.estimatedCost, 'EGP', 'symbol', '0.0-0');
+          return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(8) === -1) { return false; }
@@ -309,7 +325,7 @@ export class Request {
         }
       },
       {
-        key: 'travelAssistance', title: 'Travel Assistance', path: 'travel-assistance', order: 9,
+        key: 'travelAssistance', title: this._localeLabels.travel_assistance, path: 'travel-assistance', order: 9,
         value: ((): string => {
           const travelAssistanceParams = [];
           if (this.visaAssistanceNeeded) { travelAssistanceParams.push('Visa'); }
@@ -322,7 +338,7 @@ export class Request {
         }
       },
       {
-        key: 'information', title: 'One more step', path: 'information', order: 10,
+        key: 'information', title: this._localeLabels.information, path: 'information', order: 10,
         value: 'Information',
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
@@ -337,7 +353,7 @@ export class Request {
         }
       },
       {
-        key: 'ticket', title: '', path: 'ticket', order: 99,
+        key: 'ticket', title: this._localeLabels.ticket, path: 'ticket', order: 99,
         value: '',
         isHiddenOnNavBar: true,
         isValid: (): boolean => true
@@ -345,7 +361,9 @@ export class Request {
     ];
   }
 
-  constructor() {
+  constructor(private currencyPipe: CurrencyPipe, translate: TranslateService) {
+    translate.get('currency').subscribe(currency => this.setCurrency(currency));
+    translate.get('request.nav_bar').subscribe(labels => this.setNavBarLabels(labels));
     this._requestType = RequestType.HavePlan;
     this._touchedSteps = [];
     this._preferences = [];
@@ -358,9 +376,18 @@ export class Request {
     };
   }
 
+  private setCurrency(currency: string): void {
+    this._localeLabels.currency = currency;
+  }
+
+  private setNavBarLabels(labels: Object): void {
+    Object.keys(labels).forEach(key => this._localeLabels[key] = labels[key]);
+  }
+
   setRequestType(requestType: RequestType): void {
     this._requestType = requestType;
   }
+
 
   addPreference(preference: Preference): void {
     this._preferences.push(preference.id);

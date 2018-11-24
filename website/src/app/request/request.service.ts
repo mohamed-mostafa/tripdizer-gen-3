@@ -1,6 +1,8 @@
+import { CurrencyPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -22,7 +24,7 @@ import { Ticket } from './ticket/ticket.model';
 })
 export class RequestService {
     private endPoint = 'request';
-    private requestData = new Request();
+    private requestData;
     private Lookups: {
         destinations: Array<Destination>,
         budgetCategories: Array<BudgetCategory>,
@@ -36,7 +38,13 @@ export class RequestService {
     requestDataChanged = new Subject<{ key: string, value: any, request: Request }>();
     requestNavBarDataChanged = new Subject<{ key: string, value: any, navBar: Array<Step> }>();
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        currencyPipe: CurrencyPipe,
+        translate: TranslateService
+    ) {
+        this.requestData = new Request(currencyPipe, translate);
+    }
 
     setRequestType(params: Params): boolean {
         let requestType = RequestType.HavePlan;

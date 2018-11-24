@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'c-request-form-layout',
@@ -10,8 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class RequestFormLayoutComponent {
 
   @Input() formGroup = new FormGroup({});
-  @Input() nextLabel = 'Continue';
-  @Input() backLabel = 'Back';
+  @Input() nextLabel;
+  @Input() backLabel;
   @Input() isNextDisabled = false;
   @Input() isBackHidden = false;
   @Input() nextStepPath: string;
@@ -23,8 +24,14 @@ export class RequestFormLayoutComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router,
+    translate: TranslateService
+  ) {
+    translate.get('request.form_layout').subscribe(labels => {
+      this.nextLabel = labels.next_label;
+      this.backLabel = labels.back_label;
+    });
+  }
 
   goToPrevStep() {
     this.back.emit();
