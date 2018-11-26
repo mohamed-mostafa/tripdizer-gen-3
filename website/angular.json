@@ -33,7 +33,8 @@
               "./node_modules/owl.carousel/dist/assets/owl.carousel.css",
               "./node_modules/owl.carousel/dist/assets/owl.theme.default.css",
               "src/assets/scss/index.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/styles-rtl.scss"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",

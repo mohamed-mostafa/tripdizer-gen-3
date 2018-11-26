@@ -1,0 +1,83 @@
+.rtl {
+  .navbar-nav {
+    margin-left: initial !important;
+    margin-right: auto;
+  }
+
+  .navbar-brand {
+    margin-right: 0;
+    margin-left: 1rem;
+  }
+
+  :host {
+    width: 100%;
+  }
+
+  .why-us {
+    .tab-pane {
+      >img {
+        left: 0;
+        right: initial !important;
+      }
+    }
+
+    .tab-content:before {
+      content: "لماذا" !important;
+      right: initial !important;
+      left: 0;
+
+      @media (max-width: 768px) {
+        content: "لماذا نحن؟" !important;
+        margin-left: -110px !important;
+      }
+
+      @media (max-width: 576px) {
+        margin-left: -85px !important;
+      }
+    }
+
+    .why-us-nav:before {
+      content: "نحن؟" !important;
+      left: initial !important;
+      right: 0;
+    }
+  }
+
+  .testimonials-carousel {
+    .owl-item {
+      .testimonial-item {
+        .testimonial-info {
+          .testimonial-text {
+            padding-left: initial !important;
+            padding-right: 1em;
+
+            &:before,
+            &:after {
+              left: initial !important;
+              left: 0;
+            }
+          }
+
+          .testimonial-name {
+            text-align: right;
+            left: initial !important;
+            right: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+
+    .contact-info,
+    .slogan {
+      text-align: right;
+    }
+
+    .footer-icons {
+      padding-left: 1rem;
+      padding-right: 0 !important;
+    }
+  }
+}
