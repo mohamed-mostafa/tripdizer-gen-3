@@ -18,7 +18,7 @@
       "email": "Invalid email address",
       "numericOnly": "Numeric only",
       "equalTo": "Value doesn't match",
-      "copyPaste": "Please, Don't copy and paste the value"
+      "copyPaste": "Please, Don't copy and paste me"
     }
   },
   "home": {
