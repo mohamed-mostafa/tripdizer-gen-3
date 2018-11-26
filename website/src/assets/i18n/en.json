@@ -17,7 +17,8 @@
       "compareDates": "Invalid dates",
       "email": "Invalid email address",
       "numericOnly": "Numeric only",
-      "equalTo": "Value doesn't match"
+      "equalTo": "Value doesn't match",
+      "copyPaste": "Please, Don't copy and paste the value"
     }
   },
   "home": {

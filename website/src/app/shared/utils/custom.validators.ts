@@ -45,8 +45,11 @@ export class CustomValidators {
     }
     static equalTo(controlName: string, errorMessage?: string): ValidatorFn {
         return (c: AbstractControl): { [key: string]: string | boolean } | null => {
-            if (c.parent && c.parent.controls[controlName] && c.value === c.parent.controls[controlName].value) {
-                return null;
+            if (c.parent && c.parent.controls[controlName]) {
+                if (c.value === c.parent.controls[controlName].value) { return null; }
+                if (c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
+                    return { 'copyPaste': true };
+                }
             }
             return { 'equalTo': errorMessage || true };
         };
