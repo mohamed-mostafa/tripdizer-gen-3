@@ -78,17 +78,17 @@
             </tspan>
           </text>
           <g transform="translate(0 148)">
-            <g transform="translate(155 0)">
+            <g transform="translate(190 0)">
               <line class="splitter s-splitter" x2="50" />
               <circle cx="105" cy="0" r="45" stroke="#fff" stroke-width="1" fill="transparent" />
               <circle cx="105" cy="0" r="40" class="fill-white" fill-opacity="0.5" />
               <circle cx="105" cy="0" r="30" class="fill-white" />
-              <text class="svg-fa fill-blue" font-size="32" transform="translate(89 12)">&#xf072;</text>
+              <text class="svg-fa fill-blue" font-size="32" text-anchor="middle" transform="translate(105 13)">&#xf072;</text>
               <line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
             </g>
             <text y="27" font-size="84">
-              <tspan x="0" [innerHTML]="ticket?.travelingFrom | slice:0:3 | uppercase"></tspan>
-              <tspan x="380" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
+              <tspan x="20" [innerHTML]="ticket?.travelingFrom | slice:0:3 | uppercase"></tspan>
+              <tspan x="420" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
             </text>
           </g>
           <text font-size="19">
