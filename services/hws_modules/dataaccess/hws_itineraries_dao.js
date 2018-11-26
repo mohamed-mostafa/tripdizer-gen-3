@@ -190,7 +190,7 @@ var update = function (itinerary, onSuccess, onFailure) {
 					for (let i = 0; i < itinerary.seasons.length; i++) {
 						if (itinerary.seasons[i].type) {
 							seasonsQuery += 'INSERT INTO iternary_season (`Start`, `End`, `Type`, `Iternary_Id`) VALUES ';
-							seasonsQuery += `(${connection.escape(new Date(itinerary.seasons[i].start).toLocaleDateString())}, ${connection.escape(new Date(itinerary.seasons[i].end).toLocaleDateString())}, ${connection.escape(itinerary.seasons[i].type)}, ${connection.escape(itinerary.id)});`;
+							seasonsQuery += `(${connection.escape(formatDateForSql(new Date(itinerary.seasons[i].start)))}, ${connection.escape(formatDateForSql(new Date(itinerary.seasons[i].end)))}, ${connection.escape(itinerary.seasons[i].type)}, ${connection.escape(itinerary.id)});`;
 						}
 					}
 					var budgetsQuery = `DELETE FROM iternary_budget_category WHERE iternary_Id = ${connection.escape(itinerary.id)};`;
@@ -382,6 +382,22 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 		}
 	});
 };
+
+var formatDateForSql = function(date) {
+	var year = date.getFullYear();
+	var month = date.getMonth()+1;
+	var day = date.getDate();
+
+	if (day < 10) {
+	  day = '0' + day;
+	}
+	if (month < 10) {
+	  month = '0' + month;
+	}
+
+	var formattedDate = year + '-' + month + '-' + day;
+	return formattedDate;
+}
 
 exports.getById = getById;
 exports.create = create;
