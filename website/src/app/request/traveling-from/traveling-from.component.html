@@ -4,6 +4,6 @@
     <mat-hint>{{formGroup.controls.travelingFrom.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.travelingFrom.errors | errorMessage}}</mat-error>
     <input matInput type="text" id="traveling-from" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      placeholder="Traveling From" formControlName="travelingFrom">
+      [placeholder]="'request.traveling_from.traveling_from' | translate" formControlName="travelingFrom">
   </mat-form-field>
 </c-request-form-layout>

@@ -2,15 +2,16 @@ import { Component } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-/* Components */
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+
 /* Services */
 import { RequestService } from '../request.service';
+import { TranslateService } from '@ngx-translate/core';
+
 /* Models */
 import { Destination } from './destination.model';
 
-
-
+/* Components */
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'c-request-destinations',
@@ -20,16 +21,24 @@ import { Destination } from './destination.model';
 export class DestinationsComponent {
   currentStepPath: string;
   destinations: Array<Destination>;
+  dialogLabels: {
+    title: string,
+    description: string,
+    inputs: { input0: string },
+    buttonsLabel: { ok: string, cancel: string }
+  };
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private requestService: RequestService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    translate: TranslateService
   ) {
     this.currentStepPath = this.route.routeConfig.path;
     requestService.getDestinations().subscribe((response: Array<Destination>) => this.destinations = response);
     requestService.stepVisited(this.currentStepPath);
+    translate.get('request.destinations.dialog').subscribe(labels => this.dialogLabels = labels);
   }
 
   save(destinationId: number): boolean {
@@ -63,19 +72,19 @@ export class DestinationsComponent {
       autoFocus: true,
       maxWidth: 400,
       data: {
-        title: 'Other destination',
-        description: 'What\'s the destination name?',
+        title: this.dialogLabels ? this.dialogLabels.title : '',
+        description: this.dialogLabels ? this.dialogLabels.description : '',
         inputs: [
           {
             id: 'destinationName',
             value: this.requestService.getProperty('destinationName'),
-            placeHolder: 'Destination Name',
+            placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
             validatorOrOpts: [Validators.required]
           }
         ],
         buttonsLabel: {
-          ok: 'Save',
-          cancel: 'Cancel'
+          ok: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.ok : '',
+          cancel: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.cancel : ''
         }
       }
     });

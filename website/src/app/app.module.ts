@@ -1,4 +1,5 @@
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS, HttpBackend } from '@angular/common/http';
+import { CurrencyPipe } from '@angular/common';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -41,6 +42,7 @@ import { AppComponent } from './app.component';
     MatSliderModule
   ],
   providers: [
+    CurrencyPipe,
     { provide: HTTP_INTERCEPTORS, useClass: JWTokenInterceptor, multi: true },
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: DateAdapter, useClass: MomentDateAdapter },

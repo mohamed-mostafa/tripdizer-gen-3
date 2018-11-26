@@ -1,15 +1,144 @@
 {
   "dir": "rtl",
+  "currency": {
+    "EGP": "EGP"
+  },
   "core": {
-
+    "footer": {
+      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
+      "location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
+      "plan_trip": "Plan your trip"
+    }
   },
   "shared": {
-
+    "error_messages": {
+      "required": "Required",
+      "validDate": "Date format D / M / Y",
+      "compareDates": "Invalid dates",
+      "email": "Invalid email address",
+      "numericOnly": "Numeric only",
+      "equalTo": "Value doesn't match"
+    }
   },
   "home": {
-
+    "landing": {
+      "landing_question": "Do you know where to travel?",
+      "have_plan": "Yes, I have a plan",
+      "surprise_me": "NO, Surprise me",
+      "scroll_down": "ScrollDown"
+    },
+    "testimonials": {
+      "featured_in": "Featured In"
+    },
+    "videos": {
+      "watch_videos": "Watch our videos on"
+    },
+    "why_us": {
+      "tailor_made": {
+        "label": "Tailor-made trips",
+        "description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
+      },
+      "enhanced_travel_experience": {
+        "label": "Enhanced travel experience",
+        "description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
+      },
+      "hassle_free": {
+        "label": "Hassle-free",
+        "description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+      }
+    }
   },
   "request": {
-
+    "budget": {
+      "budget": "Own Budget"
+    },
+    "departure_return": {
+      "departure": "Departure",
+      "return": "Return",
+      "flexible": "Flexible dates ( +/- 3 days )"
+    },
+    "destinations": {
+      "dialog": {
+        "title": "Other destination",
+        "description": "What's the destination name?",
+        "inputs": {
+          "input0": "Destination Name"
+        },
+        "buttonsLabel": {
+          "ok": "Save",
+          "cancel": "Cancel"
+        }
+      }
+    },
+    "estimated_cost": {
+      "hint1": "The costs are estimates and subject to change in the actual package",
+      "flights": "Flights",
+      "accommodation": "Accommodation",
+      "ferries": "Ferries",
+      "daily_spending": "Daily Spending",
+      "hint2": "International + Domestic flights",
+      "hint3": "Just a hint, not included in the final cost"
+    },
+    "form_layout": {
+      "next_label": "Continue",
+      "back_label": "Back"
+    },
+    "information": {
+      "next_label": "Submit",
+      "name": "Name",
+      "mobile": "Mobile No.",
+      "email": "Email",
+      "confirm_email": "Confirm Email",
+      "birthday": "Birthday",
+      "referral": "How did you know about us?"
+    },
+    "nav_bar": {
+      "traveling_from": "Traveling from",
+      "traveling_to": "Traveling to",
+      "departure_return": "Departure & Return",
+      "travelers": "Travelers",
+      "budget": "Budget",
+      "purpose": "Purpose",
+      "preferences": "Preferences",
+      "destinations": "Destinations",
+      "estimated_cost": "Estimated Cost",
+      "travel_assistance": "Travel Assistance",
+      "information": "One more step",
+      "ticket": ""
+    },
+    "preferences": {},
+    "purpose": {},
+    "recommended_destinations": {
+      "highest": "Highest",
+      "lowest": "Lowest"
+    },
+    "ticket": {
+      "request_number": "Request No.",
+      "adults": "{{adultsNumber}} adults",
+      "lg_text": {
+        "line1": "It is a long established fact that a reader",
+        "line2": "will be distracted by the readable content of",
+        "line3": "a page when looking at its layout."
+      },
+      "sm_text": {
+        "line1": "It is a long established fact that",
+        "line2": "a reader will be distracted by the",
+        "line3": "readable content of a page when",
+        "line4": "looking at its layout."
+      }
+    },
+    "travel_assistance": {
+      "visa_assistance": "I need assistance with getting the visas",
+      "tour_guide": "I need a tour guide",
+      "special_request": "Special Request"
+    },
+    "travelers": {
+      "adults": "Adults",
+      "kids": "Kids",
+      "infants": "Infants"
+    },
+    "traveling_from": {
+      "traveling_from": "Traveling From"
+    }
   }
 }

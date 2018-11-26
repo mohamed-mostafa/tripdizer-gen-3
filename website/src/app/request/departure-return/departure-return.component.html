@@ -3,15 +3,17 @@
     <mat-hint>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-error>
     <input matInput [matDatepicker]="departureDatePicker" id="departure-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      placeholder="Departure" (focus)="departureDatePicker.open()" formControlName="departureDate">
+      [placeholder]="'request.departure_return.departure' | translate" (focus)="departureDatePicker.open()"
+      formControlName="departureDate">
     <mat-datepicker #departureDatePicker></mat-datepicker>
   </mat-form-field>
   <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-error>
     <input matInput [matDatepicker]="returnDatePicker" id="return-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      placeholder="Return" (focus)="returnDatePicker.open()" formControlName="returnDate">
+      [placeholder]="'request.departure_return.return' | translate" (focus)="returnDatePicker.open()" formControlName="returnDate">
     <mat-datepicker #returnDatePicker></mat-datepicker>
   </mat-form-field>
-  <mat-checkbox formControlName="isFlexibleDates" labelPosition="after">Flexible dates ( +/- 3 days )</mat-checkbox>
+  <mat-checkbox formControlName="isFlexibleDates" labelPosition="after">{{'request.departure_return.flexible' |
+    translate}}</mat-checkbox>
 </c-request-form-layout>
