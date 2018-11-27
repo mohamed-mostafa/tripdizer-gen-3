@@ -2,7 +2,7 @@
   <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.departureDate.errors | errorMessage}}</mat-error>
-    <input matInput [matDatepicker]="departureDatePicker" id="departure-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
+    <input matInput [min]="minDate" [matDatepicker]="departureDatePicker" id="departure-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
       [placeholder]="'request.departure_return.departure' | translate" (focus)="departureDatePicker.open()"
       formControlName="departureDate">
     <mat-datepicker #departureDatePicker></mat-datepicker>
@@ -10,7 +10,7 @@
   <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-error>
-    <input matInput [matDatepicker]="returnDatePicker" id="return-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
+    <input matInput [min]="minDate" [matDatepicker]="returnDatePicker" id="return-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
       [placeholder]="'request.departure_return.return' | translate" (focus)="returnDatePicker.open()" formControlName="returnDate">
     <mat-datepicker #returnDatePicker></mat-datepicker>
   </mat-form-field>

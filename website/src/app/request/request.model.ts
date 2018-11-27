@@ -21,7 +21,8 @@ export class Request {
     estimated_cost?: string,
     travel_assistance?: string,
     information?: string,
-    ticket?: string
+    ticket?: string,
+    adults?: string
   } = {};
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
@@ -76,6 +77,8 @@ export class Request {
   }
   set adultsNumber(value) {
     this._adultsNumber = parseInt(value.toString(), 10);
+    this.translate.get('request.nav_bar.adults', { adultsNumber: this._adultsNumber })
+      .subscribe(label => this.setAdultsNavBarLabel(label));
   }
   get adultsNumber(): number {
     return this._adultsNumber;
@@ -253,7 +256,7 @@ export class Request {
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
-          return `${this.adultsNumber} adults`;
+          return this._localeLabels.adults;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(3) === -1) { return false; }
@@ -361,8 +364,9 @@ export class Request {
     ];
   }
 
-  constructor(private currencyPipe: CurrencyPipe, translate: TranslateService) {
+  constructor(private currencyPipe: CurrencyPipe, private translate: TranslateService) {
     translate.get('currency').subscribe(currency => this.setCurrency(currency));
+    translate.get('request.nav_bar.adults', { adultsNumber: this.adultsNumber || 0 }).subscribe(label => this.setAdultsNavBarLabel(label));
     translate.get('request.nav_bar').subscribe(labels => this.setNavBarLabels(labels));
     this._requestType = RequestType.HavePlan;
     this._touchedSteps = [];
@@ -378,6 +382,10 @@ export class Request {
 
   private setCurrency(currency: string): void {
     this._localeLabels.currency = currency;
+  }
+
+  private setAdultsNavBarLabel(label: string): void {
+    this._localeLabels.adults = label;
   }
 
   private setNavBarLabels(labels: Object): void {

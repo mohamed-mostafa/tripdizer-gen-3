@@ -105,7 +105,8 @@
       "estimated_cost": "Estimated Cost",
       "travel_assistance": "Travel Assistance",
       "information": "One more step",
-      "ticket": ""
+      "ticket": "",
+      "adults": "{{adultsNumber}} adults"
     },
     "preferences": {},
     "purpose": {},
