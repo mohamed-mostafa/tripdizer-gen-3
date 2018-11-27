@@ -1,145 +1,145 @@
 {
   "dir": "rtl",
   "currency": {
-    "EGP": "EGP"
+    "EGP": "ج.م."
   },
   "core": {
     "footer": {
-      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
-      "location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
-      "plan_trip": "Plan your trip"
+      "slogan": "نعدك بتوفير وقتك و نقودك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
+      "location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
+      "plan_trip": "خطط لرحلتك"
     }
   },
   "shared": {
     "error_messages": {
-      "required": "Required",
-      "validDate": "Date format D / M / Y",
-      "compareDates": "Invalid dates",
-      "email": "Invalid email address",
-      "numericOnly": "Numeric only",
-      "equalTo": "Value doesn't match",
-      "copyPaste": "Please, Don't copy and paste me"
+      "required": "مطلوب",
+      "validDate": "يوم/شهر/سنة",
+      "compareDates": "التواريخ غير صحيحة",
+      "email": "البريد الالكتروني غير صحيح",
+      "numericOnly": "أرقام فقط",
+      "equalTo": "غير متطابقين",
+      "copyPaste": "رجاء لا تقوم بالنسخ و اللصق"
     }
   },
   "home": {
     "landing": {
-      "landing_question": "Do you know where to travel?",
-      "have_plan": "Yes, I have a plan",
-      "surprise_me": "NO, Surprise me",
-      "scroll_down": "ScrollDown"
+      "landing_question": "هل تعرف الي اين تريد السفر ؟",
+      "have_plan": "نعم, عندي خطة للسفر",
+      "surprise_me": "لا ... فاجئني",
+      "scroll_down": "إنزل للأسفل"
     },
     "testimonials": {
-      "featured_in": "Featured In"
+      "featured_in": "تم ذكرنا في"
     },
     "videos": {
-      "watch_videos": "Watch our videos on"
+      "watch_videos": "شاهد فيديوهاتنا علي"
     },
     "why_us": {
       "tailor_made": {
-        "label": "Tailor-made trips",
-        "description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
+        "label": "رحلات مفصلة خصيصا لك",
+        "description": "نحن نهتم بالتفاصيل الصغيرة حتي نرتب لك أنسب رحلة, مفصلة خصيصا لإهتماماتك و ميزانيتك وفقا لإحتياجاتك"
       },
       "enhanced_travel_experience": {
-        "label": "Enhanced travel experience",
-        "description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
+        "label": "تجربة سفر مدهشة",
+        "description": "نركز علي العناصر التي تساهم في جودة تجربة سفرك. سوف نتولي ترتيب الطيران, الإقامة, و الزيارات المختلفة. كل ما عليك فعله هو الإسترخاء, ترتيب حقائبك و الإستمتاع برحلتك"
       },
       "hassle_free": {
-        "label": "Hassle-free",
-        "description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+        "label": "خالية من المتاعب",
+        "description": "نبذل الكثير من الجهد في ترتيب برنامج مفصل ليرشدك خلال رحلتك. من خلال الحجز معنا ، لن تضطر إلى التعرض الي متاعب ترتيب رحلتك لأسابيع. بدلاً من ذلك ،سنجهز لك رحلة مخصصة تتناسب مع اهتماماتك وميزانيتك واحتياجاتك"
       }
     }
   },
   "request": {
     "budget": {
-      "budget": "Own Budget"
+      "budget": "لي ميزانيتي الخاصة"
     },
     "departure_return": {
-      "departure": "Departure",
-      "return": "Return",
-      "flexible": "Flexible dates ( +/- 3 days )"
+      "departure": "سفر",
+      "return": "عودة",
+      "flexible": "تواريخ مرنة (+/- 3 أيام)"
     },
     "destinations": {
       "dialog": {
-        "title": "Other destination",
-        "description": "What's the destination name?",
+        "title": "وجهة أخرى",
+        "description": "الي اين تريد السفر ؟",
         "inputs": {
-          "input0": "Destination Name"
+          "input0": "حدد وجهتك"
         },
         "buttonsLabel": {
-          "ok": "Save",
-          "cancel": "Cancel"
+          "ok": "استمر",
+          "cancel": "إلغاء"
         }
       }
     },
     "estimated_cost": {
-      "hint1": "The costs are estimates and subject to change in the actual package",
-      "flights": "Flights",
-      "accommodation": "Accommodation",
-      "ferries": "Ferries",
-      "daily_spending": "Daily Spending",
-      "hint2": "International + Domestic flights",
-      "hint3": "Just a hint, not included in the final cost"
+      "hint1": "هذة التكلفة تقديرية و قد تختلف في وقت الحجز",
+      "flights": "الطيران",
+      "accommodation": "الإقامة",
+      "ferries": "العبّارات",
+      "daily_spending": "المصاريف اليومية",
+      "hint2": "طيران دولي + داخلي",
+      "hint3": "مجرد تذكير, و ليست مدرجة في التكلفة المقدّرة"
     },
     "form_layout": {
-      "next_label": "Continue",
-      "back_label": "Back"
+      "next_label": "التالي",
+      "back_label": "السابق"
     },
     "information": {
-      "next_label": "Submit",
-      "name": "Name",
-      "mobile": "Mobile No.",
-      "email": "Email",
-      "confirm_email": "Confirm Email",
-      "birthday": "Birthday",
-      "referral": "How did you know about us?"
+      "next_label": "إرسال",
+      "name": "الأسم",
+      "mobile": "رقم الموبايل",
+      "email": "البريد الألكتروني",
+      "confirm_email": "تأكيد البريد الألكتروني",
+      "birthday": "تاريخ الميلاد",
+      "referral": "كيف عرفت عنا ؟"
     },
     "nav_bar": {
-      "traveling_from": "Traveling from",
-      "traveling_to": "Traveling to",
-      "departure_return": "Departure & Return",
-      "travelers": "Travelers",
-      "budget": "Budget",
-      "purpose": "Purpose",
-      "preferences": "Preferences",
-      "destinations": "Destinations",
-      "estimated_cost": "Estimated Cost",
-      "travel_assistance": "Travel Assistance",
-      "information": "One more step",
+      "traveling_from": "مسافر من",
+      "traveling_to": "مسافر إلي",
+      "departure_return": "سفر و عودة",
+      "travelers": "المسافرين",
+      "budget": "الميزانية",
+      "purpose": "غرض السفر",
+      "preferences": "الإهتمامات",
+      "destinations": "الوجهات",
+      "estimated_cost": "التكلفة",
+      "travel_assistance": "المساعدة",
+      "information": "خطوة أخيرة",
       "ticket": ""
     },
     "preferences": {},
     "purpose": {},
     "recommended_destinations": {
-      "highest": "Highest",
-      "lowest": "Lowest"
+      "highest": "الأكثر ملاءمة",
+      "lowest": "الأقل ملاءمة"
     },
     "ticket": {
-      "request_number": "Request No.",
-      "adults": "{{adultsNumber}} adults",
+      "request_number": "رقم الطلب",
+      "adults": "{{adultsNumber}} بالغين",
       "lg_text": {
-        "line1": "It is a long established fact that a reader",
-        "line2": "will be distracted by the readable content of",
-        "line3": "a page when looking at its layout."
+        "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
+        "line2": "ما لم يكن عندة الشجاعة الكافية لغياب الشاطئ عن نظره",
+        "line3": "- اندريا جيد"
       },
       "sm_text": {
-        "line1": "It is a long established fact that",
-        "line2": "a reader will be distracted by the",
-        "line3": "readable content of a page when",
-        "line4": "looking at its layout."
+        "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
+        "line2": "ما لم يكن عندة الشجاعة الكافية",
+        "line3": "لغياب الشاطئ عن نظره",
+        "line4": "- اندريا جيد"
       }
     },
     "travel_assistance": {
-      "visa_assistance": "I need assistance with getting the visas",
-      "tour_guide": "I need a tour guide",
-      "special_request": "Special Request"
+      "visa_assistance": "أحتاج مساعدة في الحصول غلي التأشيرات",
+      "tour_guide": "أحتاج مرشد سياحي",
+      "special_request": "طلبات خري"
     },
     "travelers": {
-      "adults": "Adults",
-      "kids": "Kids",
-      "infants": "Infants"
+      "adults": "بالغين",
+      "kids": "اطفال",
+      "infants": "رضع"
     },
     "traveling_from": {
-      "traveling_from": "Traveling From"
+      "traveling_from": "مسافر من"
     }
   }
 }

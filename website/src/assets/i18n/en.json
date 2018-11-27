@@ -61,12 +61,12 @@
     "destinations": {
       "dialog": {
         "title": "Other destination",
-        "description": "What's the destination name?",
+        "description": "Where would you like to travel?",
         "inputs": {
-          "input0": "Destination Name"
+          "input0": "Specify your destination"
         },
         "buttonsLabel": {
-          "ok": "Save",
+          "ok": "Done",
           "cancel": "Cancel"
         }
       }
@@ -117,15 +117,15 @@
       "request_number": "Request No.",
       "adults": "{{adultsNumber}} adults",
       "lg_text": {
-        "line1": "It is a long established fact that a reader",
-        "line2": "will be distracted by the readable content of",
-        "line3": "a page when looking at its layout."
+        "line1": "Man cannot discover new oceans unless he has",
+        "line2": "the courage to lose sight of the shore.",
+        "line3": "– Andre Gide."
       },
       "sm_text": {
-        "line1": "It is a long established fact that",
-        "line2": "a reader will be distracted by the",
-        "line3": "readable content of a page when",
-        "line4": "looking at its layout."
+        "line1": "Man cannot discover new oceans",
+        "line2": "unless he has the courage to",
+        "line3": "lose sight of the shore.",
+        "line4": "– Andre Gide."
       }
     },
     "travel_assistance": {
