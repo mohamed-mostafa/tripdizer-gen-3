@@ -3,8 +3,8 @@
     <div *ngFor="let destination of destinations" (click)="goToNextStep(destination.id)" class="destination m-2 m-sm-3">
       <div class="destination-info">
         <div class="dest-temp w-50 clearfix">
-          <span [ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'">{{destination.temperatureLo || 35}}</span>
-          <span [ngClass]="('dir' | translate) === 'ltr' ? 'float-right' : 'float-left'">{{destination.temperatureHi || 40}}</span>
+          <span [ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'">{{destination.temperatureLo}}</span>
+          <span [ngClass]="('dir' | translate) === 'ltr' ? 'float-right' : 'float-left'">{{destination.temperatureHi}}</span>
         </div>
         <div class="dest-data">
           <div class="dest-data-wrapper text-uppercase">
