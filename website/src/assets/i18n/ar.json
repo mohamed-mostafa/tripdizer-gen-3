@@ -24,6 +24,7 @@
   },
   "home": {
     "landing": {
+      "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
       "landing_question": "هل تعرف الي اين تريد السفر ؟",
       "have_plan": "نعم, عندي خطة للسفر",
       "surprise_me": "لا ... فاجئني",
