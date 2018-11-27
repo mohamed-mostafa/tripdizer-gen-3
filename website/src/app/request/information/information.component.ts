@@ -24,6 +24,7 @@ export class InformationComponent {
     'referralType': new FormControl('', [Validators.required]),
   };
   referralTypes: Array<{ id: number, name: string }>;
+  maxDate = new Date();
 
   constructor(
     route: ActivatedRoute,

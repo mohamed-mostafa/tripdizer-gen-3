@@ -27,7 +27,7 @@
   <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-error>
-    <input matInput [matDatepicker]="travelerBirthdayPicker" id="traveler-birthday" class="custom-bs text-yellow text-uppercase font-weight-bold"
+    <input matInput [max]="maxDate" [matDatepicker]="travelerBirthdayPicker" id="traveler-birthday" class="custom-bs text-yellow text-uppercase font-weight-bold"
       [placeholder]="'request.information.birthday' | translate" (focus)="travelerBirthdayPicker.open()"
       formControlName="travelerBirthday">
     <mat-datepicker #travelerBirthdayPicker></mat-datepicker>

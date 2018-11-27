@@ -20,6 +20,7 @@ export class DepartureReturnComponent {
     'returnDate': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
     'isFlexibleDates': new FormControl()
   };
+  minDate = new Date();
 
   constructor(
     route: ActivatedRoute,

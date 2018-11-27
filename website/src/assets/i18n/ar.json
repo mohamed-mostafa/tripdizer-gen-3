@@ -5,6 +5,7 @@
   },
   "core": {
     "footer": {
+      "logo": "../../../assets/img/logo-black.svg",
       "slogan": "نعدك بتوفير وقتك و نقودك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
       "location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
       "plan_trip": "خطط لرحلتك"
@@ -105,7 +106,8 @@
       "estimated_cost": "التكلفة",
       "travel_assistance": "المساعدة",
       "information": "خطوة أخيرة",
-      "ticket": ""
+      "ticket": "",
+      "adults": "{{adultsNumber}} بالغين"
     },
     "preferences": {},
     "purpose": {},
