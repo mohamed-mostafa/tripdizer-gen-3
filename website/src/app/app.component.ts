@@ -5,7 +5,7 @@ declare const gtag: Function;
 
 @Component({
   selector: 'c-root',
-  template: `<span dir="{{ 'dir' | translate }}" [class.rtl]="('dir' | translate) === 'rtl'">
+  template: `<span [dir]="'dir' | translate" [class.rtl]="('dir' | translate) === 'rtl'">
   <router-outlet></router-outlet><c-core-social></c-core-social>
 </span>`
 })

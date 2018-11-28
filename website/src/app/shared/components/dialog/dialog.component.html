@@ -1,16 +1,18 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
-  <p *ngIf="data.description">{{data.description}}</p>
-  <form [formGroup]="formGroup" class="mb-3">
-    <mat-form-field *ngFor="let input of data.inputs" class="w-100 my-2">
-      <mat-hint>{{formGroup.controls[input.id].errors | errorMessage}}</mat-hint>
-      <mat-error>{{formGroup.controls[input.id].errors | errorMessage}}</mat-error>
-      <input matInput [type]="input.type" [id]="input.id" class="custom-bs text-yellow text-uppercase font-weight-bold"
-        [placeholder]="input.placeHolder" [formControlName]="input.id">
-    </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions class="d-block text-center">
-  <button mat-button (click)="onCancel()" class="btn custom-bs btn-rounded btn-dark-light mx-2">{{data.buttonsLabel.cancel}}</button>
-  <button mat-button (click)="onOK()" [disabled]="formGroup.invalid" class="btn custom-bs btn-rounded btn-primary mx-2">{{data.buttonsLabel.ok}}</button>
-</div>
+<span [dir]="'dir' | translate" [ngClass]="{'text-right rtl': ('dir' | translate) === 'rtl'}">
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <div mat-dialog-content>
+    <p *ngIf="data.description">{{data.description}}</p>
+    <form [formGroup]="formGroup" class="mb-3">
+      <mat-form-field *ngFor="let input of data.inputs" class="w-100 my-2">
+        <mat-hint>{{formGroup.controls[input.id].errors | errorMessage}}</mat-hint>
+        <mat-error>{{formGroup.controls[input.id].errors | errorMessage}}</mat-error>
+        <input matInput [type]="input.type" [id]="input.id" class="custom-bs text-yellow text-uppercase font-weight-bold"
+          [placeholder]="input.placeHolder" [formControlName]="input.id">
+      </mat-form-field>
+    </form>
+  </div>
+  <div mat-dialog-actions class="d-block text-center">
+    <button mat-button (click)="onCancel()" class="btn custom-bs btn-rounded btn-dark-light mx-2">{{data.buttonsLabel.cancel}}</button>
+    <button mat-button (click)="onOK()" [disabled]="formGroup.invalid" class="btn custom-bs btn-rounded btn-primary mx-2">{{data.buttonsLabel.ok}}</button>
+  </div>
+</span>
