@@ -125,6 +125,7 @@
     "preferences": {},
     "purpose": {},
     "recommended_destinations": {
+      "rank": "Rank",
       "highest": "Highest",
       "lowest": "Lowest"
     },
