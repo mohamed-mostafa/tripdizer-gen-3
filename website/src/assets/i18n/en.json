@@ -15,7 +15,7 @@
     "error_messages": {
       "required": "Required",
       "validDate": "Date format D / M / Y",
-      "matDatepickerParse": "Date format D / M / Y",
+      "matDatepickerParse": "Invalid date",
       "compareDates": "Invalid dates",
       "email": "Invalid email address",
       "numericOnly": "Numeric only",

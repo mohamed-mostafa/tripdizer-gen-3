@@ -14,7 +14,8 @@ export class ErrorMessagePipe implements PipeTransform {
 
     transform(obj: Object, separator: string = ', '): string {
         if (obj && obj instanceof Object) {
-            return Object.keys(obj).map(key => typeof obj[key] === 'boolean' ? this.errorMessages[key] : obj[key]).join(separator);
+            return Object.keys(obj).map(key => typeof obj[key] === 'string' ? obj[key] : this.errorMessages[key])
+                .filter((v, i, s) => s.indexOf(v) === i).join(separator);
         }
         return '';
     }

@@ -15,7 +15,7 @@
     "error_messages": {
       "required": "مطلوب",
       "validDate": "يوم/شهر/سنة",
-      "matDatepickerParse": "يوم/شهر/سنة",
+      "matDatepickerParse": "التاريخ غير صحيح",
       "compareDates": "التواريخ غير صحيحة",
       "email": "البريد الإلكتروني غير صحيح",
       "numericOnly": "أرقام فقط",
