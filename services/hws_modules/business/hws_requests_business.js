@@ -358,8 +358,8 @@ var recommendationFuncs = {
 		let sumOfInterests = 0;
 		requestInterests = requestInterests.map(ri => ({
 			id: ri.id || ri,
-			percentage: ri.percentage || 0
-		}));
+			percentage: ri.percentage || 100 // if none, then its a 100, otherwise, its not even there
+ 		}));
 		for (let i = 0; i < requestInterests.length; i++) {
 			itineraryInterest = itineraryInterests.find(ii => ii.interest_Id == requestInterests[i].id);
 			if (itineraryInterest) {
