@@ -96,7 +96,7 @@ var itirnaryDaoMock = {
 			],
 			interests: [
 				{interest_Id: 1, Percentage: 100}, // activities
-				{interest_Id: 2, Percentage: 100}, // history
+				{interest_Id: 2, Percentage: 25}, // history
 				{interest_Id: 3, Percentage: 25}, // night life
 				{interest_Id: 4, Percentage: 100}, // beaches
 				{interest_Id: 5, Percentage: 50}, // nature

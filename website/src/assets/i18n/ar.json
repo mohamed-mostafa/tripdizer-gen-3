@@ -125,18 +125,13 @@
     "preferences": {},
     "purpose": {},
     "recommended_destinations": {
+      "rank": "مرتبة",
       "highest": "الأكثر ملاءمة",
       "lowest": "الأقل ملاءمة"
     },
     "ticket": {
       "request_number": "رقم الطلب",
       "adults": "{{adultsNumber}} بالغين",
-      "lg_sizes": {
-
-      },
-      "sm_sizes": {
-
-      },
       "lg_text": {
         "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
         "line2": "ما لم يكن عندة الشجاعة الكافية لغياب الشاطئ عن نظره",

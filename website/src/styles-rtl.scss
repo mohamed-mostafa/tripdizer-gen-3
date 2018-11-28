@@ -134,4 +134,16 @@
       }
     }
   }
+
+  .destination-container {
+    .destination-flag {
+      left: initial !important;
+      right: 0;
+      transform: rotateY(180deg);
+
+      .destination-flag-text {
+        transform: rotate3d(0.41, 1, 0, 180deg) translate(15px, 23px);
+      }
+    }
+  }
 }
