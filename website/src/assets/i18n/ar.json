@@ -15,8 +15,9 @@
     "error_messages": {
       "required": "مطلوب",
       "validDate": "يوم/شهر/سنة",
+      "matDatepickerParse": "يوم/شهر/سنة",
       "compareDates": "التواريخ غير صحيحة",
-      "email": "البريد الالكتروني غير صحيح",
+      "email": "البريد الإلكتروني غير صحيح",
       "numericOnly": "أرقام فقط",
       "equalTo": "غير متطابقين",
       "copyPaste": "رجاء لا تقوم بالنسخ و اللصق"
@@ -58,7 +59,8 @@
     "departure_return": {
       "departure": "سفر",
       "return": "عودة",
-      "flexible": "تواريخ مرنة (+/- 3 أيام)"
+      "flexible": "تواريخ مرنة (+/- 3 أيام)",
+      "compare_dates": "السفر يجب ان يكون قبل العودة"
     },
     "destinations": {
       "dialog": {
@@ -90,25 +92,31 @@
       "next_label": "إرسال",
       "name": "الأسم",
       "mobile": "رقم الموبايل",
-      "email": "البريد الألكتروني",
-      "confirm_email": "تأكيد البريد الألكتروني",
+      "email": "البريد الإلكتروني",
+      "confirm_email": "تأكيد البريد الإلكتروني",
       "birthday": "تاريخ الميلاد",
-      "referral": "كيف عرفت عنا ؟"
+      "referral": "كيف عرفت عنا؟",
+      "equal_to": "البريد الإلكتروني غير متطابق"
     },
     "nav_bar": {
       "traveling_from": "مسافر من",
       "traveling_to": "مسافر إلي",
       "departure_return": "سفر و عودة",
-      "travelers": "المسافرين",
+      "travelers": {
+        "title": "المسافرين",
+        "value": "{{adultsNumber}} بالغين"
+      },
       "budget": "الميزانية",
       "purpose": "غرض السفر",
       "preferences": "الإهتمامات",
       "destinations": "الوجهات",
       "estimated_cost": "التكلفة",
       "travel_assistance": "المساعدة",
-      "information": "خطوة أخيرة",
-      "ticket": "",
-      "adults": "{{adultsNumber}} بالغين"
+      "information": {
+        "title": "خطوة أخيرة",
+        "value": "معلومات"
+      },
+      "ticket": ""
     },
     "preferences": {},
     "purpose": {},
@@ -119,6 +127,12 @@
     "ticket": {
       "request_number": "رقم الطلب",
       "adults": "{{adultsNumber}} بالغين",
+      "lg_sizes": {
+
+      },
+      "sm_sizes": {
+
+      },
       "lg_text": {
         "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
         "line2": "ما لم يكن عندة الشجاعة الكافية لغياب الشاطئ عن نظره",

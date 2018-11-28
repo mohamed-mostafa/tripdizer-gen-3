@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CustomValidators } from '../../shared/utils';
 
 /* Services */
@@ -24,11 +25,15 @@ export class DepartureReturnComponent {
 
   constructor(
     route: ActivatedRoute,
-    private requestService: RequestService
+    private requestService: RequestService,
+    translate: TranslateService
   ) {
+    let compareDatesValidationMsg: string;
+    translate.stream('request.departure_return.compare_dates')
+      .subscribe(validationMsg => compareDatesValidationMsg = validationMsg);
     const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({}, {
-      validators: CustomValidators.dateGreaterThan('departureDate', 'returnDate', 'Return Date must be greater than departure date')
+      validators: CustomValidators.dateGreaterThan('departureDate', 'returnDate', compareDatesValidationMsg)
     });
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {

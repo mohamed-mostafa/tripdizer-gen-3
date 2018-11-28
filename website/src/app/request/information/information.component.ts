@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CustomValidators } from 'src/app/shared/utils';
 
 /* Services */
@@ -28,8 +29,14 @@ export class InformationComponent {
 
   constructor(
     route: ActivatedRoute,
-    private requestService: RequestService
+    private requestService: RequestService,
+    translate: TranslateService
   ) {
+    translate.stream('request.information.equal_to')
+      .subscribe(validationMsg => {
+        (this.controls['travelerEmailConfirmation'] as FormControl)
+          .setValidators([CustomValidators.equalTo('travelerEmail', validationMsg)]);
+      });
     const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {

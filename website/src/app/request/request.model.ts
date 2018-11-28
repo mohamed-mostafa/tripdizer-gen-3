@@ -13,16 +13,15 @@ export class Request {
     traveling_from?: string,
     traveling_to?: string,
     departure_return?: string,
-    travelers?: string,
+    travelers?: { title?: string, value?: string },
     budget?: string,
     purpose?: string,
     preferences?: string,
     destinations?: string,
     estimated_cost?: string,
     travel_assistance?: string,
-    information?: string,
-    ticket?: string,
-    adults?: string
+    information?: { title?: string, value?: string },
+    ticket?: string
   } = {};
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
@@ -77,7 +76,7 @@ export class Request {
   }
   set adultsNumber(value) {
     this._adultsNumber = parseInt(value.toString(), 10);
-    this.translate.get('request.nav_bar.adults', { adultsNumber: this._adultsNumber })
+    this.translate.get('request.nav_bar.travelers.value', { adultsNumber: this._adultsNumber })
       .subscribe(label => this.setAdultsNavBarLabel(label));
   }
   get adultsNumber(): number {
@@ -252,11 +251,11 @@ export class Request {
         }
       },
       {
-        key: 'travelers', title: this._localeLabels.travelers, path: 'travelers', order: 3,
+        key: 'travelers', title: this._localeLabels.travelers.title, path: 'travelers', order: 3,
         requiredForRecommendation: true, requiredForEstimateCalc: true,
         value: ((): string => {
           if (!this._adultsNumber) { return null; }
-          return this._localeLabels.adults;
+          return this._localeLabels.travelers.value;
         })(),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(3) === -1) { return false; }
@@ -341,8 +340,8 @@ export class Request {
         }
       },
       {
-        key: 'information', title: this._localeLabels.information, path: 'information', order: 10,
-        value: 'Information',
+        key: 'information', title: this._localeLabels.information.title, path: 'information', order: 10,
+        value: this._localeLabels.information.value,
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
           if (!this._traveler
@@ -366,7 +365,6 @@ export class Request {
 
   constructor(private currencyPipe: CurrencyPipe, private translate: TranslateService) {
     translate.get('currency').subscribe(currency => this.setCurrency(currency));
-    translate.get('request.nav_bar.adults', { adultsNumber: this.adultsNumber || 0 }).subscribe(label => this.setAdultsNavBarLabel(label));
     translate.get('request.nav_bar').subscribe(labels => this.setNavBarLabels(labels));
     this._requestType = RequestType.HavePlan;
     this._touchedSteps = [];
@@ -384,12 +382,12 @@ export class Request {
     this._localeLabels.currency = currency;
   }
 
-  private setAdultsNavBarLabel(label: string): void {
-    this._localeLabels.adults = label;
-  }
-
   private setNavBarLabels(labels: Object): void {
     Object.keys(labels).forEach(key => this._localeLabels[key] = labels[key]);
+  }
+
+  private setAdultsNavBarLabel(label: string): void {
+    this._localeLabels.travelers = { ...this._localeLabels.travelers, value: label };
   }
 
   setRequestType(requestType: RequestType): void {

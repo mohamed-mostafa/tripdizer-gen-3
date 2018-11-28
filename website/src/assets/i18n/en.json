@@ -15,6 +15,7 @@
     "error_messages": {
       "required": "Required",
       "validDate": "Date format D / M / Y",
+      "matDatepickerParse": "Date format D / M / Y",
       "compareDates": "Invalid dates",
       "email": "Invalid email address",
       "numericOnly": "Numeric only",
@@ -58,7 +59,8 @@
     "departure_return": {
       "departure": "Departure",
       "return": "Return",
-      "flexible": "Flexible dates ( +/- 3 days )"
+      "flexible": "Flexible dates ( +/- 3 days )",
+      "compare_dates": "Return Date must be greater than departure date"
     },
     "destinations": {
       "dialog": {
@@ -93,22 +95,28 @@
       "email": "Email",
       "confirm_email": "Confirm Email",
       "birthday": "Birthday",
-      "referral": "How did you know about us?"
+      "referral": "How did you know about us?",
+      "equal_to": "Email doesn't match"
     },
     "nav_bar": {
       "traveling_from": "Traveling from",
       "traveling_to": "Traveling to",
       "departure_return": "Departure & Return",
-      "travelers": "Travelers",
+      "travelers": {
+        "title": "Travelers",
+        "value": "{{adultsNumber}} adults"
+      },
       "budget": "Budget",
       "purpose": "Purpose",
       "preferences": "Preferences",
       "destinations": "Destinations",
       "estimated_cost": "Estimated Cost",
       "travel_assistance": "Travel Assistance",
-      "information": "One more step",
-      "ticket": "",
-      "adults": "{{adultsNumber}} adults"
+      "information": {
+        "title": "One more step",
+        "value": "Information"
+      },
+      "ticket": ""
     },
     "preferences": {},
     "purpose": {},
