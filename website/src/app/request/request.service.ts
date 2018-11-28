@@ -147,7 +147,7 @@ export class RequestService {
         return observable.pipe(map(destinations => {
             this.Lookups.destinations = destinations;
             this.isLoading.next(false);
-            return destinations;
+            return this.Lookups.destinations;
         }));
     }
 
@@ -177,7 +177,7 @@ export class RequestService {
         return observable.pipe(map(budgetCategories => {
             this.Lookups.budgetCategories = budgetCategories;
             this.isLoading.next(false);
-            return budgetCategories;
+            return this.Lookups.budgetCategories;
         }));
     }
 
@@ -190,9 +190,9 @@ export class RequestService {
             observable = this.http.get<Array<Purpose>>('purposes');
         }
         return observable.pipe(map(purposes => {
-            this.Lookups.purposes = purposes;
+            this.Lookups.purposes = purposes.filter(p => p.id !== 1);
             this.isLoading.next(false);
-            return purposes;
+            return this.Lookups.purposes;
         }));
     }
 
@@ -229,7 +229,7 @@ export class RequestService {
         return observable.pipe(map(preferences => {
             this.Lookups.preferences = preferences;
             this.isLoading.next(false);
-            return preferences;
+            return this.Lookups.preferences;
         }));
     }
 
@@ -278,7 +278,7 @@ export class RequestService {
         return observable.pipe(map(referralTypes => {
             this.Lookups.referralTypes = referralTypes;
             this.isLoading.next(false);
-            return referralTypes;
+            return this.Lookups.referralTypes;
         }));
     }
 
