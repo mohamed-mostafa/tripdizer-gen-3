@@ -358,12 +358,12 @@ var recommendationFuncs = {
 		let sumOfInterests = 0;
 		requestInterests = requestInterests.map(ri => ({
 			id: ri.id || ri,
-			percentage: ri.percentage || 100
+			percentage: ri.percentage || 0
 		}));
 		for (let i = 0; i < requestInterests.length; i++) {
 			itineraryInterest = itineraryInterests.find(ii => ii.interest_Id == requestInterests[i].id);
 			if (itineraryInterest) {
-				sumOfInterests += requestInterests[i].percentage * itineraryInterest.Percentage / 100;
+				sumOfInterests += (requestInterests[i].percentage * itineraryInterest.Percentage / 100);
 			}
 		}
 		var nonZeroPercentInterestsInRequest = requestInterests.filter(ri => ri.percentage > 0);
