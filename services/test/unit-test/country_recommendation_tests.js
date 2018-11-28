@@ -24,16 +24,8 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '05-18-2015', departure_date: '05-11-2015',
 			travel_purpose: 5, // honeymoon
-			// interests: [
-			// 	{id: 1, percentage: 100}, // activities
-			// 	{id: 2, percentage: 0}, // history
-			// 	{id: 3, percentage: 0}, // night life
-			// 	{id: 4, percentage: 100}, // beaches
-			// 	{id: 5, percentage: 0}, // nature
-			// 	{id: 6, percentage: 0}, // shopping
-			// ],
 			preferences: [
-				1, 4
+				1,4
 			],
 			budget_category: 2, // super economy
 			visa_assistance_needed: false
@@ -51,14 +43,6 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '02-18-2015', departure_date: '02-11-2015',
 			travel_purpose: 3, // family
-			// interests: [
-			// 	{id: 1, percentage: 0}, // activities
-			// 	{id: 2, percentage: 100}, // history
-			// 	{id: 3, percentage: 0}, // night life
-			// 	{id: 4, percentage: 0}, // beaches
-			// 	{id: 5, percentage: 0}, // nature
-			// 	{id: 6, percentage: 0}, // shopping
-			// ],
 			preferences: [
 				2
 			],
@@ -78,14 +62,6 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '02-18-2015', departure_date: '02-11-2015',
 			travel_purpose: 3, // family
-			// interests: [
-			// 	{id: 1, percentage: 100}, // activities
-			// 	{id: 2, percentage: 0}, // history
-			// 	{id: 3, percentage: 0}, // night life
-			// 	{id: 4, percentage: 0}, // beaches
-			// 	{id: 5, percentage: 0}, // nature
-			// 	{id: 6, percentage: 0}, // shopping
-			// ],
 			preferences: [
 				1
 			],
@@ -107,14 +83,6 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '02-18-2015', departure_date: '02-11-2015',
 			travel_purpose: 4, // group
-			// interests: [
-			// 	{id: 1, percentage: 0}, // activities
-			// 	{id: 2, percentage: 0}, // history
-			// 	{id: 3, percentage: 100}, // night life
-			// 	{id: 4, percentage: 0}, // beaches
-			// 	{id: 5, percentage: 0}, // nature
-			// 	{id: 6, percentage: 100}, // shopping
-			// ],
 			preferences: [
 				3, 6
 			],
@@ -134,14 +102,6 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '06-18-2015', departure_date: '06-11-2015',
 			travel_purpose: 4, // group
-			// interests: [
-			// 	{id: 1, percentage: 0}, // activities
-			// 	{id: 2, percentage: 0}, // history
-			// 	{id: 3, percentage: 100}, // night life
-			// 	{id: 4, percentage: 0}, // beaches
-			// 	{id: 5, percentage: 0}, // nature
-			// 	{id: 6, percentage: 100}, // shopping
-			// ],
 			preferences: [
 				3, 6
 			],
@@ -161,13 +121,8 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '06-18-2015', departure_date: '06-11-2015',
 			travel_purpose: 4, // group
-			interests: [
-				{id: 1, percentage: 0}, // activities
-				{id: 2, percentage: 0}, // history
-				{id: 3, percentage: 100}, // night life
-				{id: 4, percentage: 0}, // beaches
-				{id: 5, percentage: 0}, // nature
-				{id: 6, percentage: 100}, // shopping
+			preferences: [
+				3, 6
 			],
 			budget_category: 4, // mid range 
 			visa_assistance_needed: false
@@ -185,13 +140,8 @@ describe('hws_request_business', function() {
 			itinerary_id: 1,
 			return_date: '06-18-2015', departure_date: '06-11-2015',
 			travel_purpose: 4, // group
-			interests: [
-				{id: 1, percentage: 0}, // activities
-				{id: 2, percentage: 0}, // history
-				{id: 3, percentage: 100}, // night life
-				{id: 4, percentage: 0}, // beaches
-				{id: 5, percentage: 0}, // nature
-				{id: 6, percentage: 100}, // shopping
+			preferences: [
+				3, 6
 			],
 			budget_category: 4, // mid range 
 			visa_assistance_needed: false

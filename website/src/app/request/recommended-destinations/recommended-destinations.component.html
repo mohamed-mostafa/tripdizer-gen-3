@@ -9,7 +9,7 @@
           <span class="float-right">{{destination.temperatureHi}}</span>
         </div>
         <div class="col-5" [class.col-6]="!first && !last" [class.text-right]="('dir' | translate) === 'ltr'">{{'request.recommended_destinations.rank'
-          | translate}}: {{destination.rank||90}}%</div>
+          | translate}}: {{destination.rank||0}}%</div>
         <div class="col-12 dest-data">
           <div class="dest-data-wrapper text-uppercase">
             <div class="dest-name">{{destination.name}},</div>
