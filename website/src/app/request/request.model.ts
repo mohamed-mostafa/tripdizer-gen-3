@@ -19,7 +19,7 @@ export class Request {
     preferences?: string,
     destinations?: string,
     estimated_cost?: string,
-    travel_assistance?: string,
+    travel_assistance?: { title?: string, tourGuide?: string, visaAssistance?: string },
     information?: { title?: string, value?: string },
     ticket?: string
   } = {};
@@ -327,11 +327,11 @@ export class Request {
         }
       },
       {
-        key: 'travelAssistance', title: this._localeLabels.travel_assistance, path: 'travel-assistance', order: 9,
+        key: 'travelAssistance', title: this._localeLabels.travel_assistance.title, path: 'travel-assistance', order: 9,
         value: ((): string => {
           const travelAssistanceParams = [];
-          if (this.visaAssistanceNeeded) { travelAssistanceParams.push('Visa'); }
-          if (this.tourGuideNeeded) { travelAssistanceParams.push('Tour guide'); }
+          if (this.visaAssistanceNeeded) { travelAssistanceParams.push(this._localeLabels.travel_assistance.visaAssistance); }
+          if (this.tourGuideNeeded) { travelAssistanceParams.push(this._localeLabels.travel_assistance.tourGuide); }
           return travelAssistanceParams.join(', ');
         })(),
         isValid: (): boolean => {

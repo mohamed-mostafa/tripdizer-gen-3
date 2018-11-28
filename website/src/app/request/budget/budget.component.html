@@ -5,7 +5,7 @@
       <span class="mat-radio-group-subscript">{{formGroup.controls.budget.errors | errorMessage}}</span>
     </div>
     <mat-slider min="1" max="999999" step="10" class="col-12 col-lg-8" thumbLabel formControlName="budget"></mat-slider>
-    <div class="col-12 mat-display-2 custom-bs text-yellow" [class.text-muted]="!isOwnBudget">
+    <div class="col-12 mat-display-2 custom-bs text-yellow" [class.text-muted]="!isOwnBudget" [class.text-right]="('dir' | translate)=== 'rtl'">
       {{formGroup.controls.budget.value | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'}}
     </div>
     <div class="col-12 text-center budget-categories">

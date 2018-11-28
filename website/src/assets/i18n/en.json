@@ -111,7 +111,11 @@
       "preferences": "Preferences",
       "destinations": "Destinations",
       "estimated_cost": "Estimated Cost",
-      "travel_assistance": "Travel Assistance",
+      "travel_assistance": {
+        "title": "Travel Assistance",
+        "visaAssistance": "Visa",
+        "tourGuide": "Tour guide"
+      },
       "information": {
         "title": "One more step",
         "value": "Information"

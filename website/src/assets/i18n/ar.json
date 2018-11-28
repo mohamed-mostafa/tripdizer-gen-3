@@ -111,7 +111,11 @@
       "preferences": "الإهتمامات",
       "destinations": "الوجهات",
       "estimated_cost": "التكلفة",
-      "travel_assistance": "المساعدة",
+      "travel_assistance": {
+        "title": "المساعدة",
+        "visaAssistance": "التأشيرة",
+        "tourGuide": "مرشد سياحي"
+      },
       "information": {
         "title": "خطوة أخيرة",
         "value": "معلومات"
