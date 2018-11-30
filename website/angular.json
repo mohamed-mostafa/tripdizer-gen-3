@@ -33,8 +33,7 @@
               "./node_modules/owl.carousel/dist/assets/owl.carousel.css",
               "./node_modules/owl.carousel/dist/assets/owl.theme.default.css",
               "src/assets/scss/index.scss",
-              "src/styles.scss",
-              "src/styles-rtl.scss"
+              "src/styles.scss"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
@@ -46,8 +45,8 @@
           "configurations": {
             "production": {
               "fileReplacements": [{
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.prod.ts"
               }],
               "optimization": true,
               "outputHashing": "all",
@@ -59,15 +58,15 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [{
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
               }]
             },
             "development": {
               "fileReplacements": [{
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.dev.ts"
               }],
               "optimization": true,
               "outputHashing": "all",
@@ -79,9 +78,9 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [{
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
               }]
             },
             "staging": {
@@ -99,9 +98,9 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [{
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                "type": "initial",
+                "maximumWarning": "2mb",
+                "maximumError": "5mb"
               }]
             }
           }

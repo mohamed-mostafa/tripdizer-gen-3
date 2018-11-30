@@ -26,10 +26,10 @@
   "home": {
     "landing": {
       "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-      "landing_question": "هل تعرف الي اين تريد السفر ؟",
+      "landing_question": "هل تعرف الي اين تريد السفر؟",
       "have_plan": "نعم, عندي خطة للسفر",
       "surprise_me": "لا ... فاجئني",
-      "scroll_down": "إنزل للأسفل"
+      "scroll_down": "إنــــــــــــــــــزل لـلأســــفــــــــــــــــــل"
     },
     "testimonials": {
       "featured_in": "تم ذكرنا في"
@@ -65,7 +65,7 @@
     "destinations": {
       "dialog": {
         "title": "وجهة أخرى",
-        "description": "الي اين تريد السفر ؟",
+        "description": "الي اين تريد السفر؟",
         "inputs": {
           "input0": "حدد وجهتك"
         },
