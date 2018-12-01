@@ -17,20 +17,18 @@ export class TicketComponent {
   ticket: Ticket;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    route: ActivatedRoute,
+    router: Router,
     private requestService: RequestService
   ) {
-    this.currentStepPath = this.route.routeConfig.path;
     requestService.submitRequest().subscribe((response: Ticket | null) => {
       if (response) {
         this.ticket = response;
       } else {
-        this.router.navigate(['../', this.requestService.getPrevInvalidStep(this.currentStepPath)],
-          { relativeTo: this.route });
+        router.navigate(['../', this.requestService.getPrevInvalidStep(this.currentStepPath)],
+          { relativeTo: route });
       }
     });
-    requestService.stepVisited(this.currentStepPath);
   }
 
   serializeSVG(elementId: string): string {
