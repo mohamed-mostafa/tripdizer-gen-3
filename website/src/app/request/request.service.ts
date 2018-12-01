@@ -96,7 +96,7 @@ export class RequestService {
 
     stepVisited(stepPath: string): void {
         const step = this.requestData.validSteps.find(s => s.path === stepPath);
-        if (step) { this.requestData.touchedSteps = step.order; }
+        if (step) { this.requestData.touchStep(step.order); }
     }
 
     getNextStep(stepPath: string): string {
@@ -323,9 +323,10 @@ export class RequestService {
             const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
             return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request })
                 .pipe(map(requestResponse => {
+                    const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
                     this.resetRequestState();
                     this.isLoading.next(false);
-                    return Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
+                    return ticket;
                 }));
         }
         return of(null).pipe(finalize(() => this.isLoading.next(false)));

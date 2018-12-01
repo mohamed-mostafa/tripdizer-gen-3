@@ -48,9 +48,6 @@ export class Request extends CommonFunctions {
   private _traveler: IRequester;
   private _referralType: number;
 
-  set touchedSteps(value: number) {
-    this._touchedSteps.push(value);
-  }
   set travelingFrom(value: string) {
     this._travelingFrom = value;
   }
@@ -421,6 +418,10 @@ export class Request extends CommonFunctions {
 
   setRequestType(requestType: RequestType): void {
     this._requestType = requestType;
+  }
+
+  touchStep(value: number) {
+    this._touchedSteps.push(value);
   }
 
   addPreference(preference: Preference): void {
