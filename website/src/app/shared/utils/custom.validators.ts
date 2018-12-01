@@ -47,7 +47,8 @@ export class CustomValidators {
         return (c: AbstractControl): { [key: string]: string | boolean } | null => {
             if (c.parent && c.parent.controls[controlName]) {
                 if (c.value === c.parent.controls[controlName].value) { return null; }
-                if (c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
+                if (c.value && c.parent.controls[controlName].value &&
+                    c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
                     return { 'copyPaste': true };
                 }
             }
