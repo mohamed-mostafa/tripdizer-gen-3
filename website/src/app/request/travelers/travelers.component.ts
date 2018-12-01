@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -11,8 +10,6 @@ import { RequestService } from '../request.service';
   styleUrls: ['./travelers.component.scss']
 })
 export class TravelersComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'adultsNumber': new FormControl('', [Validators.required]),
@@ -21,10 +18,8 @@ export class TravelersComponent {
   };
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -32,9 +27,6 @@ export class TravelersComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {

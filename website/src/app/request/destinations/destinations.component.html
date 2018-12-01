@@ -1,4 +1,4 @@
-<div class="h-100 justify-content-center align-items-center d-flex mt-2 mt-sm-3">
+<c-request-form-layout [isButtonsHidden]="true" class="d-flex mt-2 mt-sm-3">
   <div class="destination-container text-center m-auto">
     <div *ngFor="let destination of destinations" (click)="goToNextStep(destination.id)" class="destination m-2 m-sm-3">
       <div class="destination-info">
@@ -16,4 +16,4 @@
       <img class="destination-img" [src]="destination.image" alt="">
     </div>
   </div>
-</div>
+</c-request-form-layout>

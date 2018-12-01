@@ -13,8 +13,6 @@ import { EstimatedCostResponse } from './estimated-cost.model';
   styleUrls: ['./estimated-cost.component.scss']
 })
 export class EstimatedCostComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   estimatedCost: EstimatedCostResponse;
 
   constructor(
@@ -22,18 +20,14 @@ export class EstimatedCostComponent {
     private router: Router,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {
       if (response) {
         this.estimatedCost = response;
       } else {
-        this.router.navigate(['../', this.requestService.getPrevInvalidStepForEstimateCalc(currentStepPath)],
+        this.router.navigate(['../', this.requestService.getPrevInvalidStepForEstimateCalc(route.routeConfig.path)],
           { relativeTo: route });
       }
     });
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
 }

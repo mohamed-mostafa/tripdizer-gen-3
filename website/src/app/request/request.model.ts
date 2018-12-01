@@ -1,6 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import { Moment } from 'moment';
+import * as moment from 'moment';
 import { Preference } from './preferences/preference.model';
 import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
@@ -25,8 +25,8 @@ export class Request {
   } = {};
   private _touchedSteps: Array<number>;
   private _travelingFrom: string;
-  private _departureDate: Moment;
-  private _returnDate: Moment;
+  private _departureDate: moment.Moment;
+  private _returnDate: moment.Moment;
   private _isFlexibleDates: boolean;
   private _adultsNumber: number;
   private _kidsNumber: number;
@@ -56,17 +56,19 @@ export class Request {
   get travelingFrom(): string {
     return this._travelingFrom;
   }
-  set departureDate(value: Moment) {
+  set departureDate(value: moment.Moment) {
+    this.resetEstimatedCost();
     this._departureDate = value;
   }
-  get departureDate(): Moment {
-    return this._departureDate;
+  get departureDate(): moment.Moment {
+    return moment(this._departureDate);
   }
-  set returnDate(value: Moment) {
+  set returnDate(value: moment.Moment) {
+    this.resetEstimatedCost();
     this._returnDate = value;
   }
-  get returnDate(): Moment {
-    return this._returnDate;
+  get returnDate(): moment.Moment {
+    return moment(this._returnDate);
   }
   set isFlexibleDates(value: boolean) {
     this._isFlexibleDates = value;
@@ -75,6 +77,7 @@ export class Request {
     return this._isFlexibleDates || false;
   }
   set adultsNumber(value) {
+    this.resetEstimatedCost();
     this._adultsNumber = parseInt(value.toString(), 10);
     this.translate.get('request.nav_bar.travelers.value', { adultsNumber: this._adultsNumber })
       .subscribe(label => this.setAdultsNavBarLabel(label));
@@ -83,12 +86,14 @@ export class Request {
     return this._adultsNumber;
   }
   set kidsNumber(value) {
+    this.resetEstimatedCost();
     this._kidsNumber = parseInt(value.toString(), 10);
   }
   get kidsNumber(): number {
     return this._kidsNumber || 0;
   }
   set infantsNumber(value) {
+    this.resetEstimatedCost();
     this._infantsNumber = parseInt(value.toString(), 10);
   }
   get infantsNumber(): number {
@@ -101,6 +106,7 @@ export class Request {
     return this.budgetCategory === 1 ? this._budget || 1 : 1;
   }
   set budgetCategory(value) {
+    this.resetEstimatedCost();
     this._budgetCategory = parseInt(value.toString(), 10);
   }
   get budgetCategory(): number {
@@ -131,6 +137,7 @@ export class Request {
     return this._preferenceNames;
   }
   set destination(value: number) {
+    this.resetEstimatedCost();
     this._destination = value;
   }
   get destination(): number {
@@ -184,11 +191,11 @@ export class Request {
   get travelerEmail(): string {
     return this._traveler.email;
   }
-  set travelerBirthday(value: Moment) {
+  set travelerBirthday(value: moment.Moment) {
     this._traveler.birthday = value;
   }
-  get travelerBirthday(): Moment {
-    return this._traveler.birthday;
+  get travelerBirthday(): moment.Moment {
+    return moment(this._traveler.birthday);
   }
   get traveler(): IRequester {
     return this._traveler;
@@ -390,10 +397,23 @@ export class Request {
     this._localeLabels.travelers = { ...this._localeLabels.travelers, value: label };
   }
 
+  private resetEstimatedCost(): void {
+    this._estimatedCost = null;
+  }
+
+  getPureRequest(): Request {
+    const pureRequest = {} as Request;
+    Object.keys(this).forEach(key => {
+      if (key !== 'currencyPipe' && key !== 'translate' && key !== '_estimatedCost') {
+        pureRequest[key] = this[key];
+      }
+    });
+    return pureRequest;
+  }
+
   setRequestType(requestType: RequestType): void {
     this._requestType = requestType;
   }
-
 
   addPreference(preference: Preference): void {
     this._preferences.push(preference.id);

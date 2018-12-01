@@ -1,10 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
@@ -40,10 +40,29 @@ export class RequestService {
 
     constructor(
         private http: HttpClient,
-        currencyPipe: CurrencyPipe,
-        translate: TranslateService
+        private router: Router,
+        private currencyPipe: CurrencyPipe,
+        private translate: TranslateService
     ) {
-        this.requestData = new Request(currencyPipe, translate);
+        this.initRequest();
+    }
+
+    private initRequest(): void {
+        this.requestData = new Request(this.currencyPipe, this.translate);
+        const savedRequest = localStorage.getItem('request');
+        if (savedRequest) {
+            const paredSavedRequest = JSON.parse(savedRequest);
+            Object.keys(paredSavedRequest).forEach(key => this.setProperty(key, paredSavedRequest[key]));
+        }
+    }
+
+    private saveRequestState(): void {
+        localStorage.setItem('request', JSON.stringify(this.requestData.getPureRequest()));
+    }
+
+    private resetRequestState(): void {
+        localStorage.removeItem('request');
+        this.initRequest();
     }
 
     setRequestType(params: Params): boolean {
@@ -62,6 +81,11 @@ export class RequestService {
 
     getNavBar(): Array<Step> {
         return this.requestData.navBar;
+    }
+
+    redirectIfShouldBeRedirected(stepPath: string): void {
+        const prevInvalidStep = this.getPrevInvalidStep(stepPath);
+        this.router.navigate(['../request/', prevInvalidStep]);
     }
 
     stepVisited(stepPath: string): void {
@@ -89,7 +113,7 @@ export class RequestService {
         const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
             prevSteps = this.requestData.validSteps
                 .filter(s => s.requiredForRecommendation && s.order < currentStep.order)
-                .sort((a, b) => b.order - a.order);
+                .sort((a, b) => a.order - b.order);
         for (let i = 0; i < prevSteps.length; ++i) {
             if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
         }
@@ -100,7 +124,7 @@ export class RequestService {
         const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
             prevSteps = this.requestData.validSteps
                 .filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
-                .sort((a, b) => b.order - a.order);
+                .sort((a, b) => a.order - b.order);
         for (let i = 0; i < prevSteps.length; ++i) {
             if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
         }
@@ -111,7 +135,7 @@ export class RequestService {
         const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
             prevSteps = this.requestData.validSteps
                 .filter(s => s.order < currentStep.order)
-                .sort((a, b) => b.order - a.order);
+                .sort((a, b) => a.order - b.order);
         for (let i = 0; i < prevSteps.length; ++i) {
             if (!prevSteps[i].isValid()) { return prevSteps[i].path; }
         }
@@ -130,6 +154,7 @@ export class RequestService {
             value: this.requestData.validSteps.find(s => s.key === key),
             navBar: this.requestData.navBar
         });
+        this.saveRequestState();
     }
 
     getProperty(key: string): any {
@@ -246,7 +271,7 @@ export class RequestService {
                 (`${this.endPoint}/recommendation`, { request: recommendedDestinationsRequest })
                 .pipe(map(recommendedDestinations => { this.isLoading.next(false); return recommendedDestinations; }));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
     isValidForEstimatedCost(): boolean {
@@ -264,7 +289,7 @@ export class RequestService {
                     return estimatedCostResponse;
                 }));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
     getReferralTypes(): Observable<Array<any> | null> {
@@ -292,11 +317,12 @@ export class RequestService {
             const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
             return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request })
                 .pipe(map(requestResponse => {
+                    this.resetRequestState();
                     this.isLoading.next(false);
                     return Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
                 }));
         }
-        return of(null);
+        return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
 }

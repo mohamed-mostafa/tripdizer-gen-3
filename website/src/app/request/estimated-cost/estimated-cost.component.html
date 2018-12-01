@@ -1,4 +1,4 @@
-<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath">
+<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true">
   <div class="row" [class.text-right]="('dir' | translate)=== 'rtl'">
     <div class="col-12 my-1 p-0 total-budget">{{estimatedCost?.totalBudget | currency:'EGP':('currency.EGP' |
       translate)+' ':'0.0-0'}}</div>

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,17 +13,13 @@ import { Preference } from './preference.model';
   styleUrls: ['./preferences.component.scss']
 })
 export class PreferencesComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {};
   preferences: Array<Preference>;
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     requestService.getPreferences().subscribe((preferences: Array<Preference>) => {
       this.preferences = preferences;
@@ -38,9 +33,6 @@ export class PreferencesComponent {
         }
       }
     });
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {
