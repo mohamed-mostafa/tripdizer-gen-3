@@ -321,6 +321,7 @@ export class Request extends CommonFunctions {
       },
       {
         key: 'estimatedCost', title: this._localeLabels.estimated_cost, path: 'estimated-cost', order: 8,
+        isDisabled: this.destination === -1,
         value: ((): string => {
           if (this._estimatedCost == null) { return null; }
           return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
