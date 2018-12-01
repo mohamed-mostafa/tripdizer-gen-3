@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 
 /* Models */
 import { Step } from '../step.model';
@@ -30,8 +30,8 @@ export class RequestNavBarComponent implements AfterViewInit {
       }, 0);
     });
     router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.currentPath = event.urlAfterRedirects;
+      if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
+        this.currentPath = (event as NavigationEnd).urlAfterRedirects || event.url;
         const splittedUrl = this.currentPath.split('/');
         if (this.currentPath && splittedUrl) {
           this.currentPath = splittedUrl[splittedUrl.length - 1];
