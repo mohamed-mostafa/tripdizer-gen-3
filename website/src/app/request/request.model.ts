@@ -204,7 +204,7 @@ export class Request {
     this._referralType = value;
   }
   get referralType(): number {
-    return this._referralType || 1;
+    return this._referralType;
   }
 
   get validSteps(): Array<Step> {
