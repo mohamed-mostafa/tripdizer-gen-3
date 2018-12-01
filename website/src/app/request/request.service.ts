@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -51,8 +52,13 @@ export class RequestService {
         this.requestData = new Request(this.currencyPipe, this.translate);
         const savedRequest = localStorage.getItem('request');
         if (savedRequest) {
-            const paredSavedRequest = JSON.parse(savedRequest);
-            Object.keys(paredSavedRequest).forEach(key => this.setProperty(key, paredSavedRequest[key]));
+            try {
+                const parsedSavedRequest = JSON.parse(savedRequest);
+                const shouldExpired = moment(parsedSavedRequest.date).diff(moment(), 'days') <= 7;
+                Object.keys(parsedSavedRequest).forEach(key => this.setProperty(key, parsedSavedRequest[key]));
+            } catch (ex) {
+                localStorage.removeItem('request');
+            }
         }
     }
 

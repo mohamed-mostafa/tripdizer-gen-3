@@ -401,13 +401,17 @@ export class Request {
     this._estimatedCost = null;
   }
 
-  getPureRequest(): Request {
-    const pureRequest = {} as Request;
+  getPureRequest(): any {
+    const pureRequest = {};
     Object.keys(this).forEach(key => {
-      if (key !== 'currencyPipe' && key !== 'translate' && key !== '_estimatedCost') {
+      if (key !== 'currencyPipe'
+        && key !== 'translate'
+        && key !== '_localeLabels'
+        && key !== '_estimatedCost') {
         pureRequest[key] = this[key];
       }
     });
+    pureRequest['date'] = moment();
     return pureRequest;
   }
 
