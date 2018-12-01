@@ -1,12 +1,13 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { CommonFunctions } from '../shared/utils';
 import { Preference } from './preferences/preference.model';
 import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 
-export class Request {
+export class Request extends CommonFunctions {
   private _requestType: RequestType;
   private _localeLabels: {
     currency?: any,
@@ -61,14 +62,14 @@ export class Request {
     this._departureDate = value;
   }
   get departureDate(): moment.Moment {
-    return moment(this._departureDate);
+    return this._departureDate ? moment(this._departureDate) : null;
   }
   set returnDate(value: moment.Moment) {
     this.resetEstimatedCost();
     this._returnDate = value;
   }
   get returnDate(): moment.Moment {
-    return moment(this._returnDate);
+    return this._returnDate ? moment(this._returnDate) : null;
   }
   set isFlexibleDates(value: boolean) {
     this._isFlexibleDates = value;
@@ -195,7 +196,7 @@ export class Request {
     this._traveler.birthday = value;
   }
   get travelerBirthday(): moment.Moment {
-    return moment(this._traveler.birthday);
+    return this._traveler.birthday ? moment(this._traveler.birthday) : null;
   }
   get traveler(): IRequester {
     return this._traveler;
@@ -371,6 +372,7 @@ export class Request {
   }
 
   constructor(private currencyPipe: CurrencyPipe, private translate: TranslateService) {
+    super();
     translate.get('currency').subscribe(currency => this.setCurrency(currency));
     translate.get('request.nav_bar').subscribe(labels => this.setNavBarLabels(labels));
     this._requestType = RequestType.HavePlan;
@@ -408,7 +410,9 @@ export class Request {
         && key !== 'translate'
         && key !== '_localeLabels'
         && key !== '_estimatedCost') {
-        pureRequest[key] = this[key];
+        const setterName = key.replace(/^_/, '');
+        const isSetterExists = Request.setters().indexOf(setterName) !== -1;
+        pureRequest[isSetterExists ? setterName : key] = this[key];
       }
     });
     pureRequest['date'] = moment();
