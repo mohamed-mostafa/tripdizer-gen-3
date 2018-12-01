@@ -18,7 +18,7 @@ export class CustomValidators {
                 c1Date = c1.value, c2Date = c2.value;
             let c1errors = c1.errors, c2errors = c2.errors;
             error[errorKey] = errorMessage || true;
-            if ((c1Date !== null && c2Date !== null) && c1Date > c2Date) {
+            if ((c1Date !== null && c2Date !== null) && c1Date >= c2Date) {
                 c1.setErrors(c1errors ? { ...c1errors, ...error } : error);
                 c2.setErrors(c2errors ? { ...c2errors, ...error } : error);
                 return error;

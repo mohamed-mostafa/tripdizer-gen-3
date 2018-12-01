@@ -60,7 +60,7 @@
       "departure": "سفر",
       "return": "عودة",
       "flexible": "تواريخ مرنة (+/- 3 أيام)",
-      "compare_dates": "السفر يجب ان يكون قبل العودة"
+      "compare_dates": "تاريخ العودة يجب ان يكون بعد السفر"
     },
     "destinations": {
       "dialog": {
