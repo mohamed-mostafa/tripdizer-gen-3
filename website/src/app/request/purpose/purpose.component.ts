@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,8 +13,6 @@ import { Purpose } from './purpose.model';
   styleUrls: ['./purpose.component.scss']
 })
 export class PurposeComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'purpose': new FormControl('', [Validators.required]),
@@ -23,10 +20,8 @@ export class PurposeComponent {
   purposes: Array<Purpose>;
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -35,9 +30,6 @@ export class PurposeComponent {
       }
     }
     requestService.getPurposes().subscribe((purposes: Array<Purpose>) => this.purposes = purposes);
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {

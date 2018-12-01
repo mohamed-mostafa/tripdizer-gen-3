@@ -18,7 +18,7 @@ export class CustomValidators {
                 c1Date = c1.value, c2Date = c2.value;
             let c1errors = c1.errors, c2errors = c2.errors;
             error[errorKey] = errorMessage || true;
-            if ((c1Date !== null && c2Date !== null) && c1Date > c2Date) {
+            if ((c1Date !== null && c2Date !== null) && c1Date >= c2Date) {
                 c1.setErrors(c1errors ? { ...c1errors, ...error } : error);
                 c2.setErrors(c2errors ? { ...c2errors, ...error } : error);
                 return error;
@@ -47,7 +47,8 @@ export class CustomValidators {
         return (c: AbstractControl): { [key: string]: string | boolean } | null => {
             if (c.parent && c.parent.controls[controlName]) {
                 if (c.value === c.parent.controls[controlName].value) { return null; }
-                if (c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
+                if (c.value && c.parent.controls[controlName].value &&
+                    c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
                     return { 'copyPaste': true };
                 }
             }

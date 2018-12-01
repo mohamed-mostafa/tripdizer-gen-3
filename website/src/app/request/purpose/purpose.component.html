@@ -1,4 +1,4 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()" marginTop="3 ">
+<c-request-form-layout [formGroup]="formGroup" (next)="save()" marginTop="3">
   <mat-radio-group class="image form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row" formControlName="purpose">
     <mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
       {{purpose.name}}

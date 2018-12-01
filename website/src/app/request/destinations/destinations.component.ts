@@ -37,7 +37,6 @@ export class DestinationsComponent {
   ) {
     this.currentStepPath = this.route.routeConfig.path;
     requestService.getDestinations().subscribe((response: Array<Destination>) => this.destinations = response);
-    requestService.stepVisited(this.currentStepPath);
     translate.get('request.destinations.dialog').subscribe(labels => this.dialogLabels = labels);
   }
 

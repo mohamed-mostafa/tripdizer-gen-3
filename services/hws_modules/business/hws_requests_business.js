@@ -60,7 +60,9 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 
 		onSuccess(request);
 
-		if (request.traveler.name !== 'Essawy') {
+		if (request.traveler.name === 'Essawy') {
+			requestsDao.modifyRequestStatusById(request.id, 11);
+		} else {
 			// notify creation
 			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == "TRUE")
 				emailBusiness.sendEmail("bookings@tripdizer.com", "notifications@tripdizer.com", "Request #" + request.id + " is placed at Tripdizer", request.traveler.name + " has just placed a new request at Tripdizer. Visit the Dashboard to view its details.");
@@ -75,10 +77,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					console.log("Failed to notify partners");
 				});
 			}
-		}
 
-		if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
-			googlePeopleAdapter.createNewContact(request.traveler.email, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
+				googlePeopleAdapter.createNewContact(request.traveler.email, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+		}
 
 	}, function (err) {
 		// respond to caller
@@ -292,10 +294,30 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 			}
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
-					itineraries[i].rank += itineraries[i].recommendationRanks[rank];
+					let factor = 0;
+					switch (rank) {
+						case budget:
+							factor = 0.3;
+							break;
+						case purpose:
+							factor = 0.2;
+							break;
+						case season:
+							factor = 0.3;
+							break;
+						case interest:
+							factor = 0.2;
+							break;
+						case needsVisa:
+							factor = 0;
+							break;
+						default:
+							factor = 0;
+							break;
+					}
+					itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
 				}
 			}
-			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
 		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,

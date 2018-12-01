@@ -1,5 +1,4 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()"
-  marginTop="3">
+<c-request-form-layout [formGroup]="formGroup" (next)="save()" marginTop="3">
   <mat-radio-group class="number form-control-xl" formControlName="adultsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.adultsNumber.invalid">
       <span class="mat-radio-group-label" [translate]="'request.travelers.adults'"></span>

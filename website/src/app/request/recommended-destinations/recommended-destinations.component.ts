@@ -31,7 +31,6 @@ export class RecommendedDestinationsComponent {
           { relativeTo: this.route });
       }
     });
-    requestService.stepVisited(this.currentStepPath);
   }
 
   save(destinationId: number): boolean {

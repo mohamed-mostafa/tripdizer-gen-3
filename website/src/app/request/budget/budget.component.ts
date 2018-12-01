@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,8 +13,6 @@ import { BudgetCategory } from './budget-category.model';
   styleUrls: ['./budget.component.scss']
 })
 export class BudgetComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'budgetCategory': new FormControl(),
@@ -25,10 +22,8 @@ export class BudgetComponent {
   isOwnBudget;
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -50,9 +45,6 @@ export class BudgetComponent {
       }
     });
     requestService.getBudgetCategories().subscribe((budgetCategories: Array<BudgetCategory>) => this.budgetCategories = budgetCategories);
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {

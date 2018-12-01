@@ -5,7 +5,7 @@
   },
   "core": {
     "footer": {
-      "logo": "../../../assets/img/logo-black.svg",
+      "logo": "../../../assets/img/logo-250x131.svg",
       "slogan": "نعدك بتوفير وقتك و نقودك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
       "location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
       "plan_trip": "خطط لرحلتك"
@@ -26,10 +26,10 @@
   "home": {
     "landing": {
       "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-      "landing_question": "هل تعرف الي اين تريد السفر ؟",
+      "landing_question": "هل تعرف الي اين تريد السفر؟",
       "have_plan": "نعم, عندي خطة للسفر",
       "surprise_me": "لا ... فاجئني",
-      "scroll_down": "إنزل للأسفل"
+      "scroll_down": "إنــــــــــــــــــزل لـلأســــفــــــــــــــــــل"
     },
     "testimonials": {
       "featured_in": "تم ذكرنا في"
@@ -60,12 +60,12 @@
       "departure": "سفر",
       "return": "عودة",
       "flexible": "تواريخ مرنة (+/- 3 أيام)",
-      "compare_dates": "السفر يجب ان يكون قبل العودة"
+      "compare_dates": "تاريخ العودة يجب ان يكون بعد السفر"
     },
     "destinations": {
       "dialog": {
         "title": "وجهة أخرى",
-        "description": "الي اين تريد السفر ؟",
+        "description": "الي اين تريد السفر؟",
         "inputs": {
           "input0": "حدد وجهتك"
         },

@@ -1,5 +1,4 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()"
-  nextLabel="{{'request.information.next_label' | translate}}">
+<c-request-form-layout [formGroup]="formGroup" [nextLabel]="'request.information.next_label' | translate" (next)="save()">
   <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-error>
@@ -33,6 +32,8 @@
     <mat-datepicker #travelerBirthdayPicker></mat-datepicker>
   </mat-form-field>
   <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.referralType.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.referralType.errors | errorMessage}}</mat-error>
     <mat-select formControlName="referralType" [placeholder]="'request.information.referral' | translate">
       <mat-option *ngFor="let type of referralTypes" [value]="type.id">{{type.name}}</mat-option>
     </mat-select>

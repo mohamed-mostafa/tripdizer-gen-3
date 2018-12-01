@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -11,8 +10,6 @@ import { RequestService } from '../request.service';
   styleUrls: ['./travel-assistance.component.scss']
 })
 export class TravelAssistanceComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'visaAssistanceNeeded': new FormControl(),
@@ -21,10 +18,8 @@ export class TravelAssistanceComponent {
   };
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService
   ) {
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -32,9 +27,6 @@ export class TravelAssistanceComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {

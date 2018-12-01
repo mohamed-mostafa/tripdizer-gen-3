@@ -1,4 +1,4 @@
-<c-request-form-layout [formGroup]="formGroup" [nextStepPath]="nextStepPath" [prevStepPath]="prevStepPath" (next)="save()">
+<c-request-form-layout [formGroup]="formGroup" (next)="save()">
   <mat-radio-group class="text form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row" formControlName="budgetCategory">
     <div class="mat-radio-group-label-wrapper text-capitalize col-12" [class.mat-error]="formGroup.controls.budget.invalid">
       <span class="mat-radio-group-label" [class.text-muted]="!isOwnBudget">{{'request.budget.budget' | translate}}</span>

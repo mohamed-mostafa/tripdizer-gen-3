@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CustomValidators } from 'src/app/shared/utils';
 
@@ -13,8 +12,6 @@ import { RequestService } from '../request.service';
   styleUrls: ['./information.component.scss']
 })
 export class InformationComponent {
-  nextStepPath: string;
-  prevStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'travelerName': new FormControl('', [Validators.required]),
@@ -28,7 +25,6 @@ export class InformationComponent {
   maxDate = new Date();
 
   constructor(
-    route: ActivatedRoute,
     private requestService: RequestService,
     translate: TranslateService
   ) {
@@ -37,7 +33,6 @@ export class InformationComponent {
         (this.controls['travelerEmailConfirmation'] as FormControl)
           .setValidators([CustomValidators.equalTo('travelerEmail', validationMsg)]);
       });
-    const currentStepPath = route.routeConfig.path;
     this.formGroup = new FormGroup({});
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -46,9 +41,6 @@ export class InformationComponent {
       }
     }
     requestService.getReferralTypes().subscribe((referralTypes: Array<any>) => this.referralTypes = referralTypes);
-    this.nextStepPath = requestService.getNextStep(currentStepPath);
-    this.prevStepPath = requestService.getPrevStep(currentStepPath);
-    requestService.stepVisited(currentStepPath);
   }
 
   save(): void {
