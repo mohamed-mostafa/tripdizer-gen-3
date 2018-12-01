@@ -3,7 +3,7 @@
   <div class="nav-links col p-0">
     <div>
       <div *ngFor="let navLink of navBar;let i = index" [routerLink]="[navLink.path]" class="nav-link text-capitalize"
-        [class.active]="currentPath === navLink.path" [class.disabled]="!navLink.isValid()" [class.text-right]="('dir' | translate) === 'rtl'">
+        [class.active]="currentPath === navLink.path" [class.disabled]="!navLink.isClickable()" [class.text-right]="('dir' | translate) === 'rtl'">
         <div class="col-12 px-2 px-md-3 title">{{navLink.title}}</div>
         <div class="col-12 px-2 px-md-3 value">{{navLink.value}}</div>
       </div>

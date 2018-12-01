@@ -9,4 +9,5 @@ export interface Step {
     requiredForEstimateCalc?: boolean;
     requiredForRecommendation?: boolean;
     isValid(): boolean;
+    isClickable(): boolean;
 }
