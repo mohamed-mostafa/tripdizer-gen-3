@@ -292,10 +292,30 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 			}
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
-					itineraries[i].rank += itineraries[i].recommendationRanks[rank];
+					let factor = 0;
+					switch (rank) {
+						case budget:
+							factor = 0.3;
+							break;
+						case purpose:
+							factor = 0.2;
+							break;
+						case season:
+							factor = 0.3;
+							break;
+						case interest:
+							factor = 0.2;
+							break;
+						case needsVisa:
+							factor = 0;
+							break;
+						default:
+							factor = 0;
+							break;
+					}
+					itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
 				}
 			}
-			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
 		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,
