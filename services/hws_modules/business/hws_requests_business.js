@@ -60,7 +60,9 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 
 		onSuccess(request);
 
-		if (request.traveler.name !== 'Essawy') {
+		if (request.traveler.name === 'Essawy') {
+			requestsDao.modifyRequestStatusById(request.id, 11);
+		} else {
 			// notify creation
 			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == "TRUE")
 				emailBusiness.sendEmail("bookings@tripdizer.com", "notifications@tripdizer.com", "Request #" + request.id + " is placed at Tripdizer", request.traveler.name + " has just placed a new request at Tripdizer. Visit the Dashboard to view its details.");
@@ -75,10 +77,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					console.log("Failed to notify partners");
 				});
 			}
-		}
 
-		if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
-			googlePeopleAdapter.createNewContact(request.traveler.email, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
+				googlePeopleAdapter.createNewContact(request.traveler.email, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+		}
 
 	}, function (err) {
 		// respond to caller
