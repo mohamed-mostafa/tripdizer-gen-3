@@ -29,7 +29,8 @@ var getById = function (id, lang, onSuccess, onFailure) {
 						var interest = {
 							id: rows[0].Id,
 							en_name: rows[0].EN_Name,
-							ar_name: rows[0].AR_Name
+							ar_name: rows[0].AR_Name,
+							image: rows[0].Image
 						};
 
 						if (lang) {
@@ -73,7 +74,7 @@ var create = function (interest, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO Interests (EN_Name, AR_Name) values (?, ?)', [interest.en_name, interest.ar_name], function (err, result) {
+					connection.query('INSERT INTO Interests (EN_Name, AR_Name, Image) values (?, ?, ?)', [interest.en_name, interest.ar_name, interest.image], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							// end the connection
@@ -120,7 +121,7 @@ var update = function (interest, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Interests SET EN_Name = ?, AR_Name = ?', [interest.en_name, interest.ar_name, interest.id], function (err, result) {
+					connection.query('UPDATE Interests SET EN_Name = ?, AR_Name = ?, Image = ? WHERE Id = ?', [interest.en_name, interest.ar_name, interest.image, interest.id], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							console.log("An error occurred while trying to update the existing interest: " + interest.en_name);
@@ -171,7 +172,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 							id: rows[i].Id,
 							en_name: rows[i].EN_Name,
 							ar_name: rows[i].AR_Name,
-							image: `https://picsum.photos/200?image=${Math.floor(Math.random() * 999)}`
+							image: rows[i].Image
 						};
 						if (lang) {
 							interest.name = interest[lang.toLowerCase() + '_name'];
