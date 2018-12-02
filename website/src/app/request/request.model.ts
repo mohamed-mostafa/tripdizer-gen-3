@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { CommonFunctions } from '../shared/utils';
+import { Destination } from './destinations/destination.model';
 import { Preference } from './preferences/preference.model';
 import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
@@ -40,8 +41,7 @@ export class Request extends CommonFunctions {
   private _purposeName: string;
   private _preferences: Array<number>;
   private _preferenceNames: Array<string>;
-  private _destination: number;
-  private _destinationName: string;
+  private _destination: Destination;
   private _estimatedCost: number;
   private _visaAssistanceNeeded: boolean;
   private _tourGuideNeeded: boolean;
@@ -135,18 +135,12 @@ export class Request extends CommonFunctions {
   get preferenceNames(): Array<string> {
     return this._preferenceNames;
   }
-  set destination(value: number) {
+  set destination(value: Destination) {
     this.resetEstimatedCost();
     this._destination = value;
   }
-  get destination(): number {
+  get destination(): Destination {
     return this._destination;
-  }
-  set destinationName(value: string) {
-    this._destinationName = value;
-  }
-  get destinationName(): string {
-    return this._destination ? this._destinationName : '';
   }
   set estimatedCost(value: number) {
     this._estimatedCost = value;
@@ -236,7 +230,7 @@ export class Request extends CommonFunctions {
         value: ((): string => {
           if (this._touchedSteps.indexOf(1) === -1) { return null; }
           if (!this._destination) { return null; }
-          return this.destinationName;
+          return this.destination.name;
         })(),
         isClickable: (): boolean => this.isNavBarItemClickable('travelingTo'),
         isValid: (): boolean => {
@@ -327,7 +321,7 @@ export class Request extends CommonFunctions {
         value: ((): string => {
           if (this._touchedSteps.indexOf(7) === -1) { return null; }
           if (!this._destination) { return null; }
-          return this.destinationName;
+          return this.destination.name;
         })(),
         isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
         isValid: (): boolean => {
@@ -338,7 +332,7 @@ export class Request extends CommonFunctions {
       },
       {
         key: 'estimatedCost', title: this._localeLabels.estimated_cost, path: 'estimated-cost', order: 8,
-        isDisabled: this.destination === -1,
+        isDisabled: this.destination && this.destination.id === -1,
         value: ((): string => {
           if (this._touchedSteps.indexOf(8) === -1) { return null; }
           if (this._estimatedCost == null) { return null; }

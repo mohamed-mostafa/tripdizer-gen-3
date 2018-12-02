@@ -15,7 +15,6 @@ export class RequestRequest {
   purpose: number;
   preferences: Array<number>;
   destination: number;
-  destinationName?: string;
   estimatedCost: number;
   visaAssistanceNeeded: boolean;
   tourGuideNeeded: boolean;
@@ -36,8 +35,7 @@ export class RequestRequest {
       budgetCategory: request.budgetCategory,
       purpose: request.purpose,
       preferences: request.preferences,
-      destination: request.destination,
-      destinationName: request.destination === -1 ? request.destinationName : null,
+      destination: request.destination.id,
       estimatedCost: request.estimatedCost,
       visaAssistanceNeeded: request.visaAssistanceNeeded,
       tourGuideNeeded: request.tourGuideNeeded,

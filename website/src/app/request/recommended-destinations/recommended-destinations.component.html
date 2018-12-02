@@ -1,6 +1,6 @@
 <c-request-form-layout [isButtonsHidden]="true" class="d-flex mt-2 mt-sm-3">
   <div class="destination-container text-center m-auto">
-    <div *ngFor="let destination of destinations;let first = first;let last = last;" (click)="goToNextStep(destination.id)"
+    <div *ngFor="let destination of destinations;let first = first;let last = last;" (click)="goToNextStep(destination)"
       class="destination m-2 m-sm-3">
       <div class="row destination-info">
         <div *ngIf="first || last" class="col-3"></div>
