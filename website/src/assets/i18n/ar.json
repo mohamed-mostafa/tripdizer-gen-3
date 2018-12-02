@@ -155,7 +155,24 @@
       "infants": "رضع"
     },
     "traveling_from": {
-      "traveling_from": "مسافر من"
+      "traveling_from": "مسافر من",
+      "airports": [{
+          "iataCode": "CAI",
+          "name": "القاهرة"
+        },
+        {
+          "iataCode": "HBE",
+          "name": "الإسكندرية"
+        },
+        {
+          "iataCode": "HRG",
+          "name": "الغردقة"
+        },
+        {
+          "iataCode": "SSH",
+          "name": "شرم الشيخ"
+        }
+      ]
     }
   }
 }

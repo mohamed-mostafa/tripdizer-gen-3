@@ -25,7 +25,7 @@ export class RequestRequest {
 
   static getRequestRequestFromRequest(request: Request): RequestRequest {
     return {
-      travelingFrom: request.travelingFrom,
+      travelingFrom: request.travelingFrom.name,
       departureDate: request.departureDate,
       returnDate: request.returnDate,
       isFlexibleDates: request.isFlexibleDates,

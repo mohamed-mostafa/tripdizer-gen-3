@@ -8,6 +8,7 @@ export class Ticket extends RequestResponse {
   static getTicketFromRequestResponse(request: Request, requestResponse: RequestResponse): Ticket {
     return {
       ...requestResponse,
+      travelingFrom: request.travelingFrom.name,
       preferenceNames: request.preferenceNames,
       destinationName: request.destinationName
     };

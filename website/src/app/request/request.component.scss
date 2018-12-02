@@ -47,8 +47,16 @@ $color-blue: #2989FF;
 /* END Extend Bootstrap */
 
 /* START Extend Angular Material */
+.mat-form-field {
+  .mat-select-value {
+    color: inherit !important;
+  }
+}
+
 .mat-focused {
-  .mat-form-field-label {
+
+  .mat-form-field-label,
+  .mat-select-arrow {
     color: $color-blue !important;
   }
 }
@@ -1194,6 +1202,15 @@ $color-blue: #2989FF;
 
 .mat-checkbox-layout {
   white-space: initial !important;
+}
+
+.mat-select-panel .mat-optgroup-label,
+.mat-select-panel .mat-option {
+  font-size: 1rem !important;
+
+  &.mat-selected:not(.mat-option-disabled) {
+    color: $color-blue;
+  }
 }
 
 /* END Extend Angular Material */
