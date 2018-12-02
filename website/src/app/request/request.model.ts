@@ -221,6 +221,7 @@ export class Request extends CommonFunctions {
           if (!this._travelingFrom) { return null; }
           return this.travelingFrom;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('travelingFrom'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(0) === -1) { return false; }
           if (!this._travelingFrom) { return false; }
@@ -234,6 +235,7 @@ export class Request extends CommonFunctions {
           if (!this._destination) { return null; }
           return this.destinationName;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('travelingTo'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(1) === -1) { return false; }
           if (!this._destination) { return false; }
@@ -249,6 +251,7 @@ export class Request extends CommonFunctions {
           const departureYearString: string = this.departureDate.format('Y') === this.returnDate.format('Y') ? '' : ' / Y';
           return this.departureDate.format(`D${departureMonthString}${departureYearString}`) + ' - ' + this.returnDate.format('D / M / Y');
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('departureReturn'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(2) === -1) { return false; }
           if (!this._departureDate || !this._returnDate) { return false; }
@@ -262,6 +265,7 @@ export class Request extends CommonFunctions {
           if (!this._adultsNumber) { return null; }
           return this._localeLabels.travelers.value;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('travelers'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(3) === -1) { return false; }
           if (!this._adultsNumber) { return false; }
@@ -276,6 +280,7 @@ export class Request extends CommonFunctions {
           return this.budgetCategory === 1 ?
             this.currencyPipe.transform(this.budget, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0') : this.budgetCategoryName;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('budget'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(4) === -1) { return false; }
           if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) { return false; }
@@ -289,6 +294,7 @@ export class Request extends CommonFunctions {
           if (!this._purpose) { return null; }
           return this.purposeName;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('purpose'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(5) === -1) { return false; }
           if (!this._purpose) { return false; }
@@ -301,6 +307,7 @@ export class Request extends CommonFunctions {
         value: ((): string => {
           return this._preferenceNames.join(', ');
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(6) === -1) { return false; }
           return true;
@@ -313,6 +320,7 @@ export class Request extends CommonFunctions {
           if (!this._destination) { return null; }
           return this.destinationName;
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(7) === -1) { return false; }
           if (!this._destination) { return false; }
@@ -321,10 +329,12 @@ export class Request extends CommonFunctions {
       },
       {
         key: 'estimatedCost', title: this._localeLabels.estimated_cost, path: 'estimated-cost', order: 8,
+        isDisabled: this.destination === -1,
         value: ((): string => {
           if (this._estimatedCost == null) { return null; }
           return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(8) === -1) { return false; }
           if (!this._estimatedCost) { return false; }
@@ -339,6 +349,7 @@ export class Request extends CommonFunctions {
           if (this.tourGuideNeeded) { travelAssistanceParams.push(this._localeLabels.travel_assistance.tourGuide); }
           return travelAssistanceParams.join(', ');
         })(),
+        isClickable: (): boolean => this.isNavBarItemClickable('travelAssistance'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(9) === -1) { return false; }
           return true;
@@ -347,6 +358,7 @@ export class Request extends CommonFunctions {
       {
         key: 'information', title: this._localeLabels.information.title, path: 'information', order: 10,
         value: this._localeLabels.information.value,
+        isClickable: (): boolean => this.isNavBarItemClickable('information'),
         isValid: (): boolean => {
           if (this._touchedSteps.indexOf(10) === -1) { return false; }
           if (!this._traveler
@@ -363,6 +375,7 @@ export class Request extends CommonFunctions {
         key: 'ticket', title: this._localeLabels.ticket, path: 'ticket', order: 99,
         value: '',
         isHiddenOnNavBar: true,
+        isClickable: (): boolean => this.isNavBarItemClickable('ticket'),
         isValid: (): boolean => true
       }
     ];
@@ -398,6 +411,11 @@ export class Request extends CommonFunctions {
 
   private resetEstimatedCost(): void {
     this._estimatedCost = null;
+  }
+
+  private isNavBarItemClickable(key: string): boolean {
+    const currentStepIndex = this.validSteps.findIndex(s => s.key === key);
+    return currentStepIndex === 0 || this.validSteps[currentStepIndex - 1].isValid();
   }
 
   getPureRequest(): any {
