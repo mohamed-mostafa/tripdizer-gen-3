@@ -132,6 +132,36 @@
     "ticket": {
       "request_number": "رقم الطلب",
       "adults": "{{adultsNumber}} بالغين",
+      "lg_sizes": {
+        "left_part": "M0,425V25A25,25,0,0,0,25,0H925a25,25,0,0,0,25,25v400A25,25,0,0,0,925,450H25A25,25,0,0,0,0,425Z",
+        "right_part": "M175,425V25A25,25,0,0,0,200,0h200a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
+        "right_part_transform": "matrix(1, 0, 0, 1, 925, 150)",
+        "splitter": "translate(1150 250)",
+        "request": {
+          "position": "translate(970 238)",
+          "left_details": "translate(385 {{calc}})",
+          "right_details": {
+            "position": "translate(0 20)",
+            "ticket_id": "-30",
+            "icon": "translate(-400 0)",
+            "from": "-20",
+            "to": "-420"
+          }
+        }
+      },
+      "sm_sizes": {
+        "position": "translate(257 128)",
+        "top_details": {
+          "number": "120",
+          "sign": "-"
+        },
+        "bottom_details": {
+          "position": "translate(120 0)",
+          "ticket_id": "-15",
+          "icon": "translate(-150 80)",
+          "description": "translate(120 295)"
+        }
+      },
       "lg_text": {
         "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
         "line2": "ما لم يكن عندة الشجاعة الكافية لغياب الشاطئ عن نظره",
