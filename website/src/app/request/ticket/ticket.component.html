@@ -61,21 +61,18 @@
         <line class="splitter l-splitter" y2="350" />
       </g>
       <g class="fill-white" transform="translate(222 238)">
-        <text class="fill-white" [attr.transform]="'translate(30 ' + (35 + (6 - ticket?.preferenceNames.length) * 17.5) + ')'"
-          font-size="18">
-          <tspan x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></tspan>
-          <tspan x="0" y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></tspan>
-          <tspan x="0" y="70" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></tspan>
-          <tspan x="0" y="105" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></tspan>
-          <tspan x="0" [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</tspan>
-        </text>
-        <g class="fill-white" transform="translate(400 20)">
-          <text font-size="24">
-            <tspan y="30" [innerHTML]="'request.ticket.request_number' | translate"></tspan>
-            <tspan y="70">
-              <tspan x="0">#</tspan>
-              <tspan x="30" [innerHTML]="ticket?.id"></tspan>
-            </tspan>
+        <g font-size="18" [attr.transform]="'translate(30 ' + (35 + (6 - ticket?.preferenceNames.length) * 17.5) + ')'">
+          <text y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
+          <text y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+          <text y="70" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
+          <text y="105" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
+          <text [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
+        </g>
+        <g font-size="24" transform="translate(400 20)">
+          <text y="30" [innerHTML]="'request.ticket.request_number' | translate"></text>
+          <text y="70">
+            <tspan x="0">#</tspan>
+            <tspan x="30" [innerHTML]="ticket?.id"></tspan>
           </text>
           <g transform="translate(0 148)">
             <g transform="translate(190 0)">
@@ -91,11 +88,11 @@
               <tspan x="420" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
             </text>
           </g>
-          <text font-size="19">
-            <tspan x="0" y="250" [innerHTML]="'request.ticket.lg_text.line1' | translate"></tspan>
-            <tspan x="0" y="280" [innerHTML]="'request.ticket.lg_text.line2' | translate"></tspan>
-            <tspan x="0" y="310" [innerHTML]="'request.ticket.lg_text.line3' | translate"></tspan>
-          </text>
+          <g font-size="19" transform="translate(0 250)">
+            <text y="0" [innerHTML]="'request.ticket.lg_text.line1' | translate"></text>
+            <text y="30" [innerHTML]="'request.ticket.lg_text.line2' | translate"></text>
+            <text y="60" [innerHTML]="'request.ticket.lg_text.line3' | translate"></text>
+          </g>
         </g>
       </g>
       <g transform="translate(1025 690)" display="none" class="ticket-links" font-size="16">
@@ -171,23 +168,21 @@
       <g transform="translate(115 275)">
         <line class="splitter l-splitter" x2="270" />
       </g>
-      <g class="fill-white" transform="translate(98 113)">
-        <text class="fill-white" transform="translate(25 15)" font-size="14">
-          <tspan x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></tspan>
-          <tspan x="120" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></tspan>
-          <tspan x="0" y="35" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></tspan>
-          <tspan x="120" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></tspan>
-          <tspan [attr.x]="(i > 2 ? i - 3 : i) * 80" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</tspan>
-        </text>
-        <g class="fill-white" transform="translate(10 175)">
-          <text font-size="16">
-            <tspan y="30" [innerHTML]="'request.ticket.request_number' | translate"></tspan>
-            <tspan y="60">
-              <tspan x="0">#</tspan>
-              <tspan x="15" [innerHTML]="ticket?.id"></tspan>
-            </tspan>
+      <g class="fill-white" transform="translate(108 128)">
+        <g font-size="14" transform="translate(15 0)">
+          <text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
+          <text x="120" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+          <text x="0" y="35" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
+          <text x="120" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
+          <text [attr.x]="(i > 2 ? i - 3 : i) * 80" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
+        </g>
+        <g font-size="16" transform="translate(0 190)">
+          <text y="0" [innerHTML]="'request.ticket.request_number' | translate"></text>
+          <text y="30">
+            <tspan x="0">#</tspan>
+            <tspan x="15" [innerHTML]="ticket?.id"></tspan>
           </text>
-          <g transform="translate(0 110)">
+          <g transform="translate(0 80)">
             <g transform="translate(140 15)">
               <line class="splitter s-splitter" y2="20" />
               <circle cx="0" cy="60" r="27.5" stroke="#fff" stroke-width="0.5" fill="transparent" />
@@ -198,15 +193,15 @@
             </g>
             <text text-anchor="middle" x="140" font-size="36">
               <tspan y="0" [innerHTML]="ticket?.travelingFrom | slice:0:3 | uppercase"></tspan>
-              <tspan x="140" y="175" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
+              <tspan y="175" x="140" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
             </text>
           </g>
-          <text font-size="12">
-            <tspan x="0" y="325" [innerHTML]="'request.ticket.sm_text.line1' | translate"></tspan>
-            <tspan x="0" y="350" [innerHTML]="'request.ticket.sm_text.line2' | translate"></tspan>
-            <tspan x="0" y="375" [innerHTML]="'request.ticket.sm_text.line3' | translate"></tspan>
-            <tspan x="0" y="400" [innerHTML]="'request.ticket.sm_text.line4' | translate"></tspan>
-          </text>
+          <g font-size="12" transform="translate(0 295)">
+            <text y="0" [innerHTML]="'request.ticket.sm_text.line1' | translate"></text>
+            <text y="25" [innerHTML]="'request.ticket.sm_text.line2' | translate"></text>
+            <text y="50" [innerHTML]="'request.ticket.sm_text.line3' | translate"></text>
+            <text y="75" [innerHTML]="'request.ticket.sm_text.line4' | translate"></text>
+          </g>
         </g>
       </g>
     </g>
