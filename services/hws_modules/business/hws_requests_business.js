@@ -296,30 +296,28 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
 					let factor;
 					switch (rank) {
-						case budget:
+						case 'budget':
 							factor = 0.3;
 							break;
-						case purpose:
+						case 'purpose':
 							factor = 0.2;
 							break;
-						case season:
+						case 'season':
 							factor = 0.3;
 							break;
-						case interest:
+						case 'interest':
 							factor = 0.2;
 							break;
-						case needsVisa:
+						case 'needsVisa':
 							factor = 0;
 							break;
 						default:
 							factor = 0;
 							break;
 					}
-					// itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
-					itineraries[i].rank += itineraries[i].recommendationRanks[rank];
+					itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
 				}
 			}
-			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
 		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,
