@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 import { CustomValidators } from '../../shared/utils';
 
 /* Services */
@@ -36,6 +37,11 @@ export class DepartureReturnComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    this.formGroup.controls['departureDate'].valueChanges.subscribe(departureDate => {
+      if (!this.formGroup.controls['returnDate'].value) {
+        this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
+      }
+    });
   }
 
   save(): void {
