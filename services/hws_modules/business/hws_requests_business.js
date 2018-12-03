@@ -294,7 +294,7 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 			}
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
-					let factor = 0;
+					let factor;
 					switch (rank) {
 						case budget:
 							factor = 0.3;
@@ -315,9 +315,11 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 							factor = 0;
 							break;
 					}
-					itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
+					// itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
+					itineraries[i].rank += itineraries[i].recommendationRanks[rank];
 				}
 			}
+			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
 		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,
