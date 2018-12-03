@@ -15,6 +15,7 @@ import { RecommendedDestinationsResponse } from './recommended-destination.model
 })
 export class RecommendedDestinationsComponent {
   currentStepPath: string;
+  selectedDestination: RecommendedDestinationsResponse;
   destinations: Array<RecommendedDestinationsResponse>;
 
   constructor(
@@ -23,6 +24,7 @@ export class RecommendedDestinationsComponent {
     private requestService: RequestService
   ) {
     this.currentStepPath = this.route.routeConfig.path;
+    this.selectedDestination = requestService.getProperty('destination');
     requestService.getRecommendedDestinations().subscribe((response: Array<RecommendedDestinationsResponse> | null) => {
       if (response) {
         this.destinations = response;

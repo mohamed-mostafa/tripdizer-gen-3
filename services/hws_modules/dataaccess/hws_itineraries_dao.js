@@ -278,6 +278,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 							image: rows[i].Image1,
 							image1: rows[i].Image1,
 							image2: rows[i].Image2,
+							iataCode: (rows[i].EN_Name).substring(0, 3),
 							agentNotes: rows[i].Agent_Notes,
 							longitudes: rows[i].longitude,
 							latitudes: rows[i].latitude,

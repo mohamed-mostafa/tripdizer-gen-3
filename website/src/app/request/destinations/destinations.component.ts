@@ -20,6 +20,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
 })
 export class DestinationsComponent {
   currentStepPath: string;
+  selectedDestination: Destination;
   destinations: Array<Destination>;
   dialogLabels: {
     title: string,
@@ -36,6 +37,7 @@ export class DestinationsComponent {
     translate: TranslateService
   ) {
     this.currentStepPath = this.route.routeConfig.path;
+    this.selectedDestination = requestService.getProperty('destination');
     requestService.getDestinations().subscribe((response: Array<Destination>) => this.destinations = response);
     translate.get('request.destinations.dialog').subscribe(labels => this.dialogLabels = labels);
   }
