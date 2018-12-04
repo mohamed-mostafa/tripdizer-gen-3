@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
-
-/* Models */
-import { Step } from '../step.model';
+import { TranslateService } from '@ngx-translate/core';
 
 /* Services */
 import { RequestService } from '../request.service';
+
+/* Models */
+import { Step } from '../step.model';
 
 @Component({
   selector: 'c-request-nav-bar',
@@ -15,11 +16,13 @@ import { RequestService } from '../request.service';
 export class RequestNavBarComponent implements AfterViewInit {
   navBar: Array<Step>;
   currentPath: string;
+  direction: string;
 
   @Output() navBarDimensionChanged = new EventEmitter();
 
   constructor(
-    private router: Router,
+    router: Router,
+    translate: TranslateService,
     requestService: RequestService) {
     this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
@@ -29,6 +32,7 @@ export class RequestNavBarComponent implements AfterViewInit {
         this.setNavBrandWidth();
       }, 0);
     });
+    translate.get('dir').subscribe(dir => this.direction = dir);
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
         this.currentPath = (event as NavigationEnd).urlAfterRedirects || event.url;
@@ -64,7 +68,9 @@ export class RequestNavBarComponent implements AfterViewInit {
 
   scrollIntoView(): void {
     const activeElements = document.getElementsByClassName('active');
-    if (activeElements.length > 0) { activeElements[0].scrollIntoView({ inline: 'start' }); }
+    if (activeElements.length > 0) {
+      activeElements[0].scrollIntoView({ inline: this.direction === 'rtl' ? 'end' : 'start' });
+    }
   }
 
 }
