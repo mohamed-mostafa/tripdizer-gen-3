@@ -1,4 +1,4 @@
-<div class="row h-100 justify-content-center align-items-center">
+<c-request-form-layout [isButtonsHidden]="true">
   <svg id="v-ticket" class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     viewBox="0 0 1300 550">
     <style>
@@ -58,7 +58,7 @@
       <g [attr.transform]="'request.ticket.lg_sizes.splitter' | translate">
         <line class="splitter l-splitter" y2="350" />
       </g>
-      <g class="fill-white" [attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
+      <g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
         <g font-size="18" [attr.transform]="'request.ticket.lg_sizes.request.left_details' | translate:{calc: (35 + (6 - ticket?.preferenceNames.length) * 17.5)}">
           <text y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
           <text y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
@@ -166,12 +166,12 @@
       <g transform="translate(115 275)">
         <line class="splitter l-splitter" x2="270" />
       </g>
-      <g class="fill-white" [attr.transform]="'request.ticket.sm_sizes.position' | translate">
+      <g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.sm_sizes.position' | translate">
         <g font-size="14">
           <text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
-          <text x="120" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+          <text x="140" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
           <text x="0" y="35" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
-          <text x="120" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
+          <text x="140" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
           <text [attr.x]="calculate('request.ticket.sm_sizes.top_details.number' | translate, 'request.ticket.sm_sizes.top_details.sign' | translate, (i > 2 ? i - 3 : i) * 80)"
             [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
         </g>
@@ -207,4 +207,4 @@
       </g>
     </g>
   </svg>
-</div>
+</c-request-form-layout>

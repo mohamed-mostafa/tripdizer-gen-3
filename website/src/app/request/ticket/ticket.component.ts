@@ -21,6 +21,7 @@ export class TicketComponent {
     router: Router,
     private requestService: RequestService
   ) {
+    this.currentStepPath = route.routeConfig.path;
     requestService.submitRequest().subscribe((response: Ticket | null) => {
       if (response) {
         this.ticket = response;

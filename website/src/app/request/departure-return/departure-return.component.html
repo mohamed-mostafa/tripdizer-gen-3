@@ -5,7 +5,7 @@
     <input matInput [min]="minDate" [matDatepicker]="departureDatePicker" id="departure-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
       [placeholder]="'request.departure_return.departure' | translate" (click)="departureDatePicker.open()" (focus)="departureDatePicker.open()"
       formControlName="departureDate">
-    <mat-datepicker #departureDatePicker></mat-datepicker>
+    <mat-datepicker #departureDatePicker [touchUi]="true"></mat-datepicker>
   </mat-form-field>
   <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
     <mat-hint>{{formGroup.controls.returnDate.errors | errorMessage}}</mat-hint>
@@ -13,7 +13,7 @@
     <input matInput [min]="minDate" [matDatepicker]="returnDatePicker" id="return-date" class="custom-bs text-yellow text-uppercase font-weight-bold"
       [placeholder]="'request.departure_return.return' | translate" (click)="returnDatePicker.open()" (focus)="returnDatePicker.open()"
       formControlName="returnDate">
-    <mat-datepicker #returnDatePicker></mat-datepicker>
+    <mat-datepicker #returnDatePicker [touchUi]="true"></mat-datepicker>
   </mat-form-field>
   <mat-checkbox formControlName="isFlexibleDates" labelPosition="after">{{'request.departure_return.flexible' |
     translate}}</mat-checkbox>
