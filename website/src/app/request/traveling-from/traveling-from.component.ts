@@ -4,6 +4,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 /* Services */
 import { RequestService } from '../request.service';
 
+/* Models */
+import { TravelingFrom } from './traveling-from.model';
+
 @Component({
   selector: 'c-request-traveling-from',
   templateUrl: './traveling-from.component.html',
@@ -34,5 +37,7 @@ export class TravelingFromComponent {
       }
     }
   }
+
+  compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 
 }

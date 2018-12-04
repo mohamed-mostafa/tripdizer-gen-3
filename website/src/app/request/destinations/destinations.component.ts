@@ -20,6 +20,7 @@ import { DialogComponent } from '../../shared/components/dialog/dialog.component
 })
 export class DestinationsComponent {
   currentStepPath: string;
+  selectedDestination: Destination;
   destinations: Array<Destination>;
   dialogLabels: {
     title: string,
@@ -36,28 +37,24 @@ export class DestinationsComponent {
     translate: TranslateService
   ) {
     this.currentStepPath = this.route.routeConfig.path;
+    this.selectedDestination = requestService.getProperty('destination');
     requestService.getDestinations().subscribe((response: Array<Destination>) => this.destinations = response);
     translate.get('request.destinations.dialog').subscribe(labels => this.dialogLabels = labels);
   }
 
-  save(destinationId: number): boolean {
-    const selectedDestination = this.destinations.find(p => p.id === destinationId);
-    if (selectedDestination) {
-      this.requestService.setProperty('destination', selectedDestination.id);
-      this.requestService.setProperty('destinationName', selectedDestination.name);
-      return true;
-    }
-    return false;
+  save(destination: Destination): boolean {
+    this.requestService.setProperty('destination', destination);
+    return true;
   }
 
   goToPrevStep() {
     this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
   }
 
-  goToNextStep(destinationId) {
-    if (destinationId === -1) {
+  goToNextStep(destination: Destination) {
+    if (destination.id === -1) {
       this.openDialog();
-    } else if (this.save(destinationId)) {
+    } else if (this.save(destination)) {
       this.navigateToNextStep();
     }
   }
@@ -76,7 +73,7 @@ export class DestinationsComponent {
         inputs: [
           {
             id: 'destinationName',
-            value: this.requestService.getProperty('destinationName'),
+            value: this.requestService.getProperty('destination') ? this.requestService.getProperty('destination').name : null,
             placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
             validatorOrOpts: [Validators.required]
           }
@@ -90,8 +87,14 @@ export class DestinationsComponent {
 
     dialogRef.afterClosed().subscribe(inputs => {
       if (inputs && inputs[0]) {
-        this.requestService.setProperty('destination', -1);
-        this.requestService.setProperty('destinationName', inputs[0].value);
+        const destination: Destination = {
+          id: -1,
+          name: inputs[0].value,
+          description: null,
+          iataCode: inputs[0].value,
+          image: null
+        };
+        this.requestService.setProperty('destination', destination);
         this.navigateToNextStep();
       }
     });

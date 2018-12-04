@@ -294,21 +294,21 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 			}
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
-					let factor = 0;
+					let factor;
 					switch (rank) {
-						case budget:
+						case 'budget':
 							factor = 0.3;
 							break;
-						case purpose:
+						case 'purpose':
 							factor = 0.2;
 							break;
-						case season:
+						case 'season':
 							factor = 0.3;
 							break;
-						case interest:
+						case 'interest':
 							factor = 0.2;
 							break;
-						case needsVisa:
+						case 'needsVisa':
 							factor = 0;
 							break;
 						default:

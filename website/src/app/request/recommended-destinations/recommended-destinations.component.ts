@@ -15,6 +15,7 @@ import { RecommendedDestinationsResponse } from './recommended-destination.model
 })
 export class RecommendedDestinationsComponent {
   currentStepPath: string;
+  selectedDestination: RecommendedDestinationsResponse;
   destinations: Array<RecommendedDestinationsResponse>;
 
   constructor(
@@ -23,6 +24,7 @@ export class RecommendedDestinationsComponent {
     private requestService: RequestService
   ) {
     this.currentStepPath = this.route.routeConfig.path;
+    this.selectedDestination = requestService.getProperty('destination');
     requestService.getRecommendedDestinations().subscribe((response: Array<RecommendedDestinationsResponse> | null) => {
       if (response) {
         this.destinations = response;
@@ -33,22 +35,17 @@ export class RecommendedDestinationsComponent {
     });
   }
 
-  save(destinationId: number): boolean {
-    const selectedDestination = this.destinations.find(p => p.id === destinationId);
-    if (selectedDestination) {
-      this.requestService.setProperty('destination', selectedDestination.id);
-      this.requestService.setProperty('destinationName', selectedDestination.name);
-      return true;
-    }
-    return false;
+  save(destination: RecommendedDestinationsResponse): boolean {
+    this.requestService.setProperty('destination', destination);
+    return true;
   }
 
   goToPrevStep() {
     this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
   }
 
-  goToNextStep(destinationId) {
-    if (this.save(destinationId)) {
+  goToNextStep(destination: RecommendedDestinationsResponse) {
+    if (this.save(destination)) {
       this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
     }
   }

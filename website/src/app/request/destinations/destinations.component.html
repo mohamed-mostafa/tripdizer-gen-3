@@ -1,6 +1,7 @@
 <c-request-form-layout [isButtonsHidden]="true" class="d-flex mt-2 mt-sm-3">
   <div class="destination-container text-center m-auto">
-    <div *ngFor="let destination of destinations" (click)="goToNextStep(destination.id)" class="destination m-2 m-sm-3">
+    <div *ngFor="let destination of destinations" (click)="goToNextStep(destination)" class="destination m-2 m-sm-3"
+      [class.selected]="selectedDestination?.id === destination?.id">
       <div class="destination-info">
         <div class="dest-temp w-50 clearfix">
           <span [ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'">{{destination.temperatureLo}}</span>

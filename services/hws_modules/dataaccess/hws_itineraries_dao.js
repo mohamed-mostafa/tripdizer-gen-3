@@ -54,6 +54,7 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							image: rows[0][0].Image1,
 							image1: rows[0][0].Image1,
 							image2: rows[0][0].Image2,
+							iataCode: (rows[0][0].EN_Name).substring(0, 3),
 							agentNotes: rows[0][0].Agent_Notes,
 							countries: rows[1],
 							ferries: rows[2],
@@ -277,6 +278,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 							image: rows[i].Image1,
 							image1: rows[i].Image1,
 							image2: rows[i].Image2,
+							iataCode: (rows[i].EN_Name).substring(0, 3),
 							agentNotes: rows[i].Agent_Notes,
 							longitudes: rows[i].longitude,
 							latitudes: rows[i].latitude,
@@ -383,16 +385,16 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 	});
 };
 
-var formatDateForSql = function(date) {
+var formatDateForSql = function (date) {
 	var year = date.getFullYear();
-	var month = date.getMonth()+1;
+	var month = date.getMonth() + 1;
 	var day = date.getDate();
 
 	if (day < 10) {
-	  day = '0' + day;
+		day = '0' + day;
 	}
 	if (month < 10) {
-	  month = '0' + month;
+		month = '0' + month;
 	}
 
 	var formattedDate = year + '-' + month + '-' + day;

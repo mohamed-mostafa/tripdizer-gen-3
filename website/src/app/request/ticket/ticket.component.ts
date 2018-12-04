@@ -44,4 +44,19 @@ export class TicketComponent {
     console.log(this.serializeSVG('v-ticket'));
   }
 
+  calculate = (val1, sign?: string, val2?: number) => {
+    switch (sign) {
+      case '-':
+        return val1 - val2;
+      case '+':
+        return val1 + val2;
+      case '*':
+        return val1 * val2;
+      case '/':
+        return val1 / val2;
+      default:
+        return val1;
+    }
+  }
+
 }
