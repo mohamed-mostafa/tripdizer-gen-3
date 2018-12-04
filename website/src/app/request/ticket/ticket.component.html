@@ -169,9 +169,9 @@
       <g class="fill-white" [attr.transform]="'request.ticket.sm_sizes.position' | translate">
         <g font-size="14">
           <text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
-          <text x="120" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+          <text x="140" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
           <text x="0" y="35" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
-          <text x="120" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
+          <text x="140" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
           <text [attr.x]="calculate('request.ticket.sm_sizes.top_details.number' | translate, 'request.ticket.sm_sizes.top_details.sign' | translate, (i > 2 ? i - 3 : i) * 80)"
             [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
         </g>
