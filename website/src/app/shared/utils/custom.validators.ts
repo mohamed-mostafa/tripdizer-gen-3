@@ -39,7 +39,7 @@ export class CustomValidators {
     static numericOnly(errorMessage?: string): ValidatorFn {
         return (c: AbstractControl): { [key: string]: boolean } | null => {
             const text = c.value;
-            if (!text || /^[0-9]*$/.test(text)) { return null; }
+            if (!text || /^[\u0661-\u06690-9]*$/.test(text)) { return null; }
             return { 'numericOnly': true };
         };
     }
