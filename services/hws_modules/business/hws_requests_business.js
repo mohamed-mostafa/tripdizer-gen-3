@@ -331,6 +331,7 @@ var recommendation = function (request, lang, onSuccess, onFailure, onUserError)
 			image1: i.image1,
 			temperatureLo: i.temperatureLo,
 			temperatureHi: i.temperatureHi,
+			iataCode: i.iataCode,
 			estimatedCost: i.estimatedCost,
 			recommendationRanks: i.recommendationRanks,
 			rank: i.rank
