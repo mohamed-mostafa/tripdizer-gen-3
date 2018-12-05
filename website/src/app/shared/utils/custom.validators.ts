@@ -39,7 +39,7 @@ export class CustomValidators {
     static numericOnly(errorMessage?: string): ValidatorFn {
         return (c: AbstractControl): { [key: string]: boolean } | null => {
             const text = c.value;
-            if (!text || /^[\u0661-\u06690-9]*$/.test(text)) { return null; }
+            if (!text || /^[\u0660-\u06690-9]*$/.test(text)) { return null; }
             return { 'numericOnly': true };
         };
     }
@@ -49,6 +49,7 @@ export class CustomValidators {
                 if (c.value === c.parent.controls[controlName].value) { return null; }
                 if (c.value && c.parent.controls[controlName].value &&
                     c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
+                    return null;
                     return { 'copyPaste': true };
                 }
             }
