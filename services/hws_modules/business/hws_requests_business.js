@@ -152,6 +152,16 @@ var sendMails = function (emails, email, onSuccess) {
 	});
 }
 
+var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+	requestsDao.getRequestCountsByPromoCode(promoCode, function(count) {
+		if (count < 50) {
+			onSuccess(true);
+		} else {
+			onSuccess(false);
+		}
+	}, onFailure);
+} 
+
 var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 	var monthMap = {
 		1: "JAN",
@@ -589,3 +599,4 @@ exports.budgetCalculation = budgetCalculation;
 exports.sendDailyReportOfRequestsCount = sendDailyReportOfRequestsCount;
 exports.toggleOptions = requestsDao.toggleOptions;
 exports.getPackage = getPackage;
+exports.validatePromoCode = validatePromoCode;

@@ -41,6 +41,7 @@ var start = function () {
 
 	// requests
 	app.put('/request/place', requestsInterface.placeRequest);
+	app.get('/request/promocodevalidity', requestsInterface.validatePromoCode);
 	app.get('/request/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	app.put('/request', auth.isAuthenticated, requestsInterface.updateRequest);
 	app.post('/request/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
