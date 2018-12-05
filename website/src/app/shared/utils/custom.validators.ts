@@ -49,6 +49,7 @@ export class CustomValidators {
                 if (c.value === c.parent.controls[controlName].value) { return null; }
                 if (c.value && c.parent.controls[controlName].value &&
                     c.value.toLowerCase() === c.parent.controls[controlName].value.toLowerCase()) {
+                    return null;
                     return { 'copyPaste': true };
                 }
             }
