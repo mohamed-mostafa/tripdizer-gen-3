@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { CommonFunctions } from '../shared/utils';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
 
@@ -40,7 +41,10 @@ export class RequestRequest {
       visaAssistanceNeeded: request.visaAssistanceNeeded,
       tourGuideNeeded: request.tourGuideNeeded,
       specialRequests: request.specialRequests,
-      traveler: request.traveler,
+      traveler: {
+        ...request.traveler,
+        mobile: CommonFunctions.parseArabicNumber(request.traveler.mobile)
+      },
       referralType: request.referralType
     };
   }

@@ -10,4 +10,12 @@ export class CommonFunctions {
             return typeof Object.getOwnPropertyDescriptor(this.prototype, name)['set'] === 'function';
         });
     }
+
+    public static parseArabicNumber(num: any): string {
+        return num.toString().replace(/[٠١٢٣٤٥٦٧٨٩]/g, (d) => {
+            return d.charCodeAt(0) - 1632; // Convert Arabic numbers
+        }).replace(/[۰۱۲۳۴۵۶۷۸۹]/g, function (d) {
+            return d.charCodeAt(0) - 1776; // Convert Persian numbers
+        });
+    }
 }
