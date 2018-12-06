@@ -26,6 +26,7 @@ describe('public website request interface', function() {
 				"budget_category":3,"budget":null,
 				"visa_assistance_needed":false,"tour_guide_needed":true,
 				"specialRequests":"Private villa please",
+				"promoCode": "TRPIDIZERx10",
 				"interests":[{"id":1,"percentage":"18"},{"id":2,"percentage":"45"},{"id":3,"percentage":"62"},{"id":4,"percentage":"79"},{"id":5,"percentage":"91"},{"id":6,"percentage":"100"}]
 				}
 		
