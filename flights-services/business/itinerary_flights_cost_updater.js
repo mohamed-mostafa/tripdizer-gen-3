@@ -49,15 +49,56 @@ var updateFlightMonth = function(flight, month) {
 			.then(flightFares => {
 				console.log("Recieved response for flight " + flight.id + " from " + flight.origin + " to " + flight.destination + " on " + flight.carrierIata + " for month " + monthName);
 				var infant = 0; var kid = 0; var adult = 0;
+				// sum of prices for all airlines in the current date combination
 				flightFares.forEach(flightFare => {
 					infant += parseInt(flightFare.infantPrice);
 					kid += parseInt(flightFare.childPrice);
 					adult += parseInt(flightFare.adultPrice);
 				});
-				flight["i"+monthName] = infant / flightFares.length;
-				flight["k"+monthName] = kid / flightFares.length;
-				flight["a"+monthName] = adult / flightFares.length;
+				// average of prices for all airlines in the current date combination
+				var infantAverageForDateCombination = infant / flightFares.length;
+				var kidAverageForDateCombination = kid / flightFares.length;
+				var adultAverageForDateCombination = adult / flightFares.length;
+				console.log("adultAverageForDateCombination : " + adultAverageForDateCombination);
+				// if that average is not zero and not NaN, keep it in the flight object (which is cross-date-combination object)
+				// but only when its not zero
+				if (adultAverageForDateCombination != 0 && adultAverageForDateCombination != NaN) {
+					if (flight.adultPrices == null) {
+						flight.adultPrices = [];
+						flight.kidPrices = [];
+						flight.infantPrices = [];
+					}
+					// update the flight to include the average of the current date combination (it should contain other averages from other date combinations for the same flight)
+					flight.infantPrices.push(infantAverageForDateCombination);
+					flight.adultPrices.push(adultAverageForDateCombination);
+					flight.kidPrices.push(kidAverageForDateCombination);
+				}
+				console.log("flight.adultPrices: " + flight.adultPrices);
 
+				// then, recalculate the month price of the flight to include the new average
+				
+				// first, sum all averages
+				flight["a"+monthName] = 0;
+				flight["i"+monthName] = 0;
+				flight["k"+monthName] = 0;
+				flight.adultPrices.forEach(price => {
+					flight["a"+monthName] += price;	
+				});
+				flight.infantPrices.forEach(price => {
+					flight["i"+monthName] += price;	
+				});
+				flight.kidPrices.forEach(price => {
+					flight["k"+monthName] += price;	
+				});
+
+				// then take their averages
+				flight["a"+monthName] = flight["a"+monthName] / flight.adultPrices.length;
+				flight["i"+monthName] = flight["i"+monthName] / flight.infantPrices.length;
+				flight["k"+monthName] = flight["k"+monthName] / flight.kidPrices.length;
+
+				console.log("flight[a" + monthName + "]: " + flight["a"+monthName]);
+
+				// then, update the flight
 				flightsDao.update(flight, () => {}, (err) => {
 					console.log("Flight " + flight.id + " update failed!");
 					console.log(err);

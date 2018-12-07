@@ -68,7 +68,7 @@ var update = function (flight, onSuccess, onFailure) {
 					+ 'NOV = ' + (flight.iNOV || 'NOV') + ' , '
 					+ '`DEC` = ' + (flight.iDEC || '`DEC`') + ' WHERE id = ' + flight.infantMonthPriceId + ';';
 					var flightQuery = flightsAdultPricesUpdateStatement  + flightsChildPricesUpdateStatement  + flightsInfantPricesUpdateStatement;
-					console.log(flightQuery);
+					// console.log(flightQuery);
 					connection.query(flightQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails

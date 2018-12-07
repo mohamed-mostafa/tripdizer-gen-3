@@ -20,7 +20,8 @@
       "email": "Invalid email address",
       "numericOnly": "Numeric only",
       "equalTo": "Value doesn't match",
-      "copyPaste": "Please, Don't copy and paste me"
+      "copyPaste": "Please, Don't copy and paste me",
+      "invalidPromoCode": "Invalid promo code"
     }
   },
   "home": {
@@ -177,6 +178,9 @@
     "travel_assistance": {
       "visa_assistance": "I need assistance with getting the visas",
       "tour_guide": "I need a tour guide",
+      "promo_code": "Promo code",
+      "hint": "Enter promo code",
+      "apply": "Apply",
       "special_request": "Special Request"
     },
     "travelers": {

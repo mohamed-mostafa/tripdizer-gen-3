@@ -20,7 +20,8 @@
       "email": "البريد الإلكتروني غير صحيح",
       "numericOnly": "أرقام فقط",
       "equalTo": "غير متطابقين",
-      "copyPaste": "رجاء لا تقوم بالنسخ و اللصق"
+      "copyPaste": "رجاء لا تقوم بالنسخ و اللصق",
+      "invalidPromoCode": "الرمز الترويجي غير صالح"
     }
   },
   "home": {
@@ -177,6 +178,9 @@
     "travel_assistance": {
       "visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",
       "tour_guide": "أحتاج مرشد سياحي",
+      "promo_code": "الرمز الترويجي",
+      "hint": "ادخل الرمز الترويجي",
+      "apply": "تطبيق",
       "special_request": "طلبات خري"
     },
     "travelers": {

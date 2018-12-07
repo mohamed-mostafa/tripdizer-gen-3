@@ -45,6 +45,7 @@ export class Request extends CommonFunctions {
   private _estimatedCost: number;
   private _visaAssistanceNeeded: boolean;
   private _tourGuideNeeded: boolean;
+  private _promoCode: string;
   private _specialRequests: string;
   private _traveler: IRequester;
   private _referralType: number;
@@ -159,6 +160,12 @@ export class Request extends CommonFunctions {
   }
   get tourGuideNeeded(): boolean {
     return this._tourGuideNeeded || false;
+  }
+  set promoCode(value: string) {
+    this._promoCode = value;
+  }
+  get promoCode(): string {
+    return this._promoCode;
   }
   set specialRequests(value: string) {
     this._specialRequests = value;
