@@ -15,12 +15,42 @@ var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function (request, onSuccess, onFailure, onUserError) {
+	request = {
+		...request,
+		travelingFrom: request.travelingFrom || request.leaving_country,
+		departureDate: request.departureDate || request.departure_date,
+		returnDate: request.returnDate || request.return_date,
+		isFlexibleDates: request.isFlexibleDates || request.flexible_dates,
+		adultsNumber: request.adultsNumber || request.number_of_adults,
+		kidsNumber: request.kidsNumber || request.number_of_kids || 0,
+		infantsNumber: request.infantsNumber || request.number_of_infants || 0,
+		budget: request.budget || request.budget,
+		budgetCategory: request.budgetCategory || request.budget_category,
+		purpose: request.purpose || request.travel_purpose,
+		preferences: request.preferences || request.interests,
+		destination: request.destination || request.itinerary_id,
+		estimatedCost: request.estimatedCost || request.estimatedCost,
+		visaAssistanceNeeded: request.visaAssistanceNeeded || request.visa_assistance_needed,
+		tourGuideNeeded: request.tourGuideNeeded || request.tour_guide_needed,
+		specialRequests: request.specialRequests || request.specialRequests,
+		traveler: {
+			...request.traveler,
+			email: request.traveler.email || request.traveler.emailAddress,
+			birthday: request.traveler.birthday || request.traveler.dateOfBirth
+		},
+
+		referralType: request.referralType || 1
+	};
+	request.preferences = request.preferences.map(ri => ({
+		id: ri.id || ri,
+		percentage: ri.percentage || 100
+	}));
 	// insert the request in our database
 	request.date = new Date(new Date().setHours(0, 0, 0, 0));
-	request.departure_date = new Date(request.departure_date);
-	request.return_date = new Date(request.return_date);
+	request.departureDate = new Date(request.departureDate);
+	request.returnDate = new Date(request.returnDate);
 	if (!request.budget) request.budget = 0;
-	if (request.itinerary_id) {
+	if (request.destination) {
 		request.first_country = 1;
 		// delete request.other_country
 		delete request.second_country;
@@ -30,14 +60,16 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 
 		onSuccess(request);
 
-		if (request.traveler.name !== 'Essawy') {
+		if (request.traveler.name === 'Essawy') {
+			requestsDao.modifyRequestStatusById(request.id, 11);
+		} else {
 			// notify creation
 			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == "TRUE")
 				emailBusiness.sendEmail("bookings@tripdizer.com", "notifications@tripdizer.com", "Request #" + request.id + " is placed at Tripdizer", request.traveler.name + " has just placed a new request at Tripdizer. Visit the Dashboard to view its details.");
-			
+
 			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == "TRUE")
-				notifyCustomer(request.traveler.emailAddress, request.traveler.name, request.id);
-			
+				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
+
 			if (process.env.ENABLE_PARTNERS_NOTIFICATION_EMAIL == "TRUE") {
 				partnersBusiness.notifyPartners(request, function () {
 					console.log("Notified Partners");
@@ -45,10 +77,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					console.log("Failed to notify partners");
 				});
 			}
-		}
 
-		if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
-			googlePeopleAdapter.createNewContact(request.traveler.emailAddress, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == "TRUE")
+				googlePeopleAdapter.createNewContact(request.traveler.email, request.traveler.name, request.traveler.mobile, "(" + request.id.toString() + ")");
+		}
 
 	}, function (err) {
 		// respond to caller
@@ -120,6 +152,20 @@ var sendMails = function (emails, email, onSuccess) {
 	});
 }
 
+var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+	if (promoCode != null && promoCode.toLowerCase() == 'tripdizerx10') {
+		requestsDao.getRequestCountsByPromoCode(promoCode, function(count) {
+			if (count < 50) {
+				onSuccess(true);
+			} else {
+				onSuccess(false);
+			}
+		}, onFailure);
+	} else {
+		onSuccess(false);
+	}
+} 
+
 var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 	var monthMap = {
 		1: "JAN",
@@ -135,27 +181,37 @@ var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 		11: "NOV",
 		12: "DEC"
 	};
-	if (request.itinerary_id) {
-		itinerariesDao.getById(request.itinerary_id, null, function (itinerary) {
+	request = {
+		...request,
+		departureDate: request.departureDate || request.departure_date,
+		returnDate: request.returnDate || request.return_date,
+		adultsNumber: request.adultsNumber || request.number_of_adults,
+		kidsNumber: request.kidsNumber || request.number_of_kids || 0,
+		infantsNumber: request.infantsNumber || request.number_of_infants || 0,
+		budgetCategory: request.budgetCategory || request.budget_category,
+		destination: request.destination || request.itinerary_id
+	};
+	if (request.destination) {
+		itinerariesDao.getById(request.destination, null, function (itinerary) {
 				if (itinerary) {
-					var diff = new DateDiff(new Date(request.return_date), new Date(request.departure_date));
+					var diff = new DateDiff(new Date(request.returnDate), new Date(request.departureDate));
 					const rData = {
-						itineraryId: request.itinerary_id,
+						itineraryId: itinerary.id,
 						iternaryName: itinerary.en_name,
 						iternaryArabicName: itinerary.ar_name,
-						dailySpendings: itinerary.dailySpendings,
-						numberOfAdults: request.number_of_adults,
-						numberOfKids: request.number_of_kids,
-						numberOfInfants: request.number_of_infants,
-						numberOfTravelers: request.number_of_adults + request.number_of_kids + request.number_of_infants,
-						numberOfAdultsAndKids: request.number_of_adults + request.number_of_kids,
-						departureMonth: monthMap[new Date(request.departure_date).getMonth() + 1],
-						returnMonth: monthMap[new Date(request.return_date).getMonth() + 1],
+						dailySpending: itinerary.dailySpendings,
+						numberOfAdults: request.adultsNumber,
+						numberOfKids: request.kidsNumber,
+						numberOfInfants: request.infantsNumber,
+						numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
+						numberOfAdultsAndKids: request.adultsNumber + request.kidsNumber,
+						departureMonth: monthMap[new Date(request.departureDate).getMonth() + 1],
+						returnMonth: monthMap[new Date(request.returnDate).getMonth() + 1],
 						numberOfRooms: 0,
 						totalBudget: 0,
 						flightsBudget: 0,
 						numberOfNights: Math.abs(diff.days()),
-						accomodationBudget: 0,
+						accommodationBudget: 0,
 						ferriesBudget: 0
 					};
 
@@ -170,47 +226,47 @@ var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 						rData.flightsBudget += rData.numberOfInfants * (flights[i]['i' + rData.departureMonth] + flights[i]['i' + rData.returnMonth]) / 2;
 					}
 
-					var hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budget_category);
+					var hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
 					for (let i = 0; i < hotels.length; i++) {
-						rData.accomodationBudget += rData.numberOfNights * (hotels[i][rData.departureMonth] + hotels[i][rData.returnMonth]) / 2;
+						rData.accommodationBudget += rData.numberOfNights * (hotels[i][rData.departureMonth] + hotels[i][rData.returnMonth]) / 2;
 					}
 
 					// take the average of the hotels of the same category
-					rData.accomodationBudget = hotels.length > 0 ? rData.accomodationBudget / hotels.length : 0;
+					rData.accommodationBudget = hotels.length > 0 ? rData.accommodationBudget / hotels.length : 0;
 
 					// the accomodation budgt is the price per peron for hostels (super economy) or the rate f the room otherwis
-					if (request.budget_category == 2) { // super economy
-						rData.accomodationBudget = rData.accomodationBudget * rData.numberOfAdultsAndKids;
+					if (request.budgetCategory == 2) { // super economy
+						rData.accommodationBudget = rData.accommodationBudget * rData.numberOfAdultsAndKids;
 					} else {
-						rData.accomodationBudget = calculateAccomodationBudgetByRoom(rData.accomodationBudget, rData.numberOfAdultsAndKids);
+						rData.accommodationBudget = calculateAccomodationBudgetByRoom(rData.accommodationBudget, rData.numberOfAdultsAndKids);
 					}
 
-					switch (request.budget_category) {
+					switch (request.budgetCategory) {
 						// case 2: // Super Economy
-						// 	rData.dailySpendings *= 1;
+						// 	rData.dailySpending *= 1;
 						// 	break;
 						// case 3: // Economy
-						// 	rData.dailySpendings *= 1;
+						// 	rData.dailySpending *= 1;
 						// 	break;
 						case 4: // Mid Range
-							rData.dailySpendings *= 1.5;
+							rData.dailySpending *= 1.5;
 							break;
 						case 5: // Splurge
-							rData.dailySpendings *= 2;
+							rData.dailySpending *= 2;
 							break;
 						default:
-							rData.dailySpendings *= 1;
+							rData.dailySpending *= 1;
 							break;
 					}
 
 					// add 10% profit margin
 					rData.flightsBudget += (rData.flightsBudget * 0.1);
 					rData.ferriesBudget += (rData.ferriesBudget * 0.1);
-					rData.accomodationBudget += (rData.accomodationBudget * 0.1);
+					rData.accommodationBudget += (rData.accommodationBudget * 0.1);
 
 					rData.totalBudget += rData.ferriesBudget;
 					rData.totalBudget += rData.flightsBudget;
-					rData.totalBudget += rData.accomodationBudget;
+					rData.totalBudget += rData.accommodationBudget;
 
 					onSuccess(rData);
 				} else {
@@ -229,7 +285,15 @@ var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 	}
 };
 
-var recommendation = function (request, onSuccess, onFailure, onUserError) {
+var recommendation = function (request, lang, onSuccess, onFailure, onUserError) {
+	request = {
+		...request,
+		departureDate: request.departureDate || request.departure_date,
+		returnDate: request.returnDate || request.return_date,
+		budgetCategory: request.budgetCategory || request.budget_category,
+		purpose: request.purpose || request.travel_purpose,
+		preferences: request.preferences || request.interests,
+	};
 	itinerariesDao.getAllLong(async itineraries => {
 		for (let i = 0; i < itineraries.length; i++) {
 			itineraries[i].rank = 0;
@@ -237,25 +301,51 @@ var recommendation = function (request, onSuccess, onFailure, onUserError) {
 			itineraries[i].estimatedCost = budgetCalculation.totalBudget;
 			itineraries[i].recommendationRanks = {
 				budget: budgetCalculation.rank,
-				purpose: recommendationFuncs.purpose(request.travel_purpose, itineraries[i].purposes),
-				season: recommendationFuncs.season(request.departure_date, request.return_date, itineraries[i].seasons),
-				interest: recommendationFuncs.interest(request.interests, itineraries[i].interests),
-				needsVisa: recommendationFuncs.needsVisa(request.visa_assistance_needed, itineraries[i].needsVisa),
+				purpose: recommendationFuncs.purpose(request.purpose, itineraries[i].purposes),
+				season: recommendationFuncs.season(request.departureDate, request.returnDate, itineraries[i].seasons),
+				interest: recommendationFuncs.interest(request.preferences, itineraries[i].interests),
+				// needsVisa: recommendationFuncs.needsVisa(request.visa_assistance_needed, itineraries[i].needsVisa),
 			}
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
-					itineraries[i].rank += itineraries[i].recommendationRanks[rank];
+					let factor;
+					switch (rank) {
+						case 'budget':
+							factor = 0.3;
+							break;
+						case 'purpose':
+							factor = 0.2;
+							break;
+						case 'season':
+							factor = 0.3;
+							break;
+						case 'interest':
+							factor = 0.2;
+							break;
+						case 'needsVisa':
+							factor = 0;
+							break;
+						default:
+							factor = 0;
+							break;
+					}
+					itineraries[i].rank += factor * itineraries[i].recommendationRanks[rank];
 				}
 			}
-			itineraries[i].rank = itineraries[i].rank / Object.keys(itineraries[i].recommendationRanks).length;
 		}
 		onSuccess(itineraries.filter(i => i.id !== -1).sort((a, b) => b.rank - a.rank).map(i => ({
 			id: i.id,
+			name: i[`${lang.toLowerCase()}_name`],
+			description: i[`${lang.toLowerCase()}_description`],
 			enName: i.en_name,
 			enDescription: i.en_description,
 			arName: i.ar_name,
 			arDescription: i.ar_description,
+			image: i.image1,
 			image1: i.image1,
+			temperatureLo: i.temperatureLo,
+			temperatureHi: i.temperatureHi,
+			iataCode: i.iataCode,
 			estimatedCost: i.estimatedCost,
 			recommendationRanks: i.recommendationRanks,
 			rank: i.rank
@@ -272,8 +362,8 @@ var recommendationFuncs = {
 		for (let i = 0; i < seasons.length; i++) {
 			const start = new Date(seasons[i].start),
 				end = new Date(seasons[i].end);
-				start.setFullYear(1970);
-				end.setFullYear(1970);
+			start.setFullYear(1970);
+			end.setFullYear(1970);
 			if ((requestDepartureDate > start && requestDepartureDate < end) || (requestReturnDate > start && requestReturnDate < end))
 				return seasons[i].type == 0 ? 100 : seasons[i].type == 2 ? 50 : 0;
 		}
@@ -283,7 +373,7 @@ var recommendationFuncs = {
 		budgetCalculation({ ...request,
 			itinerary_id: itineraryId
 		}, function (calculation) {
-			const requestBudgetCategory = request.budget_category;
+			const requestBudgetCategory = request.budgetCategory;
 			if (requestBudgetCategory == 1) {
 				if (parseFloat(calculation.totalBudget) < parseFloat(request.budget)) calculation.rank = 100;
 				else calculation.rank = 0;
@@ -303,10 +393,14 @@ var recommendationFuncs = {
 	},
 	interest: (requestInterests, itineraryInterests) => {
 		let sumOfInterests = 0;
+		requestInterests = requestInterests.map(ri => ({
+			id: ri.id || ri,
+			percentage: ri.percentage || 100
+		}));
 		for (let i = 0; i < requestInterests.length; i++) {
 			itineraryInterest = itineraryInterests.find(ii => ii.interest_Id == requestInterests[i].id);
 			if (itineraryInterest) {
-				sumOfInterests += requestInterests[i].percentage * itineraryInterest.Percentage / 100;
+				sumOfInterests += (requestInterests[i].percentage * itineraryInterest.Percentage / 100);
 			}
 		}
 		var nonZeroPercentInterestsInRequest = requestInterests.filter(ri => ri.percentage > 0);
@@ -509,3 +603,4 @@ exports.budgetCalculation = budgetCalculation;
 exports.sendDailyReportOfRequestsCount = sendDailyReportOfRequestsCount;
 exports.toggleOptions = requestsDao.toggleOptions;
 exports.getPackage = getPackage;
+exports.validatePromoCode = validatePromoCode;

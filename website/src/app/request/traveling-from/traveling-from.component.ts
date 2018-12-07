@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
+
+/* Models */
+import { TravelingFrom } from './traveling-from.model';
 
 @Component({
   selector: 'c-request-traveling-from',
@@ -11,15 +13,12 @@ import { RequestService } from '../request.service';
   styleUrls: ['./traveling-from.component.scss']
 })
 export class TravelingFromComponent {
-  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'travelingFrom': new FormControl('', [Validators.required])
   };
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private requestService: RequestService
   ) {
     this.formGroup = new FormGroup({});
@@ -29,26 +28,16 @@ export class TravelingFromComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.currentStepPath = this.route.routeConfig.path;
-    requestService.stepVisited(this.currentStepPath);
   }
 
-  save(): boolean {
-    if (this.formGroup.invalid) { return false; }
-
+  save(): void {
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
     }
-    return true;
   }
 
-  goToPrevStep() {
-    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-  }
+  compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 
-  goToNextStep() {
-    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
-  }
 }

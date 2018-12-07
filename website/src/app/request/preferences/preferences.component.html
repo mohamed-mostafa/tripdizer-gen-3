@@ -1,17 +1,8 @@
-<div class="h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <form [formGroup]="formGroup" class="col-11 col-lg-7">
-      <div class="mat-checkbox-group mat-checkbox-rounded form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row">
-        <mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id">
-          {{preference.name}}
-          <span class="label-content-img" [style.background]="'url(' + preference.image + ')'"></span>
-        </mat-checkbox>
-      </div>
-    </form>
-    <div class="offset-lg-1">
-      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
-      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
-        <i class="fas fa-chevron-right"></i></button>
-    </div>
+<c-request-form-layout [formGroup]="formGroup" (next)="save()" marginTop="3">
+  <div class="mat-checkbox-group mat-checkbox-rounded form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row">
+    <mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
+      {{preference.name}}
+      <span class="label-content-img" [style.background]="'url(' + preference.image + ')'"></span>
+    </mat-checkbox>
   </div>
-</div>
+</c-request-form-layout>

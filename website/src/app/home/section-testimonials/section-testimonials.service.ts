@@ -9,19 +9,19 @@ export class SectionTestimonialService {
     private endPoint = 'public/testimonial' /*+ (lang ? '?lang=' + lang : '')*/;
     private testimonial: Array<any> = [
         {
-            enName: 'Rania Saleh',
-            enText: 'My family trip to Malaysia was Amazing. The day to day planing couldn’t be better and worth every penny.',
+            name: 'Rania Saleh',
+            text: 'My family trip to Malaysia was Amazing. The day to day planing couldn’t be better and worth every penny.',
             picture: '../../../assets/img/rania_saleh.jpg'
         },
         {
-            enName: 'Shahd Taha',
-            enText: `I really enjoyed Bali’s trip so much, you guys made my Honeymoon perfect by recommending the best
+            name: 'Shahd Taha',
+            text: `I really enjoyed Bali’s trip so much, you guys made my Honeymoon perfect by recommending the best
             things ever which totally matched what we love. Thanks a million.`,
             picture: '../../../assets/img/shahd_taha.jpg'
         },
         {
-            enName: 'Tamer Mohamed',
-            enText: `Best website to use if you are looking for a plan that matches your travel style,
+            name: 'Tamer Mohamed',
+            text: `Best website to use if you are looking for a plan that matches your travel style,
             I travelled to Malaysia and Bali and I couldn’t enjoy it more.`,
             picture: '../../../assets/img/tamer_mohamed.jpg'
         },

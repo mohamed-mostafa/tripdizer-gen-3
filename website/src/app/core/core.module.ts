@@ -1,21 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 /* Components */
-import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { SocialComponent } from './social/social.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   exports: [
+    FooterComponent,
     NavBarComponent,
-    FooterComponent
+    SocialComponent
   ],
   declarations: [
+    FooterComponent,
     NavBarComponent,
-    FooterComponent
+    SocialComponent
   ]
 })
 export class CoreModule { }

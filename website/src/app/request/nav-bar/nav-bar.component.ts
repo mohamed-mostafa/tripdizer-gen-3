@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
-
-/* Models */
-import { Request } from '../request.model';
-import { Step } from '../step.model';
+import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 /* Services */
 import { RequestService } from '../request.service';
+
+/* Models */
+import { Step } from '../step.model';
 
 @Component({
   selector: 'c-request-nav-bar',
@@ -14,17 +14,34 @@ import { RequestService } from '../request.service';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class RequestNavBarComponent implements AfterViewInit {
-  navBar: Array<Step> = new Request().steps;
+  navBar: Array<Step>;
+  currentPath: string;
+  direction: string;
 
   @Output() navBarDimensionChanged = new EventEmitter();
 
   constructor(
-    private router: Router,
-    private requestService: RequestService) {
+    router: Router,
+    translate: TranslateService,
+    requestService: RequestService) {
+    this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
-      this.setNavLinksWidth();
-      this.setNavBrandWidth();
+      setTimeout(() => {
+        this.setNavLinksWidth();
+        this.setNavBrandWidth();
+      }, 0);
+    });
+    translate.get('dir').subscribe(dir => this.direction = dir);
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
+        this.currentPath = (event as NavigationEnd).urlAfterRedirects || event.url;
+        const splittedUrl = this.currentPath.split('/');
+        if (this.currentPath && splittedUrl) {
+          this.currentPath = splittedUrl[splittedUrl.length - 1];
+        }
+        setTimeout(() => this.scrollIntoView(), 0);
+      }
     });
   }
 
@@ -40,7 +57,7 @@ export class RequestNavBarComponent implements AfterViewInit {
       const navLinkElement = navLinksContainer.children[i] as HTMLElement;
       navLinksContainerWidth += navLinkElement.offsetWidth;
     }
-    navLinksContainer.style.width = `${navLinksContainerWidth * 1.1}px`;
+    navLinksContainer.style.width = `${navLinksContainerWidth + 1}px`;
   }
 
   setNavBrandWidth() {
@@ -49,14 +66,11 @@ export class RequestNavBarComponent implements AfterViewInit {
     this.navBarDimensionChanged.emit();
   }
 
-  isActive(path: string): boolean {
-    this.scrollIntoView();
-    return this.router.url.endsWith(path);
-  }
-
   scrollIntoView(): void {
     const activeElements = document.getElementsByClassName('active');
-    if (activeElements.length > 0) { activeElements[0].scrollIntoView({ inline: 'start' }); }
+    if (activeElements.length > 0) {
+      activeElements[0].scrollIntoView({ inline: this.direction === 'rtl' ? 'end' : 'start' });
+    }
   }
 
 }

@@ -208,7 +208,7 @@ describe('hws_request_business', function() {
 		
 		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
-			assert.equal(result.dailySpendings, 100);
+			assert.equal(result.dailySpending, 100);
 			done();
 		}, null, null);
     });
@@ -223,7 +223,7 @@ describe('hws_request_business', function() {
 		
 		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
-			assert.equal(result.dailySpendings, 100);
+			assert.equal(result.dailySpending, 100);
 			done();
 		}, null, null);
     });
@@ -238,7 +238,7 @@ describe('hws_request_business', function() {
 		
 		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
-			assert.equal(result.dailySpendings, 150);
+			assert.equal(result.dailySpending, 150);
 			done();
 		}, null, null);
     });
@@ -253,7 +253,7 @@ describe('hws_request_business', function() {
 		
 		var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js')
 		requestsBusiness.budgetCalculation(request, function(result) {
-			assert.equal(result.dailySpendings, 200);
+			assert.equal(result.dailySpending, 200);
 			done();
 		}, null, null);
     });

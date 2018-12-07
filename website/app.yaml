@@ -1,7 +1,7 @@
 # [START runtime]
 runtime: python27
 threadsafe: yes
-service: tripdizer-website
+service: beta
 # [END runtime]
 
 handlers:

@@ -1,36 +1,41 @@
-<div class="h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <form [formGroup]="formGroup" class="col-11 col-lg-7">
-      <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-        <mat-hint>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-hint>
-        <mat-error>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-error>
-        <input matInput type="text" id="traveler-name" class="custom-bs text-yellow text-uppercase font-weight-bold"
-          placeholder="Name" formControlName="travelerName">
-      </mat-form-field>
-      <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-        <mat-hint>{{formGroup.controls.travelerMobile.errors | errorMessage}}</mat-hint>
-        <mat-error>{{formGroup.controls.travelerMobile.errors | errorMessage}}</mat-error>
-        <input matInput type="text" id="traveler-mobile" class="custom-bs text-yellow text-uppercase font-weight-bold"
-          placeholder="Mobile No." formControlName="travelerMobile">
-      </mat-form-field>
-      <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-        <mat-hint>{{formGroup.controls.travelerEmail.errors | errorMessage}}</mat-hint>
-        <mat-error>{{formGroup.controls.travelerEmail.errors | errorMessage}}</mat-error>
-        <input matInput type="text" id="traveler-email" class="custom-bs text-yellow text-uppercase font-weight-bold"
-          placeholder="E-Mail" formControlName="travelerEmail">
-      </mat-form-field>
-      <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-        <mat-hint>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-hint>
-        <mat-error>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-error>
-        <input matInput [matDatepicker]="travelerBirthdayPicker" id="traveler-birthday" class="custom-bs text-yellow text-uppercase font-weight-bold"
-          placeholder="Birthday" (focus)="travelerBirthdayPicker.open()" formControlName="travelerBirthday">
-        <mat-datepicker #travelerBirthdayPicker></mat-datepicker>
-      </mat-form-field>
-    </form>
-    <div class="offset-lg-1">
-      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
-      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Submit
-        <i class="fas fa-chevron-right"></i></button>
-    </div>
-  </div>
-</div>
+<c-request-form-layout [formGroup]="formGroup" [nextLabel]="'request.information.next_label' | translate" (next)="save()">
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.travelerName.errors | errorMessage}}</mat-error>
+    <input matInput type="text" id="traveler-name" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      [placeholder]="'request.information.name' | translate" formControlName="travelerName">
+  </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.travelerMobile.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.travelerMobile.errors | errorMessage}}</mat-error>
+    <input matInput type="text" id="traveler-mobile" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      [placeholder]="'request.information.mobile' | translate" formControlName="travelerMobile">
+  </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.travelerEmail.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.travelerEmail.errors | errorMessage}}</mat-error>
+    <input matInput type="text" id="traveler-email" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      [placeholder]="'request.information.email' | translate" formControlName="travelerEmail">
+  </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.travelerEmailConfirmation.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.travelerEmailConfirmation.errors | errorMessage}}</mat-error>
+    <input matInput type="text" id="traveler-email-confirmation" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      [placeholder]="'request.information.confirm_email' | translate" formControlName="travelerEmailConfirmation">
+  </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.travelerBirthday.errors | errorMessage}}</mat-error>
+    <input matInput [max]="maxDate" [matDatepicker]="travelerBirthdayPicker" id="traveler-birthday" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      [placeholder]="'request.information.birthday' | translate" (click)="travelerBirthdayPicker.open()" (focus)="travelerBirthdayPicker.open()"
+      formControlName="travelerBirthday">
+    <mat-datepicker #travelerBirthdayPicker [touchUi]="true"></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-hint>{{formGroup.controls.referralType.errors | errorMessage}}</mat-hint>
+    <mat-error>{{formGroup.controls.referralType.errors | errorMessage}}</mat-error>
+    <mat-select formControlName="referralType" [placeholder]="'request.information.referral' | translate">
+      <mat-option *ngFor="let type of referralTypes" [value]="type.id">{{type.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</c-request-form-layout>

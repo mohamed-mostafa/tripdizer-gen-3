@@ -1,0 +1,208 @@
+{
+  "dir": "rtl",
+  "currency": {
+    "EGP": "ج.م."
+  },
+  "core": {
+    "footer": {
+      "logo": "../../../assets/img/logo-250x131.svg",
+      "slogan": "نعدك بتوفير وقتك و نقودك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
+      "location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
+      "plan_trip": "خطط لرحلتك"
+    }
+  },
+  "shared": {
+    "error_messages": {
+      "required": "مطلوب",
+      "validDate": "يوم/شهر/سنة",
+      "matDatepickerParse": "التاريخ غير صحيح",
+      "compareDates": "التواريخ غير صحيحة",
+      "email": "البريد الإلكتروني غير صحيح",
+      "numericOnly": "أرقام فقط",
+      "equalTo": "غير متطابقين",
+      "copyPaste": "رجاء لا تقوم بالنسخ و اللصق"
+    }
+  },
+  "home": {
+    "landing": {
+      "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+      "landing_question": "هل تعرف الي اين تريد السفر؟",
+      "have_plan": "نعم, عندي خطة للسفر",
+      "surprise_me": "لا ... فاجئني",
+      "scroll_down": "إنــــــــــــــــــزل لـلأســــفــــــــــــــــــل"
+    },
+    "testimonials": {
+      "featured_in": "تم ذكرنا في"
+    },
+    "videos": {
+      "watch_videos": "شاهد فيديوهاتنا علي"
+    },
+    "why_us": {
+      "tailor_made": {
+        "label": "رحلات مفصلة خصيصا لك",
+        "description": "نحن نهتم بالتفاصيل الصغيرة حتي نرتب لك أنسب رحلة, مفصلة خصيصا لإهتماماتك و ميزانيتك وفقا لإحتياجاتك"
+      },
+      "enhanced_travel_experience": {
+        "label": "تجربة سفر مدهشة",
+        "description": "نركز علي العناصر التي تساهم في جودة تجربة سفرك. سوف نتولي ترتيب الطيران, الإقامة, و الزيارات المختلفة. كل ما عليك فعله هو الإسترخاء, ترتيب حقائبك و الإستمتاع برحلتك"
+      },
+      "hassle_free": {
+        "label": "خالية من المتاعب",
+        "description": "نبذل الكثير من الجهد في ترتيب برنامج مفصل ليرشدك خلال رحلتك. من خلال الحجز معنا ، لن تضطر إلى التعرض الي متاعب ترتيب رحلتك لأسابيع. بدلاً من ذلك ،سنجهز لك رحلة مخصصة تتناسب مع اهتماماتك وميزانيتك واحتياجاتك"
+      }
+    }
+  },
+  "request": {
+    "budget": {
+      "budget": "لي ميزانيتي الخاصة"
+    },
+    "departure_return": {
+      "departure": "سفر",
+      "return": "عودة",
+      "flexible": "تواريخ مرنة (+/- 3 أيام)",
+      "compare_dates": "تاريخ العودة يجب ان يكون بعد السفر"
+    },
+    "destinations": {
+      "dialog": {
+        "title": "وجهة أخرى",
+        "description": "الي اين تريد السفر؟",
+        "inputs": {
+          "input0": "حدد وجهتك"
+        },
+        "buttonsLabel": {
+          "ok": "استمر",
+          "cancel": "إلغاء"
+        }
+      }
+    },
+    "estimated_cost": {
+      "hint1": "هذة التكلفة تقديرية و قد تختلف في وقت الحجز",
+      "flights": "الطيران",
+      "accommodation": "الإقامة",
+      "ferries": "العبّارات",
+      "daily_spending": "المصاريف اليومية",
+      "hint2": "طيران دولي + داخلي",
+      "hint3": "مجرد تذكير, و ليست مدرجة في التكلفة المقدّرة"
+    },
+    "form_layout": {
+      "next_label": "التالي",
+      "back_label": "السابق"
+    },
+    "information": {
+      "next_label": "إرسال",
+      "name": "الأسم",
+      "mobile": "رقم الموبايل",
+      "email": "البريد الإلكتروني",
+      "confirm_email": "تأكيد البريد الإلكتروني",
+      "birthday": "تاريخ الميلاد",
+      "referral": "كيف عرفت عنا؟",
+      "equal_to": "البريد الإلكتروني غير متطابق"
+    },
+    "nav_bar": {
+      "traveling_from": "مسافر من",
+      "traveling_to": "مسافر إلي",
+      "departure_return": "سفر و عودة",
+      "travelers": {
+        "title": "المسافرين",
+        "value": "{{adultsNumber}} بالغين"
+      },
+      "budget": "الميزانية",
+      "purpose": "غرض السفر",
+      "preferences": "الإهتمامات",
+      "destinations": "الوجهات",
+      "estimated_cost": "التكلفة",
+      "travel_assistance": {
+        "title": "المساعدة",
+        "visaAssistance": "التأشيرة",
+        "tourGuide": "مرشد سياحي"
+      },
+      "information": {
+        "title": "خطوة أخيرة",
+        "value": "معلومات"
+      },
+      "ticket": ""
+    },
+    "preferences": {},
+    "purpose": {},
+    "recommended_destinations": {
+      "rank": "مرتبة",
+      "highest": "الأكثر ملاءمة",
+      "lowest": "الأقل ملاءمة"
+    },
+    "ticket": {
+      "request_number": "رقم الطلب",
+      "adults": "{{adultsNumber}} بالغين",
+      "lg_sizes": {
+        "left_part": "M0,425V25A25,25,0,0,0,25,0H925a25,25,0,0,0,25,25v400A25,25,0,0,0,925,450H25A25,25,0,0,0,0,425Z",
+        "right_part": "M175,425V25A25,25,0,0,0,200,0h200a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
+        "right_part_transform": "matrix(1, 0, 0, 1, 925, 150)",
+        "splitter": "translate(1150 250)",
+        "request": {
+          "position": "translate(970 238)",
+          "left_details": "translate(385 {{calc}})",
+          "right_details": {
+            "position": "translate(0 20)",
+            "ticket_id": "-30",
+            "icon": "translate(-400 0)",
+            "from": "-20",
+            "to": "-420"
+          }
+        }
+      },
+      "sm_sizes": {
+        "position": "translate(257 128)",
+        "top_details": {
+          "number": "120",
+          "sign": "-"
+        },
+        "bottom_details": {
+          "position": "translate(120 0)",
+          "ticket_id": "-15",
+          "icon": "translate(-150 80)",
+          "description": "translate(120 295)"
+        }
+      },
+      "lg_text": {
+        "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
+        "line2": "ما لم يكن عندة الشجاعة الكافية لغياب الشاطئ عن نظره",
+        "line3": "- اندريا جيد"
+      },
+      "sm_text": {
+        "line1": "لا أحد يمكنه أكتشاف محيطات جديدة",
+        "line2": "ما لم يكن عندة الشجاعة الكافية",
+        "line3": "لغياب الشاطئ عن نظره",
+        "line4": "- اندريا جيد"
+      }
+    },
+    "travel_assistance": {
+      "visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",
+      "tour_guide": "أحتاج مرشد سياحي",
+      "special_request": "طلبات خري"
+    },
+    "travelers": {
+      "adults": "بالغين",
+      "kids": "اطفال",
+      "infants": "رضع"
+    },
+    "traveling_from": {
+      "traveling_from": "مسافر من",
+      "airports": [{
+          "iataCode": "CAI",
+          "name": "القاهرة"
+        },
+        {
+          "iataCode": "HBE",
+          "name": "الإسكندرية"
+        },
+        {
+          "iataCode": "HRG",
+          "name": "الغردقة"
+        },
+        {
+          "iataCode": "SSH",
+          "name": "شرم الشيخ"
+        }
+      ]
+    }
+  }
+}

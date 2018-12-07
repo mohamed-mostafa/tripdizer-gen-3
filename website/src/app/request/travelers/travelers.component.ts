@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -11,23 +10,14 @@ import { RequestService } from '../request.service';
   styleUrls: ['./travelers.component.scss']
 })
 export class TravelersComponent {
-  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'adultsNumber': new FormControl('', [Validators.required]),
     'kidsNumber': new FormControl(),
     'infantsNumber': new FormControl()
   };
-  radioValues: Array<{ key: number, value: string }> = [
-    { key: 1, value: '1' },
-    { key: 2, value: '2' },
-    { key: 3, value: '3' },
-    { key: 4, value: '+4' }
-  ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private requestService: RequestService
   ) {
     this.formGroup = new FormGroup({});
@@ -37,26 +27,38 @@ export class TravelersComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.currentStepPath = this.route.routeConfig.path;
-    requestService.stepVisited(this.currentStepPath);
   }
 
-  save(): boolean {
-    if (this.formGroup.invalid) { return false; }
-
+  save(): void {
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
     }
-    return true;
   }
 
-  goToPrevStep() {
-    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+  getRadioValues(controlName: string): Array<number> {
+    return [1, 2, 3, 4].map(val => this.requestService.getTravelersRadioButtonsStart(controlName) + val);
   }
 
-  goToNextStep() {
-    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
+  setRadioValuesStart(controlName: string, isFirst = false, isLast = false): void {
+    const times = 2;
+    this.calcRadioValuesStartWithAnimation(controlName, times, isLast,
+      isFirst && this.requestService.getTravelersRadioButtonsStart(controlName) >= times);
   }
+
+  calcRadioValuesStartWithAnimation(controlName, counter, increase, decrease) {
+    if (counter <= 0) { return; }
+    setTimeout(() => {
+      this.requestService.setTravelersRadioButtonsStart(controlName, increase, decrease);
+      this.calcRadioValuesStartWithAnimation(controlName, --counter, increase, decrease);
+    }, 100);
+  }
+
+  clearValueIfDoubleClicked(controlName: string, newControlValue): void {
+    if (newControlValue === this.formGroup.controls[controlName].value) {
+      setTimeout(() => { (this.controls[controlName] as FormControl).setValue(0); }, 1);
+    }
+  }
+
 }

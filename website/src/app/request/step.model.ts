@@ -4,6 +4,10 @@ export interface Step {
     value: string;
     path: string;
     order: number;
+    isDisabled?: boolean;
+    isHiddenOnNavBar?: boolean;
     requiredForEstimateCalc?: boolean;
+    requiredForRecommendation?: boolean;
     isValid(): boolean;
+    isClickable(): boolean;
 }

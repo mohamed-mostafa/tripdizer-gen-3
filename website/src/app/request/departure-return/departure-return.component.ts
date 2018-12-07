@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DateValidators } from '../../shared/utils';
+import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
+import { CustomValidators } from '../../shared/utils';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -12,21 +13,23 @@ import { RequestService } from '../request.service';
   styleUrls: ['./departure-return.component.scss']
 })
 export class DepartureReturnComponent {
-  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
-    'departureDate': new FormControl('', [Validators.required, DateValidators.valid()]),
-    'returnDate': new FormControl('', [Validators.required, DateValidators.valid()]),
+    'departureDate': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
+    'returnDate': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
     'isFlexibleDates': new FormControl()
   };
+  minDate = new Date();
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private requestService: RequestService
+    private requestService: RequestService,
+    translate: TranslateService
   ) {
+    let compareDatesValidationMsg: string;
+    translate.stream('request.departure_return.compare_dates')
+      .subscribe(validationMsg => compareDatesValidationMsg = validationMsg);
     this.formGroup = new FormGroup({}, {
-      validators: DateValidators.greaterThan('departureDate', 'returnDate', 'Return Date must be greater than departure date')
+      validators: CustomValidators.dateGreaterThan('departureDate', 'returnDate', compareDatesValidationMsg)
     });
     for (const controlName in this.controls) {
       if (this.controls.hasOwnProperty(controlName)) {
@@ -34,26 +37,19 @@ export class DepartureReturnComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.currentStepPath = this.route.routeConfig.path;
-    requestService.stepVisited(this.currentStepPath);
+    this.formGroup.controls['departureDate'].valueChanges.subscribe(departureDate => {
+      if (!this.formGroup.controls['returnDate'].value) {
+        this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
+      }
+    });
   }
 
-  save(): boolean {
-    if (this.formGroup.invalid) { return false; }
-
+  save(): void {
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
     }
-    return true;
   }
 
-  goToPrevStep() {
-    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-  }
-
-  goToNextStep() {
-    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
-  }
 }

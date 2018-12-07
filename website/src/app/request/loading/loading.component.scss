@@ -1,0 +1,28 @@
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5) url('../../../assets/img/loading.gif') center center no-repeat;
+  background-size: 30%;
+
+  @media (min-width: 576px) {
+    background-size: 25%;
+  }
+
+  @media (min-width: 768px) {
+    background-size: 20%;
+  }
+
+  @media (min-width: 992px) {
+    background-size: 15%;
+  }
+
+  @media (min-width: 1200px) {
+    background-size: 10%;
+  }
+}

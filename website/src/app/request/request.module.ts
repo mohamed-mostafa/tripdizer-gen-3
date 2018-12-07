@@ -5,13 +5,18 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 
 /* Modules */
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
-/* Pipes */
-import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
+/* Components */
+import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
+import { RequestLoadingComponent } from './loading/loading.component';
+import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
+import { RequestComponent } from './request.component';
 
 @NgModule({
   imports: [
@@ -19,15 +24,20 @@ import { ErrorMessagePipe } from '../shared/pipes/error-message.pipe';
     RequestRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatDatepickerModule,
+    SharedModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     MatSliderModule
   ],
   declarations: [
     ...RequestComponents,
-    ErrorMessagePipe
+    RequestComponent,
+    RequestNavBarComponent,
+    RequestFormLayoutComponent,
+    RequestLoadingComponent
   ]
 })
 export class RequestModule { }

@@ -122,7 +122,7 @@ var update = function (budgetCategory, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Budget_Category SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?', [budgetCategory.en_name, budgetCategory.en_description, budgetCategory.ar_name, budgetCategory.ar_description, budgetCategory.id], function (err, result) {
+					connection.query('UPDATE Budget_Category SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ? WHERE Id = ?', [budgetCategory.en_name, budgetCategory.en_description, budgetCategory.ar_name, budgetCategory.ar_description, budgetCategory.id], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							console.log("An error occurred while trying to update the existing budgetCategory: " + budgetCategory.en_name);

@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var $: any;
 
@@ -9,9 +10,10 @@ declare var $: any;
   styleUrls: ['./videos-carousel.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class VideosCarouselComponent implements OnInit {
+export class VideosCarouselComponent {
 
   _videos: Array<any> = [];
+  _isRTL = false;
 
   get videos(): Array<any> {
     return this._videos;
@@ -24,17 +26,17 @@ export class VideosCarouselComponent implements OnInit {
     }
   }
 
-  constructor(public sanitizer: DomSanitizer) {
-  }
-
-  ngOnInit() {
+  constructor(public sanitizer: DomSanitizer, translate: TranslateService) {
+    translate.stream('dir').subscribe(dir => this._isRTL = dir === 'rtl');
   }
 
   initOwlCarousel() {
-    $(document).ready(function () {
+    $(document).ready(() => {
       const screenWidth = document.body.offsetWidth;
       const videoRatio = 560 / 315;
-      $('.videos-carousel.owl-carousel').width(screenWidth).owlCarousel({
+      $('#videos-carousel-container').html($('#videos-carousel-template').html());
+      $('#videos-carousel-container .videos-carousel.owl-carousel').width(screenWidth).owlCarousel({
+        rtl: this._isRTL,
         items: 3,
         center: true,
         loop: true,

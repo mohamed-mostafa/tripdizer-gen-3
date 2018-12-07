@@ -1,0 +1,65 @@
+:host {
+  font-family: 'Space Mono', monospace;
+}
+
+.fill-blue {
+  fill: #2989ff;
+}
+
+.fill-white {
+  fill: #ffffff;
+}
+
+// .ticket-links {
+//   display: block !important;
+// }
+
+.v-ticket {
+  @media (min-width: 992px) {
+    padding: 0 2rem !important;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 0 5rem !important;
+  }
+
+  @media (min-width: 1500px) {
+    padding: 0 10rem !important;
+  }
+
+  .splitter {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    &.l-splitter {
+      stroke-width: 4px;
+      stroke-dasharray: 0 10.205;
+    }
+
+    &.s-splitter {
+      stroke-width: 3px;
+      stroke-dasharray: 0 7;
+    }
+  }
+}
+
+.h-ticket {
+  .splitter {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    &.l-splitter {
+      stroke-width: 4px;
+      stroke-dasharray: 0 10.205;
+    }
+
+    &.s-splitter {
+      stroke-width: 3px;
+      stroke-dasharray: 0 7;
+    }
+  }
+}

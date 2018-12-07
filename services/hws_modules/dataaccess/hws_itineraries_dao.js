@@ -49,8 +49,12 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							introduction: rows[0][0].Introduction,
 							includes: rows[0][0].Includes,
 							excludes: rows[0][0].Excludes,
+							temperatureLo: rows[0][0].temperatureLo,
+							temperatureHi: rows[0][0].temperatureHi,
+							image: rows[0][0].Image1,
 							image1: rows[0][0].Image1,
 							image2: rows[0][0].Image2,
+							iataCode: (rows[0][0].EN_Name).substring(0, 3),
 							agentNotes: rows[0][0].Agent_Notes,
 							countries: rows[1],
 							ferries: rows[2],
@@ -269,8 +273,12 @@ var getAll = function (lang, onSuccess, onFailure) {
 							introduction: rows[i].Introduction,
 							includes: rows[i].Includes,
 							excludes: rows[i].Excludes,
+							temperatureLo: rows[i].temperatureLo,
+							temperatureHi: rows[i].temperatureHi,
+							image: rows[i].Image1,
 							image1: rows[i].Image1,
 							image2: rows[i].Image2,
+							iataCode: (rows[i].EN_Name).substring(0, 3),
 							agentNotes: rows[i].Agent_Notes,
 							longitudes: rows[i].longitude,
 							latitudes: rows[i].latitude,
@@ -288,6 +296,9 @@ var getAll = function (lang, onSuccess, onFailure) {
 					// end the connection
 					connection.end();
 					// call the callback function provided by the caller, and give it the response
+					if (itineraries[0] && itineraries[0].id === -1) {
+						itineraries.push(itineraries.shift());
+					}
 					onSuccess(itineraries);
 				}
 			});
@@ -351,7 +362,7 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					var updateQuery = `UPDATE iternary SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
-					
+
 					connection.query(updateQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the statement fails
@@ -374,16 +385,16 @@ var updateAgentNotes = function (id, note, onSuccess, onFailure) {
 	});
 };
 
-var formatDateForSql = function(date) {
+var formatDateForSql = function (date) {
 	var year = date.getFullYear();
-	var month = date.getMonth()+1;
+	var month = date.getMonth() + 1;
 	var day = date.getDate();
 
 	if (day < 10) {
-	  day = '0' + day;
+		day = '0' + day;
 	}
 	if (month < 10) {
-	  month = '0' + month;
+		month = '0' + month;
 	}
 
 	var formattedDate = year + '-' + month + '-' + day;

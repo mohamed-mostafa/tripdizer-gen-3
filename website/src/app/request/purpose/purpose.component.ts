@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -14,7 +13,6 @@ import { Purpose } from './purpose.model';
   styleUrls: ['./purpose.component.scss']
 })
 export class PurposeComponent {
-  currentStepPath: string;
   formGroup: FormGroup;
   controls: any = {
     'purpose': new FormControl('', [Validators.required]),
@@ -22,8 +20,6 @@ export class PurposeComponent {
   purposes: Array<Purpose>;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private requestService: RequestService
   ) {
     this.formGroup = new FormGroup({});
@@ -33,14 +29,10 @@ export class PurposeComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
-    this.currentStepPath = this.route.routeConfig.path;
-    requestService.stepVisited(this.currentStepPath);
     requestService.getPurposes().subscribe((purposes: Array<Purpose>) => this.purposes = purposes);
   }
 
-  save(): boolean {
-    if (this.formGroup.invalid) { return false; }
-
+  save(): void {
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
@@ -48,15 +40,6 @@ export class PurposeComponent {
     }
     const selectedPurpose = this.purposes.find(p => p.id === this.formGroup.controls['purpose'].value);
     if (selectedPurpose) { this.requestService.setProperty('purposeName', selectedPurpose.name); }
-    return true;
-  }
-
-  goToPrevStep() {
-    this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-  }
-
-  goToNextStep() {
-    if (this.save()) { this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route }); }
   }
 
 }

@@ -231,8 +231,9 @@ var budgetCalculation = function (req, res) {
 var recommendation = function (req, res) {
 	try {
 		var request = req.body.request;
+		var lang = req.query.lang;
 		// call the business function and give it a callback function 
-		requestsBusiness.recommendation(request, function (request) {
+		requestsBusiness.recommendation(request, lang, function (request) {
 				res.json(request);
 			},
 			function (error) {
@@ -287,6 +288,24 @@ var getPackage = function (req, res) {
 	}
 };
 
+var validatePromoCode = function(req, res) {
+	try {
+		var promoCode = req.query.promoCode;
+		// call the business function and give it a callback function 
+		requestsBusiness.validatePromoCode(promoCode, function (isValid) {
+				res.send(isValid);
+			},
+			function (error) {
+				console.log(error);
+				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			});
+	} catch (error) {
+		console.log("An error occured in /request/promocodevalidity");
+		console.log(error);
+		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}	
+}
+
 exports.placeRequest = placeRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = assignRequestToUser;
@@ -303,4 +322,5 @@ exports.markRequestPlaced = markRequestPlaced;
 exports.budgetCalculation = budgetCalculation;
 exports.recommendation = recommendation;
 exports.toggleOptions = toggleOptions;
-exports.getPackage = getPackage;
+exports.getPackage = getPackage
+exports.validatePromoCode = validatePromoCode;

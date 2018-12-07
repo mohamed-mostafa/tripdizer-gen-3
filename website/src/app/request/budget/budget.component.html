@@ -1,24 +1,16 @@
-<div class="h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <form [formGroup]="formGroup" class="col-11 col-lg-7">
-      <mat-radio-group class="text form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row" formControlName="budgetCategory">
-        <div class="mat-radio-group-label-wrapper text-capitalize col-12" [class.mat-error]="formGroup.controls.budget.invalid">
-          <span class="mat-radio-group-label">Budget</span>
-          <span class="mat-radio-group-subscript">{{formGroup.controls.budget.errors | errorMessage}}</span>
-        </div>
-        <mat-slider min="1" max="999999" step="10" class="col-6" thumbLabel formControlName="budget"></mat-slider>
-        <div class="col-12 mat-display-2 custom-bs text-yellow">
-          {{formGroup.controls.budget.value | currency:'EGP':'symbol':'0.0-0'}}
-        </div>
-        <div class="col-12">
-          <mat-radio-button *ngFor="let budgetCategory of budgetCategories" [value]="budgetCategory.id" class="m-2">{{budgetCategory.name}}</mat-radio-button>
-        </div>
-      </mat-radio-group>
-    </form>
-    <div class="offset-lg-1">
-      <a href="javascript:void(0)" (click)="goToPrevStep()" class="mr-5">Back</a>
-      <button (click)="goToNextStep()" [disabled]="formGroup.invalid" class="btn btn-primary custom-bs btn-rounded btn-xl text-uppercase">Continue
-        <i class="fas fa-chevron-right"></i></button>
+<c-request-form-layout [formGroup]="formGroup" (next)="save()">
+  <mat-radio-group class="text form-control-xl my-1 my-sm-2 my-md-3 my-lg-4 row" formControlName="budgetCategory">
+    <div class="mat-radio-group-label-wrapper text-capitalize col-12" [class.mat-error]="formGroup.controls.budget.invalid">
+      <span class="mat-radio-group-label" [class.text-muted]="!isOwnBudget">{{'request.budget.budget' | translate}}</span>
+      <span class="mat-radio-group-subscript">{{formGroup.controls.budget.errors | errorMessage}}</span>
     </div>
-  </div>
-</div>
+    <mat-slider min="1" max="999999" step="10" class="col-12 col-lg-8" thumbLabel formControlName="budget"></mat-slider>
+    <div class="col-12 mat-display-2 custom-bs text-yellow" [class.text-muted]="!isOwnBudget" [class.text-right]="('dir' | translate)=== 'rtl'">
+      {{formGroup.controls.budget.value | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'}}
+    </div>
+    <div class="col-12 text-center budget-categories">
+      <mat-radio-button *ngFor="let budgetCategory of budgetCategories" [value]="budgetCategory.id" [hidden]="budgetCategory.id == 1"
+        class="m-1 m-lg-2">{{budgetCategory.name}}</mat-radio-button>
+    </div>
+  </mat-radio-group>
+</c-request-form-layout>

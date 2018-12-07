@@ -32,7 +32,8 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							ar_name: rows[0].AR_Name,
 							numberOfAdults: rows[0].Number_Of_Adults,
 							numberOfKids: rows[0].Number_Of_Kids,
-							numberOfInfants: rows[0].Number_Of_Infants
+							numberOfInfants: rows[0].Number_Of_Infants,
+							image: rows[0].Image
 						};
 
 						if (lang) {
@@ -76,7 +77,7 @@ var create = function (purpose, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO Travel_Purpose (EN_Name, AR_Name, Number_Of_Adults, Number_Of_Kids, Number_Of_Infants) values (?, ?, ?, ?, ?)', [purpose.en_name, purpose.ar_name, purpose.numberOfAdults, purpose.numberOfKids, purpose.numberOfInfants], function (err, result) {
+					connection.query('INSERT INTO Travel_Purpose (EN_Name, AR_Name, Number_Of_Adults, Number_Of_Kids, Number_Of_Infants, Image) values (?, ?, ?, ?, ?, ?)', [purpose.en_name, purpose.ar_name, purpose.numberOfAdults, purpose.numberOfKids, purpose.numberOfInfants, purpose.image], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							// end the connection
@@ -123,7 +124,7 @@ var update = function (purpose, onSuccess, onFailure) {
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Travel_Purpose SET EN_Name = ?, AR_Name = ?, Number_Of_Adults = ?, Number_Of_Kids = ?, Number_Of_Infants = ?', [purpose.en_name, purpose.ar_name, purpose.numberOfAdults, purpose.numberOfKids, purpose.numberOfInfants, purpose.id], function (err, result) {
+					connection.query('UPDATE Travel_Purpose SET EN_Name = ?, AR_Name = ?, Number_Of_Adults = ?, Number_Of_Kids = ?, Number_Of_Infants = ?, Image = ? WHERE Id = ?', [purpose.en_name, purpose.ar_name, purpose.numberOfAdults, purpose.numberOfKids, purpose.numberOfInfants, purpose.image, purpose.id], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
 							console.log("An error occurred while trying to update the existing purpose: " + purpose.en_name);
@@ -176,7 +177,8 @@ var getAll = function (lang, onSuccess, onFailure) {
 							ar_name: rows[i].AR_Name,
 							numberOfAdults: rows[i].Number_Of_Adults,
 							numberOfKids: rows[i].Number_Of_Kids,
-							numberOfInfants: rows[i].Number_Of_Infants
+							numberOfInfants: rows[i].Number_Of_Infants,
+							image: rows[i].Image
 						};
 						if (lang) {
 							purpose.name = purpose[lang.toLowerCase() + '_name'];
