@@ -118,10 +118,10 @@ var getAllFlights = function (onSuccess, onFailure) {
 					rows.forEach(row => {
 						var flight = {
 							id: row.id,
-							origin: row.departing_from,
-							destination: row.arriving_to,
+							origin: row.departing_from_iata,
+							destination: row.arriving_to_iata,
 							"return": row["return"],
-							carrierIata: row.airline_name,
+							carrierIata: row.airline_iata,
 							adultMonthPriceId: row.adult_price,
 							childMonthPriceId: row.kid_price,
 							infantMonthPriceId: row.infant_price
