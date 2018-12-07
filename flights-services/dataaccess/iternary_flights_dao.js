@@ -68,7 +68,7 @@ var update = function (flight, onSuccess, onFailure) {
 					+ 'NOV = ' + (flight.iNOV || 'NOV') + ' , '
 					+ '`DEC` = ' + (flight.iDEC || '`DEC`') + ' WHERE id = ' + flight.infantMonthPriceId + ';';
 					var flightQuery = flightsAdultPricesUpdateStatement  + flightsChildPricesUpdateStatement  + flightsInfantPricesUpdateStatement;
-					console.log(flightQuery);
+					// console.log(flightQuery);
 					connection.query(flightQuery, [], function (err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) { // if the first insert statement fails
@@ -118,10 +118,10 @@ var getAllFlights = function (onSuccess, onFailure) {
 					rows.forEach(row => {
 						var flight = {
 							id: row.id,
-							origin: row.departing_from,
-							destination: row.arriving_to,
+							origin: row.departing_from_iata,
+							destination: row.arriving_to_iata,
 							"return": row["return"],
-							carrierIata: row.airline_name,
+							carrierIata: row.airline_iata,
 							adultMonthPriceId: row.adult_price,
 							childMonthPriceId: row.kid_price,
 							infantMonthPriceId: row.infant_price

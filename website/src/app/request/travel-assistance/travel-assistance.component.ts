@@ -14,8 +14,11 @@ export class TravelAssistanceComponent {
   controls: any = {
     'visaAssistanceNeeded': new FormControl(),
     'tourGuideNeeded': new FormControl(),
+    'promoCode': new FormControl(),
     'specialRequests': new FormControl()
   };
+  isValidPromoCode = false;
+  isCheckingPromoCode = false;
 
   constructor(
     private requestService: RequestService
@@ -27,14 +30,33 @@ export class TravelAssistanceComponent {
         this.formGroup.addControl(controlName, this.controls[controlName]);
       }
     }
+    this.applyPromoCode();
   }
 
   save(): void {
     for (const controlName in this.formGroup.controls) {
-      if (this.formGroup.controls.hasOwnProperty(controlName)) {
+      if (this.formGroup.controls.hasOwnProperty(controlName) && controlName !== 'promoCode') {
         this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
       }
     }
+  }
+
+  applyPromoCode(): void {
+    this.isCheckingPromoCode = true;
+    this.formGroup.controls['promoCode'].disable();
+    const promoCode = this.formGroup.controls['promoCode'].value;
+    this.requestService.validatePromoCode(promoCode).subscribe(isValid => {
+      this.isValidPromoCode = isValid;
+      this.isCheckingPromoCode = false;
+      this.formGroup.controls['promoCode'].enable();
+      if (!isValid) {
+        this.formGroup.controls['promoCode'].setValue('');
+        this.formGroup.controls['promoCode'].setErrors({ invalidPromoCode: true });
+        setTimeout(() => {
+          this.formGroup.controls['promoCode'].reset();
+        }, 1000);
+      }
+    });
   }
 
 }
