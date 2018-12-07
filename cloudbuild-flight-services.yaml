@@ -1,0 +1,6 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
+  dir: services
+  id: 'GCLOUD DEPLOY'
+timeout: 1800s
