@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonFunctions } from 'src/app/shared/utils';
 
 /* Services */
 import { RequestService } from '../request.service';
@@ -15,6 +16,7 @@ import { Ticket } from './ticket.model';
 export class TicketComponent {
   currentStepPath: string;
   ticket: Ticket;
+  invalidForSVG = false;
 
   constructor(
     route: ActivatedRoute,
@@ -22,6 +24,9 @@ export class TicketComponent {
     private requestService: RequestService
   ) {
     this.currentStepPath = route.routeConfig.path;
+    if (CommonFunctions.getOSName() === 'MacOS' || CommonFunctions.getBrowserInfo().name === 'Safari') {
+      this.invalidForSVG = true;
+    }
     requestService.submitRequest().subscribe((response: Ticket | null) => {
       if (response) {
         this.ticket = response;

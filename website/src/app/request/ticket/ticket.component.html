@@ -1,6 +1,6 @@
 <c-request-form-layout [isButtonsHidden]="true">
-  <svg id="v-ticket" class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-    viewBox="0 0 1300 550">
+  <svg id="v-ticket" [class.bg-blue]="invalidForSVG" class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1300 550">
     <style>
       .svg-fa {
         font-family: FontAwesome;
@@ -105,8 +105,8 @@
       </g>
     </g>
   </svg>
-  <svg id="h-ticket" class="h-100 h-ticket d-block d-md-none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-    viewBox="0 0 400 710">
+  <svg id="h-ticket" [class.bg-blue]="invalidForSVG" class="h-100 h-ticket d-block d-md-none" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 400 710">
     <style>
       .svg-fa {
         font-family: FontAwesome;
