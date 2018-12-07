@@ -298,6 +298,18 @@ export class RequestService {
         return of(null).pipe(finalize(() => this.isLoading.next(false)));
     }
 
+    validatePromoCode(promoCode: string): Observable<boolean> {
+        return this.http.get<boolean>(`${this.endPoint}/promocodevalidity`, { params: { promoCode: promoCode } })
+            .pipe(map(isValid => {
+                if (isValid) {
+                    this.setProperty('promoCode', promoCode);
+                } else {
+                    this.setProperty('promoCode', null);
+                }
+                return isValid;
+            }));
+    }
+
     getReferralTypes(): Observable<Array<any> | null> {
         this.isLoading.next(true);
         let observable: Observable<Array<any>>;

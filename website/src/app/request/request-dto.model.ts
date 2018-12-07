@@ -19,6 +19,7 @@ export class RequestRequest {
   estimatedCost: number;
   visaAssistanceNeeded: boolean;
   tourGuideNeeded: boolean;
+  promoCode: string;
   specialRequests: string;
   traveler: IRequester;
   referralType: number;
@@ -40,6 +41,7 @@ export class RequestRequest {
       estimatedCost: request.estimatedCost,
       visaAssistanceNeeded: request.visaAssistanceNeeded,
       tourGuideNeeded: request.tourGuideNeeded,
+      promoCode: request.promoCode,
       specialRequests: request.specialRequests,
       traveler: {
         ...request.traveler,
