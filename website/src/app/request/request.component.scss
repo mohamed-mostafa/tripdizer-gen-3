@@ -164,6 +164,7 @@ $color-blue: #2989FF;
 
         .mat-radio-label-content {
           position: absolute;
+          left: 0;
           padding: 0;
           color: rgba(0, 0, 0, .54);
           font-weight: 600;
@@ -190,29 +191,28 @@ $color-blue: #2989FF;
 
           .mat-radio-container,
           .mat-radio-outer-circle,
-          .mat-radio-inner-circle {
+          .mat-radio-inner-circle,
+          .mat-radio-label-content {
             width: 44px;
             height: 44px;
           }
 
           .mat-radio-label-content {
             font-size: 1.25rem;
-            width: 44px;
-            // top: 17%;
           }
 
           @media (min-width: 576px) {
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 49px;
               height: 49px;
             }
 
             .mat-radio-label-content {
               font-size: 1.375rem;
-              width: 49px;
             }
           }
 
@@ -220,14 +220,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 54px;
               height: 54px;
             }
 
             .mat-radio-label-content {
               font-size: 1.5rem;
-              width: 54px;
             }
           }
 
@@ -235,14 +235,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 59px;
               height: 59px;
             }
 
             .mat-radio-label-content {
               font-size: 1.625rem;
-              width: 59px;
             }
           }
 
@@ -250,14 +250,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 64px;
               height: 64px;
             }
 
             .mat-radio-label-content {
               font-size: 1.75rem;
-              width: 64px;
             }
           }
         }
@@ -292,14 +292,14 @@ $color-blue: #2989FF;
 
           .mat-radio-container,
           .mat-radio-outer-circle,
-          .mat-radio-inner-circle {
+          .mat-radio-inner-circle,
+          .mat-radio-label-content {
             width: 55px;
             height: 55px;
           }
 
           .mat-radio-label-content {
             font-size: 0.65rem;
-            width: 55px;
             word-spacing: 55px;
             white-space: normal;
             text-align: center;
@@ -341,14 +341,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 72.25px;
               height: 72.25px;
             }
 
             .mat-radio-label-content {
               font-size: 0.74rem;
-              width: 72.25px;
               word-spacing: 72.25px;
             }
           }
@@ -373,14 +373,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 89.5px;
               height: 89.5px;
             }
 
             .mat-radio-label-content {
               font-size: 0.83rem;
-              width: 89.5px;
               word-spacing: 89.5px;
             }
           }
@@ -405,14 +405,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 106.75px;
               height: 106.75px;
             }
 
             .mat-radio-label-content {
               font-size: 0.91rem;
-              width: 106.75px;
               word-spacing: 106.75px;
             }
           }
@@ -437,14 +437,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 124px;
               height: 124px;
             }
 
             .mat-radio-label-content {
               font-size: 1rem;
-              width: 124px;
               word-spacing: 124px;
             }
           }
@@ -470,7 +470,8 @@ $color-blue: #2989FF;
 
           .mat-radio-container,
           .mat-radio-outer-circle,
-          .mat-radio-inner-circle {
+          .mat-radio-inner-circle,
+          .mat-radio-label-content {
             width: 128px;
             height: 128px;
           }
@@ -482,7 +483,6 @@ $color-blue: #2989FF;
           .mat-radio-label-content {
             color: #FFF;
             font-size: 1rem;
-            width: 128px;
             white-space: normal;
 
             .label-content-img {
@@ -493,6 +493,7 @@ $color-blue: #2989FF;
                 position: absolute;
                 width: 128px;
                 height: 128px;
+                top: 0;
                 left: 0;
                 border-radius: 50%;
                 z-index: -1;
@@ -553,14 +554,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 154.75px;
               height: 154.75px;
             }
 
             .mat-radio-label-content {
               font-size: 1.19rem;
-              width: 154.75px;
 
               .label-content-img {
                 top: calc((-154.75px + 10px + 1.18rem) / 2);
@@ -594,14 +595,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 181.5px;
               height: 181.5px;
             }
 
             .mat-radio-label-content {
               font-size: 1.38rem;
-              width: 181.5px;
 
               .label-content-img {
                 top: calc((-181.5px + 10px + 1.45rem) / 2);
@@ -635,14 +636,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 208.25px;
               height: 208.25px;
             }
 
             .mat-radio-label-content {
               font-size: 1.56rem;
-              width: 208.25px;
 
               .label-content-img {
                 top: calc((-208.25px + 10px + 1.73rem) / 2);
@@ -676,14 +677,14 @@ $color-blue: #2989FF;
 
             .mat-radio-container,
             .mat-radio-outer-circle,
-            .mat-radio-inner-circle {
+            .mat-radio-inner-circle,
+            .mat-radio-label-content {
               width: 235px;
               height: 235px;
             }
 
             .mat-radio-label-content {
               font-size: 1.75rem;
-              width: 235px;
 
               .label-content-img {
                 top: calc((-235px + 10px + 2rem) / 2);
@@ -783,6 +784,7 @@ $color-blue: #2989FF;
 
         .mat-checkbox-label {
           position: absolute;
+          left: 0;
           padding: 0;
           font-weight: 600;
           font-size: 1rem;
