@@ -9,7 +9,7 @@
       {{formGroup.controls.budget.value | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'}}
     </div>
     <div class="col-12 text-center budget-categories">
-      {{'request.budget.choice' | translate}}
+      <p>{{'request.budget.choice' | translate}}</p>
     </div>
     <div class="col-12 text-center budget-categories">
       <mat-radio-button *ngFor="let budgetCategory of budgetCategories" [value]="budgetCategory.id" [hidden]="budgetCategory.id == 1"
