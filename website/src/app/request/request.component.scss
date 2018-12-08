@@ -160,12 +160,19 @@ $color-blue: #2989FF;
   &.mat-radio-group {
     .mat-radio-button {
       .mat-radio-label {
+        position: relative;
+
         .mat-radio-label-content {
           position: absolute;
           padding: 0;
           color: rgba(0, 0, 0, .54);
           font-weight: 600;
           text-align: center;
+          display: inline-flex;
+          justify-content: center;
+          display: -webkit-inline-box;
+          -webkit-box-pack: center;
+          -webkit-box-align: center;
         }
       }
     }
@@ -191,6 +198,7 @@ $color-blue: #2989FF;
           .mat-radio-label-content {
             font-size: 1.25rem;
             width: 44px;
+            // top: 17%;
           }
 
           @media (min-width: 576px) {
@@ -294,6 +302,7 @@ $color-blue: #2989FF;
             width: 55px;
             word-spacing: 55px;
             white-space: normal;
+            text-align: center;
           }
         }
 
@@ -477,7 +486,7 @@ $color-blue: #2989FF;
             white-space: normal;
 
             .label-content-img {
-              top: calc((-128px + 10px + 1rem) / 2);
+              top: calc((-128px + 10px + 0.9rem) / 2);
 
               &,
               &:after {
@@ -554,7 +563,7 @@ $color-blue: #2989FF;
               width: 154.75px;
 
               .label-content-img {
-                top: calc((-154.75px + 10px + 1.19rem) / 2);
+                top: calc((-154.75px + 10px + 1.18rem) / 2);
 
                 &,
                 &:after {
@@ -595,7 +604,7 @@ $color-blue: #2989FF;
               width: 181.5px;
 
               .label-content-img {
-                top: calc((-181.5px + 10px + 1.38rem) / 2);
+                top: calc((-181.5px + 10px + 1.45rem) / 2);
 
                 &,
                 &:after {
@@ -636,7 +645,7 @@ $color-blue: #2989FF;
               width: 208.25px;
 
               .label-content-img {
-                top: calc((-208.25px + 10px + 1.56rem) / 2);
+                top: calc((-208.25px + 10px + 1.73rem) / 2);
 
                 &,
                 &:after {
@@ -677,7 +686,7 @@ $color-blue: #2989FF;
               width: 235px;
 
               .label-content-img {
-                top: calc((-235px + 10px + 1.75rem) / 2);
+                top: calc((-235px + 10px + 2rem) / 2);
 
                 &,
                 &:after {
@@ -741,6 +750,8 @@ $color-blue: #2989FF;
   &.mat-checkbox-group {
     .mat-checkbox {
       .mat-checkbox-layout {
+        position: relative;
+
         .mat-checkbox-inner-container {
           width: 128px;
           height: 128px;
@@ -774,13 +785,18 @@ $color-blue: #2989FF;
           position: absolute;
           padding: 0;
           font-weight: 600;
-          text-align: center;
           font-size: 1rem;
           width: 128px;
           word-spacing: 128px;
           color: #FFF;
           white-space: normal;
           padding-top: calc((128px - 1rem) / 2);
+          text-align: center;
+          display: inline-flex;
+          justify-content: center;
+          display: -webkit-inline-box;
+          -webkit-box-pack: center;
+          -webkit-box-align: center;
 
           .label-content-img {
 
@@ -1074,7 +1090,6 @@ $color-blue: #2989FF;
   @media (min-width: 1200px) {
     &.mat-form-field {
       font-size: 2.25rem;
-      // padding-top: 2rem;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-label,
