@@ -1,6 +1,8 @@
 .request-nav-bar {
   .nav-brand {
     background-color: #2989FF;
+    float: left;
+    outline: none;
 
     &:after {
       content: "";
@@ -9,8 +11,6 @@
       width: 50%;
       height: 50%;
       margin: 25%;
-      float: left;
-      outline: none;
     }
   }
 
