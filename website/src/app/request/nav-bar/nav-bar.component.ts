@@ -63,6 +63,7 @@ export class RequestNavBarComponent implements AfterViewInit {
   setNavBrandWidth() {
     const componentHeight = document.getElementById('request-nav-bar-container').offsetHeight;
     (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.width = `${componentHeight}px`;
+    (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.height = `${componentHeight}px`;
     this.navBarDimensionChanged.emit();
   }
 
