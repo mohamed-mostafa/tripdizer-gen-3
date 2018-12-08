@@ -97,6 +97,14 @@
     }
   }
 
+  .request-nav-bar {
+
+    .nav-brand,
+    .nav-link {
+      float: right !important;
+    }
+  }
+
   .mat-checkbox {
     float: right;
     text-align: right;
