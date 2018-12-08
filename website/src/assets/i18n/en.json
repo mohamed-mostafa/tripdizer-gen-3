@@ -55,7 +55,8 @@
   },
   "request": {
     "budget": {
-      "budget": "Budget/Person"
+      "budget": "Budget/Person",
+      "choice": "OR choose one of our pre-defined budget categories"
     },
     "departure_return": {
       "departure": "Departure",

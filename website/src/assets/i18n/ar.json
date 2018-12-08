@@ -55,7 +55,8 @@
   },
   "request": {
     "budget": {
-      "budget": "ميزانيتي/للشخص"
+      "budget": "ميزانيتي/للشخص",
+      "choice": "أو اختر واحدة من فئات الميزانية المحددة مسبقًا"
     },
     "departure_return": {
       "departure": "سفر",
