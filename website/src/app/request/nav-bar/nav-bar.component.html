@@ -1,5 +1,5 @@
 <div id="request-nav-bar-container" class="row request-nav-bar">
-  <div class="nav-brand"></div>
+  <div class="nav-brand" [routerLink]="['/']"></div>
   <div class="nav-links col p-0">
     <div>
       <div *ngFor="let navLink of navBar;let i = index" [routerLink]="[navLink.path]" class="nav-link text-capitalize"

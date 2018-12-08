@@ -3,20 +3,24 @@
   height: 100%;
 }
 
-#testimonials {
-  min-height: 100%;
-
-  @media (min-width: 355px) {
-    height: 100%;
-  }
-}
-
+#testimonials,
 #videos,
 #why-us,
 #our-team {
   min-height: 100%;
+}
 
-  @media (min-width: 576px) {
+@media (min-width: 355px) {
+  #testimonials {
+    height: 100%;
+  }
+}
+
+@media (min-width: 576px) {
+
+  #videos,
+  #why-us,
+  #our-team {
     height: 100%;
   }
 }

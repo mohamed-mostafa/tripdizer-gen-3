@@ -55,7 +55,7 @@
   },
   "request": {
     "budget": {
-      "budget": "Own Budget"
+      "budget": "Budget/Person"
     },
     "departure_return": {
       "departure": "Departure",
