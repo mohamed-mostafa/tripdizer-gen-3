@@ -20,6 +20,42 @@
     background-position: center;
     transition: background 0.3s;
 
+    @media (max-width: 372px) {
+      zoom: 0.9;
+    }
+
+    @media (max-width: 339px) {
+      zoom: 0.8;
+    }
+
+    @media (max-width: 307px) {
+      zoom: 0.7;
+    }
+
+    @media (max-width: 274px) {
+      zoom: 0.6;
+    }
+
+    @media (max-width: 241px) {
+      zoom: 0.5;
+    }
+
+    @media (max-width: 209px) {
+      zoom: 0.4;
+    }
+
+    @media (max-width: 176px) {
+      zoom: 0.3;
+    }
+
+    @media (max-width: 143px) {
+      zoom: 0.2;
+    }
+
+    @media (max-width: 110px) {
+      zoom: 0.1;
+    }
+
     &:before {
       content: "";
       width: 100%;
