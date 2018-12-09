@@ -153,7 +153,7 @@ var sendMails = function (emails, email, onSuccess) {
 }
 
 var validatePromoCode = function(promoCode, onSuccess, onFailure) {
-	if (promoCode != null && promoCode.toLowerCase() == 'tripdizerx10') {
+	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(promoCode, function(count) {
 			if (count < 50) {
 				onSuccess(true);
