@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Poppins:400,600,700">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/announcement.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
   <!--[if lt IE 10]>
@@ -70,6 +72,7 @@
   <!-- Page-->
   <div class="page text-center" ng-controller="GroupTripsController">
     <!-- Page Head-->
+    
     <header class="page-head slider-menu-position">
       <!-- RD Navbar Transparent-->
       <div class="rd-navbar-wrap">
@@ -102,6 +105,13 @@
         </nav>
       </div>
     </header>
+    <center style="z-index: 99999999; position: relative;">
+    <div class="m-bar m-red">
+      <!-- <a class="m-microphone"><i class="material-icons" style="font-size:26px;">mic</i></a> -->
+      <a class="m-content" href="https://beta.tripdizer.com">Check our new beta website</a>
+      <a class="m-close" href="#"><i class="material-icons">close</i></a>
+    </div> 
+  </center>
     <!-- Page Contents-->
     <main class="page-content">
       <section>
@@ -519,6 +529,12 @@
       jQuery('input[name="trip"]').val($(btn).data('trip-id'));
       $('#groupTripsRegistrationModal').modal('show');
     }
+
+     $(document).ready(function(){
+        $(".m-close").click(function(){
+            $(".m-bar").hide(600);
+        });
+    });
   </script>
   <!--Start of Tawk.to Script
 <script type="text/javascript">

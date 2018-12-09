@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/materialdesignicons.min.css">
   <link rel="stylesheet" href="//cdn.materialdesignicons.com/1.9.32/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/announcement.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--[if lt IE 10]>
     <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
     <script src="js/html5shiv.min.js"></script>
@@ -125,6 +127,13 @@
         </nav>
       </div>
     </header>
+    <center style="z-index: 99999999; position: relative;">
+    <div class="m-bar m-red">
+      <!-- <a class="m-microphone"><i class="material-icons" style="font-size:26px;">mic</i></a> -->
+      <a class="m-content" href="https://beta.tripdizer.com">جرب النسخة التجريبية من موقعنا الجديد</a>
+      <a class="m-close" href="#"><i class="material-icons">close</i></a>
+    </div> 
+  </center>
     <!-- Page Contents-->
     <main class="page-content">
       <section>
@@ -547,6 +556,11 @@
       jQuery('input[name="trip"]').val($(btn).data('trip-id'));
       $('#groupTripsRegistrationModal').modal('show');
     }
+    $(document).ready(function(){
+        $(".m-close").click(function(){
+            $(".m-bar").hide(600);
+        });
+    });
   </script>
   <!--Start of Tawk.to Script
 <script type="text/javascript">
