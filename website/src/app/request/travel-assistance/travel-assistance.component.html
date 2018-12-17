@@ -5,8 +5,8 @@
     <mat-checkbox class="col-12 mt-1 mt-sm-2 mt-md-3 mt-lg-4 mat-checkbox-md" formControlName="tourGuideNeeded"
       labelPosition="after">{{'request.travel_assistance.tour_guide' | translate}}</mat-checkbox>
     <mat-form-field class="promo-code form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-      <mat-hint *ngIf="!formGroup.controls.promoCode.value" [innerText]="'request.travel_assistance.hint' | translate"></mat-hint>
-      <mat-error>{{formGroup.controls.promoCode.errors | errorMessage}}</mat-error>
+      <mat-hint *ngIf="!formGroup.controls['promoCode'].value" [innerText]="'request.travel_assistance.hint' | translate"></mat-hint>
+      <mat-error>{{formGroup.controls['promoCode'].errors | errorMessage}}</mat-error>
       <input matInput type="text" id="promo-code" class="custom-bs text-yellow text-uppercase font-weight-bold"
         [class.text-success]="isValidPromoCode" [placeholder]="'request.travel_assistance.promo_code' | translate"
         formControlName="promoCode" (change)="isValidPromoCode = false" (keyup)="isValidPromoCode = false">
@@ -14,8 +14,8 @@
         (click)="applyPromoCode()" class="btn btn-primary text-uppercase"></button>
     </mat-form-field>
     <mat-form-field class="form-control-lg">
-      <mat-hint>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-hint>
-      <mat-error>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-error>
+      <mat-hint>{{formGroup.controls['specialRequests'].errors | errorMessage}}</mat-hint>
+      <mat-error>{{formGroup.controls['specialRequests'].errors | errorMessage}}</mat-error>
       <textarea matInput id="special-requests" class="custom-bs text-yellow text-uppercase font-weight-bold"
         [placeholder]="'request.travel_assistance.special_request' | translate" formControlName="specialRequests"></textarea>
     </mat-form-field>

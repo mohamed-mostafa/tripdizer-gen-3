@@ -6,6 +6,4 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./request.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RequestComponent {
-
-}
+export class RequestComponent { }
