@@ -19,11 +19,7 @@
   }
 
   .nav-links {
-    overflow: hidden;
-
-    @media (max-width: 576px) {
-      overflow: auto;
-    }
+    overflow: auto;
 
     .nav-link {
       padding: 3vh 0;
