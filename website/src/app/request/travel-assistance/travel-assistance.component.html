@@ -1,6 +1,6 @@
 <c-request-form-layout [formGroup]="formGroup" (next)="save()">
   <div class="row">
-    <mat-checkbox class="col-12 my-1 my-sm-2 my-md-3 my-lg-4 mat-checkbox-md" formControlName="visaAssistanceNeeded"
+    <mat-checkbox class="col-12 mb-1 mb-sm-2 mb-md-3 mb-lg-4 mat-checkbox-md" formControlName="visaAssistanceNeeded"
       labelPosition="after">{{'request.travel_assistance.visa_assistance' | translate}}</mat-checkbox>
     <mat-checkbox class="col-12 mt-1 mt-sm-2 mt-md-3 mt-lg-4 mat-checkbox-md" formControlName="tourGuideNeeded"
       labelPosition="after">{{'request.travel_assistance.tour_guide' | translate}}</mat-checkbox>
@@ -13,10 +13,10 @@
       <button matSuffix [innerText]="'request.travel_assistance.apply' | translate" [disabled]="isCheckingPromoCode"
         (click)="applyPromoCode()" class="btn btn-primary text-uppercase"></button>
     </mat-form-field>
-    <mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
+    <mat-form-field class="form-control-lg">
       <mat-hint>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-hint>
       <mat-error>{{formGroup.controls.specialRequests.errors | errorMessage}}</mat-error>
-      <textarea matInput type="text" id="special-requests" class="custom-bs text-yellow text-uppercase font-weight-bold"
+      <textarea matInput id="special-requests" class="custom-bs text-yellow text-uppercase font-weight-bold"
         [placeholder]="'request.travel_assistance.special_request' | translate" formControlName="specialRequests"></textarea>
     </mat-form-field>
   </div>

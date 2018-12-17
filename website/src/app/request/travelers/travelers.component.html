@@ -1,16 +1,16 @@
-<c-request-form-layout [formGroup]="formGroup" (next)="save()" marginTop="3">
-  <mat-radio-group class="number form-control-xl" formControlName="adultsNumber">
+<c-request-form-layout [formGroup]="formGroup" (next)="save()">
+  <mat-radio-group class="number form-control-xl d-block" formControlName="adultsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.adultsNumber.invalid">
       <span class="mat-radio-group-label" [translate]="'request.travelers.adults'"></span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.adultsNumber.errors | errorMessage}}</span>
     </div>
     <div [class.text-right]="('dir' | translate)=== 'rtl'">
       <mat-radio-button *ngFor="let radioValue of getRadioValues('adultsNumber');let first = first;let last = last;"
-        [value]="radioValue" (click)="setRadioValuesStart('adultsNumber', first, last)" class="mx-1 mx-sm-2 mb-4 mb-md-4">{{radioValue}}{{first
+        [value]="radioValue" (click)="setRadioValuesStart('adultsNumber', first, last)" class="mx-1 mx-sm-2">{{radioValue}}{{first
         && radioValue !== 1 ? '-' : ''}}{{last ? '+' : ''}}</mat-radio-button>
     </div>
   </mat-radio-group>
-  <mat-radio-group class="number form-control-xl" formControlName="kidsNumber">
+  <mat-radio-group class="number form-control-xl d-block my-4 my-md-4" formControlName="kidsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.kidsNumber.invalid">
       <span class="mat-radio-group-label" [translate]="'request.travelers.kids'"></span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.kidsNumber.errors | errorMessage}}</span>
@@ -18,10 +18,10 @@
     <div [class.text-right]="('dir' | translate)=== 'rtl'">
       <mat-radio-button *ngFor="let radioValue of getRadioValues('kidsNumber');let first = first;let last = last;"
         [value]="radioValue" (click)="setRadioValuesStart('kidsNumber', first, last);clearValueIfDoubleClicked('kidsNumber', radioValue)"
-        class="mx-1 mx-sm-2 mb-4 mb-md-4">{{radioValue}}{{first && radioValue !== 1 ? '-' : ''}}{{last ? '+' : ''}}</mat-radio-button>
+        class="mx-1 mx-sm-2">{{radioValue}}{{first && radioValue !== 1 ? '-' : ''}}{{last ? '+' : ''}}</mat-radio-button>
     </div>
   </mat-radio-group>
-  <mat-radio-group class="number form-control-xl" formControlName="infantsNumber">
+  <mat-radio-group class="number form-control-xl d-block" formControlName="infantsNumber">
     <div class="mat-radio-group-label-wrapper text-capitalize" [class.mat-error]="formGroup.controls.infantsNumber.invalid">
       <span class="mat-radio-group-label" [translate]="'request.travelers.infants'"></span>
       <span class="mat-radio-group-subscript">{{formGroup.controls.infantsNumber.errors | errorMessage}}</span>
@@ -29,7 +29,7 @@
     <div [class.text-right]="('dir' | translate)=== 'rtl'">
       <mat-radio-button *ngFor="let radioValue of getRadioValues('infantsNumber');let first = first;let last = last;"
         [value]="radioValue" (click)="setRadioValuesStart('infantsNumber', first, last);clearValueIfDoubleClicked('infantsNumber', radioValue)"
-        class="mx-1 mx-sm-2 mb-4 mb-md-4">{{radioValue}}{{first && radioValue !== 1 ? '-' : ''}}{{last ? '+' : ''}}</mat-radio-button>
+        class="mx-1 mx-sm-2">{{radioValue}}{{first && radioValue !== 1 ? '-' : ''}}{{last ? '+' : ''}}</mat-radio-button>
     </div>
   </mat-radio-group>
 </c-request-form-layout>

@@ -19,7 +19,6 @@ export class RequestFormLayoutComponent {
   @Input() isButtonsHidden = false;
   @Input() isNextDisabled = false;
   @Input() isBackHidden = false;
-  @Input() marginTop = 0;
 
   @Output() next = new EventEmitter();
   @Output() back = new EventEmitter();

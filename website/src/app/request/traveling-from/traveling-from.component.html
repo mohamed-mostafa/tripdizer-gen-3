@@ -1,12 +1,10 @@
 <c-request-form-layout [formGroup]="formGroup" [isBackHidden]="true" (next)="save()">
-  <mat-form-field class="form-control-xl my-1 my-sm-2 my-md-3 my-lg-4">
+  <mat-form-field class="form-control-xl">
     <mat-hint>{{formGroup.controls.travelingFrom.errors | errorMessage}}</mat-hint>
     <mat-error>{{formGroup.controls.travelingFrom.errors | errorMessage}}</mat-error>
     <mat-select formControlName="travelingFrom" [placeholder]="'request.traveling_from.traveling_from' | translate"
       [compareWith]="compareObjects" class="custom-bs text-yellow text-uppercase font-weight-bold">
       <mat-option *ngFor="let airport of ('request.traveling_from.airports' | translate)" [value]="airport">{{airport.name}}</mat-option>
     </mat-select>
-    <!-- <input matInput type="text" id="traveling-from" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.traveling_from.traveling_from' | translate" formControlName="travelingFrom"> -->
   </mat-form-field>
 </c-request-form-layout>
