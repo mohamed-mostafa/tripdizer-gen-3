@@ -28,7 +28,7 @@ export class RequestNavBarComponent implements AfterViewInit {
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
       setTimeout(() => {
-        this.setNavLinksWidth();
+        // this.setNavLinksWidth();
         this.setNavBrandWidth();
       }, 0);
     });
@@ -46,7 +46,7 @@ export class RequestNavBarComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setNavLinksWidth();
+    // this.setNavLinksWidth();
     this.setNavBrandWidth();
   }
 
