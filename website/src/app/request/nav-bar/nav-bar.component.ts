@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -18,6 +18,11 @@ export class RequestNavBarComponent implements AfterViewInit {
   currentPath: string;
   direction: string;
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setNavBrandWidth();
+  }
+
   constructor(
     router: Router,
     translate: TranslateService,
@@ -25,9 +30,6 @@ export class RequestNavBarComponent implements AfterViewInit {
     this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
-      setTimeout(() => {
-        this.setNavBrandWidth();
-      }, 0);
     });
     translate.get('dir').subscribe(dir => this.direction = dir);
     router.events.subscribe((event) => {
