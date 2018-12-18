@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, Input, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,6 +14,11 @@ export class VideosCarouselComponent {
 
   _videos: Array<any> = [];
   _isRTL = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.initOwlCarousel();
+  }
 
   get videos(): Array<any> {
     return this._videos;

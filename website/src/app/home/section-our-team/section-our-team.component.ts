@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { SectionOurTeamService } from './section-our-team.service';
@@ -15,6 +15,11 @@ export class SectionOurTeamComponent {
 
   teamMembers: Array<any> = [];
   _isRTL = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.initOwlCarousel();
+  }
 
   constructor(public sanitizer: DomSanitizer,
     translate: TranslateService,
