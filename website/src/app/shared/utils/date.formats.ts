@@ -1,11 +1,8 @@
 export const CUSTOM_FORMATS = {
     parse: {
-        dateInput: 'LL',
+        dateInput: 'D / M / Y'
     },
     display: {
-        dateInput: 'D / M / Y',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY'
-    },
+        dateInput: 'D / M / Y'
+    }
 };
