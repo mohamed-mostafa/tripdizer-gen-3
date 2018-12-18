@@ -1,9 +1,8 @@
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 import { SectionOurTeamService } from './section-our-team.service';
-
-declare var $: any;
 
 @Component({
   selector: 'c-home-section-our-team',
@@ -14,41 +13,27 @@ declare var $: any;
 export class SectionOurTeamComponent {
 
   teamMembers: Array<any> = [];
-  _isRTL = false;
+  options: any;
+  refreshCarousel = new Subject();
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.initOwlCarousel();
-  }
-
-  constructor(public sanitizer: DomSanitizer,
-    translate: TranslateService,
-    service: SectionOurTeamService) {
-    translate.stream('dir').subscribe(dir => this._isRTL = dir === 'rtl');
-
+  constructor(service: SectionOurTeamService, public sanitizer: DomSanitizer, translate: TranslateService) {
     service.getTeamMembers().subscribe(teamMembers => {
       this.teamMembers = teamMembers;
-      this.initOwlCarousel();
+      if (this.options) { this.refreshCarousel.next(); }
     });
 
     translate.onLangChange.subscribe(() => {
       service.getTeamMembers().subscribe(teamMembers => {
         this.teamMembers = teamMembers;
-        this.initOwlCarousel();
+        if (this.options) { this.refreshCarousel.next(); }
       });
     });
-  }
 
-  initOwlCarousel() {
-    $(document).ready(() => {
-      $('#our-team-carousel-container').html($('#our-team-carousel-template').html());
-      $('#our-team-carousel-container .our-team-carousel.owl-carousel').width(document.body.offsetWidth).owlCarousel({
-        rtl: this._isRTL,
-        center: true,
-        loop: true,
-        dots: false,
-        autoWidth: true
-      });
-    });
+    this.options = {
+      center: true,
+      loop: true,
+      dots: false,
+      autoWidth: true
+    };
   }
 }
