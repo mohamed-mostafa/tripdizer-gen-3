@@ -20,7 +20,7 @@ export class SectionVideosComponent {
   constructor(service: SectionVideosService, public sanitizer: DomSanitizer, translate: TranslateService) {
     service.getVideos().subscribe(videos => {
       this.videos = videos;
-      if (this.options) { this.refreshCarousel.next(); }
+      this.setOptions();
     });
 
     translate.onLangChange.subscribe(() => {
@@ -29,7 +29,9 @@ export class SectionVideosComponent {
         if (this.options) { this.refreshCarousel.next(); }
       });
     });
+  }
 
+  setOptions() {
     const screenWidth = document.body.offsetWidth;
     const videoRatio = 560 / 315;
     this.options = {
@@ -59,5 +61,4 @@ export class SectionVideosComponent {
       }
     };
   }
-
 }

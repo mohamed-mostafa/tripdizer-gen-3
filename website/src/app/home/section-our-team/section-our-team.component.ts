@@ -19,7 +19,7 @@ export class SectionOurTeamComponent {
   constructor(service: SectionOurTeamService, public sanitizer: DomSanitizer, translate: TranslateService) {
     service.getTeamMembers().subscribe(teamMembers => {
       this.teamMembers = teamMembers;
-      if (this.options) { this.refreshCarousel.next(); }
+      this.setOptions();
     });
 
     translate.onLangChange.subscribe(() => {
@@ -28,7 +28,9 @@ export class SectionOurTeamComponent {
         if (this.options) { this.refreshCarousel.next(); }
       });
     });
+  }
 
+  setOptions() {
     this.options = {
       center: true,
       loop: true,

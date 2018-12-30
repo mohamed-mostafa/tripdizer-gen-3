@@ -21,7 +21,7 @@ export class SectionTestimonialsComponent {
   constructor(service: SectionTestimonialService, public sanitizer: DomSanitizer, translate: TranslateService) {
     service.getTestimonials().subscribe(testimonials => {
       this.testimonials = testimonials;
-      if (this.options) { this.refreshCarousel.next(); }
+      this.setOptions();
     });
 
     translate.onLangChange.subscribe(() => {
@@ -34,7 +34,9 @@ export class SectionTestimonialsComponent {
     service.getSponsors().subscribe(sponsors => {
       this.sponsors = sponsors;
     });
+  }
 
+  setOptions() {
     this.options = {
       dots: false,
       responsive: {
