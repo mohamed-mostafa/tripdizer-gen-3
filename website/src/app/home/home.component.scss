@@ -3,34 +3,6 @@
   height: 100%;
 }
 
-#testimonials,
-#videos,
-#why-us,
-#our-team {
-  min-height: 100%;
-}
-
-@media (min-width: 355px) {
-  #testimonials {
-    height: 100%;
-  }
-}
-
-@media (min-width: 576px) {
-
-  #videos,
-  #why-us,
-  #our-team {
-    height: 100%;
-  }
-}
-
-#our-team {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #why-us,
 #our-team {
   background-color: #2989FF;

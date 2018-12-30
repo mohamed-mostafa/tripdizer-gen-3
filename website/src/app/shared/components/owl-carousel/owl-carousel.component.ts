@@ -14,6 +14,7 @@ export class OwlCarouselComponent implements OnInit, OnDestroy {
   _id = Math.floor(Math.random() * 999999) + 100000;
   _options: any;
   _isRTL = false;
+  _resizeId;
 
   @Input() refresh: Subject<void>;
   @Input() newClass: string;
@@ -27,7 +28,7 @@ export class OwlCarouselComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    if (this._options) { this.initOwlCarousel(); }
+    this.initOwlCarousel();
   }
 
   constructor(translate: TranslateService) {
@@ -42,12 +43,15 @@ export class OwlCarouselComponent implements OnInit, OnDestroy {
   }
 
   initOwlCarousel() {
-    if (this._options) {
-      $(document).ready(() => {
-        $(`#owl-carousel-container-${this._id}`).html($(`#owl-carousel-template-${this._id}`).html());
-        $(`#owl-carousel-container-${this._id} .owl-carousel`).width(document.body.offsetWidth).owlCarousel(this._options);
-      });
-    }
+    clearTimeout(this._resizeId);
+    this._resizeId = setTimeout(() => {
+      if (this._options) {
+        $(document).ready(() => {
+          $(`#owl-carousel-container-${this._id}`).html($(`#owl-carousel-template-${this._id}`).html());
+          $(`#owl-carousel-container-${this._id} .owl-carousel`).width(document.body.offsetWidth - 1).owlCarousel(this._options);
+        });
+      }
+    }, 100);
   }
 
   ngOnDestroy() {

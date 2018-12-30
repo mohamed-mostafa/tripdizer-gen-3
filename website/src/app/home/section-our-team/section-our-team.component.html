@@ -1,10 +1,10 @@
-<c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'our-team-carousel'">
+<c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'our-team-carousel py-2 my-2'">
   <span *ngFor="let member of teamMembers" class="team-member text-center">
     <span class="img-fluid m-auto member-picture-wrapper">
       <img [src]="sanitizer.bypassSecurityTrustResourceUrl(member.picture)" class="rounded-circle img-fluid m-auto member-picture"
         [alt]="member.name + '\' picture'">
     </span>
-    <div class="member-info mt-md-4 pt-md-4 mt-sm-3 pt-sm-3 mt-2 pt-2">
+    <div class="member-info m-auto mt-md-4 pt-md-4 mt-sm-3 pt-sm-3 mt-2 pt-2">
       <h3 class="text-uppercase text-white member-name">{{member.name}}</h3>
       <span class="member-job-title">{{member.jobTitle}}</span>
     </div>

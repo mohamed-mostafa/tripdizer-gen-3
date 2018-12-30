@@ -54,6 +54,23 @@
 
       .owl-video-play-icon {
         display: none;
+        zoom: 0.6;
+
+        @media (min-width: 576px) {
+          zoom: 0.7;
+        }
+
+        @media (min-width: 768px) {
+          zoom: 0.8;
+        }
+
+        @media (min-width: 992px) {
+          zoom: 0.9;
+        }
+
+        @media (min-width: 1200px) {
+          zoom: 1;
+        }
       }
 
       &.active {

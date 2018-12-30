@@ -42,19 +42,19 @@ export class SectionVideosComponent {
       responsive: {
         0: {
           videoWidth: screenWidth / 1.25,
-          videoHeight: (screenWidth / 1.25) / videoRatio / 0.6
+          videoHeight: (screenWidth / 1.25) / videoRatio
         },
         480: {
           videoWidth: screenWidth / 1.5,
-          videoHeight: (screenWidth / 1.5) / videoRatio / 0.73
+          videoHeight: (screenWidth / 1.5) / videoRatio
         },
         768: {
           videoWidth: screenWidth / 1.75,
-          videoHeight: (screenWidth / 1.75) / videoRatio / 0.86
+          videoHeight: (screenWidth / 1.75) / videoRatio
         },
         1200: {
           videoWidth: screenWidth / 2,
-          videoHeight: (screenWidth / 2) / videoRatio / 0.99
+          videoHeight: (screenWidth / 2) / videoRatio
         }
       }
     };
