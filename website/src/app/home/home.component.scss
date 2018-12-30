@@ -1,6 +1,11 @@
-.sections-container,
-#landing {
-  height: 100%;
+.sections-container {
+  #landing {
+    height: 100%;
+  }
+
+  section>* {
+    width: 100%;
+  }
 }
 
 #why-us,

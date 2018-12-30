@@ -1,68 +1,53 @@
 :host {
-  height: 100%;
-
-  @media (min-height: 530px) {
-    padding-bottom: 2.12rem;
-  }
-
   &:after {
     content: "";
-    background: url('../../../assets/img/bg.jpg');
+    background-image: url('../../../assets/img/bg.jpg');
     background-color: #1e90ff;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    background-attachment: fixed;
     position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     z-index: -1;
   }
-}
 
-.lets-go-traveller-img {
-  @media (min-aspect-ratio: 1360 / 768) {
-    height: 50%;
+  .lets-go {
+    font-size: 12.86rem;
+    line-height: 15.7rem;
   }
 
-  img {
-    max-height: 100%;
-  }
-}
-
-.lets-go {
-  font-size: 12.86rem;
-  line-height: 15.7rem;
-}
-
-.traveller {
-  font-size: 28.75rem;
-  font-family: Qwigley, Regular;
-  color: #FFC640;
-  position: absolute;
-  display: block;
-  top: -60px;
-  left: 21%;
-}
-
-.landing-question {
-  font-size: 2.25rem;
-
-  @media (max-height: 720px) {
-    font-size: 2rem;
-    line-height: 2rem;
-  }
-}
-
-.scroll-down {
-  font-size: 0.62rem;
-  letter-spacing: 1rem;
-  position: absolute;
-  bottom: 1.5rem;
-
-  @media (max-height: 530px) {
-    display: none;
+  .traveller {
+    font-size: 28.75rem;
+    font-family: Qwigley, Regular;
+    color: #FFC640;
+    position: absolute;
+    display: block;
+    top: -60px;
+    left: 21%;
   }
 
-  >a {
-    text-decoration: none;
+  .landing-question {
+    font-size: 2.25rem;
+
+    @media (max-height: 720px) {
+      font-size: 2rem;
+      line-height: 2rem;
+    }
+  }
+
+  .scroll-down {
+    font-size: 0.62rem;
+    letter-spacing: 0.5rem;
+    position: absolute;
+    bottom: 3vh;
+
+    @media (min-width: 250px) {
+      letter-spacing: 1rem;
+    }
+
+    >a {
+      text-decoration: none;
+    }
   }
 }
