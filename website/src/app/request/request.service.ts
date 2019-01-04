@@ -21,6 +21,7 @@ import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';
 
 declare const gtag: Function;
+declare const fbq: Function;
 
 @Injectable({
     providedIn: 'root',
@@ -345,6 +346,16 @@ export class RequestService {
                         'Infants Number': ticket.infantsNumber,
                         'Total Number': ticket.adultsNumber + ticket.kidsNumber + ticket.infantsNumber,
                         'Estimate Cost': ticket.estimatedCost
+                    });
+                    fbq('track', 'Submit Request', {
+                        contents: [{
+                            'Request Id': ticket.id,
+                            'Adults Number': ticket.adultsNumber,
+                            'Kids Number': ticket.kidsNumber,
+                            'Infants Number': ticket.infantsNumber,
+                            'Total Number': ticket.adultsNumber + ticket.kidsNumber + ticket.infantsNumber,
+                            'Estimate Cost': ticket.estimatedCost
+                        }]
                     });
                     this.resetRequestState();
                     this.isLoading.next(false);
