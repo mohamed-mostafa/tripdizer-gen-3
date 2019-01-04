@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/',
-  googleAnalyticsTrackingID: 'UA-106443087-2'
+  googleAnalyticsTrackingID: 'UA-106443087-2',
+  facebookPixelID: null
 };
 
 /*

@@ -34,11 +34,11 @@ document.write(`<!-- Facebook Pixel Code -->
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '198150784300872');
+  fbq('init', '${environment.facebookPixelID}');
   fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=198150784300872&ev=PageView&noscript=1"
+  src="https://www.facebook.com/tr?id=${environment.facebookPixelID}&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Facebook Pixel Code -->
 `);
