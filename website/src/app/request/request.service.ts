@@ -20,6 +20,8 @@ import { Request } from './request.model';
 import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';
 
+declare const gtag: Function;
+
 @Injectable({
     providedIn: 'root',
 })
@@ -336,6 +338,14 @@ export class RequestService {
             return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request })
                 .pipe(map(requestResponse => {
                     const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
+                    gtag('event', 'Submit Request', {
+                        'Request Id': ticket.id,
+                        'Adults Number': ticket.adultsNumber,
+                        'Kids Number': ticket.kidsNumber,
+                        'Infants Number': ticket.infantsNumber,
+                        'Total Number': ticket.adultsNumber + ticket.kidsNumber + ticket.infantsNumber,
+                        'Estimate Cost': ticket.estimatedCost
+                    });
                     this.resetRequestState();
                     this.isLoading.next(false);
                     return ticket;
