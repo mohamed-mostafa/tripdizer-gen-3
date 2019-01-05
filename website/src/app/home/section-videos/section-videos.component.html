@@ -6,7 +6,15 @@
   </div>
 
   <div class="py-2 my-2">
-    <c-shared-videos-carousel [videos]="videos"></c-shared-videos-carousel>
+    <c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'videos-carousel'">
+      <span *ngFor="let video of videos">
+        <a class="owl-video" [href]="sanitizer.bypassSecurityTrustResourceUrl(video.uri)"></a>
+        <div class="video-caption m-auto">
+          <h3 class="text-uppercase video-name">{{video.name}}</h3>
+          <span class="video-desc">{{video.description}}</span>
+        </div>
+      </span>
+    </c-shared-owl-carousel>
   </div>
 
 </div>

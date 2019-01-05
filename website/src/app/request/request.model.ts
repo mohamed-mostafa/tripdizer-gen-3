@@ -103,7 +103,7 @@ export class Request extends CommonFunctions {
     this._budget = parseInt(value.toString(), 10);
   }
   get budget(): number {
-    return this.budgetCategory === 1 ? this._budget || 1 : 1;
+    return this.budgetCategory === 1 ? this._budget : 0;
   }
   set budgetCategory(value) {
     this.resetEstimatedCost();

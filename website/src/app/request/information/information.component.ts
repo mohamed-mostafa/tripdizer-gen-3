@@ -14,10 +14,11 @@ import { RequestService } from '../request.service';
 export class InformationComponent {
   formGroup: FormGroup;
   controls: any = {
-    'travelerName': new FormControl('', [Validators.required]),
+    'travelerName': new FormControl('', [Validators.required, CustomValidators.notEmpty()]),
     'travelerMobile': new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
     'travelerEmail': new FormControl('', [Validators.required, Validators.email]),
-    'travelerEmailConfirmation': new FormControl('', [CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match')]),
+    'travelerEmailConfirmation':
+      new FormControl('', [Validators.required, Validators.email, CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match')]),
     'travelerBirthday': new FormControl('', [Validators.required, CustomValidators.dateValid()]),
     'referralType': new FormControl('', [Validators.required]),
   };

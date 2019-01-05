@@ -1,9 +1,12 @@
 .request-nav-bar {
+  margin: auto -15px;
+
   .nav-brand {
     background-color: #2989FF;
     float: left;
     outline: none;
     cursor: pointer;
+
     &:after {
       content: "";
       background: url('../../../assets/img/icon-white.png') no-repeat;
@@ -16,11 +19,7 @@
   }
 
   .nav-links {
-    overflow: hidden;
-
-    @media (max-width: 576px) {
-      overflow: auto;
-    }
+    overflow: auto;
 
     .nav-link {
       padding: 3vh 0;
@@ -33,10 +32,6 @@
       cursor: pointer;
       float: left;
       outline: none;
-
-      @media (max-width: 576px) {
-        overflow: auto;
-      }
 
       &>* {
         max-width: 10rem;
