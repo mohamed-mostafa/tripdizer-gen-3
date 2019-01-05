@@ -21,6 +21,7 @@
       "numericOnly": "Numeric only",
       "equalTo": "Value doesn't match",
       "copyPaste": "Please, Don't copy and paste me",
+      "notEmpty": "Invalid value",
       "invalidPromoCode": "Invalid promo code"
     }
   },

@@ -37,10 +37,10 @@ export class CustomValidators {
         };
     }
     static numericOnly(errorMessage?: string): ValidatorFn {
-        return (c: AbstractControl): { [key: string]: boolean } | null => {
+        return (c: AbstractControl): { [key: string]: string | boolean } | null => {
             const text = c.value;
             if (!text || /^[\u0660-\u06690-9]*$/.test(text)) { return null; }
-            return { 'numericOnly': true };
+            return { 'numericOnly': errorMessage || true };
         };
     }
     static equalTo(controlName: string, errorMessage?: string): ValidatorFn {
@@ -54,6 +54,13 @@ export class CustomValidators {
                 }
             }
             return { 'equalTo': errorMessage || true };
+        };
+    }
+    static notEmpty(errorMessage?: string): ValidatorFn {
+        return (c: AbstractControl): { [key: string]: string | boolean } | null => {
+            const text = c.value;
+            if (!text || /\S/.test(text)) { return null; }
+            return { 'notEmpty': errorMessage || true };
         };
     }
 }

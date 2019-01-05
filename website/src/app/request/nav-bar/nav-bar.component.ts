@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -18,7 +18,10 @@ export class RequestNavBarComponent implements AfterViewInit {
   currentPath: string;
   direction: string;
 
-  @Output() navBarDimensionChanged = new EventEmitter();
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setNavBrandWidth();
+  }
 
   constructor(
     router: Router,
@@ -27,10 +30,6 @@ export class RequestNavBarComponent implements AfterViewInit {
     this.navBar = requestService.getNavBar();
     requestService.requestNavBarDataChanged.subscribe(obj => {
       this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
-      setTimeout(() => {
-        this.setNavLinksWidth();
-        this.setNavBrandWidth();
-      }, 0);
     });
     translate.get('dir').subscribe(dir => this.direction = dir);
     router.events.subscribe((event) => {
@@ -46,25 +45,13 @@ export class RequestNavBarComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.setNavLinksWidth();
     this.setNavBrandWidth();
-  }
-
-  setNavLinksWidth() {
-    let navLinksContainerWidth = 0;
-    const navLinksContainer = (document.getElementsByClassName('nav-links')[0].firstChild as HTMLElement);
-    for (let i = 0; i < navLinksContainer.children.length; ++i) {
-      const navLinkElement = navLinksContainer.children[i] as HTMLElement;
-      navLinksContainerWidth += navLinkElement.offsetWidth;
-    }
-    navLinksContainer.style.width = `${navLinksContainerWidth + 1}px`;
   }
 
   setNavBrandWidth() {
     const componentHeight = document.getElementById('request-nav-bar-container').offsetHeight;
     (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.width = `${componentHeight}px`;
     (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.height = `${componentHeight}px`;
-    this.navBarDimensionChanged.emit();
   }
 
   scrollIntoView(): void {

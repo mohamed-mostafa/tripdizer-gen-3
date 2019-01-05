@@ -7,8 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 /* Components */
 import { DialogComponent } from './components/dialog/dialog.component';
-import { TestimonialsCarouselComponent } from './components/testimonials-carousel/testimonials-carousel.component';
-import { VideosCarouselComponent } from './components/videos-carousel/videos-carousel.component';
+import { OwlCarouselComponent } from './components/owl-carousel/owl-carousel.component';
 
 /* Pipes */
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
@@ -26,14 +25,12 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
     ErrorMessagePipe,
     TranslateModule,
     DialogComponent,
-    TestimonialsCarouselComponent,
-    VideosCarouselComponent
+    OwlCarouselComponent
   ],
   declarations: [
     ErrorMessagePipe,
     DialogComponent,
-    TestimonialsCarouselComponent,
-    VideosCarouselComponent
+    OwlCarouselComponent
   ],
   entryComponents: [
     DialogComponent
