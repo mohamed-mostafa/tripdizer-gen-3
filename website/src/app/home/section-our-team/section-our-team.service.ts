@@ -9,6 +9,14 @@ export class SectionOurTeamService {
     private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
     private team: Array<any> = [
         {
+            name: 'Ziad Eladawy', jobTitle: 'Founder, CEO',
+            picture: 'https://storage.googleapis.com/tripdizer-prod/Ziad_Eladawy_Founder_CEO.jpg'
+        },
+        {
+            name: 'Yara Yehia', jobTitle: 'Cofounder, Managing Director',
+            picture: 'https://storage.googleapis.com/tripdizer-prod/Yara_Yehia_Cofounder_Managing_Director.jpg'
+        },
+        {
             name: 'Omama Saad', jobTitle: 'Operations Manager',
             picture: 'https://storage.googleapis.com/tripdizer-prod/Omama_Saad_Operations_Manager.jpg'
         },
@@ -21,22 +29,6 @@ export class SectionOurTeamService {
             picture: 'https://storage.googleapis.com/tripdizer-prod/Mariam_Mahmoud_Travel_Advisor.jpg'
         },
         {
-            name: 'Yara Yehia', jobTitle: 'Cofounder, Managing Director',
-            picture: 'https://storage.googleapis.com/tripdizer-prod/Yara_Yehia_Cofounder_Managing_Director.jpg'
-        },
-        {
-            name: 'Hatem Ayoub', jobTitle: 'Cofounder, CMO',
-            picture: 'https://storage.googleapis.com/tripdizer-prod/Hatem_Ayoub_Cofounder_CMO.jpg'
-        },
-        {
-            name: 'Mohamed Mostafa', jobTitle: 'Cofounder, CTO',
-            picture: 'https://storage.googleapis.com/tripdizer-prod/Mohamed_cofounder_CTO.jpg'
-        },
-        {
-            name: 'Ziad Eladawy', jobTitle: 'Founder, CEO',
-            picture: 'https://storage.googleapis.com/tripdizer-prod/Ziad_Eladawy_Founder_CEO.jpg'
-        },
-        {
             name: 'Abdullah Hassan', jobTitle: 'Travel Advisor',
             picture: 'https://storage.googleapis.com/tripdizer-prod/Abdullah_Hassan_Travel_Advisor.jpg'
         },
@@ -47,11 +39,19 @@ export class SectionOurTeamService {
         {
             name: 'Mina Emad', jobTitle: 'Graphic Designer',
             picture: 'https://storage.googleapis.com/tripdizer-prod/Mina_Emad_Graphic_Designer.jpg'
+        },
+        {
+            name: 'Mohamed Mostafa', jobTitle: 'Cofounder, CTO',
+            picture: 'https://storage.googleapis.com/tripdizer-prod/Mohamed_cofounder_CTO.jpg'
+        },
+        {
+            name: 'Hatem Ayoub', jobTitle: 'Cofounder, CMO',
+            picture: 'https://storage.googleapis.com/tripdizer-prod/Hatem_Ayoub_Cofounder_CMO.jpg'
         }
     ];
-
+    
     constructor(private http: HttpClient) { }
-
+    
     getTeamMembers(): Observable<Array<any>> {
         return of(this.team);
         // return this.http.get<Array<any>>(`${this.endPoint}s`);
