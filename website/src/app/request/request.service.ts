@@ -340,23 +340,17 @@ export class RequestService {
                 .pipe(map(requestResponse => {
                     const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
                     gtag('event', 'Submit Request', {
-                        'Request Id': ticket.id,
-                        'Adults Number': ticket.adultsNumber,
-                        'Kids Number': ticket.kidsNumber,
-                        'Infants Number': ticket.infantsNumber,
-                        'Total Number': ticket.adultsNumber + ticket.kidsNumber + ticket.infantsNumber,
-                        'Estimate Cost': ticket.estimatedCost
-                    });
-                    fbq('track', 'Submit Request', {
+                        'event_category': 'Submit Request',
+                        'event_label': 'RequestId: ' + ticket.id,
+                        'value': ticket.id
+                        });
+                    fbq('track', 'Purchase', {
                         contents: [{
-                            'Request Id': ticket.id,
-                            'Adults Number': ticket.adultsNumber,
-                            'Kids Number': ticket.kidsNumber,
-                            'Infants Number': ticket.infantsNumber,
-                            'Total Number': ticket.adultsNumber + ticket.kidsNumber + ticket.infantsNumber,
-                            'Estimate Cost': ticket.estimatedCost
+                            id: ticket.id,
+                            quantity: ticket.adultsNumber,
+                            itemPrice: ticket.estimatedCost
                         }]
-                    });
+                    });;
                     this.resetRequestState();
                     this.isLoading.next(false);
                     return ticket;
