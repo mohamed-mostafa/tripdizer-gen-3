@@ -1,7 +1,7 @@
 # [START runtime]
 runtime: python27
 threadsafe: yes
-# service: beta
+service: beta
 # [END runtime]
 
 handlers:
@@ -9,18 +9,22 @@ handlers:
 - url: /request
   static_files: dist/website/index.html
   upload: dist/website/index.html
+  secure: always
 
 - url: /request/(.*)
   static_files: dist/website/index.html
   upload: dist/website/index.html
+  secure: always
 
 - url: /
   static_files: dist/website/index.html
   upload: dist/website/index.html
+  secure: always
 
 - url: /(.+)
   static_files: dist/website/\1
   upload: dist/website/(.*)
+  secure: always
 
 # [keep gcloud from uploading not required files for deployment]
 skip_files:
