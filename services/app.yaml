@@ -15,7 +15,7 @@ runtime: nodejs
 env: flex
 service: tripdizer-backend
 beta_settings:
-  cloud_sql_instances: tripdizer-prod:europe-west2:tripdizer-prod
+  cloud_sql_instances: tripdizer-dev:europe-west2:tripdizer-dev
 
 manual_scaling:
   instances: 1
@@ -26,12 +26,12 @@ resources:
 env_variables:
   DATA_BACKEND: "cloudsql"
   MYSQL_USER: "application"
-  MYSQL_PASSWORD: "tr1pd1zerP@ssw0rd"
-  INSTANCE_CONNECTION_NAME: "tripdizer-prod:europe-west2:tripdizer-prod"
+  MYSQL_PASSWORD: "tripdizer"
+  INSTANCE_CONNECTION_NAME: "tripdizer-dev:europe-west2:tripdizer-dev"
   SECRET: "TRIPDIZER-JWT-SECRET"
-  ENABLE_DAILY_STATISTICS_CRON: "TRUE"
+  ENABLE_DAILY_STATISTICS_CRON: "FALSE"
   ENABLE_END_USER_CONFIRMATION_EMAIL: "TRUE"
   ENABLE_AGENTS_NOTIFICATION_EMAIL: "TRUE"
   ENABLE_PARTNERS_NOTIFICATION_EMAIL: "TRUE"
   ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION: "TRUE"
-  GOOGLE_PEOPLE_CONTACTS_ACCOUNT: "bookings@tripdizer.com"
+  GOOGLE_PEOPLE_CONTACTS_ACCOUNT: "test@tripdizer.com"

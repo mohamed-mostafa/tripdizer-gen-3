@@ -33,6 +33,10 @@ export class SectionOurTeamService {
             picture: 'https://storage.googleapis.com/tripdizer-prod/Abdullah_Hassan_Travel_Advisor.jpg'
         },
         {
+            name: 'Ahmed Essawy', jobTitle: 'Software Engineer',
+            picture: 'https://storage.googleapis.com/tripdizer-prod/Ahmed_Essawy_Software_Engineer.jpg'
+        },
+        {
             name: 'Asmaa Kamal', jobTitle: 'Travel Agent',
             picture: 'https://storage.googleapis.com/tripdizer-prod/Asmaa_Kamal_Travel_Agent.jpg'
         },
