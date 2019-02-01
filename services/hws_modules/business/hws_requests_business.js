@@ -529,7 +529,7 @@ var getPackage = function (requestId, onSuccess, onFailure) {
 							}
 						};
 						httpRequest.post({
-							url: 'https://script.google.com/macros/s/AKfycbwQdxYAZ8X3qi6p8wtWHwlO1v-SYAfYvk83kmCb-mEZ5jfLzRB8/exec',
+							url: 'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
 							form: JSON.stringify(request),
 							followAllRedirects: true,
 							headers: {
