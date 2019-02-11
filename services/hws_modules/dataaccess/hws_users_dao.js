@@ -2,27 +2,26 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
-
+var daoUtilities = require('./hws_dao_utilities.js');
 
 //calls the onSuccess with a user object or null
 //calls the onFailure with an err object in case of technical error
-var getUserByUsername = function (username, onSuccess, onFailure) {
+var getUserByUsername = function(username, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user WHERE username = ?', [username], function (err, rows) {
+			connection.query('SELECT * FROM user WHERE username = ?', [username], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a user with username " + username);
+					console.log('An error occurred while trying to find a user with username ' + username);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -35,7 +34,7 @@ var getUserByUsername = function (username, onSuccess, onFailure) {
 							password: rows[0].password,
 							fullName: rows[0].full_name,
 							phone: rows[0].phone,
-							admin: rows[0].admin
+							admin: rows[0].admin,
 						};
 
 						// end the connection
@@ -49,28 +48,27 @@ var getUserByUsername = function (username, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-var getUserById = function (id, onSuccess, onFailure) {
+var getUserById = function(id, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user WHERE id = ?', [id], function (err, rows) {
+			connection.query('SELECT * FROM user WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a user with id " + id);
+					console.log('An error occurred while trying to find a user with id ' + id);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -82,7 +80,7 @@ var getUserById = function (id, onSuccess, onFailure) {
 							username: rows[0].username,
 							fullName: rows[0].full_name,
 							phone: rows[0].phone,
-							admin: rows[0].admin
+							admin: rows[0].admin,
 						};
 
 						// end the connection
@@ -95,52 +93,55 @@ var getUserById = function (id, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-
-var createNewUser = function (user, onSuccess, onFailure) {
+var createNewUser = function(user, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the user and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO user (username, password, full_name, phone, active) values (?, ?, ?, ?, ?)', [user.username, user.password, user.fullName, user.phone, 1], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new user: " + user.username);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the userId to the user
-							user.id = result.insertId;
+					connection.query(
+						'INSERT INTO user (username, password, full_name, phone, active) values (?, ?, ?, ?, ?)',
+						[user.username, user.password, user.fullName, user.phone, 1],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new user: ' + user.username);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the userId to the user
+								user.id = result.insertId;
 
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(user);
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(user);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -149,41 +150,46 @@ var createNewUser = function (user, onSuccess, onFailure) {
 
 //calls the onSuccess with a user object if successful
 //calls the onFailure with an err object in case of technical error
-var updateExistingUser = function (user, onSuccess, onFailure) {
+var updateExistingUser = function(user, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the user and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE user SET password = ?, full_name= ?, phone= ?, active= ? WHERE id=?', [user.password, user.fullName, user.phone, user.active, user.id], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							console.log("An error occurred while trying to update the existing user: " + user.username);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(user);
+					connection.query(
+						'UPDATE user SET password = ?, full_name= ?, phone= ?, active= ? WHERE id=?',
+						[user.password, user.fullName, user.phone, user.active, user.id],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.log('An error occurred while trying to update the existing user: ' + user.username);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else {
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(user);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -192,22 +198,22 @@ var updateExistingUser = function (user, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAllUsers = function (isFull, onSuccess, onFailure) {
+var getAllUsers = function(isFull, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user', [], function (err, rows) {
+			connection.query('SELECT * FROM user', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while list all users");
+					console.log('An error occurred while list all users');
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -221,7 +227,7 @@ var getAllUsers = function (isFull, onSuccess, onFailure) {
 							fullName: rows[i].full_name,
 							phone: isFull ? rows[i].phone : null,
 							active: isFull ? rows[i].active : null,
-							admin: isFull ? rows[i].admin : null
+							admin: isFull ? rows[i].admin : null,
 						};
 						users.push(user);
 					}
@@ -234,7 +240,6 @@ var getAllUsers = function (isFull, onSuccess, onFailure) {
 		}
 	});
 };
-
 
 exports.getUserByUsername = getUserByUsername;
 exports.getUserById = getUserById;

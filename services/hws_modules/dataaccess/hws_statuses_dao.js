@@ -2,24 +2,24 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
+var daoUtilities = require('./hws_dao_utilities.js');
 
-var getById = function (id, onSuccess, onFailure) {
+var getById = function(id, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM statuses WHERE id = ?', [id], function (err, rows) {
+			connection.query('SELECT * FROM statuses WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a status type with id " + id);
+					console.log('An error occurred while trying to find a status type with id ' + id);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -38,7 +38,7 @@ var getById = function (id, onSuccess, onFailure) {
 								md: rows[0].Size_MD,
 								lg: rows[0].Size_LG,
 							},
-							order: rows[0].Order
+							order: rows[0].Order,
 						};
 
 						// end the connection
@@ -51,52 +51,65 @@ var getById = function (id, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-
-var create = function (status, onSuccess, onFailure) {
+var create = function(status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the status and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO `statuses` (`Title`, `Refresh`, `Color`, `Watermark`, `Size_XS`, `Size_SM`, `Size_MD`, `Size_LG`, `Order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [status.title, status.refresh, status.color, status.watermark, status.size.xs, status.size.sm, status.size.md, status.size.lg, status.order], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new status: " + status.title);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the insertId to the status
-							status.id = result.insertId;
+					connection.query(
+						'INSERT INTO `statuses` (`Title`, `Refresh`, `Color`, `Watermark`, `Size_XS`, `Size_SM`, `Size_MD`, `Size_LG`, `Order`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						[
+							status.title,
+							status.refresh,
+							status.color,
+							status.watermark,
+							status.size.xs,
+							status.size.sm,
+							status.size.md,
+							status.size.lg,
+							status.order,
+						],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new status: ' + status.title);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the insertId to the status
+								status.id = result.insertId;
 
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(status);
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(status);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -105,108 +118,127 @@ var create = function (status, onSuccess, onFailure) {
 
 //calls the onSuccess with a et status object if successful
 //calls the onFailure with an err object in case of technical error
-var update = function (status, onSuccess, onFailure) {
+var update = function(status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the status and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE `statuses` SET `Title` = ?, `Refresh` = ?, `Color` = ?, `Watermark` = ?, `Size_XS` = ?, `Size_SM` = ?, `Size_MD` = ?, `Size_LG` = ?, `Order` = ? WHERE `Id` = ?', [status.title, status.refresh, status.color, status.watermark, status.size.xs, status.size.sm, status.size.md, status.size.lg, status.order, status.id], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							console.log("An error occurred while trying to update the existing status: " + status.id);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(status);
+					connection.query(
+						'UPDATE `statuses` SET `Title` = ?, `Refresh` = ?, `Color` = ?, `Watermark` = ?, `Size_XS` = ?, `Size_SM` = ?, `Size_MD` = ?, `Size_LG` = ?, `Order` = ? WHERE `Id` = ?',
+						[
+							status.title,
+							status.refresh,
+							status.color,
+							status.watermark,
+							status.size.xs,
+							status.size.sm,
+							status.size.md,
+							status.size.lg,
+							status.order,
+							status.id,
+						],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.log('An error occurred while trying to update the existing status: ' + status.id);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else {
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(status);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
 	});
 };
 
-var deleteFunc = function (id, migrateToId, onSuccess, onFailure) {
+var deleteFunc = function(id, migrateToId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('UPDATE `traveler_request` SET `Status` = ? WHERE `Status` = ?;DELETE FROM statuses WHERE id = ?', [migrateToId, id, id], function (err, rows) {
-				// if an error is thrown, end the connection and throw an error
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log("An error occurred while trying to find a status type with id " + id);
-					console.log(err);
-					onFailure(err);
-				} else {
-					// no error is thrown
-					if (rows[1].affectedRows > 0) {
+			connection.query(
+				'UPDATE `traveler_request` SET `Status` = ? WHERE `Status` = ?;DELETE FROM statuses WHERE id = ?',
+				[migrateToId, id, id],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
 						// end the connection
 						connection.end();
-						// call the callback function provided by the caller, and give it the response
-						onSuccess({
-							success: true,
-							id: id
-						});
+						console.log('An error occurred while trying to find a status type with id ' + id);
+						console.log(err);
+						onFailure(err);
 					} else {
-						// no status is found with the id
-						connection.end();
-						onSuccess({
-							success: false,
-							id: id
-						});
+						// no error is thrown
+						if (rows[1].affectedRows > 0) {
+							// end the connection
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess({
+								success: true,
+								id: id,
+							});
+						} else {
+							// no status is found with the id
+							connection.end();
+							onSuccess({
+								success: false,
+								id: id,
+							});
+						}
 					}
 				}
-
-			});
+			);
 		}
 	});
 };
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAll = function (onSuccess, onFailure) {
+var getAll = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM `statuses` ORDER BY `Order` ASC', [], function (err, rows) {
+			connection.query('SELECT * FROM `statuses` ORDER BY `Order` ASC', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while list all statuses");
+					console.log('An error occurred while list all statuses');
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -226,7 +258,7 @@ var getAll = function (onSuccess, onFailure) {
 								md: rows[i].Size_MD,
 								lg: rows[i].Size_LG,
 							},
-							order: rows[i].Order
+							order: rows[i].Order,
 						};
 						statuses.push(status);
 					}

@@ -2,12 +2,12 @@
  * The hws server exposing the REST services
  */
 
-var start = function () {
+var start = function() {
 	// initialize express
 	var express = require('express');
 	var cors = require('cors');
 	var bodyParser = require('body-parser');
-	var daoUtilities = require("../dataaccess/hws_dao_utilities.js");
+	var daoUtilities = require('../dataaccess/hws_dao_utilities.js');
 	var connection = daoUtilities.createConnection();
 	var auth = require('../app/auth/index');
 
@@ -31,9 +31,11 @@ var start = function () {
 	// your express configuration here
 
 	app.use(cors()); // add CORS middleware (to enable cross-domain requests from clients.)
-	app.use(bodyParser.urlencoded({
-		extended: true
-	}));
+	app.use(
+		bodyParser.urlencoded({
+			extended: true,
+		})
+	);
 	app.use(bodyParser.json()); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
@@ -84,12 +86,11 @@ var start = function () {
 
 	//		countries
 	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
-	app.get('/countriesInIternaries', auth.isAuthenticated, countriesInterface.getAllCountriesInIternaries)
+	app.get('/countriesInIternaries', auth.isAuthenticated, countriesInterface.getAllCountriesInIternaries);
 	app.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
 	app.put('/country', auth.isAuthenticated, countriesInterface.create);
 	app.post('/country', auth.isAuthenticated, countriesInterface.update);
 	app.post('/country/note', auth.isAuthenticated, countriesInterface.updateAgentNotes);
-
 
 	//		itineraries
 	app.get('/itineraries', itinerariesInterface.getAll);
@@ -138,7 +139,7 @@ var start = function () {
 
 	var port = process.env.PORT || 8080;
 
-	app.listen(port, function () {
+	app.listen(port, function() {
 		console.log('%s: Node server started on %d ...', Date(Date.now()), port);
 	});
 };

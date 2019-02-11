@@ -1,310 +1,421 @@
 var requestsBusiness = require('../business/hws_requests_business.js');
 
-var placeRequest = function (req, res) {
+var placeRequest = function(req, res) {
 	try {
 		var request = req.body.request;
-		// call the business function and give it a callback function 
-		requestsBusiness.placeRequest(request, function (request) {
+		// call the business function and give it a callback function
+		requestsBusiness.placeRequest(
+			request,
+			function(request) {
 				res.json(request);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			},
-			function (userErrorMessage) {
+			function(userErrorMessage) {
 				res.status(500).send(userErrorMessage);
-			});
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/place");
+		console.log('An error occured in /request/place');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var getRequestById = function (req, res) {
+var getRequestById = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
-		// call the business function and give it a callback function 
-		requestsBusiness.getRequestById(requestId, function (request) {
+		// call the business function and give it a callback function
+		requestsBusiness.getRequestById(
+			requestId,
+			function(request) {
 				res.json(request);
 			},
-			function (error) {
+			function(error) {
 				console.log(error);
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request");
+		console.log('An error occured in /request');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var getRequestSummaries = function (req, res) {
+var getRequestSummaries = function(req, res) {
 	try {
-		// call the business function and give it a callback function 
+		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
 		var page = req.query.page;
 		var size = req.query.size;
-		requestsBusiness.getRequestSummaries(statuses.split(','), page, size,
-			function (requestSummaries) {
+		requestsBusiness.getRequestSummaries(
+			statuses.split(','),
+			page,
+			size,
+			function(requestSummaries) {
 				res.json(requestSummaries);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/status");
+		console.log('An error occured in /request/status');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var getRequestSummariesCount = function (req, res) {
+var getRequestSummariesCount = function(req, res) {
 	try {
-		// call the business function and give it a callback function 
+		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
 		var filter = req.query.filter ? JSON.parse(req.query.filter) : {};
-		requestsBusiness.getRequestSummariesCount(statuses.split(','), filter, function (response) {
+		requestsBusiness.getRequestSummariesCount(
+			statuses.split(','),
+			filter,
+			function(response) {
 				res.json(response);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/status/" + statuses + "/count");
+		console.log('An error occured in /request/status/' + statuses + '/count');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var sendMailsToRequestTraveler = function (req, res) {
+var sendMailsToRequestTraveler = function(req, res) {
 	try {
 		var email = req.body.email;
-		// call the business function and give it a callback function 
-		requestsBusiness.sendMailsToRequestTraveler(email,
-			function (response) {
+		// call the business function and give it a callback function
+		requestsBusiness.sendMailsToRequestTraveler(
+			email,
+			function(response) {
 				res.json(response);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/statuses/sendmails");
+		console.log('An error occured in /request/statuses/sendmails');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var changeRequestStatus = function (req, res) {
+var changeRequestStatus = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var status = req.body.status;
-		// call the business function and give it a callback function 
-		requestsBusiness.changeRequestStatus(requestId, status,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.changeRequestStatus(
+			requestId,
+			status,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/status");
+		console.log('An error occured in /request/status');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
 //-------------------------------------- SET STATUS ------------------------------
 
-var markRequestBeingPrepared = function (req, res) {
+var markRequestBeingPrepared = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
-		// call the business function and give it a callback function 
-		requestsBusiness.markRequestBeingPrepared(requestId,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.markRequestBeingPrepared(
+			requestId,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/ststus/beingprepared");
+		console.log('An error occured in /request/ststus/beingprepared');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var markRequestDelivered = function (req, res) {
+var markRequestDelivered = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
-		// call the business function and give it a callback function 
-		requestsBusiness.markRequestDelivered(requestId,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.markRequestDelivered(
+			requestId,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/ststus/delivered");
+		console.log('An error occured in /request/ststus/delivered');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var markRequestPlaced = function (req, res) {
+var markRequestPlaced = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
-		// call the business function and give it a callback function 
-		requestsBusiness.markRequestPlaced(requestId,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.markRequestPlaced(
+			requestId,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/ststus/placed");
+		console.log('An error occured in /request/ststus/placed');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var assignRequestToUser = function (req, res) {
+var assignRequestToUser = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var userId = req.body.userId;
-		// call the business function and give it a callback function 
-		requestsBusiness.assignRequestToUser(requestId, userId,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.assignRequestToUser(
+			requestId,
+			userId,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/assign");
+		console.log('An error occured in /request/assign');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var updateRequest = function (req, res) {
+var updateRequest = function(req, res) {
 	try {
 		var request = req.body.request;
-		// call the business function and give it a callback function 
-		requestsBusiness.updateRequest(request,
-			function () {
+		// call the business function and give it a callback function
+		requestsBusiness.updateRequest(
+			request,
+			function() {
 				res.json();
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request");
+		console.log('An error occured in /request');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
 //-------------------------------------- SEARCH ------------------------------
 
-var budgetCalculation = function (req, res) {
+var budgetCalculation = function(req, res) {
 	try {
 		var request = req.body.request;
-		// call the business function and give it a callback function 
-		requestsBusiness.budgetCalculation(request, function (request) {
+		// call the business function and give it a callback function
+		requestsBusiness.budgetCalculation(
+			request,
+			function(request) {
 				res.json(request);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			},
-			function (userErrorMessage) {
+			function(userErrorMessage) {
 				res.status(500).send(userErrorMessage);
-			});
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/budgetCalculation");
+		console.log('An error occured in /request/budgetCalculation');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var recommendation = function (req, res) {
+var recommendation = function(req, res) {
 	try {
 		var request = req.body.request;
 		var lang = req.query.lang;
-		// call the business function and give it a callback function 
-		requestsBusiness.recommendation(request, lang, function (request) {
+		// call the business function and give it a callback function
+		requestsBusiness.recommendation(
+			request,
+			lang,
+			function(request) {
 				res.json(request);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			},
-			function (userErrorMessage) {
+			function(userErrorMessage) {
 				res.status(500).send(userErrorMessage);
-			});
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/recommendation");
+		console.log('An error occured in /request/recommendation');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var toggleOptions = function (req, res) {
+var toggleOptions = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var option = req.body.option;
-		// call the business function and give it a callback function 
-		requestsBusiness.toggleOptions(requestId, option, function (request) {
+		// call the business function and give it a callback function
+		requestsBusiness.toggleOptions(
+			requestId,
+			option,
+			function(request) {
 				res.json(request);
 			},
-			function (error) {
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			},
-			function (userErrorMessage) {
+			function(userErrorMessage) {
 				res.status(500).send(userErrorMessage);
-			});
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/place");
+		console.log('An error occured in /request/place');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
-var getPackage = function (req, res) {
+var getPackage = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
-		// call the business function and give it a callback function 
-		requestsBusiness.getPackage(requestId, function (packageUrl) {
+		// call the business function and give it a callback function
+		requestsBusiness.getPackage(
+			requestId,
+			function(packageUrl) {
 				res.send(packageUrl);
 			},
-			function (error) {
+			function(error) {
 				console.log(error);
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request");
+		console.log('An error occured in /request');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
 
 var validatePromoCode = function(req, res) {
 	try {
 		var promoCode = req.query.promoCode;
-		// call the business function and give it a callback function 
-		requestsBusiness.validatePromoCode(promoCode, function (isValid) {
+		// call the business function and give it a callback function
+		requestsBusiness.validatePromoCode(
+			promoCode,
+			function(isValid) {
 				res.send(isValid);
 			},
-			function (error) {
+			function(error) {
 				console.log(error);
-				res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			});
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
-		console.log("An error occured in /request/promocodevalidity");
+		console.log('An error occured in /request/promocodevalidity');
 		console.log(error);
-		res.status(500).send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
-	}	
-}
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
 
 exports.placeRequest = placeRequest;
 exports.getRequestById = getRequestById;
@@ -313,7 +424,7 @@ exports.updateRequest = updateRequest;
 
 exports.getRequestSummaries = getRequestSummaries;
 exports.getRequestSummariesCount = getRequestSummariesCount;
-exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler
+exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
 exports.changeRequestStatus = changeRequestStatus;
 
 exports.markRequestBeingPrepared = markRequestBeingPrepared;
@@ -322,5 +433,5 @@ exports.markRequestPlaced = markRequestPlaced;
 exports.budgetCalculation = budgetCalculation;
 exports.recommendation = recommendation;
 exports.toggleOptions = toggleOptions;
-exports.getPackage = getPackage
+exports.getPackage = getPackage;
 exports.validatePromoCode = validatePromoCode;

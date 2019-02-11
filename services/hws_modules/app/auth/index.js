@@ -2,59 +2,75 @@ const jwt = require('jwt-simple');
 
 const user = require('../../business/hws_users_business');
 
-const getToken = (headers) => {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split('JWT ');
-        if (parted.length === 2) {
-            return parted[1];
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
+const getToken = headers => {
+	if (headers && headers.authorization) {
+		var parted = headers.authorization.split('JWT ');
+		if (parted.length === 2) {
+			return parted[1];
+		} else {
+			return null;
+		}
+	} else {
+		return null;
+	}
 };
 
-const getDecodedToken = (headers) => {
-    try {
-        return jwt.decode(getToken(headers), process.env.SECRET || 'TRIPDIZER-JWT-SECRET');
-    } catch (ex) {
-        return null;
-    }
+const getDecodedToken = headers => {
+	try {
+		return jwt.decode(getToken(headers), process.env.SECRET || 'TRIPDIZER-JWT-SECRET');
+	} catch (ex) {
+		return null;
+	}
 };
 
 const isAuthenticated = (req, res, next) => {
-    const decodedData = getDecodedToken(req.headers);
-    if (decodedData) {
-        user.login(decodedData.username, decodedData.password, (user) => {
-            next();
-        }, () => {
-            res.send(401);
-        }, () => {
-            res.send(401);
-        }, () => {
-            res.send(401);
-        }, false);
-    } else res.send(401);
+	const decodedData = getDecodedToken(req.headers);
+	if (decodedData) {
+		user.login(
+			decodedData.username,
+			decodedData.password,
+			user => {
+				next();
+			},
+			() => {
+				res.send(401);
+			},
+			() => {
+				res.send(401);
+			},
+			() => {
+				res.send(401);
+			},
+			false
+		);
+	} else res.send(401);
 };
 
 const isAuthenticatedAsAdmin = (req, res, next) => {
-    const decodedData = getDecodedToken(req.headers);
-    if (decodedData) {
-        user.login(decodedData.username, decodedData.password, (user) => {
-            if (user.admin) {
-                next();
-            } else {
-                res.send(401);
-            }
-        }, () => {
-            res.send(401);
-        }, () => {
-            res.send(401);
-        }, () => {
-            res.send(401);
-        }, false);
-    } else res.send(401);
+	const decodedData = getDecodedToken(req.headers);
+	if (decodedData) {
+		user.login(
+			decodedData.username,
+			decodedData.password,
+			user => {
+				if (user.admin) {
+					next();
+				} else {
+					res.send(401);
+				}
+			},
+			() => {
+				res.send(401);
+			},
+			() => {
+				res.send(401);
+			},
+			() => {
+				res.send(401);
+			},
+			false
+		);
+	} else res.send(401);
 };
 
 exports.getToken = getToken;

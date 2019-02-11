@@ -2,24 +2,24 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
+var daoUtilities = require('./hws_dao_utilities.js');
 
-var getById = function (id, lang, onSuccess, onFailure) {
+var getById = function(id, lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM referral_types WHERE id = ?', [id], function (err, rows) {
+			connection.query('SELECT * FROM referral_types WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a referral type with id " + id);
+					console.log('An error occurred while trying to find a referral type with id ' + id);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -48,52 +48,55 @@ var getById = function (id, lang, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-
-var create = function (referralType, onSuccess, onFailure) {
+var create = function(referralType, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the referral type and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO referral_types (EN_Name, AR_Name) values (?, ?)', [referralType.enName, referralType.arName], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new referral type: " + referralType.enName);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the insertId to the referral type
-							referralType.id = result.insertId;
+					connection.query(
+						'INSERT INTO referral_types (EN_Name, AR_Name) values (?, ?)',
+						[referralType.enName, referralType.arName],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new referral type: ' + referralType.enName);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the insertId to the referral type
+								referralType.id = result.insertId;
 
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(referralType);
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(referralType);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -102,41 +105,48 @@ var create = function (referralType, onSuccess, onFailure) {
 
 //calls the onSuccess with a et referral type object if successful
 //calls the onFailure with an err object in case of technical error
-var update = function (referralType, onSuccess, onFailure) {
+var update = function(referralType, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the referral type and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE referral_types SET EN_Name = ?, AR_Name = ? WHERE Id = ?', [referralType.enName, referralType.arName, referralType.id], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							console.log("An error occurred while trying to update the existing referral type: " + referralType.enName);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(referralType);
+					connection.query(
+						'UPDATE referral_types SET EN_Name = ?, AR_Name = ? WHERE Id = ?',
+						[referralType.enName, referralType.arName, referralType.id],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.log(
+									'An error occurred while trying to update the existing referral type: ' + referralType.enName
+								);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else {
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(referralType);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -145,22 +155,22 @@ var update = function (referralType, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAll = function (lang, onSuccess, onFailure) {
+var getAll = function(lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM referral_types ORDER BY Id DESC', [], function (err, rows) {
+			connection.query('SELECT * FROM referral_types ORDER BY Id DESC', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while list all referral types");
+					console.log('An error occurred while list all referral types');
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -171,7 +181,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 						var referralType = {
 							id: rows[i].Id,
 							enName: rows[i].EN_Name,
-							arName: rows[i].AR_Name
+							arName: rows[i].AR_Name,
 						};
 						if (lang) {
 							referralType.name = referralType[lang.toLowerCase() + 'Name'];

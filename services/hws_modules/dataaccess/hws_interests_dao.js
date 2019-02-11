@@ -2,24 +2,24 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
+var daoUtilities = require('./hws_dao_utilities.js');
 
-var getById = function (id, lang, onSuccess, onFailure) {
+var getById = function(id, lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Interests WHERE id = ?', [id], function (err, rows) {
+			connection.query('SELECT * FROM Interests WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a interest with id " + id);
+					console.log('An error occurred while trying to find a interest with id ' + id);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -30,7 +30,7 @@ var getById = function (id, lang, onSuccess, onFailure) {
 							id: rows[0].Id,
 							en_name: rows[0].EN_Name,
 							ar_name: rows[0].AR_Name,
-							image: rows[0].Image
+							image: rows[0].Image,
 						};
 
 						if (lang) {
@@ -48,52 +48,55 @@ var getById = function (id, lang, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-
-var create = function (interest, onSuccess, onFailure) {
+var create = function(interest, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the interest and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO Interests (EN_Name, AR_Name, Image) values (?, ?, ?)', [interest.en_name, interest.ar_name, interest.image], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new interest: " + interest.en_name);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the interestId to the interest
-							interest.id = result.insertId;
+					connection.query(
+						'INSERT INTO Interests (EN_Name, AR_Name, Image) values (?, ?, ?)',
+						[interest.en_name, interest.ar_name, interest.image],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new interest: ' + interest.en_name);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the interestId to the interest
+								interest.id = result.insertId;
 
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(interest);
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(interest);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -102,41 +105,46 @@ var create = function (interest, onSuccess, onFailure) {
 
 //calls the onSuccess with a interest object if successful
 //calls the onFailure with an err object in case of technical error
-var update = function (interest, onSuccess, onFailure) {
+var update = function(interest, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the interest and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Interests SET EN_Name = ?, AR_Name = ?, Image = ? WHERE Id = ?', [interest.en_name, interest.ar_name, interest.image, interest.id], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							console.log("An error occurred while trying to update the existing interest: " + interest.en_name);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(interest);
+					connection.query(
+						'UPDATE Interests SET EN_Name = ?, AR_Name = ?, Image = ? WHERE Id = ?',
+						[interest.en_name, interest.ar_name, interest.image, interest.id],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.log('An error occurred while trying to update the existing interest: ' + interest.en_name);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else {
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(interest);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -145,22 +153,22 @@ var update = function (interest, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAll = function (lang, onSuccess, onFailure) {
+var getAll = function(lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Interests', [], function (err, rows) {
+			connection.query('SELECT * FROM Interests', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while list all interests");
+					console.log('An error occurred while list all interests');
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -172,7 +180,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 							id: rows[i].Id,
 							en_name: rows[i].EN_Name,
 							ar_name: rows[i].AR_Name,
-							image: rows[i].Image
+							image: rows[i].Image,
 						};
 						if (lang) {
 							interest.name = interest[lang.toLowerCase() + '_name'];

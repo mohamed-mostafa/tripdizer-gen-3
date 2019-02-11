@@ -2,15 +2,14 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
-
+var daoUtilities = require('./hws_dao_utilities.js');
 
 var getTravelerByEmailAddress = function(emailAddress, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
@@ -18,7 +17,7 @@ var getTravelerByEmailAddress = function(emailAddress, onSuccess, onFailure) {
 			connection.query('SELECT t.* FROM traveler t WHERE t.email_address = ?', [emailAddress], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
-					console.log("An error occurred while trying to find a traveler with email " + emailAddress);
+					console.log('An error occurred while trying to find a traveler with email ' + emailAddress);
 					console.log(err);
 					connection.end();
 					onFailure(err);
@@ -48,7 +47,7 @@ var createNewTraveler = function(traveler, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
@@ -58,36 +57,39 @@ var createNewTraveler = function(traveler, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO traveler (name, mobile, email_address, date_of_birth) values (?, ?, ?, ?)',
-							[traveler.name, traveler.mobile, traveler.emailAddress, traveler.dateOfBirth], function(err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new traveler: " + traveler.name);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the travelerId to the traveler
-							traveler.id = result.insertId;
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(traveler);
+					connection.query(
+						'INSERT INTO traveler (name, mobile, email_address, date_of_birth) values (?, ?, ?, ?)',
+						[traveler.name, traveler.mobile, traveler.emailAddress, traveler.dateOfBirth],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new traveler: ' + traveler.name);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the travelerId to the traveler
+								traveler.id = result.insertId;
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(traveler);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
 	});
 };
-
 
 exports.createNewTraveler = createNewTraveler;
 exports.getTravelerByEmailAddress = getTravelerByEmailAddress;

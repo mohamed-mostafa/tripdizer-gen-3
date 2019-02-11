@@ -2,24 +2,24 @@
  * The dataaccess methods of hws
  */
 
-var daoUtilities = require("./hws_dao_utilities.js");
+var daoUtilities = require('./hws_dao_utilities.js');
 
-var getById = function (id, lang, onSuccess, onFailure) {
+var getById = function(id, lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Countries WHERE id = ?', [id], function (err, rows) {
+			connection.query('SELECT * FROM Countries WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to find a country with id " + id);
+					console.log('An error occurred while trying to find a country with id ' + id);
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -54,52 +54,65 @@ var getById = function (id, lang, onSuccess, onFailure) {
 						onSuccess(null);
 					}
 				}
-
 			});
 		}
 	});
 };
 
-
-var create = function (country, onSuccess, onFailure) {
+var create = function(country, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the country and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Budget_Category, Travel_Purpose) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [country.en_name, country.en_description, country.ar_name, country.ar_description, country.thumbnail, country.lat, country.lng, country.budget, country.purpose], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							// end the connection
-							connection.end();
-							console.log("An error occurred while trying to create the new country: " + country.en_name);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							onFailure(err);
-						} else {
-							// set the countryId to the country
-							country.id = result.insertId;
+					connection.query(
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Budget_Category, Travel_Purpose) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						[
+							country.en_name,
+							country.en_description,
+							country.ar_name,
+							country.ar_description,
+							country.thumbnail,
+							country.lat,
+							country.lng,
+							country.budget,
+							country.purpose,
+						],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to create the new country: ' + country.en_name);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// set the countryId to the country
+								country.id = result.insertId;
 
-							// end the connection
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(country);
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(country);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -108,41 +121,57 @@ var create = function (country, onSuccess, onFailure) {
 
 //calls the onSuccess with a country object if successful
 //calls the onFailure with an err object in case of technical error
-var update = function (country, onSuccess, onFailure) {
+var update = function(country, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the country and his addresses
-			connection.beginTransaction(function (err) {
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ?, Budget_Category = ?, Travel_Purpose = ? WHERE Id = ?', [country.en_name, country.en_description, country.ar_name, country.ar_description, country.thumbnail, country.lat, country.lng, country.budget, country.purpose, country.id], function (err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the first insert statement fails
-							console.log("An error occurred while trying to update the existing country: " + country.en_name);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess(country);
+					connection.query(
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ?, Budget_Category = ?, Travel_Purpose = ? WHERE Id = ?',
+						[
+							country.en_name,
+							country.en_description,
+							country.ar_name,
+							country.ar_description,
+							country.thumbnail,
+							country.lat,
+							country.lng,
+							country.budget,
+							country.purpose,
+							country.id,
+						],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.log('An error occurred while trying to update the existing country: ' + country.en_name);
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else {
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(country);
+							}
 						}
-					});
+					);
 				}
 			});
 		}
@@ -151,22 +180,22 @@ var update = function (country, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAll = function (lang, onSuccess, onFailure) {
+var getAll = function(lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Countries', [], function (err, rows) {
+			connection.query('SELECT * FROM Countries', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while list all countries");
+					console.log('An error occurred while list all countries');
 					console.log(err);
 					onFailure(err);
 				} else {
@@ -202,82 +231,91 @@ var getAll = function (lang, onSuccess, onFailure) {
 	});
 };
 
-var getAllCountriesInIternaries = function (lang, onSuccess, onFailure) {
+var getAllCountriesInIternaries = function(lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT c.* FROM hws.Countries c where Id in (select Countries_Id from hws.iternary_countries)', [], function (err, rows) {
-				// if an error is thrown, end the connection and throw an error
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log("An error occurred while list all countries in iternaries");
-					console.log(err);
-					onFailure(err);
-				} else {
-					// no error is thrown
-					var countries = [];
-					// populate the attributes
-					for (var i = 0; i < rows.length; ++i) {
-						var country = {
-							id: rows[i].Id,
-							en_name: rows[i].EN_Name,
-							en_description: rows[i].EN_Description,
-							ar_name: rows[i].AR_Name,
-							ar_description: rows[i].AR_Description,
-							thumbnail: rows[i].Thumbnail,
-							lat: rows[i].Latitude,
-							lng: rows[i].Longitude,
-							budget: rows[i].Budget_Category,
-							purpose: rows[i].Travel_Purpose,
-						};
-						if (lang) {
-							country.name = country[lang.toLowerCase() + '_name'];
-							country.description = country[lang.toLowerCase() + '_description'];
+			connection.query(
+				'SELECT c.* FROM hws.Countries c where Id in (select Countries_Id from hws.iternary_countries)',
+				[],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
+						// end the connection
+						connection.end();
+						console.log('An error occurred while list all countries in iternaries');
+						console.log(err);
+						onFailure(err);
+					} else {
+						// no error is thrown
+						var countries = [];
+						// populate the attributes
+						for (var i = 0; i < rows.length; ++i) {
+							var country = {
+								id: rows[i].Id,
+								en_name: rows[i].EN_Name,
+								en_description: rows[i].EN_Description,
+								ar_name: rows[i].AR_Name,
+								ar_description: rows[i].AR_Description,
+								thumbnail: rows[i].Thumbnail,
+								lat: rows[i].Latitude,
+								lng: rows[i].Longitude,
+								budget: rows[i].Budget_Category,
+								purpose: rows[i].Travel_Purpose,
+							};
+							if (lang) {
+								country.name = country[lang.toLowerCase() + '_name'];
+								country.description = country[lang.toLowerCase() + '_description'];
+							}
+							countries.push(country);
 						}
-						countries.push(country);
+						// end the connection
+						connection.end();
+						// call the callback function provided by the caller, and give it the response
+						onSuccess(countries);
 					}
-					// end the connection
-					connection.end();
-					// call the callback function provided by the caller, and give it the response
-					onSuccess(countries);
 				}
-			});
+			);
 		}
 	});
 };
 
-var updateAgentNotes = function (id, note, onSuccess, onFailure) {
+var updateAgentNotes = function(id, note, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function (err) {
+	connection.connect(function(err) {
 		if (err) {
-			console.log("An error occurred while trying to open a database connection");
+			console.log('An error occurred while trying to open a database connection');
 			console.log(err);
 			onFailure(err);
 		} else {
-			// begin a transaction to update the itinerary 
-			connection.beginTransaction(function (err) {
+			// begin a transaction to update the itinerary
+			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log("An error occurred while trying to begin a database transaction");
+					console.log('An error occurred while trying to begin a database transaction');
 					console.log(err);
 					onFailure(err);
 				} else {
-					var updateQuery = `UPDATE Countries SET Agent_Notes = ${connection.escape(note || "")} WHERE Id = ${connection.escape(id)};`;
-					
-					connection.query(updateQuery, [], function (err, result) {
+					var updateQuery = `UPDATE Countries SET Agent_Notes = ${connection.escape(
+						note || ''
+					)} WHERE Id = ${connection.escape(id)};`;
+
+					connection.query(updateQuery, [], function(err, result) {
 						// if an error is thrown, end the connection and throw an error
-						if (err) { // if the statement fails
-							console.log("An error occurred while trying to update the existing country: " + id + " with note: " + note);
+						if (err) {
+							// if the statement fails
+							console.log(
+								'An error occurred while trying to update the existing country: ' + id + ' with note: ' + note
+							);
 							console.log(err);
 							connection.rollback(); // rollback the transaction
 							// end the connection
