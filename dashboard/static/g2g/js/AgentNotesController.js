@@ -6,16 +6,16 @@ g2gControlCenterApplication.controller('AgentNotesController', [
 	'$rootScope',
 	'$scope',
 	'$http',
-	'CountriesService',
-	function($rootScope, $scope, $http, CountriesService) {
+	'CitiesService',
+	function($rootScope, $scope, $http, CitiesService) {
 		// fields
-		$scope.countries = [];
+		$scope.cities = [];
 
 		// validation flags
 		$scope.serverError = false;
 		$scope.serverErrorMessage = '';
 		// form fields
-		$scope.country = {};
+		$scope.city = {};
 		$scope.editMode = true;
 
 		$scope.loading = false;
@@ -28,18 +28,18 @@ g2gControlCenterApplication.controller('AgentNotesController', [
 			$scope.serverErrorMessage = '';
 		};
 
-		$scope.editCountry = function(id) {
+		$scope.editCity = function(id) {
 			$scope.resetValidationFlags();
 			$scope.saving = true;
 			$http
-				.post($rootScope.serverURL + '/country/note', { id: $scope.country.id, note: $scope.country.agentNotes })
+				.post($rootScope.serverURL + '/city/note', { id: $scope.city.id, note: $scope.city.agentNotes })
 				.success(function(response) {
 					$scope.saving = false;
 					$scope.editMode = false;
-					$('#editCountryModal').modal('hide');
+					$('#editCityModal').modal('hide');
 				})
 				.error(function(err) {
-					$scope.country = {};
+					$scope.city = {};
 					$scope.editMode = false;
 					$scope.saving = false;
 					$scope.serverError = true;
@@ -48,17 +48,17 @@ g2gControlCenterApplication.controller('AgentNotesController', [
 		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
-			for (var i = 0; i < $scope.countries.length; i++) {
-				if ($scope.countries[i].id == id) {
-					$scope.country = $scope.countries[i];
+			for (var i = 0; i < $scope.cities.length; i++) {
+				if ($scope.cities[i].id == id) {
+					$scope.city = $scope.cities[i];
 				}
 			}
-			$('#editCountryModal').modal('show');
+			$('#editCityModal').modal('show');
 		};
 
 		$scope.initialize = function() {
-			CountriesService.getAll().then(function(countries) {
-				$scope.countries = countries;
+			CitiesService.getAll().then(function(cities) {
+				$scope.cities = cities;
 			});
 		};
 

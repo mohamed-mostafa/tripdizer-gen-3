@@ -87,11 +87,9 @@ var start = function() {
 
 	//		countries
 	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
-	app.get('/countriesInIternaries', auth.isAuthenticated, countriesInterface.getAllCountriesInIternaries);
 	app.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
 	app.put('/country', auth.isAuthenticated, countriesInterface.create);
 	app.post('/country', auth.isAuthenticated, countriesInterface.update);
-	app.post('/country/note', auth.isAuthenticated, countriesInterface.updateAgentNotes);
 
 	//		cities
 	app.get('/cities', auth.isAuthenticated, citiesInterface.getAll);

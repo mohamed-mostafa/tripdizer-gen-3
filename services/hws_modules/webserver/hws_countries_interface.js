@@ -104,58 +104,7 @@ var getAll = function(req, res) {
 	}
 };
 
-var getAllCountriesInIternaries = function(req, res) {
-	try {
-		// call the business function and give it a callback function
-		var lang = req.query.lang;
-		business.getAllCountriesInIternaries(
-			lang,
-			function(countries) {
-				res.json(countries);
-			},
-			function(error) {
-				res
-					.status(500)
-					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			}
-		);
-	} catch (error) {
-		console.log('An error occured in /countriesInIternaries');
-		console.log(error);
-		res
-			.status(500)
-			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
-	}
-};
-
-var updateAgentNotes = function(req, res) {
-	try {
-		var id = req.body.id;
-		var note = req.body.note;
-		business.updateAgentNotes(
-			id,
-			note,
-			function() {
-				res.json({});
-			},
-			function(error) {
-				res
-					.status(500)
-					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			}
-		);
-	} catch (error) {
-		console.log('An error occured in /countries/note');
-		console.log(error);
-		res
-			.status(500)
-			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
-	}
-};
-
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
-exports.getAllCountriesInIternaries = getAllCountriesInIternaries;
-exports.updateAgentNotes = updateAgentNotes;

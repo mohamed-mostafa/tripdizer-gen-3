@@ -9,5 +9,3 @@ exports.getById = dao.getById;
 exports.create = dao.create;
 exports.update = dao.update;
 exports.getAll = dao.getAll;
-exports.getAllCountriesInIternaries = dao.getAllCountriesInIternaries;
-exports.updateAgentNotes = dao.updateAgentNotes;
