@@ -571,31 +571,31 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 										Iternary_id: itinerary.flights[i].Iternary_id,
 									});
 						}
-						itinerary.countries = itinerary.countries.sort((a, b) => a.order - b.order);
-						for (let i = 0; i < itinerary.countries.length; ++i) {
-							itinerary.countries[i].numberOfDays = (tripDays * itinerary.countries[i].days) / 100;
-							itinerary.countries[i].startDate =
+						itinerary.cities = itinerary.cities.sort((a, b) => a.order - b.order);
+						for (let i = 0; i < itinerary.cities.length; ++i) {
+							itinerary.cities[i].numberOfDays = (tripDays * itinerary.cities[i].days) / 100;
+							itinerary.cities[i].startDate =
 								i === 0
 									? departureDate
 									: new Date(
-											new Date(itinerary.countries[i - 1].endDate).setDate(itinerary.countries[i - 1].endDate.getDate())
+											new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
 									  );
-							itinerary.countries[i].endDate = new Date(
-								new Date(itinerary.countries[i].startDate).setDate(
-									itinerary.countries[i].startDate.getDate() + itinerary.countries[i].numberOfDays
+							itinerary.cities[i].endDate = new Date(
+								new Date(itinerary.cities[i].startDate).setDate(
+									itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
 								)
 							);
 							if (itinerary.flights[i + 1])
-								itinerary.flights[i + 1].date = itinerary.countries[i].endDate.toLocaleDateString();
+								itinerary.flights[i + 1].date = itinerary.cities[i].endDate.toLocaleDateString();
 						}
 						itinerary.hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
 						for (let i = 0; i < itinerary.hotels.length; ++i) {
-							const country = itinerary.countries.find(c => c.id == itinerary.hotels[i].Country_Id);
-							if (country) {
-								itinerary.hotels[i].order = country.order;
-								itinerary.hotels[i].checkIn = country.startDate.toLocaleDateString();
-								itinerary.hotels[i].checkOut = country.endDate.toLocaleDateString();
-								itinerary.hotels[i].nights = country.numberOfDays;
+							const city = itinerary.cities.find(c => c.id == itinerary.hotels[i].City_Id);
+							if (city) {
+								itinerary.hotels[i].order = city.order;
+								itinerary.hotels[i].checkIn = city.startDate.toLocaleDateString();
+								itinerary.hotels[i].checkOut = city.endDate.toLocaleDateString();
+								itinerary.hotels[i].nights = city.numberOfDays;
 							}
 						}
 						request = {
@@ -622,7 +622,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 								hotels: itinerary.hotels
 									.sort((a, b) => a.order - b.order)
 									.map(rh => ({
-										countryName: rh.Country_Name ? rh.Country_Name : '',
+										cityName: rh.City_Name ? rh.City_Name : '',
 										checkIn: rh.checkIn ? rh.checkIn : '',
 										checkOut: rh.checkOut ? rh.checkOut : '',
 										nights: rh.nights ? rh.nights : '',

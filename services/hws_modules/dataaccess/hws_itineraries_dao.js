@@ -433,7 +433,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as city_en_name, GROUP_CONCAT(c.AR_Name separator "#") as city_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as city_en_description, GROUP_CONCAT(c.AR_Description separator "#") as city_ar_description FROM hws.iternary i left outer join hws.iternary_cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
+				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as cities_en_name, GROUP_CONCAT(c.AR_Name separator "#") as cities_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as cities_en_description, GROUP_CONCAT(c.AR_Description separator "#") as cities_ar_description FROM hws.iternary i left outer join hws.iternary_cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -468,10 +468,10 @@ var getAll = function(lang, onSuccess, onFailure) {
 								agentNotes: rows[i].Agent_Notes,
 								longitudes: rows[i].longitude,
 								latitudes: rows[i].latitude,
-								cities_en_descriptions: rows[i].city_en_description,
-								cities_ar_descriptions: rows[i].city_ar_description,
-								cities_en_names: rows[i].city_en_name,
-								cities_ar_names: rows[i].city_ar_name,
+								cities_en_descriptions: rows[i].cities_en_description,
+								cities_ar_descriptions: rows[i].cities_ar_description,
+								cities_en_names: rows[i].cities_en_name,
+								cities_ar_names: rows[i].cities_ar_name,
 							};
 							if (lang) {
 								itinerary.name = itinerary[lang.toLowerCase() + '_name'];
