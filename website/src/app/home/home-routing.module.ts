@@ -9,25 +9,19 @@ import { SectionWhyUsComponent } from './section-why-us/section-why-us.component
 import { SectionOurTeamComponent } from './section-our-team/section-our-team.component';
 import { SectionTestimonialsComponent } from './section-testimonials/section-testimonials.component';
 
-const routes: Routes = [
-    { path: '', component: HomeComponent }
-];
+const routes: Routes = [{ path: '', component: HomeComponent }];
 
 export const COMPONENTS = [
-    HomeComponent,
-    SectionLandingComponent,
-    SectionVideosComponent,
-    SectionWhyUsComponent,
-    SectionOurTeamComponent,
-    SectionTestimonialsComponent
+	HomeComponent,
+	SectionLandingComponent,
+	SectionVideosComponent,
+	SectionWhyUsComponent,
+	SectionOurTeamComponent,
+	SectionTestimonialsComponent,
 ];
 
 @NgModule({
-    exports: [
-        RouterModule
-    ],
-    imports: [
-        RouterModule.forChild(routes)
-    ]
+	exports: [RouterModule],
+	imports: [RouterModule.forChild(routes)],
 })
-export class HomeRoutingModule { }
+export class HomeRoutingModule {}

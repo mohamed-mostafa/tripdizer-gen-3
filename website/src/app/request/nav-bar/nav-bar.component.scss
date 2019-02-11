@@ -1,73 +1,73 @@
 .request-nav-bar {
-  margin: auto -15px;
+	margin: auto -15px;
 
-  .nav-brand {
-    background-color: #2989FF;
-    float: left;
-    outline: none;
-    cursor: pointer;
+	.nav-brand {
+		background-color: #2989ff;
+		float: left;
+		outline: none;
+		cursor: pointer;
 
-    &:after {
-      content: "";
-      background: url('../../../assets/img/icon-white.png') no-repeat;
-      background-size: contain;
-      width: 50%;
-      height: 50%;
-      margin: 25%;
-      display: inline-block;
-    }
-  }
+		&:after {
+			content: '';
+			background: url('../../../assets/img/icon-white.png') no-repeat;
+			background-size: contain;
+			width: 50%;
+			height: 50%;
+			margin: 25%;
+			display: inline-block;
+		}
+	}
 
-  .nav-links {
-    overflow: auto;
+	.nav-links {
+		overflow: auto;
 
-    .nav-link {
-      padding: 3vh 0;
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: #CCCCCC;
-      white-space: nowrap;
-      box-sizing: content-box;
-      border-top: 2px solid #2989FF;
-      cursor: pointer;
-      float: left;
-      outline: none;
+		.nav-link {
+			padding: 3vh 0;
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: #cccccc;
+			white-space: nowrap;
+			box-sizing: content-box;
+			border-top: 2px solid #2989ff;
+			cursor: pointer;
+			float: left;
+			outline: none;
 
-      &>* {
-        max-width: 10rem;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
+			& > * {
+				max-width: 10rem;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
 
-      &.active {
-        &~.nav-link {
-          border-color: transparent;
-        }
+			&.active {
+				& ~ .nav-link {
+					border-color: transparent;
+				}
 
-        .title {
-          color: #191917;
-        }
+				.title {
+					color: #191917;
+				}
 
-        .value {
-          color: #2989FF;
-        }
-      }
+				.value {
+					color: #2989ff;
+				}
+			}
 
-      &.disabled {
-        pointer-events: none;
-        cursor: default;
-      }
-    }
-  }
+			&.disabled {
+				pointer-events: none;
+				cursor: default;
+			}
+		}
+	}
 
-  .nav-login-link {
-    font-size: 1rem;
-    font-weight: 600;
-    white-space: nowrap;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-  }
+	.nav-login-link {
+		font-size: 1rem;
+		font-weight: 600;
+		white-space: nowrap;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-decoration: none;
+	}
 }

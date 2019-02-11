@@ -1,62 +1,61 @@
 :host {
-  width: 100%;
+	width: 100%;
 }
 
 .why-us {
-  overflow: hidden;
+	overflow: hidden;
 
-  &,
-  .why-us-container {
-    height: 100%;
-  }
+	&,
+	.why-us-container {
+		height: 100%;
+	}
 
-  .why-us-nav:before,
-  .tab-content:before {
-    position: absolute;
-    font-size: 4rem;
-    font-weight: bolder;
-    text-transform: uppercase;
-    z-index: 1;
-    color: #fff;
-  }
+	.why-us-nav:before,
+	.tab-content:before {
+		position: absolute;
+		font-size: 4rem;
+		font-weight: bolder;
+		text-transform: uppercase;
+		z-index: 1;
+		color: #fff;
+	}
 
-  .tab-content:before {
-    content: "Why";
-    top: 2rem;
-    right: 0;
+	.tab-content:before {
+		content: 'Why';
+		top: 2rem;
+		right: 0;
 
-    @media (max-width: 768px) {
-      content: "Why Us?";
-      top: -48px;
-      left: 50%;
-      margin-left: -150px;
-    }
+		@media (max-width: 768px) {
+			content: 'Why Us?';
+			top: -48px;
+			left: 50%;
+			margin-left: -150px;
+		}
 
-    @media (max-width: 576px) {
-      font-size: 3rem;
-      top: -36px;
-      margin-left: -115px;
-    }
-  }
+		@media (max-width: 576px) {
+			font-size: 3rem;
+			top: -36px;
+			margin-left: -115px;
+		}
+	}
 
-  .why-us-nav:before {
-    content: "Us?";
-    top: 6rem;
-    left: 0;
+	.why-us-nav:before {
+		content: 'Us?';
+		top: 6rem;
+		left: 0;
 
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
 
+	@media (max-width: 768px) {
+		.why-us-nav {
+			height: 30%;
+		}
 
-  @media (max-width: 768px) {
-    .why-us-nav {
-      height: 30%;
-    }
-
-    .tab-content {
-      height: 70%;
-    }
-  }
+		.tab-content {
+			height: 70%;
+		}
+	}
 }

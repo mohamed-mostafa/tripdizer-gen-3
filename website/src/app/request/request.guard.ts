@@ -5,14 +5,12 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { RequestService } from './request.service';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class RequestGuard implements CanActivate {
+	constructor(private service: RequestService) {}
 
-  constructor(private service: RequestService) { }
-
-  canActivate(route: ActivatedRouteSnapshot): boolean {
-    return this.service.setRequestType(route.queryParams);
-  }
-
+	canActivate(route: ActivatedRouteSnapshot): boolean {
+		return this.service.setRequestType(route.queryParams);
+	}
 }

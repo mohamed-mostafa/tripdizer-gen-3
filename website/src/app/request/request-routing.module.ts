@@ -20,47 +20,45 @@ import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
 
 const routes: Routes = [
-    {
-        path: '', component: RequestComponent, canActivate: [RequestGuard],
-        children: [
-            { path: '', redirectTo: 'traveling-from', pathMatch: 'full' },
-            { path: 'traveling-from', component: TravelingFromComponent },
-            { path: 'traveling-to', component: DestinationsComponent },
-            { path: 'departure-return', component: DepartureReturnComponent },
-            { path: 'travelers', component: TravelersComponent },
-            { path: 'budget', component: BudgetComponent },
-            { path: 'purpose', component: PurposeComponent },
-            { path: 'preferences', component: PreferencesComponent },
-            { path: 'destinations', component: RecommendedDestinationsComponent },
-            { path: 'estimated-cost', component: EstimatedCostComponent },
-            { path: 'travel-assistance', component: TravelAssistanceComponent },
-            { path: 'information', component: InformationComponent },
-            { path: 'ticket', component: TicketComponent }
-        ]
-    }
+	{
+		path: '',
+		component: RequestComponent,
+		canActivate: [RequestGuard],
+		children: [
+			{ path: '', redirectTo: 'traveling-from', pathMatch: 'full' },
+			{ path: 'traveling-from', component: TravelingFromComponent },
+			{ path: 'traveling-to', component: DestinationsComponent },
+			{ path: 'departure-return', component: DepartureReturnComponent },
+			{ path: 'travelers', component: TravelersComponent },
+			{ path: 'budget', component: BudgetComponent },
+			{ path: 'purpose', component: PurposeComponent },
+			{ path: 'preferences', component: PreferencesComponent },
+			{ path: 'destinations', component: RecommendedDestinationsComponent },
+			{ path: 'estimated-cost', component: EstimatedCostComponent },
+			{ path: 'travel-assistance', component: TravelAssistanceComponent },
+			{ path: 'information', component: InformationComponent },
+			{ path: 'ticket', component: TicketComponent },
+		],
+	},
 ];
 
 export const COMPONENTS = [
-    TravelingFromComponent,
-    DestinationsComponent,
-    DepartureReturnComponent,
-    TravelersComponent,
-    BudgetComponent,
-    PurposeComponent,
-    PreferencesComponent,
-    RecommendedDestinationsComponent,
-    EstimatedCostComponent,
-    TravelAssistanceComponent,
-    InformationComponent,
-    TicketComponent
+	TravelingFromComponent,
+	DestinationsComponent,
+	DepartureReturnComponent,
+	TravelersComponent,
+	BudgetComponent,
+	PurposeComponent,
+	PreferencesComponent,
+	RecommendedDestinationsComponent,
+	EstimatedCostComponent,
+	TravelAssistanceComponent,
+	InformationComponent,
+	TicketComponent,
 ];
 
 @NgModule({
-    exports: [
-        RouterModule
-    ],
-    imports: [
-        RouterModule.forChild(routes)
-    ]
+	exports: [RouterModule],
+	imports: [RouterModule.forChild(routes)],
 })
-export class RequestRoutingModule { }
+export class RequestRoutingModule {}

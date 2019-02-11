@@ -1,1 +1,4 @@
-export enum RequestType { HavePlan, SurpriseMe }
+export enum RequestType {
+	HavePlan,
+	SurpriseMe,
+}

@@ -1,28 +1,28 @@
 .navbar-brand {
-  width: 66%;
-  max-width: 11.125rem;
+	width: 66%;
+	max-width: 11.125rem;
 }
 
 .navbar-toggler {
-  border: 0;
+	border: 0;
 
-  img {
-    width: 1.88rem;
+	img {
+		width: 1.88rem;
 
-    @media (min-width: 250px) {
-      width: 2.34rem;
-    }
+		@media (min-width: 250px) {
+			width: 2.34rem;
+		}
 
-    @media (min-width: 350px) {
-      width: 2.79rem;
-    }
+		@media (min-width: 350px) {
+			width: 2.79rem;
+		}
 
-    @media (min-width: 450px) {
-      width: 3.25rem;
-    }
-  }
+		@media (min-width: 450px) {
+			width: 3.25rem;
+		}
+	}
 }
 
 .navbar-nav {
-  margin-left: auto;
+	margin-left: auto;
 }

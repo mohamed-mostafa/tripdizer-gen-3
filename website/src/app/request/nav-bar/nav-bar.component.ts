@@ -9,56 +9,52 @@ import { RequestService } from '../request.service';
 import { Step } from '../step.model';
 
 @Component({
-  selector: 'c-request-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+	selector: 'c-request-nav-bar',
+	templateUrl: './nav-bar.component.html',
+	styleUrls: ['./nav-bar.component.scss'],
 })
 export class RequestNavBarComponent implements AfterViewInit {
-  navBar: Array<Step>;
-  currentPath: string;
-  direction: string;
+	navBar: Array<Step>;
+	currentPath: string;
+	direction: string;
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.setNavBrandWidth();
-  }
+	@HostListener('window:resize', ['$event'])
+	onResize() {
+		this.setNavBrandWidth();
+	}
 
-  constructor(
-    router: Router,
-    translate: TranslateService,
-    requestService: RequestService) {
-    this.navBar = requestService.getNavBar();
-    requestService.requestNavBarDataChanged.subscribe(obj => {
-      this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
-    });
-    translate.get('dir').subscribe(dir => this.direction = dir);
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
-        this.currentPath = (event as NavigationEnd).urlAfterRedirects || event.url;
-        const splittedUrl = this.currentPath.split('/');
-        if (this.currentPath && splittedUrl) {
-          this.currentPath = splittedUrl[splittedUrl.length - 1];
-        }
-        setTimeout(() => this.scrollIntoView(), 0);
-      }
-    });
-  }
+	constructor(router: Router, translate: TranslateService, requestService: RequestService) {
+		this.navBar = requestService.getNavBar();
+		requestService.requestNavBarDataChanged.subscribe(obj => {
+			this.navBar = obj.navBar.sort((a, b) => a.order - b.order);
+		});
+		translate.get('dir').subscribe(dir => (this.direction = dir));
+		router.events.subscribe(event => {
+			if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
+				this.currentPath = (event as NavigationEnd).urlAfterRedirects || event.url;
+				const splittedUrl = this.currentPath.split('/');
+				if (this.currentPath && splittedUrl) {
+					this.currentPath = splittedUrl[splittedUrl.length - 1];
+				}
+				setTimeout(() => this.scrollIntoView(), 0);
+			}
+		});
+	}
 
-  ngAfterViewInit() {
-    this.setNavBrandWidth();
-  }
+	ngAfterViewInit() {
+		this.setNavBrandWidth();
+	}
 
-  setNavBrandWidth() {
-    const componentHeight = document.getElementById('request-nav-bar-container').offsetHeight;
-    (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.width = `${componentHeight}px`;
-    (document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.height = `${componentHeight}px`;
-  }
+	setNavBrandWidth() {
+		const componentHeight = document.getElementById('request-nav-bar-container').offsetHeight;
+		(document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.width = `${componentHeight}px`;
+		(document.getElementsByClassName('nav-brand')[0] as HTMLElement).style.height = `${componentHeight}px`;
+	}
 
-  scrollIntoView(): void {
-    const activeElements = document.getElementsByClassName('active');
-    if (activeElements.length > 0) {
-      activeElements[0].scrollIntoView({ inline: this.direction === 'rtl' ? 'end' : 'start' });
-    }
-  }
-
+	scrollIntoView(): void {
+		const activeElements = document.getElementsByClassName('active');
+		if (activeElements.length > 0) {
+			activeElements[0].scrollIntoView({ inline: this.direction === 'rtl' ? 'end' : 'start' });
+		}
+	}
 }

@@ -1,8 +1,8 @@
 <c-request-form-layout [formGroup]="formGroup" (next)="save()">
-  <mat-radio-group class="image form-control-xl row" formControlName="purpose">
-    <mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
-      {{purpose.name}}
-      <span class="label-content-img" [style.background]="'url(' + purpose.image + ')'"></span>
-    </mat-radio-button>
-  </mat-radio-group>
+	<mat-radio-group class="image form-control-xl row" formControlName="purpose">
+		<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
+			{{ purpose.name }}
+			<span class="label-content-img" [style.background]="'url(' + purpose.image + ')'"></span>
+		</mat-radio-button>
+	</mat-radio-group>
 </c-request-form-layout>

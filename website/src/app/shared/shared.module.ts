@@ -13,27 +13,9 @@ import { OwlCarouselComponent } from './components/owl-carousel/owl-carousel.com
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatInputModule,
-    TranslateModule
-  ],
-  exports: [
-    ErrorMessagePipe,
-    TranslateModule,
-    DialogComponent,
-    OwlCarouselComponent
-  ],
-  declarations: [
-    ErrorMessagePipe,
-    DialogComponent,
-    OwlCarouselComponent
-  ],
-  entryComponents: [
-    DialogComponent
-  ]
+	imports: [CommonModule, FormsModule, ReactiveFormsModule, MatDialogModule, MatInputModule, TranslateModule],
+	exports: [ErrorMessagePipe, TranslateModule, DialogComponent, OwlCarouselComponent],
+	declarations: [ErrorMessagePipe, DialogComponent, OwlCarouselComponent],
+	entryComponents: [DialogComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

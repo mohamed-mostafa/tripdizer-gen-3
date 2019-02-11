@@ -1,41 +1,77 @@
-<c-request-form-layout [formGroup]="formGroup" [nextLabel]="'request.information.next_label' | translate" (next)="save()">
-  <mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-    <mat-hint>{{formGroup.controls['travelerName'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['travelerName'].errors | errorMessage}}</mat-error>
-    <input matInput type="text" id="traveler-name" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.information.name' | translate" formControlName="travelerName">
-  </mat-form-field>
-  <mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-    <mat-hint>{{formGroup.controls['travelerMobile'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['travelerMobile'].errors | errorMessage}}</mat-error>
-    <input matInput type="text" id="traveler-mobile" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.information.mobile' | translate" formControlName="travelerMobile">
-  </mat-form-field>
-  <mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-    <mat-hint>{{formGroup.controls['travelerEmail'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['travelerEmail'].errors | errorMessage}}</mat-error>
-    <input matInput type="text" id="traveler-email" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.information.email' | translate" formControlName="travelerEmail">
-  </mat-form-field>
-  <mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-    <mat-hint>{{formGroup.controls['travelerEmailConfirmation'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['travelerEmailConfirmation'].errors | errorMessage}}</mat-error>
-    <input matInput type="text" id="traveler-email-confirmation" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.information.confirm_email' | translate" formControlName="travelerEmailConfirmation">
-  </mat-form-field>
-  <mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-    <mat-hint>{{formGroup.controls['travelerBirthday'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['travelerBirthday'].errors | errorMessage}}</mat-error>
-    <input matInput [max]="maxDate" [matDatepicker]="travelerBirthdayPicker" id="traveler-birthday" class="custom-bs text-yellow text-uppercase font-weight-bold"
-      [placeholder]="'request.information.birthday' | translate" (click)="travelerBirthdayPicker.open()" (focus)="travelerBirthdayPicker.open()"
-      formControlName="travelerBirthday">
-    <mat-datepicker #travelerBirthdayPicker [touchUi]="true"></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field class="form-control-lg">
-    <mat-hint>{{formGroup.controls['referralType'].errors | errorMessage}}</mat-hint>
-    <mat-error>{{formGroup.controls['referralType'].errors | errorMessage}}</mat-error>
-    <mat-select formControlName="referralType" [placeholder]="'request.information.referral' | translate">
-      <mat-option *ngFor="let type of referralTypes" [value]="type.id">{{type.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<c-request-form-layout
+	[formGroup]="formGroup"
+	[nextLabel]="'request.information.next_label' | translate"
+	(next)="save()"
+>
+	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<mat-hint>{{ formGroup.controls['travelerName'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerName'].errors | errorMessage }}</mat-error>
+		<input
+			matInput
+			type="text"
+			id="traveler-name"
+			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			[placeholder]="'request.information.name' | translate"
+			formControlName="travelerName"
+		/>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<mat-hint>{{ formGroup.controls['travelerMobile'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerMobile'].errors | errorMessage }}</mat-error>
+		<input
+			matInput
+			type="text"
+			id="traveler-mobile"
+			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			[placeholder]="'request.information.mobile' | translate"
+			formControlName="travelerMobile"
+		/>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<mat-hint>{{ formGroup.controls['travelerEmail'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerEmail'].errors | errorMessage }}</mat-error>
+		<input
+			matInput
+			type="text"
+			id="traveler-email"
+			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			[placeholder]="'request.information.email' | translate"
+			formControlName="travelerEmail"
+		/>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<mat-hint>{{ formGroup.controls['travelerEmailConfirmation'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerEmailConfirmation'].errors | errorMessage }}</mat-error>
+		<input
+			matInput
+			type="text"
+			id="traveler-email-confirmation"
+			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			[placeholder]="'request.information.confirm_email' | translate"
+			formControlName="travelerEmailConfirmation"
+		/>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<mat-hint>{{ formGroup.controls['travelerBirthday'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerBirthday'].errors | errorMessage }}</mat-error>
+		<input
+			matInput
+			[max]="maxDate"
+			[matDatepicker]="travelerBirthdayPicker"
+			id="traveler-birthday"
+			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			[placeholder]="'request.information.birthday' | translate"
+			(click)="travelerBirthdayPicker.open()"
+			(focus)="travelerBirthdayPicker.open()"
+			formControlName="travelerBirthday"
+		/>
+		<mat-datepicker #travelerBirthdayPicker [touchUi]="true"></mat-datepicker>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg">
+		<mat-hint>{{ formGroup.controls['referralType'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['referralType'].errors | errorMessage }}</mat-error>
+		<mat-select formControlName="referralType" [placeholder]="'request.information.referral' | translate">
+			<mat-option *ngFor="let type of referralTypes" [value]="type.id">{{ type.name }}</mat-option>
+		</mat-select>
+	</mat-form-field>
 </c-request-form-layout>

@@ -8,19 +8,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SocialComponent } from './social/social.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TranslateModule
-  ],
-  exports: [
-    FooterComponent,
-    NavBarComponent,
-    SocialComponent
-  ],
-  declarations: [
-    FooterComponent,
-    NavBarComponent,
-    SocialComponent
-  ]
+	imports: [CommonModule, TranslateModule],
+	exports: [FooterComponent, NavBarComponent, SocialComponent],
+	declarations: [FooterComponent, NavBarComponent, SocialComponent],
 })
-export class CoreModule { }
+export class CoreModule {}

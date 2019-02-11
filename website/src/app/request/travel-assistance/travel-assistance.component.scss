@@ -1,12 +1,12 @@
 .promo-code {
-  width: initial;
-  min-width: 60%;
+	width: initial;
+	min-width: 60%;
 
-  @media (max-width: 700px) {
-    min-width: 70%;
-  }
+	@media (max-width: 700px) {
+		min-width: 70%;
+	}
 
-  @media (max-width: 450px) {
-    min-width: 100%;
-  }
+	@media (max-width: 450px) {
+		min-width: 100%;
+	}
 }

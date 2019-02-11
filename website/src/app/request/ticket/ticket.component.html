@@ -1,210 +1,285 @@
 <c-request-form-layout [isButtonsHidden]="true">
-  <svg id="v-ticket" [class.bg-blue]="invalidForSVG" class="col-12 v-ticket d-none d-md-block" xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1300 550">
-    <style>
-      .svg-fa {
-        font-family: FontAwesome;
-      }
+	<svg
+		id="v-ticket"
+		[class.bg-blue]="invalidForSVG"
+		class="col-12 v-ticket d-none d-md-block"
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		viewBox="0 0 1300 550"
+	>
+		<style>
+			.svg-fa {
+				font-family: FontAwesome;
+			}
 
-      .fill-blue {
-        fill: #2989ff;
-      }
+			.fill-blue {
+				fill: #2989ff;
+			}
 
-      .fill-white {
-        fill: #ffffff;
-      }
+			.fill-white {
+				fill: #ffffff;
+			}
 
-      .splitter {
-        fill: none;
-        stroke: #fff;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
+			.splitter {
+				fill: none;
+				stroke: #fff;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
 
-      .splitter.l-splitter {
-        stroke-width: 4px;
-        stroke-dasharray: 0 10.205;
-      }
+			.splitter.l-splitter {
+				stroke-width: 4px;
+				stroke-dasharray: 0 10.205;
+			}
 
-      .splitter.s-splitter {
-        stroke-width: 3px;
-        stroke-dasharray: 0 7;
-      }
+			.splitter.s-splitter {
+				stroke-width: 3px;
+				stroke-dasharray: 0 7;
+			}
+		</style>
+		<defs>
+			<filter id="left-part" filterUnits="userSpaceOnUse">
+				<feOffset input="SourceAlpha" />
+				<feGaussianBlur stdDeviation="25" result="d" />
+				<feFlood flood-color="#2989ff" flood-opacity="0.478" />
+				<feComposite operator="in" in2="d" />
+				<feComposite in="SourceGraphic" />
+			</filter>
+			<filter id="right-part" filterUnits="userSpaceOnUse">
+				<feOffset input="SourceAlpha" />
+				<feGaussianBlur stdDeviation="25" result="b" />
+				<feFlood flood-color="#2989ff" flood-opacity="0.478" />
+				<feComposite operator="in" in2="b" />
+				<feComposite in="SourceGraphic" />
+			</filter>
+		</defs>
+		<g transform="translate(-150 -150)">
+			<g filter="url(#left-part)" transform="matrix(1, 0, 0, 1, 150, 150)">
+				<path
+					class="fill-blue"
+					[attr.d]="'request.ticket.lg_sizes.left_part' | translate"
+					transform="translate(50 50)"
+				/>
+			</g>
+			<g filter="url(#right-part)" [attr.transform]="'request.ticket.lg_sizes.right_part_transform' | translate">
+				<path
+					class="fill-blue"
+					[attr.d]="'request.ticket.lg_sizes.right_part' | translate"
+					transform="translate(50 50)"
+				/>
+			</g>
+			<g [attr.transform]="'request.ticket.lg_sizes.splitter' | translate">
+				<line class="splitter l-splitter" y2="350" />
+			</g>
+			<g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
+				<g
+					font-size="18"
+					[attr.transform]="
+						'request.ticket.lg_sizes.request.left_details'
+							| translate: { calc: 35 + (6 - ticket?.preferenceNames.length) * 17.5 }
+					"
+				>
+					<text y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
+					<text y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+					<text
+						y="70"
+						[translate]="'request.ticket.adults'"
+						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"
+					></text>
+					<text
+						y="105"
+						[innerHTML]="ticket?.estimatedCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0'"
+					></text>
+					<text [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">
+						{{ preference }}
+					</text>
+				</g>
+				<g font-size="24" [attr.transform]="'request.ticket.lg_sizes.request.right_details.position' | translate">
+					<text y="30" [innerHTML]="'request.ticket.request_number' | translate"></text>
+					<text y="70">
+						<tspan x="0">#</tspan>
+						<tspan
+							[attr.x]="'request.ticket.lg_sizes.request.right_details.ticket_id' | translate"
+							[innerHTML]="ticket?.id"
+						></tspan>
+					</text>
+					<g transform="translate(0 148)">
+						<g [attr.transform]="'request.ticket.lg_sizes.request.right_details.icon' | translate">
+							<line class="splitter s-splitter" x2="50" />
+							<circle cx="105" cy="0" r="45" stroke="#fff" stroke-width="1" fill="transparent" />
+							<circle cx="105" cy="0" r="40" class="fill-white" fill-opacity="0.5" />
+							<circle cx="105" cy="0" r="30" class="fill-white" />
+							<text class="svg-fa fill-blue" font-size="32" text-anchor="middle" transform="translate(105 13)">
+								&#xf072;
+							</text>
+							<line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
+						</g>
+						<text y="27" font-size="84">
+							<tspan
+								[attr.x]="'request.ticket.lg_sizes.request.right_details.from' | translate"
+								[innerHTML]="ticket?.travelingFrom | slice: 0:3 | uppercase"
+							></tspan>
+							<tspan
+								[attr.x]="'request.ticket.lg_sizes.request.right_details.to' | translate"
+								[innerHTML]="ticket?.destinationName | slice: 0:3 | uppercase"
+							></tspan>
+						</text>
+					</g>
+					<g font-size="19" transform="translate(0 250)">
+						<text y="0" [innerHTML]="'request.ticket.lg_text.line1' | translate"></text>
+						<text y="30" [innerHTML]="'request.ticket.lg_text.line2' | translate"></text>
+						<text y="60" [innerHTML]="'request.ticket.lg_text.line3' | translate"></text>
+					</g>
+				</g>
+			</g>
+			<g transform="translate(1025 690)" display="none" class="ticket-links" font-size="16">
+				<a (click)="saveAsPDF()" xlink:href="javascript:void(0)">
+					<text x="0" class="fill-blue fa">&#xf1c1;</text>
+					<text x="25" class="fill-blue">Save as PDF</text>
+				</a>
+				<a (click)="shareWithFriends()" xlink:href="javascript:void(0)">
+					<text x="175" class="fill-blue fa">&#xf1e0;</text>
+					<text x="200" class="fill-blue">Share with friends</text>
+				</a>
+			</g>
+		</g>
+	</svg>
+	<svg
+		id="h-ticket"
+		[class.bg-blue]="invalidForSVG"
+		class="h-100 h-ticket d-block d-md-none"
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		viewBox="0 0 400 710"
+	>
+		<style>
+			.svg-fa {
+				font-family: FontAwesome;
+			}
 
-    </style>
-    <defs>
-      <filter id="left-part" filterUnits="userSpaceOnUse">
-        <feOffset input="SourceAlpha" />
-        <feGaussianBlur stdDeviation="25" result="d" />
-        <feFlood flood-color="#2989ff" flood-opacity="0.478" />
-        <feComposite operator="in" in2="d" />
-        <feComposite in="SourceGraphic" />
-      </filter>
-      <filter id="right-part" filterUnits="userSpaceOnUse">
-        <feOffset input="SourceAlpha" />
-        <feGaussianBlur stdDeviation="25" result="b" />
-        <feFlood flood-color="#2989ff" flood-opacity="0.478" />
-        <feComposite operator="in" in2="b" />
-        <feComposite in="SourceGraphic" />
-      </filter>
-    </defs>
-    <g transform="translate(-150 -150)">
-      <g filter="url(#left-part)" transform="matrix(1, 0, 0, 1, 150, 150)">
-        <path class="fill-blue" [attr.d]="'request.ticket.lg_sizes.left_part' | translate" transform="translate(50 50)" />
-      </g>
-      <g filter="url(#right-part)" [attr.transform]="'request.ticket.lg_sizes.right_part_transform' | translate">
-        <path class="fill-blue" [attr.d]="'request.ticket.lg_sizes.right_part' | translate" transform="translate(50 50)" />
-      </g>
-      <g [attr.transform]="'request.ticket.lg_sizes.splitter' | translate">
-        <line class="splitter l-splitter" y2="350" />
-      </g>
-      <g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
-        <g font-size="18" [attr.transform]="'request.ticket.lg_sizes.request.left_details' | translate:{calc: (35 + (6 - ticket?.preferenceNames.length) * 17.5)}">
-          <text y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
-          <text y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
-          <text y="70" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
-          <text y="105" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
-          <text [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
-        </g>
-        <g font-size="24" [attr.transform]="'request.ticket.lg_sizes.request.right_details.position' | translate">
-          <text y="30" [innerHTML]="'request.ticket.request_number' | translate"></text>
-          <text y="70">
-            <tspan x="0">#</tspan>
-            <tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.ticket_id' | translate" [innerHTML]="ticket?.id"></tspan>
-          </text>
-          <g transform="translate(0 148)">
-            <g [attr.transform]="'request.ticket.lg_sizes.request.right_details.icon' | translate">
-              <line class="splitter s-splitter" x2="50" />
-              <circle cx="105" cy="0" r="45" stroke="#fff" stroke-width="1" fill="transparent" />
-              <circle cx="105" cy="0" r="40" class="fill-white" fill-opacity="0.5" />
-              <circle cx="105" cy="0" r="30" class="fill-white" />
-              <text class="svg-fa fill-blue" font-size="32" text-anchor="middle" transform="translate(105 13)">&#xf072;</text>
-              <line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
-            </g>
-            <text y="27" font-size="84">
-              <tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.from' | translate" [innerHTML]="ticket?.travelingFrom | slice:0:3 | uppercase"></tspan>
-              <tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.to' | translate" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
-            </text>
-          </g>
-          <g font-size="19" transform="translate(0 250)">
-            <text y="0" [innerHTML]="'request.ticket.lg_text.line1' | translate"></text>
-            <text y="30" [innerHTML]="'request.ticket.lg_text.line2' | translate"></text>
-            <text y="60" [innerHTML]="'request.ticket.lg_text.line3' | translate"></text>
-          </g>
-        </g>
-      </g>
-      <g transform="translate(1025 690)" display="none" class="ticket-links" font-size="16">
-        <a (click)="saveAsPDF()" xlink:href="javascript:void(0)">
-          <text x="0" class="fill-blue fa">&#xf1c1;</text>
-          <text x="25" class="fill-blue">Save as PDF</text>
-        </a>
-        <a (click)="shareWithFriends()" xlink:href="javascript:void(0)">
-          <text x="175" class="fill-blue fa">&#xf1e0;</text>
-          <text x="200" class="fill-blue">Share with friends</text>
-        </a>
-      </g>
-    </g>
-  </svg>
-  <svg id="h-ticket" [class.bg-blue]="invalidForSVG" class="h-100 h-ticket d-block d-md-none" xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 400 710">
-    <style>
-      .svg-fa {
-        font-family: FontAwesome;
-      }
+			.fill-blue {
+				fill: #2989ff;
+			}
 
-      .fill-blue {
-        fill: #2989ff;
-      }
+			.fill-white {
+				fill: #ffffff;
+			}
 
-      .fill-white {
-        fill: #ffffff;
-      }
+			.splitter {
+				fill: none;
+				stroke: #fff;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
 
-      .splitter {
-        fill: none;
-        stroke: #fff;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
+			.splitter.l-splitter {
+				stroke-width: 4px;
+				stroke-dasharray: 0 10.205;
+			}
 
-      .splitter.l-splitter {
-        stroke-width: 4px;
-        stroke-dasharray: 0 10.205;
-      }
-
-      .splitter.s-splitter {
-        stroke-width: 3px;
-        stroke-dasharray: 0 7;
-      }
-
-    </style>
-    <defs>
-      <filter id="top-part" filterUnits="userSpaceOnUse">
-        <feOffset input="SourceAlpha" />
-        <feGaussianBlur stdDeviation="12.5" result="d" />
-        <feFlood flood-color="#2989ff" flood-opacity="0.478" />
-        <feComposite operator="in" in2="d" />
-        <feComposite in="SourceGraphic" />
-      </filter>
-      <filter id="bottom-part" filterUnits="userSpaceOnUse">
-        <feOffset input="SourceAlpha" />
-        <feGaussianBlur stdDeviation="12.5" result="b" />
-        <feFlood flood-color="#2989ff" flood-opacity="0.478" />
-        <feComposite operator="in" in2="b" />
-        <feComposite in="SourceGraphic" />
-      </filter>
-    </defs>
-    <g transform="translate(-50 -50)">
-      <g filter="url(#top-part)" transform="matrix(1, 0, 0, 1, 50, 50)">
-        <path class="fill-blue" d="M0,175V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v150A25,25,0,0,0,325,200H25A25,25,0,0,0,0,175Z"
-          transform="translate(25 25)" />
-      </g>
-      <g filter="url(#bottom-part)" transform="matrix(1, 0, 0, 1, 50, 250)">
-        <path class="fill-blue" d="M0,725V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v410A25,25,0,0,0,325,460H25A25,25,0,0,0,0,435Z"
-          transform="translate(25 25)" />
-      </g>
-      <g transform="translate(115 275)">
-        <line class="splitter l-splitter" x2="270" />
-      </g>
-      <g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.sm_sizes.position' | translate">
-        <g font-size="14">
-          <text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
-          <text x="140" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
-          <text x="0" y="35" [translate]="'request.ticket.adults'" [translateParams]="{adultsNumber: ticket?.adultsNumber}"></text>
-          <text x="140" y="35" [innerHTML]="ticket?.estimatedCost | currency:'EGP':('currency.EGP' | translate)+' ':'0.0-0'"></text>
-          <text [attr.x]="calculate('request.ticket.sm_sizes.top_details.number' | translate, 'request.ticket.sm_sizes.top_details.sign' | translate, (i > 2 ? i - 3 : i) * 80)"
-            [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">{{preference}}</text>
-        </g>
-        <g font-size="16" transform="translate(0 190)">
-          <g [attr.transform]="'request.ticket.sm_sizes.bottom_details.position' | translate">
-            <text y="0" [innerHTML]="'request.ticket.request_number' | translate"></text>
-            <text y="30">
-              <tspan x="0">#</tspan>
-              <tspan [attr.x]="'request.ticket.sm_sizes.bottom_details.ticket_id' | translate" [innerHTML]="ticket?.id"></tspan>
-            </text>
-          </g>
-          <g [attr.transform]="'request.ticket.sm_sizes.bottom_details.icon' | translate">
-            <g transform="translate(140 15)">
-              <line class="splitter s-splitter" y2="20" />
-              <circle cx="0" cy="60" r="27.5" stroke="#fff" stroke-width="0.5" fill="transparent" />
-              <circle cx="0" cy="60" r="25" class="fill-white" fill-opacity="0.5" />
-              <circle cx="0" cy="60" r="20" class="fill-white" />
-              <text class="svg-fa fill-blue" font-size="24" text-anchor="middle" transform="translate(2.5 67.5)">&#xf072;</text>
-              <line class="splitter s-splitter" y2="20" transform="translate(0 100)" />
-            </g>
-            <text text-anchor="middle" x="140" font-size="36">
-              <tspan y="0" [innerHTML]="ticket?.travelingFrom | slice:0:3 | uppercase"></tspan>
-              <tspan y="175" x="140" [innerHTML]="ticket?.destinationName | slice:0:3 | uppercase"></tspan>
-            </text>
-          </g>
-          <g font-size="12" [attr.transform]="'request.ticket.sm_sizes.bottom_details.description' | translate">
-            <text y="0" [innerHTML]="'request.ticket.sm_text.line1' | translate"></text>
-            <text y="25" [innerHTML]="'request.ticket.sm_text.line2' | translate"></text>
-            <text y="50" [innerHTML]="'request.ticket.sm_text.line3' | translate"></text>
-            <text y="75" [innerHTML]="'request.ticket.sm_text.line4' | translate"></text>
-          </g>
-        </g>
-      </g>
-    </g>
-  </svg>
+			.splitter.s-splitter {
+				stroke-width: 3px;
+				stroke-dasharray: 0 7;
+			}
+		</style>
+		<defs>
+			<filter id="top-part" filterUnits="userSpaceOnUse">
+				<feOffset input="SourceAlpha" />
+				<feGaussianBlur stdDeviation="12.5" result="d" />
+				<feFlood flood-color="#2989ff" flood-opacity="0.478" />
+				<feComposite operator="in" in2="d" />
+				<feComposite in="SourceGraphic" />
+			</filter>
+			<filter id="bottom-part" filterUnits="userSpaceOnUse">
+				<feOffset input="SourceAlpha" />
+				<feGaussianBlur stdDeviation="12.5" result="b" />
+				<feFlood flood-color="#2989ff" flood-opacity="0.478" />
+				<feComposite operator="in" in2="b" />
+				<feComposite in="SourceGraphic" />
+			</filter>
+		</defs>
+		<g transform="translate(-50 -50)">
+			<g filter="url(#top-part)" transform="matrix(1, 0, 0, 1, 50, 50)">
+				<path
+					class="fill-blue"
+					d="M0,175V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v150A25,25,0,0,0,325,200H25A25,25,0,0,0,0,175Z"
+					transform="translate(25 25)"
+				/>
+			</g>
+			<g filter="url(#bottom-part)" transform="matrix(1, 0, 0, 1, 50, 250)">
+				<path
+					class="fill-blue"
+					d="M0,725V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v410A25,25,0,0,0,325,460H25A25,25,0,0,0,0,435Z"
+					transform="translate(25 25)"
+				/>
+			</g>
+			<g transform="translate(115 275)">
+				<line class="splitter l-splitter" x2="270" />
+			</g>
+			<g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.sm_sizes.position' | translate">
+				<g font-size="14">
+					<text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
+					<text x="140" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
+					<text
+						x="0"
+						y="35"
+						[translate]="'request.ticket.adults'"
+						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"
+					></text>
+					<text
+						x="140"
+						y="35"
+						[innerHTML]="ticket?.estimatedCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0'"
+					></text>
+					<text
+						[attr.x]="
+							calculate(
+								'request.ticket.sm_sizes.top_details.number' | translate,
+								'request.ticket.sm_sizes.top_details.sign' | translate,
+								(i > 2 ? i - 3 : i) * 80
+							)
+						"
+						[attr.y]="70 + (i > 2 ? 35 : 0)"
+						*ngFor="let preference of ticket?.preferenceNames; index as i"
+					>
+						{{ preference }}
+					</text>
+				</g>
+				<g font-size="16" transform="translate(0 190)">
+					<g [attr.transform]="'request.ticket.sm_sizes.bottom_details.position' | translate">
+						<text y="0" [innerHTML]="'request.ticket.request_number' | translate"></text>
+						<text y="30">
+							<tspan x="0">#</tspan>
+							<tspan
+								[attr.x]="'request.ticket.sm_sizes.bottom_details.ticket_id' | translate"
+								[innerHTML]="ticket?.id"
+							></tspan>
+						</text>
+					</g>
+					<g [attr.transform]="'request.ticket.sm_sizes.bottom_details.icon' | translate">
+						<g transform="translate(140 15)">
+							<line class="splitter s-splitter" y2="20" />
+							<circle cx="0" cy="60" r="27.5" stroke="#fff" stroke-width="0.5" fill="transparent" />
+							<circle cx="0" cy="60" r="25" class="fill-white" fill-opacity="0.5" />
+							<circle cx="0" cy="60" r="20" class="fill-white" />
+							<text class="svg-fa fill-blue" font-size="24" text-anchor="middle" transform="translate(2.5 67.5)">
+								&#xf072;
+							</text>
+							<line class="splitter s-splitter" y2="20" transform="translate(0 100)" />
+						</g>
+						<text text-anchor="middle" x="140" font-size="36">
+							<tspan y="0" [innerHTML]="ticket?.travelingFrom | slice: 0:3 | uppercase"></tspan>
+							<tspan y="175" x="140" [innerHTML]="ticket?.destinationName | slice: 0:3 | uppercase"></tspan>
+						</text>
+					</g>
+					<g font-size="12" [attr.transform]="'request.ticket.sm_sizes.bottom_details.description' | translate">
+						<text y="0" [innerHTML]="'request.ticket.sm_text.line1' | translate"></text>
+						<text y="25" [innerHTML]="'request.ticket.sm_text.line2' | translate"></text>
+						<text y="50" [innerHTML]="'request.ticket.sm_text.line3' | translate"></text>
+						<text y="75" [innerHTML]="'request.ticket.sm_text.line4' | translate"></text>
+					</g>
+				</g>
+			</g>
+		</g>
+	</svg>
 </c-request-form-layout>

@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root',
+	providedIn: 'root',
 })
 export class SectionVideosService {
-    private endPoint = 'public/video' /*+ (lang ? '?lang=' + lang : '')*/;
+	private endPoint = 'public/video' /*+ (lang ? '?lang=' + lang : '')*/;
 
-    constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
-    getVideos(): Observable<Array<any>> {
-        return this.http.get<Array<any>>(`${this.endPoint}s`);
-    }
+	getVideos(): Observable<Array<any>> {
+		return this.http.get<Array<any>>(`${this.endPoint}s`);
+	}
 }

@@ -20,26 +20,26 @@ import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { RequestComponent } from './request.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RequestRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule
-  ],
-  declarations: [
-    ...RequestComponents,
-    RequestComponent,
-    RequestNavBarComponent,
-    RequestFormLayoutComponent,
-    RequestLoadingComponent
-  ]
+	imports: [
+		CommonModule,
+		RequestRoutingModule,
+		FormsModule,
+		ReactiveFormsModule,
+		SharedModule,
+		MatCheckboxModule,
+		MatDatepickerModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatRadioModule,
+		MatSelectModule,
+		MatSliderModule,
+	],
+	declarations: [
+		...RequestComponents,
+		RequestComponent,
+		RequestNavBarComponent,
+		RequestFormLayoutComponent,
+		RequestLoadingComponent,
+	],
 })
-export class RequestModule { }
+export class RequestModule {}

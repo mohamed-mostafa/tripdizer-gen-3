@@ -8,36 +8,33 @@ import { RequestService } from '../request.service';
 import { TravelingFrom } from './traveling-from.model';
 
 @Component({
-  selector: 'c-request-traveling-from',
-  templateUrl: './traveling-from.component.html',
-  styleUrls: ['./traveling-from.component.scss']
+	selector: 'c-request-traveling-from',
+	templateUrl: './traveling-from.component.html',
+	styleUrls: ['./traveling-from.component.scss'],
 })
 export class TravelingFromComponent {
-  formGroup: FormGroup;
-  controls: any = {
-    'travelingFrom': new FormControl('', [Validators.required])
-  };
+	formGroup: FormGroup;
+	controls: any = {
+		travelingFrom: new FormControl('', [Validators.required]),
+	};
 
-  constructor(
-    private requestService: RequestService
-  ) {
-    this.formGroup = new FormGroup({});
-    for (const controlName in this.controls) {
-      if (this.controls.hasOwnProperty(controlName)) {
-        (this.controls[controlName] as FormControl).setValue(this.requestService.getProperty(controlName));
-        this.formGroup.addControl(controlName, this.controls[controlName]);
-      }
-    }
-  }
+	constructor(private requestService: RequestService) {
+		this.formGroup = new FormGroup({});
+		for (const controlName in this.controls) {
+			if (this.controls.hasOwnProperty(controlName)) {
+				(this.controls[controlName] as FormControl).setValue(this.requestService.getProperty(controlName));
+				this.formGroup.addControl(controlName, this.controls[controlName]);
+			}
+		}
+	}
 
-  save(): void {
-    for (const controlName in this.formGroup.controls) {
-      if (this.formGroup.controls.hasOwnProperty(controlName)) {
-        this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
-      }
-    }
-  }
+	save(): void {
+		for (const controlName in this.formGroup.controls) {
+			if (this.formGroup.controls.hasOwnProperty(controlName)) {
+				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
+			}
+		}
+	}
 
-  compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
-
+	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 }

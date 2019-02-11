@@ -1,4 +1,4 @@
 export class TravelingFrom {
-  iataCode: string;
-  name: string;
+	iataCode: string;
+	name: string;
 }

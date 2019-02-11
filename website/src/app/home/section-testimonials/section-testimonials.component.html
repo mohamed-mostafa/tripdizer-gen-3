@@ -1,20 +1,27 @@
 <div class="testimonials pt-2 mt-2">
-  <c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'testimonials-carousel'">
-    <div *ngFor="let testimonial of testimonials" class="row mx-0 testimonial-item">
-      <div class="col-3">
-        <img [src]="sanitizer.bypassSecurityTrustResourceUrl(testimonial.picture)" class="img-fluid rounded-circle testimonial-picture"
-          [alt]="testimonial.name + '\' picture'">
-      </div>
-      <div class="col-9 row testimonial-info">
-        <span class="col-12 testimonial-text" [title]="testimonial.text">{{testimonial.text}}</span>
-        <h5 class="col-12 testimonial-name">{{testimonial.name}}</h5>
-      </div>
-    </div>
-  </c-shared-owl-carousel>
+	<c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'testimonials-carousel'">
+		<div *ngFor="let testimonial of testimonials" class="row mx-0 testimonial-item">
+			<div class="col-3">
+				<img
+					[src]="sanitizer.bypassSecurityTrustResourceUrl(testimonial.picture)"
+					class="img-fluid rounded-circle testimonial-picture"
+					[alt]="testimonial.name + '\' picture'"
+				/>
+			</div>
+			<div class="col-9 row testimonial-info">
+				<span class="col-12 testimonial-text" [title]="testimonial.text">{{ testimonial.text }}</span>
+				<h5 class="col-12 testimonial-name">{{ testimonial.name }}</h5>
+			</div>
+		</div>
+	</c-shared-owl-carousel>
 </div>
 
 <div class="featured-in text-center pb-2 mb-2">
-  <div>{{'home.testimonials.featured_in' | translate}}</div>
-  <img *ngFor="let sponsor of sponsors" [src]="sponsor.picture" class="mx-md-4 mx-sm-12 mx-2 img-fluid sponsor-image"
-    alt="">
+	<div>{{ 'home.testimonials.featured_in' | translate }}</div>
+	<img
+		*ngFor="let sponsor of sponsors"
+		[src]="sponsor.picture"
+		class="mx-md-4 mx-sm-12 mx-2 img-fluid sponsor-image"
+		alt=""
+	/>
 </div>

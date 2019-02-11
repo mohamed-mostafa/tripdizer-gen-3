@@ -11,16 +11,7 @@ import { NavLinkComponent } from './section-why-us/nav-link/nav-link.component';
 import { TabContentComponent } from './section-why-us/tab-content/tab-content.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    HomeRoutingModule,
-    SharedModule,
-    CoreModule
-  ],
-  declarations: [
-    ...HomeComponents,
-    NavLinkComponent,
-    TabContentComponent
-  ]
+	imports: [CommonModule, HomeRoutingModule, SharedModule, CoreModule],
+	declarations: [...HomeComponents, NavLinkComponent, TabContentComponent],
 })
-export class HomeModule { }
+export class HomeModule {}
