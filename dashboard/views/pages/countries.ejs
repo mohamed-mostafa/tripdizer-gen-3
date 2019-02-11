@@ -20,8 +20,6 @@
             <th>Thumbnail</th>
             <th>Latitude</th>
             <th>Longitude</th>
-            <th>Budget</th>
-            <th>Purpose</th>
             <th></th>
           </tr>
         </thead>
@@ -34,8 +32,6 @@
             <td>{{country.thumbnail}}</td>
             <td>{{country.lat}}</td>
             <td>{{country.lng}}</td>
-            <td>{{country.budget}}</td>
-            <td>{{country.purpose}}</td>
             <td>
               <i class="fa fa-edit cursor" ng-click="openEditDialog(country.id)"> Edit</i>
             </td>
@@ -109,7 +105,7 @@
               <div class="form-group" ng-show="saving==false">
                 <label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
                   <i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
-                <label for="thumbnail" ng-show="thumbnailMissing==false">Ar Desc</label>
+                <label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
                 <input type="text" required class="form-control" id="thumbnail" ng-model="newCountry.thumbnail" placeholder="Enter thumbnail"
                   required>
               </div>
@@ -124,22 +120,6 @@
                   <i class="fa fa-times-circle-o"></i>Longitude is missing</label>
                 <label for="lng" ng-show="lngMissing==false">Longitude</label>
                 <input type="text" required class="form-control" id="lng" ng-model="newCountry.lng" placeholder="Enter longitude" required>
-              </div>
-              <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="budget" ng-show="budgetMissing==true">
-                  <i class="fa fa-times-circle-o"></i>Budget is missing</label>
-                <label for="budget" ng-show="budgetMissing==false">Budget</label>
-                <select class="form-control" id="budget" ng-model="newCountry.budget">
-                  <option ng-repeat="budget in budgetCategories" ng-value="budget.id" ng-selected="newCountry.budget === budget.id">{{budget.en_name}}</option>
-                </select>
-              </div>
-              <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="purpose" ng-show="purposeMissing==true">
-                  <i class="fa fa-times-circle-o"></i>Purpose is missing</label>
-                <label for="purpose" ng-show="purposeMissing==false">Purpose</label>
-                <select class="form-control" id="purpose" ng-model="newCountry.purpose">
-                  <option ng-repeat="purpose in purposes" ng-value="purpose.id" ng-selected="newCountry.purpose === purpose.id">{{purpose.en_name}}</option>
-                </select>
               </div>
               <!-- /.form group -->
             </div>

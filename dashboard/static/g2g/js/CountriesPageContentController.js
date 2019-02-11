@@ -7,10 +7,8 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 	'$scope',
 	'$http',
 	'CountriesService',
-	'PurposesService',
-	'BudgetCategoriesService',
 	'InterestsService',
-	function($rootScope, $scope, $http, CountriesService, PurposesService, BudgetCategoriesService, InterestsService) {
+	function($rootScope, $scope, $http, CountriesService, InterestsService) {
 		// fields
 		$scope.countries = [];
 
@@ -36,8 +34,6 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.thumbnailMissing = false;
 			$scope.latMissing = false;
 			$scope.lngMissing = false;
-			$scope.budgetMissing = false;
-			$scope.purposeMissing = false;
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
@@ -64,12 +60,6 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.lng == null || $scope.newCountry.lng == '') {
 				$scope.lngMissing = true;
 			}
-			if ($scope.newCountry.budget == null || $scope.newCountry.budget == '') {
-				$scope.budgetMissing = true;
-			}
-			if ($scope.newCountry.purpose == null || $scope.newCountry.purpose == '') {
-				$scope.purposeMissing = true;
-			}
 			return (
 				$scope.en_nameMissing !== true &&
 				$scope.ar_nameMissing !== true &&
@@ -77,9 +67,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				$scope.ar_descriptionMissing !== true &&
 				$scope.latMissing !== true &&
 				$scope.lngMissing !== true &&
-				$scope.thumbnailMissing !== true &&
-				$scope.budgetMissing !== true &&
-				$scope.purposeMissing !== true
+				$scope.thumbnailMissing !== true
 			);
 		};
 		$scope.addCountry = function(close) {
@@ -159,14 +147,6 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		$scope.initialize = function() {
 			CountriesService.getAll().then(function(countries) {
 				$scope.countries = countries;
-			});
-
-			PurposesService.getAll().then(function(purposes) {
-				$scope.purposes = purposes;
-			});
-
-			BudgetCategoriesService.getAll().then(function(budgetCategories) {
-				$scope.budgetCategories = budgetCategories;
 			});
 
 			InterestsService.getAll().then(function(interests) {

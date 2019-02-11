@@ -113,6 +113,16 @@ var start = () => {
 			user: req.user,
 		});
 	});
+	app.get('/admin/cities', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Cities',
+			controller: 'CitiesPageContent',
+		};
+		res.render('pages/cities', {
+			user: req.user,
+		});
+	});
 	app.get('/admin/itineraries', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,

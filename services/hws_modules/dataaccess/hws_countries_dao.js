@@ -35,8 +35,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 							thumbnail: rows[0].Thumbnail,
 							lat: rows[0].Latitude,
 							lng: rows[0].Longitude,
-							budget: rows[0].Budget_Category,
-							purpose: rows[0].Travel_Purpose,
 						};
 
 						if (lang) {
@@ -79,7 +77,7 @@ var create = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Budget_Category, Travel_Purpose) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude) values (?, ?, ?, ?, ?, ?, ?)',
 						[
 							country.en_name,
 							country.en_description,
@@ -88,8 +86,6 @@ var create = function(country, onSuccess, onFailure) {
 							country.thumbnail,
 							country.lat,
 							country.lng,
-							country.budget,
-							country.purpose,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -141,7 +137,7 @@ var update = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ?, Budget_Category = ?, Travel_Purpose = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ? WHERE Id = ?',
 						[
 							country.en_name,
 							country.en_description,
@@ -150,8 +146,6 @@ var update = function(country, onSuccess, onFailure) {
 							country.thumbnail,
 							country.lat,
 							country.lng,
-							country.budget,
-							country.purpose,
 							country.id,
 						],
 						function(err, result) {
@@ -212,8 +206,6 @@ var getAll = function(lang, onSuccess, onFailure) {
 							thumbnail: rows[i].Thumbnail,
 							lat: rows[i].Latitude,
 							lng: rows[i].Longitude,
-							budget: rows[i].Budget_Category,
-							purpose: rows[i].Travel_Purpose,
 						};
 						if (lang) {
 							country.name = country[lang.toLowerCase() + '_name'];
@@ -266,8 +258,6 @@ var getAllCountriesInIternaries = function(lang, onSuccess, onFailure) {
 								thumbnail: rows[i].Thumbnail,
 								lat: rows[i].Latitude,
 								lng: rows[i].Longitude,
-								budget: rows[i].Budget_Category,
-								purpose: rows[i].Travel_Purpose,
 							};
 							if (lang) {
 								country.name = country[lang.toLowerCase() + '_name'];

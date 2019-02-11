@@ -122,6 +122,23 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
+	.factory('CitiesService', [
+		'$rootScope',
+		'$http',
+		function CitiesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
+
+			return {
+				getAll: getAll,
+			};
+
+			function getAll() {
+				return $http.get(prefix + 'cities').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
 	.factory('PurposesService', [
 		'$rootScope',
 		'$http',
