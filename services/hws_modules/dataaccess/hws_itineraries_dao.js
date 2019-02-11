@@ -1,7 +1,3 @@
-/**
- * The dataaccess methods of hws
- */
-
 var daoUtilities = require('./hws_dao_utilities.js');
 
 var getById = function(id, lang, onSuccess, onFailure) {
@@ -15,7 +11,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			var iternaryQuery = `SELECT * FROM iternary WHERE id = ${connection.escape(id)};`;
-			var countriesQuery = `SELECT ic.Countries_Id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join iternary_countries ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
+			var citiesQuery = `SELECT ic.City_id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join iternary_cities ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
 				id
 			)};`;
 			var ferryQuery = `SELECT ife.*, mp.* FROM iternary i join iternary_ferry ife on i.Id = ife.iternary_id join month_price mp on mp.id = ife.price WHERE i.Id = ${connection.escape(
@@ -27,7 +23,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			FROM iternary i join iternary_flight ifl on i.Id = ifl.Iternary_id join month_price mpa on mpa.id = ifl.adult_price join month_price mpk on mpk.id = ifl.kid_price join month_price mpi on mpi.id = ifl.infant_price WHERE i.Id = ${connection.escape(
 				id
 			)};`;
-			var hotelQuery = `SELECT ih.*, c.EN_Name AS Country_Name, mp.* FROM iternary i join iternary_hotel ih on i.Id = ih.Iternary_id join month_price mp on mp.id = ih.night_price LEFT JOIN Countries c on c.Id = ih.Country_Id WHERE i.Id =  ${connection.escape(
+			var hotelQuery = `SELECT ih.*, c.EN_Name AS City_Name, mp.* FROM iternary i join iternary_hotel ih on i.Id = ih.Iternary_id join month_price mp on mp.id = ih.night_price LEFT JOIN Cities c on c.Id = ih.City_Id WHERE i.Id =  ${connection.escape(
 				id
 			)};`;
 			var seasonQuery = `SELECT Start AS start, End AS end, Type AS type FROM iternary i join iternary_season s on i.Id = s.Iternary_Id WHERE i.Id = ${connection.escape(
@@ -44,7 +40,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			)};`;
 			connection.query(
 				iternaryQuery +
-					countriesQuery +
+					citiesQuery +
 					ferryQuery +
 					flightQuery +
 					hotelQuery +
@@ -83,7 +79,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								image2: rows[0][0].Image2,
 								iataCode: rows[0][0].EN_Name.substring(0, 3),
 								agentNotes: rows[0][0].Agent_Notes,
-								countries: rows[1],
+								cities: rows[1],
 								ferries: rows[2],
 								flights: rows[3],
 								hotels: rows[4],
@@ -209,16 +205,16 @@ var update = function(itinerary, onSuccess, onFailure) {
 					)}, Excludes = ${connection.escape(itinerary.excludes || '')}, Image1 = ${connection.escape(
 						itinerary.image1
 					)}, Image2 = ${connection.escape(itinerary.image2)} WHERE Id = ${connection.escape(itinerary.id)};`;
-					var countriesQuery = `DELETE FROM iternary_countries WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
-					for (let i = 0; i < itinerary.countries.length; i++) {
-						if (i === 0) countriesQuery += `INSERT INTO iternary_countries VALUES `;
-						else countriesQuery += ', ';
-						countriesQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
-							itinerary.countries[i].id
-						)}, ${connection.escape(itinerary.countries[i].order || 0)}, ${connection.escape(
-							itinerary.countries[i].days || 0
+					var citiesQuery = `DELETE FROM iternary_cities WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
+					for (let i = 0; i < itinerary.cities.length; i++) {
+						if (i === 0) citiesQuery += `INSERT INTO iternary_cities VALUES `;
+						else citiesQuery += ', ';
+						citiesQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
+							itinerary.cities[i].id
+						)}, ${connection.escape(itinerary.cities[i].order || 0)}, ${connection.escape(
+							itinerary.cities[i].days || 0
 						)})`;
-						if (i === itinerary.countries.length - 1) countriesQuery += ';';
+						if (i === itinerary.cities.length - 1) citiesQuery += ';';
 					}
 					var ferriesQuery = `DELETE FROM month_price WHERE id in (SELECT price FROM iternary_ferry WHERE Iternary_Id = ${connection.escape(
 						itinerary.id
@@ -335,13 +331,13 @@ var update = function(itinerary, onSuccess, onFailure) {
 								itinerary.hotels[i].NOV || 0
 							)}, ${connection.escape(itinerary.hotels[i].DEC || 0)});`;
 							hotelsQuery +=
-								'INSERT INTO iternary_hotel (`Iternary_id`, `EN_Name`, `AR_Name`, `private`, `budget_category_id`, `Country_Id`, `night_price`) VALUES ';
+								'INSERT INTO iternary_hotel (`Iternary_id`, `EN_Name`, `AR_Name`, `private`, `budget_category_id`, `City_Id`, `night_price`) VALUES ';
 							hotelsQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
 								itinerary.hotels[i].EN_Name || ''
 							)}, ${connection.escape(itinerary.hotels[i].AR_Name || '')}, ${connection.escape(
 								itinerary.hotels[i].private || 0
 							)}, ${connection.escape(itinerary.hotels[i].budget_category_id || 1)}, ${connection.escape(
-								itinerary.countries.length === 1 ? itinerary.countries[0].id : itinerary.hotels[i].Country_Id || 1
+								itinerary.cities.length === 1 ? itinerary.cities[0].id : itinerary.hotels[i].City_Id || 1
 							)}, LAST_INSERT_ID());`;
 						}
 					}
@@ -391,7 +387,7 @@ var update = function(itinerary, onSuccess, onFailure) {
 					}
 					connection.query(
 						updateQuery +
-							countriesQuery +
+							citiesQuery +
 							ferriesQuery +
 							flightsQuery +
 							hotelsQuery +
@@ -437,7 +433,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as country_en_name, GROUP_CONCAT(c.AR_Name separator "#") as country_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as country_en_description, GROUP_CONCAT(c.AR_Description separator "#") as country_ar_description FROM hws.iternary i left outer join hws.iternary_countries ic on i.Id = ic.Iternary_Id left outer join hws.Countries c on ic.Countries_Id = c.Id group by i.id ',
+				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as city_en_name, GROUP_CONCAT(c.AR_Name separator "#") as city_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as city_en_description, GROUP_CONCAT(c.AR_Description separator "#") as city_ar_description FROM hws.iternary i left outer join hws.iternary_cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -472,10 +468,10 @@ var getAll = function(lang, onSuccess, onFailure) {
 								agentNotes: rows[i].Agent_Notes,
 								longitudes: rows[i].longitude,
 								latitudes: rows[i].latitude,
-								countries_en_descriptions: rows[i].country_en_description,
-								countries_ar_descriptions: rows[i].country_ar_description,
-								countries_en_names: rows[i].country_en_name,
-								countries_ar_names: rows[i].country_ar_name,
+								cities_en_descriptions: rows[i].city_en_description,
+								cities_ar_descriptions: rows[i].city_ar_description,
+								cities_en_names: rows[i].city_en_name,
+								cities_ar_names: rows[i].city_ar_name,
 							};
 							if (lang) {
 								itinerary.name = itinerary[lang.toLowerCase() + '_name'];

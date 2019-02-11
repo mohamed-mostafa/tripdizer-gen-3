@@ -1,14 +1,10 @@
-/**
- *
- */
-
 g2gControlCenterApplication
 	.controller('ItinerariesPageContentController', [
 		'$rootScope',
 		'$scope',
 		'$http',
 		'ItinerariesService',
-		'CountriesService',
+		'CitiesService',
 		'BudgetCategoriesService',
 		'PurposesService',
 		'InterestsService',
@@ -17,13 +13,13 @@ g2gControlCenterApplication
 			$scope,
 			$http,
 			ItinerariesService,
-			CountriesService,
+			CitiesService,
 			BudgetCategoriesService,
 			PurposesService,
 			InterestsService
 		) {
 			// fields
-			$scope.countries = [];
+			$scope.cities = [];
 			$scope.purposes = [];
 			$scope.interests = [];
 			$scope.budgetCategories = [];
@@ -243,9 +239,9 @@ g2gControlCenterApplication
 					});
 				});
 			};
-			$scope.getCountryById = function(id) {
-				for (let i = 0; i < $scope.countries.length; ++i) {
-					if ($scope.countries[i].id == id) return $scope.countries[i];
+			$scope.getCityById = function(id) {
+				for (let i = 0; i < $scope.cities.length; ++i) {
+					if ($scope.cities[i].id == id) return $scope.cities[i];
 				}
 			};
 			$scope.getSeasonById = function(id) {
@@ -269,8 +265,8 @@ g2gControlCenterApplication
 					$scope.budgetCategories = budgetCategories;
 				});
 
-				CountriesService.getAll().then(function(countries) {
-					$scope.countries = countries;
+				CitiesService.getAll().then(function(cities) {
+					$scope.cities = cities;
 				});
 
 				PurposesService.getAll().then(function(purposes) {
@@ -284,11 +280,11 @@ g2gControlCenterApplication
 
 			$scope.initialize();
 
-			$scope.removeCountry = function(index) {
-				$scope.newItinerary.countries.splice(index, 1);
+			$scope.removeCity = function(index) {
+				$scope.newItinerary.cities.splice(index, 1);
 			};
-			$scope.addCountry = function(index) {
-				$scope.newItinerary.countries.push({});
+			$scope.addCity = function(index) {
+				$scope.newItinerary.cities.push({});
 			};
 			$scope.removeFerry = function(index) {
 				$scope.newItinerary.ferries.splice(index, 1);

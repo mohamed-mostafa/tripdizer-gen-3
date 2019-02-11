@@ -179,7 +179,7 @@
                                         <a href="#itineraryTab" data-toggle="tab">Basic</a>
                                     </li>
                                     <li>
-                                        <a href="#countriesTab" data-toggle="tab">Countries</a>
+                                        <a href="#citiesTab" data-toggle="tab">Cities</a>
                                     </li>
                                     <li>
                                         <a href="#ferriesTab" data-toggle="tab">Ferries</a>
@@ -283,15 +283,15 @@
                                         <!-- /.form group -->
                                     </div>
                                     <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="countriesTab">
+                                    <div class="tab-pane" id="citiesTab">
                                         <div class="text-center">
-                                            <i class="fa fa-plus-circle" style="font-size: 30px" aria-hidden="true" ng-click="addCountry()"></i>
+                                            <i class="fa fa-plus-circle" style="font-size: 30px" aria-hidden="true" ng-click="addCity()"></i>
                                         </div>
-                                        <div class="box box-primary" ng-repeat="country in newItinerary.countries">
+                                        <div class="box box-primary" ng-repeat="city in newItinerary.cities">
                                             <div class="box-header with-border">
-                                                <h3 class="box-title">{{getCountryById(country.id).en_name}}</h3>
+                                                <h3 class="box-title">{{getCityById(city.id).enName}}</h3>
                                                 <div class="box-tools pull-right">
-                                                    <button class="btn btn-box-tool" ng-click="removeCountry($index)">
+                                                    <button class="btn btn-box-tool" ng-click="removeCity($index)">
                                                         <i class="fa fa-times-circle text-danger"></i>
                                                     </button>
                                                     <button class="btn btn-box-tool" data-widget="collapse">
@@ -304,18 +304,18 @@
                                             <div class="box-body">
                                                 <div class="form-group" style="border: 1px solid #eee;padding: 15px;">
                                                     <div class="form-control-4">
-                                                        <label>Country name</label>
-                                                        <select class="form-control" ng-model="country.id">
-                                                            <option ng-repeat="orgCountry in countries" ng-value="orgCountry.id" ng-selected="orgCountry.id == country.id">{{orgCountry.en_name}}</option>
+                                                        <label>City name</label>
+                                                        <select class="form-control" ng-model="city.id">
+                                                            <option ng-repeat="orgCity in cities" ng-value="orgCity.id" ng-selected="orgCity.id == city.id">{{orgCity.enName}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-control-4">
                                                         <label>Order #</label>
-                                                        <input class="form-control" type="number" ng-model="country.order" required>
+                                                        <input class="form-control" type="number" ng-model="city.order" required>
                                                     </div>
                                                     <div class="form-control-4">
                                                         <label>Days %</label>
-                                                        <input class="form-control" type="number" ng-model="country.days" required>
+                                                        <input class="form-control" type="number" ng-model="city.days" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -754,9 +754,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-control-4">
-                                                        <label>Country:</label>
-                                                        <select class="form-control" id="country" ng-model="hotel.Country_Id">
-                                                            <option ng-repeat="country in newItinerary.countries" ng-value="country.id" ng-selected="hotel.Country_Id === country.id">{{getCountryById(country.id).en_name}}</option>
+                                                        <label>City:</label>
+                                                        <select class="form-control" id="city" ng-model="hotel.City_Id">
+                                                            <option ng-repeat="city in newItinerary.cities" ng-value="city.id" ng-selected="hotel.City_Id === city.id">{{getCityById(city.id).enName}}</option>
                                                         </select>
                                                     </div>
                                                     <label>Night price:</label>
