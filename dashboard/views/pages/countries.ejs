@@ -18,20 +18,16 @@
             <th>En Description</th>
             <th>Ar Description</th>
             <th>Thumbnail</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="country in countries">
-            <td>{{country.en_name}}</td>
-            <td>{{country.ar_name}}</td>
-            <td>{{country.en_description}}</td>
-            <td>{{country.ar_description}}</td>
+            <td>{{country.enName}}</td>
+            <td>{{country.arName}}</td>
+            <td>{{country.enDescription}}</td>
+            <td>{{country.arDescription}}</td>
             <td>{{country.thumbnail}}</td>
-            <td>{{country.lat}}</td>
-            <td>{{country.lng}}</td>
             <td>
               <i class="fa fa-edit cursor" ng-click="openEditDialog(country.id)"> Edit</i>
             </td>
@@ -75,31 +71,31 @@
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
               <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="en_name" ng-show="en_nameMissing==true">
+                <label class="control-label text-red" for="enName" ng-show="enNameMissing==true">
                   <i class="fa fa-times-circle-o"></i>English Name is missing</label>
-                <label for="en_name" ng-show="en_nameMissing==false">En Name</label>
-                <input type="text" required class="form-control" id="en_name" ng-model="newCountry.en_name" placeholder="Enter name in English"
+                <label for="enName" ng-show="enNameMissing==false">En Name</label>
+                <input type="text" required class="form-control" id="enName" ng-model="newCountry.enName" placeholder="Enter name in English"
                   required>
               </div>
               <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="en_description" ng-show="en_descriptionMissing==true">
+                <label class="control-label text-red" for="enDescription" ng-show="enDescriptionMissing==true">
                   <i class="fa fa-times-circle-o"></i>English Description is missing</label>
-                <label for="en_description" ng-show="en_descriptionMissing==false">En Desc</label>
-                <input type="text" required class="form-control" id="en_description" ng-model="newCountry.en_description" placeholder="Enter description in English"
+                <label for="enDescription" ng-show="enDescriptionMissing==false">En Desc</label>
+                <input type="text" required class="form-control" id="enDescription" ng-model="newCountry.enDescription" placeholder="Enter description in English"
                   required>
               </div>
               <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="ar_name" ng-show="ar_nameMissing==true">
+                <label class="control-label text-red" for="arName" ng-show="arNameMissing==true">
                   <i class="fa fa-times-circle-o"></i>Arabic Name is missing</label>
-                <label for="ar_name" ng-show="ar_nameMissing==false">Ar Name</label>
-                <input type="text" required class="form-control" id="ar_name" ng-model="newCountry.ar_name" placeholder="Enter name in Arabic"
+                <label for="arName" ng-show="arNameMissing==false">Ar Name</label>
+                <input type="text" required class="form-control" id="arName" ng-model="newCountry.arName" placeholder="Enter name in Arabic"
                   required>
               </div>
               <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="ar_description" ng-show="ar_descriptionMissing==true">
+                <label class="control-label text-red" for="arDescription" ng-show="arDescriptionMissing==true">
                   <i class="fa fa-times-circle-o"></i>Arabic Description is missing</label>
-                <label for="ar_description" ng-show="ar_descriptionMissing==false">Ar Desc</label>
-                <input type="text" required class="form-control" id="ar_description" ng-model="newCountry.ar_description" placeholder="Enter description in Arabic"
+                <label for="arDescription" ng-show="arDescriptionMissing==false">Ar Desc</label>
+                <input type="text" required class="form-control" id="arDescription" ng-model="newCountry.arDescription" placeholder="Enter description in Arabic"
                   required>
               </div>
               <div class="form-group" ng-show="saving==false">
@@ -108,18 +104,6 @@
                 <label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
                 <input type="text" required class="form-control" id="thumbnail" ng-model="newCountry.thumbnail" placeholder="Enter thumbnail"
                   required>
-              </div>
-              <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="lat" ng-show="latMissing==true">
-                  <i class="fa fa-times-circle-o"></i>Latitude is missing</label>
-                <label for="lat" ng-show="latMissing==false">Latitude</label>
-                <input type="text" required class="form-control" id="lat" ng-model="newCountry.lat" placeholder="Enter latitude" required>
-              </div>
-              <div class="form-group" ng-show="saving==false">
-                <label class="control-label text-red" for="lng" ng-show="lngMissing==true">
-                  <i class="fa fa-times-circle-o"></i>Longitude is missing</label>
-                <label for="lng" ng-show="lngMissing==false">Longitude</label>
-                <input type="text" required class="form-control" id="lng" ng-model="newCountry.lng" placeholder="Enter longitude" required>
               </div>
               <!-- /.form group -->
             </div>

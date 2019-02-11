@@ -1,7 +1,3 @@
-/**
- * The dataaccess methods of hws
- */
-
 var daoUtilities = require('./hws_dao_utilities.js');
 
 var getById = function(id, lang, onSuccess, onFailure) {
@@ -28,13 +24,11 @@ var getById = function(id, lang, onSuccess, onFailure) {
 						// populate the country attributes
 						var country = {
 							id: rows[0].Id,
-							en_name: rows[0].EN_Name,
-							en_description: rows[0].EN_Description,
-							ar_name: rows[0].AR_Name,
-							ar_description: rows[0].AR_Description,
+							enName: rows[0].EN_Name,
+							enDescription: rows[0].EN_Description,
+							arName: rows[0].AR_Name,
+							arDescription: rows[0].AR_Description,
 							thumbnail: rows[0].Thumbnail,
-							lat: rows[0].Latitude,
-							lng: rows[0].Longitude,
 						};
 
 						if (lang) {
@@ -77,23 +71,15 @@ var create = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude) values (?, ?, ?, ?, ?, ?, ?)',
-						[
-							country.en_name,
-							country.en_description,
-							country.ar_name,
-							country.ar_description,
-							country.thumbnail,
-							country.lat,
-							country.lng,
-						],
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail) values (?, ?, ?, ?, ?)',
+						[country.enName, country.enDescription, country.arName, country.arDescription, country.thumbnail],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new country: ' + country.en_name);
+								console.log('An error occurred while trying to create the new country: ' + country.enName);
 								console.log(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
@@ -137,22 +123,20 @@ var update = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ? WHERE Id = ?',
 						[
-							country.en_name,
-							country.en_description,
-							country.ar_name,
-							country.ar_description,
+							country.enName,
+							country.enDescription,
+							country.arName,
+							country.arDescription,
 							country.thumbnail,
-							country.lat,
-							country.lng,
 							country.id,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing country: ' + country.en_name);
+								console.log('An error occurred while trying to update the existing country: ' + country.enName);
 								console.log(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
@@ -199,13 +183,11 @@ var getAll = function(lang, onSuccess, onFailure) {
 					for (var i = 0; i < rows.length; ++i) {
 						var country = {
 							id: rows[i].Id,
-							en_name: rows[i].EN_Name,
-							en_description: rows[i].EN_Description,
-							ar_name: rows[i].AR_Name,
-							ar_description: rows[i].AR_Description,
+							enName: rows[i].EN_Name,
+							enDescription: rows[i].EN_Description,
+							arName: rows[i].AR_Name,
+							arDescription: rows[i].AR_Description,
 							thumbnail: rows[i].Thumbnail,
-							lat: rows[i].Latitude,
-							lng: rows[i].Longitude,
 						};
 						if (lang) {
 							country.name = country[lang.toLowerCase() + '_name'];
@@ -251,13 +233,11 @@ var getAllCountriesInIternaries = function(lang, onSuccess, onFailure) {
 						for (var i = 0; i < rows.length; ++i) {
 							var country = {
 								id: rows[i].Id,
-								en_name: rows[i].EN_Name,
-								en_description: rows[i].EN_Description,
-								ar_name: rows[i].AR_Name,
-								ar_description: rows[i].AR_Description,
+								enName: rows[i].EN_Name,
+								enDescription: rows[i].EN_Description,
+								arName: rows[i].AR_Name,
+								arDescription: rows[i].AR_Description,
 								thumbnail: rows[i].Thumbnail,
-								lat: rows[i].Latitude,
-								lng: rows[i].Longitude,
 							};
 							if (lang) {
 								country.name = country[lang.toLowerCase() + '_name'];

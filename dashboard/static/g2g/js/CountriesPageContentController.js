@@ -27,46 +27,36 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 
 		// functions
 		$scope.resetValidationFlags = function() {
-			$scope.en_nameMissing = false;
-			$scope.ar_nameMissing = false;
-			$scope.en_descriptionMissing = false;
-			$scope.ar_descriptionMissing = false;
+			$scope.enNameMissing = false;
+			$scope.arNameMissing = false;
+			$scope.enDescriptionMissing = false;
+			$scope.arDescriptionMissing = false;
 			$scope.thumbnailMissing = false;
-			$scope.latMissing = false;
-			$scope.lngMissing = false;
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
 		$scope.newCountryIsValid = function() {
 			$scope.resetValidationFlags();
-			if ($scope.newCountry.en_name == null || $scope.newCountry.en_name == '') {
-				$scope.en_nameMissing = true;
+			if ($scope.newCountry.enName == null || $scope.newCountry.enName == '') {
+				$scope.enNameMissing = true;
 			}
-			if ($scope.newCountry.ar_name == null || $scope.newCountry.ar_name == '') {
-				$scope.ar_nameMissing = true;
+			if ($scope.newCountry.arName == null || $scope.newCountry.arName == '') {
+				$scope.arNameMissing = true;
 			}
-			if ($scope.newCountry.en_description == null || $scope.newCountry.en_description == '') {
-				$scope.en_descriptionMissing = true;
+			if ($scope.newCountry.enDescription == null || $scope.newCountry.enDescription == '') {
+				$scope.enDescriptionMissing = true;
 			}
-			if ($scope.newCountry.ar_description == null || $scope.newCountry.ar_description == '') {
-				$scope.ar_descriptionMissing = true;
+			if ($scope.newCountry.arDescription == null || $scope.newCountry.arDescription == '') {
+				$scope.arDescriptionMissing = true;
 			}
 			if ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '') {
 				$scope.thumbnailMissing = true;
 			}
-			if ($scope.newCountry.lat == null || $scope.newCountry.lat == '') {
-				$scope.latMissing = true;
-			}
-			if ($scope.newCountry.lng == null || $scope.newCountry.lng == '') {
-				$scope.lngMissing = true;
-			}
 			return (
-				$scope.en_nameMissing !== true &&
-				$scope.ar_nameMissing !== true &&
-				$scope.en_descriptionMissing !== true &&
-				$scope.ar_descriptionMissing !== true &&
-				$scope.latMissing !== true &&
-				$scope.lngMissing !== true &&
+				$scope.enNameMissing !== true &&
+				$scope.arNameMissing !== true &&
+				$scope.enDescriptionMissing !== true &&
+				$scope.arDescriptionMissing !== true &&
 				$scope.thumbnailMissing !== true
 			);
 		};
