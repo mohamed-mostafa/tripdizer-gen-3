@@ -1,84 +1,96 @@
 /**
- * 
+ *
  */
-var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", ['textAngular', 'ui.bootstrap'])
-	.run(function ($rootScope) {
+var g2gControlCenterApplication = angular
+	.module('G2GControlCenterApplication', ['textAngular', 'ui.bootstrap'])
+	.run(function($rootScope) {
 		$rootScope.serverURL = globalVariables.serverURL;
 	})
-	.config(['$locationProvider', function ($locationProvider) {
-		$locationProvider.html5Mode(false);
-		//    $locationProvider.html5Mode(true);
-	}])
-	.config(['$httpProvider', '$windowProvider', function ($httpProvider, $windowProvider) {
-		var $window = $windowProvider.$get();
-		$httpProvider.interceptors.push(function () {
-			return {
-				request: function (config) {
-					config.headers = config.headers || {};
-					const JWToken = globalVariables.curentGlobalToken;
-					if (JWToken) {
-						config.headers['Authorization'] = JWToken;
-					}
-					return config;
-				},
-				responseError: function (response) {
-					if (response.status === 401) { // Unauthorized
-						$window.location.href = '/admin/login';
-					}
-				}
-			};
-		});
-	}])
-	.directive('ngFileModel', ['$parse', function ($parse) {
-		return {
-			restrict: 'A',
-			link: function (scope, element, attrs) {
-				var model = $parse(attrs.ngFileModel);
-				var isMultiple = attrs.multiple;
-				var modelSetter = model.assign;
-				element.bind('change', function () {
-					var values = [];
-					angular.forEach(element[0].files, function (item) {
-						var value = {
-							filename: item.name,
-							path: URL.createObjectURL(item),
-							contentType: item.type,
-							_file: item
-						};
-						values.push(value);
-					});
-					scope.$apply(function () {
-						if (isMultiple) {
-							modelSetter(scope, values);
-						} else {
-							modelSetter(scope, values[0]);
+	.config([
+		'$locationProvider',
+		function($locationProvider) {
+			$locationProvider.html5Mode(false);
+			//    $locationProvider.html5Mode(true);
+		},
+	])
+	.config([
+		'$httpProvider',
+		'$windowProvider',
+		function($httpProvider, $windowProvider) {
+			var $window = $windowProvider.$get();
+			$httpProvider.interceptors.push(function() {
+				return {
+					request: function(config) {
+						config.headers = config.headers || {};
+						const JWToken = globalVariables.curentGlobalToken;
+						if (JWToken) {
+							config.headers['Authorization'] = JWToken;
 						}
+						return config;
+					},
+					responseError: function(response) {
+						if (response.status === 401) {
+							// Unauthorized
+							$window.location.href = '/admin/login';
+						}
+					},
+				};
+			});
+		},
+	])
+	.directive('ngFileModel', [
+		'$parse',
+		function($parse) {
+			return {
+				restrict: 'A',
+				link: function(scope, element, attrs) {
+					var model = $parse(attrs.ngFileModel);
+					var isMultiple = attrs.multiple;
+					var modelSetter = model.assign;
+					element.bind('change', function() {
+						var values = [];
+						angular.forEach(element[0].files, function(item) {
+							var value = {
+								filename: item.name,
+								path: URL.createObjectURL(item),
+								contentType: item.type,
+								_file: item,
+							};
+							values.push(value);
+						});
+						scope.$apply(function() {
+							if (isMultiple) {
+								modelSetter(scope, values);
+							} else {
+								modelSetter(scope, values[0]);
+							}
+						});
 					});
-				});
-			}
-		};
-	}])
-	.directive('format', function (dateFilter) {
+				},
+			};
+		},
+	])
+	.directive('format', function(dateFilter) {
 		return {
 			require: 'ngModel',
-			link: function (scope, elm, attrs, ctrl) {
+			link: function(scope, elm, attrs, ctrl) {
 				var dateFormat = attrs['format'] || 'yyyy-MM-dd';
-				ctrl.$formatters.unshift(function (modelValue) {
+				ctrl.$formatters.unshift(function(modelValue) {
 					return dateFilter(modelValue, dateFormat);
 				});
-			}
+			},
 		};
 	})
-	.directive('prefix', function () {
+	.directive('prefix', function() {
 		return {
 			restrict: 'A',
 			require: 'ngModel',
-			link: function (scope, elm, attrs, ctrl) {
+			link: function(scope, elm, attrs, ctrl) {
 				const prefix = attrs['prefix'] || '';
-				const ensurePrefix = (value) => {
+				const ensurePrefix = value => {
 					if (value && value.indexOf(prefix) !== 0) {
-						if (value.indexOf("https://www.youtube.com/watch?v=") === 0) {
-							value = value.split("https://www.youtube.com/watch?v=")[1];
+						if (value.indexOf('https://www.youtube.com/watch?v=') === 0) {
+							value = value.split('https://www.youtube.com/watch?v=')[1];
 						}
 						if (prefix.indexOf(value) === 0) {
 							value = '';
@@ -86,128 +98,163 @@ var g2gControlCenterApplication = angular.module("G2GControlCenterApplication", 
 						ctrl.$setViewValue(prefix + value);
 						ctrl.$render();
 						return prefix + value;
-					} else
-						return value;
-				}
+					} else return value;
+				};
 				ctrl.$formatters.push(ensurePrefix);
 				ctrl.$parsers.splice(0, 0, ensurePrefix);
-			}
+			},
 		};
 	})
-	.factory('CountriesService', ['$rootScope', '$http', function CountriesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+	.factory('CountriesService', [
+		'$rootScope',
+		'$http',
+		function CountriesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'countries').then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('PurposesService', ['$rootScope', '$http', function PurposesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll() {
+				return $http.get(prefix + 'countries').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('PurposesService', [
+		'$rootScope',
+		'$http',
+		function PurposesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'purposes').then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('BudgetCategoriesService', ['$rootScope', '$http', function BudgetCategoriesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll() {
+				return $http.get(prefix + 'purposes').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('BudgetCategoriesService', [
+		'$rootScope',
+		'$http',
+		function BudgetCategoriesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'budgetcategories').then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('InterestsService', ['$rootScope', '$http', function InterestsService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll() {
+				return $http.get(prefix + 'budgetcategories').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('InterestsService', [
+		'$rootScope',
+		'$http',
+		function InterestsService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'interests').then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('ItinerariesService', ['$rootScope', '$http', function ItinerariesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll() {
+				return $http.get(prefix + 'interests').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('ItinerariesService', [
+		'$rootScope',
+		'$http',
+		function ItinerariesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'itineraries').then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('VideosService', ['$rootScope', '$http', function VideosService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/public/';
+			function getAll() {
+				return $http.get(prefix + 'itineraries').then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('VideosService', [
+		'$rootScope',
+		'$http',
+		function VideosService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/public/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll(lang) {
-			return $http.get(prefix + 'videos' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('GroupTripsService', ['$rootScope', '$http', function GroupTripsService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll(lang) {
+				return $http.get(prefix + 'videos' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('GroupTripsService', [
+		'$rootScope',
+		'$http',
+		function GroupTripsService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll(lang) {
-			return $http.get(prefix + 'groupTrips' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('ReferralTypesService', ['$rootScope', '$http', function ReferralTypesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll(lang) {
+				return $http.get(prefix + 'groupTrips' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('ReferralTypesService', [
+		'$rootScope',
+		'$http',
+		function ReferralTypesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll(lang) {
-			return $http.get(prefix + 'referralTypes' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
-				return response.data
-			})
-		}
-	}])
-	.factory('StatusesService', ['$rootScope', '$http', function StatusesService($rootScope, $http) {
-		var prefix = $rootScope.serverURL + '/';
+			function getAll(lang) {
+				return $http.get(prefix + 'referralTypes' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
+	.factory('StatusesService', [
+		'$rootScope',
+		'$http',
+		function StatusesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
 
-		return {
-			getAll: getAll
-		}
+			return {
+				getAll: getAll,
+			};
 
-		function getAll() {
-			return $http.get(prefix + 'statuses', {}).then(function (response) {
-				return response.data
-			})
-		}
-	}]);
+			function getAll() {
+				return $http.get(prefix + 'statuses', {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	]);
