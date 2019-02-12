@@ -11,7 +11,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			var iternaryQuery = `SELECT * FROM iternary WHERE id = ${connection.escape(id)};`;
-			var citiesQuery = `SELECT ic.City_id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join iternary_cities ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
+			var citiesQuery = `SELECT ic.City_id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join Iternary_Cities ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
 				id
 			)};`;
 			var ferryQuery = `SELECT ife.*, mp.* FROM iternary i join iternary_ferry ife on i.Id = ife.iternary_id join month_price mp on mp.id = ife.price WHERE i.Id = ${connection.escape(
@@ -205,9 +205,9 @@ var update = function(itinerary, onSuccess, onFailure) {
 					)}, Excludes = ${connection.escape(itinerary.excludes || '')}, Image1 = ${connection.escape(
 						itinerary.image1
 					)}, Image2 = ${connection.escape(itinerary.image2)} WHERE Id = ${connection.escape(itinerary.id)};`;
-					var citiesQuery = `DELETE FROM iternary_cities WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
+					var citiesQuery = `DELETE FROM Iternary_Cities WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
 					for (let i = 0; i < itinerary.cities.length; i++) {
-						if (i === 0) citiesQuery += `INSERT INTO iternary_cities VALUES `;
+						if (i === 0) citiesQuery += `INSERT INTO Iternary_Cities VALUES `;
 						else citiesQuery += ', ';
 						citiesQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
 							itinerary.cities[i].id
@@ -433,7 +433,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as cities_en_name, GROUP_CONCAT(c.AR_Name separator "#") as cities_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as cities_en_description, GROUP_CONCAT(c.AR_Description separator "#") as cities_ar_description FROM hws.iternary i left outer join hws.iternary_cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
+				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as cities_en_name, GROUP_CONCAT(c.AR_Name separator "#") as cities_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as cities_en_description, GROUP_CONCAT(c.AR_Description separator "#") as cities_ar_description FROM hws.iternary i left outer join hws.Iternary_Cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
