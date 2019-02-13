@@ -2,7 +2,10 @@
 	<div class="mat-checkbox-group mat-checkbox-rounded form-control-xl row">
 		<mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
 			{{ preference.name }}
-			<span class="label-content-img" [style.background]="'url(' + preference.image + ')'"></span>
+			<span
+				class="label-content-img"
+				[style.background]="preference.image ? 'url(' + preference.image + ')' : null"
+			></span>
 		</mat-checkbox>
 	</div>
 </c-request-form-layout>

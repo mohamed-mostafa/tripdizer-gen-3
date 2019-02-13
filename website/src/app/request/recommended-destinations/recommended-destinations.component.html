@@ -58,7 +58,7 @@
 					</text>
 				</g>
 			</svg>
-			<img class="destination-img" [src]="destination.image" alt="" />
+			<img class="destination-img" *ngIf="destination.image" [src]="destination.image" alt="" />
 		</div>
 	</div>
 </c-request-form-layout>
