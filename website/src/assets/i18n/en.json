@@ -1,214 +1,216 @@
 {
-  "dir": "ltr",
-  "currency": {
-    "EGP": "EGP"
-  },
-  "core": {
-    "footer": {
-      "logo": "../../../assets/img/logo-250x131.svg",
-      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
-      "location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
-      "plan_trip": "Plan your trip"
-    }
-  },
-  "shared": {
-    "error_messages": {
-      "required": "Required",
-      "validDate": "Date format D / M / Y",
-      "matDatepickerParse": "Invalid date",
-      "compareDates": "Invalid dates",
-      "email": "Invalid email address",
-      "numericOnly": "Numeric only",
-      "equalTo": "Value doesn't match",
-      "copyPaste": "Please, Don't copy and paste me",
-      "notEmpty": "Invalid value",
-      "invalidPromoCode": "Invalid promo code"
-    }
-  },
-  "home": {
-    "landing": {
-      "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-      "landing_question": "Do you know where to travel?",
-      "have_plan": "Yes, I have a plan",
-      "surprise_me": "NO, Surprise me",
-      "scroll_down": "ScrollDown"
-    },
-    "testimonials": {
-      "featured_in": "Featured In"
-    },
-    "videos": {
-      "watch_videos": "Watch our videos on"
-    },
-    "why_us": {
-      "tailor_made": {
-        "label": "Tailor-made trips",
-        "description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
-      },
-      "enhanced_travel_experience": {
-        "label": "Enhanced travel experience",
-        "description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
-      },
-      "hassle_free": {
-        "label": "Hassle-free",
-        "description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
-      }
-    }
-  },
-  "request": {
-    "budget": {
-      "budget": "Budget/Person",
-      "choice": "OR choose one of our prepared budget categories"
-    },
-    "departure_return": {
-      "departure": "Departure",
-      "return": "Return",
-      "flexible": "Flexible dates ( +/- 3 days )",
-      "compare_dates": "Return Date must be greater than departure date"
-    },
-    "destinations": {
-      "dialog": {
-        "title": "Other destination",
-        "description": "Where would you like to travel?",
-        "inputs": {
-          "input0": "Specify your destination"
-        },
-        "buttonsLabel": {
-          "ok": "Done",
-          "cancel": "Cancel"
-        }
-      }
-    },
-    "estimated_cost": {
-      "hint1": "The costs are estimates and subject to change in the actual package",
-      "flights": "Flights",
-      "accommodation": "Accommodation",
-      "ferries": "Ferries",
-      "daily_spending": "Daily Spending",
-      "hint2": "International + Domestic flights",
-      "hint3": "Just a hint, not included in the final cost"
-    },
-    "form_layout": {
-      "next_label": "Continue",
-      "back_label": "Back"
-    },
-    "information": {
-      "next_label": "Submit",
-      "name": "Name",
-      "mobile": "Mobile No.",
-      "email": "Email",
-      "confirm_email": "Confirm Email",
-      "birthday": "Birthday",
-      "referral": "How did you know about us?",
-      "equal_to": "Email doesn't match"
-    },
-    "nav_bar": {
-      "traveling_from": "Traveling from",
-      "traveling_to": "Traveling to",
-      "departure_return": "Departure & Return",
-      "travelers": {
-        "title": "Travelers",
-        "value": "{{adultsNumber}} adults"
-      },
-      "budget": "Budget",
-      "purpose": "Purpose",
-      "preferences": "Preferences",
-      "destinations": "Destinations",
-      "estimated_cost": "Estimated Cost",
-      "travel_assistance": {
-        "title": "Travel Assistance",
-        "visaAssistance": "Visa",
-        "tourGuide": "Tour guide"
-      },
-      "information": {
-        "title": "One more step",
-        "value": "Information"
-      },
-      "ticket": ""
-    },
-    "preferences": {},
-    "purpose": {},
-    "recommended_destinations": {
-      "rank": "Rank",
-      "highest": "Highest",
-      "lowest": "Lowest"
-    },
-    "ticket": {
-      "request_number": "Request No.",
-      "adults": "{{adultsNumber}} adults",
-      "lg_sizes": {
-        "left_part": "M0,425V25A25,25,0,0,0,25,0H225a25,25,0,0,0,25,25v400A25,25,0,0,0,225,450H25A25,25,0,0,0,0,425Z",
-        "right_part": "M175,425V25A25,25,0,0,0,200,0h900a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
-        "right_part_transform": "matrix(1, 0, 0, 1, 225, 150)",
-        "splitter": "translate(450 250)",
-        "request": {
-          "position": "translate(222 238)",
-          "left_details": "translate(30 {{calc}})",
-          "right_details": {
-            "position": "translate(400 20)",
-            "ticket_id": "30",
-            "icon": "translate(190 0)",
-            "from": "20",
-            "to": "420"
-          }
-        }
-      },
-      "sm_sizes": {
-        "position": "translate(108 128)",
-        "top_details": {
-          "number": "1",
-          "sign": "*"
-        },
-        "bottom_details": {
-          "position": "translate(0 0)",
-          "ticket_id": "15",
-          "icon": "translate(0 80)",
-          "description": "translate(0 295)"
-        }
-      },
-      "lg_text": {
-        "line1": "Man cannot discover new oceans unless he has",
-        "line2": "the courage to lose sight of the shore.",
-        "line3": "– Andre Gide."
-      },
-      "sm_text": {
-        "line1": "Man cannot discover new oceans",
-        "line2": "unless he has the courage to",
-        "line3": "lose sight of the shore.",
-        "line4": "– Andre Gide."
-      }
-    },
-    "travel_assistance": {
-      "visa_assistance": "I need assistance with getting the visas",
-      "tour_guide": "I need a tour guide",
-      "promo_code": "Promo code",
-      "hint": "Enter promo code",
-      "apply": "Apply",
-      "special_request": "Special Request"
-    },
-    "travelers": {
-      "adults": "Adults",
-      "kids": "Kids",
-      "infants": "Infants"
-    },
-    "traveling_from": {
-      "traveling_from": "Traveling From",
-      "airports": [{
-          "iataCode": "CAI",
-          "name": "Cairo"
-        },
-        {
-          "iataCode": "HBE",
-          "name": "Alexandria"
-        },
-        {
-          "iataCode": "HRG",
-          "name": "Hurghada"
-        },
-        {
-          "iataCode": "SSH",
-          "name": "Sharm El-Sheikh"
-        }
-      ]
-    }
-  }
+	"dir": "ltr",
+	"currency": {
+		"EGP": "EGP"
+	},
+	"core": {
+		"footer": {
+			"logo": "../../../assets/img/logo-250x131.svg",
+			"slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
+			"location": "10 zakaria Rizq, Zamalek, Al Qahirah, Egypt",
+			"plan_trip": "Plan your trip"
+		}
+	},
+	"shared": {
+		"error_messages": {
+			"required": "Required",
+			"validDate": "Date format D / M / Y",
+			"matDatepickerParse": "Invalid date",
+			"compareDates": "Invalid dates",
+			"email": "Invalid email address",
+			"numericOnly": "Numeric only",
+			"equalTo": "Value doesn't match",
+			"copyPaste": "Please, Don't copy and paste me",
+			"notEmpty": "Invalid value",
+			"invalidPromoCode": "Invalid promo code"
+		}
+	},
+	"home": {
+		"landing": {
+			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+			"landing_question": "Do you know where to travel?",
+			"have_plan": "Yes, I have a plan",
+			"surprise_me": "NO, Surprise me",
+			"scroll_down": "ScrollDown"
+		},
+		"testimonials": {
+			"featured_in": "Featured In"
+		},
+		"videos": {
+			"watch_videos": "Watch our videos on"
+		},
+		"why_us": {
+			"tailor_made": {
+				"label": "Tailor-made trips",
+				"description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
+			},
+			"enhanced_travel_experience": {
+				"label": "Enhanced travel experience",
+				"description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
+			},
+			"hassle_free": {
+				"label": "Hassle-free",
+				"description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+			}
+		}
+	},
+	"request": {
+		"budget": {
+			"budget": "Budget/Person",
+			"choice": "OR choose one of our prepared budget categories"
+		},
+		"departure_return": {
+			"departure": "Departure",
+			"return": "Return",
+			"flexible": "Flexible dates ( +/- 3 days )",
+			"compare_dates": "Return Date must be greater than departure date"
+		},
+		"destinations": {
+			"dialog": {
+				"title": "Other destination",
+				"description": "Where would you like to travel?",
+				"inputs": {
+					"input0": "Specify your destination"
+				},
+				"buttonsLabel": {
+					"ok": "Done",
+					"cancel": "Cancel"
+				}
+			}
+		},
+		"estimated_cost": {
+			"hint0": "Total price for {{numberOfTravelers}} persons",
+			"hint1": "The costs are estimates and subject to change in the actual package",
+			"flights": "Flights",
+			"accommodation": "Accommodation",
+			"ferries": "Ferries",
+			"daily_spending": "Daily Spending",
+			"hint2": "International + Domestic flights",
+			"hint3": "Just a hint, not included in the final cost"
+		},
+		"form_layout": {
+			"next_label": "Continue",
+			"back_label": "Back"
+		},
+		"information": {
+			"next_label": "Submit",
+			"name": "Name",
+			"mobile": "Mobile No.",
+			"email": "Email",
+			"confirm_email": "Confirm Email",
+			"birthday": "Birthday",
+			"referral": "How did you know about us?",
+			"equal_to": "Email doesn't match"
+		},
+		"nav_bar": {
+			"traveling_from": "Traveling from",
+			"traveling_to": "Traveling to",
+			"departure_return": "Departure & Return",
+			"travelers": {
+				"title": "Travelers",
+				"value": "{{adultsNumber}} adults"
+			},
+			"budget": "Budget",
+			"purpose": "Purpose",
+			"preferences": "Preferences",
+			"destinations": "Destinations",
+			"estimated_cost": "Estimated Cost",
+			"travel_assistance": {
+				"title": "Travel Assistance",
+				"visaAssistance": "Visa",
+				"tourGuide": "Tour guide"
+			},
+			"information": {
+				"title": "One more step",
+				"value": "Information"
+			},
+			"ticket": ""
+		},
+		"preferences": {},
+		"purpose": {},
+		"recommended_destinations": {
+			"rank": "Rank",
+			"highest": "Highest",
+			"lowest": "Lowest"
+		},
+		"ticket": {
+			"request_number": "Request No.",
+			"adults": "{{adultsNumber}} adults",
+			"lg_sizes": {
+				"left_part": "M0,425V25A25,25,0,0,0,25,0H225a25,25,0,0,0,25,25v400A25,25,0,0,0,225,450H25A25,25,0,0,0,0,425Z",
+				"right_part": "M175,425V25A25,25,0,0,0,200,0h900a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
+				"right_part_transform": "matrix(1, 0, 0, 1, 225, 150)",
+				"splitter": "translate(450 250)",
+				"request": {
+					"position": "translate(222 238)",
+					"left_details": "translate(30 {{calc}})",
+					"right_details": {
+						"position": "translate(400 20)",
+						"ticket_id": "30",
+						"icon": "translate(190 0)",
+						"from": "20",
+						"to": "420"
+					}
+				}
+			},
+			"sm_sizes": {
+				"position": "translate(108 128)",
+				"top_details": {
+					"number": "1",
+					"sign": "*"
+				},
+				"bottom_details": {
+					"position": "translate(0 0)",
+					"ticket_id": "15",
+					"icon": "translate(0 80)",
+					"description": "translate(0 295)"
+				}
+			},
+			"lg_text": {
+				"line1": "Man cannot discover new oceans unless he has",
+				"line2": "the courage to lose sight of the shore.",
+				"line3": "– Andre Gide."
+			},
+			"sm_text": {
+				"line1": "Man cannot discover new oceans",
+				"line2": "unless he has the courage to",
+				"line3": "lose sight of the shore.",
+				"line4": "– Andre Gide."
+			}
+		},
+		"travel_assistance": {
+			"visa_assistance": "I need assistance with getting the visas",
+			"tour_guide": "I need a tour guide",
+			"promo_code": "Promo code",
+			"hint": "Enter promo code",
+			"apply": "Apply",
+			"special_request": "Special Request"
+		},
+		"travelers": {
+			"adults": "Adults",
+			"kids": "Kids",
+			"infants": "Infants"
+		},
+		"traveling_from": {
+			"traveling_from": "Traveling From",
+			"airports": [
+				{
+					"iataCode": "CAI",
+					"name": "Cairo"
+				},
+				{
+					"iataCode": "HBE",
+					"name": "Alexandria"
+				},
+				{
+					"iataCode": "HRG",
+					"name": "Hurghada"
+				},
+				{
+					"iataCode": "SSH",
+					"name": "Sharm El-Sheikh"
+				}
+			]
+		}
+	}
 }

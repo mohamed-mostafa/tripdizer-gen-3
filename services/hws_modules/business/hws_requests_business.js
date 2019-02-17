@@ -602,6 +602,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							id: request.id,
 							travelerName: request.traveler.name ? request.traveler.name : '',
 							estimatedCost: request.estimatedCost ? currencyFormat(request.estimatedCost) : currencyFormat(0),
+							numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
 							itinerary: {
 								name: itinerary.en_name ? itinerary.en_name : '',
 								introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',

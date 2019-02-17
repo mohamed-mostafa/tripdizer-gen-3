@@ -28,5 +28,6 @@ export class EstimatedCostResponse {
 	dailySpending: number;
 	accommodationBudget: number;
 	ferriesBudget: number;
+	numberOfTravelers: number;
 	totalBudget: number;
 }

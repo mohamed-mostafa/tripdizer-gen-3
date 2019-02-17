@@ -4,6 +4,7 @@
 	line-height: 2rem;
 }
 
+.hint-0,
 .hint-1,
 .hint-2,
 .hint-3 {
@@ -23,10 +24,15 @@
 		.details-info {
 			font-size: 1rem;
 		}
+	}
+}
 
-		.fas {
-			font-size: 1.25em;
-		}
+.cost-tabs,
+.detailed-budget {
+	.fa,
+	.far,
+	.fas {
+		font-size: 1.25em;
 	}
 }
 
@@ -41,6 +47,7 @@
 		line-height: 2.38rem;
 	}
 
+	.hint-0,
 	.hint-1,
 	.hint-2,
 	.hint-3 {
@@ -55,10 +62,15 @@
 			.details-info {
 				font-size: 1.06rem;
 			}
+		}
+	}
 
-			.fas {
-				font-size: 1.44em;
-			}
+	.cost-tabs,
+	.detailed-budget {
+		.fa,
+		.far,
+		.fas {
+			font-size: 1.44em;
 		}
 	}
 }
@@ -69,6 +81,7 @@
 		line-height: 2.75rem;
 	}
 
+	.hint-0,
 	.hint-1,
 	.hint-2,
 	.hint-3 {
@@ -83,10 +96,15 @@
 			.details-info {
 				font-size: 1.13rem;
 			}
+		}
+	}
 
-			.fas {
-				font-size: 1.63em;
-			}
+	.cost-tabs,
+	.detailed-budget {
+		.fa,
+		.far,
+		.fas {
+			font-size: 1.63em;
 		}
 	}
 }
@@ -97,6 +115,7 @@
 		line-height: 3.13rem;
 	}
 
+	.hint-0,
 	.hint-1,
 	.hint-2,
 	.hint-3 {
@@ -111,10 +130,15 @@
 			.details-info {
 				font-size: 1.19rem;
 			}
+		}
+	}
 
-			.fas {
-				font-size: 1.81em;
-			}
+	.cost-tabs,
+	.detailed-budget {
+		.fa,
+		.far,
+		.fas {
+			font-size: 1.81em;
 		}
 	}
 }
@@ -125,6 +149,7 @@
 		line-height: 3.5rem;
 	}
 
+	.hint-0,
 	.hint-1,
 	.hint-2,
 	.hint-3 {
@@ -139,10 +164,15 @@
 			.details-info {
 				font-size: 1.25rem;
 			}
+		}
+	}
 
-			.fas {
-				font-size: 2em;
-			}
+	.cost-tabs,
+	.detailed-budget {
+		.fa,
+		.far,
+		.fas {
+			font-size: 2em;
 		}
 	}
 }

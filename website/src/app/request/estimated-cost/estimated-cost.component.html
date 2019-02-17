@@ -3,6 +3,9 @@
 		<div class="col-12 mb-1 p-0 total-budget">
 			{{ estimatedCost?.totalBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
 		</div>
+		<div class="col-12 p-2 hint-0">
+			{{ 'request.estimated_cost.hint0' | translate: { numberOfTravelers: estimatedCost?.numberOfTravelers } }}
+		</div>
 		<div class="col-12 p-2 hint-1">{{ 'request.estimated_cost.hint1' | translate }}</div>
 		<ul class="col-12 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
 			<li class="row">
