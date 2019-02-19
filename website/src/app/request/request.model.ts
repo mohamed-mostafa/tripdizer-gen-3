@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
 import { Preference } from './preferences/preference.model';
+import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.model';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
@@ -209,7 +210,7 @@ export class Request extends CommonFunctions {
 	}
 
 	get validSteps(): Array<Step> {
-		return this.steps.filter(s => !s.isDisabled);
+		return this.steps.filter(s => !s.isDisabled).sort((a, b) => a.order - b.order);
 	}
 
 	get navBar(): Array<Step> {
@@ -309,11 +310,12 @@ export class Request extends CommonFunctions {
 				key: 'travelers',
 				title: this._localeLabels.travelers.title,
 				path: 'travelers',
-				order: 3,
+				order: 5,
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
+				isDisabled: this.purpose === LUTPurpose.Solo || this.purpose === LUTPurpose.Honeymoon,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(3) === -1) {
+					if (this._touchedSteps.indexOf(5) === -1) {
 						return null;
 					}
 					if (!this._adultsNumber) {
@@ -323,7 +325,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelers'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(3) === -1) {
+					if (this._touchedSteps.indexOf(5) === -1) {
 						return false;
 					}
 					if (!this._adultsNumber) {
@@ -365,10 +367,10 @@ export class Request extends CommonFunctions {
 				key: 'purpose',
 				title: this._localeLabels.purpose,
 				path: 'purpose',
-				order: 5,
+				order: 3,
 				requiredForRecommendation: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(5) === -1) {
+					if (this._touchedSteps.indexOf(3) === -1) {
 						return null;
 					}
 					if (!this._purpose) {
@@ -378,7 +380,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('purpose'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(5) === -1) {
+					if (this._touchedSteps.indexOf(3) === -1) {
 						return false;
 					}
 					if (!this._purpose) {

@@ -4,7 +4,16 @@ export class Purpose {
 	ar_name?: string;
 	en_name?: string;
 	image: string;
-	numberOfAdults?: number;
-	numberOfInfants?: number;
-	numberOfKids?: number;
+	adultsNumber?: number;
+	kidsNumber?: number;
+	infantsNumber?: number;
+}
+
+export enum LUTPurpose {
+	Other = 1,
+	Solo = 2,
+	Family = 3,
+	Group = 4,
+	Honeymoon = 5,
+	Business = 6,
 }

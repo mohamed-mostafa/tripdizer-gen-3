@@ -39,6 +39,9 @@ export class PurposeComponent {
 		const selectedPurpose = this.purposes.find(p => p.id === this.formGroup.controls['purpose'].value);
 		if (selectedPurpose) {
 			this.requestService.setProperty('purposeName', selectedPurpose.name);
+			this.requestService.setProperty('adultsNumber', selectedPurpose.adultsNumber);
+			this.requestService.setProperty('kidsNumber', selectedPurpose.kidsNumber);
+			this.requestService.setProperty('infantsNumber', selectedPurpose.infantsNumber);
 		}
 	}
 }
