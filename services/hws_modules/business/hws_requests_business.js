@@ -573,7 +573,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 						}
 						itinerary.cities = itinerary.cities.sort((a, b) => a.order - b.order);
 						for (let i = 0; i < itinerary.cities.length; ++i) {
-							itinerary.cities[i].numberOfDays = (tripDays * itinerary.cities[i].days) / 100;
+							itinerary.cities[i].numberOfDays = Math.round((tripDays * itinerary.cities[i].days) / 100);
 							itinerary.cities[i].startDate =
 								i === 0
 									? departureDate
@@ -588,6 +588,8 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							if (itinerary.flights[i + 1])
 								itinerary.flights[i + 1].date = itinerary.cities[i].endDate.toLocaleDateString();
 						}
+						itinerary.cities[itinerary.cities.length - 1].numberOfDays +=
+							tripDays - itinerary.cities.reduce((ac, cv) => ac + cv.numberOfDays, 0);
 						itinerary.hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
 						for (let i = 0; i < itinerary.hotels.length; ++i) {
 							const city = itinerary.cities.find(c => c.id == itinerary.hotels[i].City_Id);
@@ -602,7 +604,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							id: request.id,
 							travelerName: request.traveler.name ? request.traveler.name : '',
 							estimatedCost: request.estimatedCost ? currencyFormat(request.estimatedCost) : currencyFormat(0),
-							numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
+							numberOfTravelers: request.numberOfAdults + request.numberOfKids + request.numberOfInfants,
 							itinerary: {
 								name: itinerary.en_name ? itinerary.en_name : '',
 								introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',
