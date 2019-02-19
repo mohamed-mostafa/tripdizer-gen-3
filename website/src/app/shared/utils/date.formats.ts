@@ -4,5 +4,6 @@ export const CUSTOM_FORMATS = {
 	},
 	display: {
 		dateInput: 'D / M / Y',
+		monthYearLabel: 'MMMM DD, YYYY',
 	},
 };
