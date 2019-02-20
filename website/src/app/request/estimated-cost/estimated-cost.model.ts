@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { LUTBudgetCategory } from '../budget/budget-category.model';
 import { Request } from '../request.model';
 
 export class EstimatedCostRequest {
@@ -8,6 +9,7 @@ export class EstimatedCostRequest {
 	kidsNumber: number;
 	infantsNumber: number;
 	budgetCategory: number;
+	budget: number;
 	destination: number;
 
 	static getEstimatedCostRequestFromRequest(request: Request): EstimatedCostRequest {
@@ -18,6 +20,7 @@ export class EstimatedCostRequest {
 			kidsNumber: request.kidsNumber,
 			infantsNumber: request.infantsNumber,
 			budgetCategory: request.budgetCategory,
+			budget: request.budgetCategory === LUTBudgetCategory.OwnBudget ? request.budget : 0,
 			destination: request.destination.id,
 		};
 	}

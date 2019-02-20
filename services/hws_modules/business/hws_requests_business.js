@@ -5,6 +5,7 @@
 
 var requestsDao = require('../dataaccess/hws_requests_dao.js');
 var itinerariesDao = require('../dataaccess/hws_itineraries_dao.js');
+var budgetCategoriesDao = require('../dataaccess/hws_budgetcategories_dao.js');
 var partnersBusiness = require('./hws_partners_business.js');
 var emailBusiness = require('./hws_email_business.js');
 var Promise = require('promise');
@@ -233,7 +234,7 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 		itinerariesDao.getById(
 			request.destination,
 			null,
-			function(itinerary) {
+			async function(itinerary) {
 				if (itinerary) {
 					var diff = new DateDiff(new Date(request.returnDate), new Date(request.departureDate));
 					const rData = {
@@ -272,14 +273,36 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 							2;
 					}
 
-					var hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
-					for (let i = 0; i < hotels.length; i++) {
-						rData.accommodationBudget +=
-							(rData.numberOfNights * (hotels[i][rData.departureMonth] + hotels[i][rData.returnMonth])) / 2;
-					}
+					if (request.budgetCategory === 1) {
+						const budgetsPerBudgetCategories = await new Promise(resolve =>
+							budgetCategoriesDao.getAll(null, budgetCategories => {
+								resolve(
+									budgetCategories
+										.map(budgetCategory =>
+											calculateAccomodationAvgBudgetByBudgetCategory(
+												itinerary.hotels,
+												budgetCategory.id,
+												rData.numberOfNights,
+												rData.departureMonth,
+												rData.returnMonth
+											)
+										)
+										.sort((a, b) => b - a)
+								);
+							})
+						);
 
-					// take the average of the hotels of the same category
-					rData.accommodationBudget = hotels.length > 0 ? rData.accommodationBudget / hotels.length : 0;
+						rData.accommodationBudget =
+							budgetsPerBudgetCategories.find(b => b < request.budget) || budgetsPerBudgetCategories.pop();
+					} else {
+						rData.accommodationBudget = calculateAccomodationAvgBudgetByBudgetCategory(
+							itinerary.hotels,
+							request.budgetCategory,
+							rData.numberOfNights,
+							rData.departureMonth,
+							rData.returnMonth
+						);
+					}
 
 					// the accomodation budgt is the price per peron for hostels (super economy) or the rate f the room otherwis
 					if (request.budgetCategory == 2) {
@@ -481,6 +504,19 @@ var recommendationFuncs = {
 	},
 };
 
+var calculateAccomodationAvgBudgetByBudgetCategory = (
+	hotels,
+	budgetCategory,
+	numberOfNights,
+	departureMonth,
+	returnMonth
+) => {
+	hotels = hotels.filter(h => h.budget_category_id === budgetCategory);
+	var budget = hotels.reduce((ac, cv) => ac + (numberOfNights * (cv[departureMonth] + cv[returnMonth])) / 2, 0);
+
+	// take the average of the hotels of the same category
+	return hotels.length > 0 ? budget / hotels.length : 0;
+};
 var calculateAccomodationBudgetByRoom = function(costOfAllNights, numbrtOfTravelers) {
 	var regularRooms = Math.floor(numbrtOfTravelers / 2);
 	var extraRooms = numbrtOfTravelers % 2;

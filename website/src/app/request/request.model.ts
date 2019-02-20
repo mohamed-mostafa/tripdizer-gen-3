@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { CommonFunctions } from '../shared/utils';
+import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
@@ -105,7 +106,7 @@ export class Request extends CommonFunctions {
 		this._budget = parseInt(value.toString(), 10);
 	}
 	get budget(): number {
-		return this.budgetCategory === 1 ? this._budget : 0;
+		return this.budgetCategory === LUTBudgetCategory.OwnBudget ? this._budget : 0;
 	}
 	set budgetCategory(value) {
 		this.resetEstimatedCost();
@@ -345,10 +346,10 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(4) === -1) {
 						return null;
 					}
-					if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) {
+					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
 						return null;
 					}
-					return this.budgetCategory === 1
+					return this.budgetCategory === LUTBudgetCategory.OwnBudget
 						? this.currencyPipe.transform(this.budget, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0')
 						: this.budgetCategoryName;
 				})(),
@@ -357,7 +358,7 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(4) === -1) {
 						return false;
 					}
-					if (!this.budgetCategory || (this.budgetCategory === 1 && !this._budget)) {
+					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
 						return false;
 					}
 					return true;

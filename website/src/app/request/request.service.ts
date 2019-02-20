@@ -12,7 +12,7 @@ import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
-import { Purpose } from './purpose/purpose.model';
+import { Purpose, LUTPurpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
 	RecommendedDestinationsResponse,
@@ -244,7 +244,7 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(purposes => {
-				this.Lookups.purposes = purposes.filter(p => p.id !== 1);
+				this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
 				this.isLoading.next(false);
 				return this.Lookups.purposes;
 			})

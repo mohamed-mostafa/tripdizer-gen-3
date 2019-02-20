@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RequestService } from '../request.service';
 
 /* Models */
-import { BudgetCategory } from './budget-category.model';
+import { BudgetCategory, LUTBudgetCategory } from './budget-category.model';
 
 @Component({
 	selector: 'c-request-budget',
@@ -29,9 +29,9 @@ export class BudgetComponent {
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
-		this.isOwnBudget = this.formGroup.controls['budgetCategory'].value === 1;
+		this.isOwnBudget = this.formGroup.controls['budgetCategory'].value === LUTBudgetCategory.OwnBudget;
 		this.formGroup.controls['budgetCategory'].valueChanges.subscribe(data => {
-			this.isOwnBudget = data === 1;
+			this.isOwnBudget = data === LUTBudgetCategory.OwnBudget;
 			if (!this.isOwnBudget) {
 				this.formGroup.controls['budget'].setValue(0);
 			}

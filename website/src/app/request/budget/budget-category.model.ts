@@ -7,3 +7,11 @@ export class BudgetCategory {
 	en_description?: string;
 	ar_description?: string;
 }
+
+export enum LUTBudgetCategory {
+	OwnBudget = 1,
+	SuperEconomy = 2,
+	Economy = 3,
+	MidRange = 4,
+	Splurge = 5,
+}
