@@ -334,9 +334,9 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 					}
 
 					// add 10% profit margin
-					rData.flightsBudget += rData.flightsBudget * 0.1;
-					rData.ferriesBudget += rData.ferriesBudget * 0.1;
-					rData.accommodationBudget += rData.accommodationBudget * 0.1;
+					// rData.flightsBudget += rData.flightsBudget * 0.1;
+					// rData.ferriesBudget += rData.ferriesBudget * 0.1;
+					rData.accommodationBudget += ((rData.accommodationBudget * 0.1) + (rData.flightsBudget * 0.1) + (rData.ferriesBudget * 0.1));
 
 					rData.totalBudget += rData.ferriesBudget;
 					rData.totalBudget += rData.flightsBudget;
