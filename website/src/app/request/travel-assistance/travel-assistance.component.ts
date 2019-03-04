@@ -13,7 +13,7 @@ export class TravelAssistanceComponent {
 	formGroup: FormGroup;
 	controls: any = {
 		visaAssistanceNeeded: new FormControl(),
-		tourGuideNeeded: new FormControl(),
+		// tourGuideNeeded: new FormControl(),
 		promoCode: new FormControl(),
 		specialRequests: new FormControl(),
 	};
