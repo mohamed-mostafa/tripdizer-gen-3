@@ -5,7 +5,8 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 	'CitiesService',
 	'CountriesService',
 	'InterestsService',
-	function($rootScope, $scope, $http, CitiesService, CountriesService, InterestsService) {
+	'BudgetCategoriesService',
+	function($rootScope, $scope, $http, CitiesService, CountriesService, InterestsService, BudgetCategoriesService) {
 		// fields
 		$scope.cities = [];
 
@@ -157,6 +158,10 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 
 			InterestsService.getAll().then(function(interests) {
 				$scope.interests = interests;
+			});
+
+			BudgetCategoriesService.getAll().then(function(budgetCategories) {
+				$scope.budgetCategories = budgetCategories;
 			});
 		};
 

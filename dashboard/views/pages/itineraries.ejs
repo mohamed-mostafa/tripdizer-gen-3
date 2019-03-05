@@ -106,15 +106,8 @@
                                 <label for="excludes" ng-show="excludesMissing==false">Excludes</label>
                                 <textarea bullet class="form-control" id="excludes" ng-model="newItinerary.excludes" placeholder="Enter excludes" rows="2"></textarea>
                             </div>
-                            <div class="form-group form-group-3" ng-show="saving==false">
-                                <label class="control-label text-red" for="dailySpendings" ng-show="dailySpendingsMissing==true">
-                                    <i class="fa fa-times-circle-o"></i>Daily Spendings is missing</label>
-                                <label for="dailySpendings" ng-show="dailySpendingsMissing==false">Daily Spendings</label>
-                                <input type="number" required class="form-control" id="dailySpendings" ng-model="newItinerary.dailySpendings" placeholder="Enter daily spendings"
-                                    required>
-                            </div>
                             <div class="form-group form-group-2" ng-show="saving==false">
-                                <label class="control-label text-red" for="needsVisa" ng-show="dailySpendingsMissing==true">
+                                <label class="control-label text-red" for="needsVisa" ng-show="needsVisaMissing==true">
                                     <i class="fa fa-times-circle-o"></i>Need a visa is missing</label>
                                 <label for="needsVisa" ng-show="needsVisaMissing==false">Need a visa</label>
                                 <select class="form-control" ng-model="newItinerary.needsVisa">
@@ -250,13 +243,6 @@
                                                 <i class="fa fa-times-circle-o"></i>Excludes is missing</label>
                                             <label for="excludes" ng-show="!excludesMissing">Excludes</label>
                                             <textarea bullet class="form-control" id="excludes" ng-model="newItinerary.excludes" placeholder="Enter excludes" rows="2"></textarea>
-                                        </div>
-                                        <div class="form-group form-group-3" ng-show="saving==false">
-                                            <label class="control-label text-red" for="dailySpendings" ng-show="dailySpendingsMissing">
-                                                <i class="fa fa-times-circle-o"></i>Daily Spendings is missing</label>
-                                            <label for="dailySpendings" ng-show="!dailySpendingsMissing">Daily Spendings</label>
-                                            <input type="number" required class="form-control" id="dailySpendings" ng-model="newItinerary.dailySpendings" placeholder="Enter daily spendings"
-                                                required>
                                         </div>
                                         <div class="form-group form-group-2" ng-show="saving==false">
                                             <label class="control-label text-red" for="needsVisa" ng-show="needsVisaMissing">

@@ -14,6 +14,9 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			var citiesQuery = `SELECT ic.City_id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join Iternary_Cities ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
 				id
 			)};`;
+			var cityDailySpendingQuery = `SELECT cds.* FROM City_Daily_Spending cds join Iternary_Cities ic on cds.City_Id = ic.City_Id WHERE ic.Iternary_Id = ${connection.escape(
+				id
+			)};`;
 			var ferryQuery = `SELECT ife.*, mp.* FROM iternary i join iternary_ferry ife on i.Id = ife.iternary_id join month_price mp on mp.id = ife.price WHERE i.Id = ${connection.escape(
 				id
 			)};`;
@@ -41,6 +44,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			connection.query(
 				iternaryQuery +
 					citiesQuery +
+					cityDailySpendingQuery +
 					ferryQuery +
 					flightQuery +
 					hotelQuery +
@@ -67,7 +71,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								en_description: rows[0][0].EN_Description,
 								ar_name: rows[0][0].AR_Name,
 								ar_description: rows[0][0].AR_Description,
-								dailySpendings: rows[0][0].Daily_Spendings,
 								needsVisa: rows[0][0].Needs_Visa,
 								introduction: rows[0][0].Introduction,
 								includes: rows[0][0].Includes,
@@ -80,14 +83,23 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								iataCode: rows[0][0].EN_Name.substring(0, 3),
 								agentNotes: rows[0][0].Agent_Notes,
 								cities: rows[1],
-								ferries: rows[2],
-								flights: rows[3],
-								hotels: rows[4],
-								seasons: rows[5],
-								budgetCategories: rows[6],
-								purposes: rows[7],
-								interests: rows[8],
+								ferries: rows[3],
+								flights: rows[4],
+								hotels: rows[5],
+								seasons: rows[6],
+								budgetCategories: rows[7],
+								purposes: rows[8],
+								interests: rows[9],
 							};
+							itinerary.cities = itinerary.cities.map(city => ({
+								...city,
+								dailySpending: rows[2]
+									.filter(dailySpending => dailySpending.City_Id === city.id)
+									.map(dailySpending => ({
+										budgetCategory: dailySpending.Budget_Category_Id,
+										dailySpending: dailySpending.Daily_Spending,
+									})),
+							}));
 							if (lang) {
 								itinerary.name = itinerary[lang.toLowerCase() + '_name'];
 								itinerary.description = itinerary[lang.toLowerCase() + '_description'];
@@ -129,13 +141,12 @@ var create = function(itinerary, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO iternary (EN_Name, EN_Description, AR_Name, AR_Description, Daily_Spendings, Needs_Visa, Introduction, Includes, Excludes, Image1, Image2) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO iternary (EN_Name, EN_Description, AR_Name, AR_Description, Needs_Visa, Introduction, Includes, Excludes, Image1, Image2) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							itinerary.en_name,
 							itinerary.en_description,
 							itinerary.ar_name,
 							itinerary.ar_description,
-							itinerary.dailySpendings,
 							itinerary.needsVisa,
 							itinerary.introduction,
 							itinerary.includes,
@@ -196,9 +207,7 @@ var update = function(itinerary, onSuccess, onFailure) {
 						itinerary.en_name || ''
 					)}, EN_Description = ${connection.escape(itinerary.en_description || '')}, AR_Name = ${connection.escape(
 						itinerary.ar_name || ''
-					)}, AR_Description = ${connection.escape(
-						itinerary.ar_description || ''
-					)}, Daily_Spendings = ${connection.escape(itinerary.dailySpendings || 0)}, Needs_Visa = ${connection.escape(
+					)}, AR_Description = ${connection.escape(itinerary.ar_description || '')}, Needs_Visa = ${connection.escape(
 						itinerary.needsVisa || 0
 					)}, Introduction = ${connection.escape(itinerary.introduction || '')}, Includes = ${connection.escape(
 						itinerary.includes || ''
@@ -454,7 +463,6 @@ var getAll = function(lang, onSuccess, onFailure) {
 								en_description: rows[i].EN_Description,
 								ar_name: rows[i].AR_Name,
 								ar_description: rows[i].AR_Description,
-								dailySpendings: rows[i].Daily_Spendings,
 								needsVisa: rows[i].Needs_Visa,
 								introduction: rows[i].Introduction,
 								includes: rows[i].Includes,

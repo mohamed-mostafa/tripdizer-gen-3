@@ -14,46 +14,52 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Cities WHERE id = ?', [id], function(err, rows) {
-				// if an error is thrown, end the connection and throw an error
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log('An error occurred while trying to find a city with id ' + id);
-					console.log(err);
-					onFailure(err);
-				} else {
-					// no error is thrown
-					if (rows.length != 0) {
-						// populate the city attributes
-						var city = {
-							id: rows[0].Id,
-							enName: rows[0].EN_Name,
-							enDescription: rows[0].EN_Description,
-							arName: rows[0].AR_Name,
-							arDescription: rows[0].AR_Description,
-							countryId: rows[0].Country_Id,
-							thumbnail: rows[0].Thumbnail,
-							lat: rows[0].Latitude,
-							lng: rows[0].Longitude,
-						};
-
-						if (lang) {
-							city.name = city[lang.toLowerCase() + 'Name'];
-							city.description = city[lang.toLowerCase() + 'Description'];
-						}
-
+			connection.query(
+				'SELECT c.*, cds.Budget_Category_Id, cds.Daily_Spending FROM Cities c LEFT JOIN City_Daily_Spending cds on c.Id = cds.City_Id WHERE id = ?',
+				[id],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
 						// end the connection
 						connection.end();
-						// call the callback function provided by the caller, and give it the response
-						onSuccess(city);
+						console.log('An error occurred while trying to find a city with id ' + id);
+						console.log(err);
+						onFailure(err);
 					} else {
-						// no city is found with the id
-						connection.end();
-						onSuccess(null);
+						// no error is thrown
+						if (rows.length != 0) {
+							// populate the city attributes
+							var city = {
+								id: rows[0].Id,
+								enName: rows[0].EN_Name,
+								enDescription: rows[0].EN_Description,
+								arName: rows[0].AR_Name,
+								arDescription: rows[0].AR_Description,
+								countryId: rows[0].Country_Id,
+								thumbnail: rows[0].Thumbnail,
+								lat: rows[0].Latitude,
+								lng: rows[0].Longitude,
+								dailySpending: {},
+							};
+							rows.forEach(cityRow => (city.dailySpending[cityRow.Budget_Category_Id] = cityRow.Daily_Spending));
+
+							if (lang) {
+								city.name = city[lang.toLowerCase() + 'Name'];
+								city.description = city[lang.toLowerCase() + 'Description'];
+							}
+
+							// end the connection
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess(city);
+						} else {
+							// no city is found with the id
+							connection.end();
+							onSuccess(null);
+						}
 					}
 				}
-			});
+			);
 		}
 	});
 };
@@ -103,11 +109,40 @@ var create = function(city, onSuccess, onFailure) {
 								// set the cityId to the city
 								city.id = result.insertId;
 
-								// end the connection
-								connection.commit();
-								connection.end();
-								// call the callback function provided by the caller, and give it the response
-								onSuccess(city);
+								const budgetCategoryIds = Object.keys(city.dailySpending);
+								let insertDailySpendingQuery = '';
+								if (budgetCategoryIds.length) {
+									budgetCategoryIds.forEach((budgetCategoryId, i) => {
+										if (i === 0) insertDailySpendingQuery += `INSERT INTO City_Daily_Spending VALUES `;
+										else insertDailySpendingQuery += ', ';
+										insertDailySpendingQuery += `(${connection.escape(city.id)}, ${connection.escape(
+											budgetCategoryId
+										)}, ${connection.escape(city.dailySpending[budgetCategoryId])})`;
+										if (i === budgetCategoryIds.length - 1) insertDailySpendingQuery += ';';
+									});
+									connection.query(insertDailySpendingQuery, [], function(err, result) {
+										// if an error is thrown, end the connection and throw an error
+										if (err) {
+											// if the first insert statement fails
+											console.log('An error occurred while trying to update the existing city: ' + city.enName);
+											console.log(err);
+											connection.rollback(); // rollback the transaction
+											// end the connection
+											connection.end();
+											onFailure(err);
+										} else {
+											connection.commit();
+											connection.end();
+											// call the callback function provided by the caller, and give it the response
+											onSuccess(city);
+										}
+									});
+								} else {
+									connection.commit();
+									connection.end();
+									// call the callback function provided by the caller, and give it the response
+									onSuccess(city);
+								}
 							}
 						}
 					);
@@ -162,10 +197,44 @@ var update = function(city, onSuccess, onFailure) {
 								connection.end();
 								onFailure(err);
 							} else {
-								connection.commit();
-								connection.end();
-								// call the callback function provided by the caller, and give it the response
-								onSuccess(city);
+								const budgetCategoryIds = Object.keys(city.dailySpending);
+								let deleteDailySpendingQuery = '',
+									insertDailySpendingQuery = '';
+								if (budgetCategoryIds.length) {
+									deleteDailySpendingQuery = `DELETE FROM City_Daily_Spending WHERE City_Id = ${connection.escape(
+										city.id
+									)};`;
+									budgetCategoryIds.forEach((budgetCategoryId, i) => {
+										if (i === 0) insertDailySpendingQuery += `INSERT INTO City_Daily_Spending VALUES `;
+										else insertDailySpendingQuery += ', ';
+										insertDailySpendingQuery += `(${connection.escape(city.id)}, ${connection.escape(
+											budgetCategoryId
+										)}, ${connection.escape(city.dailySpending[budgetCategoryId])})`;
+										if (i === budgetCategoryIds.length - 1) insertDailySpendingQuery += ';';
+									});
+									connection.query(deleteDailySpendingQuery + insertDailySpendingQuery, [], function(err, result) {
+										// if an error is thrown, end the connection and throw an error
+										if (err) {
+											// if the first insert statement fails
+											console.log('An error occurred while trying to update the existing city: ' + city.enName);
+											console.log(err);
+											connection.rollback(); // rollback the transaction
+											// end the connection
+											connection.end();
+											onFailure(err);
+										} else {
+											connection.commit();
+											connection.end();
+											// call the callback function provided by the caller, and give it the response
+											onSuccess(city);
+										}
+									});
+								} else {
+									connection.commit();
+									connection.end();
+									// call the callback function provided by the caller, and give it the response
+									onSuccess(city);
+								}
 							}
 						}
 					);
@@ -188,7 +257,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT CI.*, CO.EN_Name Country_EN_Name, CO.AR_Name Country_AR_Name FROM Cities CI JOIN Countries CO ON CI.Country_Id = CO.Id',
+				'SELECT CI.*, CO.EN_Name Country_EN_Name, CO.AR_Name Country_AR_Name, cds.Budget_Category_Id, cds.Daily_Spending FROM Cities CI JOIN Countries CO ON CI.Country_Id = CO.Id LEFT JOIN City_Daily_Spending cds on CI.Id = cds.City_Id',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -203,23 +272,29 @@ var getAll = function(lang, onSuccess, onFailure) {
 						var cities = [];
 						// populate the attributes
 						for (var i = 0; i < rows.length; ++i) {
-							var city = {
-								id: rows[i].Id,
-								enName: rows[i].EN_Name,
-								enDescription: rows[i].EN_Description,
-								arName: rows[i].AR_Name,
-								arDescription: rows[i].AR_Description,
-								countryId: rows[i].Country_Id,
-								countryName: rows[i].Country_EN_Name,
-								thumbnail: rows[i].Thumbnail,
-								lat: rows[i].Latitude,
-								lng: rows[i].Longitude,
-							};
-							if (lang) {
-								city.name = city[lang.toLowerCase() + '_name'];
-								city.description = city[lang.toLowerCase() + '_description'];
+							const cityIndex = cities.findIndex(city => city.id === rows[i].Id);
+							if (cityIndex === -1) {
+								var city = {
+									id: rows[i].Id,
+									enName: rows[i].EN_Name,
+									enDescription: rows[i].EN_Description,
+									arName: rows[i].AR_Name,
+									arDescription: rows[i].AR_Description,
+									countryId: rows[i].Country_Id,
+									countryName: rows[i].Country_EN_Name,
+									thumbnail: rows[i].Thumbnail,
+									lat: rows[i].Latitude,
+									lng: rows[i].Longitude,
+									dailySpending: { [rows[i].Budget_Category_Id]: rows[i].Daily_Spending },
+								};
+								if (lang) {
+									city.name = city[lang.toLowerCase() + '_name'];
+									city.description = city[lang.toLowerCase() + '_description'];
+								}
+								cities.push(city);
+							} else {
+								cities[cityIndex].dailySpending[rows[i].Budget_Category_Id] = rows[i].Daily_Spending;
 							}
-							cities.push(city);
 						}
 						// end the connection
 						connection.end();

@@ -241,7 +241,7 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 						itineraryId: itinerary.id,
 						iternaryName: itinerary.en_name,
 						iternaryArabicName: itinerary.ar_name,
-						dailySpending: itinerary.dailySpendings,
+						dailySpending: 0,
 						numberOfAdults: request.adultsNumber,
 						numberOfKids: request.kidsNumber,
 						numberOfInfants: request.infantsNumber,
@@ -256,6 +256,15 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 						accommodationBudget: 0,
 						ferriesBudget: 0,
 					};
+
+					const dailySpending = [];
+					itinerary.cities.forEach(city =>
+						dailySpending.push(
+							...city.dailySpending.filter(dailySpending => dailySpending.budgetCategory === request.budgetCategory)
+						)
+					);
+					if (dailySpending.length)
+						rData.dailySpending = dailySpending.reduce((ac, cv) => cv.dailySpending + ac, 0) / dailySpending.length;
 
 					for (let i = 0, ferries = itinerary.ferries; i < ferries.length; ++i) {
 						rData.ferriesBudget +=
@@ -336,7 +345,8 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 					// add 10% profit margin
 					// rData.flightsBudget += rData.flightsBudget * 0.1;
 					// rData.ferriesBudget += rData.ferriesBudget * 0.1;
-					rData.accommodationBudget += ((rData.accommodationBudget * 0.1) + (rData.flightsBudget * 0.1) + (rData.ferriesBudget * 0.1));
+					rData.accommodationBudget +=
+						rData.accommodationBudget * 0.1 + rData.flightsBudget * 0.1 + rData.ferriesBudget * 0.1;
 
 					rData.totalBudget += rData.ferriesBudget;
 					rData.totalBudget += rData.flightsBudget;
@@ -624,8 +634,9 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							if (itinerary.flights[i + 1])
 								itinerary.flights[i + 1].date = itinerary.cities[i].endDate.toLocaleDateString();
 						}
-						itinerary.cities[itinerary.cities.length - 1].numberOfDays +=
-							tripDays - itinerary.cities.reduce((ac, cv) => ac + cv.numberOfDays, 0);
+						if (itinerary.cities.length)
+							itinerary.cities[itinerary.cities.length - 1].numberOfDays +=
+								tripDays - itinerary.cities.reduce((ac, cv) => ac + cv.numberOfDays, 0);
 						itinerary.hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
 						for (let i = 0; i < itinerary.hotels.length; ++i) {
 							const city = itinerary.cities.find(c => c.id == itinerary.hotels[i].City_Id);
