@@ -79,7 +79,7 @@
 			}
 		},
 		"estimated_cost": {
-			"hint0": "Total price for {{numberOfTravelers}} persons",
+			"hint0": "Total price for {{numberOfTravelers}} person{{withS}}",
 			"hint1": "The costs are estimates and subject to change in the actual package",
 			"flights": "Flights",
 			"accommodation": "Accommodation",
