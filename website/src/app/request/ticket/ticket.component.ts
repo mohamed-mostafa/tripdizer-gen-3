@@ -62,5 +62,5 @@ export class TicketComponent {
 			default:
 				return val1;
 		}
-	};
+	}
 }

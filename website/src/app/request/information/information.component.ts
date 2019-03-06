@@ -20,7 +20,7 @@ export class InformationComponent {
 		travelerEmailConfirmation: new FormControl('', [
 			Validators.required,
 			Validators.email,
-			CustomValidators.equalTo('travelerEmail', "Email doesn't match"),
+			CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match'),
 		]),
 		travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		referralType: new FormControl('', [Validators.required]),
