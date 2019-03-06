@@ -230,7 +230,7 @@
                 </div>
                 <p class="small">{{trip.arName}}</p>
                 <p class="medium">{{trip.departureDate | date: 'MMM dd, yyyy'}} الى {{trip.returnDate | date: 'MMM dd, yyyy'}}</p>
-                <p class="small">الفيزا {{trip.needsVisa ? '' : 'غير '}}مطلوبة</p>
+                <p class="small">{{trip.arVisaTypeName}}</p>
                 <p class="small">المجموعة {{trip.numOfPersons}} مسافر</p>
                 <ul class="list-inline">
                   <li>

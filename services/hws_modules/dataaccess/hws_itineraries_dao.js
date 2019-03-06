@@ -10,7 +10,9 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			var iternaryQuery = `SELECT * FROM iternary WHERE id = ${connection.escape(id)};`;
+			var iternaryQuery = `SELECT i.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM iternary i JOIN Visa_Types vt ON i.Visa_Type = vt.Id WHERE i.id = ${connection.escape(
+				id
+			)};`;
 			var citiesQuery = `SELECT ic.City_id as id, ic.Order as \'order\', ic.Days as days FROM iternary i join Iternary_Cities ic on i.Id = ic.Iternary_Id WHERE i.Id = ${connection.escape(
 				id
 			)};`;
@@ -71,7 +73,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								en_description: rows[0][0].EN_Description,
 								ar_name: rows[0][0].AR_Name,
 								ar_description: rows[0][0].AR_Description,
-								needsVisa: rows[0][0].Needs_Visa,
 								introduction: rows[0][0].Introduction,
 								includes: rows[0][0].Includes,
 								excludes: rows[0][0].Excludes,
@@ -82,6 +83,10 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								image2: rows[0][0].Image2,
 								iataCode: rows[0][0].EN_Name.substring(0, 3),
 								agentNotes: rows[0][0].Agent_Notes,
+								visaType: rows[0][0].Visa_Type,
+								enVisaTypeName: rows[0][0].EN_Visa_Type_Name,
+								arVisaTypeName: rows[0][0].AR_Visa_Type_Name,
+								visaRequirements: rows[0][0].Visa_Requirements,
 								cities: rows[1],
 								ferries: rows[3],
 								flights: rows[4],
@@ -103,6 +108,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 							if (lang) {
 								itinerary.name = itinerary[lang.toLowerCase() + '_name'];
 								itinerary.description = itinerary[lang.toLowerCase() + '_description'];
+								itinerary.visaTypeName = itinerary[lang.toLowerCase() + 'VisaTypeName'];
 							}
 
 							// end the connection
@@ -141,18 +147,18 @@ var create = function(itinerary, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO iternary (EN_Name, EN_Description, AR_Name, AR_Description, Needs_Visa, Introduction, Includes, Excludes, Image1, Image2) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO iternary (EN_Name, EN_Description, AR_Name, AR_Description, Introduction, Includes, Excludes, Image1, Image2, Visa_Type) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							itinerary.en_name,
 							itinerary.en_description,
 							itinerary.ar_name,
 							itinerary.ar_description,
-							itinerary.needsVisa,
 							itinerary.introduction,
 							itinerary.includes,
 							itinerary.excludes,
 							itinerary.image1,
 							itinerary.image2,
+							itinerary.visaType,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -207,13 +213,15 @@ var update = function(itinerary, onSuccess, onFailure) {
 						itinerary.en_name || ''
 					)}, EN_Description = ${connection.escape(itinerary.en_description || '')}, AR_Name = ${connection.escape(
 						itinerary.ar_name || ''
-					)}, AR_Description = ${connection.escape(itinerary.ar_description || '')}, Needs_Visa = ${connection.escape(
-						itinerary.needsVisa || 0
-					)}, Introduction = ${connection.escape(itinerary.introduction || '')}, Includes = ${connection.escape(
-						itinerary.includes || ''
-					)}, Excludes = ${connection.escape(itinerary.excludes || '')}, Image1 = ${connection.escape(
-						itinerary.image1
-					)}, Image2 = ${connection.escape(itinerary.image2)} WHERE Id = ${connection.escape(itinerary.id)};`;
+					)}, AR_Description = ${connection.escape(itinerary.ar_description || '')}, Introduction = ${connection.escape(
+						itinerary.introduction || ''
+					)}, Includes = ${connection.escape(itinerary.includes || '')}, Excludes = ${connection.escape(
+						itinerary.excludes || ''
+					)}, Image1 = ${connection.escape(itinerary.image1)}, Image2 = ${connection.escape(
+						itinerary.image2
+					)}, Visa_Type = ${connection.escape(itinerary.visaType || 0)}, Visa_Requirements = ${connection.escape(
+						itinerary.visaRequirements || ''
+					)} WHERE Id = ${connection.escape(itinerary.id)};`;
 					var citiesQuery = `DELETE FROM Iternary_Cities WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
 					for (let i = 0; i < itinerary.cities.length; i++) {
 						if (i === 0) citiesQuery += `INSERT INTO Iternary_Cities VALUES `;
@@ -442,7 +450,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT i.*,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as cities_en_name, GROUP_CONCAT(c.AR_Name separator "#") as cities_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as cities_en_description, GROUP_CONCAT(c.AR_Description separator "#") as cities_ar_description FROM hws.iternary i left outer join hws.Iternary_Cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id ',
+				'SELECT i.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name,GROUP_CONCAT(c.Latitude separator "#") as latitude, GROUP_CONCAT(c.Longitude separator "#") as longitude, GROUP_CONCAT(c.EN_Name separator "#") as cities_en_name, GROUP_CONCAT(c.AR_Name separator "#") as cities_ar_name, GROUP_CONCAT(c.EN_Description separator "#") as cities_en_description, GROUP_CONCAT(c.AR_Description separator "#") as cities_ar_description FROM hws.iternary i JOIN Visa_Types vt ON i.Visa_Type = vt.Id left outer join hws.Iternary_Cities ic on i.Id = ic.Iternary_Id left outer join Cities c on ic.City_id = c.Id group by i.id',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -463,7 +471,6 @@ var getAll = function(lang, onSuccess, onFailure) {
 								en_description: rows[i].EN_Description,
 								ar_name: rows[i].AR_Name,
 								ar_description: rows[i].AR_Description,
-								needsVisa: rows[i].Needs_Visa,
 								introduction: rows[i].Introduction,
 								includes: rows[i].Includes,
 								excludes: rows[i].Excludes,
@@ -474,6 +481,10 @@ var getAll = function(lang, onSuccess, onFailure) {
 								image2: rows[i].Image2,
 								iataCode: rows[i].EN_Name.substring(0, 3),
 								agentNotes: rows[i].Agent_Notes,
+								visaType: rows[i].Visa_Type,
+								enVisaTypeName: rows[i].EN_Visa_Type_Name,
+								arVisaTypeName: rows[i].AR_Visa_Type_Name,
+								visaRequirements: rows[i].Visa_Requirements,
 								longitudes: rows[i].longitude,
 								latitudes: rows[i].latitude,
 								cities_en_descriptions: rows[i].cities_en_description,
@@ -484,6 +495,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 							if (lang) {
 								itinerary.name = itinerary[lang.toLowerCase() + '_name'];
 								itinerary.description = itinerary[lang.toLowerCase() + '_description'];
+								itinerary.visaTypeName = itinerary[lang.toLowerCase() + 'VisaTypeName'];
 							}
 							itineraries.push(itinerary);
 						}

@@ -35,7 +35,7 @@ var register = function(requestData, onSuccess, onFailure) {
 					number_of_infants: 0,
 					budget_category: 3,
 					budget: requestData.pex * parseFloat(groupTrip.totalCost),
-					visa_assistance_needed: groupTrip.needsVisa,
+					visaType: groupTrip.visaType,
 					tour_guide_needed: 1,
 					specialRequests: requestData.message,
 					estimatedCost: requestData.pex * parseFloat(groupTrip.totalCost),

@@ -106,19 +106,20 @@
                                 <label for="excludes" ng-show="excludesMissing==false">Excludes</label>
                                 <textarea bullet class="form-control" id="excludes" ng-model="newItinerary.excludes" placeholder="Enter excludes" rows="2"></textarea>
                             </div>
-                            <div class="form-group form-group-2" ng-show="saving==false">
-                                <label class="control-label text-red" for="needsVisa" ng-show="needsVisaMissing==true">
-                                    <i class="fa fa-times-circle-o"></i>Need a visa is missing</label>
-                                <label for="needsVisa" ng-show="needsVisaMissing==false">Need a visa</label>
-                                <select class="form-control" ng-model="newItinerary.needsVisa">
-                                    <option value="1" ng-selected="true">Yes</option>
-                                    <option value="0">No</option>
+                            <div class="form-group form-group-4" ng-show="saving==false">
+                                <label class="control-label text-red" for="visaType" ng-show="visaTypeMissing==true">
+                                    <i class="fa fa-times-circle-o"></i>Visa type is missing</label>
+                                <label for="visaType" ng-show="visaTypeMissing==false">Visa type</label>
+                                <select class="form-control" ng-model="newItinerary.visaType">
+                                    <option value="0" ng-selected="true">No visa required</option>
+                                    <option value="1">Online visa</option>
+                                    <option value="2">Visa required</option>
                                 </select>
                             </div>
-                            <div class="form-group form-group-7" ng-show="saving==false">
+                            <div class="form-group form-group-8" ng-show="saving==false">
                                 <label class="control-label text-red" for="image1" ng-show="image1Missing==true">
                                     <i class="fa fa-times-circle-o"></i>Image is missing</label>
-                                <label for="image1" ng-show="image1Missing==false">Image URI (recommended width 600px)</label>
+                                <label for="image1" ng-show="image1Missing==false">Image URI (recommended width 600x600px)</label>
                                 <input type="url" class="form-control" id="image1" ng-model="newItinerary.image1" placeholder="Enter image URI" required>
                             </div>
                             <!-- <div class="form-group form-group-6" ng-show="saving==false">
@@ -191,9 +192,11 @@
                                     </li>
                                     <li>
                                         <a href="#purposeTab" data-toggle="tab">Purpose</a>
+                                    </li><li>
+                                        <a href="#interestTab" data-toggle="tab">Interest</a>
                                     </li>
                                     <li>
-                                        <a href="#interestTab" data-toggle="tab">Interest</a>
+                                        <a href="#visaTab" data-toggle="tab">Visa</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -244,19 +247,10 @@
                                             <label for="excludes" ng-show="!excludesMissing">Excludes</label>
                                             <textarea bullet class="form-control" id="excludes" ng-model="newItinerary.excludes" placeholder="Enter excludes" rows="2"></textarea>
                                         </div>
-                                        <div class="form-group form-group-2" ng-show="saving==false">
-                                            <label class="control-label text-red" for="needsVisa" ng-show="needsVisaMissing">
-                                                <i class="fa fa-times-circle-o"></i>Need a visa is missing</label>
-                                            <label for="needsVisa" ng-show="!needsVisaMissing">Need a visa</label>
-                                            <select class="form-control" ng-model="newItinerary.needsVisa">
-                                                <option value="1" ng-selected="newItinerary.needsVisa == 1">Yes</option>
-                                                <option value="0" ng-selected="newItinerary.needsVisa != 1">No</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group form-group-7" ng-show="saving==false">
+                                        <div class="form-group" ng-show="saving==false">
                                             <label class="control-label text-red" for="image1" ng-show="image1Missing">
                                                 <i class="fa fa-times-circle-o"></i>Image is missing</label>
-                                            <label for="image1" ng-show="!image1Missing">Image URI (recommended width 600px)</label>
+                                            <label for="image1" ng-show="!image1Missing">Image URI (recommended width 600x600px)</label>
                                             <input type="url" class="form-control" id="image1" ng-model="newItinerary.image1" placeholder="Enter image URI" required>
                                         </div>
                                         <!-- <div class="form-group form-group-4" ng-show="saving==false">
@@ -861,6 +855,25 @@
                                         <div class="form-group" ng-repeat="interest in interests">
                                             <label>{{interest.en_name}}: {{newItinerary.interests[interest.id]}}%</label>
                                             <input type="range" min="0" max="100" ng-model="newItinerary.interests[interest.id]">
+                                        </div>
+                                        <!-- /.form group -->
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="visaTab">
+                                        <div class="form-group" ng-show="saving==false">
+                                          <label class="control-label text-red" for="visaType" ng-show="visaTypeMissing">
+                                              <i class="fa fa-times-circle-o"></i>Visa type is missing</label>
+                                          <label for="visaType" ng-show="!visaTypeMissing">Visa type</label>
+                                          <select class="form-control" ng-model="newItinerary.visaType">
+                                              <option value="0" ng-selected="true">No visa required</option>
+                                              <option value="1">Online visa</option>
+                                              <option value="2">Visa required</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group" ng-show="saving==false">
+                                            <label for="visaRequirements">Visa requirements</label>
+                                            <textarea bullet class="form-control" id="visaRequirements" ng-model="newItinerary.visaRequirements"
+                                                placeholder="Enter visa requirements" rows="10"></textarea>
                                         </div>
                                         <!-- /.form group -->
                                     </div>

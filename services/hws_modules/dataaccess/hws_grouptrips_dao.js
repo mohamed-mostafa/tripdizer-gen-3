@@ -15,7 +15,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT gt.*, i.EN_Name, i.EN_Description, i.AR_Name, i.AR_Description, i.Needs_Visa FROM group_trips gt JOIN iternary i ON gt.Iternary_Id = i.Id WHERE gt.Id = ?',
+				'SELECT gt.*, i.EN_Name, i.EN_Description, i.AR_Name, i.AR_Description, i.Visa_Type FROM group_trips gt JOIN iternary i ON gt.Iternary_Id = i.Id WHERE gt.Id = ?',
 				[id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -40,8 +40,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								returnDate: new Date(rows[0].Return_Date).toString(),
 								numOfPersons: rows[0].Num_Of_Persons,
 								totalCost: rows[0].Total_Cost,
-								needsVisa: rows[0].Needs_Visa,
 								image: rows[0].Image,
+								visaType: rows[0].Visa_Type,
 								mailSubject: rows[0].Email_Subject,
 								mailBody: rows[0].Email_Body,
 								mailAttachments: JSON.parse(rows[0].Email_Attachments),
@@ -255,7 +255,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT gt.*, i.EN_Name, i.EN_Description, i.AR_Name, i.AR_Description, i.Needs_Visa FROM group_trips gt JOIN iternary i ON gt.Iternary_Id = i.Id',
+				'SELECT gt.*, i.EN_Name, i.EN_Description, i.AR_Name, i.AR_Description, i.Visa_Type FROM group_trips gt JOIN iternary i ON gt.Iternary_Id = i.Id',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -281,8 +281,8 @@ var getAll = function(lang, onSuccess, onFailure) {
 								returnDate: new Date(rows[i].Return_Date).toString(),
 								numOfPersons: rows[i].Num_Of_Persons,
 								totalCost: rows[i].Total_Cost,
-								needsVisa: rows[i].Needs_Visa,
 								image: rows[i].Image,
+								visaType: rows[i].Visa_Type,
 								mailSubject: rows[i].Email_Subject,
 								mailBody: rows[i].Email_Body,
 								mailAttachments: JSON.parse(rows[i].Email_Attachments),

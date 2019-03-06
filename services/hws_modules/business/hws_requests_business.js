@@ -260,7 +260,10 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 					const dailySpending = [];
 					itinerary.cities.forEach(city =>
 						dailySpending.push(
-							...city.dailySpending.filter(dailySpending => dailySpending.budgetCategory === request.budgetCategory)
+							...city.dailySpending.filter(
+								dailySpending =>
+									dailySpending.budgetCategory === (request.budgetCategory === 1 ? 3 : request.budgetCategory)
+							)
 						)
 					);
 					if (dailySpending.length)
@@ -393,7 +396,7 @@ var recommendation = function(request, lang, onSuccess, onFailure, onUserError) 
 				purpose: recommendationFuncs.purpose(request.purpose, itineraries[i].purposes),
 				season: recommendationFuncs.season(request.departureDate, request.returnDate, itineraries[i].seasons),
 				interest: recommendationFuncs.interest(request.preferences, itineraries[i].interests),
-				// needsVisa: recommendationFuncs.needsVisa(request.visa_assistance_needed, itineraries[i].needsVisa),
+				// visa: recommendationFuncs.visa(request.visa_assistance_needed, itineraries[i].needsVisa),
 			};
 			for (const rank in itineraries[i].recommendationRanks) {
 				if (itineraries[i].recommendationRanks.hasOwnProperty(rank)) {
@@ -411,7 +414,7 @@ var recommendation = function(request, lang, onSuccess, onFailure, onUserError) 
 						case 'interest':
 							factor = 0.2;
 							break;
-						case 'needsVisa':
+						case 'visa':
 							factor = 0;
 							break;
 						default:
@@ -507,7 +510,7 @@ var recommendationFuncs = {
 		var nonZeroPercentInterestsInRequest = requestInterests.filter(ri => ri.percentage > 0);
 		return sumOfInterests / nonZeroPercentInterestsInRequest.length;
 	},
-	needsVisa: (request, itinerary) => {
+	visa: (request, itinerary) => {
 		request = request ? 1 : 0;
 		itinerary = itinerary ? 1 : 0;
 		return request === itinerary ? 100 : 0;

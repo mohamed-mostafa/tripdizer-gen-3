@@ -35,7 +35,7 @@ export class RecommendedDestinationsResponse extends Destination {
 		purpose: number;
 		season: number;
 		interest: number;
-		needsVisa: number;
+		visa: number;
 	};
 	rank: number;
 }

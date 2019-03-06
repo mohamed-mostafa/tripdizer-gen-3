@@ -56,7 +56,7 @@ g2gControlCenterApplication
 				$scope.ar_nameMissing = false;
 				$scope.en_descriptionMissing = false;
 				$scope.ar_descriptionMissing = false;
-				$scope.needsVisaMissing = false;
+				$scope.visaTypeMissing = false;
 				$scope.introductionMissing = false;
 				$scope.includesMissing = false;
 				$scope.excludesMissing = false;
@@ -79,8 +79,8 @@ g2gControlCenterApplication
 				if ($scope.newItinerary.ar_description == null || $scope.newItinerary.ar_description == '') {
 					$scope.ar_descriptionMissing = true;
 				}
-				if ($scope.newItinerary.needsVisa == null) {
-					$scope.needsVisaMissing = true;
+				if ($scope.newItinerary.visaType == null) {
+					$scope.visaTypeMissing = true;
 				}
 				if ($scope.newItinerary.introduction == null || $scope.newItinerary.introduction == '') {
 					$scope.introductionMissing = true;
@@ -110,7 +110,7 @@ g2gControlCenterApplication
 					$scope.ar_nameMissing !== true &&
 					$scope.en_descriptionMissing !== true &&
 					$scope.ar_descriptionMissing !== true &&
-					$scope.needsVisaMissing !== true &&
+					$scope.visaTypeMissing !== true &&
 					$scope.includesMissing !== true &&
 					$scope.excludesMissing !== true &&
 					$scope.introductionMissing !== true &&

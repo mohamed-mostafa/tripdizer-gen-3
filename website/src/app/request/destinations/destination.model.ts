@@ -8,6 +8,7 @@ export class Destination {
 	arName?: string;
 	arDescription?: string;
 	image: string;
+	visaTypeName: string;
 	temperatureLo?: number;
 	temperatureHi?: number;
 }
