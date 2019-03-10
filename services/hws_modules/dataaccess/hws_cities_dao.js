@@ -285,8 +285,11 @@ var getAll = function(lang, onSuccess, onFailure) {
 									thumbnail: rows[i].Thumbnail,
 									lat: rows[i].Latitude,
 									lng: rows[i].Longitude,
-									dailySpending: { [rows[i].Budget_Category_Id]: rows[i].Daily_Spending },
+									dailySpending: {},
 								};
+								if (rows[i].Budget_Category_Id) {
+									city.dailySpending[rows[i].Budget_Category_Id] = rows[i].Daily_Spending;
+								}
 								if (lang) {
 									city.name = city[lang.toLowerCase() + '_name'];
 									city.description = city[lang.toLowerCase() + '_description'];

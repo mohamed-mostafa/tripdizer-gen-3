@@ -95,6 +95,7 @@ export class DestinationsComponent {
 					description: null,
 					iataCode: inputs[0].value,
 					image: null,
+					visaTypeName: null,
 				};
 				this.requestService.setProperty('destination', destination);
 				this.navigateToNextStep();
