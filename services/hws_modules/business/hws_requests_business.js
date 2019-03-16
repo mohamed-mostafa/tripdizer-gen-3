@@ -61,10 +61,17 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		function(request) {
 			// create the request
 
-			onSuccess(request);
+			getPackage(
+				request.id,
+				function(packageId) {
+					request.packageUri = 'https://docs.google.com/document/d/' + packageId + '/view';
+					onSuccess(request);
+				},
+				onFailure
+			);
 
 			if (request.traveler.name === 'Essawy') {
-				requestsDao.modifyRequestStatusById(request.id, 11);
+				requestsDao.modifyRequestStatusById(request.id, 11, () => {}, () => {});
 			} else {
 				// notify creation
 				if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
@@ -694,8 +701,17 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 								},
 							},
 							function(error, response, body) {
-								if (response.statusCode === 200 && isUrl(body)) {
-									onSuccess(body);
+								if (response.statusCode === 200) {
+									requestsDao.modifyRequestPackageId(
+										request.id,
+										body,
+										() => {
+											onSuccess(body);
+										},
+										() => {
+											onSuccess(body);
+										}
+									);
 								} else {
 									const errorBody = body.match(/<body(?:.*?)>([^<].*?)<\/.*>/);
 									if (errorBody[1]) {

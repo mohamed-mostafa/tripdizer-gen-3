@@ -506,6 +506,8 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					if (request.returnDate) request.returnDate = new Date(request.returnDate);
 					for (let i = 0; i < request.mailsHistory.length; i++)
 						request.mailsHistory[i].date = new Date(request.mailsHistory[i].date);
+					if (request.packageId)
+						request.generatedFile = 'https://docs.google.com/document/d/' + request.packageId + '/edit';
 					$scope.currentOrder = request;
 				})
 				.error(function(err) {
@@ -592,7 +594,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 				function(response) {
 					if (response) {
 						$scope.serverError = false;
-						$scope.currentOrder.generatedFile = response.data;
+						$scope.currentOrder.generatedFile = 'https://docs.google.com/document/d/' + response.data + '/edit';
 						// $window.open(response, "popup");
 					} else {
 						$scope.serverError = true;

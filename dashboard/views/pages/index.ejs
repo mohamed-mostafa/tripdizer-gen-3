@@ -166,7 +166,7 @@
                     <a href="#revenueTab" data-toggle="tab">Financials</a>
                   </li>
                   <li ng-if="currentOrder.itineraryId">
-                    <a href="#generatePackageTab" data-toggle="tab">Generate Package</a>
+                    <a href="#generatePackageTab" data-toggle="tab">Package</a>
                   </li>
                   <li>
                     <a href="#mailshistoryTab" data-toggle="tab">Mails History</a>
@@ -339,9 +339,11 @@
                       <div ng-show="loading">
                         <i class="fa fa-refresh fa-spin"></i>
                       </div>
-                      <button ng-if="!currentOrder.generatedFile && !loading" ng-click="generatePackage()">Generate</button>
-                      <a ng-if="currentOrder.generatedFile && !loading" ng-href="{{currentOrder.generatedFile}}" target="_blank">Generated
-                        File</a>
+                      <button ng-if="!currentOrder.generatedFile && !loading" ng-click="generatePackage()">Generate New Package</button>
+                      <a ng-if="currentOrder.generatedFile && !loading" ng-href="{{currentOrder.generatedFile}}" target="_blank">Open Generated Package</a>
+                      <br>
+                      <br>
+                      <button ng-if="currentOrder.generatedFile && !loading" ng-click="generatePackage()">Re-Generate New Package</button>
                     </center>
                   </div>
                   <!-- /.tab-pane -->

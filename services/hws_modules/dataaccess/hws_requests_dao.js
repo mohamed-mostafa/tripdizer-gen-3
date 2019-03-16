@@ -192,6 +192,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								reachable: rows[i].Reachable,
 								packageSent: rows[i].Package_Sent,
 								referralType: rows[i].Referral_Type,
+								packageId: rows[i].Package_Id,
 								interests: [],
 							};
 							var interest = {
@@ -339,6 +340,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								packageSent: rows[0].Package_Sent,
 								referralType: rows[0].Referral_Type,
 								promoCode: rows[0].Promo_Code,
+								packageId: rows[0].Package_Id,
 								interests: [],
 								mailsHistory: [],
 							};
@@ -500,6 +502,42 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 					onSuccess();
 				}
 			});
+		}
+	});
+};
+
+//calls the onSuccess
+//calls the onFailure with an err object in case of technical error
+var modifyRequestPackageId = function(requestId, packageId, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection');
+			console.log(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query(
+				'UPDATE `traveler_request` SET `Package_Id` = ? WHERE `Id` = ?',
+				[packageId, requestId],
+				function(err) {
+					// if an error is thrown, end the connection and throw an error
+					//				connection.end();
+					if (err) {
+						console.log('An error occurred while trying to update a request with id ' + requestId);
+						console.log(err);
+						connection.rollback();
+						connection.end();
+						onFailure(err);
+					} else {
+						// no error is thrown
+						connection.commit();
+						connection.end();
+						onSuccess();
+					}
+				}
+			);
 		}
 	});
 };
@@ -739,4 +777,5 @@ exports.getRequestById = getRequestById;
 exports.addNewMailHistory = addNewMailHistory;
 exports.getRequestCounts = getRequestCounts;
 exports.toggleOptions = toggleOptions;
+exports.modifyRequestPackageId = modifyRequestPackageId;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
