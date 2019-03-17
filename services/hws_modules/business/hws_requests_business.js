@@ -334,23 +334,6 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 						);
 					}
 
-					switch (request.budgetCategory) {
-						// case 2: // Super Economy
-						// 	rData.dailySpending *= 1;
-						// 	break;
-						// case 3: // Economy
-						// 	rData.dailySpending *= 1;
-						// 	break;
-						case 4: // Mid Range
-							rData.dailySpending *= 1.5;
-							break;
-						case 5: // Splurge
-							rData.dailySpending *= 2;
-							break;
-						default:
-							rData.dailySpending *= 1;
-							break;
-					}
 
 					// add 10% profit margin
 					// rData.flightsBudget += rData.flightsBudget * 0.1;

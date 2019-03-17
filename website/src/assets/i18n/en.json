@@ -86,7 +86,7 @@
 			"ferries": "Ferries",
 			"daily_spending": "Daily Spending",
 			"hint2": "International + Domestic flights",
-			"hint3": "Just a hint, not included in the final cost"
+			"hint3": "Just an indicator for daily spendings per person, not included in the package cost"
 		},
 		"form_layout": {
 			"next_label": "Continue",
