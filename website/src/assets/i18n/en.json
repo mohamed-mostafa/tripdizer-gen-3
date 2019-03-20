@@ -85,6 +85,7 @@
 			"accommodation": "Accommodation",
 			"ferries": "Ferries",
 			"daily_spending": "Daily Spending",
+			"per_person": "per person",
 			"hint2": "International + Domestic flights",
 			"hint3": "Just an indicator for daily spendings per person, not included in the package cost"
 		},
