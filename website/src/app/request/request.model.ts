@@ -4,10 +4,11 @@ import * as moment from 'moment';
 import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
+import { Gender } from './gender.enum';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
-import { RequestType } from './request-type.model';
-import { Gender, IRequester } from './requester.model';
+import { RequestType } from './request-type.enum';
+import { IRequester } from './requester.model';
 import { Step } from './step.model';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
 
@@ -559,7 +560,7 @@ export class Request extends CommonFunctions {
 			name: null,
 			mobile: null,
 			email: null,
-			gender: Gender.male,
+			gender: Gender.Male,
 			birthday: null,
 			profession: null,
 		};

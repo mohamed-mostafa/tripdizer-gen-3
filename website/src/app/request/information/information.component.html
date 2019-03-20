@@ -55,8 +55,8 @@
 		<mat-hint>{{ formGroup.controls['travelerGender'].errors | errorMessage }}</mat-hint>
 		<mat-error>{{ formGroup.controls['travelerGender'].errors | errorMessage }}</mat-error>
 		<mat-select formControlName="travelerGender" [placeholder]="'request.information.gender' | translate">
-			<mat-option [value]="gender.male">{{ 'request.information.male' | translate }}</mat-option>
-			<mat-option [value]="gender.female">{{ 'request.information.female' | translate }}</mat-option>
+			<mat-option [value]="gender.Male">{{ 'request.information.male' | translate }}</mat-option>
+			<mat-option [value]="gender.Female">{{ 'request.information.female' | translate }}</mat-option>
 		</mat-select>
 	</mat-form-field>
 	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">

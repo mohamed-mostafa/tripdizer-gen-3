@@ -20,7 +20,7 @@ import {
 	RecommendedDestinationsResponse,
 } from './recommended-destinations/recommended-destination.model';
 import { RequestRequest, RequestResponse } from './request-dto.model';
-import { RequestType } from './request-type.model';
+import { RequestType } from './request-type.enum';
 import { Request } from './request.model';
 import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';

@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { Gender } from './gender.enum';
 
 export interface IRequester {
 	name: string;
@@ -7,9 +8,4 @@ export interface IRequester {
 	gender: Gender;
 	birthday: Moment;
 	profession: number;
-}
-
-export enum Gender {
-	male = 1,
-	female = 2,
 }

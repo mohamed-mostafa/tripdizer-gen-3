@@ -8,8 +8,8 @@ import { CustomValidators } from 'src/app/shared/utils';
 import { RequestService } from '../request.service';
 
 /* Models */
-import { DropDownItem } from 'src/app/shared/models/drop-down-item.model';
-import { Gender } from '../requester.model';
+import { DropDownItem } from '../../shared/models/drop-down-item.model';
+import { Gender } from '../gender.enum';
 
 @Component({
 	selector: 'c-request-information',
