@@ -6,13 +6,14 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
-import { Purpose, LUTPurpose } from './purpose/purpose.model';
+import { LUTPurpose, Purpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
 	RecommendedDestinationsResponse,
@@ -44,6 +45,7 @@ export class RequestService {
 	isLoading = new Subject<boolean>();
 	requestDataChanged = new Subject<{ key: string; value: any; request: Request }>();
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
+	isDevelopment = !environment.production;
 
 	constructor(
 		private http: HttpClient,
@@ -73,8 +75,10 @@ export class RequestService {
 	}
 
 	resetRequestState(): void {
-		localStorage.removeItem('request');
-		this.initRequest();
+		if (!this.isDevelopment) {
+			localStorage.removeItem('request');
+			this.initRequest();
+		}
 	}
 
 	setRequestType(params: Params): boolean {
@@ -174,7 +178,9 @@ export class RequestService {
 			value: this.requestData.validSteps.find(s => s.key === key),
 			navBar: this.requestData.navBar,
 		});
-		// this.saveRequestState();
+		if (this.isDevelopment) {
+			this.saveRequestState();
+		}
 	}
 
 	getProperty(key: string): any {
