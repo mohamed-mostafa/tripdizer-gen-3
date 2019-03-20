@@ -72,7 +72,7 @@ export class RequestService {
 		localStorage.setItem('request', JSON.stringify(this.requestData.getPureRequest()));
 	}
 
-	private resetRequestState(): void {
+	resetRequestState(): void {
 		localStorage.removeItem('request');
 		this.initRequest();
 	}
@@ -174,7 +174,7 @@ export class RequestService {
 			value: this.requestData.validSteps.find(s => s.key === key),
 			navBar: this.requestData.navBar,
 		});
-		this.saveRequestState();
+		// this.saveRequestState();
 	}
 
 	getProperty(key: string): any {

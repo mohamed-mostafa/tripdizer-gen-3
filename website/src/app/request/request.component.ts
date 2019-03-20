@@ -1,4 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { RequestService } from './request.service';
 
 @Component({
 	selector: 'c-request',
@@ -6,4 +7,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 	styleUrls: ['./request.component.scss'],
 	encapsulation: ViewEncapsulation.None,
 })
-export class RequestComponent {}
+export class RequestComponent implements OnDestroy {
+	constructor(private requestService: RequestService) {}
+
+	ngOnDestroy() {
+		this.requestService.resetRequestState();
+	}
+}
