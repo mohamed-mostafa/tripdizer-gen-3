@@ -105,6 +105,9 @@
 			"birthday": "تاريخ الميلاد",
 			"profession": "المهنة",
 			"referral": "كيف عرفت عنا؟",
+			"travel_history": "تاريخ السفر",
+			"traveled_before": "سافرت من قبل",
+			"never_traveled": "لم تسافر",
 			"equal_to": "البريد الإلكتروني غير متطابق"
 		},
 		"nav_bar": {

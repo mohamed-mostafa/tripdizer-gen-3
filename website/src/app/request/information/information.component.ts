@@ -10,6 +10,7 @@ import { RequestService } from '../request.service';
 /* Models */
 import { DropDownItem } from '../../shared/models/drop-down-item.model';
 import { Gender } from '../gender.enum';
+import { TravelHistory } from '../travel-history.enum';
 
 @Component({
 	selector: 'c-request-information',
@@ -31,10 +32,12 @@ export class InformationComponent {
 		travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		travelerProfession: new FormControl('', [Validators.required]),
 		referralType: new FormControl('', [Validators.required]),
+		travelHistory: new FormControl('', [Validators.required]),
 	};
 	professions: Observable<Array<DropDownItem>>;
 	referralTypes: Observable<Array<DropDownItem>>;
 	gender = Gender;
+	travelHistory = TravelHistory;
 	maxDate = new Date();
 
 	constructor(private requestService: RequestService, translate: TranslateService) {

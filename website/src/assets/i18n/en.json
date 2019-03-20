@@ -105,6 +105,9 @@
 			"birthday": "Birthday",
 			"profession": "Profession",
 			"referral": "How did you know about us?",
+			"travel_history": "Travel History",
+			"traveled_before": "Traveled Before",
+			"never_traveled": "Never Traveled",
 			"equal_to": "Email doesn't match"
 		},
 		"nav_bar": {

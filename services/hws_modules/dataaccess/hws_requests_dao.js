@@ -26,7 +26,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Promo_Code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							request.date,
 							request.traveler.email,
@@ -55,6 +55,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.specialRequests,
 							request.estimatedCost,
 							request.referralType,
+							request.travelHistory,
 							request.promoCode,
 						],
 						function(err, result) {
@@ -196,6 +197,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								reachable: rows[i].Reachable,
 								packageSent: rows[i].Package_Sent,
 								referralType: rows[i].Referral_Type,
+								travelHistory: rows[i].Travel_History,
 								packageId: rows[i].Package_Id,
 								interests: [],
 							};
@@ -261,6 +263,7 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 			if (filter.reachable) query += ' AND `Reachable` = ' + connection.escape(filter.reachable);
 			if (filter.packageSent) query += ' AND `Package_Sent` = ' + connection.escape(filter.packageSent);
 			if (filter.referralType) query += ' AND `Referral_Type` = ' + connection.escape(filter.referralType);
+			if (filter.travelHistory) query += ' AND `Travel_History` = ' + connection.escape(filter.travelHistory);
 			// execute the query
 			connection.query(
 				'SELECT count(id) as count, sum(revenue) as revenue, sum(profit) as profit, sum(Number_Of_Adults + Number_Of_Kids + Number_Of_Infants) as numberOfTravelers FROM traveler_request WHERE status IN (?) AND Archived = 0' +
@@ -345,6 +348,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								reachable: rows[0].Reachable,
 								packageSent: rows[0].Package_Sent,
 								referralType: rows[0].Referral_Type,
+								travelHistory: rows[0].Travel_History,
 								promoCode: rows[0].Promo_Code,
 								packageId: rows[0].Package_Id,
 								interests: [],
@@ -454,6 +458,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.edit,
 					request.reachable,
 					request.referralType,
+					request.travelHistory,
 					request.id,
 				],
 				function(err, rows) {

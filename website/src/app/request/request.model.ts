@@ -11,6 +11,7 @@ import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
+import { TravelHistory } from './travel-history.enum';
 
 export class Request extends CommonFunctions {
 	private _requestType: RequestType;
@@ -52,6 +53,7 @@ export class Request extends CommonFunctions {
 	private _specialRequests: string;
 	private _traveler: IRequester;
 	private _referralType: number;
+	private _travelHistory: TravelHistory;
 
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
@@ -221,6 +223,12 @@ export class Request extends CommonFunctions {
 	}
 	get referralType(): number {
 		return this._referralType;
+	}
+	set travelHistory(value: TravelHistory) {
+		this._travelHistory = value;
+	}
+	get travelHistory(): TravelHistory {
+		return this._travelHistory;
 	}
 
 	get validSteps(): Array<Step> {
@@ -525,6 +533,9 @@ export class Request extends CommonFunctions {
 						return false;
 					}
 					if (!this._referralType) {
+						return false;
+					}
+					if (!this._travelHistory) {
 						return false;
 					}
 					return true;

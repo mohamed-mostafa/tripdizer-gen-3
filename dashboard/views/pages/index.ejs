@@ -195,13 +195,13 @@
                       <label for="customer">Traveler</label>
                       <input type="text" disabled class="form-control" id="customer" ng-model="currentOrder.traveler.name">
                     </div>
+                    <div>
+                      <label for="email">Email</label>
+                      <input type="text" disabled class="form-control" id="email" ng-model="currentOrder.traveler.emailAddress">
+                    </div>
                     <div class="form-control-6">
                       <label for="phone">Phone</label>
                       <input type="text" disabled class="form-control" id="phone" ng-model="currentOrder.traveler.mobile">
-                    </div>
-                    <div class="form-control-6">
-                      <label for="email">Email</label>
-                      <input type="text" disabled class="form-control" id="email" ng-model="currentOrder.traveler.emailAddress">
                     </div>
                     <div class="form-control-6">
                       <label for="gender">Gender</label>
@@ -227,6 +227,13 @@
                       <select class="form-control" disabled id="referralType" ng-model="currentOrder.referralType">
                         <option ng-repeat="type in referralTypes" ng-value="type.id" ng-selected="type.id === currentOrder.referralType">
                           {{type.enName}}</option>
+                      </select>
+                    </div>
+                    <div class="form-control-6">
+                      <label for="travelHistory">Travel History</label>
+                      <select class="form-control" disabled id="travelHistory" ng-model="currentOrder.travelHistory">
+                        <option value="1">Traveled Before</option>
+                        <option value="2">Never Traveled</option>
                       </select>
                     </div>
                   </div>

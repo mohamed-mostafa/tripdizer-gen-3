@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 import { CommonFunctions } from '../shared/utils';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
+import { TravelHistory } from './travel-history.enum';
 
 export class RequestRequest {
 	travelingFrom: string;
@@ -23,6 +24,7 @@ export class RequestRequest {
 	specialRequests: string;
 	traveler: IRequester;
 	referralType: number;
+	travelHistory: TravelHistory;
 
 	static getRequestRequestFromRequest(request: Request): RequestRequest {
 		return {
@@ -48,6 +50,7 @@ export class RequestRequest {
 				mobile: CommonFunctions.parseArabicNumber(request.traveler.mobile),
 			},
 			referralType: request.referralType,
+			travelHistory: request.travelHistory,
 		};
 	}
 }
