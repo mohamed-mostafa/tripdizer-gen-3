@@ -6,6 +6,9 @@ import { CustomValidators } from 'src/app/shared/utils';
 /* Services */
 import { RequestService } from '../request.service';
 
+/* Models */
+import { Gender } from '../requester.model';
+
 @Component({
 	selector: 'c-request-information',
 	templateUrl: './information.component.html',
@@ -22,10 +25,12 @@ export class InformationComponent {
 			Validators.email,
 			CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match'),
 		]),
+		travelerGender: new FormControl('', [Validators.required]),
 		travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		referralType: new FormControl('', [Validators.required]),
 	};
 	referralTypes: Array<{ id: number; name: string }>;
+	gender = Gender;
 	maxDate = new Date();
 
 	constructor(private requestService: RequestService, translate: TranslateService) {

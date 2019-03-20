@@ -99,6 +99,9 @@
 			"mobile": "Mobile No.",
 			"email": "Email",
 			"confirm_email": "Confirm Email",
+			"gender": "Gender",
+			"male": "Male",
+			"female": "Female",
 			"birthday": "Birthday",
 			"referral": "How did you know about us?",
 			"equal_to": "Email doesn't match"

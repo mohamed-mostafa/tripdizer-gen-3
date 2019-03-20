@@ -198,6 +198,11 @@
                       <input type="text" disabled class="form-control" id="phone" ng-model="currentOrder.traveler.mobile">
                       <label for="email">Email</label>
                       <input type="text" disabled class="form-control" id="email" ng-model="currentOrder.traveler.emailAddress">
+                      <label for="gender">Gender</label>
+                      <select class="form-control" disabled id="gender" ng-model="currentOrder.traveler.gender">
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                      </select>
                       <label for="dob">Date of birth</label>
                       <input type="text" disabled class="form-control" id="dob" format="MMM d, y" ng-model="currentOrder.traveler.dateOfBirth">
                       <label for="referralType">Referral</label>

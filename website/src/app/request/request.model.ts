@@ -7,7 +7,7 @@ import { Destination } from './destinations/destination.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.model';
-import { IRequester } from './requester.model';
+import { Gender, IRequester } from './requester.model';
 import { Step } from './step.model';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
 
@@ -193,6 +193,12 @@ export class Request extends CommonFunctions {
 	}
 	get travelerEmail(): string {
 		return this._traveler.email;
+	}
+	set travelerGender(value: Gender) {
+		this._traveler.gender = value;
+	}
+	get travelerGender(): Gender {
+		return this._traveler.gender;
 	}
 	set travelerBirthday(value: moment.Moment) {
 		this._traveler.birthday = value;
@@ -505,6 +511,7 @@ export class Request extends CommonFunctions {
 						!this._traveler.name ||
 						!this._traveler.mobile ||
 						!this._traveler.email ||
+						!this._traveler.gender ||
 						!this._traveler.birthday
 					) {
 						return false;
@@ -545,6 +552,7 @@ export class Request extends CommonFunctions {
 			name: null,
 			mobile: null,
 			email: null,
+			gender: Gender.male,
 			birthday: null,
 		};
 	}

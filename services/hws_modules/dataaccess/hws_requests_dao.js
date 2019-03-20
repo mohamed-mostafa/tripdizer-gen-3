@@ -26,12 +26,13 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Birth_Date`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Promo_Code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Promo_Code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							request.date,
 							request.traveler.email,
 							request.traveler.name,
 							request.traveler.mobile,
+							request.traveler.gender,
 							request.traveler.birthday,
 							request.departureDate,
 							request.returnDate,
@@ -167,6 +168,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 									name: rows[i].Traveler_Name,
 									mobile: rows[i].Traveler_Mobile,
 									emailAddress: rows[i].Traveler_Email_Address,
+									gender: rows[i].Traveler_Gender,
 									dateOfBirth: new Date(rows[i].Traveler_Birth_Date).toString(),
 								},
 								userFullName: rows[i].full_name,
@@ -314,6 +316,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 									name: rows[0].Traveler_Name,
 									mobile: rows[0].Traveler_Mobile,
 									emailAddress: rows[0].Traveler_Email_Address,
+									gender: rows[0].Traveler_Gender,
 									dateOfBirth: new Date(rows[0].Traveler_Birth_Date).toString(),
 								},
 								userFullName: rows[0].full_name,
