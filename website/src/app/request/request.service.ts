@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
+import { DropDownItem } from '../shared/models/drop-down-item.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose, Purpose } from './purpose/purpose.model';
@@ -38,7 +39,8 @@ export class RequestService {
 		budgetCategories: Array<BudgetCategory>;
 		purposes: Array<Purpose>;
 		preferences: Array<Preference>;
-		referralTypes: Array<{ id: number; name: string }>;
+		referralTypes: Array<DropDownItem>;
+		professions: Array<DropDownItem>;
 	} = {} as any;
 	private travelersRadioButtonsStart = {};
 
@@ -354,13 +356,30 @@ export class RequestService {
 		);
 	}
 
-	getReferralTypes(): Observable<Array<any> | null> {
+	getProfessions(): Observable<Array<DropDownItem> | null> {
 		this.isLoading.next(true);
-		let observable: Observable<Array<any>>;
+		let observable: Observable<Array<DropDownItem>>;
+		if (this.Lookups.professions) {
+			observable = of(this.Lookups.professions);
+		} else {
+			observable = this.http.get<Array<DropDownItem>>('professions');
+		}
+		return observable.pipe(
+			map(professions => {
+				this.Lookups.professions = professions;
+				this.isLoading.next(false);
+				return this.Lookups.professions;
+			})
+		);
+	}
+
+	getReferralTypes(): Observable<Array<DropDownItem> | null> {
+		this.isLoading.next(true);
+		let observable: Observable<Array<DropDownItem>>;
 		if (this.Lookups.referralTypes) {
 			observable = of(this.Lookups.referralTypes);
 		} else {
-			observable = this.http.get<Array<any>>('referralTypes');
+			observable = this.http.get<Array<DropDownItem>>('referralTypes');
 		}
 		return observable.pipe(
 			map(referralTypes => {

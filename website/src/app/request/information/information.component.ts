@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 import { CustomValidators } from 'src/app/shared/utils';
 
 /* Services */
 import { RequestService } from '../request.service';
 
 /* Models */
+import { DropDownItem } from 'src/app/shared/models/drop-down-item.model';
 import { Gender } from '../requester.model';
 
 @Component({
@@ -27,9 +29,11 @@ export class InformationComponent {
 		]),
 		travelerGender: new FormControl('', [Validators.required]),
 		travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
+		travelerProfession: new FormControl('', [Validators.required]),
 		referralType: new FormControl('', [Validators.required]),
 	};
-	referralTypes: Array<{ id: number; name: string }>;
+	professions: Observable<Array<DropDownItem>>;
+	referralTypes: Observable<Array<DropDownItem>>;
 	gender = Gender;
 	maxDate = new Date();
 
@@ -46,7 +50,8 @@ export class InformationComponent {
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
-		requestService.getReferralTypes().subscribe((referralTypes: Array<any>) => (this.referralTypes = referralTypes));
+		this.professions = requestService.getProfessions();
+		this.referralTypes = requestService.getReferralTypes();
 	}
 
 	save(): void {

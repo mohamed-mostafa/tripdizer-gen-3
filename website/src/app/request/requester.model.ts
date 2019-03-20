@@ -6,6 +6,7 @@ export interface IRequester {
 	email: string;
 	gender: Gender;
 	birthday: Moment;
+	profession: number;
 }
 
 export enum Gender {

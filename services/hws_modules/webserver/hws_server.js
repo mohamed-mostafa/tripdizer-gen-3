@@ -24,6 +24,7 @@ var start = function() {
 	var purposesInterface = require('./hws_purposes_interface.js');
 	var interestsInterface = require('./hws_interests_interface.js');
 	var budgetcategoriesInterface = require('./hws_budgetcategories_interface.js');
+	var professionsInterface = require('./hws_professions_interface.js');
 	var referralTypesInterface = require('./hws_referraltypes_interface.js');
 	var statusesInterface = require('./hws_statuses_interface.js');
 
@@ -123,6 +124,12 @@ var start = function() {
 	app.get('/budgetcategory/:id', auth.isAuthenticated, budgetcategoriesInterface.getById);
 	app.put('/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.create);
 	app.post('/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.update);
+
+	//		Professions
+	app.get('/professions', professionsInterface.getAll);
+	app.get('/profession/:id', auth.isAuthenticated, professionsInterface.getById);
+	app.put('/profession', auth.isAuthenticated, professionsInterface.create);
+	app.post('/profession', auth.isAuthenticated, professionsInterface.update);
 
 	//		Referral Types
 	app.get('/referraltypes', referralTypesInterface.getAll);

@@ -241,6 +241,23 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
+	.factory('ProfessionsService', [
+		'$rootScope',
+		'$http',
+		function ProfessionsService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
+
+			return {
+				getAll: getAll,
+			};
+
+			function getAll(lang) {
+				return $http.get(prefix + 'professions' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
 	.factory('ReferralTypesService', [
 		'$rootScope',
 		'$http',

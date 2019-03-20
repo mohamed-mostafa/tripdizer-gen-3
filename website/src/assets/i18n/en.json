@@ -103,6 +103,7 @@
 			"male": "Male",
 			"female": "Female",
 			"birthday": "Birthday",
+			"profession": "Profession",
 			"referral": "How did you know about us?",
 			"equal_to": "Email doesn't match"
 		},

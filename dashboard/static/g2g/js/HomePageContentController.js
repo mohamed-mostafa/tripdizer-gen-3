@@ -12,6 +12,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 	'BudgetCategoriesService',
 	'InterestsService',
 	'ItinerariesService',
+	'ProfessionsService',
 	'ReferralTypesService',
 	'StatusesService',
 	function(
@@ -24,6 +25,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		BudgetCategoriesService,
 		InterestsService,
 		ItinerariesService,
+		ProfessionsService,
 		ReferralTypesService,
 		StatusesService
 	) {
@@ -654,6 +656,10 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 
 		ItinerariesService.getAll().then(function(itineraries) {
 			$scope.itineraries = itineraries;
+		});
+
+		ProfessionsService.getAll().then(function(professions) {
+			$scope.professions = professions;
 		});
 
 		ReferralTypesService.getAll().then(function(referralTypes) {

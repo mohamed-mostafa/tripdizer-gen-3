@@ -206,6 +206,12 @@ export class Request extends CommonFunctions {
 	get travelerBirthday(): moment.Moment {
 		return this._traveler.birthday ? moment(this._traveler.birthday) : null;
 	}
+	set travelerProfession(value: number) {
+		this._traveler.profession = value;
+	}
+	get travelerProfession(): number {
+		return this._traveler.profession;
+	}
 	get traveler(): IRequester {
 		return this._traveler;
 	}
@@ -512,7 +518,8 @@ export class Request extends CommonFunctions {
 						!this._traveler.mobile ||
 						!this._traveler.email ||
 						!this._traveler.gender ||
-						!this._traveler.birthday
+						!this._traveler.birthday ||
+						!this._traveler.profession
 					) {
 						return false;
 					}
@@ -554,6 +561,7 @@ export class Request extends CommonFunctions {
 			email: null,
 			gender: Gender.male,
 			birthday: null,
+			profession: null,
 		};
 	}
 

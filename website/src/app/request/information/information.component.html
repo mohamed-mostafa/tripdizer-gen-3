@@ -76,10 +76,19 @@
 		<mat-datepicker #travelerBirthdayPicker [touchUi]="true"></mat-datepicker>
 	</mat-form-field>
 	<mat-form-field class="form-control-lg">
+		<mat-hint>{{ formGroup.controls['travelerProfession'].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls['travelerProfession'].errors | errorMessage }}</mat-error>
+		<mat-select formControlName="travelerProfession" [placeholder]="'request.information.profession' | translate">
+			<mat-option *ngFor="let profession of (professions | async)" [value]="profession.id">{{
+				profession.name
+			}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="form-control-lg">
 		<mat-hint>{{ formGroup.controls['referralType'].errors | errorMessage }}</mat-hint>
 		<mat-error>{{ formGroup.controls['referralType'].errors | errorMessage }}</mat-error>
 		<mat-select formControlName="referralType" [placeholder]="'request.information.referral' | translate">
-			<mat-option *ngFor="let type of referralTypes" [value]="type.id">{{ type.name }}</mat-option>
+			<mat-option *ngFor="let type of (referralTypes | async)" [value]="type.id">{{ type.name }}</mat-option>
 		</mat-select>
 	</mat-form-field>
 </c-request-form-layout>
