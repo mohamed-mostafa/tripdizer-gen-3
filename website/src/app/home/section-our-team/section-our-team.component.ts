@@ -35,7 +35,7 @@ export class SectionOurTeamComponent {
 		this.options = {
 			center: true,
 			loop: true,
-			dots: false,
+			dots: true,
 			autoWidth: true,
 		};
 	}
