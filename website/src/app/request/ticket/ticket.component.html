@@ -132,14 +132,18 @@
 					</g>
 				</g>
 			</g>
-			<g transform="translate(1025 690)" display="none" class="ticket-links" font-size="16">
-				<a (click)="saveAsPDF()" xlink:href="javascript:void(0)">
+			<g transform="translate(1025 690)" class="ticket-links" font-size="16">
+				<a (click)="openPackage()" xlink:href="javascript:void(0)">
 					<text x="0" class="fill-blue fa">&#xf1c1;</text>
-					<text x="25" class="fill-blue">Save as PDF</text>
+					<text x="25" class="fill-blue">Open package</text>
 				</a>
-				<a (click)="shareWithFriends()" xlink:href="javascript:void(0)">
+				<a *ngIf="!isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
 					<text x="175" class="fill-blue fa">&#xf1e0;</text>
-					<text x="200" class="fill-blue">Share with friends</text>
+					<text x="200" class="fill-blue">Send by mail</text>
+				</a>
+				<a *ngIf="isSentByMail" xlink:href="javascript:void(0)">
+					<text x="175" class="fill-gray fa">&#xf1e0;</text>
+					<text x="200" class="fill-gray">Send by mail</text>
 				</a>
 			</g>
 		</g>
@@ -155,6 +159,11 @@
 		<style>
 			.svg-fa {
 				font-family: FontAwesome;
+			}
+
+			.fill-gray {
+				fill: #cccccc;
+				cursor: default;
 			}
 
 			.fill-blue {

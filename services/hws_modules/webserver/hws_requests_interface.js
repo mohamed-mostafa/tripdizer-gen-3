@@ -392,6 +392,31 @@ var getPackage = function(req, res) {
 	}
 };
 
+var sendPackageByMail = function(req, res) {
+	try {
+		var requestId = req.body.requestId;
+		// call the business function and give it a callback function
+		requestsBusiness.sendPackageByMail(
+			requestId,
+			function(response) {
+				res.send(response);
+			},
+			function(error) {
+				console.log(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.log('An error occured in /request');
+		console.log(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 var validatePromoCode = function(req, res) {
 	try {
 		var promoCode = req.query.promoCode;
@@ -434,4 +459,5 @@ exports.budgetCalculation = budgetCalculation;
 exports.recommendation = recommendation;
 exports.toggleOptions = toggleOptions;
 exports.getPackage = getPackage;
+exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;

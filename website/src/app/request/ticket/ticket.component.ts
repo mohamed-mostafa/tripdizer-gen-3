@@ -17,6 +17,7 @@ export class TicketComponent {
 	currentStepPath: string;
 	ticket: Ticket;
 	invalidForSVG = false;
+	isSentByMail = false;
 
 	constructor(route: ActivatedRoute, router: Router, private requestService: RequestService) {
 		this.currentStepPath = route.routeConfig.path;
@@ -41,12 +42,13 @@ export class TicketComponent {
 		);
 	}
 
-	saveAsPDF() {
-		console.log(this.serializeSVG('v-ticket'));
+	openPackage() {
+		window.open(this.ticket.packageUrl, '_blank');
 	}
 
-	shareWithFriends() {
-		console.log(this.serializeSVG('v-ticket'));
+	sendByMail() {
+		this.isSentByMail = true;
+		this.requestService.sendPackageByMail();
 	}
 
 	calculate = (val1, sign?: string, val2?: number) => {

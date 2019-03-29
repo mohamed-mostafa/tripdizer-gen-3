@@ -127,7 +127,7 @@ var notifyCustomer = function(to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
-	emailBody += "<p style='font-weight: bold;'>Dear {customerName}</p>";
+	emailBody += "<p style='font-weight: bold;'>Dear {customerName},</p>";
 	emailBody +=
 		'<p>Thank you for submitting your travel request at Tripdizer. One of our agents will contact you as soon as possible.</p>';
 	emailBody += "<p style='font-weight: bolder;'>Regards,</p>";
@@ -727,6 +727,49 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 	);
 };
 
+var sendPackageByMail = function(requestId, onSuccess, onFailure) {
+	requestsDao.getRequestById(
+		requestId,
+		function(request) {
+			// prepare email body
+			var emailBody = '';
+			emailBody += '<html>';
+			emailBody += "<p style='font-weight: bold;'>Dear {customerName},</p>";
+			emailBody += '<p>Thank you for using Tripdizer,</p>';
+			emailBody +=
+				'<p>Please click on the <a href="{packageUrl0}">link</a> to get redirected to your primary package.</p>';
+			emailBody += 'Package link: <a href="{packageUrl1}">{packageUrl2}</a>';
+			emailBody +=
+				'<p>Please note that this is just a primarily package, one of our representatives will get in with you touch within 48 hours after submitting your request.</p>';
+			emailBody += "<p style='font-weight: bolder;'>Regards,</p>";
+			emailBody += "<p style='font-weight: bold;'>Tripdizer Booking Team</p>";
+			emailBody +=
+				"<p style='font-weight: italic; font-size: 8px; color: red;'>Important! Please don't reply to this email</p>";
+			emailBody += '</html>';
+
+			emailBody = emailBody.replace('{requestId}', request.id);
+			emailBody = emailBody.replace('{customerName}', request.traveler.name);
+			emailBody = emailBody.replace('{packageUrl0}', request.pdfUrl);
+			emailBody = emailBody.replace('{packageUrl1}', request.pdfUrl);
+			emailBody = emailBody.replace('{packageUrl2}', request.pdfUrl);
+
+			// notify creation
+			emailBusiness.sendEmail(
+				request.traveler.emailAddress,
+				'Tripdizer Notifications <do-not-reply@tripdizer.com>',
+				'Primary itinerary',
+				emailBody
+			);
+			onSuccess({ success: true });
+		},
+		function(err) {
+			console.log('An error occured while getting request package');
+			console.log(err);
+			onFailure({ ...err, success: false });
+		}
+	);
+};
+
 function currencyFormat(value) {
 	var r = new RegExp(
 		(1)
@@ -775,4 +818,5 @@ exports.budgetCalculation = budgetCalculation;
 exports.sendDailyReportOfRequestsCount = sendDailyReportOfRequestsCount;
 exports.toggleOptions = requestsDao.toggleOptions;
 exports.getPackage = getPackage;
+exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;

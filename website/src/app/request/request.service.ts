@@ -47,6 +47,7 @@ export class RequestService {
 	isLoading = new Subject<boolean>();
 	requestDataChanged = new Subject<{ key: string; value: any; request: Request }>();
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
+	lastRequestId: number;
 	isDevelopment = !environment.production;
 
 	constructor(
@@ -401,6 +402,7 @@ export class RequestService {
 			return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
+					this.lastRequestId = ticket.id;
 					gtag('event', 'Submit Request', {
 						event_category: 'Submit Request',
 						event_label: 'RequestId: ' + ticket.id,
@@ -422,5 +424,13 @@ export class RequestService {
 			);
 		}
 		return of(null).pipe(finalize(() => this.isLoading.next(false)));
+	}
+
+	sendPackageByMail(): void {
+		this.isLoading.next(true);
+		this.http
+			.post<Boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
+			.pipe(finalize(() => this.isLoading.next(false)))
+			.subscribe(() => {});
 	}
 }

@@ -55,13 +55,14 @@ var start = function() {
 	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
 	app.post('/request/budgetcalc', requestsInterface.budgetCalculation);
 	app.post('/request/recommendation', requestsInterface.recommendation);
+	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
+	app.post('/request/send-package', requestsInterface.sendPackageByMail);
 
 	// 		set status
 	app.post('/request/status/placed', auth.isAuthenticated, requestsInterface.markRequestPlaced);
 	app.post('/request/status/beingprepared', auth.isAuthenticated, requestsInterface.markRequestBeingPrepared);
 	app.post('/request/status/delivered', auth.isAuthenticated, requestsInterface.markRequestDelivered);
 	app.put('/request/toggleoptions', auth.isAuthenticated, requestsInterface.toggleOptions);
-	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 
 	//		users
 	app.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
