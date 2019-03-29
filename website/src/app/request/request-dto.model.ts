@@ -57,5 +57,5 @@ export class RequestRequest {
 
 export class RequestResponse extends RequestRequest {
 	id: number;
-	packageUri: string;
+	packageUrl: string;
 }

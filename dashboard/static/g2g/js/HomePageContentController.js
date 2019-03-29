@@ -508,8 +508,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					if (request.returnDate) request.returnDate = new Date(request.returnDate);
 					for (let i = 0; i < request.mailsHistory.length; i++)
 						request.mailsHistory[i].date = new Date(request.mailsHistory[i].date);
-					if (request.packageId)
-						request.generatedFile = 'https://docs.google.com/document/d/' + request.packageId + '/edit';
+					if (request.docUrl) request.generatedFile = request.docUrl;
 					$scope.currentOrder = request;
 				})
 				.error(function(err) {

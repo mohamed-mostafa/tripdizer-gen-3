@@ -198,7 +198,8 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								packageSent: rows[i].Package_Sent,
 								referralType: rows[i].Referral_Type,
 								travelHistory: rows[i].Travel_History,
-								packageId: rows[i].Package_Id,
+								docUrl: rows[i].Doc_Url,
+								pdfUrl: rows[i].Pdf_Url,
 								interests: [],
 							};
 							var interest = {
@@ -350,7 +351,8 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								referralType: rows[0].Referral_Type,
 								travelHistory: rows[0].Travel_History,
 								promoCode: rows[0].Promo_Code,
-								packageId: rows[0].Package_Id,
+								docUrl: rows[0].Doc_Url,
+								pdfUrl: rows[0].Pdf_Url,
 								interests: [],
 								mailsHistory: [],
 							};
@@ -519,7 +521,7 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPackageId = function(requestId, packageId, onSuccess, onFailure) {
+var modifyRequestPackageInfo = function(requestId, docUrl, pdfUrl, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -530,8 +532,8 @@ var modifyRequestPackageId = function(requestId, packageId, onSuccess, onFailure
 		} else {
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Package_Id` = ? WHERE `Id` = ?',
-				[packageId, requestId],
+				'UPDATE `traveler_request` SET `Doc_Url` = ?, `Pdf_Url` = ? WHERE `Id` = ?',
+				[docUrl, pdfUrl, requestId],
 				function(err) {
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();
@@ -788,5 +790,5 @@ exports.getRequestById = getRequestById;
 exports.addNewMailHistory = addNewMailHistory;
 exports.getRequestCounts = getRequestCounts;
 exports.toggleOptions = toggleOptions;
-exports.modifyRequestPackageId = modifyRequestPackageId;
+exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
