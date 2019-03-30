@@ -198,8 +198,11 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								packageSent: rows[i].Package_Sent,
 								referralType: rows[i].Referral_Type,
 								travelHistory: rows[i].Travel_History,
-								docUrl: rows[i].Doc_Url,
-								pdfUrl: rows[i].Pdf_Url,
+								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Doc_Id}`,
+								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Pdf_Id}`,
+								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
+									rows[i].Pdf_Id
+								}&export=download`,
 								interests: [],
 							};
 							var interest = {
@@ -351,8 +354,11 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								referralType: rows[0].Referral_Type,
 								travelHistory: rows[0].Travel_History,
 								promoCode: rows[0].Promo_Code,
-								docUrl: rows[0].Doc_Url,
-								pdfUrl: rows[0].Pdf_Url,
+								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
+								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
+								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
+									rows[0].Pdf_Id
+								}&export=download`,
 								interests: [],
 								mailsHistory: [],
 							};
@@ -521,7 +527,7 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPackageInfo = function(requestId, docUrl, pdfUrl, onSuccess, onFailure) {
+var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -532,8 +538,8 @@ var modifyRequestPackageInfo = function(requestId, docUrl, pdfUrl, onSuccess, on
 		} else {
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Doc_Url` = ?, `Pdf_Url` = ? WHERE `Id` = ?',
-				[docUrl, pdfUrl, requestId],
+				'UPDATE `traveler_request` SET `Doc_Id` = ?, `Pdf_Id` = ? WHERE `Id` = ?',
+				[docId, pdfId, requestId],
 				function(err) {
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();

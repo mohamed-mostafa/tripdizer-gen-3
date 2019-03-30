@@ -61,14 +61,11 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		function(request) {
 			// create the request
 
-			getPackage(
-				request.id,
-				function(data) {
-					request.packageUrl = data.pdfUrl;
-					onSuccess(request);
-				},
-				onFailure
-			);
+			getPackage(request.id, function(data) {
+				request.packageUrl = data.pdfUrl;
+				request.packageDownloadUrl = data.pdfDownloadUrl;
+				onSuccess(request);
+			});
 
 			if (request.traveler.name === 'Essawy') {
 				requestsDao.modifyRequestStatusById(request.id, 11, () => {}, () => {});
@@ -672,40 +669,31 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 									})),
 							},
 						};
-						httpRequest.post(
-							{
-								url:
-									'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
-								form: JSON.stringify(request),
-								followAllRedirects: true,
-								headers: {
-									'Content-Type': 'text/plain',
-								},
-							},
-							function(error, response, body) {
-								const package = JSON.parse(body);
-								if (response.statusCode === 200 && package && isUrl(package.docUrl)) {
-									requestsDao.modifyRequestPackageInfo(
-										request.id,
-										package.docUrl,
-										package.pdfUrl,
-										() => {
-											onSuccess(package);
-										},
-										() => {
-											onSuccess(package);
-										}
-									);
-								} else {
-									const errorBody = package.match(/<body(?:.*?)>([^<].*?)<\/.*>/);
-									if (errorBody[1]) {
-										console.log('An error occured while getting request package: ' + errorBody[1]);
-										onFailure('An error occured while getting request package: ' + errorBody[1]);
-									} else {
-										console.log('An error occured while getting request package: ' + error);
-										onFailure('An error occured while getting request package: ' + error);
+						packageHttp(
+							'post',
+							'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+							JSON.stringify(request),
+							function(doc) {
+								packageHttp(
+									'get',
+									`https://script.google.com/macros/s/AKfycbz2AJVaYZ6y_8uLuljHohJTV_YcqWLEAT39H-5ZYcvhW45jBbU/exec?docId=${
+										doc.docId
+									}`,
+									null,
+									function(package) {
+										requestsDao.modifyRequestPackageInfo(
+											request.id,
+											package.docId,
+											package.pdfId,
+											() => {
+												onSuccess(package);
+											},
+											() => {
+												onSuccess(package);
+											}
+										);
 									}
-								}
+								);
 							}
 						);
 					},
@@ -802,6 +790,34 @@ function isUrl(str) {
 	const regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 	if (regexp.test(str)) return true;
 	else return false;
+}
+
+function packageHttp(method, url, data = {}, onSuccess) {
+	httpRequest[method](
+		{
+			url: url,
+			form: data,
+			followAllRedirects: true,
+			headers: {
+				'Content-Type': 'text/plain',
+			},
+		},
+		function(error, response, body) {
+			if (error) return;
+			const package = JSON.parse(body);
+			if (response.statusCode === 200) {
+				onSuccess(package);
+			} else {
+				console.log('packageHttp');
+				const errorBody = package.match(/<body(?:.*?)>([^<].*?)<\/.*>/);
+				if (errorBody[1]) {
+					console.log('An error occured while getting request package: ' + errorBody[1]);
+				} else {
+					console.log('An error occured while getting request package: ' + error);
+				}
+			}
+		}
+	);
 }
 
 exports.placeRequest = placeRequest;
