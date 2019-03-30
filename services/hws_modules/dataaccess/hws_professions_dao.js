@@ -14,7 +14,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM professions WHERE id = ?', [id], function(err, rows) {
+			connection.query('SELECT * FROM Professions WHERE id = ?', [id], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
@@ -73,7 +73,7 @@ var create = function(profession, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO professions (EN_Name, AR_Name) values (?, ?)',
+						'INSERT INTO Professions (EN_Name, AR_Name) values (?, ?)',
 						[profession.enName, profession.arName],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -125,7 +125,7 @@ var update = function(profession, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE professions SET EN_Name = ?, AR_Name = ? WHERE Id = ?',
+						'UPDATE Professions SET EN_Name = ?, AR_Name = ? WHERE Id = ?',
 						[profession.enName, profession.arName, profession.id],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -163,7 +163,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM professions ORDER BY Id DESC', [], function(err, rows) {
+			connection.query('SELECT * FROM Professions ORDER BY Id DESC', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
