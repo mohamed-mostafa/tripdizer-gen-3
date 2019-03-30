@@ -725,8 +725,7 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 			emailBody += "<p style='font-weight: bold;'>Dear {customerName},</p>";
 			emailBody += '<p>Thank you for using Tripdizer,</p>';
 			emailBody +=
-				'<p>Please click on the <a href="{packageUrl0}">link</a> to get redirected to your primary package.</p>';
-			emailBody += 'Package link: <a href="{packageUrl1}">{packageUrl2}</a>';
+				'<p>Please click on the <a href="{packageUrl}">link</a> to get redirected to your primary package.</p>';
 			emailBody +=
 				'<p>Please note that this is just a primarily package, one of our representatives will get in with you touch within 48 hours after submitting your request.</p>';
 			emailBody += "<p style='font-weight: bolder;'>Regards,</p>";
@@ -737,18 +736,19 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 
 			emailBody = emailBody.replace('{requestId}', request.id);
 			emailBody = emailBody.replace('{customerName}', request.traveler.name);
-			emailBody = emailBody.replace('{packageUrl0}', request.pdfUrl);
-			emailBody = emailBody.replace('{packageUrl1}', request.pdfUrl);
-			emailBody = emailBody.replace('{packageUrl2}', request.pdfUrl);
+			emailBody = emailBody.replace('{packageUrl}', request.pdfUrl);
 
-			// notify creation
-			emailBusiness.sendEmail(
-				request.traveler.emailAddress,
-				'Tripdizer Notifications <do-not-reply@tripdizer.com>',
-				'Primary itinerary',
-				emailBody
-			);
-			onSuccess({ success: true });
+			httpRequest(request.PdfDownloadUrl, function(error, response, body) {
+				// notify creation
+				emailBusiness.sendEmail(
+					request.traveler.emailAddress,
+					'Tripdizer Notifications <do-not-reply@tripdizer.com>',
+					'Primary itinerary',
+					emailBody,
+					!error && response.statusCode == 200 ? [body] : null
+				);
+				onSuccess({ success: true });
+			});
 		},
 		function(err) {
 			console.log('An error occured while getting request package');

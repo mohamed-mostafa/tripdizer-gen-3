@@ -42,7 +42,11 @@ export class TicketComponent {
 		);
 	}
 
-	openPackage() {
+	downloadPackage() {
+		window.open(this.ticket.packageDownloadUrl, '_self');
+	}
+
+	viewPackage() {
 		window.open(this.ticket.packageUrl, '_blank');
 	}
 
