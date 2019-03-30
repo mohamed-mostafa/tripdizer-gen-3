@@ -178,6 +178,12 @@
 					"ticket_id": "-15",
 					"icon": "translate(-150 80)",
 					"description": "translate(120 295)"
+				},
+				"actions": {
+					"position": "translate(395 755)",
+					"view_package": { "icon": 0, "button": -15 },
+					"download_package": { "icon": -85, "button": -100 },
+					"send_package": { "icon": -170, "button": -185 }
 				}
 			},
 			"lg_text": {
