@@ -676,7 +676,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							function(doc) {
 								packageHttp(
 									'get',
-									`https://script.google.com/macros/s/AKfycbz2AJVaYZ6y_8uLuljHohJTV_YcqWLEAT39H-5ZYcvhW45jBbU/exec?docId=${
+									`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
 										doc.docId
 									}`,
 									null,
