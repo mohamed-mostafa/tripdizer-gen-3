@@ -199,7 +199,13 @@
 			},
 			"view_package": "View package",
 			"download_package": "Download package",
-			"send_package": "Send to mail"
+			"send_package": "Send to mail",
+			"dialog": {
+				"description": "Package has been sent",
+				"buttonsLabel": {
+					"cancel": "OK"
+				}
+			}
 		},
 		"travel_assistance": {
 			"visa_assistance": "I need assistance with getting the visas",

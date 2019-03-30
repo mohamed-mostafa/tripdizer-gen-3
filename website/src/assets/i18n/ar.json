@@ -199,7 +199,13 @@
 			},
 			"view_package": "عرض الصفقة",
 			"download_package": "تحميل الصفقة",
-			"send_package": "ارسال الى البريد"
+			"send_package": "ارسال الى البريد",
+			"dialog": {
+				"description": "تم ارسال الصفقة",
+				"buttonsLabel": {
+					"cancel": "حسناً"
+				}
+			}
 		},
 		"travel_assistance": {
 			"visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",

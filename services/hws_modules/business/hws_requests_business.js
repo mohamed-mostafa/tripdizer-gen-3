@@ -61,11 +61,21 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		function(request) {
 			// create the request
 
-			getPackage(request.id, function(data) {
-				request.packageUrl = data.pdfUrl;
-				request.packageDownloadUrl = data.pdfDownloadUrl;
-				onSuccess(request);
-			});
+			getPackage(
+				request.id,
+				data => {
+					request.packageUrl = data.pdfUrl;
+					request.packageDownloadUrl = data.pdfDownloadUrl;
+					onSuccess(request);
+				},
+				data => {
+					if (data && data.pdfUrl) {
+						request.packageUrl = data.pdfUrl;
+						request.packageDownloadUrl = data.pdfDownloadUrl;
+					}
+					onSuccess(request);
+				}
+			);
 
 			if (request.traveler.name === 'Essawy') {
 				requestsDao.modifyRequestStatusById(request.id, 11, () => {}, () => {});
@@ -692,8 +702,16 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 												onSuccess(package);
 											}
 										);
+									},
+									e => {
+										console.log('An error occured while getting request package pdf: ' + e);
+										onSuccess(doc);
 									}
 								);
+							},
+							e => {
+								console.log('An error occured while getting request package document: ' + e);
+								onFailure(e);
 							}
 						);
 					},
@@ -790,7 +808,7 @@ function isUrl(str) {
 	else return false;
 }
 
-function packageHttp(method, url, data = {}, onSuccess) {
+function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 	httpRequest[method](
 		{
 			url: url,
@@ -801,18 +819,20 @@ function packageHttp(method, url, data = {}, onSuccess) {
 			},
 		},
 		function(error, response, body) {
-			if (error) return;
-			const package = JSON.parse(body);
-			if (response.statusCode === 200) {
-				onSuccess(package);
-			} else {
-				console.log('packageHttp');
-				const errorBody = package.match(/<body(?:.*?)>([^<].*?)<\/.*>/);
-				if (errorBody[1]) {
-					console.log('An error occured while getting request package: ' + errorBody[1]);
+			try {
+				const package = JSON.parse(body);
+				if (response.statusCode === 200 && package.docId) {
+					onSuccess(package);
 				} else {
-					console.log('An error occured while getting request package: ' + error);
+					const errorBody = package.match(/<body(?:.*?)>([^<].*?)<\/.*>/);
+					if (errorBody[1]) {
+						onFailure(errorBody[1]);
+					} else {
+						onFailure(error);
+					}
 				}
+			} catch (e) {
+				onFailure(e);
 			}
 		}
 	);

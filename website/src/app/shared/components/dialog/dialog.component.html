@@ -1,8 +1,8 @@
 <span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
-	<h1 mat-dialog-title>{{ data.title }}</h1>
+	<h1 *ngIf="data.title" mat-dialog-title>{{ data.title }}</h1>
 	<div mat-dialog-content>
 		<p *ngIf="data.description">{{ data.description }}</p>
-		<form [formGroup]="formGroup" class="mb-3">
+		<form *ngIf="data.inputs" [formGroup]="formGroup" class="mb-3">
 			<mat-form-field *ngFor="let input of data.inputs" class="w-100 my-2">
 				<mat-hint>{{ formGroup.controls[input.id].errors | errorMessage }}</mat-hint>
 				<mat-error>{{ formGroup.controls[input.id].errors | errorMessage }}</mat-error>
@@ -18,11 +18,17 @@
 		</form>
 	</div>
 	<div mat-dialog-actions class="d-block text-center">
-		<button mat-button (click)="onCancel()" class="btn custom-bs btn-rounded btn-dark-light mx-2">
+		<button
+			mat-button
+			*ngIf="data.buttonsLabel?.cancel"
+			(click)="onCancel()"
+			class="btn custom-bs btn-rounded btn-dark-light mx-2"
+		>
 			{{ data.buttonsLabel.cancel }}
 		</button>
 		<button
 			mat-button
+			*ngIf="data.buttonsLabel?.ok"
 			(click)="onOK()"
 			[disabled]="formGroup.invalid"
 			class="btn custom-bs btn-rounded btn-primary mx-2"
