@@ -132,22 +132,46 @@
 					</g>
 				</g>
 			</g>
-			<g transform="translate(850 690)" class="ticket-links" font-size="16">
-				<a *ngIf="ticket?.packageUrl" (click)="viewPackage()" xlink:href="javascript:void(0)">
-					<text x="0" class="fill-blue fa">&#xf1c1;</text>
-					<text x="25" class="fill-blue">View package</text>
+			<g [attr.transform]="'request.ticket.lg_sizes.actions.position' | translate" class="ticket-links" font-size="16">
+				<a (click)="viewPackage()" xlink:href="javascript:void(0)">
+					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.icon' | translate" class="fill-blue fa">
+						&#xf1c1;
+					</text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.view_package.button' | translate"
+						class="fill-blue"
+						[innerHTML]="'request.ticket.view_package' | translate"
+					></text>
 				</a>
-				<a *ngIf="ticket?.packageDownloadUrl" (click)="downloadPackage()" xlink:href="javascript:void(0)">
-					<text x="170" class="fill-blue fa">&#xf1c1;</text>
-					<text x="195" class="fill-blue">Download package</text>
+				<a (click)="downloadPackage()" xlink:href="javascript:void(0)">
+					<text [attr.x]="'request.ticket.lg_sizes.actions.download_package.icon' | translate" class="fill-blue fa">
+						&#xf1c1;
+					</text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.download_package.button' | translate"
+						class="fill-blue"
+						[innerHTML]="'request.ticket.download_package' | translate"
+					></text>
 				</a>
-				<a *ngIf="ticket && !isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
-					<text x="375" class="fill-blue fa">&#xf1e0;</text>
-					<text x="400" class="fill-blue">Send by mail</text>
+				<a (click)="sendByMail()" xlink:href="javascript:void(0)">
+					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate" class="fill-blue fa">
+						&#xf1e0;
+					</text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate"
+						class="fill-blue"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 				<a *ngIf="ticket && isSentByMail" xlink:href="javascript:void(0)">
-					<text x="375" class="fill-gray fa">&#xf1e0;</text>
-					<text x="400" class="fill-gray">Send by mail</text>
+					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate" class="fill-blue fa">
+						&#xf1e0;
+					</text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate"
+						class="fill-blue"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 			</g>
 		</g>

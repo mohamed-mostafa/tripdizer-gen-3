@@ -159,6 +159,12 @@
 						"from": "20",
 						"to": "420"
 					}
+				},
+				"actions": {
+					"position": "translate(850 690)",
+					"view_package": { "icon": 0, "button": 25 },
+					"download_package": { "icon": 170, "button": 195 },
+					"send_package": { "icon": 375, "button": 400 }
 				}
 			},
 			"sm_sizes": {
@@ -184,7 +190,10 @@
 				"line2": "unless he has the courage to",
 				"line3": "lose sight of the shore.",
 				"line4": "– Andre Gide."
-			}
+			},
+			"view_package": "View package",
+			"download_package": "Download package",
+			"send_package": "Send to mail"
 		},
 		"travel_assistance": {
 			"visa_assistance": "I need assistance with getting the visas",

@@ -159,6 +159,12 @@
 						"from": "-20",
 						"to": "-420"
 					}
+				},
+				"actions": {
+					"position": "translate(325 690)",
+					"view_package": { "icon": 290, "button": 265 },
+					"download_package": { "icon": 155, "button": 130 },
+					"send_package": { "icon": 25, "button": 0 }
 				}
 			},
 			"sm_sizes": {
@@ -184,7 +190,10 @@
 				"line2": "ما لم يكن عندة الشجاعة الكافية",
 				"line3": "لغياب الشاطئ عن نظره",
 				"line4": "- اندريا جيد"
-			}
+			},
+			"view_package": "عرض الصفقة",
+			"download_package": "تحميل الصفقة",
+			"send_package": "ارسال الى البريد"
 		},
 		"travel_assistance": {
 			"visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",
