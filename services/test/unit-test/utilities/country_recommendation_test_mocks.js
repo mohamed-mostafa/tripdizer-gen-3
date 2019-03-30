@@ -1,6 +1,7 @@
 var itirnaryDaoMock = {
 	getById: function(requestId, language, onSuccess, onFailure) {
 		var itinerary = {
+			cities: [],
 			ferries: [{ MAY: 300 }],
 			flights: [{ aMAY: 7000, iMAY: 1000, kMAY: 5000 }],
 			hotels: [{ budget_category_id: 2, MAY: 100 }],
@@ -12,6 +13,7 @@ var itirnaryDaoMock = {
 			id: 1,
 			en_name: 'BALI',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 2 }, // shoulder season
 				{ start: '04-01-2018', end: '09-30-2018', type: 0 }, // high season
@@ -44,6 +46,7 @@ var itirnaryDaoMock = {
 			id: 2,
 			en_name: 'EGYPT',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 0 }, // high season
 				{ start: '04-01-2018', end: '09-30-2018', type: 2 }, // shoulder season
@@ -76,6 +79,7 @@ var itirnaryDaoMock = {
 			id: 5,
 			en_name: 'NIPAL',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 0 }, // high season
 				{ start: '04-01-2018', end: '09-30-2018', type: 2 }, // shoulder season
@@ -108,6 +112,7 @@ var itirnaryDaoMock = {
 			id: 3,
 			en_name: 'DUBAI',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 0 }, // high season
 				{ start: '04-01-2018', end: '09-30-2018', type: 2 }, // shoulder season
@@ -140,6 +145,7 @@ var itirnaryDaoMock = {
 			id: 4,
 			en_name: 'PARIS',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 2 }, // shoulder season
 				{ start: '04-01-2018', end: '09-30-2018', type: 0 }, // high season
@@ -172,6 +178,7 @@ var itirnaryDaoMock = {
 			id: 6,
 			en_name: 'BANGKOK',
 			needsVisa: false,
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 2 }, // shoulder season
 				{ start: '04-01-2018', end: '09-30-2018', type: 0 }, // high season
@@ -204,6 +211,8 @@ var itirnaryDaoMock = {
 			id: 7,
 			en_name: 'KUALALUMPUR',
 			needsVisa: false,
+			cities: [],
+			cities: [],
 			seasons: [
 				{ start: '01-01-2018', end: '03-31-2018', type: 2 }, // shoulder season
 				{ start: '04-01-2018', end: '09-30-2018', type: 0 }, // high season
