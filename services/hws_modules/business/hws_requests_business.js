@@ -738,17 +738,15 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 			emailBody = emailBody.replace('{customerName}', request.traveler.name);
 			emailBody = emailBody.replace('{packageUrl}', request.pdfUrl);
 
-			httpRequest(request.PdfDownloadUrl, function(error, response, body) {
-				// notify creation
-				emailBusiness.sendEmail(
-					request.traveler.emailAddress,
-					'Tripdizer Notifications <do-not-reply@tripdizer.com>',
-					'Primary itinerary',
-					emailBody,
-					!error && response.statusCode == 200 ? [body] : null
-				);
-				onSuccess({ success: true });
-			});
+			// notify creation
+			emailBusiness.sendEmail(
+				request.traveler.emailAddress,
+				'Tripdizer Notifications <do-not-reply@tripdizer.com>',
+				'Primary itinerary',
+				emailBody,
+				[request.PdfDownloadUrl]
+			);
+			onSuccess({ success: true });
 		},
 		function(err) {
 			console.log('An error occured while getting request package');

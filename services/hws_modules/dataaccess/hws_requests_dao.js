@@ -616,7 +616,7 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 				} else {
 					var attachmentFileNames = [];
 					object.attachments.forEach(function(attachment) {
-						attachmentFileNames.push(attachment.filename);
+						attachmentFileNames.push(attachment.filename || attachment);
 					});
 					connection.query(
 						'INSERT INTO traveler_mail_history (Email, Subject, Attachments) values (?, ?, ?)',
