@@ -58,14 +58,6 @@ export class TicketComponent {
 		);
 	}
 
-	downloadPackage() {
-		window.open(this.ticket.packageDownloadUrl, '_self');
-	}
-
-	viewPackage() {
-		window.open(this.ticket.packageUrl, '_blank');
-	}
-
 	sendByMail() {
 		this.isSentByMail = true;
 		this.requestService.sendPackageByMail();
