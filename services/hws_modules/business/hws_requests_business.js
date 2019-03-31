@@ -656,6 +656,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 								introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',
 								includes: itinerary.includes ? itinerary.includes : '',
 								excludes: itinerary.excludes ? itinerary.excludes : '',
+								visaRequirements: itinerary.visaRequirements ? itinerary.visaRequirements : '',
 								image1:
 									itinerary.image1 && (await isValidImage(itinerary.image1))
 										? itinerary.image1
