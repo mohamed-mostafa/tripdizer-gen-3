@@ -596,7 +596,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 			const departureDate = new Date(request.departureDate);
 			const returnDate = new Date(request.returnDate);
 			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
-			if (request.itineraryId) {
+			if (request.itineraryId && request.itineraryId !== -1) {
 				itinerariesDao.getById(
 					request.itineraryId,
 					null,
