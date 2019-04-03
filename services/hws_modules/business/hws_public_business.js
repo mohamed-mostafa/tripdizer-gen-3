@@ -8,3 +8,4 @@ var dao = require('../dataaccess/hws_public_dao.js');
 exports.create = dao.create;
 exports.update = dao.update;
 exports.getVideos = dao.getVideos;
+exports.savePhoneNumber = dao.savePhoneNumber;

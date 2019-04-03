@@ -1,0 +1,13 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class HomeService {
+	private endPoint = 'public';
+
+	constructor(private http: HttpClient) {}
+
+	savePhoneNumber(phoneNumber: number): void {
+		this.http.post<void>(`${this.endPoint}/save-phone-number`, { phoneNumber }).subscribe(() => {});
+	}
+}

@@ -150,6 +150,9 @@ var start = function() {
 	app.post('/public/video', auth.isAuthenticated, publicInterface.create);
 	app.put('/public/video', auth.isAuthenticated, publicInterface.update);
 
+	// Website
+	app.post('/public/save-phone-number', publicInterface.savePhoneNumber);
+
 	// routing - end
 
 	var port = process.env.PORT || 8080;

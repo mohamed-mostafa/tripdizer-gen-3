@@ -149,6 +149,47 @@ var update = function(video, onSuccess, onFailure) {
 	});
 };
 
+var savePhoneNumber = function(phoneNumber) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection');
+			console.log(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the video and his addresses
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log('An error occurred while trying to begin a database transaction');
+					console.log(err);
+					onFailure(err);
+				} else {
+					connection.query('INSERT INTO Phones (Phone_Number) values (?)', [phoneNumber], function(err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							// end the connection
+							connection.end();
+							console.log('An error occurred while trying to create the new phone number: ' + phoneNumber);
+							console.log(err);
+						} else {
+							// end the connection
+							connection.commit();
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
+exports.savePhoneNumber = savePhoneNumber;

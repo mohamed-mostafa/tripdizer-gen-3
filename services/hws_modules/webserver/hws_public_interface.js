@@ -75,6 +75,23 @@ var update = function(req, res) {
 	}
 };
 
+var savePhoneNumber = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		var phoneNumber = req.body.phoneNumber;
+		business.savePhoneNumber(phoneNumber, function() {
+			res.end();
+		});
+	} catch (error) {
+		console.log('An error occurred in /save-phone-number');
+		console.log(error);
+		res
+			.status(500)
+			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
+exports.savePhoneNumber = savePhoneNumber;

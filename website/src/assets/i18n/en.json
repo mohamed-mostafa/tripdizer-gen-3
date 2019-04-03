@@ -52,6 +52,17 @@
 				"label": "Hassle-free",
 				"description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
 			}
+		},
+		"dialog": {
+			"title": "Need help?",
+			"description": "Leave your phone number and one of our agents will call you.",
+			"inputs": {
+				"input0": "Phone number"
+			},
+			"buttonsLabel": {
+				"ok": "Submit",
+				"cancel": "No, thanks"
+			}
 		}
 	},
 	"request": {
