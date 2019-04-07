@@ -6,6 +6,8 @@ import { DialogComponent } from '../shared/components/dialog/dialog.component';
 import { CustomValidators } from '../shared/utils';
 import { HomeService } from './home.service';
 
+declare const gtag: Function;
+
 @Component({
 	selector: 'c-home',
 	templateUrl: './home.component.html',
@@ -23,7 +25,8 @@ export class HomeComponent {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
 		setTimeout(() => {
 			this.openDialog();
-		}, 2000);
+
+		}, 5000);
 	}
 
 	openDialog(): void {
@@ -51,7 +54,24 @@ export class HomeComponent {
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
 				this.homeService.savePhoneNumber(inputs[0].value);
+				gtag('event', 'Submit Help Popup', {
+					event_category: 'Submit Help Popup',
+					event_label: 'PhoneNumber: ' + inputs[0].value,
+					value: inputs[0].value,
+				});
+			} else {
+				gtag('event', 'Cancel Help Popup', {
+					event_category: 'Cancel Help Popup',
+					event_label: 'N/A',
+					value: 'N/A',
+				});
 			}
+		});
+		
+		gtag('event', 'Display Help Popup', {
+			event_category: 'Display Help Popup',
+			event_label: 'N/A',
+			value: 'N/A',
 		});
 	}
 }

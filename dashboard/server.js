@@ -174,6 +174,17 @@ var start = () => {
 			user: req.user,
 		});
 	});
+
+	app.get('/admin/phones', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Phones',
+			controller: 'Phones',
+		};
+		res.render('pages/phones', {
+			user: req.user,
+		});
+	});
 	app.get('*', auth.isAuthenticated, auth.renderTo404);
 
 	// routes end

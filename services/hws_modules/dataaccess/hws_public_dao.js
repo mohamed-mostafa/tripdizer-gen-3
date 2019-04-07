@@ -189,7 +189,46 @@ var savePhoneNumber = function(phoneNumber) {
 	});
 };
 
+var getPhones = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection');
+			console.log(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query('SELECT * FROM Phones', [], function(err, rows) {
+				// if an error is thrown, end the connection and throw an error
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log('An error occurred while list all phones');
+					console.log(err);
+					onFailure(err);
+				} else {
+					// no error is thrown
+					var phones = [];
+					// populate the attributes
+					for (var i = 0; i < rows.length; i++) {
+						var phone = rows[i];
+						
+						phones.push(phone);
+					}
+					// end the connection
+					connection.end();
+					// call the callback function provided by the caller, and give it the response
+					onSuccess(phones);
+				}
+			});
+		}
+	});
+};
+
+
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
 exports.savePhoneNumber = savePhoneNumber;
+exports.getPhones = getPhones;

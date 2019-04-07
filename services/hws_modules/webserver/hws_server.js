@@ -152,6 +152,7 @@ var start = function() {
 
 	// Website
 	app.post('/public/save-phone-number', publicInterface.savePhoneNumber);
+	app.get('/public/phones', publicInterface.getPhones);
 
 	// routing - end
 

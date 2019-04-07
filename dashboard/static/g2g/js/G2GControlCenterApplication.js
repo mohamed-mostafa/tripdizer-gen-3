@@ -224,6 +224,23 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
+	.factory('PhonesService', [
+		'$rootScope',
+		'$http',
+		function PhonesService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/public/';
+
+			return {
+				getAll: getAll,
+			};
+
+			function getAll() {
+				return $http.get(prefix + 'phones', {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
 	.factory('GroupTripsService', [
 		'$rootScope',
 		'$http',

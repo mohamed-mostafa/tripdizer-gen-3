@@ -9,3 +9,4 @@ exports.create = dao.create;
 exports.update = dao.update;
 exports.getVideos = dao.getVideos;
 exports.savePhoneNumber = dao.savePhoneNumber;
+exports.getPhones = dao.getPhones;

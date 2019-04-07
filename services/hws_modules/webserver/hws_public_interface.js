@@ -91,7 +91,30 @@ var savePhoneNumber = function(req, res) {
 	}
 };
 
+var getPhones = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		business.getPhones(
+			function(phones) {
+				res.json(phones);
+			},
+			function(error) {
+				res
+					.status(500)
+					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.log('An error occured in /public/phones');
+		console.log(error);
+		res
+			.status(500)
+			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
 exports.savePhoneNumber = savePhoneNumber;
+exports.getPhones = getPhones;
