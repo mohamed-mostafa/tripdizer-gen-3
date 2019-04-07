@@ -149,7 +149,7 @@ var update = function(video, onSuccess, onFailure) {
 	});
 };
 
-var savePhoneNumber = function(phoneNumber) {
+var createPhone = function(phoneNumber) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -189,6 +189,53 @@ var savePhoneNumber = function(phoneNumber) {
 	});
 };
 
+//calls the onSuccess with a video object if successful
+//calls the onFailure with an err object in case of technical error
+var updatePhone = function(phone, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection');
+			console.log(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the video and his addresses
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log('An error occurred while trying to begin a database transaction');
+					console.log(err);
+					onFailure(err);
+				} else {
+					connection.query('UPDATE Phones SET Status = ? WHERE Id = ?', [phone.Status, phone.Id], function(
+						err,
+						result
+					) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							console.log('An error occurred while trying to update the existing phone: ' + phone.Phone_Number);
+							console.log(err);
+							connection.rollback(); // rollback the transaction
+							// end the connection
+							connection.end();
+							onFailure(err);
+						} else {
+							connection.commit();
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess(phone);
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
 var getPhones = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
@@ -213,7 +260,7 @@ var getPhones = function(onSuccess, onFailure) {
 					// populate the attributes
 					for (var i = 0; i < rows.length; i++) {
 						var phone = rows[i];
-						
+
 						phones.push(phone);
 					}
 					// end the connection
@@ -226,9 +273,9 @@ var getPhones = function(onSuccess, onFailure) {
 	});
 };
 
-
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
-exports.savePhoneNumber = savePhoneNumber;
 exports.getPhones = getPhones;
+exports.createPhone = createPhone;
+exports.updatePhone = updatePhone;

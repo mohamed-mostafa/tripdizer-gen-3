@@ -8,6 +8,6 @@ export class HomeService {
 	constructor(private http: HttpClient) {}
 
 	savePhoneNumber(phoneNumber: number): void {
-		this.http.post<void>(`${this.endPoint}/save-phone-number`, { phoneNumber }).subscribe(() => {});
+		this.http.post<void>(`${this.endPoint}/phone`, { phoneNumber }).subscribe(() => {});
 	}
 }

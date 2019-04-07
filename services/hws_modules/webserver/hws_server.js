@@ -151,8 +151,9 @@ var start = function() {
 	app.put('/public/video', auth.isAuthenticated, publicInterface.update);
 
 	// Website
-	app.post('/public/save-phone-number', publicInterface.savePhoneNumber);
 	app.get('/public/phones', publicInterface.getPhones);
+	app.post('/public/phone', publicInterface.createPhone);
+	app.put('/public/phone', publicInterface.updatePhone);
 
 	// routing - end
 

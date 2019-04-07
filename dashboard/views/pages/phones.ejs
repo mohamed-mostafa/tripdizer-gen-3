@@ -16,6 +16,7 @@
 						<th>ID</th>
 						<th>Phone</th>
 						<th>Date</th>
+						<th>Call Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -23,10 +24,11 @@
 						<td>{{ phone.Id }}</td>
 						<td>{{ phone.Phone_Number }}</td>
 						<td>{{ phone.Date | date: 'dd/MM/yyyy' }}</td>
-						
+						<td><textarea name="phone_status" id="phone_status" class="form-control" rows="2"
+								ng-model="phone.Status" ng-blur="savePhoneStatus(phone.Id)"></textarea></td>
 					</tr>
 				</tbody>
-				
+
 			</table>
 		</div>
 	</div>

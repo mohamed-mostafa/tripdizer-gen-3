@@ -14,5 +14,24 @@ g2gControlCenterApplication.controller('PhonesController', [
 			});
 		};
 		$scope.initialize();
+
+		$scope.savePhoneStatus = function(phoneId) {
+			$scope.saving = true;
+			for (let i = 0; i < $scope.phones.length; i++) {
+				if ($scope.phones[i].Id === phoneId) {
+					$http
+						.put($rootScope.serverURL + '/public/phone', { phone: $scope.phones[i] })
+						.success(function(response) {
+							$scope.saving = false;
+							$scope.phones[i] = response;
+						})
+						.error(function(err) {
+							$scope.saving = false;
+							$scope.serverError = true;
+							$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+						});
+				}
+			}
+		};
 	},
 ]);
