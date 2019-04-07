@@ -440,7 +440,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ? WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
