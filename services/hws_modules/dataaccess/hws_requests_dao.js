@@ -790,6 +790,52 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
+var getTravelerEmails = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection');
+			console.log(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the mail history
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.log('An error occurred while trying to begin a database transaction');
+					console.log(err);
+					onFailure(err);
+				} else {
+					connection.query(
+						'SET SESSION GROUP_CONCAT_MAX_LEN = 1000000000000000000;SELECT DISTINCT GROUP_CONCAT(`Traveler_Email_Address`) AS `emails` FROM `traveler_request`',
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								// end the connection
+								connection.end();
+								console.log('An error occurred while trying to get request counts by promo code');
+								console.log(err);
+								connection.rollback(); // rollback the transaction
+								onFailure(err);
+							} else {
+								// end the connection
+								connection.commit();
+								connection.end();
+								// call the callback function provided by the caller, and give it the response
+								onSuccess(result[1][0].emails);
+							}
+						}
+					);
+				}
+			});
+		}
+	});
+};
+
 exports.assignRequestToUser = assignRequestToUser;
 exports.updateRequest = updateRequest;
 exports.createNewRequest = createNewRequest;
@@ -802,3 +848,4 @@ exports.getRequestCounts = getRequestCounts;
 exports.toggleOptions = toggleOptions;
 exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
+exports.getTravelerEmails = getTravelerEmails;

@@ -57,6 +57,7 @@ var start = function() {
 	app.post('/request/recommendation', requestsInterface.recommendation);
 	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 	app.post('/request/send-package', requestsInterface.sendPackageByMail);
+	app.get('/request/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
 
 	// 		set status
 	app.post('/request/status/placed', auth.isAuthenticated, requestsInterface.markRequestPlaced);

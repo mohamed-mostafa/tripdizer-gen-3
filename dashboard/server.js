@@ -175,6 +175,17 @@ var start = () => {
 		});
 	});
 
+	app.get('/admin/emails', auth.isAuthenticatedAsAdmin, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Emails',
+			controller: 'Emails',
+		};
+		res.render('pages/emails', {
+			user: req.user,
+		});
+	});
+
 	app.get('/admin/phones', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,

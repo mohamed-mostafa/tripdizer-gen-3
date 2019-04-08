@@ -442,6 +442,29 @@ var validatePromoCode = function(req, res) {
 	}
 };
 
+var getTravelerEmails = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getTravelerEmails(
+			function(emails) {
+				res.send(emails);
+			},
+			function(error) {
+				console.log(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.log('An error occured in /request/emails');
+		console.log(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 exports.placeRequest = placeRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = assignRequestToUser;
@@ -461,3 +484,4 @@ exports.toggleOptions = toggleOptions;
 exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
+exports.getTravelerEmails = getTravelerEmails;

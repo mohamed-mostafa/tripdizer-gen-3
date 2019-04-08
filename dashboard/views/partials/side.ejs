@@ -1,33 +1,60 @@
- <!-- sidebar: style can be found in sidebar.less -->
+<!-- sidebar: style can be found in sidebar.less -->
 <section class="sidebar">
-  <!-- Sidebar user panel -->
-  <div class="user-panel">
-    <div class="pull-left image">
-      <img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
-    </div>
-    <div class="pull-left info">
-      <p><%= user.fullName %></p>
-      <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-    </div>
-  </div>
-  <!-- sidebar menu: : style can be found in sidebar.less -->
-  <ul class="sidebar-menu">
-    <li class="header">MAIN NAVIGATION</li>
-    <li><a href="home"><i class="fa fa-home text-info"></i> Home</a></li>
-    <%if (user.isAdmin) { %>
-      <li><a href="users"><i class="fa fa-user text-info"></i> Users</a></li>
-    <% } %>
-    <li><a href="partners"><i class="fa fa-users text-info"></i> Partners</a></li>    
-    <li><a href="countries"><i class="fa fa-globe text-info"></i> Countries</a></li>
-    <li><a href="cities"><i class="fa fa-globe text-info"></i> Cities</a></li>
-    <li><a href="itineraries"><i class="fa fa-plane text-info"></i> Itineraries</a></li>    
-    <li><a href="group-trips"><i class="fa fa-group text-info"></i> Group Trips</a></li>
-    <li><a href="videos"><i class="fa fa-youtube-play text-info"></i> Videos</a></li>
-    <%if (user.isAdmin) { %>
-      <li><a href="statuses"><i class="fa fa-align-left text-info"></i> Folders</a></li>
-    <% } %>
-    <li><a href="agents-notes"><i class="fa fa-align-left fa-comments"></i> Agents Notes</a></li>
-    <li><a href="phones"><i class="fa fa-align-left fa-phone"></i> Phones</a></li>
-  </ul>
+	<!-- Sidebar user panel -->
+	<div class="user-panel">
+		<div class="pull-left image">
+			<img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
+		</div>
+		<div class="pull-left info">
+			<p><%= user.fullName %></p>
+			<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+		</div>
+	</div>
+	<!-- sidebar menu: : style can be found in sidebar.less -->
+	<ul class="sidebar-menu">
+		<li class="header">MAIN NAVIGATION</li>
+		<li>
+			<a href="home"><i class="fa fa-home text-info"></i> Home</a>
+		</li>
+		<%if (user.isAdmin) { %>
+		<li>
+			<a href="users"><i class="fa fa-user text-info"></i> Users</a>
+		</li>
+		<% } %>
+		<li>
+			<a href="partners"><i class="fa fa-users text-info"></i> Partners</a>
+		</li>
+		<li>
+			<a href="countries"><i class="fa fa-globe text-info"></i> Countries</a>
+		</li>
+		<li>
+			<a href="cities"><i class="fa fa-globe text-info"></i> Cities</a>
+		</li>
+		<li>
+			<a href="itineraries"><i class="fa fa-plane text-info"></i> Itineraries</a>
+		</li>
+		<li>
+			<a href="group-trips"><i class="fa fa-group text-info"></i> Group Trips</a>
+		</li>
+		<li>
+			<a href="videos"><i class="fa fa-youtube-play text-info"></i> Videos</a>
+		</li>
+		<%if (user.isAdmin) { %>
+		<li>
+			<a href="statuses"><i class="fa fa-align-left text-info"></i> Folders</a>
+		</li>
+		<% } %>
+		<li>
+			<a href="agents-notes"><i class="fa fa-align-left fa-comments"></i> Agents Notes</a>
+		</li>
+		<%if (user.isAdmin) { %>
+		<li>
+			<a href="emails"><i class="fa fa-align-left text-info"></i> Emails</a>
+		</li>
+		<% } %>
+		<li>
+			<a href="phones"><i class="fa fa-align-left fa-phone"></i> Phones</a>
+		</li>
+	</ul>
 </section>
 <!-- /.sidebar -->
