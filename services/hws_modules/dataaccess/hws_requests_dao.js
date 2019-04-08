@@ -26,7 +26,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							request.date,
 							request.traveler.email,
@@ -57,6 +57,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.referralType,
 							request.travelHistory,
 							request.promoCode,
+							request.score,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -143,7 +144,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 			var offset = ((isNaN(page) ? 1 : page) - 1) * limit;
 			// execute the query
 			var query =
-				'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?) AND Archived = 0;SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) AND Archived = 0 ORDER BY Date DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY ti.Interest_Id';
+				'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?) AND Archived = 0;SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) AND Archived = 0 ORDER BY Score DESC, Date DESC, Id DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY tr.Score DESC, tr.Date DESC, tr.Id DESC, ti.Interest_Id';
 			connection.query(query, [statuses, statuses, offset, limit], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
@@ -198,6 +199,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								packageSent: rows[i].Package_Sent,
 								referralType: rows[i].Referral_Type,
 								travelHistory: rows[i].Travel_History,
+								score: rows[i].Score,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -354,6 +356,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								referralType: rows[0].Referral_Type,
 								travelHistory: rows[0].Travel_History,
 								promoCode: rows[0].Promo_Code,
+								score: rows[0].Score,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -440,7 +443,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ? WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
@@ -467,6 +470,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.reachable,
 					request.referralType,
 					request.travelHistory,
+					request.score,
 					request.id,
 				],
 				function(err, rows) {

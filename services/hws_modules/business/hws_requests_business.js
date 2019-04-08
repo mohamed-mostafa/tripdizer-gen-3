@@ -56,6 +56,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		delete request.second_country;
 		delete request.third_country;
 	}
+	request.score = calculateRequestScore(request);
 	requestsDao.createNewRequest(
 		request,
 		function(request) {
@@ -124,6 +125,21 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		},
 		function(err) {
 			console.log('An error occured while checking if traveler exists before');
+			console.log(err);
+			onFailure(err);
+		}
+	);
+};
+
+var updateRequest = function(request, onSuccess, onFailure) {
+	request.score = calculateRequestScore(request);
+	requestsDao.updateRequest(
+		request,
+		function(request) {
+			onSuccess(request);
+		},
+		function(err) {
+			console.log('An error occured while getting request package');
 			console.log(err);
 			onFailure(err);
 		}
@@ -809,6 +825,27 @@ function isUrl(str) {
 	else return false;
 }
 
+function calculateRequestScore(request) {
+	let score = 0;
+	// Traveled Before
+	if (request.travelHistory === 1) score += 1;
+	// Honeymoon
+	if (request.purpose === 5) score += 2;
+	// Female & Solo
+	if (request.purpose === 2 && request.traveler && request.traveler.gender === 2) score += 1;
+	// Student
+	if (request.traveler && request.traveler.profession === 2) score += 1;
+	// Employee
+	if (request.traveler && request.traveler.profession === 3) score += 2;
+	// Business Owner
+	if (request.traveler && request.traveler.profession === 4) score += 3;
+	// MidRange || Splurge
+	if (request.budgetCategory === 4 || request.budgetCategory === 5) score += 1;
+	// Friend
+	if (request.referralType === 3) score += 1;
+	return score;
+}
+
 function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 	httpRequest[method](
 		{
@@ -842,7 +879,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 exports.placeRequest = placeRequest;
 exports.getRequestById = requestsDao.getRequestById;
 exports.assignRequestToUser = requestsDao.assignRequestToUser;
-exports.updateRequest = requestsDao.updateRequest;
+exports.updateRequest = updateRequest;
 
 exports.getRequestSummaries = requestsDao.getRequestSummariesByStatus;
 exports.getRequestSummariesCount = requestsDao.getRequestSummariesCountByStatus;

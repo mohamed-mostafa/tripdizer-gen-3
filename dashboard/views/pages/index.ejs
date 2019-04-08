@@ -163,7 +163,7 @@
                     <a href="#detailsTab" data-toggle="tab">Assistance</a>
                   </li>
                   <li>
-                    <a href="#revenueTab" data-toggle="tab">Financials</a>
+                    <a href="#revenueTab" data-toggle="tab">Financial</a>
                   </li>
                   <li ng-if="currentOrder.itineraryId">
                     <a href="#generatePackageTab" data-toggle="tab">Package</a>
@@ -178,15 +178,24 @@
                       <label for="id">ID</label>
                       <input type="text" disabled class="form-control" id="id" ng-model="currentOrder.id">
                       <label for="status">Status</label>
-                      <input type="text" disabled class="form-control" id="status" ng-model="currentOrder.status">
+                      <select disabled class="form-control" id="status" ng-model="currentOrder.status">
+                        <option ng-repeat="status in statuses" ng-value="status.id" ng-selected="status.id == currentOrder.status">
+                          {{status.title}}</option>
+                      </select>
                       <label for="placed">Placed</label>
                       <input type="text" disabled class="form-control" id="placed" format="MMM d, y" ng-model="currentOrder.date">
                       <label for="promoCode">Promo Code</label>
                       <input type="text" disabled class="form-control" id="promoCode" ng-model="currentOrder.promoCode">
                       <label for="comments">Comments</label>
                       <textarea class="form-control" id="comments" ng-model="currentOrder.comments"></textarea>
-                      <label for="userFullName">Assigned User</label>
-                      <input type="text" disabled class="form-control" id="userFullName" ng-model="currentOrder.userFullName"></input>
+                      <div class="form-control-6">
+                        <label for="userFullName">Assigned User</label>
+                        <input type="text" disabled class="form-control" id="userFullName" ng-model="currentOrder.userFullName"></input>
+                      </div>
+                      <div class="form-control-6">
+                        <label for="score">Score</label>
+                        <input type="text" disabled class="form-control" id="score" ng-model="currentOrder.score"></input>
+                      </div>
                     </div>
                   </div>
                   <!-- /.tab-pane -->

@@ -157,15 +157,13 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 				)
 				.success(function(response) {
 					$scope.totalItems = response.totalRows;
-					response = response.requests
-						.sort((a, b) => b.id - a.id)
-						.map(function(request) {
-							if (request.date) request.date = new Date(request.date);
-							if (request.traveler) request.traveler.dateOfBirth = new Date(request.traveler.dateOfBirth);
-							if (request.departureDate) request.departureDate = new Date(request.departureDate);
-							if (request.returnDate) request.returnDate = new Date(request.returnDate);
-							return request;
-						});
+					response = response.requests.map(function(request) {
+						if (request.date) request.date = new Date(request.date);
+						if (request.traveler) request.traveler.dateOfBirth = new Date(request.traveler.dateOfBirth);
+						if (request.departureDate) request.departureDate = new Date(request.departureDate);
+						if (request.returnDate) request.returnDate = new Date(request.returnDate);
+						return request;
+					});
 					$scope.currentOrders = response;
 					$scope.originalOrders = response;
 					$scope.searchOrders();
