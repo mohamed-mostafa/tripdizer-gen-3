@@ -415,17 +415,17 @@ export class Request extends CommonFunctions {
 				key: 'preferences',
 				title: this._localeLabels.preferences,
 				path: 'preferences',
-				order: 6,
+				order: 8,
 				requiredForRecommendation: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(6) === -1) {
+					if (this._touchedSteps.indexOf(8) === -1) {
 						return null;
 					}
 					return this._preferenceNames.join(', ');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(6) === -1) {
+					if (this._touchedSteps.indexOf(8) === -1) {
 						return false;
 					}
 					return true;
@@ -435,11 +435,11 @@ export class Request extends CommonFunctions {
 				key: 'destinations',
 				title: this._localeLabels.destinations,
 				path: 'destinations',
-				order: 7,
+				order: 6,
 				isDisabled: this._requestType !== RequestType.SurpriseMe,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(7) === -1) {
+					if (this._touchedSteps.indexOf(6) === -1) {
 						return null;
 					}
 					if (!this._destination) {
@@ -449,7 +449,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(7) === -1) {
+					if (this._touchedSteps.indexOf(6) === -1) {
 						return false;
 					}
 					if (!this._destination) {
@@ -462,10 +462,10 @@ export class Request extends CommonFunctions {
 				key: 'estimatedCost',
 				title: this._localeLabels.estimated_cost,
 				path: 'estimated-cost',
-				order: 8,
+				order: 7,
 				isDisabled: this.destination && this.destination.id === -1,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(8) === -1) {
+					if (this._touchedSteps.indexOf(7) === -1) {
 						return null;
 					}
 					if (this._estimatedCost == null) {
@@ -475,7 +475,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(8) === -1) {
+					if (this._touchedSteps.indexOf(7) === -1) {
 						return false;
 					}
 					if (!this._estimatedCost) {
