@@ -114,7 +114,7 @@ export class RequestService {
 		if (step) {
 			this.requestData.touchStep(step.order);
 		}
-		this.mixpanelService.track('Step Visited', stepPath);
+		this.mixpanelService.track('Step Visited', { requestStep: stepPath });
 	}
 
 	getNextStep(stepPath: string): string {
