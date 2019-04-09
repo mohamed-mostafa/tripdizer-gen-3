@@ -6,6 +6,10 @@ import { environment } from '../../../environments/environment';
 export class MixpanelService {
 	projectToken = environment.mixpanelToken;
 
+	constructor() {
+		this.init();
+	}
+
 	init(): void {
 		mixpanel.init(this.projectToken);
 	}
