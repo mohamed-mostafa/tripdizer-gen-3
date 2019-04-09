@@ -17,7 +17,7 @@ export class AppComponent {
 		router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
 				gtag('event', 'screen_view', { screen_name: event.urlAfterRedirects });
-				mixpanelService.track('screen_view', { screen_name: event.urlAfterRedirects });
+				mixpanelService.track('Page view', { screen_name: event.urlAfterRedirects });
 			}
 		});
 	}
