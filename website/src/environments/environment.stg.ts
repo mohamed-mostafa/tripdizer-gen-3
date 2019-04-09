@@ -3,5 +3,5 @@ export const environment = {
 	apiUrl: 'https://tripdizer-backend-dot-tripdizer-stg.appspot.com/',
 	googleAnalyticsTrackingID: 'UA-106443087-3',
 	facebookPixelID: null,
-	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
+	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
 };
