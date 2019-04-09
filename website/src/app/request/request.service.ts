@@ -110,11 +110,11 @@ export class RequestService {
 	}
 
 	stepVisited(stepPath: string): void {
-		const step = this.requestData.validSteps.find(s => s.path === stepPath);
+		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
 		if (step) {
 			this.requestData.touchStep(step.order);
+			this.mixpanelService.track(`Submit - ${step.title}`);
 		}
-		this.mixpanelService.track(stepPath);
 	}
 
 	getNextStep(stepPath: string): string {
