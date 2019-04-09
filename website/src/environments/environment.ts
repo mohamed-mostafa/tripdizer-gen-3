@@ -7,7 +7,7 @@ export const environment = {
 	apiUrl: 'http://localhost:8080/',
 	googleAnalyticsTrackingID: 'UA-106443087-2',
 	facebookPixelID: null,
-	mixpanelToken: null,
+	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 };
 
 /*
