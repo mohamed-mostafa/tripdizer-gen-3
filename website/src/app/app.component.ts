@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { MixpanelService } from './shared/services/mixpanel.service';
 
 declare const gtag: Function;
 
@@ -12,10 +13,11 @@ declare const gtag: Function;
 	`,
 })
 export class AppComponent {
-	constructor(router: Router) {
+	constructor(router: Router, mixpanelService: MixpanelService) {
 		router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
 				gtag('event', 'screen_view', { screen_name: event.urlAfterRedirects });
+				mixpanelService.track('screen_view', { screen_name: event.urlAfterRedirects });
 			}
 		});
 	}

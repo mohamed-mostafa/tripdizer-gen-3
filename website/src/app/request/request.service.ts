@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { MixpanelService } from '../shared/services/mixpanel.service';
 
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
@@ -54,7 +55,8 @@ export class RequestService {
 		private http: HttpClient,
 		private router: Router,
 		private currencyPipe: CurrencyPipe,
-		private translate: TranslateService
+		private translate: TranslateService,
+		private mixpanelService: MixpanelService
 	) {
 		this.initRequest();
 	}
@@ -112,6 +114,7 @@ export class RequestService {
 		if (step) {
 			this.requestData.touchStep(step.order);
 		}
+		this.mixpanelService.track('Step Visited', stepPath);
 	}
 
 	getNextStep(stepPath: string): string {
@@ -417,6 +420,7 @@ export class RequestService {
 							},
 						],
 					});
+					this.mixpanelService.track('Submit Request', { requestId: ticket.id });
 					this.resetRequestState();
 					this.isLoading.next(false);
 					return ticket;
