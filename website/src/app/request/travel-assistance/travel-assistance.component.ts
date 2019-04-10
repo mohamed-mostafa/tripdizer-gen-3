@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class TravelAssistanceComponent {
 	isValidPromoCode = false;
 	isCheckingPromoCode = false;
 
-	constructor(private requestService: RequestService) {
+	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -37,6 +38,7 @@ export class TravelAssistanceComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
+		this.mixpanelService.track('Submit - Travel Assistance', this.formGroup.value);
 	}
 
 	applyPromoCode(): void {

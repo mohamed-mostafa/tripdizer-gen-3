@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 /* Models */
@@ -17,7 +18,7 @@ export class PreferencesComponent {
 	controls: any = {};
 	preferences: Array<Preference>;
 
-	constructor(private requestService: RequestService) {
+	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
 		this.formGroup = new FormGroup({});
 		requestService.getPreferences().subscribe((preferences: Array<Preference>) => {
 			this.preferences = preferences;
@@ -43,5 +44,6 @@ export class PreferencesComponent {
 				}
 			}
 		}
+		this.mixpanelService.track('Submit - Preferences', this.formGroup.value);
 	}
 }

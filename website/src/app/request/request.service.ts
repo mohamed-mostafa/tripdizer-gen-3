@@ -113,7 +113,6 @@ export class RequestService {
 		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
 		if (step) {
 			this.requestData.touchStep(step.order);
-			this.mixpanelService.track(`Submit - ${step.title}`);
 		}
 	}
 

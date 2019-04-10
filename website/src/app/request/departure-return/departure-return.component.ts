@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { CustomValidators } from '../../shared/utils';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -21,7 +22,11 @@ export class DepartureReturnComponent {
 	};
 	minDate = new Date();
 
-	constructor(private requestService: RequestService, translate: TranslateService) {
+	constructor(
+		private requestService: RequestService,
+		private mixpanelService: MixpanelService,
+		translate: TranslateService
+	) {
 		let compareDatesValidationMsg: string;
 		translate
 			.stream('request.departure_return.compare_dates')
@@ -51,5 +56,10 @@ export class DepartureReturnComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
+		this.mixpanelService.track('Submit - Departure & Return', {
+			departureDate: moment(this.formGroup.get('departureDate').value).format('D / M / Y'),
+			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
+			isFlexibleDates: this.formGroup.get('isFlexibleDates').value,
+		});
 	}
 }

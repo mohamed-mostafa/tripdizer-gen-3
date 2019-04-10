@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 /* Models */
@@ -19,7 +20,7 @@ export class PurposeComponent {
 	};
 	purposes: Array<Purpose>;
 
-	constructor(private requestService: RequestService) {
+	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -43,5 +44,6 @@ export class PurposeComponent {
 			this.requestService.setProperty('kidsNumber', selectedPurpose.kidsNumber);
 			this.requestService.setProperty('infantsNumber', selectedPurpose.infantsNumber);
 		}
+		this.mixpanelService.track('Submit - Purpose', { ...this.formGroup.value, purposeName: selectedPurpose.name });
 	}
 }

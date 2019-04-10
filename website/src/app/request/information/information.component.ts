@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { CustomValidators } from 'src/app/shared/utils';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 /* Models */
@@ -40,7 +42,11 @@ export class InformationComponent {
 	travelHistory = TravelHistory;
 	maxDate = new Date();
 
-	constructor(private requestService: RequestService, translate: TranslateService) {
+	constructor(
+		private requestService: RequestService,
+		private mixpanelService: MixpanelService,
+		translate: TranslateService
+	) {
 		translate.stream('request.information.equal_to').subscribe(validationMsg => {
 			(this.controls['travelerEmailConfirmation'] as FormControl).setValidators([
 				CustomValidators.equalTo('travelerEmail', validationMsg),
@@ -63,5 +69,9 @@ export class InformationComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
+		this.mixpanelService.track('Submit - Information', {
+			...this.formGroup.value,
+			travelerBirthday: moment(this.formGroup.get('travelerBirthday').value).format('D / M / Y'),
+		});
 	}
 }
