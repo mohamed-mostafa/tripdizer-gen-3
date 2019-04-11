@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 /* Models */
@@ -18,7 +19,12 @@ export class RecommendedDestinationsComponent {
 	selectedDestination: RecommendedDestinationsResponse;
 	destinations: Array<RecommendedDestinationsResponse>;
 
-	constructor(private route: ActivatedRoute, private router: Router, private requestService: RequestService) {
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private requestService: RequestService,
+		private mixpanelService: MixpanelService
+	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.selectedDestination = requestService.getProperty('destination');
 		requestService.getRecommendedDestinations().subscribe((response: Array<RecommendedDestinationsResponse> | null) => {
@@ -35,6 +41,10 @@ export class RecommendedDestinationsComponent {
 
 	save(destination: RecommendedDestinationsResponse): boolean {
 		this.requestService.setProperty('destination', destination);
+		this.mixpanelService.track('Submit - Recommended Destination', {
+			destinationId: destination.id,
+			destinationName: destination.name,
+		});
 		return true;
 	}
 

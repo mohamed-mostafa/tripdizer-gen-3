@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 /* Models */
@@ -21,7 +22,7 @@ export class BudgetComponent {
 	budgetCategories: Array<BudgetCategory>;
 	isOwnBudget;
 
-	constructor(private requestService: RequestService) {
+	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -59,5 +60,9 @@ export class BudgetComponent {
 		if (selectedBudgetCategory) {
 			this.requestService.setProperty('budgetCategoryName', selectedBudgetCategory.name);
 		}
+		this.mixpanelService.track('Submit - Budget', {
+			...this.formGroup.value,
+			budgetCategoryName: selectedBudgetCategory.name,
+		});
 	}
 }

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 /* Services */
+import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -33,6 +34,7 @@ export class DestinationsComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		private requestService: RequestService,
+		private mixpanelService: MixpanelService,
 		private dialog: MatDialog,
 		translate: TranslateService
 	) {
@@ -44,6 +46,10 @@ export class DestinationsComponent {
 
 	save(destination: Destination): boolean {
 		this.requestService.setProperty('destination', destination);
+		this.mixpanelService.track('Submit - Destination', {
+			destinationId: destination.id,
+			destinationName: destination.name,
+		});
 		return true;
 	}
 
@@ -98,6 +104,10 @@ export class DestinationsComponent {
 					visaTypeName: null,
 				};
 				this.requestService.setProperty('destination', destination);
+				this.mixpanelService.track('Submit - Destination', {
+					destinationId: destination.id,
+					destinationName: destination.name,
+				});
 				this.navigateToNextStep();
 			}
 		});
