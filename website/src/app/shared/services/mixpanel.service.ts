@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class MixpanelService {
 	projectToken = environment.mixpanelToken;
+	experimentKey = environment.experimentKey;
 
 	constructor(private translate: TranslateService) {
 		this.init();
@@ -14,6 +15,9 @@ export class MixpanelService {
 	init(): void {
 		mixpanel.init(this.projectToken);
 		mixpanel.register({ language: this.translate.currentLang });
+		if (this.experimentKey) {
+			mixpanel.register({ experiment: this.experimentKey });
+		}
 	}
 
 	track(id: string, data: any = {}): void {
