@@ -246,11 +246,11 @@ export class Request extends CommonFunctions {
 				key: 'travelInfo',
 				title: this._localeLabels.travel_info,
 				path: 'travel-info',
-				order: -1,
+				order: this.getStepOrder('travelInfo'),
 				requiredForEstimateCalc: true,
 				requiredForRecommendation: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(-1) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
 						return null;
 					}
 					if (
@@ -277,7 +277,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelInfo'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(-1) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
 						return false;
 					}
 					if (
@@ -298,10 +298,10 @@ export class Request extends CommonFunctions {
 				key: 'travelingFrom',
 				title: this._localeLabels.traveling_from,
 				path: 'traveling-from',
-				order: 0,
+				order: this.getStepOrder('travelingFrom'),
 				isDisabled: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(0) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelingFrom')) === -1) {
 						return null;
 					}
 					if (!(this._travelingFrom && this._travelingFrom.name)) {
@@ -311,7 +311,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelingFrom'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(0) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelingFrom')) === -1) {
 						return false;
 					}
 					if (!(this._travelingFrom && this._travelingFrom.name)) {
@@ -324,11 +324,11 @@ export class Request extends CommonFunctions {
 				key: 'travelingTo',
 				title: this._localeLabels.traveling_to,
 				path: 'traveling-to',
-				order: 1,
+				order: this.getStepOrder('travelingTo'),
 				isDisabled: true || this._requestType !== RequestType.HavePlan,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(1) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelingTo')) === -1) {
 						return null;
 					}
 					if (!this._destination) {
@@ -338,7 +338,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelingTo'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(1) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelingTo')) === -1) {
 						return false;
 					}
 					if (!this._destination) {
@@ -351,12 +351,12 @@ export class Request extends CommonFunctions {
 				key: 'departureReturn',
 				title: this._localeLabels.departure_return,
 				path: 'departure-return',
-				order: 2,
+				order: this.getStepOrder('departureReturn'),
 				isDisabled: true,
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(2) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('departureReturn')) === -1) {
 						return null;
 					}
 					if (!this._departureDate || !this._returnDate) {
@@ -374,7 +374,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('departureReturn'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(2) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('departureReturn')) === -1) {
 						return false;
 					}
 					if (!this._departureDate || !this._returnDate) {
@@ -387,12 +387,12 @@ export class Request extends CommonFunctions {
 				key: 'travelers',
 				title: this._localeLabels.travelers.title,
 				path: 'travelers',
-				order: 5,
+				order: this.getStepOrder('travelers'),
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
 				isDisabled: this.purpose === LUTPurpose.Solo || this.purpose === LUTPurpose.Honeymoon,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(5) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelers')) === -1) {
 						return null;
 					}
 					if (!this._adultsNumber) {
@@ -402,7 +402,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelers'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(5) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelers')) === -1) {
 						return false;
 					}
 					if (!this._adultsNumber) {
@@ -415,11 +415,11 @@ export class Request extends CommonFunctions {
 				key: 'budget',
 				title: this._localeLabels.budget,
 				path: 'budget',
-				order: 4,
+				order: this.getStepOrder('budget'),
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(4) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
 						return null;
 					}
 					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
@@ -431,7 +431,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('budget'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(4) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
 						return false;
 					}
 					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
@@ -444,10 +444,10 @@ export class Request extends CommonFunctions {
 				key: 'purpose',
 				title: this._localeLabels.purpose,
 				path: 'purpose',
-				order: 3,
+				order: this.getStepOrder('purpose'),
 				requiredForRecommendation: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(3) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
 						return null;
 					}
 					if (!this._purpose) {
@@ -457,7 +457,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('purpose'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(3) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
 						return false;
 					}
 					if (!this._purpose) {
@@ -470,17 +470,17 @@ export class Request extends CommonFunctions {
 				key: 'preferences',
 				title: this._localeLabels.preferences,
 				path: 'preferences',
-				order: 8,
+				order: this.getStepOrder('preferences'),
 				requiredForRecommendation: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(8) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
 						return null;
 					}
 					return this._preferenceNames.join(', ');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(8) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
 						return false;
 					}
 					return true;
@@ -490,11 +490,11 @@ export class Request extends CommonFunctions {
 				key: 'destinations',
 				title: this._localeLabels.destinations,
 				path: 'destinations',
-				order: 6,
+				order: this.getStepOrder('destinations'),
 				isDisabled: this._requestType !== RequestType.SurpriseMe,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(6) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('destinations')) === -1) {
 						return null;
 					}
 					if (!this._destination) {
@@ -504,7 +504,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(6) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('destinations')) === -1) {
 						return false;
 					}
 					if (!this._destination) {
@@ -517,10 +517,10 @@ export class Request extends CommonFunctions {
 				key: 'estimatedCost',
 				title: this._localeLabels.estimated_cost,
 				path: 'estimated-cost',
-				order: 7,
+				order: this.getStepOrder('estimatedCost'),
 				isDisabled: this.destination && this.destination.id === -1,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(7) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return null;
 					}
 					if (this._estimatedCost == null) {
@@ -530,7 +530,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(7) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return false;
 					}
 					if (!this._estimatedCost) {
@@ -543,9 +543,9 @@ export class Request extends CommonFunctions {
 				key: 'travelAssistance',
 				title: this._localeLabels.travel_assistance.title,
 				path: 'travel-assistance',
-				order: 9,
+				order: this.getStepOrder('travelAssistance'),
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(9) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelAssistance')) === -1) {
 						return null;
 					}
 					const travelAssistanceParams = [];
@@ -559,7 +559,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelAssistance'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(9) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelAssistance')) === -1) {
 						return false;
 					}
 					return true;
@@ -569,11 +569,11 @@ export class Request extends CommonFunctions {
 				key: 'information',
 				title: this._localeLabels.information.title,
 				path: 'information',
-				order: 10,
+				order: this.getStepOrder('information'),
 				value: this._localeLabels.information.value,
 				isClickable: (): boolean => this.isNavBarItemClickable('information'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(10) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('information')) === -1) {
 						return false;
 					}
 					if (
@@ -600,7 +600,7 @@ export class Request extends CommonFunctions {
 				key: 'ticket',
 				title: this._localeLabels.ticket,
 				path: 'ticket',
-				order: 99,
+				order: this.getStepOrder('ticket'),
 				value: '',
 				isHiddenOnNavBar: true,
 				isClickable: (): boolean => this.isNavBarItemClickable('ticket'),
@@ -651,6 +651,29 @@ export class Request extends CommonFunctions {
 	private isNavBarItemClickable(key: string): boolean {
 		const currentStepIndex = this.validSteps.findIndex(s => s.key === key);
 		return currentStepIndex === 0 || this.validSteps[currentStepIndex - 1].isValid();
+	}
+
+	private getStepOrder(stepKey: string): number {
+		const steps = {
+			travelInfo: 0,
+			travelingFrom: 1,
+			travelingTo: 2,
+			departureReturn: 3,
+			purpose: 4,
+			budget: 5,
+			travelers: 6,
+			preferences: this.getOrderByRequestType(9, 7),
+			destinations: this.getOrderByRequestType(7, 8),
+			estimatedCost: this.getOrderByRequestType(8, 9),
+			travelAssistance: 10,
+			information: 11,
+			ticket: 99,
+		};
+		return steps[stepKey];
+	}
+
+	private getOrderByRequestType(havePlanOrder: number, surpriseMeOrder: number): number {
+		return this._requestType === RequestType.HavePlan ? havePlanOrder : surpriseMeOrder;
 	}
 
 	getPureRequest(): any {
