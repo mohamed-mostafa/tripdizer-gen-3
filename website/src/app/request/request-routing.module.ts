@@ -16,6 +16,7 @@ import { RecommendedDestinationsComponent } from './recommended-destinations/rec
 import { RequestComponent } from './request.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
+import { TravelInfoComponent } from './travel-info/travel-info.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
 
@@ -25,7 +26,8 @@ const routes: Routes = [
 		component: RequestComponent,
 		canActivate: [RequestGuard],
 		children: [
-			{ path: '', redirectTo: 'traveling-from', pathMatch: 'full' },
+			{ path: '', redirectTo: 'travel-info', pathMatch: 'full' },
+			{ path: 'travel-info', component: TravelInfoComponent },
 			{ path: 'traveling-from', component: TravelingFromComponent },
 			{ path: 'traveling-to', component: DestinationsComponent },
 			{ path: 'departure-return', component: DepartureReturnComponent },
@@ -55,6 +57,7 @@ export const COMPONENTS = [
 	TravelAssistanceComponent,
 	InformationComponent,
 	TicketComponent,
+	TravelInfoComponent,
 ];
 
 @NgModule({

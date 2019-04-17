@@ -17,6 +17,7 @@ export class Request extends CommonFunctions {
 	private _requestType: RequestType;
 	private _localeLabels: {
 		currency?: any;
+		travel_info?: string;
 		traveling_from?: string;
 		traveling_to?: string;
 		departure_return?: string;
@@ -242,10 +243,63 @@ export class Request extends CommonFunctions {
 	private get steps(): Array<Step> {
 		return [
 			{
+				key: 'travelInfo',
+				title: this._localeLabels.travel_info,
+				path: 'travel-info',
+				order: -1,
+				requiredForEstimateCalc: true,
+				requiredForRecommendation: true,
+				value: ((): string => {
+					if (this._touchedSteps.indexOf(-1) === -1) {
+						return null;
+					}
+					if (
+						!(
+							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							this._travelingFrom &&
+							this._travelingFrom.name &&
+							this._departureDate &&
+							this._returnDate
+						)
+					) {
+						return null;
+					}
+					const departureMonthString: string =
+						this.departureDate.format('M') === this.returnDate.format('M') ? '' : ' / M';
+					const departureYearString: string =
+						this.departureDate.format('Y') === this.returnDate.format('Y') ? '' : ' / Y';
+					return (
+						(this.destination ? this.destination.name + ' ' : '') +
+						(this.departureDate.format(`D${departureMonthString}${departureYearString}`) +
+							' - ' +
+							this.returnDate.format('D / M / Y'))
+					);
+				})(),
+				isClickable: (): boolean => this.isNavBarItemClickable('travelInfo'),
+				isValid: (): boolean => {
+					if (this._touchedSteps.indexOf(-1) === -1) {
+						return false;
+					}
+					if (
+						!(
+							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							this._travelingFrom &&
+							this._travelingFrom.name &&
+							this._departureDate &&
+							this._returnDate
+						)
+					) {
+						return false;
+					}
+					return true;
+				},
+			},
+			{
 				key: 'travelingFrom',
 				title: this._localeLabels.traveling_from,
 				path: 'traveling-from',
 				order: 0,
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(0) === -1) {
 						return null;
@@ -271,7 +325,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.traveling_to,
 				path: 'traveling-to',
 				order: 1,
-				isDisabled: this._requestType !== RequestType.HavePlan,
+				isDisabled: true || this._requestType !== RequestType.HavePlan,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(1) === -1) {
@@ -298,6 +352,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.departure_return,
 				path: 'departure-return',
 				order: 2,
+				isDisabled: true,
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
@@ -613,6 +668,10 @@ export class Request extends CommonFunctions {
 
 	setRequestType(requestType: RequestType): void {
 		this._requestType = requestType;
+	}
+
+	getRequestType(): RequestType {
+		return this._requestType;
 	}
 
 	touchStep(value: number) {

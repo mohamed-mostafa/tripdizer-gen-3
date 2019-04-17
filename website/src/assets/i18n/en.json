@@ -66,6 +66,43 @@
 		}
 	},
 	"request": {
+		"travel_info": {
+			"traveling_to": "Traveling To",
+			"traveling_from": "Traveling From",
+			"airports": [
+				{
+					"iataCode": "CAI",
+					"name": "Cairo"
+				},
+				{
+					"iataCode": "HBE",
+					"name": "Alexandria"
+				},
+				{
+					"iataCode": "HRG",
+					"name": "Hurghada"
+				},
+				{
+					"iataCode": "SSH",
+					"name": "Sharm El-Sheikh"
+				}
+			],
+			"departure": "Departure",
+			"return": "Return",
+			"flexible": "Flexible dates ( +/- 3 days )",
+			"compare_dates": "Return Date must be greater than departure date",
+			"dialog": {
+				"title": "Other destination",
+				"description": "Where would you like to travel?",
+				"inputs": {
+					"input0": "Specify your destination"
+				},
+				"buttonsLabel": {
+					"ok": "Done",
+					"cancel": "Cancel"
+				}
+			}
+		},
 		"budget": {
 			"budget": "Budget/Person",
 			"choice": "OR choose one of our prepared budget categories"
@@ -122,6 +159,7 @@
 			"equal_to": "Email doesn't match"
 		},
 		"nav_bar": {
+			"travel_info": "Trip Details",
 			"traveling_from": "Traveling from",
 			"traveling_to": "Traveling to",
 			"departure_return": "Departure & Return",

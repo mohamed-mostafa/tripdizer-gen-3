@@ -100,6 +100,10 @@ export class RequestService {
 		return true;
 	}
 
+	getRequestType(): RequestType {
+		return this.requestData.getRequestType();
+	}
+
 	getNavBar(): Array<Step> {
 		return this.requestData.navBar;
 	}
