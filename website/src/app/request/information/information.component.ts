@@ -25,33 +25,33 @@ export class InformationComponent {
 		travelerName: new FormControl('', [Validators.required, CustomValidators.notEmpty()]),
 		travelerMobile: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		travelerEmail: new FormControl('', [Validators.required, Validators.email]),
-		travelerEmailConfirmation: new FormControl('', [
-			Validators.required,
-			Validators.email,
-			CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match'),
-		]),
-		travelerGender: new FormControl('', [Validators.required]),
-		travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
-		travelerProfession: new FormControl('', [Validators.required]),
-		referralType: new FormControl('', [Validators.required]),
-		travelHistory: new FormControl('', [Validators.required]),
+		// travelerEmailConfirmation: new FormControl('', [
+		// 	Validators.required,
+		// 	Validators.email,
+		// 	CustomValidators.equalTo('travelerEmail', 'Email doesn\'t match'),
+		// ]),
+		// travelerGender: new FormControl('', [Validators.required]),
+		// travelerBirthday: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
+		// travelerProfession: new FormControl('', [Validators.required]),
+		// referralType: new FormControl('', [Validators.required]),
+		// travelHistory: new FormControl('', [Validators.required]),
 	};
-	professions: Observable<Array<DropDownItem>>;
-	referralTypes: Observable<Array<DropDownItem>>;
-	gender = Gender;
-	travelHistory = TravelHistory;
-	maxDate = new Date();
+	// professions: Observable<Array<DropDownItem>>;
+	// referralTypes: Observable<Array<DropDownItem>>;
+	// gender = Gender;
+	// travelHistory = TravelHistory;
+	// maxDate = new Date();
 
 	constructor(
 		private requestService: RequestService,
 		private mixpanelService: MixpanelService,
 		translate: TranslateService
 	) {
-		translate.stream('request.information.equal_to').subscribe(validationMsg => {
-			(this.controls['travelerEmailConfirmation'] as FormControl).setValidators([
-				CustomValidators.equalTo('travelerEmail', validationMsg),
-			]);
-		});
+		// translate.stream('request.information.equal_to').subscribe(validationMsg => {
+		// 	(this.controls['travelerEmailConfirmation'] as FormControl).setValidators([
+		// 		CustomValidators.equalTo('travelerEmail', validationMsg),
+		// 	]);
+		// });
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -59,8 +59,8 @@ export class InformationComponent {
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
-		this.professions = requestService.getProfessions();
-		this.referralTypes = requestService.getReferralTypes();
+		// this.professions = requestService.getProfessions();
+		// this.referralTypes = requestService.getReferralTypes();
 	}
 
 	save(): void {
@@ -71,7 +71,7 @@ export class InformationComponent {
 		}
 		this.mixpanelService.track('Submit - Information', {
 			...this.formGroup.value,
-			travelerBirthday: moment(this.formGroup.get('travelerBirthday').value).format('D / M / Y'),
+			// travelerBirthday: moment(this.formGroup.get('travelerBirthday').value).format('D / M / Y'),
 		});
 	}
 }

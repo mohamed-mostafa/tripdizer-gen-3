@@ -4,5 +4,5 @@ export const environment = {
 	googleAnalyticsTrackingID: 'UA-106443087-2',
 	facebookPixelID: null,
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
-	experimentKey: '',
+	experimentKey: 'Reduce Friction',
 };

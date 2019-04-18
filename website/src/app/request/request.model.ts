@@ -544,6 +544,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.travel_assistance.title,
 				path: 'travel-assistance',
 				order: this.getStepOrder('travelAssistance'),
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelAssistance')) === -1) {
 						return null;
@@ -580,19 +581,19 @@ export class Request extends CommonFunctions {
 						!this._traveler ||
 						!this._traveler.name ||
 						!this._traveler.mobile ||
-						!this._traveler.email ||
-						!this._traveler.gender ||
-						!this._traveler.birthday ||
-						!this._traveler.profession
+						!this._traveler.email // ||
+						// !this._traveler.gender ||
+						// !this._traveler.birthday ||
+						// !this._traveler.profession
 					) {
 						return false;
 					}
-					if (!this._referralType) {
-						return false;
-					}
-					if (!this._travelHistory) {
-						return false;
-					}
+					// if (!this._referralType) {
+					// 	return false;
+					// }
+					// if (!this._travelHistory) {
+					// 	return false;
+					// }
 					return true;
 				},
 			},
