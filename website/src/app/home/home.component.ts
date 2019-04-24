@@ -23,10 +23,10 @@ export class HomeComponent {
 
 	constructor(private homeService: HomeService, private dialog: MatDialog, translate: TranslateService) {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
-		setTimeout(() => {
-			this.openDialog();
+		// setTimeout(() => {
+		// 	this.openDialog();
 
-		}, 5000);
+		// }, 5000);
 	}
 
 	openDialog(): void {
