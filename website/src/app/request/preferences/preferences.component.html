@@ -3,7 +3,7 @@
 		<mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
 			{{ preference.name }}
 			<span
-				class="label-content-img"
+				class="label-content-img full-size-background"
 				[style.background]="preference.image ? 'url(' + preference.image + ')' : null"
 			></span>
 		</mat-checkbox>
