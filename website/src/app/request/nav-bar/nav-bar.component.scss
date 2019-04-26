@@ -58,6 +58,13 @@
 				pointer-events: none;
 				cursor: default;
 			}
+
+			@media (min-width: 992px) {
+				width: 100%;
+				& > * {
+					max-width: initial;
+				}
+			}
 		}
 	}
 
