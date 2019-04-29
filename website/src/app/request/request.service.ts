@@ -110,7 +110,9 @@ export class RequestService {
 
 	redirectIfShouldBeRedirected(stepPath: string): void {
 		const prevInvalidStep = this.getPrevInvalidStep(stepPath);
-		this.router.navigate(['../request/', prevInvalidStep]);
+		if (prevInvalidStep !== stepPath) {
+			this.router.navigate(['../request/', prevInvalidStep]);
+		}
 	}
 
 	stepVisited(stepPath: string): void {
