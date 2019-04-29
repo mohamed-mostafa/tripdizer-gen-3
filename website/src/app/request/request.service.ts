@@ -79,6 +79,10 @@ export class RequestService {
 		localStorage.setItem('request', JSON.stringify(this.requestData.getPureRequest()));
 	}
 
+	private refineStepPath(path: string): string {
+		return path.split('/')[0];
+	}
+
 	resetRequestState(): void {
 		if (!this.isDevelopment) {
 			localStorage.removeItem('request');
@@ -109,6 +113,7 @@ export class RequestService {
 	}
 
 	redirectIfShouldBeRedirected(stepPath: string): void {
+		stepPath = this.refineStepPath(stepPath);
 		const prevInvalidStep = this.getPrevInvalidStep(stepPath);
 		if (prevInvalidStep !== stepPath) {
 			this.router.navigate(['../request/', prevInvalidStep]);
@@ -116,6 +121,7 @@ export class RequestService {
 	}
 
 	stepVisited(stepPath: string): void {
+		stepPath = this.refineStepPath(stepPath);
 		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
 		if (step) {
 			this.requestData.touchStep(step.order);
@@ -123,6 +129,7 @@ export class RequestService {
 	}
 
 	getNextStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			nextSteps = this.requestData.validSteps
 				.filter(s => s.order > currentStep.order)
@@ -131,6 +138,7 @@ export class RequestService {
 	}
 
 	getPrevStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)
@@ -139,6 +147,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.requiredForRecommendation && s.order < currentStep.order)
@@ -152,6 +161,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStepForEstimateCalc(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
@@ -165,6 +175,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)

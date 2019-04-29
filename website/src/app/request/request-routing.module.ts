@@ -28,6 +28,7 @@ const routes: Routes = [
 		children: [
 			{ path: '', redirectTo: 'travel-info', pathMatch: 'full' },
 			{ path: 'travel-info', component: TravelInfoComponent },
+			{ path: 'travel-info/:destinationName', component: TravelInfoComponent },
 			{ path: 'traveling-from', component: TravelingFromComponent },
 			{ path: 'traveling-to', component: DestinationsComponent },
 			{ path: 'departure-return', component: DepartureReturnComponent },

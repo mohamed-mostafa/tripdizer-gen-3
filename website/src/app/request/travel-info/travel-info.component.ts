@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
+
 /* Services */
 import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { CustomValidators } from '../../shared/utils';
+
 /* Models */
 import { Destination } from '../destinations/destination.model';
+import { RequestType } from '../request-type.enum';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
-import { RequestType } from '../request-type.enum';
-
 @Component({
 	selector: 'c-request-travel-info',
 	templateUrl: './travel-info.component.html',
@@ -29,6 +30,7 @@ export class TravelInfoComponent {
 		isFlexibleDates: new FormControl(),
 	};
 	destinations: Array<Destination>;
+	preSelectedDestinationName: string;
 	minDate = new Date();
 	dialogLabels: {
 		title: string;
@@ -39,6 +41,7 @@ export class TravelInfoComponent {
 	isHavePlan: boolean;
 
 	constructor(
+		route: ActivatedRoute,
 		private requestService: RequestService,
 		private mixpanelService: MixpanelService,
 		private dialog: MatDialog,
@@ -74,9 +77,16 @@ export class TravelInfoComponent {
 				this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
 			}
 		});
-		requestService
-			.getDestinations()
-			.subscribe(destinations => (this.destinations = destinations.filter(dest => dest.id !== -1)));
+		requestService.getDestinations().subscribe(destinations => {
+			this.destinations = destinations.filter(dest => dest.id !== -1);
+			this.preSelectedDestination();
+		});
+		route.params.subscribe(params => {
+			if (params.destinationName) {
+				this.preSelectedDestinationName = params.destinationName;
+				this.preSelectedDestination();
+			}
+		});
 	}
 
 	save(): void {
@@ -106,6 +116,18 @@ export class TravelInfoComponent {
 		});
 	}
 
+	preSelectedDestination(): void {
+		if (this.preSelectedDestinationName) {
+			if (Array.isArray(this.destinations) && this.destinations.length) {
+				const selectedDestination = this.destinations.find(
+					d => d.enName && d.enName.toLowerCase() === this.preSelectedDestinationName.toLowerCase()
+				);
+				if (selectedDestination) {
+					this.formGroup.get('destination').setValue(selectedDestination);
+				}
+			}
+		}
+	}
 	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 
 	openDialog(): void {
