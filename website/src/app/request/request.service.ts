@@ -272,7 +272,7 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(purposes => {
-				this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
+				this.Lookups.purposes = purposes;
 				this.isLoading.next(false);
 				return this.Lookups.purposes;
 			})

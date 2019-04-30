@@ -15,6 +15,7 @@ export class RequestRequest {
 	budget: number;
 	budgetCategory: number;
 	purpose: number;
+	otherPurposeName?: string;
 	preferences: Array<number>;
 	destination: number;
 	estimatedCost: number;
@@ -38,6 +39,7 @@ export class RequestRequest {
 			budget: request.budget,
 			budgetCategory: request.budgetCategory,
 			purpose: request.purpose,
+			otherPurposeName: request.purposeName,
 			preferences: request.preferences,
 			destination: request.destination.id,
 			estimatedCost: request.estimatedCost,

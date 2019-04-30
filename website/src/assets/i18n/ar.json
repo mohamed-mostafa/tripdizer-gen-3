@@ -184,7 +184,9 @@
 			"ticket": ""
 		},
 		"preferences": {},
-		"purpose": {},
+		"purpose": {
+			"other": "اخرى"
+		},
 		"recommended_destinations": {
 			"rank": "نسبة الملائمة",
 			"highest": "الأكثر ملاءمة",

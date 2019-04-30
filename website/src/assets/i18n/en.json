@@ -184,7 +184,9 @@
 			"ticket": ""
 		},
 		"preferences": {},
-		"purpose": {},
+		"purpose": {
+			"other": "Other"
+		},
 		"recommended_destinations": {
 			"rank": "Rank",
 			"highest": "Highest",
