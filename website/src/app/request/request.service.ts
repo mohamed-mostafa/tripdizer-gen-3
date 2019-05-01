@@ -301,6 +301,10 @@ export class RequestService {
 		return this.requestData.isPreferenceSelected(parseInt(preferenceId, 10));
 	}
 
+	getPreferenceName(preferenceId: string): string {
+		return this.requestData.getPreferenceName(parseInt(preferenceId, 10));
+	}
+
 	getPreferences(): Observable<Array<Preference>> {
 		this.isLoading.next(true);
 		let observable: Observable<Array<Preference>>;

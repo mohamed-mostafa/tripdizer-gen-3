@@ -183,7 +183,9 @@
 			},
 			"ticket": ""
 		},
-		"preferences": {},
+		"preferences": {
+			"other": "اخرى"
+		},
 		"purpose": {
 			"other": "اخرى"
 		},

@@ -183,7 +183,9 @@
 			},
 			"ticket": ""
 		},
-		"preferences": {},
+		"preferences": {
+			"other": "Other"
+		},
 		"purpose": {
 			"other": "Other"
 		},

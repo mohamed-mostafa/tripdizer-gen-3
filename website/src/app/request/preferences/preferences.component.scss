@@ -1,3 +1,33 @@
 .full-size-background {
-    background-size: 100% 100% !important;
+	background-size: 100% 100% !important;
+}
+
+.other-preference {
+	&,
+	input {
+		width: 85%;
+		font-weight: 600;
+	}
+}
+
+.mat-checkbox:not(:hover) {
+	.other-preference {
+		input {
+			border: 0;
+			color: #fff;
+			background: transparent;
+			&::-webkit-input-placeholder {
+				color: #fff;
+			}
+			&::-moz-placeholder {
+				color: #fff;
+			}
+			&:-ms-input-placeholder {
+				color: #fff;
+			}
+			&:-moz-placeholder {
+				color: #fff;
+			}
+		}
+	}
 }

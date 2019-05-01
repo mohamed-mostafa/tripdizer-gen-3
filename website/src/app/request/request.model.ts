@@ -44,8 +44,7 @@ export class Request extends CommonFunctions {
 	private _budgetCategoryName: string;
 	private _purpose: number;
 	private _purposeName: string;
-	private _preferences: Array<number>;
-	private _preferenceNames: Array<string>;
+	private _preferences: Array<Preference>;
 	private _destination: Destination;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
@@ -138,10 +137,10 @@ export class Request extends CommonFunctions {
 		return this._purpose ? this._purposeName : '';
 	}
 	get preferences(): Array<number> {
-		return this._preferences;
+		return this._preferences.map(p => p.id);
 	}
 	get preferenceNames(): Array<string> {
-		return this._preferenceNames;
+		return this._preferences.map(p => p.name);
 	}
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
@@ -476,7 +475,7 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
 						return null;
 					}
-					return this._preferenceNames.join(', ');
+					return this.preferenceNames.join(', ');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
 				isValid: (): boolean => {
@@ -622,7 +621,6 @@ export class Request extends CommonFunctions {
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
 		this._preferences = [];
-		this._preferenceNames = [];
 		this._traveler = {
 			name: null,
 			mobile: null,
@@ -703,17 +701,20 @@ export class Request extends CommonFunctions {
 	}
 
 	addPreference(preference: Preference): void {
-		this._preferences.push(preference.id);
-		this._preferenceNames.push(preference.name);
+		this._preferences.push(preference);
 	}
 
 	resetPreference(): void {
 		this._preferences = [];
-		this._preferenceNames = [];
 	}
 
 	isPreferenceSelected(preferenceId: number): boolean {
-		return this._preferences.indexOf(preferenceId) !== -1;
+		return this._preferences.some(p => p.id === preferenceId);
+	}
+
+	getPreferenceName(preferenceId: number): string {
+		const preference = this._preferences.find(p => p.id === preferenceId);
+		return preference ? preference.name : null;
 	}
 
 	isValidForRecommendedDestinations(): boolean {

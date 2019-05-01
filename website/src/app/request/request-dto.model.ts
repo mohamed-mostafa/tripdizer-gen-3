@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { CommonFunctions } from '../shared/utils';
+import { LUTPreference } from './preferences/preference.model';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
 import { TravelHistory } from './travel-history.enum';
@@ -17,6 +18,7 @@ export class RequestRequest {
 	purpose: number;
 	otherPurposeName?: string;
 	preferences: Array<number>;
+	otherPreferenceName?: string;
 	destination: number;
 	estimatedCost: number;
 	visaAssistanceNeeded: boolean;
@@ -41,6 +43,7 @@ export class RequestRequest {
 			purpose: request.purpose,
 			otherPurposeName: request.purposeName,
 			preferences: request.preferences,
+			otherPreferenceName: request.getPreferenceName(LUTPreference.Other),
 			destination: request.destination.id,
 			estimatedCost: request.estimatedCost,
 			visaAssistanceNeeded: request.visaAssistanceNeeded,
