@@ -26,7 +26,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							request.date,
 							request.traveler.email,
@@ -44,6 +44,8 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.second_country,
 							request.third_country,
 							request.purpose,
+							request.otherPurposeName,
+							request.otherInterestName,
 							request.adultsNumber,
 							request.kidsNumber,
 							request.infantsNumber,
@@ -185,6 +187,8 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								secondCountry: rows[i].Second_Country,
 								thirdCountry: rows[i].Third_Country,
 								travelPurpose: rows[i].Travel_Purpose,
+								otherPurposeName: rows[i].Other_Purpose_Name,
+								otherInterestName: rows[i].Other_Interest_Name,
 								numberOfAdults: rows[i].Number_Of_Adults,
 								numberOfKids: rows[i].Number_Of_Kids,
 								numberOfInfants: rows[i].Number_Of_Infants,
@@ -341,6 +345,8 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								secondCountry: rows[0].Second_Country,
 								thirdCountry: rows[0].Third_Country,
 								travelPurpose: rows[0].Travel_Purpose,
+								otherPurposeName: rows[0].Other_Purpose_Name,
+								otherInterestName: rows[0].Other_Interest_Name,
 								numberOfAdults: rows[0].Number_Of_Adults,
 								numberOfKids: rows[0].Number_Of_Kids,
 								numberOfInfants: rows[0].Number_Of_Infants,
@@ -443,7 +449,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ? WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
@@ -455,6 +461,8 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.secondCountry,
 					request.thirdCountry,
 					request.travelPurpose,
+					request.otherPurposeName,
+					request.otherInterestName,
 					request.numberOfAdults,
 					request.numberOfKids,
 					request.numberOfInfants,

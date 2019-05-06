@@ -26,8 +26,9 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		infantsNumber: request.infantsNumber || request.number_of_infants || 0,
 		budget: request.budget || request.budget,
 		budgetCategory: request.budgetCategory || request.budget_category,
-		purpose: request.purpose || request.travel_purpose,
+		purpose: request.purpose || request.travelPurpose || request.travel_purpose,
 		preferences: request.preferences || request.interests,
+		otherInterestName: request.otherInterestName || request.otherPreferenceName,
 		destination: request.destination || request.itinerary_id,
 		estimatedCost: request.estimatedCost || request.estimatedCost,
 		visaAssistanceNeeded: request.visaAssistanceNeeded || request.visa_assistance_needed,
@@ -41,6 +42,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 
 		referralType: request.referralType || 1,
 	};
+	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	request.preferences = request.preferences.map(ri => ({
 		id: ri.id || ri,
 		percentage: ri.percentage || 100,
@@ -133,6 +135,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 
 var updateRequest = function(request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
+	request.otherPurposeName = request.travelPurpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
 		request,
 		function(request) {

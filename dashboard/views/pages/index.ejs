@@ -302,6 +302,10 @@
                       <select class="form-control" id="travelPurpose" ng-model="currentOrder.travelPurpose">
                         <option ng-repeat="purpose in purposes" ng-value="purpose.id" ng-selected="purpose.id === currentOrder.travelPurpose">{{purpose.en_name}}</option>
                       </select>
+                      <div ng-if="currentOrder.travelPurpose == 1">
+                        <label for="numberOfAdults">Other Purpose Name</label>
+                        <input type="text" class="form-control" id="otherPurposeName" ng-model="currentOrder.otherPurposeName">
+                      </div>
                       <label for="numberOfAdults">Number Of Adults</label>
                       <input type="number" min="1" step="1" class="form-control" id="numberOfAdults" ng-model="currentOrder.numberOfAdults">
                       <label for="numberOfKids">Number Of Kids</label>
@@ -338,7 +342,7 @@
                       </thead>
                       <tbody>
                         <tr ng-repeat="interest in currentOrder.interests" ng-show="currentOrder.interests.length != 0">
-                          <td>{{interests[interest.id - 1].en_name}}</td>
+                          <td>{{ interest.id == 0 ? currentOrder.otherInterestName : interests[interest.id - 1].en_name }}</td>
                           <td>{{interest.percentage | number}}%</td>
                         </tr>
                       </tbody>

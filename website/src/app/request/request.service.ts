@@ -14,7 +14,7 @@ import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { DropDownItem } from '../shared/models/drop-down-item.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
-import { Preference } from './preferences/preference.model';
+import { Preference, LUTPreference } from './preferences/preference.model';
 import { LUTPurpose, Purpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
@@ -101,6 +101,8 @@ export class RequestService {
 			value: requestType,
 			navBar: this.requestData.navBar,
 		});
+		this.Lookups.purposes = null;
+		this.Lookups.preferences = null;
 		return true;
 	}
 
@@ -272,7 +274,11 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(purposes => {
-				this.Lookups.purposes = purposes;
+				if (this.getRequestType() === RequestType.SurpriseMe) {
+					this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
+				} else {
+					this.Lookups.purposes = purposes;
+				}
 				this.isLoading.next(false);
 				return this.Lookups.purposes;
 			})
@@ -315,7 +321,11 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(preferences => {
-				this.Lookups.preferences = preferences;
+				if (this.getRequestType() === RequestType.SurpriseMe) {
+					this.Lookups.preferences = preferences.filter(p => p.id !== LUTPreference.Other);
+				} else {
+					this.Lookups.preferences = preferences;
+				}
 				this.isLoading.next(false);
 				return this.Lookups.preferences;
 			})
