@@ -105,6 +105,7 @@ export class TravelInfoComponent implements OnInit {
 					this.openLoginDialog();
 				}
 			}
+			this.firstTimeLogin = false;
 		});
 	}
 
@@ -193,7 +194,6 @@ export class TravelInfoComponent implements OnInit {
 	}
 
 	openLoginDialog(): void {
-		this.firstTimeLogin = false;
 		this.loginDialogRef = this.dialog.open(LoginDialogComponent, {
 			autoFocus: true,
 			maxWidth: 400,
