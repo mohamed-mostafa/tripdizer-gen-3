@@ -5,4 +5,10 @@ export const environment = {
 	facebookPixelID: '198150784300872',
 	mixpanelToken: 'caf7404381b0d9a563c861d3566c35ed',
 	experimentKey: 'Reduce Friction',
+	facebook: {
+		appID: null,
+	},
+	google: {
+		OAuthID: null,
+	},
 };

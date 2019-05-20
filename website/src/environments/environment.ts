@@ -9,6 +9,12 @@ export const environment = {
 	facebookPixelID: null,
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
+	facebook: {
+		appID: '692219684549236',
+	},
+	google: {
+		OAuthID: '181173581443-lmlkmu06abauaed1oauqgdcn87gbhbaa.apps.googleusercontent.com',
+	},
 };
 
 /*

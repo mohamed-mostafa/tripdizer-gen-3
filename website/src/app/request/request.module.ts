@@ -8,21 +8,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
-
-/* Modules */
-import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
+import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
-
-/* Components */
 import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
 import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
+import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		RequestRoutingModule,
+		CoreModule,
 		FormsModule,
 		ReactiveFormsModule,
 		SharedModule,

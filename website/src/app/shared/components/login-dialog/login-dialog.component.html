@@ -1,0 +1,29 @@
+<span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
+	<span mat-dialog-title>
+		{{ 'core.user_profile.sign_in' | translate }}
+		<img
+			src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
+			(click)="close()"
+			class="close-btn"
+			[ngClass]="('dir' | translate) === 'rtl' ? 'float-left mr-5' : 'float-right ml-5'"
+		/>
+	</span>
+	<div mat-dialog-content>
+		<div class="text-center" *ngIf="user; else notUser">
+			<c-core-user-profile></c-core-user-profile>
+		</div>
+		<ng-template #notUser>
+			<div class="text-center">
+				<button class="btn btn-social-icon btn-google mx-1" (click)="signInWithGoogle()">
+					<span class="fa fa-google"></span>
+				</button>
+				<button class="btn btn-social-icon btn-facebook mx-1" (click)="signInWithFacebook()">
+					<span class="fa fa-facebook"></span>
+				</button>
+				<!-- <button class="btn btn-social-icon btn-facebook mx-1" (click)="signInWithLinkedIn()">
+				<span class="fa fa-linkedin"></span>
+			</button> -->
+			</div>
+		</ng-template>
+	</div>
+</span>

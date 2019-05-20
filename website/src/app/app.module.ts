@@ -10,10 +10,8 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-/* Modules */
+import { AuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { AppRoutingModule } from './app-routing.module';
-import { CoreModule } from './core/core.module';
 import {
 	AppTranslateLoader,
 	LangChangeEvent,
@@ -21,15 +19,11 @@ import {
 	TranslateModule,
 	TranslateService,
 } from './app-translate.loader';
-
-/* Interceptors */
-import { JWTokenInterceptor } from './http.interceptor';
-
-/* Date Formats */
-import { CUSTOM_FORMATS } from './shared/utils';
-
-/* Components */
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
+import { JWTokenInterceptor } from './http.interceptor';
+import { CUSTOM_FORMATS } from './shared/utils';
+import { SocialAuthServiceConfig } from './social-auth-service.config';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -48,6 +42,7 @@ import { AppComponent } from './app.component';
 		CoreModule,
 		MatMomentDateModule,
 		MatSliderModule,
+		SocialLoginModule,
 	],
 	providers: [
 		CurrencyPipe,
@@ -55,6 +50,7 @@ import { AppComponent } from './app.component';
 		{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
 		{ provide: DateAdapter, useClass: MomentDateAdapter },
 		{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_FORMATS },
+		{ provide: AuthServiceConfig, useFactory: SocialAuthServiceConfig },
 	],
 	bootstrap: [AppComponent],
 })

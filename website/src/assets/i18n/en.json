@@ -4,6 +4,10 @@
 		"EGP": "EGP"
 	},
 	"core": {
+		"user_profile": {
+			"sign_out": "Sign Out",
+			"sign_in": "Sign In"
+		},
 		"footer": {
 			"logo": "../../../assets/img/logo-250x131.svg",
 			"slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
