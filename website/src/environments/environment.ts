@@ -5,15 +5,15 @@
 export const environment = {
 	production: false,
 	apiUrl: 'http://localhost:8080/',
-	googleAnalyticsTrackingID: 'UA-106443087-2',
-	facebookPixelID: null,
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	facebook: {
 		appID: '692219684549236',
+		pixelID: null,
 	},
 	google: {
 		OAuthID: '181173581443-lmlkmu06abauaed1oauqgdcn87gbhbaa.apps.googleusercontent.com',
+		analyticsTrackingID: 'UA-106443087-2',
 	},
 };
 
