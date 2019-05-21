@@ -27,6 +27,14 @@
 			"copyPaste": "رجاء عدم النسخ",
 			"notEmpty": "القيمة غير صحيحة",
 			"invalidPromoCode": "البروموكود غير فعال"
+		},
+		"login_dialog": {
+			"sign_out": "تسجيل الخروج",
+			"sign_in": "تسجيل الدخول",
+			"sign_in_google": "تسجيل الدخول بواسطة Google",
+			"sign_in_facebook": "تسجيل الدخول بواسطة Facebook",
+			"or": "أو",
+			"continue_without_login": "اكمل بدون تسجيل الدخول"
 		}
 	},
 	"home": {

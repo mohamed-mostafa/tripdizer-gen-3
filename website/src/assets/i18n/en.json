@@ -27,6 +27,14 @@
 			"copyPaste": "Please, Don't copy and paste me",
 			"notEmpty": "Invalid value",
 			"invalidPromoCode": "Invalid promo code"
+		},
+		"login_dialog": {
+			"sign_out": "Sign Out",
+			"sign_in": "Sign In",
+			"sign_in_google": "Sign in with Google",
+			"sign_in_facebook": "Sign in with Facebook",
+			"or": "or",
+			"continue_without_login": "Continue without login"
 		}
 	},
 	"home": {

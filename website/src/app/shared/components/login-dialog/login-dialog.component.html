@@ -1,6 +1,6 @@
 <span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
 	<span mat-dialog-title>
-		{{ 'core.user_profile.sign_in' | translate }}
+		{{ 'shared.login_dialog.sign_in' | translate }}
 		<img
 			src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
 			(click)="close()"
@@ -14,15 +14,18 @@
 		</div>
 		<ng-template #notUser>
 			<div class="text-center">
-				<button class="btn btn-social-icon btn-google mx-1" (click)="signInWithGoogle()">
-					<span class="fa fa-google"></span>
+				<button class="btn mx-1 social-btn google-btn" (click)="signInWithGoogle()">
+					<span class="fa fa-google float-left m-1"></span>
+					<div>{{ 'shared.login_dialog.sign_in_google' | translate }}</div>
 				</button>
-				<button class="btn btn-social-icon btn-facebook mx-1" (click)="signInWithFacebook()">
-					<span class="fa fa-facebook"></span>
+				<button class="btn mx-1 social-btn facebook-btn" (click)="signInWithFacebook()">
+					<span class="fa fa-facebook float-left m-1"></span>
+					<div>{{ 'shared.login_dialog.sign_in_facebook' | translate }}</div>
 				</button>
-				<!-- <button class="btn btn-social-icon btn-facebook mx-1" (click)="signInWithLinkedIn()">
-				<span class="fa fa-linkedin"></span>
-			</button> -->
+				<div class="my-2 text-uppercase text-center">{{ 'shared.login_dialog.or' | translate }}</div>
+				<button class="btn mx-1 social-btn btn-secondary" (click)="continueWithoutLogin()">
+					{{ 'shared.login_dialog.continue_without_login' | translate }}
+				</button>
 			</div>
 		</ng-template>
 	</div>
