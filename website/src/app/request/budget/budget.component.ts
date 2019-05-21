@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
 import { BudgetCategory, LUTBudgetCategory } from './budget-category.model';
 
 @Component({
@@ -22,7 +18,7 @@ export class BudgetComponent {
 	budgetCategories: Array<BudgetCategory>;
 	isOwnBudget;
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -60,7 +56,7 @@ export class BudgetComponent {
 		if (selectedBudgetCategory) {
 			this.requestService.setProperty('budgetCategoryName', selectedBudgetCategory.name);
 		}
-		this.mixpanelService.track('Submit - Budget', {
+		this.trackingService.track('Submit - Budget', {
 			...this.formGroup.value,
 			budgetCategoryName: selectedBudgetCategory.name,
 		});

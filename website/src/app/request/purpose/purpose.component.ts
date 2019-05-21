@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
-import { Purpose, LUTPurpose } from './purpose.model';
+import { LUTPurpose, Purpose } from './purpose.model';
 
 @Component({
 	selector: 'c-request-purpose',
@@ -22,7 +18,7 @@ export class PurposeComponent {
 	LUTPurpose = LUTPurpose;
 	otherPurposeName = '';
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -56,6 +52,6 @@ export class PurposeComponent {
 			this.requestService.setProperty('kidsNumber', selectedPurpose.kidsNumber);
 			this.requestService.setProperty('infantsNumber', selectedPurpose.infantsNumber);
 		}
-		this.mixpanelService.track('Submit - Purpose', { ...this.formGroup.value, purposeName: selectedPurpose.name });
+		this.trackingService.track('Submit - Purpose', { ...this.formGroup.value, purposeName: selectedPurpose.name });
 	}
 }

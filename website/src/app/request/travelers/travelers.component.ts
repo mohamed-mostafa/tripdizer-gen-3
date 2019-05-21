@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -18,7 +16,7 @@ export class TravelersComponent {
 		infantsNumber: new FormControl(),
 	};
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -34,7 +32,7 @@ export class TravelersComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
-		this.mixpanelService.track('Submit - Travelers', this.formGroup.value);
+		this.trackingService.track('Submit - Travelers', this.formGroup.value);
 	}
 
 	getRadioValues(controlName: string): Array<number> {

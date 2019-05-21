@@ -3,10 +3,9 @@ import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogComponent } from '../shared/components/dialog/dialog.component';
+import { TrackingService } from '../shared/services/tracking.service';
 import { CustomValidators } from '../shared/utils';
 import { HomeService } from './home.service';
-
-declare const gtag: Function;
 
 @Component({
 	selector: 'c-home',
@@ -21,7 +20,12 @@ export class HomeComponent {
 		buttonsLabel: { ok: string; cancel: string };
 	};
 
-	constructor(private homeService: HomeService, private dialog: MatDialog, translate: TranslateService) {
+	constructor(
+		private homeService: HomeService,
+		private dialog: MatDialog,
+		translate: TranslateService,
+		private trackingService: TrackingService
+	) {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
 		// setTimeout(() => {
 		// 	this.openDialog();
@@ -54,21 +58,20 @@ export class HomeComponent {
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
 				this.homeService.savePhoneNumber(inputs[0].value);
-				gtag('event', 'Submit Help Popup', {
+				this.trackingService.track('Submit Help Popup', {
 					event_category: 'Submit Help Popup',
 					event_label: 'PhoneNumber: ' + inputs[0].value,
 					value: inputs[0].value,
 				});
 			} else {
-				gtag('event', 'Cancel Help Popup', {
+				this.trackingService.track('Cancel Help Popup', {
 					event_category: 'Cancel Help Popup',
 					event_label: 'N/A',
 					value: 'N/A',
 				});
 			}
 		});
-		
-		gtag('event', 'Display Help Popup', {
+		this.trackingService.track('Display Help Popup', {
 			event_category: 'Display Help Popup',
 			event_label: 'N/A',
 			value: 'N/A',

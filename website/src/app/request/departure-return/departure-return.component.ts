@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
 import { RequestService } from '../request.service';
 
 @Component({
@@ -24,7 +22,7 @@ export class DepartureReturnComponent {
 
 	constructor(
 		private requestService: RequestService,
-		private mixpanelService: MixpanelService,
+		private trackingService: TrackingService,
 		translate: TranslateService
 	) {
 		let compareDatesValidationMsg: string;
@@ -56,7 +54,7 @@ export class DepartureReturnComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
-		this.mixpanelService.track('Submit - Departure & Return', {
+		this.trackingService.track('Submit - Departure & Return', {
 			departureDate: moment(this.formGroup.get('departureDate').value).format('D / M / Y'),
 			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
 			isFlexibleDates: this.formGroup.get('isFlexibleDates').value,

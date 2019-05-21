@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
-import { Preference, LUTPreference } from './preference.model';
+import { LUTPreference, Preference } from './preference.model';
 
 @Component({
 	selector: 'c-request-preferences',
@@ -20,7 +16,7 @@ export class PreferencesComponent {
 	LUTPreference = LUTPreference;
 	otherPreferenceName = '';
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		requestService.getPreferences().subscribe((preferences: Array<Preference>) => {
 			this.preferences = preferences;
@@ -56,6 +52,6 @@ export class PreferencesComponent {
 				}
 			}
 		}
-		this.mixpanelService.track('Submit - Preferences', this.formGroup.value);
+		this.trackingService.track('Submit - Preferences', this.formGroup.value);
 	}
 }

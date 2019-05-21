@@ -7,7 +7,7 @@ import { AuthService as SocialAuthService } from 'angularx-social-login';
 import * as moment from 'moment';
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
 import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/login-dialog.component';
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
 import { Destination } from '../destinations/destination.model';
 import { RequestType } from '../request-type.enum';
@@ -44,7 +44,7 @@ export class TravelInfoComponent implements OnInit {
 	constructor(
 		route: ActivatedRoute,
 		private requestService: RequestService,
-		private mixpanelService: MixpanelService,
+		private trackingService: TrackingService,
 		private dialog: MatDialog,
 		private socialAuthService: SocialAuthService,
 		translate: TranslateService
@@ -128,7 +128,7 @@ export class TravelInfoComponent implements OnInit {
 				// }
 			}
 		}
-		this.mixpanelService.track('Submit - Travel Info', {
+		this.trackingService.track('Submit - Travel Info', {
 			...this.formGroup.value,
 			departureDate: moment(this.formGroup.get('departureDate').value).format('D / M / Y'),
 			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
@@ -185,7 +185,7 @@ export class TravelInfoComponent implements OnInit {
 					visaTypeName: null,
 				};
 				this.formGroup.get('destination').setValue({ ...destination, triggered: true });
-				this.mixpanelService.track('Submit - Destination', {
+				this.trackingService.track('Submit - Destination', {
 					destinationId: destination.id,
 					destinationName: destination.name,
 				});

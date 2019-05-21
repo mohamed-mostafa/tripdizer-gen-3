@@ -1,15 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
-import { Observable } from 'rxjs';
 import { CustomValidators } from 'src/app/shared/utils';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
 import { DropDownItem } from '../../shared/models/drop-down-item.model';
 import { Gender } from '../gender.enum';
 import { TravelHistory } from '../travel-history.enum';
@@ -44,7 +38,7 @@ export class InformationComponent {
 
 	constructor(
 		private requestService: RequestService,
-		private mixpanelService: MixpanelService,
+		private trackingService: TrackingService,
 		translate: TranslateService
 	) {
 		// translate.stream('request.information.equal_to').subscribe(validationMsg => {
@@ -69,7 +63,7 @@ export class InformationComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
-		this.mixpanelService.track('Submit - Information', {
+		this.trackingService.track('Submit - Information', {
 			...this.formGroup.value,
 			// travelerBirthday: moment(this.formGroup.get('travelerBirthday').value).format('D / M / Y'),
 		});

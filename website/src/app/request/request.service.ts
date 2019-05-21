@@ -7,14 +7,13 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { MixpanelService } from '../shared/services/mixpanel.service';
-
+import { DropDownItem } from '../shared/models/drop-down-item.model';
+import { TrackingService } from '../shared/services/tracking.service';
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
-import { DropDownItem } from '../shared/models/drop-down-item.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
-import { Preference, LUTPreference } from './preferences/preference.model';
+import { LUTPreference, Preference } from './preferences/preference.model';
 import { LUTPurpose, Purpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
@@ -25,9 +24,6 @@ import { RequestType } from './request-type.enum';
 import { Request } from './request.model';
 import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';
-
-declare const gtag: Function;
-declare const fbq: Function;
 
 @Injectable({
 	providedIn: 'root',
@@ -56,7 +52,7 @@ export class RequestService {
 		private router: Router,
 		private currencyPipe: CurrencyPipe,
 		private translate: TranslateService,
-		private mixpanelService: MixpanelService
+		private trackingService: TrackingService
 	) {
 		this.initRequest();
 	}
@@ -436,21 +432,7 @@ export class RequestService {
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
 					this.lastRequestId = ticket.id;
-					gtag('event', 'Submit Request', {
-						event_category: 'Submit Request',
-						event_label: 'RequestId: ' + ticket.id,
-						value: ticket.id,
-					});
-					fbq('track', 'Purchase', {
-						contents: [
-							{
-								id: ticket.id,
-								quantity: ticket.adultsNumber,
-								itemPrice: ticket.estimatedCost,
-							},
-						],
-					});
-					this.mixpanelService.track('Submit Request', { requestId: ticket.id });
+					this.trackingService.track('Submit Request', { requestId: ticket.id });
 					this.resetRequestState();
 					this.isLoading.next(false);
 					return ticket;

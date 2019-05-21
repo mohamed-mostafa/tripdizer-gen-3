@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MixpanelService } from 'src/app/shared/services/mixpanel.service';
+import { TrackingService } from 'src/app/shared/services/tracking.service';
 
 @Component({
 	selector: 'c-home-section-landing',
@@ -7,13 +7,13 @@ import { MixpanelService } from 'src/app/shared/services/mixpanel.service';
 	styleUrls: ['./section-landing.component.scss'],
 })
 export class SectionLandingComponent {
-	constructor(private mixpanelService: MixpanelService) {}
+	constructor(private trackingService: TrackingService) {}
 
 	havePlan() {
-		this.mixpanelService.track('Submit - Yes, I have a plan');
+		this.trackingService.track('Submit - Yes, I have a plan');
 	}
 
 	surpriseMe() {
-		this.mixpanelService.track('Submit - NO, Surprise me');
+		this.trackingService.track('Submit - NO, Surprise me');
 	}
 }

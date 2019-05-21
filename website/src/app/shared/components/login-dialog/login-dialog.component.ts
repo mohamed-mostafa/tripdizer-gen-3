@@ -7,7 +7,7 @@ import {
 	LinkedInLoginProvider,
 	SocialUser,
 } from 'angularx-social-login';
-import { MixpanelService } from '../../services/mixpanel.service';
+import { TrackingService } from '../../services/tracking.service';
 
 declare const FB: any;
 
@@ -23,7 +23,7 @@ export class LoginDialogComponent implements OnInit {
 		public dialogRef: MatDialogRef<LoginDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private socialAuthService: SocialAuthService,
-		private mixpanelService: MixpanelService
+		private trackingService: TrackingService
 	) {}
 
 	ngOnInit() {
@@ -36,26 +36,26 @@ export class LoginDialogComponent implements OnInit {
 
 	signInWithGoogle(): void {
 		this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-		this.mixpanelService.track('Sign in with Google');
+		this.trackingService.track('Sign in with Google');
 	}
 
 	signInWithFacebook(): void {
 		this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-		this.mixpanelService.track('Sign in with Facebook');
+		this.trackingService.track('Sign in with Facebook');
 	}
 
 	signInWithLinkedIn(): void {
 		this.socialAuthService.signIn(LinkedInLoginProvider.PROVIDER_ID);
-		this.mixpanelService.track('Sign in with LinkedIn');
+		this.trackingService.track('Sign in with LinkedIn');
 	}
 
 	continueWithoutLogin(): void {
 		this.close();
-		this.mixpanelService.track('Continue without login');
+		this.trackingService.track('Continue without login');
 	}
 
 	signOut(): void {
 		this.socialAuthService.signOut();
-		this.mixpanelService.track('Sign out');
+		this.trackingService.track('Sign out');
 	}
 }

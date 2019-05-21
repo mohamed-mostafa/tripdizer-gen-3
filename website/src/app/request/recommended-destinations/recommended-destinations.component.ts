@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
 import { RecommendedDestinationsResponse } from './recommended-destination.model';
 
 @Component({
@@ -23,7 +18,7 @@ export class RecommendedDestinationsComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		private requestService: RequestService,
-		private mixpanelService: MixpanelService
+		private trackingService: TrackingService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.selectedDestination = requestService.getProperty('destination');
@@ -41,7 +36,7 @@ export class RecommendedDestinationsComponent {
 
 	save(destination: RecommendedDestinationsResponse): boolean {
 		this.requestService.setProperty('destination', destination);
-		this.mixpanelService.track('Submit - Recommended Destination', {
+		this.trackingService.track('Submit - Recommended Destination', {
 			destinationId: destination.id,
 			destinationName: destination.name,
 		});
