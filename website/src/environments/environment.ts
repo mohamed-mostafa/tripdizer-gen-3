@@ -8,11 +8,11 @@ export const environment = {
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	facebook: {
-		appID: '692219684549236',
+		appID: '1597597783733890',
 		pixelID: null,
 	},
 	google: {
-		OAuthID: '181173581443-lmlkmu06abauaed1oauqgdcn87gbhbaa.apps.googleusercontent.com',
+		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-2',
 	},
 };
