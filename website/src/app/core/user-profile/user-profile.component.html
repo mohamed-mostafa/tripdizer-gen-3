@@ -1,15 +1,22 @@
 <div *ngIf="user; else notUser">
-	<img
-		[src]="user.photoUrl"
-		alt=""
-		class="user-img mx-1 rounded-circle d-none d-md-inline"
-		[ngClass]="('dir' | translate) === 'rtl' ? 'float-left' : 'float-right'"
-	/>
-	<div class="mx-1" [ngClass]="('dir' | translate) === 'rtl' ? 'float-left text-right' : 'float-right text-left'">
-		<span class="text-body text-capitalize">{{ user.name }}</span>
-		<br />
-		<a class="small text-monospace text-muted" (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
-	</div>
+	<table>
+		<tr>
+			<td rowspan="2">
+				<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
+			</td>
+			<td class="text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
+				{{ user.name }}
+			</td>
+		</tr>
+		<tr>
+			<td
+				class="small text-monospace text-muted"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
+				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
+			</td>
+		</tr>
+	</table>
 </div>
 <ng-template #notUser>
 	<a (click)="openLoginDialog()">{{ 'core.user_profile.sign_in' | translate }}</a>
