@@ -1,8 +1,32 @@
 <div *ngIf="user; else notUser">
-	<table>
+	<div>
+		<a class="dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown">
+			<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
+			<span class="caret"></span>
+		</a>
+
+		<ul class="dropdown-menu">
+			<li class="text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
+				{{ user.name }}
+			</li>
+			<li
+				class="small text-monospace text-muted"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
+				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
+			</li>
+		</ul>
+	</div>
+
+	<!-- <table>
 		<tr>
 			<td rowspan="2">
-				<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
+				<img
+					[src]="user.photoUrl"
+					alt=""
+					class="user-img rounded-circle"
+					[ngClass]="('dir' | translate) === 'rtl' ? 'ml-2' : 'mr-2'"
+				/>
 			</td>
 			<td class="text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
 				{{ user.name }}
@@ -16,7 +40,7 @@
 				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
 			</td>
 		</tr>
-	</table>
+	</table> -->
 </div>
 <ng-template #notUser>
 	<a (click)="openLoginDialog()">{{ 'core.user_profile.sign_in' | translate }}</a>
