@@ -30,13 +30,16 @@
 					[ngClass]="('dir' | translate) === 'rtl' ? 'ml-2' : 'mr-2'"
 				/>
 			</td>
-			<td class="text-body text-capitalize px-1" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
+			<td
+				class="text-body text-capitalize"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right pl-3' : 'text-left pr-3'"
+			>
 				{{ user.name }}
 			</td>
 		</tr>
 		<tr *ngIf="rowSpanNum === 2">
 			<td
-				class="small text-monospace text-muted px-1"
+				class="small text-monospace text-muted"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
 			>
 				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
