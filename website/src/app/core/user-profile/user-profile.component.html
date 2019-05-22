@@ -6,11 +6,11 @@
 		</a>
 
 		<ul class="dropdown-menu">
-			<li class="text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
+			<li class="mx-2 text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
 				{{ user.name }}
 			</li>
 			<li
-				class="small text-monospace text-muted"
+				class="mx-2 small text-monospace text-muted"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
 			>
 				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
