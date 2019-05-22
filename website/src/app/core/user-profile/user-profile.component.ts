@@ -10,6 +10,8 @@ import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/log
 })
 export class UserProfileComponent implements OnInit {
 	user: SocialUser;
+	rowSpanNum = 1;
+	setRowSpanNumTimeout: any;
 
 	constructor(private socialAuthService: SocialAuthService, private dialog: MatDialog) {}
 
@@ -19,6 +21,13 @@ export class UserProfileComponent implements OnInit {
 
 	signOut(): void {
 		this.socialAuthService.signOut();
+	}
+
+	setRowSpanNum(num: number) {
+		clearTimeout(this.setRowSpanNumTimeout);
+		this.setRowSpanNumTimeout = setTimeout(() => {
+			this.rowSpanNum = num;
+		}, 0);
 	}
 
 	openLoginDialog(): void {

@@ -20,9 +20,9 @@
 		</ul>
 	</div> -->
 
-	<table>
+	<table (mouseover)="setRowSpanNum(2)" (mouseout)="setRowSpanNum(1)">
 		<tr>
-			<td rowspan="2">
+			<td [attr.rowspan]="rowSpanNum">
 				<img
 					[src]="user.photoUrl"
 					alt=""
@@ -34,14 +34,14 @@
 				{{ user.name }}
 			</td>
 		</tr>
-		<!-- <tr>
+		<tr *ngIf="rowSpanNum === 2">
 			<td
 				class="small text-monospace text-muted"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
 			>
 				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
 			</td>
-		</tr> -->
+		</tr>
 	</table>
 </div>
 <ng-template #notUser>
