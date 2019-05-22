@@ -1,16 +1,19 @@
 <div *ngIf="user; else notUser">
 	<div>
-		<a class="dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown">
+		<a href="javascript:void(0)" data-toggle="dropdown">
 			<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
 			<!-- <span class="caret"></span> -->
 		</a>
 
 		<ul class="dropdown-menu">
-			<li class="mx-2 text-body text-capitalize" [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'">
+			<li
+				class="mx-3 mt-1 text-body text-capitalize"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
 				{{ user.name }}
 			</li>
 			<li
-				class="mx-2 small text-monospace text-muted"
+				class="mx-3 mb-1 small text-monospace text-muted"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
 			>
 				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
