@@ -27,7 +27,12 @@ export class LoginDialogComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => (this.user = user));
+		this.socialAuthService.authState.subscribe(user => {
+			if (user) {
+				this.close();
+			}
+			this.user = user;
+		});
 	}
 
 	close(): void {

@@ -39,7 +39,6 @@ export class TravelInfoComponent implements OnInit {
 	};
 	isHavePlan: boolean;
 	firstTimeLogin = true;
-	loginDialogRef: MatDialogRef<LoginDialogComponent, any>;
 
 	constructor(
 		route: ActivatedRoute,
@@ -94,9 +93,6 @@ export class TravelInfoComponent implements OnInit {
 	ngOnInit() {
 		this.socialAuthService.authState.subscribe(user => {
 			if (user) {
-				if (this.loginDialogRef) {
-					this.loginDialogRef.close();
-				}
 				this.requestService.setProperty('socialSigning', true);
 				this.requestService.setProperty('travelerName', user.name);
 				this.requestService.setProperty('travelerEmail', user.email);
@@ -194,7 +190,7 @@ export class TravelInfoComponent implements OnInit {
 	}
 
 	openLoginDialog(): void {
-		this.loginDialogRef = this.dialog.open(LoginDialogComponent, {
+		this.dialog.open(LoginDialogComponent, {
 			autoFocus: true,
 			maxWidth: 400,
 		});
