@@ -4,11 +4,11 @@ export const environment = {
 	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
 	experimentKey: 'Reduce Friction',
 	facebook: {
-		appID: null,
+		appID: '1597597783733890',
 		pixelID: null,
 	},
 	google: {
-		OAuthID: null,
+		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-3',
 	},
 };
