@@ -34,7 +34,8 @@
 			"sign_in_google": "Sign in with Google",
 			"sign_in_facebook": "Sign in with Facebook",
 			"or": "or",
-			"continue_without_login": "Continue without login"
+			"continue_without_login": "Continue without login",
+			"improve_experience": "To improve your experience" 
 		}
 	},
 	"home": {

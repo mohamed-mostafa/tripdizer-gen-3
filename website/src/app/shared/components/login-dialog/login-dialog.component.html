@@ -8,6 +8,7 @@
 			[ngClass]="('dir' | translate) === 'rtl' ? 'float-left mr-5' : 'float-right ml-5'"
 		/>
 	</span>
+	<h6>{{ 'shared.login_dialog.improve_experience' | translate }}</h6>
 	<div mat-dialog-content>
 		<div class="text-center" *ngIf="user; else notUser">
 			<c-core-user-profile></c-core-user-profile>
