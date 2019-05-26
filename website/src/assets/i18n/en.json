@@ -253,15 +253,15 @@
 				}
 			},
 			"lg_text": {
-				"line1": "Man cannot discover new oceans unless he has",
-				"line2": "the courage to lose sight of the shore.",
-				"line3": "– Andre Gide."
+				"line1": "Hey, you're only a few steps away from your dream trip.",
+				"line2": "Check out your itinerary and one of our advisors",
+				"line3": "will be calling you shortly."
 			},
 			"sm_text": {
-				"line1": "Man cannot discover new oceans",
-				"line2": "unless he has the courage to",
-				"line3": "lose sight of the shore.",
-				"line4": "– Andre Gide."
+				"line1": "Hey, you're only a few steps away",
+				"line2": "from your dream trip. Check out",
+				"line3": "your itinerary and one of our advisors",
+				"line4": "will be calling you shortly."
 			},
 			"view_package": "View package",
 			"download_package": "Download package",
