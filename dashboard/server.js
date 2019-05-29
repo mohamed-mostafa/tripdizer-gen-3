@@ -39,6 +39,9 @@ var start = () => {
 	app.set('layout extractStyles', true);
 	app.set('layout extractMetas', true);
 	// routes
+	app.get('/admin', (req, res) => {
+		res.redirect('/admin/home');
+	});
 	app.get('/admin/login', (req, res) => {
 		res.locals = {
 			...locals,
@@ -80,6 +83,16 @@ var start = () => {
 			controller: 'HomePageContent',
 		};
 		res.render('pages/index', {
+			user: req.user,
+		});
+	});
+	app.get('/admin/new-request', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'New Request',
+			controller: 'NewRequest',
+		};
+		res.render('pages/new-request', {
 			user: req.user,
 		});
 	});
