@@ -309,4 +309,29 @@ var g2gControlCenterApplication = angular
 				});
 			}
 		},
+	])
+	.factory('ChannelsService', [
+		'$rootScope',
+		'$http',
+		function ChannelsService($rootScope, $http) {
+			var prefix = $rootScope.serverURL + '/';
+
+			return {
+				getAll: getAll,
+			};
+
+			function getAll() {
+				return new Promise(function(resolve) {
+					resolve([
+						{ id: 1, enName: 'Website' },
+						{ id: 2, enName: 'Facebook' },
+						{ id: 3, enName: 'Instagram' },
+						{ id: 4, enName: 'Word of mouth' },
+					]);
+				});
+				// return $http.get(prefix + 'statuses', {}).then(function(response) {
+				// 	return response.data;
+				// });
+			}
+		},
 	]);
