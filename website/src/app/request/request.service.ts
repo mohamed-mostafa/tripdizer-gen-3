@@ -428,7 +428,7 @@ export class RequestService {
 		this.isLoading.next(true);
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
-			return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request }).pipe(
+			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request: request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
 					this.lastRequestId = ticket.id;
