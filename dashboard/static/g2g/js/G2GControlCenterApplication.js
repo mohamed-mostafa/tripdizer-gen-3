@@ -18,7 +18,7 @@ var g2gControlCenterApplication = angular
 		'$windowProvider',
 		function($httpProvider, $windowProvider) {
 			var $window = $windowProvider.$get();
-			$httpProvider.interceptors.push(function() {
+			$httpProvider.interceptors.push(function($q) {
 				return {
 					request: function(config) {
 						config.headers = config.headers || {};
@@ -33,6 +33,7 @@ var g2gControlCenterApplication = angular
 							// Unauthorized
 							$window.location.href = '/admin/login';
 						}
+						return $q.reject(response);
 					},
 				};
 			});
