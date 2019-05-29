@@ -73,7 +73,7 @@
                         <div>
                             <label for="channel">Channel</label>
                             <select  class="form-control" id="channel" ng-model="currentOrder.channel">
-                                <option ng-repeat="channel in channels" ng-value="channel.id" ng-selected="channel.id == currentOrder.channel">
+                                <option ng-repeat="channel in channels" ng-if="!channel.isHiddenOnDashboard" ng-value="channel.id" ng-selected="channel.id == currentOrder.channel">
                                     {{channel.enName}}</option>
                             </select>
                         </div>
@@ -178,7 +178,7 @@
                             </select>
                         </div>
                     </div>
-                    <div>
+                    <div ng-if="!isCreate">
                         <label for="actualDestination">Actual Destination</label>
                         <select class="form-control" id="actualDestination" ng-model="currentOrder.actualDestination">
                             <option ng-value="999999" ng-selected="true">-- Select actual destination --</option>

@@ -323,7 +323,7 @@ var g2gControlCenterApplication = angular
 			function getAll() {
 				return new Promise(function(resolve) {
 					resolve([
-						{ id: 1, enName: 'Website' },
+						{ id: 1, enName: 'Website', isHiddenOnDashboard: true },
 						{ id: 2, enName: 'Facebook' },
 						{ id: 3, enName: 'Instagram' },
 						{ id: 4, enName: 'Word of mouth' },
