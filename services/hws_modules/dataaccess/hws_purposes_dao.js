@@ -33,9 +33,9 @@ var getById = function(id, lang, onSuccess, onFailure) {
 							adultsNumber: rows[0].Number_Of_Adults,
 							kidsNumber: rows[0].Number_Of_Kids,
 							infantsNumber: rows[0].Number_Of_Infants,
-							numberOfAdults: rows[0].Number_Of_Adults,
-							numberOfKids: rows[0].Number_Of_Kids,
-							numberOfInfants: rows[0].Number_Of_Infants,
+							adultsNumber: rows[0].Number_Of_Adults,
+							kidsNumber: rows[0].Number_Of_Kids,
+							infantsNumber: rows[0].Number_Of_Infants,
 							image: rows[0].Image,
 						};
 
@@ -83,9 +83,9 @@ var create = function(purpose, onSuccess, onFailure) {
 						[
 							purpose.en_name,
 							purpose.ar_name,
-							purpose.numberOfAdults,
-							purpose.numberOfKids,
-							purpose.numberOfInfants,
+							purpose.adultsNumber,
+							purpose.kidsNumber,
+							purpose.infantsNumber,
 							purpose.image,
 						],
 						function(err, result) {
@@ -142,9 +142,9 @@ var update = function(purpose, onSuccess, onFailure) {
 						[
 							purpose.en_name,
 							purpose.ar_name,
-							purpose.numberOfAdults,
-							purpose.numberOfKids,
-							purpose.numberOfInfants,
+							purpose.adultsNumber,
+							purpose.kidsNumber,
+							purpose.infantsNumber,
 							purpose.image,
 							purpose.id,
 						],
@@ -204,9 +204,9 @@ var getAll = function(lang, onSuccess, onFailure) {
 							adultsNumber: rows[i].Number_Of_Adults,
 							kidsNumber: rows[i].Number_Of_Kids,
 							infantsNumber: rows[i].Number_Of_Infants,
-							numberOfAdults: rows[i].Number_Of_Adults,
-							numberOfKids: rows[i].Number_Of_Kids,
-							numberOfInfants: rows[i].Number_Of_Infants,
+							adultsNumber: rows[i].Number_Of_Adults,
+							kidsNumber: rows[i].Number_Of_Kids,
+							infantsNumber: rows[i].Number_Of_Infants,
 							image: rows[i].Image,
 						};
 						if (lang) {

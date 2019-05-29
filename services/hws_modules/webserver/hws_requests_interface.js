@@ -1,8 +1,9 @@
 var requestsBusiness = require('../business/hws_requests_business.js');
 
-var placeRequest = function(req, res) {
+var placeWebsiteRequest = function(req, res) {
 	try {
 		var request = req.body.request;
+		request.isFromWebsite = true;
 		// call the business function and give it a callback function
 		requestsBusiness.placeRequest(
 			request,
@@ -19,7 +20,35 @@ var placeRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/place');
+		console.log('An error occured in /request/website/place');
+		console.log(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
+var placeDashboardRequest = function(req, res) {
+	try {
+		var request = req.body.request;
+		request.isFromDashboard = true;
+		// call the business function and give it a callback function
+		requestsBusiness.placeRequest(
+			request,
+			function(request) {
+				res.json(request);
+			},
+			function(error) {
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			},
+			function(userErrorMessage) {
+				res.status(500).send(userErrorMessage);
+			}
+		);
+	} catch (error) {
+		console.log('An error occured in /request/dashboard/place');
 		console.log(error);
 		res
 			.status(500)
@@ -359,7 +388,7 @@ var toggleOptions = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/place');
+		console.log('An error occured in /request/toggleOptions');
 		console.log(error);
 		res
 			.status(500)
@@ -465,7 +494,8 @@ var getTravelerEmails = function(req, res) {
 	}
 };
 
-exports.placeRequest = placeRequest;
+exports.placeWebsiteRequest = placeWebsiteRequest;
+exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = assignRequestToUser;
 exports.updateRequest = updateRequest;

@@ -17,7 +17,8 @@ var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
-		travelingFrom: request.travelingFrom || request.leaving_country,
+		status: request.isFromWebsite ? 3 : null,
+		travelingFrom: request.travelingFrom || request.leavingCountry || request.leaving_country,
 		departureDate: request.departureDate || request.departure_date,
 		returnDate: request.returnDate || request.return_date,
 		isFlexibleDates: request.isFlexibleDates || request.flexible_dates,
@@ -26,27 +27,41 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		infantsNumber: request.infantsNumber || request.number_of_infants || 0,
 		budget: request.budget || request.budget,
 		budgetCategory: request.budgetCategory || request.budget_category,
-		purpose: request.purpose || request.travelPurpose || request.travel_purpose,
+		purpose: request.purpose || request.travel_purpose,
 		preferences: request.preferences || request.interests,
 		otherInterestName: request.otherInterestName || request.otherPreferenceName,
 		destination: request.destination || request.itinerary_id,
 		estimatedCost: request.estimatedCost || request.estimatedCost,
 		visaAssistanceNeeded: request.visaAssistanceNeeded || request.visa_assistance_needed,
 		tourGuideNeeded: request.tourGuideNeeded || request.tour_guide_needed,
-		specialRequests: request.specialRequests || request.specialRequests,
+		specialRequests: request.comments || request.specialRequests,
+		channel: request.isFromWebsite ? 1 : request.channel,
 		traveler: {
 			...request.traveler,
 			email: request.traveler.email || request.traveler.emailAddress,
 			birthday: request.traveler.birthday || request.traveler.dateOfBirth,
 		},
-
 		referralType: request.referralType || 1,
 	};
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
-	request.preferences = request.preferences.map(ri => ({
-		id: ri.id || ri,
-		percentage: ri.percentage || 100,
-	}));
+	if (Array.isArray(request.preferences)) {
+		request.preferences = request.preferences.map(ri => ({
+			id: ri.id || ri,
+			percentage: ri.percentage || 100,
+		}));
+	}
+	if (typeof request.preferences === 'object') {
+		const preferences = [];
+		for (const key in request.preferences) {
+			if (request.preferences.hasOwnProperty(key)) {
+				preferences.push({
+					id: key,
+					percentage: 100,
+				});
+			}
+		}
+		request.preferences = preferences;
+	}
 	// insert the request in our database
 	request.date = new Date(new Date().setHours(0, 0, 0, 0));
 	request.departureDate = new Date(request.departureDate);
@@ -135,7 +150,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 
 var updateRequest = function(request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
-	request.otherPurposeName = request.travelPurpose == 1 ? request.otherPurposeName : null;
+	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
 		request,
 		function(request) {
@@ -275,11 +290,11 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 						iternaryName: itinerary.en_name,
 						iternaryArabicName: itinerary.ar_name,
 						dailySpending: 0,
-						numberOfAdults: request.adultsNumber,
-						numberOfKids: request.kidsNumber,
-						numberOfInfants: request.infantsNumber,
+						adultsNumber: request.adultsNumber,
+						kidsNumber: request.kidsNumber,
+						infantsNumber: request.infantsNumber,
 						numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
-						numberOfAdultsAndKids: request.adultsNumber + request.kidsNumber,
+						adultsNumberAndKids: request.adultsNumber + request.kidsNumber,
 						departureMonth: monthMap[new Date(request.departureDate).getMonth() + 1],
 						returnMonth: monthMap[new Date(request.returnDate).getMonth() + 1],
 						numberOfRooms: 0,
@@ -304,17 +319,16 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 
 					for (let i = 0, ferries = itinerary.ferries; i < ferries.length; ++i) {
 						rData.ferriesBudget +=
-							(rData.numberOfAdultsAndKids * (ferries[i][rData.departureMonth] + ferries[i][rData.returnMonth])) / 2;
+							(rData.adultsNumberAndKids * (ferries[i][rData.departureMonth] + ferries[i][rData.returnMonth])) / 2;
 					}
 
 					for (let i = 0, flights = itinerary.flights; i < flights.length; ++i) {
 						rData.flightsBudget +=
-							(rData.numberOfAdults * (flights[i]['a' + rData.departureMonth] + flights[i]['a' + rData.returnMonth])) /
-							2;
+							(rData.adultsNumber * (flights[i]['a' + rData.departureMonth] + flights[i]['a' + rData.returnMonth])) / 2;
 						rData.flightsBudget +=
-							(rData.numberOfKids * (flights[i]['k' + rData.departureMonth] + flights[i]['k' + rData.returnMonth])) / 2;
+							(rData.kidsNumber * (flights[i]['k' + rData.departureMonth] + flights[i]['k' + rData.returnMonth])) / 2;
 						rData.flightsBudget +=
-							(rData.numberOfInfants * (flights[i]['i' + rData.departureMonth] + flights[i]['i' + rData.returnMonth])) /
+							(rData.infantsNumber * (flights[i]['i' + rData.departureMonth] + flights[i]['i' + rData.returnMonth])) /
 							2;
 					}
 
@@ -352,11 +366,11 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 					// the accomodation budgt is the price per peron for hostels (super economy) or the rate f the room otherwis
 					if (request.budgetCategory == 2) {
 						// super economy
-						rData.accommodationBudget = rData.accommodationBudget * rData.numberOfAdultsAndKids;
+						rData.accommodationBudget = rData.accommodationBudget * rData.adultsNumberAndKids;
 					} else {
 						rData.accommodationBudget = calculateAccomodationBudgetByRoom(
 							rData.accommodationBudget,
-							rData.numberOfAdultsAndKids
+							rData.adultsNumberAndKids
 						);
 					}
 
@@ -669,7 +683,7 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 							id: request.id,
 							travelerName: request.traveler.name ? request.traveler.name : '',
 							estimatedCost: request.estimatedCost ? currencyFormat(request.estimatedCost) : currencyFormat(0),
-							numberOfTravelers: request.numberOfAdults + request.numberOfKids + request.numberOfInfants,
+							numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
 							itinerary: {
 								name: itinerary.en_name ? itinerary.en_name : '',
 								introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',
