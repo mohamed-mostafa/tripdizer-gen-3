@@ -181,7 +181,7 @@
                     <div ng-if="!isCreate">
                         <label for="actualDestination">Actual Destination</label>
                         <select class="form-control" id="actualDestination" ng-model="currentOrder.actualDestination">
-                            <option ng-value="999999" ng-selected="true">-- Select actual destination --</option>
+                            <option value="">None</option>
                             <option ng-repeat="itinerary in itineraries" ng-value="itinerary.id"
                                 ng-selected="itinerary.id === currentOrder.actualDestination">{{itinerary.en_name}}
                             </option>

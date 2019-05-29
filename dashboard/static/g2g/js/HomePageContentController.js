@@ -638,7 +638,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		window.setInterval($scope.refreshLocations, 5000); // set the timer
 
 		$scope.$watch('currentOrder.actualDestination', function(val) {
-			if (val == 999999) delete $scope.currentOrder.actualDestination;
+			if (!val) delete $scope.currentOrder.actualDestination;
 		});
 
 		CountriesService.getAll().then(function(countries) {

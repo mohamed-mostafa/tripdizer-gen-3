@@ -169,10 +169,6 @@ g2gControlCenterApplication.controller('NewRequestController', [
 			return false;
 		};
 
-		$scope.$watch('currentOrder.actualDestination', function(val) {
-			if (val == 999999) delete $scope.currentOrder.actualDestination;
-		});
-
 		PurposesService.getAll().then(function(purposes) {
 			$scope.purposes = purposes;
 			setFirstElementAsDefault(purposes, 'purpose', 'id');
