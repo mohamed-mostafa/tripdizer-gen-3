@@ -15,6 +15,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 	'ProfessionsService',
 	'ReferralTypesService',
 	'StatusesService',
+	'ChannelsService',
 	function(
 		$rootScope,
 		$scope,
@@ -27,9 +28,11 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		ItinerariesService,
 		ProfessionsService,
 		ReferralTypesService,
-		StatusesService
+		StatusesService,
+		ChannelsService
 	) {
 		// fields
+		$scope.isCreate = false;
 		$scope.statuses = [];
 		$scope.currentOrders = [];
 		$scope.total = {
@@ -70,13 +73,13 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			'interests.5.percentage': 'Shopping',
 			departureDate: 'Departure Date',
 			returnDate: 'Return Date',
-			flexibleDates: 'Flexible Dates',
+			isFlexibleDates: 'Flexible Dates',
 			leavingCountry: 'Leaving Country',
 			firstCountryName: 'First Country',
 			otherCountry: 'Other Country',
 			secondCountryName: 'Second Country',
 			thirdCountryName: 'Third Country',
-			travelPurposeName: 'Travel Purpose',
+			purposeName: 'Travel Purpose',
 			numberOfTravelers: 'Number Of Travelers',
 			budgetCategoryName: 'Budget Category',
 			budget: 'Budget',
@@ -372,18 +375,17 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			if ($scope.searchCriteria.itinerary) {
 				var ordersArr = [];
 				for (let i = 0; i < $scope.currentOrders.length; ++i)
-					if ($scope.currentOrders[i].itineraryId == $scope.searchCriteria.itinerary)
+					if ($scope.currentOrders[i].destination == $scope.searchCriteria.itinerary)
 						ordersArr.push($scope.currentOrders[i]);
 				$scope.currentOrders = ordersArr;
 			} else delete $scope.searchCriteria.itinerary;
 
-			if ($scope.searchCriteria.travelPurpose) {
+			if ($scope.searchCriteria.purpose) {
 				var ordersArr = [];
 				for (let i = 0; i < $scope.currentOrders.length; ++i)
-					if ($scope.currentOrders[i].travelPurpose == $scope.searchCriteria.travelPurpose)
-						ordersArr.push($scope.currentOrders[i]);
+					if ($scope.currentOrders[i].purpose == $scope.searchCriteria.purpose) ordersArr.push($scope.currentOrders[i]);
 				$scope.currentOrders = ordersArr;
-			} else delete $scope.searchCriteria.travelPurpose;
+			} else delete $scope.searchCriteria.purpose;
 
 			if ($scope.searchCriteria.budgetCategory) {
 				var ordersArr = [];
@@ -635,6 +637,10 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		window.setInterval($scope.refreshContent, 30000); // set the timer
 		window.setInterval($scope.refreshLocations, 5000); // set the timer
 
+		$scope.$watch('currentOrder.actualDestination', function(val) {
+			if (val == 999999) delete $scope.currentOrder.actualDestination;
+		});
+
 		CountriesService.getAll().then(function(countries) {
 			$scope.countries = countries;
 		});
@@ -674,6 +680,10 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					$scope.refreshContent();
 				}
 			}
+		});
+
+		ChannelsService.getAll().then(function(channels) {
+			$scope.channels = channels;
 		});
 
 		$scope.refreshOrders($scope.currentRequest);
@@ -736,9 +746,9 @@ g2gControlCenterApplication.directive('exportExcel', function() {
 						request.budgetCategory && scope.budgetCategories
 							? scope.budgetCategories.find(country => country.id === request.budgetCategory).en_name
 							: '';
-					request.travelPurposeName =
-						request.travelPurpose && scope.purposes
-							? scope.purposes.find(country => country.id === request.travelPurpose).en_name
+					request.purposeName =
+						request.purpose && scope.purposes
+							? scope.purposes.find(country => country.id === request.purpose).en_name
 							: '';
 					request.isVisaAssistanceNeeded = request.visaAssistanceNeeded === 1 ? 'True' : 'False';
 					request.isTourGuideNeeded = request.tourGuideNeeded === 1 ? 'True' : 'False';
