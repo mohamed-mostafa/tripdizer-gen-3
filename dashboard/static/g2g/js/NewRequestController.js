@@ -37,6 +37,7 @@ g2gControlCenterApplication.controller('NewRequestController', [
 		$scope.resetCurrentOrder = function() {
 			$scope.currentOrder = {
 				traveler: {},
+				preferences: {},
 				travelingFrom: 'Cairo',
 				departureDate: new Date(),
 				returnDate: new Date(),

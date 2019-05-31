@@ -17,7 +17,7 @@ var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
-		status: request.isFromWebsite ? 3 : null,
+		status: request.isFromWebsite ? 3 : request.status,
 		travelingFrom: request.travelingFrom || request.leavingCountry || request.leaving_country,
 		departureDate: request.departureDate || request.departure_date,
 		returnDate: request.returnDate || request.return_date,

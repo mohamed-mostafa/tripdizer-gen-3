@@ -42,9 +42,9 @@
                             <label for="id">ID</label>
                             <input type="text" disabled class="form-control" id="id" ng-model="currentOrder.id">
                         </div>
-                        <div ng-if="!isCreate" class="form-control-6">
+                        <div ng-class="{ 'form-control-6' : !isCreate }">
                             <label for="status">Status</label>
-                            <select disabled class="form-control" id="status" ng-model="currentOrder.status">
+                            <select class="form-control" id="status" ng-model="currentOrder.status">
                                 <option ng-repeat="status in statuses" ng-value="status.id"
                                     ng-selected="status.id == currentOrder.status">
                                     {{status.title}}</option>
