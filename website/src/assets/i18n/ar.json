@@ -4,6 +4,10 @@
 		"EGP": "ج.م."
 	},
 	"core": {
+		"nav_bar": {
+			"blog": "المدونة",
+			"our_team": "فريقنا"
+		},
 		"user_profile": {
 			"sign_out": "تسجيل الخروج",
 			"sign_in": "تسجيل الدخول"

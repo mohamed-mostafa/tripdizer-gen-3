@@ -4,6 +4,10 @@
 		"EGP": "EGP"
 	},
 	"core": {
+		"nav_bar": {
+			"blog": "Blog",
+			"our_team": "Our Team"
+		},
 		"user_profile": {
 			"sign_out": "Sign Out",
 			"sign_in": "Sign In"
@@ -35,7 +39,7 @@
 			"sign_in_facebook": "Sign in with Facebook",
 			"or": "or",
 			"continue_without_login": "Continue without login",
-			"improve_experience": "To improve your experience" 
+			"improve_experience": "To improve your experience"
 		}
 	},
 	"home": {
