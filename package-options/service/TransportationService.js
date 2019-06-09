@@ -2,6 +2,7 @@ let request = require('request');
 let moment = require('moment');
 let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
+const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8081/tripdizer-flights-api/1.0.0/flights'
 
 /**
  * retrieve options of transportation between cities and countries for a package
@@ -84,7 +85,7 @@ exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,
             numberOfChildren: numberOfChildren,
             numberOfInfants: numberOfInfants
         }
-        request.get({url:'http://localhost:8081/tripdizer-flights-api/1.0.0/flights', qs: legSearchRequest, json: true}, function(err,httpResponse,body) { 
+        request.get({url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, json: true}, function(err,httpResponse,body) { 
             if (err) {
                 reject(err);
             } else {
