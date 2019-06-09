@@ -1,6 +1,6 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
-  args: ['endpoinsts', 'services', 'deploy', 'api/swagger.yaml']
+  args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
   dir: services
   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/gcloud
