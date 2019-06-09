@@ -1,0 +1,7 @@
+*.bat
+*.ant
+.project
+.settings
+.externalToolBuilders
+bat/
+node_modules/

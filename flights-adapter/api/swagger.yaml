@@ -1,0 +1,138 @@
+---
+swagger: "2.0"
+info:
+  description: "Tripdizer Flights API"
+  version: "1.0.0"
+  title: "Tripdizer Flights API"
+  contact:
+    email: "mohamed@tripdizer.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8081"
+basePath: "/tripdizer-flights-api/1.0.0"
+schemes:
+- "http"
+paths:
+  /flights:
+    get:
+      summary: "searches flights from origin to destination on specific dates for\
+        \ number of travelers"
+      description: "By passing in the appropriate options, you can search for flights"
+      operationId: "searchFlights"
+      parameters:
+      - name: "origin"
+        in: "query"
+        description: "The IATA code of the origin city or airport"
+        required: true
+        type: "string"
+      - name: "destination"
+        in: "query"
+        description: "The IATA code of the destination city or airport"
+        required: true
+        type: "string"
+      - name: "departure"
+        in: "query"
+        description: "The desired departure date"
+        required: true
+        type: "string"
+        format: "date"
+      - name: "return"
+        in: "query"
+        description: "The desired return date - if not provided, then it a one-way\
+          \ flight"
+        required: false
+        type: "string"
+        format: "date"
+      - name: "numberOfAdults"
+        in: "query"
+        required: true
+        type: "number"
+        default: 1
+        minimum: 1
+      - name: "numberOfChildren"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "numberOfInfants"
+        in: "query"
+        required: false
+        type: "number"
+      responses:
+        200:
+          description: "successful execution"
+          schema:
+            $ref: "#/definitions/flightOffers"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+definitions:
+  flightOffers:
+    type: "array"
+    description: "a list of flight offers"
+    items:
+      $ref: "#/definitions/flightOffer"
+  flightOffer:
+    type: "object"
+    properties:
+      flightLegs:
+        type: "array"
+        description: "a list of flights from an origin to a destination. if there's\
+          \ only one leg, then its a one-way flight, if its two legs, then its a return\
+          \ flight, if its more than 2 legs, then its a multi-city flight"
+        items:
+          $ref: "#/definitions/flightLeg"
+      price:
+        type: "number"
+        format: "currency"
+      currency:
+        type: "string"
+        example: "EGP"
+    description: "represents an offer to the client"
+  flightLeg:
+    type: "object"
+    properties:
+      origin:
+        type: "string"
+        example: "CAI"
+      destination:
+        type: "string"
+        example: "AMS"
+      segments:
+        type: "array"
+        description: "represents one segment in a flight leg. if there's only one,\
+          \ then it is a direct flight leg"
+        items:
+          $ref: "#/definitions/flightSegment"
+      totalDuration:
+        type: "string"
+        example: "0D6H30M"
+      transitDuration:
+        type: "string"
+        example: "0D2H0M"
+      carrier:
+        type: "string"
+        example: "EgyptAir"
+    description: "represents a trip from an origin to a destination. can be a direct\
+      \ flight or a flight with transits."
+  flightSegment:
+    type: "object"
+    properties:
+      departure:
+        type: "string"
+        format: "date-time"
+        example: "2016-08-29T10:00:00"
+      arrival:
+        type: "string"
+        format: "date-time"
+        example: "2016-08-29T10:00:00"
+      origin:
+        type: "string"
+        example: "CAI"
+      destination:
+        type: "string"
+        example: "AMS"
+      duration:
+        type: "string"
+        example: "0D6H30M"
+    description: "represents a part of a flight from an origin to a destination."

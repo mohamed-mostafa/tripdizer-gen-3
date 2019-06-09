@@ -1,0 +1,25 @@
+{
+  "name": "tripdizer-flights-api",
+  "version": "1.0.0",
+  "description": "Tripdizer Flights API",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js",
+    "predebug": "npm install",
+    "debug": "nodemon --inspect index.js NODE_ENV=development"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "amadeus": "1.1.0",
+    "dateformat": "3.0.3",
+    "humanize-duration": "3.18.0",
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "swagger-tools": "0.10.1"
+  }
+}
