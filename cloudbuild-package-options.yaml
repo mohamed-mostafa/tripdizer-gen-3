@@ -1,10 +1,10 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
-  args: ['endpoints', 'services', 'deploy', './api/swagger.yaml']
-  dir: services
+  args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
+  dir: package-options
   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
-  dir: services
+  dir: package-options
   id: 'GCLOUD DEPLOY'
 timeout: 1800s
