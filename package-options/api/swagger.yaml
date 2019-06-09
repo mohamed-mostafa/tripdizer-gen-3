@@ -9,10 +9,10 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8080"
+host: "package-options-dot-tripdizer-dev.appspot.com"
 basePath: "/package-options-api/1.0.0"
 schemes:
-- "http"
+- "https"
 paths:
   /cities:
     post:

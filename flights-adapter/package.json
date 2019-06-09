@@ -7,7 +7,7 @@
     "prestart": "npm install",
     "start": "node index.js",
     "predebug": "npm install",
-    "debug": "nodemon --inspect index.js NODE_ENV=development"
+    "debug": "nodemon --inspect index.js"
   },
   "keywords": [
     "swagger"
