@@ -15,13 +15,11 @@ schemes:
 - "https"
 paths:
   /cities:
-    post:
+    get:
       summary: "retrieve options of cities for a package"
       description: "retrieve the recommended options of cities in the countries choosen\
         \ by the client, based on the client's interests\n"
       operationId: "searchCities"
-      consumes:
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
@@ -31,16 +29,17 @@ paths:
         type: "string"
         default: "en"
       - name: "countries"
-        in: "formData"
-        description: "The list of countries IATA codes chosen by the client"
+        in: "query"
+        description: "The list of countries ISO codes chosen by the client (e.g. FRA,\
+          \ ITA, EGY, ... etc)"
         required: true
         type: "array"
         items:
           type: "string"
         collectionFormat: "multi"
       - name: "interests"
-        in: "formData"
-        description: "The list of interests chosen by the client"
+        in: "query"
+        description: "The list of interest names chosen by the client"
         required: true
         type: "array"
         items:
@@ -50,17 +49,12 @@ paths:
         200:
           description: "search results matching criteria"
           schema:
-            type: "object"
-            properties:
-              cities:
-                type: "array"
-                items:
-                  $ref: "#/definitions/city"
+            $ref: "#/definitions/citiesList"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
   /transportation:
-    post:
+    get:
       summary: "retrieve options of transportation between cities and countries for\
         \ a package"
       description: "Retrieve the recommended transportation options (flights or others)\
@@ -68,8 +62,6 @@ paths:
         \ are provided, the days between the departure and return will be distributed\
         \ evenly among them\n"
       operationId: "searchTransportation"
-      consumes:
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
@@ -79,61 +71,54 @@ paths:
         type: "string"
         default: "en"
       - name: "departure"
-        in: "formData"
+        in: "query"
         required: true
         type: "string"
         format: "date"
       - name: "return"
-        in: "formData"
+        in: "query"
         required: false
         type: "string"
         format: "date"
       - name: "citiesSequence"
-        in: "formData"
+        in: "query"
         required: true
         type: "array"
         items:
           type: "string"
         collectionFormat: "multi"
       - name: "numberOfAdults"
-        in: "formData"
+        in: "query"
         required: true
         type: "number"
-        default: 1.0
+        default: 1
         minimum: 1
       - name: "numberOfChildren"
-        in: "formData"
+        in: "query"
         required: false
         type: "number"
-        default: 0.0
+        default: 0
         minimum: 0
       - name: "numberOfInfants"
-        in: "formData"
+        in: "query"
         required: false
         type: "number"
-        default: 0.0
+        default: 0
         minimum: 0
       responses:
         200:
           description: "search results matching criteria"
           schema:
-            type: "object"
-            properties:
-              transportationLegs:
-                type: "array"
-                items:
-                  $ref: "#/definitions/transportationLeg"
+            $ref: "#/definitions/transportationLegOffers"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
   /accomodation:
-    post:
+    get:
       summary: "retrieve options of accomodations for a package"
       description: "By passing in the appropriate options, you can search for\navailable\
         \ hotels in the system\n"
       operationId: "searchAccomodations"
-      consumes:
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
@@ -143,7 +128,7 @@ paths:
         type: "string"
         default: "en"
       - name: "cities"
-        in: "formData"
+        in: "query"
         description: "the client's chosen cities"
         required: true
         type: "array"
@@ -151,7 +136,7 @@ paths:
           type: "string"
         collectionFormat: "multi"
       - name: "budgetCategory"
-        in: "formData"
+        in: "query"
         description: "the client's chosen budget category"
         required: true
         type: "string"
@@ -159,23 +144,16 @@ paths:
         200:
           description: "search results matching criteria"
           schema:
-            type: "object"
-            properties:
-              accomodationOffers:
-                type: "array"
-                items:
-                  $ref: "#/definitions/accomodationOffer"
+            $ref: "#/definitions/accomodationOffers"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
   /activities:
-    post:
+    get:
       summary: "retrieve options of activities of a city for a package"
       description: "By passing in the appropriate options, you can search for\navailable\
         \ activities in the system\n"
       operationId: "activitiesSearchActivities"
-      consumes:
-      - "application/x-www-form-urlencoded"
       produces:
       - "application/json"
       parameters:
@@ -185,7 +163,7 @@ paths:
         type: "string"
         default: "en"
       - name: "cities"
-        in: "formData"
+        in: "query"
         description: "the client's choosen cities"
         required: false
         type: "array"
@@ -196,12 +174,7 @@ paths:
         200:
           description: "search results matching criteria"
           schema:
-            type: "object"
-            properties:
-              activityOffers:
-                type: "array"
-                items:
-                  $ref: "#/definitions/activityOffer"
+            $ref: "#/definitions/activityOffers"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
@@ -238,20 +211,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/city_interests"
-    example:
-      country: "Egypt"
-      thumbnail: "https://static.tripdizer.com/cairo.png"
-      iataCode: "CAI"
-      displayName: "ألقاهرة"
-      name: "Cairo"
-      coordinates: "30.06263, 31.24967"
-      countryIataCode: "EGY"
-      interests:
-      - displayName: "التسوق"
-        name: "Shopping"
-      - displayName: "التسوق"
-        name: "Shopping"
-      countryDisplayName: "مصر"
   transportationLeg:
     type: "object"
     properties:
@@ -269,85 +228,6 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/flightOffer"
-    example:
-      flightOffers:
-      - price: 4500.0
-        flightLegs:
-        - totalDuration: "0D6H30M"
-          transitDuration: "0D2H0M"
-          carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-          carrier: "EgyptAir"
-          origin: "CAI"
-          destination: "AMS"
-          segments:
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-        - totalDuration: "0D6H30M"
-          transitDuration: "0D2H0M"
-          carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-          carrier: "EgyptAir"
-          origin: "CAI"
-          destination: "AMS"
-          segments:
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-        currency: "EGP"
-      - price: 4500.0
-        flightLegs:
-        - totalDuration: "0D6H30M"
-          transitDuration: "0D2H0M"
-          carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-          carrier: "EgyptAir"
-          origin: "CAI"
-          destination: "AMS"
-          segments:
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-        - totalDuration: "0D6H30M"
-          transitDuration: "0D2H0M"
-          carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-          carrier: "EgyptAir"
-          origin: "CAI"
-          destination: "AMS"
-          segments:
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-          - duration: "0D6H30M"
-            arrival: "2016-08-29T10:00:00"
-            origin: "CAI"
-            destination: "AMS"
-            departure: "2016-08-29T10:00:00"
-        currency: "EGP"
-      origin: "CAI"
-      destination: "AMS"
-      departure: "2019-10-10"
   flightOffer:
     type: "object"
     properties:
@@ -361,49 +241,11 @@ definitions:
       price:
         type: "number"
         format: "currency"
-        example: 4500.0
+        example: 4500
       currency:
         type: "string"
         example: "EGP"
     description: "represents an offer to the client"
-    example:
-      price: 4500.0
-      flightLegs:
-      - totalDuration: "0D6H30M"
-        transitDuration: "0D2H0M"
-        carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-        carrier: "EgyptAir"
-        origin: "CAI"
-        destination: "AMS"
-        segments:
-        - duration: "0D6H30M"
-          arrival: "2016-08-29T10:00:00"
-          origin: "CAI"
-          destination: "AMS"
-          departure: "2016-08-29T10:00:00"
-        - duration: "0D6H30M"
-          arrival: "2016-08-29T10:00:00"
-          origin: "CAI"
-          destination: "AMS"
-          departure: "2016-08-29T10:00:00"
-      - totalDuration: "0D6H30M"
-        transitDuration: "0D2H0M"
-        carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-        carrier: "EgyptAir"
-        origin: "CAI"
-        destination: "AMS"
-        segments:
-        - duration: "0D6H30M"
-          arrival: "2016-08-29T10:00:00"
-          origin: "CAI"
-          destination: "AMS"
-          departure: "2016-08-29T10:00:00"
-        - duration: "0D6H30M"
-          arrival: "2016-08-29T10:00:00"
-          origin: "CAI"
-          destination: "AMS"
-          departure: "2016-08-29T10:00:00"
-      currency: "EGP"
   flightLeg:
     type: "object"
     properties:
@@ -434,24 +276,6 @@ definitions:
         example: "https://static.tripdizer.comm/EgyptAir.png"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
-    example:
-      totalDuration: "0D6H30M"
-      transitDuration: "0D2H0M"
-      carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-      carrier: "EgyptAir"
-      origin: "CAI"
-      destination: "AMS"
-      segments:
-      - duration: "0D6H30M"
-        arrival: "2016-08-29T10:00:00"
-        origin: "CAI"
-        destination: "AMS"
-        departure: "2016-08-29T10:00:00"
-      - duration: "0D6H30M"
-        arrival: "2016-08-29T10:00:00"
-        origin: "CAI"
-        destination: "AMS"
-        departure: "2016-08-29T10:00:00"
   flightSegment:
     type: "object"
     properties:
@@ -472,12 +296,6 @@ definitions:
       duration:
         type: "string"
         example: "0D6H30M"
-    example:
-      duration: "0D6H30M"
-      arrival: "2016-08-29T10:00:00"
-      origin: "CAI"
-      destination: "AMS"
-      departure: "2016-08-29T10:00:00"
   accomodationOffer:
     type: "object"
     properties:
@@ -493,48 +311,21 @@ definitions:
         example: "2019-06-03"
       numberOfNights:
         type: "number"
-        example: 2.0
+        example: 2
         minimum: 1
       rate:
         type: "number"
         format: "currency"
-        example: 1000.0
+        example: 1000
       currency:
         type: "string"
         example: "EGP"
       price:
         type: "number"
         format: "currency"
-        example: 2000.0
+        example: 2000
       hotel:
         $ref: "#/definitions/hotel"
-    example:
-      checkin: "2019-06-03"
-      city:
-        country: "Egypt"
-        thumbnail: "https://static.tripdizer.com/cairo.png"
-        iataCode: "CAI"
-        displayName: "ألقاهرة"
-        name: "Cairo"
-        coordinates: "30.06263, 31.24967"
-        countryIataCode: "EGY"
-        interests:
-        - displayName: "التسوق"
-          name: "Shopping"
-        - displayName: "التسوق"
-          name: "Shopping"
-        countryDisplayName: "مصر"
-      rate: 1000.0
-      price: 2000.0
-      numberOfNights: 2.0
-      hotel:
-        thumbnail: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-        name: "Hilton Capetown Hotel"
-        displaName: "هيلتون كيب تاون"
-        description: "One of the best hotels in Cape Town"
-        stars: 5.0
-      currency: "EGP"
-      checkout: "2019-06-03"
   hotel:
     type: "object"
     properties:
@@ -553,13 +344,7 @@ definitions:
         example: "https://static.tripdizer.com/hilton-capetown-hotel.png"
       stars:
         type: "number"
-        example: 5.0
-    example:
-      thumbnail: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-      name: "Hilton Capetown Hotel"
-      displaName: "هيلتون كيب تاون"
-      description: "One of the best hotels in Cape Town"
-      stars: 5.0
+        example: 5
   activityOffer:
     properties:
       date:
@@ -568,27 +353,6 @@ definitions:
         example: "2019-06-03"
       activity:
         $ref: "#/definitions/activity"
-    example:
-      date: "2019-06-03"
-      activity:
-        thumbnail: "https://static.tripdizer.com/waterboom.png"
-        city:
-          country: "Egypt"
-          thumbnail: "https://static.tripdizer.com/cairo.png"
-          iataCode: "CAI"
-          displayName: "ألقاهرة"
-          name: "Cairo"
-          coordinates: "30.06263, 31.24967"
-          countryIataCode: "EGY"
-          interests:
-          - displayName: "التسوق"
-            name: "Shopping"
-          - displayName: "التسوق"
-            name: "Shopping"
-          countryDisplayName: "مصر"
-        name: "Spend a day in the waterboom park"
-        description: "One of the best water activities in Bali"
-        category: "Water activity"
   activity:
     type: "object"
     properties:
@@ -607,331 +371,22 @@ definitions:
       category:
         type: "string"
         example: "Water activity"
-    example:
-      thumbnail: "https://static.tripdizer.com/waterboom.png"
-      city:
-        country: "Egypt"
-        thumbnail: "https://static.tripdizer.com/cairo.png"
-        iataCode: "CAI"
-        displayName: "ألقاهرة"
-        name: "Cairo"
-        coordinates: "30.06263, 31.24967"
-        countryIataCode: "EGY"
-        interests:
-        - displayName: "التسوق"
-          name: "Shopping"
-        - displayName: "التسوق"
-          name: "Shopping"
-        countryDisplayName: "مصر"
-      name: "Spend a day in the waterboom park"
-      description: "One of the best water activities in Bali"
-      category: "Water activity"
-  inline_response_200:
-    properties:
-      cities:
-        type: "array"
-        items:
-          $ref: "#/definitions/city"
-    example:
-      cities:
-      - country: "Egypt"
-        thumbnail: "https://static.tripdizer.com/cairo.png"
-        iataCode: "CAI"
-        displayName: "ألقاهرة"
-        name: "Cairo"
-        coordinates: "30.06263, 31.24967"
-        countryIataCode: "EGY"
-        interests:
-        - displayName: "التسوق"
-          name: "Shopping"
-        - displayName: "التسوق"
-          name: "Shopping"
-        countryDisplayName: "مصر"
-      - country: "Egypt"
-        thumbnail: "https://static.tripdizer.com/cairo.png"
-        iataCode: "CAI"
-        displayName: "ألقاهرة"
-        name: "Cairo"
-        coordinates: "30.06263, 31.24967"
-        countryIataCode: "EGY"
-        interests:
-        - displayName: "التسوق"
-          name: "Shopping"
-        - displayName: "التسوق"
-          name: "Shopping"
-        countryDisplayName: "مصر"
-  inline_response_200_1:
-    properties:
-      transportationLegs:
-        type: "array"
-        items:
-          $ref: "#/definitions/transportationLeg"
-    example:
-      transportationLegs:
-      - flightOffers:
-        - price: 4500.0
-          flightLegs:
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          currency: "EGP"
-        - price: 4500.0
-          flightLegs:
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          currency: "EGP"
-        origin: "CAI"
-        destination: "AMS"
-        departure: "2019-10-10"
-      - flightOffers:
-        - price: 4500.0
-          flightLegs:
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          currency: "EGP"
-        - price: 4500.0
-          flightLegs:
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          - totalDuration: "0D6H30M"
-            transitDuration: "0D2H0M"
-            carrierThumbnail: "https://static.tripdizer.comm/EgyptAir.png"
-            carrier: "EgyptAir"
-            origin: "CAI"
-            destination: "AMS"
-            segments:
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-            - duration: "0D6H30M"
-              arrival: "2016-08-29T10:00:00"
-              origin: "CAI"
-              destination: "AMS"
-              departure: "2016-08-29T10:00:00"
-          currency: "EGP"
-        origin: "CAI"
-        destination: "AMS"
-        departure: "2019-10-10"
-  inline_response_200_2:
-    properties:
-      accomodationOffers:
-        type: "array"
-        items:
-          $ref: "#/definitions/accomodationOffer"
-    example:
-      accomodationOffers:
-      - checkin: "2019-06-03"
-        city:
-          country: "Egypt"
-          thumbnail: "https://static.tripdizer.com/cairo.png"
-          iataCode: "CAI"
-          displayName: "ألقاهرة"
-          name: "Cairo"
-          coordinates: "30.06263, 31.24967"
-          countryIataCode: "EGY"
-          interests:
-          - displayName: "التسوق"
-            name: "Shopping"
-          - displayName: "التسوق"
-            name: "Shopping"
-          countryDisplayName: "مصر"
-        rate: 1000.0
-        price: 2000.0
-        numberOfNights: 2.0
-        hotel:
-          thumbnail: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-          name: "Hilton Capetown Hotel"
-          displaName: "هيلتون كيب تاون"
-          description: "One of the best hotels in Cape Town"
-          stars: 5.0
-        currency: "EGP"
-        checkout: "2019-06-03"
-      - checkin: "2019-06-03"
-        city:
-          country: "Egypt"
-          thumbnail: "https://static.tripdizer.com/cairo.png"
-          iataCode: "CAI"
-          displayName: "ألقاهرة"
-          name: "Cairo"
-          coordinates: "30.06263, 31.24967"
-          countryIataCode: "EGY"
-          interests:
-          - displayName: "التسوق"
-            name: "Shopping"
-          - displayName: "التسوق"
-            name: "Shopping"
-          countryDisplayName: "مصر"
-        rate: 1000.0
-        price: 2000.0
-        numberOfNights: 2.0
-        hotel:
-          thumbnail: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-          name: "Hilton Capetown Hotel"
-          displaName: "هيلتون كيب تاون"
-          description: "One of the best hotels in Cape Town"
-          stars: 5.0
-        currency: "EGP"
-        checkout: "2019-06-03"
-  inline_response_200_3:
-    properties:
-      activityOffers:
-        type: "array"
-        items:
-          $ref: "#/definitions/activityOffer"
-    example:
-      activityOffers:
-      - date: "2019-06-03"
-        activity:
-          thumbnail: "https://static.tripdizer.com/waterboom.png"
-          city:
-            country: "Egypt"
-            thumbnail: "https://static.tripdizer.com/cairo.png"
-            iataCode: "CAI"
-            displayName: "ألقاهرة"
-            name: "Cairo"
-            coordinates: "30.06263, 31.24967"
-            countryIataCode: "EGY"
-            interests:
-            - displayName: "التسوق"
-              name: "Shopping"
-            - displayName: "التسوق"
-              name: "Shopping"
-            countryDisplayName: "مصر"
-          name: "Spend a day in the waterboom park"
-          description: "One of the best water activities in Bali"
-          category: "Water activity"
-      - date: "2019-06-03"
-        activity:
-          thumbnail: "https://static.tripdizer.com/waterboom.png"
-          city:
-            country: "Egypt"
-            thumbnail: "https://static.tripdizer.com/cairo.png"
-            iataCode: "CAI"
-            displayName: "ألقاهرة"
-            name: "Cairo"
-            coordinates: "30.06263, 31.24967"
-            countryIataCode: "EGY"
-            interests:
-            - displayName: "التسوق"
-              name: "Shopping"
-            - displayName: "التسوق"
-              name: "Shopping"
-            countryDisplayName: "مصر"
-          name: "Spend a day in the waterboom park"
-          description: "One of the best water activities in Bali"
-          category: "Water activity"
+  citiesList:
+    type: "array"
+    items:
+      $ref: "#/definitions/city"
+  activityOffers:
+    type: "array"
+    items:
+      $ref: "#/definitions/activityOffer"
+  transportationLegOffers:
+    type: "array"
+    items:
+      $ref: "#/definitions/transportationLeg"
+  accomodationOffers:
+    type: "array"
+    items:
+      $ref: "#/definitions/accomodationOffer"
   city_interests:
     properties:
       name:
@@ -940,6 +395,3 @@ definitions:
       displayName:
         type: "string"
         example: "التسوق"
-    example:
-      displayName: "التسوق"
-      name: "Shopping"

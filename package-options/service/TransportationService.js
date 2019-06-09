@@ -23,14 +23,6 @@ exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,
       let returnMoment = new moment(_return);
       let departureMoment = new moment(departure);
   
-      // capture citiesSequence (swagger UI has an issue here that it sends all cities in the first element of the array)
-      if (citiesSequence.length == 1) {
-        let citiesSequenceString = citiesSequence[0];
-        if (citiesSequenceString.includes(",")) {
-          citiesSequence = citiesSequenceString.split(",");
-        }
-      }
-  
       if (_return) { // if the return date is provided, the cities has to be at least 3, where first and last items are city of departure and city of return
         if (citiesSequence.length < 3) {
             var error = errorPayloadCreator.respondWithCode(400, "If a return date is specified, number of cities has to be at least 3")
