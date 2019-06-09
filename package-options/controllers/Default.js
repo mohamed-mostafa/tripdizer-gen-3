@@ -1,7 +1,8 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Default = require('../service/PackageOptionsService');
+var Default = require('../service/DefaultService.js');
+var TransportationService = require('../service/TransportationService.js');
 
 module.exports.activitiesSearchActivities = function activitiesSearchActivities (req, res, next) {
   var language = req.swagger.params['language'].value;
@@ -49,7 +50,7 @@ module.exports.searchTransportation = function searchTransportation (req, res, n
   var _return = req.swagger.params['return'].value;
   var numberOfChildren = req.swagger.params['numberOfChildren'].value;
   var numberOfInfants = req.swagger.params['numberOfInfants'].value;
-  Default.searchTransportation(departure,citiesSequence,numberOfAdults,language,_return,numberOfChildren,numberOfInfants)
+  TransportationService.searchTransportation(departure,citiesSequence,numberOfAdults,language,_return,numberOfChildren,numberOfInfants)
     .then(function (response) {
       utils.writeJson(res, response);
     })
