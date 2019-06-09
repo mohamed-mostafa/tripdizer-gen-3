@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 @Injectable({
 	providedIn: 'root',
 })
-export class SectionOurTeamService {
+export class OurTeamService {
 	private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
 	private team: Array<any> = [
 		{

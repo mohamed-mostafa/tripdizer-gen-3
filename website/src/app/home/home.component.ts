@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import { HomeService } from './home.service';
 	selector: 'c-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
+	encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
 	dialogLabels: {

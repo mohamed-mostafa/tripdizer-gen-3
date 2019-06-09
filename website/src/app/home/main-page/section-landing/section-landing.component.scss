@@ -1,7 +1,11 @@
 :host {
+	& > * {
+		height: 100%;
+	}
+
 	&:after {
 		content: '';
-		background-image: url('../../../assets/img/bg.jpg');
+		background-image: url('../../../../assets/img/bg.jpg');
 		background-color: #1e90ff;
 		background-attachment: fixed;
 		position: absolute;

@@ -2,20 +2,20 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { SectionOurTeamService } from './section-our-team.service';
+import { OurTeamService } from './our-team.service';
 
 @Component({
-	selector: 'c-home-section-our-team',
-	templateUrl: './section-our-team.component.html',
-	styleUrls: ['./section-our-team.component.scss'],
+	selector: 'c-home-our-team',
+	templateUrl: './our-team.component.html',
+	styleUrls: ['./our-team.component.scss'],
 	encapsulation: ViewEncapsulation.None,
 })
-export class SectionOurTeamComponent {
+export class OurTeamComponent {
 	teamMembers: Array<any> = [];
 	options: any;
 	refreshCarousel = new Subject();
 
-	constructor(service: SectionOurTeamService, public sanitizer: DomSanitizer, translate: TranslateService) {
+	constructor(service: OurTeamService, public sanitizer: DomSanitizer, translate: TranslateService) {
 		service.getTeamMembers().subscribe(teamMembers => {
 			this.teamMembers = teamMembers;
 			this.setOptions();
