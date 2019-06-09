@@ -1,5 +1,5 @@
 <section id="testimonials" class="row">
-	<div class="testimonials pt-2 mt-2">
+	<div class="testimonials col-12 pt-2 mt-2">
 		<c-shared-owl-carousel [options]="options" [refresh]="refreshCarousel" [newClass]="'testimonials-carousel'">
 			<div *ngFor="let testimonial of testimonials" class="row mx-0 testimonial-item">
 				<div class="col-3">
@@ -17,7 +17,7 @@
 		</c-shared-owl-carousel>
 	</div>
 
-	<div class="featured-in text-center pb-2 mb-2">
+	<div class="featured-in text-center col-12 pb-2 mb-2">
 		<div>{{ 'home.testimonials.featured_in' | translate }}</div>
 		<img
 			*ngFor="let sponsor of sponsors"

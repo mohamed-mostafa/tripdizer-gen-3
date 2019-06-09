@@ -1,21 +1,4 @@
 :host {
-	& > * {
-		height: 100%;
-	}
-
-	&:after {
-		content: '';
-		background-image: url('../../../../assets/img/bg.jpg');
-		background-color: #1e90ff;
-		background-attachment: fixed;
-		position: absolute;
-		left: 0;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		z-index: -1;
-	}
-
 	.lets-go {
 		font-size: 12.86rem;
 		line-height: 15.7rem;
