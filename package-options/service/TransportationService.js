@@ -3,10 +3,22 @@ let moment = require('moment');
 let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 
+/**
+ * retrieve options of transportation between cities and countries for a package
+ * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client. If multiple cities are provided, the days between the departure and return will be distributed evenly among them 
+ *
+ * language String  (optional)
+ * departure date the departure date from the origin (optional)
+ * _return date the return date to the origin (optional)
+ * citiesSequence List the iata codes of the cities, ordered by the sequence the client wants to travel (optional)
+ * numberOfAdults BigDecimal  (optional)
+ * numberOfChildren BigDecimal  (optional)
+ * numberOfInfants BigDecimal  (optional)
+ * returns inline_response_200_1
+ **/
 exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,language,_return,numberOfChildren,numberOfInfants) {
     return new Promise(async function(resolve, reject) {
-  
-      // change JS dates into moments
+      // change JS dates to moments
       let returnMoment = new moment(_return);
       let departureMoment = new moment(departure);
   
