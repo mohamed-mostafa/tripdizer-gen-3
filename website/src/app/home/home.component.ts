@@ -1,7 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 import { DialogComponent } from '../shared/components/dialog/dialog.component';
 import { TrackingService } from '../shared/services/tracking.service';
 import { CustomValidators } from '../shared/utils';
@@ -13,25 +15,42 @@ import { HomeService } from './home.service';
 	styleUrls: ['./home.component.scss'],
 	encapsulation: ViewEncapsulation.None,
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
 	dialogLabels: {
 		title: string;
 		description: string;
 		inputs: { input0: string };
 		buttonsLabel: { ok: string; cancel: string };
 	};
+	navBarHeight: number;
+	navBarHeightSubject = new Subject<number>();
 
 	constructor(
 		private homeService: HomeService,
 		private dialog: MatDialog,
-		translate: TranslateService,
-		private trackingService: TrackingService
+		private trackingService: TrackingService,
+		router: Router,
+		translate: TranslateService
 	) {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
+
 		// setTimeout(() => {
 		// 	this.openDialog();
-
 		// }, 5000);
+
+		router.events.subscribe(() => {
+			this.resizeFirstElement();
+		});
+
+		this.navBarHeightSubject.subscribe(height => {
+			this.navBarHeight = height;
+			this.resizeFirstElement();
+		});
+	}
+
+	resizeFirstElement() {
+		const firstElement = document.getElementsByTagName('section')[0];
+		firstElement.style.height = document.body.clientHeight - this.navBarHeight + 'px';
 	}
 
 	openDialog(): void {
@@ -77,5 +96,9 @@ export class HomeComponent {
 			event_label: 'N/A',
 			value: 'N/A',
 		});
+	}
+
+	ngOnDestroy() {
+		this.navBarHeightSubject.unsubscribe();
 	}
 }
