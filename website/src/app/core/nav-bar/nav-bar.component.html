@@ -1,9 +1,10 @@
 <div class="row" #navBar>
 	<div class="col-12 p-3">
 		<nav class="custom-bs navbar navbar-expand-sm navbar-dark">
-			<a class="navbar-brand p-0 p-m-1" href="/">
+			<a [routerLink]="['/']" class="navbar-brand p-0 p-m-1">
 				<img src="../../../assets/img/logo-250x131.svg" class="w-75 d-inline-block align-top" alt="" />
 			</a>
+
 			<button
 				class="navbar-toggler p-0"
 				type="button"
@@ -33,13 +34,13 @@
 						<a href="#" class="nav-link text-white float-right">{{ 'core.nav_bar.blog' | translate }}</a>
 					</li>
 					<li class="nav-item mx-sm-1 mx-md-3 mx-lg-5">
-						<a [routerLink]="['our-team']" class="nav-link text-white float-right">{{
+						<a [routerLink]="['/', 'our-team']" class="nav-link text-white float-right">{{
 							'core.nav_bar.our_team' | translate
 						}}</a>
 					</li>
 					<!-- <li class="nav-item mx-sm-1 ml-md-5 mr-md-3">
-				<a class="nav-link text-white text-nowrap" href="#">Login <i class="fas fa-lock"></i></a>
-			</li> -->
+						<a class="nav-link text-white text-nowrap" href="#">Login <i class="fas fa-lock"></i></a>
+					</li> -->
 				</ul>
 			</div>
 		</nav>
