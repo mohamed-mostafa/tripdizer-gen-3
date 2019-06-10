@@ -4,6 +4,10 @@ threadsafe: yes
 # [END runtime]
 
 handlers:
+  - url: /our-team
+    static_files: dist/website/index.html
+    upload: dist/website/index.html
+
   - url: /request
     static_files: dist/website/index.html
     upload: dist/website/index.html
