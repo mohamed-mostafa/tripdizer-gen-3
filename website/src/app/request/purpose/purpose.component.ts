@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
-import { Purpose } from './purpose.model';
+import { LUTPurpose, Purpose } from './purpose.model';
 
 @Component({
 	selector: 'c-request-purpose',
@@ -19,16 +15,25 @@ export class PurposeComponent {
 		purpose: new FormControl('', [Validators.required]),
 	};
 	purposes: Array<Purpose>;
+	LUTPurpose = LUTPurpose;
+	otherPurposeName = '';
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
 				(this.controls[controlName] as FormControl).setValue(this.requestService.getProperty(controlName));
+				if (this.requestService.getProperty(controlName) === LUTPurpose.Other) {
+					this.otherPurposeName = this.requestService.getProperty('purposeName');
+				}
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
 		requestService.getPurposes().subscribe((purposes: Array<Purpose>) => (this.purposes = purposes));
+	}
+
+	otherPurposeFocused(): void {
+		this.formGroup.get('purpose').setValue(LUTPurpose.Other);
 	}
 
 	save(): void {
@@ -39,11 +44,14 @@ export class PurposeComponent {
 		}
 		const selectedPurpose = this.purposes.find(p => p.id === this.formGroup.controls['purpose'].value);
 		if (selectedPurpose) {
+			if (selectedPurpose.id === LUTPurpose.Other) {
+				selectedPurpose.name = this.otherPurposeName;
+			}
 			this.requestService.setProperty('purposeName', selectedPurpose.name);
 			this.requestService.setProperty('adultsNumber', selectedPurpose.adultsNumber);
 			this.requestService.setProperty('kidsNumber', selectedPurpose.kidsNumber);
 			this.requestService.setProperty('infantsNumber', selectedPurpose.infantsNumber);
 		}
-		this.mixpanelService.track('Submit - Purpose', { ...this.formGroup.value, purposeName: selectedPurpose.name });
+		this.trackingService.track('Submit - Purpose', { ...this.formGroup.value, purposeName: selectedPurpose.name });
 	}
 }

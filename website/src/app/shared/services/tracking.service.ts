@@ -3,8 +3,11 @@ import { TranslateService } from '@ngx-translate/core';
 import * as mixpanel from 'mixpanel-browser';
 import { environment } from '../../../environments/environment';
 
+declare const gtag: Function;
+declare const fbq: Function;
+
 @Injectable({ providedIn: 'root' })
-export class MixpanelService {
+export class TrackingService {
 	projectToken = environment.mixpanelToken;
 	experimentKey = environment.experimentKey;
 
@@ -22,5 +25,7 @@ export class MixpanelService {
 
 	track(id: string, data: any = {}): void {
 		mixpanel.track(id, data);
+		gtag('event', id, data);
+		fbq('track', id, data);
 	}
 }

@@ -5,63 +5,63 @@ import { Observable, of } from 'rxjs';
 @Injectable({
 	providedIn: 'root',
 })
-export class SectionOurTeamService {
+export class OurTeamService {
 	private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
 	private team: Array<any> = [
 		{
 			name: 'Ziad Eladawy',
 			jobTitle: 'Founder, CEO',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Ziad_Eladawy_Founder_CEO.jpg',
+			picture: 'https://static.tripdizer.com/Ziad_Eladawy_Founder_CEO.jpg',
 		},
 		{
 			name: 'Yara Yehia',
 			jobTitle: 'Cofounder, Managing Director',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Yara_Yehia_Cofounder_Managing_Director.jpg',
+			picture: 'https://static.tripdizer.com/Yara_Yehia_Cofounder_Managing_Director.jpg',
 		},
 		{
 			name: 'Omama Saad',
 			jobTitle: 'Operations Manager',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Omama_Saad_Operations_Manager.jpg',
+			picture: 'https://static.tripdizer.com/Omama_Saad_Operations_Manager.jpg',
 		},
 		{
 			name: 'Fady Rasmy',
 			jobTitle: 'Administration Manager',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Fady_Rasmy_Administration_Manager.jpg',
+			picture: 'https://static.tripdizer.com/Fady_Rasmy_Administration_Manager.jpg',
 		},
 		{
 			name: 'Mariam Mahmoud',
 			jobTitle: 'Travel Advisor',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Mariam_Mahmoud_Travel_Advisor.jpg',
+			picture: 'https://static.tripdizer.com/Mariam_Mahmoud_Travel_Advisor.jpg',
 		},
 		{
 			name: 'Abdullah Hassan',
 			jobTitle: 'Travel Advisor',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Abdullah_Hassan_Travel_Advisor.jpg',
+			picture: 'https://static.tripdizer.com/Abdullah_Hassan_Travel_Advisor.jpg',
 		},
 		{
 			name: 'Ahmed Essawy',
 			jobTitle: 'Software Engineer',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Ahmed_Essawy_Software_Engineer.jpg',
+			picture: 'https://static.tripdizer.com/Ahmed_Essawy_Software_Engineer.jpg',
 		},
 		{
 			name: 'Asmaa Kamal',
 			jobTitle: 'Travel Agent',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Asmaa_Kamal_Travel_Agent.jpg',
+			picture: 'https://static.tripdizer.com/Asmaa_Kamal_Travel_Agent.jpg',
 		},
 		{
 			name: 'Mina Emad',
 			jobTitle: 'Graphic Designer',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Mina_Emad_Graphic_Designer.jpg',
+			picture: 'https://static.tripdizer.com/Mina_Emad_Graphic_Designer.jpg',
 		},
 		{
 			name: 'Mohamed Mostafa',
 			jobTitle: 'Cofounder, CTO',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Mohamed_cofounder_CTO.jpg',
+			picture: 'https://static.tripdizer.com/Mohamed_cofounder_CTO.jpg',
 		},
 		{
 			name: 'Hatem Ayoub',
 			jobTitle: 'Cofounder, CMO',
-			picture: 'https://storage.googleapis.com/tripdizer-prod/Hatem_Ayoub_Cofounder_CMO.jpg',
+			picture: 'https://static.tripdizer.com/Hatem_Ayoub_Cofounder_CMO.jpg',
 		},
 	];
 

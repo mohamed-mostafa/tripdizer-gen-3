@@ -46,7 +46,7 @@ describe('public website request interface', function() {
 
 			chai
 				.request(serverURL)
-				.put('/request/place')
+				.put('/request/website/place')
 				.send({
 					request: request,
 				})
@@ -93,7 +93,7 @@ describe('public website request interface', function() {
 
 			chai
 				.request(serverURL)
-				.put('/request/place')
+				.put('/request/website/place')
 				.send({
 					request: request,
 				})
@@ -144,7 +144,7 @@ describe('public website request interface', function() {
 
 			chai
 				.request(serverURL)
-				.put('/request/place')
+				.put('/request/website/place')
 				.send({
 					request: request,
 				})

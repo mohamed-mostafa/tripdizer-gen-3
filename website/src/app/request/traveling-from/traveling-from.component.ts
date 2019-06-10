@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
 import { TravelingFrom } from './traveling-from.model';
 
 @Component({
@@ -19,7 +15,7 @@ export class TravelingFromComponent {
 		travelingFrom: new FormControl('', [Validators.required]),
 	};
 
-	constructor(private requestService: RequestService, private mixpanelService: MixpanelService) {
+	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
@@ -35,7 +31,7 @@ export class TravelingFromComponent {
 				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 			}
 		}
-		this.mixpanelService.track('Submit - Traveling From', this.formGroup.value);
+		this.trackingService.track('Submit - Traveling From', this.formGroup.value);
 	}
 
 	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;

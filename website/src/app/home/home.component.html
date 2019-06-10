@@ -1,23 +1,7 @@
 <div class="container-fluid sections-container h-100">
-	<section id="landing" class="row">
-		<c-home-section-landing></c-home-section-landing>
-	</section>
+	<c-core-nav-bar [height]="navBarHeightSubject"></c-core-nav-bar>
 
-	<section id="videos" class="row">
-		<c-home-section-videos></c-home-section-videos>
-	</section>
-
-	<section id="why-us" class="row">
-		<c-home-section-why-us></c-home-section-why-us>
-	</section>
-
-	<section id="our-team" class="row">
-		<c-home-section-our-team></c-home-section-our-team>
-	</section>
-
-	<section id="testimonials" class="row">
-		<c-home-section-testimonials></c-home-section-testimonials>
-	</section>
+	<router-outlet></router-outlet>
 
 	<footer id="footer">
 		<c-core-footer></c-core-footer>

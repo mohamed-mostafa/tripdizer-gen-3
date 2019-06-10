@@ -2,17 +2,11 @@ import { Component } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
-import { RequestService } from '../request.service';
 import { TranslateService } from '@ngx-translate/core';
-
-/* Models */
-import { Destination } from './destination.model';
-
-/* Components */
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { TrackingService } from '../../shared/services/tracking.service';
+import { RequestService } from '../request.service';
+import { Destination } from './destination.model';
 
 @Component({
 	selector: 'c-request-destinations',
@@ -34,7 +28,7 @@ export class DestinationsComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		private requestService: RequestService,
-		private mixpanelService: MixpanelService,
+		private trackingService: TrackingService,
 		private dialog: MatDialog,
 		translate: TranslateService
 	) {
@@ -46,7 +40,7 @@ export class DestinationsComponent {
 
 	save(destination: Destination): boolean {
 		this.requestService.setProperty('destination', destination);
-		this.mixpanelService.track('Submit - Destination', {
+		this.trackingService.track('Submit - Destination', {
 			destinationId: destination.id,
 			destinationName: destination.name,
 		});
@@ -104,7 +98,7 @@ export class DestinationsComponent {
 					visaTypeName: null,
 				};
 				this.requestService.setProperty('destination', destination);
-				this.mixpanelService.track('Submit - Destination', {
+				this.trackingService.track('Submit - Destination', {
 					destinationId: destination.id,
 					destinationName: destination.name,
 				});

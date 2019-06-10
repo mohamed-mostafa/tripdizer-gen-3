@@ -1,0 +1,52 @@
+<div *ngIf="user; else notUser">
+	<!-- <div>
+		<a href="javascript:void(0)" data-toggle="dropdown">
+			<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
+		</a>
+
+		<ul class="dropdown-menu">
+			<li
+				class="mx-3 mt-1 text-body text-capitalize"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
+				{{ user.name }}
+			</li>
+			<li
+				class="mx-3 mb-1 small text-monospace text-muted"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
+				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
+			</li>
+		</ul>
+	</div> -->
+
+	<table (mouseover)="setRowSpanNum(2)" (mouseout)="setRowSpanNum(1)">
+		<tr>
+			<td [attr.rowspan]="rowSpanNum">
+				<img
+					[src]="user.photoUrl"
+					alt=""
+					class="user-img rounded-circle"
+					[ngClass]="('dir' | translate) === 'rtl' ? 'ml-2' : 'mr-2'"
+				/>
+			</td>
+			<td
+				class="text-body text-capitalize"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right pl-3' : 'text-left pr-3'"
+			>
+				{{ user.name }}
+			</td>
+		</tr>
+		<tr *ngIf="rowSpanNum === 2">
+			<td
+				class="small text-monospace text-muted"
+				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
+			>
+				<a (click)="signOut()">{{ 'core.user_profile.sign_out' | translate }}</a>
+			</td>
+		</tr>
+	</table>
+</div>
+<ng-template #notUser>
+	<a (click)="openLoginDialog()">{{ 'core.user_profile.sign_in' | translate }}</a>
+</ng-template>

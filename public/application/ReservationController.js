@@ -22,9 +22,9 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
 
 	$scope.plusOrMinusThreeDays = false,
 
-	$scope.numberOfAdults = 1,
-	$scope.numberOfKids = 0,
-	$scope.numberOfInfants = 0,
+		$scope.adultsNumber = 1,
+	$scope.kidsNumber = 0,
+	$scope.infantsNumber = 0,
 	$scope.otherType = "",
 
 	$scope.secondDestinationShown = false,
@@ -185,7 +185,7 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
 		}
 		$scope.buildRequestObj();
 
-		$http.put($rootScope.serverURL + "/request/place", { request: $scope.request }).success(function (response) {
+		$http.put($rootScope.serverURL + "/request/dashboard/place", { request: $scope.request }).success(function (response) {
 			console.log("Request submitted");
 			$scope.submitting = false;
 			$scope.requestNumber = response.id;
@@ -318,18 +318,18 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
 		$scope.request.departure_date = $scope.selectedFrom;
 		$scope.request.return_date = $scope.selectedTo;
 		$scope.request.itinerary_id = $scope.selectedDestinations[0];	
-		$scope.request.number_of_adults = $scope.numberOfAdults;
-		$scope.request.number_of_kids = $scope.numberOfKids;
-		$scope.request.number_of_infants = $scope.numberOfInfants;
+		$scope.request.number_of_adults = $scope.adultsNumber;
+		$scope.request.number_of_kids = $scope.kidsNumber;
+		$scope.request.number_of_infants = $scope.infantsNumber;
 		$scope.request.budget_category = $scope.selectedBudgetCategory.id;
 		$scope.request.budget = $scope.myOwnBudget;
 		
 		var adultsString = "1 adult";
 		var kidsString = null;
 		var infantsString = null;
-		if ($scope.numberOfAdults > 0) adultsString = $scope.numberOfAdults + " adult"; if ($scope.numberOfAdults > 1) adultsString += "s";
-		if ($scope.numberOfKids > 0) kidsString = $scope.numberOfKids + " kid"; if ($scope.numberOfKids > 1) kidsString += "s"; 
-		if ($scope.numberOfInfants > 0) infantsString = $scope.numberOfInfants + " infant"; if ($scope.numberOfInfants > 1) infantsString += "s"; 
+		if ($scope.adultsNumber > 0) adultsString = $scope.adultsNumber + " adult"; if ($scope.adultsNumber > 1) adultsString += "s";
+		if ($scope.kidsNumber > 0) kidsString = $scope.kidsNumber + " kid"; if ($scope.kidsNumber > 1) kidsString += "s"; 
+		if ($scope.infantsNumber > 0) infantsString = $scope.infantsNumber + " infant"; if ($scope.infantsNumber > 1) infantsString += "s"; 
 		$scope.travelersStatement = adultsString;
 		if (kidsString && infantsString) $scope.travelersStatement += " , " + kidsString; else if (kidsString) $scope.travelersStatement += " and " + kidsString;
 		if (infantsString) $scope.travelersStatement += " and " + infantsString;
@@ -390,13 +390,13 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
             ga('send', 'pageview');
         }
 	};
-	$scope.reportSubmitButtonClicked = function(requestId, numberOfAdults, estimatedCost) {
+	$scope.reportSubmitButtonClicked = function (requestId, adultsNumber, estimatedCost) {
 		ga('send', 'event', 'Submit Button', 'Submit Request', 'RequestId: ' +requestId, requestId);
 		  fbq('track', 'Purchase', {
 		    contents: [
 		        {
 		            id: requestId,
-		            quantity: numberOfAdults,
+					quantity: adultsNumber,
 		            item_price: estimatedCost
 		        }
 		    ],
@@ -415,10 +415,10 @@ tripdizerApplication.controller("ReservationController", ['$rootScope', '$scope'
 		$scope.request.leaving_country = $scope.selectedSource;
 		$scope.request.other_country = $scope.selectedOtherDestinations;
 		$scope.request.travel_purpose = $scope.selectedPurpose.id;
-		$scope.request.number_of_adults = $scope.numberOfAdults;
-		$scope.request.number_of_kids = $scope.numberOfKids;
+		$scope.request.number_of_adults = $scope.adultsNumber;
+		$scope.request.number_of_kids = $scope.kidsNumber;
 		// $scope.request.kids_age = $scope.kidsAge;
-		$scope.request.number_of_infants = $scope.numberOfInfants;
+		$scope.request.number_of_infants = $scope.infantsNumber;
 		$scope.request.budget_category = $scope.selectedBudgetCategory.id;
 		$scope.request.budget = $scope.myOwnBudget;
 		$scope.request.visa_assistance_needed = $scope.needVisaAssistance;

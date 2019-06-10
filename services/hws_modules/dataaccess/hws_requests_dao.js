@@ -26,9 +26,10 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							request.date,
+							request.status || 1,
 							request.traveler.email,
 							request.traveler.name,
 							request.traveler.mobile,
@@ -44,6 +45,8 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.second_country,
 							request.third_country,
 							request.purpose,
+							request.otherPurposeName,
+							request.otherInterestName,
 							request.adultsNumber,
 							request.kidsNumber,
 							request.infantsNumber,
@@ -52,12 +55,15 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.visaAssistanceNeeded || false,
 							request.tourGuideNeeded || false,
 							request.destination,
+							request.actualDestination,
+							request.otherActualDestination,
 							request.specialRequests,
 							request.estimatedCost,
 							request.referralType,
 							request.travelHistory,
 							request.promoCode,
 							request.score,
+							request.channel,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -166,7 +172,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								status: rows[i].Status,
 								revenue: rows[i].Revenue,
 								profit: rows[i].Profit,
-								comments: rows[i].Comments,
+								specialRequests: rows[i].Comments,
 								traveler: {
 									name: rows[i].Traveler_Name,
 									mobile: rows[i].Traveler_Mobile,
@@ -178,21 +184,26 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								userFullName: rows[i].full_name,
 								departureDate: new Date(rows[i].Departure_Date).toString(),
 								returnDate: new Date(rows[i].Return_Date).toString(),
-								flexibleDates: rows[i].Flexible_Dates,
-								leavingCountry: rows[i].Leaving_Country,
+								isFlexibleDates: rows[i].Flexible_Dates,
+								travelingFrom: rows[i].Leaving_Country,
 								firstCountry: rows[i].First_Country,
 								otherCountry: rows[i].Other_Country,
 								secondCountry: rows[i].Second_Country,
 								thirdCountry: rows[i].Third_Country,
-								travelPurpose: rows[i].Travel_Purpose,
-								numberOfAdults: rows[i].Number_Of_Adults,
-								numberOfKids: rows[i].Number_Of_Kids,
-								numberOfInfants: rows[i].Number_Of_Infants,
+								purpose: rows[i].Travel_Purpose,
+								otherPurposeName: rows[i].Other_Purpose_Name,
+								otherInterestName: rows[i].Other_Interest_Name,
+								adultsNumber: rows[i].Number_Of_Adults,
+								kidsNumber: rows[i].Number_Of_Kids,
+								infantsNumber: rows[i].Number_Of_Infants,
 								budgetCategory: rows[i].Budget_Category,
 								budget: rows[i].Budget,
 								visaAssistanceNeeded: rows[i].Visa_Assistance_Needed,
 								tourGuideNeeded: rows[i].Tour_Guide_Needed,
+								destination: rows[i].itinerary_id,
 								itineraryId: rows[i].itinerary_id,
+								actualDestination: rows[i].Actual_Destination,
+								otherActualDestination: rows[i].Other_Actual_Destination,
 								estimatedCost: rows[i].Estimated_Cost,
 								edit: rows[i].Edit,
 								reachable: rows[i].Reachable,
@@ -200,6 +211,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								referralType: rows[i].Referral_Type,
 								travelHistory: rows[i].Travel_History,
 								score: rows[i].Score,
+								channel: rows[i].Channel,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -260,8 +272,10 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 					' OR `Third_Country` = ' +
 					connection.escape(filter.destination) +
 					')';
+			if (filter.actualDestination)
+				query += ' AND `Actual_Destination` = ' + connection.escape(filter.actualDestination);
 			// if (filter.status) statuses = [filter.status];
-			if (filter.travelPurpose) query += ' AND `Travel_Purpose` = ' + connection.escape(filter.travelPurpose);
+			if (filter.purpose) query += ' AND `Travel_Purpose` = ' + connection.escape(filter.purpose);
 			if (filter.budgetCategory) query += ' AND `Budget_Category` = ' + connection.escape(filter.budgetCategory);
 			if (filter.estimatedFrom) query += ' AND `Estimated_Cost` >= ' + connection.escape(filter.estimatedFrom);
 			if (filter.estimatedTo) query += ' AND `Estimated_Cost` <= ' + connection.escape(filter.estimatedTo);
@@ -270,6 +284,7 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 			if (filter.packageSent) query += ' AND `Package_Sent` = ' + connection.escape(filter.packageSent);
 			if (filter.referralType) query += ' AND `Referral_Type` = ' + connection.escape(filter.referralType);
 			if (filter.travelHistory) query += ' AND `Travel_History` = ' + connection.escape(filter.travelHistory);
+			if (filter.channel) query += ' AND `Channel` = ' + connection.escape(filter.channel);
 			// execute the query
 			connection.query(
 				'SELECT count(id) as count, sum(revenue) as revenue, sum(profit) as profit, sum(Number_Of_Adults + Number_Of_Kids + Number_Of_Infants) as numberOfTravelers FROM traveler_request WHERE status IN (?) AND Archived = 0' +
@@ -322,7 +337,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								status: rows[0].Status,
 								revenue: rows[0].Revenue,
 								profit: rows[0].Profit,
-								comments: rows[0].Comments,
+								specialRequests: rows[0].Comments,
 								traveler: {
 									name: rows[0].Traveler_Name,
 									mobile: rows[0].Traveler_Mobile,
@@ -334,21 +349,26 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								userFullName: rows[0].full_name,
 								departureDate: new Date(rows[0].Departure_Date).toString(),
 								returnDate: new Date(rows[0].Return_Date).toString(),
-								flexibleDates: rows[0].Flexible_Dates,
-								leavingCountry: rows[0].Leaving_Country,
+								isFlexibleDates: rows[0].Flexible_Dates,
+								travelingFrom: rows[0].Leaving_Country,
 								firstCountry: rows[0].First_Country,
 								otherCountry: rows[0].Other_Country,
 								secondCountry: rows[0].Second_Country,
 								thirdCountry: rows[0].Third_Country,
-								travelPurpose: rows[0].Travel_Purpose,
-								numberOfAdults: rows[0].Number_Of_Adults,
-								numberOfKids: rows[0].Number_Of_Kids,
-								numberOfInfants: rows[0].Number_Of_Infants,
+								purpose: rows[0].Travel_Purpose,
+								otherPurposeName: rows[0].Other_Purpose_Name,
+								otherInterestName: rows[0].Other_Interest_Name,
+								adultsNumber: rows[0].Number_Of_Adults,
+								kidsNumber: rows[0].Number_Of_Kids,
+								infantsNumber: rows[0].Number_Of_Infants,
 								budgetCategory: rows[0].Budget_Category,
 								budget: rows[0].Budget,
 								visaAssistanceNeeded: rows[0].Visa_Assistance_Needed,
 								tourGuideNeeded: rows[0].Tour_Guide_Needed,
+								destination: rows[0].itinerary_id,
 								itineraryId: rows[0].itinerary_id,
+								actualDestination: rows[0].Actual_Destination,
+								otherActualDestination: rows[0].Other_Actual_Destination,
 								estimatedCost: rows[0].Estimated_Cost,
 								edit: rows[0].Edit,
 								reachable: rows[0].Reachable,
@@ -357,6 +377,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								travelHistory: rows[0].Travel_History,
 								promoCode: rows[0].Promo_Code,
 								score: rows[0].Score,
+								channel: rows[0].Channel,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -443,27 +464,31 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
 					request.returnDate,
-					request.flexibleDates,
-					request.leavingCountry,
+					request.isFlexibleDates,
+					request.travelingFrom,
 					request.firstCountry,
 					request.otherCountry,
 					request.secondCountry,
 					request.thirdCountry,
-					request.travelPurpose,
-					request.numberOfAdults,
-					request.numberOfKids,
-					request.numberOfInfants,
+					request.purpose,
+					request.otherPurposeName,
+					request.otherInterestName,
+					request.adultsNumber,
+					request.kidsNumber,
+					request.infantsNumber,
 					request.budgetCategory,
 					request.budget || 0,
 					request.visaAssistanceNeeded,
 					request.tourGuideNeeded,
-					request.itineraryId,
-					request.comments || '',
+					request.destination,
+					request.actualDestination,
+					request.otherActualDestination,
+					request.specialRequests || '',
 					request.revenue,
 					request.profit,
 					request.edit,
@@ -471,6 +496,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.referralType,
 					request.travelHistory,
 					request.score,
+					request.channel,
 					request.id,
 				],
 				function(err, rows) {

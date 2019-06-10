@@ -163,7 +163,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Interests', [], function(err, rows) {
+			connection.query('SELECT * FROM Interests order by id desc', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection

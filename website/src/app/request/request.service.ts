@@ -7,14 +7,13 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { MixpanelService } from '../shared/services/mixpanel.service';
-
+import { DropDownItem } from '../shared/models/drop-down-item.model';
+import { TrackingService } from '../shared/services/tracking.service';
 /* Models */
 import { BudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
-import { DropDownItem } from '../shared/models/drop-down-item.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
-import { Preference } from './preferences/preference.model';
+import { LUTPreference, Preference } from './preferences/preference.model';
 import { LUTPurpose, Purpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
@@ -25,9 +24,6 @@ import { RequestType } from './request-type.enum';
 import { Request } from './request.model';
 import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';
-
-declare const gtag: Function;
-declare const fbq: Function;
 
 @Injectable({
 	providedIn: 'root',
@@ -56,7 +52,7 @@ export class RequestService {
 		private router: Router,
 		private currencyPipe: CurrencyPipe,
 		private translate: TranslateService,
-		private mixpanelService: MixpanelService
+		private trackingService: TrackingService
 	) {
 		this.initRequest();
 	}
@@ -79,6 +75,10 @@ export class RequestService {
 		localStorage.setItem('request', JSON.stringify(this.requestData.getPureRequest()));
 	}
 
+	private refineStepPath(path: string): string {
+		return path.split('/')[0];
+	}
+
 	resetRequestState(): void {
 		if (!this.isDevelopment) {
 			localStorage.removeItem('request');
@@ -97,7 +97,13 @@ export class RequestService {
 			value: requestType,
 			navBar: this.requestData.navBar,
 		});
+		this.Lookups.purposes = null;
+		this.Lookups.preferences = null;
 		return true;
+	}
+
+	getRequestType(): RequestType {
+		return this.requestData.getRequestType();
 	}
 
 	getNavBar(): Array<Step> {
@@ -105,6 +111,7 @@ export class RequestService {
 	}
 
 	redirectIfShouldBeRedirected(stepPath: string): void {
+		stepPath = this.refineStepPath(stepPath);
 		const prevInvalidStep = this.getPrevInvalidStep(stepPath);
 		if (prevInvalidStep !== stepPath) {
 			this.router.navigate(['../request/', prevInvalidStep]);
@@ -112,6 +119,7 @@ export class RequestService {
 	}
 
 	stepVisited(stepPath: string): void {
+		stepPath = this.refineStepPath(stepPath);
 		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
 		if (step) {
 			this.requestData.touchStep(step.order);
@@ -119,6 +127,7 @@ export class RequestService {
 	}
 
 	getNextStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			nextSteps = this.requestData.validSteps
 				.filter(s => s.order > currentStep.order)
@@ -127,6 +136,7 @@ export class RequestService {
 	}
 
 	getPrevStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)
@@ -135,6 +145,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.requiredForRecommendation && s.order < currentStep.order)
@@ -148,6 +159,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStepForEstimateCalc(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
@@ -161,6 +173,7 @@ export class RequestService {
 	}
 
 	getPrevInvalidStep(stepPath: string): string {
+		stepPath = this.refineStepPath(stepPath);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)
@@ -257,7 +270,11 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(purposes => {
-				this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
+				if (this.getRequestType() === RequestType.SurpriseMe) {
+					this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
+				} else {
+					this.Lookups.purposes = purposes;
+				}
 				this.isLoading.next(false);
 				return this.Lookups.purposes;
 			})
@@ -286,6 +303,10 @@ export class RequestService {
 		return this.requestData.isPreferenceSelected(parseInt(preferenceId, 10));
 	}
 
+	getPreferenceName(preferenceId: string): string {
+		return this.requestData.getPreferenceName(parseInt(preferenceId, 10));
+	}
+
 	getPreferences(): Observable<Array<Preference>> {
 		this.isLoading.next(true);
 		let observable: Observable<Array<Preference>>;
@@ -296,7 +317,11 @@ export class RequestService {
 		}
 		return observable.pipe(
 			map(preferences => {
-				this.Lookups.preferences = preferences;
+				if (this.getRequestType() === RequestType.SurpriseMe) {
+					this.Lookups.preferences = preferences.filter(p => p.id !== LUTPreference.Other);
+				} else {
+					this.Lookups.preferences = preferences;
+				}
 				this.isLoading.next(false);
 				return this.Lookups.preferences;
 			})
@@ -403,25 +428,11 @@ export class RequestService {
 		this.isLoading.next(true);
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
-			return this.http.put<RequestResponse>(`${this.endPoint}/place`, { request: request }).pipe(
+			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request: request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
 					this.lastRequestId = ticket.id;
-					gtag('event', 'Submit Request', {
-						event_category: 'Submit Request',
-						event_label: 'RequestId: ' + ticket.id,
-						value: ticket.id,
-					});
-					fbq('track', 'Purchase', {
-						contents: [
-							{
-								id: ticket.id,
-								quantity: ticket.adultsNumber,
-								itemPrice: ticket.estimatedCost,
-							},
-						],
-					});
-					this.mixpanelService.track('Submit Request', { requestId: ticket.id });
+					this.trackingService.track('Submit Request', { requestId: ticket.id });
 					this.resetRequestState();
 					this.isLoading.next(false);
 					return ticket;

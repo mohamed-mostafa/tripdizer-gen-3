@@ -13,14 +13,14 @@ platformBrowserDynamic()
 
 // Global site tag (gtag.js) - Google Analytics
 document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?${environment.googleAnalyticsTrackingID}">
+<script async src="https://www.googletagmanager.com/gtag/js?${environment.google.analyticsTrackingID}">
 </script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '${environment.googleAnalyticsTrackingID}');
+  gtag('config', '${environment.google.analyticsTrackingID}');
 </script>`);
 
 // Facebook Pixel Code
@@ -34,11 +34,11 @@ document.write(`<!-- Facebook Pixel Code -->
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '${environment.facebookPixelID}');
+  fbq('init', '${environment.facebook.pixelID}');
   fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=${environment.facebookPixelID}&ev=PageView&noscript=1"
+  src="https://www.facebook.com/tr?id=${environment.facebook.pixelID}&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Facebook Pixel Code -->
 `);

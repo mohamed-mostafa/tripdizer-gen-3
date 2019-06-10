@@ -1,5 +1,9 @@
 :host {
 	width: 100%;
+
+	& > * {
+		background-color: #2989ff;
+	}
 }
 
 .why-us {

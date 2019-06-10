@@ -17,6 +17,7 @@ export class Request extends CommonFunctions {
 	private _requestType: RequestType;
 	private _localeLabels: {
 		currency?: any;
+		travel_info?: string;
 		traveling_from?: string;
 		traveling_to?: string;
 		departure_return?: string;
@@ -43,8 +44,7 @@ export class Request extends CommonFunctions {
 	private _budgetCategoryName: string;
 	private _purpose: number;
 	private _purposeName: string;
-	private _preferences: Array<number>;
-	private _preferenceNames: Array<string>;
+	private _preferences: Array<Preference>;
 	private _destination: Destination;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
@@ -137,10 +137,10 @@ export class Request extends CommonFunctions {
 		return this._purpose ? this._purposeName : '';
 	}
 	get preferences(): Array<number> {
-		return this._preferences;
+		return this._preferences.map(p => p.id);
 	}
 	get preferenceNames(): Array<string> {
-		return this._preferenceNames;
+		return this._preferences.map(p => p.name);
 	}
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
@@ -242,10 +242,63 @@ export class Request extends CommonFunctions {
 	private get steps(): Array<Step> {
 		return [
 			{
+				key: 'travelInfo',
+				title: this._localeLabels.travel_info,
+				path: 'travel-info',
+				order: this.getStepOrder('travelInfo'),
+				requiredForEstimateCalc: true,
+				requiredForRecommendation: true,
+				value: ((): string => {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
+						return null;
+					}
+					if (
+						!(
+							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							this._travelingFrom &&
+							this._travelingFrom.name &&
+							this._departureDate &&
+							this._returnDate
+						)
+					) {
+						return null;
+					}
+					const departureMonthString: string =
+						this.departureDate.format('M') === this.returnDate.format('M') ? '' : ' / M';
+					const departureYearString: string =
+						this.departureDate.format('Y') === this.returnDate.format('Y') ? '' : ' / Y';
+					return (
+						(this.destination ? this.destination.name + ' ' : '') +
+						(this.departureDate.format(`D${departureMonthString}${departureYearString}`) +
+							' - ' +
+							this.returnDate.format('D / M / Y'))
+					);
+				})(),
+				isClickable: (): boolean => this.isNavBarItemClickable('travelInfo'),
+				isValid: (): boolean => {
+					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
+						return false;
+					}
+					if (
+						!(
+							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							this._travelingFrom &&
+							this._travelingFrom.name &&
+							this._departureDate &&
+							this._returnDate
+						)
+					) {
+						return false;
+					}
+					return true;
+				},
+			},
+			{
 				key: 'travelingFrom',
 				title: this._localeLabels.traveling_from,
 				path: 'traveling-from',
 				order: this.getStepOrder('travelingFrom'),
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelingFrom')) === -1) {
 						return null;
@@ -271,7 +324,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.traveling_to,
 				path: 'traveling-to',
 				order: this.getStepOrder('travelingTo'),
-				isDisabled: this._requestType !== RequestType.HavePlan,
+				isDisabled: true || this._requestType !== RequestType.HavePlan,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelingTo')) === -1) {
@@ -297,11 +350,12 @@ export class Request extends CommonFunctions {
 				key: 'departureReturn',
 				title: this._localeLabels.departure_return,
 				path: 'departure-return',
-				order: this.getStepOrder('travelingTo'),
+				order: this.getStepOrder('departureReturn'),
+				isDisabled: true,
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
 				value: ((): string => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('travelingTo')) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('departureReturn')) === -1) {
 						return null;
 					}
 					if (!this._departureDate || !this._returnDate) {
@@ -319,7 +373,7 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('departureReturn'),
 				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('travelingTo')) === -1) {
+					if (this._touchedSteps.indexOf(this.getStepOrder('departureReturn')) === -1) {
 						return false;
 					}
 					if (!this._departureDate || !this._returnDate) {
@@ -421,7 +475,7 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
 						return null;
 					}
-					return this._preferenceNames.join(', ');
+					return this.preferenceNames.join(', ');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
 				isValid: (): boolean => {
@@ -489,6 +543,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.travel_assistance.title,
 				path: 'travel-assistance',
 				order: this.getStepOrder('travelAssistance'),
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelAssistance')) === -1) {
 						return null;
@@ -525,19 +580,19 @@ export class Request extends CommonFunctions {
 						!this._traveler ||
 						!this._traveler.name ||
 						!this._traveler.mobile ||
-						!this._traveler.email ||
-						!this._traveler.gender ||
-						!this._traveler.birthday ||
-						!this._traveler.profession
+						!this._traveler.email // ||
+						// !this._traveler.gender ||
+						// !this._traveler.birthday ||
+						// !this._traveler.profession
 					) {
 						return false;
 					}
-					if (!this._referralType) {
-						return false;
-					}
-					if (!this._travelHistory) {
-						return false;
-					}
+					// if (!this._referralType) {
+					// 	return false;
+					// }
+					// if (!this._travelHistory) {
+					// 	return false;
+					// }
 					return true;
 				},
 			},
@@ -566,7 +621,6 @@ export class Request extends CommonFunctions {
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
 		this._preferences = [];
-		this._preferenceNames = [];
 		this._traveler = {
 			name: null,
 			mobile: null,
@@ -600,6 +654,7 @@ export class Request extends CommonFunctions {
 
 	private getStepOrder(stepKey: string): number {
 		const steps = {
+			travelInfo: 0,
 			travelingFrom: 1,
 			travelingTo: 2,
 			departureReturn: 3,
@@ -637,22 +692,29 @@ export class Request extends CommonFunctions {
 		this._requestType = requestType;
 	}
 
+	getRequestType(): RequestType {
+		return this._requestType;
+	}
+
 	touchStep(value: number) {
 		this._touchedSteps.push(value);
 	}
 
 	addPreference(preference: Preference): void {
-		this._preferences.push(preference.id);
-		this._preferenceNames.push(preference.name);
+		this._preferences.push(preference);
 	}
 
 	resetPreference(): void {
 		this._preferences = [];
-		this._preferenceNames = [];
 	}
 
 	isPreferenceSelected(preferenceId: number): boolean {
-		return this._preferences.indexOf(preferenceId) !== -1;
+		return this._preferences.some(p => p.id === preferenceId);
+	}
+
+	getPreferenceName(preferenceId: number): string {
+		const preference = this._preferences.find(p => p.id === preferenceId);
+		return preference ? preference.name : null;
 	}
 
 	isValidForRecommendedDestinations(): boolean {

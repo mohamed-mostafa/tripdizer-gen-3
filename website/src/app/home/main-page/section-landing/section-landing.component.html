@@ -1,0 +1,28 @@
+<section id="landing" class="row d-block">
+	<img [src]="'home.landing.lets_go_traveller' | translate" class="col-8 offset-2" alt="" />
+
+	<div class="col-12 text-center">
+		<span class="text-white landing-question">{{ 'home.landing.landing_question' | translate }}</span>
+		<div class="mt-3">
+			<a
+				class="btn greenbtn custom-bs btn-rounded btn-outline-light mx-2 mt-1"
+				(click)="havePlan()"
+				[routerLink]="['request']"
+				role="button"
+				>{{ 'home.landing.have_plan' | translate }}</a
+			>
+			<a
+				class="btn custom-bs btn-rounded btn-light mx-2 mt-1"
+				(click)="surpriseMe()"
+				[routerLink]="['request']"
+				[queryParams]="{ surprise: true }"
+				role="button"
+				>{{ 'home.landing.surprise_me' | translate }}</a
+			>
+		</div>
+	</div>
+
+	<div class="col-12 text-center scroll-down">
+		<a href="#videos" class="text-uppercase text-white">{{ 'home.landing.scroll_down' | translate }}</a>
+	</div>
+</section>

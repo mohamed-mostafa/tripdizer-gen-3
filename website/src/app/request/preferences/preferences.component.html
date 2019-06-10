@@ -1,9 +1,23 @@
 <c-request-form-layout [formGroup]="formGroup" (next)="save()">
 	<div class="mat-checkbox-group mat-checkbox-rounded form-control-xl row">
 		<mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
-			{{ preference.name }}
+			<span *ngIf="preference.id !== LUTPreference.Other; else otherPreference">
+				{{ preference.name }}
+			</span>
+			<ng-template #otherPreference>
+				<span class="other-preference">
+					<input
+						type="text"
+						class="text-capitalize text-center"
+						[value]="otherPreferenceName"
+						[placeholder]="'request.preferences.other' | translate"
+						(change)="otherPreferenceName = $event.target.value"
+						(focus)="otherPreferenceFocused()"
+					/>
+				</span>
+			</ng-template>
 			<span
-				class="label-content-img"
+				class="label-content-img full-size-background"
 				[style.background]="preference.image ? 'url(' + preference.image + ')' : null"
 			></span>
 		</mat-checkbox>

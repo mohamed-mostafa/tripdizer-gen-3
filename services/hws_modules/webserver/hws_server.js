@@ -44,7 +44,8 @@ var start = function() {
 	// routing - Start
 
 	// requests
-	app.put('/request/place', requestsInterface.placeRequest);
+	app.put('/request/website/place', requestsInterface.placeWebsiteRequest);
+	app.put('/request/dashboard/place', requestsInterface.placeDashboardRequest);
 	app.get('/request/promocodevalidity', requestsInterface.validatePromoCode);
 	app.get('/request/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	app.put('/request', auth.isAuthenticated, requestsInterface.updateRequest);

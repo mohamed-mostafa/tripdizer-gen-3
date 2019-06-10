@@ -2,8 +2,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-
-/* Services */
 import { SectionVideosService } from './section-videos.service';
 
 @Component({

@@ -1,8 +1,14 @@
 export const environment = {
 	production: true,
 	apiUrl: 'https://tripdizer-backend-dot-tripdizer-stg.appspot.com/',
-	googleAnalyticsTrackingID: 'UA-106443087-3',
-	facebookPixelID: null,
 	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
-	experimentKey: '',
+	experimentKey: 'Reduce Friction',
+	facebook: {
+		appID: '1597597783733890',
+		pixelID: null,
+	},
+	google: {
+		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
+		analyticsTrackingID: 'UA-106443087-3',
+	},
 };

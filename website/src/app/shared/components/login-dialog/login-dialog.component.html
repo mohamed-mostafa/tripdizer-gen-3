@@ -1,0 +1,33 @@
+<span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
+	<span mat-dialog-title>
+		{{ 'shared.login_dialog.sign_in' | translate }}
+		<img
+			src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
+			(click)="close()"
+			class="close-btn"
+			[ngClass]="('dir' | translate) === 'rtl' ? 'float-left mr-5' : 'float-right ml-5'"
+		/>
+	</span>
+	<h6>{{ 'shared.login_dialog.improve_experience' | translate }}</h6>
+	<div mat-dialog-content>
+		<div class="text-center" *ngIf="user; else notUser">
+			<c-core-user-profile></c-core-user-profile>
+		</div>
+		<ng-template #notUser>
+			<div class="text-center">
+				<button class="btn mx-1 social-btn google-btn" (click)="signInWithGoogle()">
+					<span class="fa fa-google float-left m-1"></span>
+					<div>{{ 'shared.login_dialog.sign_in_google' | translate }}</div>
+				</button>
+				<button class="btn mx-1 social-btn facebook-btn" (click)="signInWithFacebook()">
+					<span class="fa fa-facebook float-left m-1"></span>
+					<div>{{ 'shared.login_dialog.sign_in_facebook' | translate }}</div>
+				</button>
+				<div class="my-2 text-uppercase text-center">{{ 'shared.login_dialog.or' | translate }}</div>
+				<button class="btn mx-1 social-btn btn-secondary" (click)="continueWithoutLogin()">
+					{{ 'shared.login_dialog.continue_without_login' | translate }}
+				</button>
+			</div>
+		</ng-template>
+	</div>
+</span>

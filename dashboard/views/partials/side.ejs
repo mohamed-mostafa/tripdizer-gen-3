@@ -16,6 +16,9 @@
 		<li>
 			<a href="home"><i class="fa fa-home text-info"></i> Home</a>
 		</li>
+		<li>
+			<a href="new-request"><i class="fa fa-files-o text-info"></i> New Request</a>
+		</li>
 		<%if (user.isAdmin) { %>
 		<li>
 			<a href="users"><i class="fa fa-user text-info"></i> Users</a>
@@ -41,19 +44,19 @@
 		</li>
 		<%if (user.isAdmin) { %>
 		<li>
-			<a href="statuses"><i class="fa fa-align-left text-info"></i> Folders</a>
+			<a href="statuses"><i class="fa fa-folder text-info"></i> Folders</a>
 		</li>
 		<% } %>
 		<li>
-			<a href="agents-notes"><i class="fa fa-align-left fa-comments"></i> Agents Notes</a>
+			<a href="agents-notes"><i class="fa fa-quote-right text-info"></i> Agents Notes</a>
 		</li>
 		<%if (user.isAdmin) { %>
 		<li>
-			<a href="emails"><i class="fa fa-align-left text-info"></i> Emails</a>
+			<a href="emails"><i class="fa fa-send text-info"></i> Emails</a>
 		</li>
 		<% } %>
 		<li>
-			<a href="phones"><i class="fa fa-align-left fa-phone"></i> Phones</a>
+			<a href="phones"><i class="fa fa-phone text-info"></i> Phones</a>
 		</li>
 	</ul>
 </section>

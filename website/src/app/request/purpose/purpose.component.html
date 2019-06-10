@@ -1,8 +1,25 @@
 <c-request-form-layout [formGroup]="formGroup" (next)="save()">
 	<mat-radio-group class="image form-control-xl row" formControlName="purpose">
 		<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
-			{{ purpose.name }}
-			<span class="label-content-img" [style.background]="purpose.image ? 'url(' + purpose.image + ')' : null"></span>
+			<span *ngIf="purpose.id !== LUTPurpose.Other; else otherPurpose">
+				{{ purpose.name }}
+			</span>
+			<ng-template #otherPurpose>
+				<span class="other-purpose">
+					<input
+						type="text"
+						[value]="otherPurposeName"
+						class="text-capitalize text-center"
+						[placeholder]="'request.purpose.other' | translate"
+						(change)="otherPurposeName = $event.target.value"
+						(focus)="otherPurposeFocused()"
+					/>
+				</span>
+			</ng-template>
+			<span
+				class="label-content-img full-size-background"
+				[style.background]="purpose.image ? 'url(' + purpose.image + ')' : null"
+			></span>
 		</mat-radio-button>
 	</mat-radio-group>
 </c-request-form-layout>

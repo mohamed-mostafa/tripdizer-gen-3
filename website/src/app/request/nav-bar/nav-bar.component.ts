@@ -1,12 +1,8 @@
 import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-
-/* Services */
-import { MixpanelService } from '../../shared/services/mixpanel.service';
+import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-
-/* Models */
 import { Step } from '../step.model';
 
 @Component({
@@ -28,7 +24,7 @@ export class RequestNavBarComponent implements AfterViewInit {
 		router: Router,
 		translate: TranslateService,
 		requestService: RequestService,
-		private mixpanelService: MixpanelService
+		private trackingService: TrackingService
 	) {
 		this.navBar = requestService.getNavBar();
 		requestService.requestNavBarDataChanged.subscribe(obj => {
@@ -65,6 +61,6 @@ export class RequestNavBarComponent implements AfterViewInit {
 	}
 
 	onClick(step: Step): void {
-		this.mixpanelService.track(`Navbar - ${step.title}`);
+		this.trackingService.track(`Navbar - ${step.title}`);
 	}
 }
