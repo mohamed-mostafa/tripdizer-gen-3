@@ -2,6 +2,7 @@ let request = require('request');
 let moment = require('moment');
 let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
+const MAX_TRANSIT_TIME_IN_MINUTES = 8*60;
 const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8081/tripdizer-flights-api/1.0.0/flights'
 
 /**
@@ -99,7 +100,7 @@ exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,
       let filteredflightOffers = [];
       for (let i = 0; i < flightOffers.length; i++) {
         let currentOffer = flightOffers[i];
-        // find out if the airline name doesn't exists before
+        // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
         let airlineFound = false;
         for (let j = 0; j < filteredflightOffers.length; j++) {
             if (currentOffer.flightLegs[0].carrier == filteredflightOffers[j].flightLegs[0].carrier) {
@@ -108,7 +109,9 @@ exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,
             }
         }
         if (!airlineFound) {
-            filteredflightOffers.push(currentOffer);
+            if (currentOffer.flightLegs[0].transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES ) { // also transit has to be less than a limit
+                filteredflightOffers.push(currentOffer);
+            }
         }
 
         if (filteredflightOffers.length == MAX_NUMBER_OF_OFFERS_PER_LEG) {

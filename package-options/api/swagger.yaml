@@ -261,12 +261,18 @@ definitions:
           \ then it is a direct flight leg"
         items:
           $ref: "#/definitions/flightSegment"
-      totalDuration:
+      totalDurationInWords:
         type: "string"
         example: "0D6H30M"
-      transitDuration:
+      transitDurationInWords:
         type: "string"
         example: "0D2H0M"
+      totalDurationInMinutes:
+        type: "number"
+        example: 240
+      transitDurationInMinutes:
+        type: "number"
+        example: 120
       carrier:
         type: "string"
         example: "EgyptAir"
@@ -293,9 +299,12 @@ definitions:
       destination:
         type: "string"
         example: "AMS"
-      duration:
+      durationInWords:
         type: "string"
         example: "0D6H30M"
+      durationInMinutes:
+        type: "number"
+        example: 120
   accomodationOffer:
     type: "object"
     properties:

@@ -63,20 +63,27 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 				}
 				offerItem.services.forEach (service => {
 					// each service is a flight leg
+					var flightDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
+					var transitDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.departure.at).getTime() - new Date(service.segments[0].flightSegment.arrival.at).getTime();
 					var flightLeg = {
 						origin: service.segments[0].flightSegment.departure.iataCode,
 						destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,
-						totalDuration: shortEnglishHumanizer(new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime()),
-						transitDuration: shortEnglishHumanizer(new Date(service.segments[service.segments.length -1].flightSegment.departure.at).getTime() - new Date(service.segments[0].flightSegment.arrival.at).getTime()),
+						totalDurationInWords: shortEnglishHumanizer(flightDurationInMillis),
+						transitDurationInWords: shortEnglishHumanizer(transitDurationInMillis),
+						totalDurationInMinutes: flightDurationInMillis / (1000 * 60 ),
+						transitDurationInMinutes: transitDurationInMillis / (1000 * 60 ),
 						carrier: carriersMap[service.segments[0].flightSegment.carrierCode],
 						segments: []
 					};
 					service.segments.forEach(segment => {
+						var segmentDurationInMillis = new Date(segment.flightSegment.arrival.at).getTime() - new Date(segment.flightSegment.departure.at).getTime();
 						var flightLegSegment = {
 							origin: segment.flightSegment.departure.iataCode,
 							destination: segment.flightSegment.arrival.iataCode,
 							departure: segment.flightSegment.departure.at,
-							"return": segment.flightSegment.arrival.at
+							"return": segment.flightSegment.arrival.at,
+							durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
+							durationInMinutes: segmentDurationInMillis / (1000 * 60)
 						}
 						flightLeg.segments.push(flightLegSegment);
 					});
