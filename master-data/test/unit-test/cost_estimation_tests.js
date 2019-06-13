@@ -2,7 +2,7 @@ var assert = require('assert');
 var mockery = require('mockery');
 var costEstimationTestsMocks = require('./utilities/cost_estimation_test_mocks.js');
 
-describe('hws_request_business', function() {
+describe('hws_budget_calculation_business', function() {
 	describe('budgetCalculation - totalBudget', function() {
 		before(done => {
 			mockery.enable({ useCleanCache: true });
@@ -29,7 +29,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -53,7 +53,7 @@ describe('hws_request_business', function() {
 				budget_category: 3, // economy
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -77,7 +77,7 @@ describe('hws_request_business', function() {
 				budget_category: 5, // splurge
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -101,7 +101,7 @@ describe('hws_request_business', function() {
 				budget_category: 3, // economy
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -125,7 +125,7 @@ describe('hws_request_business', function() {
 				budget_category: 3, // economy
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -149,7 +149,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -173,7 +173,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -196,7 +196,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -220,7 +220,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -244,7 +244,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -259,7 +259,7 @@ describe('hws_request_business', function() {
 	}); // end function describe
 }); // end module describe
 
-describe('hws_request_business', function() {
+describe('hws_budget_calculation_business', function() {
 	describe('budgetCalculation - dailySpendings', function() {
 		before(done => {
 			mockery.enable({ useCleanCache: true });
@@ -286,7 +286,7 @@ describe('hws_request_business', function() {
 				budget_category: 2,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -309,7 +309,7 @@ describe('hws_request_business', function() {
 				budget_category: 3,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -332,7 +332,7 @@ describe('hws_request_business', function() {
 				budget_category: 4,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {
@@ -355,7 +355,7 @@ describe('hws_request_business', function() {
 				budget_category: 5,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_budget_calculation_business.js');
 			requestsBusiness.budgetCalculation(
 				request,
 				function(result) {

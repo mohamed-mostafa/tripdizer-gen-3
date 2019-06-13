@@ -7,17 +7,15 @@ var start = function() {
 	var express = require('express');
 	var cors = require('cors');
 	var bodyParser = require('body-parser');
-	var daoUtilities = require('../dataaccess/hws_dao_utilities.js');
-	var connection = daoUtilities.createConnection();
+	// var daoUtilities = require('../dataaccess/hws_dao_utilities.js');
+	// var connection = daoUtilities.createConnection();
 	var auth = require('../app/auth/index');
 
 	// interfaces
-	require('../app/cron/index');
 	var publicInterface = require('./hws_public_interface.js');
-	var requestsInterface = require('./hws_requests_interface.js');
+	var budgetCalculationInterface = require('./hws_budget_calculation_interface.js');
+	var recommendationInterface = require('./hws_country_recommendation_interface.js');
 	var usersInterface = require('./hws_users_interface.js');
-	var partnersInterface = require('./hws_partners_interface.js');
-	var grouptripsInterface = require('./hws_grouptrips_interface.js');
 	var countriesInterface = require('./hws_countries_interface.js');
 	var citiesInterface = require('./hws_cities_interface.js');
 	var itinerariesInterface = require('./hws_itineraries_interface.js');
@@ -43,51 +41,13 @@ var start = function() {
 
 	// routing - Start
 
-	// requests
-	app.put('/request/website/place', requestsInterface.placeWebsiteRequest);
-	app.put('/request/dashboard/place', requestsInterface.placeDashboardRequest);
-	app.get('/request/promocodevalidity', requestsInterface.validatePromoCode);
-	app.get('/request/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
-	app.put('/request', auth.isAuthenticated, requestsInterface.updateRequest);
-	app.post('/request/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
-	app.get('/request/statuses/summaries', auth.isAuthenticated, requestsInterface.getRequestSummaries);
-	app.get('/request/statuses/count', auth.isAuthenticated, requestsInterface.getRequestSummariesCount);
-	app.post('/request/statuses/sendmails', auth.isAuthenticated, requestsInterface.sendMailsToRequestTraveler);
-	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
-	app.post('/request/budgetcalc', requestsInterface.budgetCalculation);
-	app.post('/request/recommendation', requestsInterface.recommendation);
-	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
-	app.post('/request/send-package', requestsInterface.sendPackageByMail);
-	app.get('/request/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
-
-	// 		set status
-	app.post('/request/status/placed', auth.isAuthenticated, requestsInterface.markRequestPlaced);
-	app.post('/request/status/beingprepared', auth.isAuthenticated, requestsInterface.markRequestBeingPrepared);
-	app.post('/request/status/delivered', auth.isAuthenticated, requestsInterface.markRequestDelivered);
-	app.put('/request/toggleoptions', auth.isAuthenticated, requestsInterface.toggleOptions);
-
 	//		users
 	app.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
 	app.get('/users/ToAssign', usersInterface.getAllUsersToAssign);
 	app.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
 	app.post('/user/login', usersInterface.loginUser);
 	app.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
-	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
-
-	//		partners
-	app.get('/partners', auth.isAuthenticated, partnersInterface.getAllPartners);
-	app.get('/partners/active', auth.isAuthenticated, partnersInterface.getAllActivePartners);
-	app.put('/partner', auth.isAuthenticated, partnersInterface.createPartner);
-	app.post('/partner', auth.isAuthenticated, partnersInterface.updatePartner);
-
-	// Group Trips
-	app.get('/groupTrips', auth.isAuthenticated, grouptripsInterface.getAll);
-	app.get('/groupTrips/current', grouptripsInterface.getAllCurrentTrips);
-	app.get('/groupTrips/:id', auth.isAuthenticated, grouptripsInterface.getById);
-	app.post('/groupTrips', auth.isAuthenticated, grouptripsInterface.create);
-	app.post('/groupTrips/register', grouptripsInterface.register);
-	app.put('/groupTrips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
-	app.put('/groupTrips', auth.isAuthenticated, grouptripsInterface.update);
+	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);	
 
 	//		countries
 	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);

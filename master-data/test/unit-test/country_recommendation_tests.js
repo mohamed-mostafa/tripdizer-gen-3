@@ -2,7 +2,7 @@ var assert = require('assert');
 var mockery = require('mockery');
 var countryRecommendationMocks = require('./utilities/country_recommendation_test_mocks.js');
 
-describe('hws_request_business', function() {
+describe('hws_country_recommendation_business', function() {
 	describe('recommendation', function() {
 		before(done => {
 			mockery.enable({ useCleanCache: true });
@@ -29,7 +29,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -57,7 +57,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -85,7 +85,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -114,7 +114,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -142,7 +142,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -170,7 +170,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
@@ -198,7 +198,7 @@ describe('hws_request_business', function() {
 				visa_assistance_needed: false,
 			};
 
-			var requestsBusiness = require('../../hws_modules/business/hws_requests_business.js');
+			var requestsBusiness = require('../../hws_modules/business/hws_country_recommendation_business.js');
 			requestsBusiness.recommendation(
 				request,
 				'en',
