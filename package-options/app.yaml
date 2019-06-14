@@ -13,7 +13,7 @@
 #
 runtime: nodejs
 env: flex
-service: package-options
+service: tripdizer-package-options
 
 manual_scaling:
   instances: 1

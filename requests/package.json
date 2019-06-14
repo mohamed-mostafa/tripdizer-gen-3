@@ -1,6 +1,6 @@
 {
-	"name": "tripdizer-backend",
-	"description": "Tripdizer Back-end Services",
+	"name": "tripdizer-requests-backend",
+	"description": "Tripdizer requests Back-end Services",
 	"version": "1.0.0",
 	"dependencies": {
 		"bcrypt-nodejs": "0.0.3",
