@@ -2,11 +2,13 @@
   "routes": [
     {
       "route": "/requests",
-      "address": "http://localhost:8082"
+      "address": "http://localhost:8082",
+      "path": "../requests/hws_modules/webserver/hws_server.js"
     },
     {
       "route": "/master-data",
-      "address": "http://localhost:8083"
+      "address": "http://localhost:8083",
+      "path": "../master-data/hws_modules/webserver/hws_server.js"
     }
   ]
 }

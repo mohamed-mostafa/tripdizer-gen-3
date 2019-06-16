@@ -1,17 +1,12 @@
-const express = require("express");
+const app = require("express")();
 const proxy = require("http-proxy-middleware");
 
 const { routes } = require("./reverse-proxy-config.json");
 
-const app = express();
-
-const requestsWebServer = require("../requests/hws_modules/webserver/hws_server.js");
-const masterDataWebServer = require("../master-data/hws_modules/webserver/hws_server.js");
-
-requestsWebServer.start();
-masterDataWebServer.start();
-
 for (route of routes) {
+  const webServer = require(route.path);
+  webServer.start();
+
   app.use(
     route.route,
     proxy({
