@@ -1,0 +1,16 @@
+{
+  "name": "services",
+  "version": "1.0.0",
+  "description": "Tripdizer requests Back-end Services",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon --watch ../requests --watch ../master-data"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^0.19.1",
+    "nodemon": "^1.19.1"
+  }
+}

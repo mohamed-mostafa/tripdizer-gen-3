@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/requests",
+      "address": "http://localhost:8082"
+    },
+    {
+      "route": "/master-data",
+      "address": "http://localhost:8083"
+    }
+  ]
+}
