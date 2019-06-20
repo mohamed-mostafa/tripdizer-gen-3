@@ -47,7 +47,7 @@ var start = function() {
 	app.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
 	app.post('/user/login', usersInterface.loginUser);
 	app.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
-	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);	
+	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
 
 	//		countries
 	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
@@ -124,7 +124,7 @@ var start = function() {
 	var port = process.env.PORT || 8083;
 
 	app.listen(port, function() {
-		console.log('%s: Node server started on %d ...', Date(Date.now()), port);
+		console.log('%s: "master-data" Node server started on %d ...', Date(Date.now()), port);
 	});
 };
 
