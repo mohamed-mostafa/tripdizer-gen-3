@@ -1,11 +1,11 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
   args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
-  dir: package-options
+  dir: requests
   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/npm
   args: ['install-test', '--dev', '--unsafe-perm']
-  dir: package-options
+  dir: requests
   id: 'UNIT TEST'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
@@ -13,7 +13,7 @@ steps:
   id: 'GCLOUD DEPLOY'
 - name: gcr.io/cloud-builders/npm
   args: ['set', 'server_url=${_API_TEST_SERVER_URL}']
-  dir: services
+  dir: requests
   id: 'PREPARE API TEST'
 - name: gcr.io/cloud-builders/npm
   args: ['run', 'api-test']
