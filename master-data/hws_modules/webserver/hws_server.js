@@ -69,6 +69,8 @@ var start = function() {
 	app.put('/itinerary', auth.isAuthenticated, itinerariesInterface.create);
 	app.post('/itinerary', auth.isAuthenticated, itinerariesInterface.update);
 	app.post('/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
+	app.post('/itinerary/budgetcalc', budgetCalculationInterface.budgetCalculation);
+	app.post('/itinerary/recommendation', recommendationInterface.recommendation);
 
 	//		Purposes
 	app.get('/purposes', purposesInterface.getAll);
@@ -119,7 +121,7 @@ var start = function() {
 
 	// routing - end
 
-	var port = process.env.PORT || 8080;
+	var port = process.env.PORT || 8083;
 
 	app.listen(port, function() {
 		console.log('%s: Node server started on %d ...', Date(Date.now()), port);

@@ -72,9 +72,13 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 						transitDurationInWords: shortEnglishHumanizer(transitDurationInMillis),
 						totalDurationInMinutes: flightDurationInMillis / (1000 * 60 ),
 						transitDurationInMinutes: transitDurationInMillis / (1000 * 60 ),
-						carrier: carriersMap[service.segments[0].flightSegment.carrierCode],
 						segments: []
 					};
+					flightLeg.carrier = {
+						iataCode: service.segments[0].flightSegment.carrierCode, 
+						name: carriersMap[service.segments[0].flightSegment.carrierCode]
+					};
+
 					service.segments.forEach(segment => {
 						var segmentDurationInMillis = new Date(segment.flightSegment.arrival.at).getTime() - new Date(segment.flightSegment.departure.at).getTime();
 						var flightLegSegment = {

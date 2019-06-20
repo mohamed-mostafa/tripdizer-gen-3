@@ -27,5 +27,5 @@ env_variables:
 endpoints_api_service:
   # The following values are to be replaced by information from the output of
   # 'gcloud endpoints services deploy openapi-appengine.yaml' command.
-  name: flights-adapter-dot-tripdizer-dev.appspot.com
+  name: tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com
   rollout_strategy: managed

@@ -1,6 +1,6 @@
 export const environment = {
 	production: true,
-	apiUrl: 'https://tripdizer-backend-dot-tripdizer-stg.appspot.com/',
+	apiUrl: 'https://staging-services.tripdizer.com/',
 	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
 	experimentKey: 'Reduce Friction',
 	facebook: {

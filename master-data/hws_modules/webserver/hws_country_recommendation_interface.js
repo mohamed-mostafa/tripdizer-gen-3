@@ -1,9 +1,11 @@
+var recommendationBusiness = require('../business/hws_country_recommendation_business.js');
+
 var recommendation = function(req, res) {
 	try {
 		var request = req.body.request;
 		var lang = req.query.lang;
 		// call the business function and give it a callback function
-		requestsBusiness.recommendation(
+		recommendationBusiness.recommendation(
 			request,
 			lang,
 			function(request) {
@@ -19,7 +21,7 @@ var recommendation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/recommendation');
+		console.log('An error occured in /itinerary/recommendation');
 		console.log(error);
 		res
 			.status(500)

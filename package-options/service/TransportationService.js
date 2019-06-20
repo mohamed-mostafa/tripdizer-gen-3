@@ -4,7 +4,8 @@ let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8*60;
 const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8081/tripdizer-flights-api/1.0.0/flights'
-
+const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
+const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 /**
  * retrieve options of transportation between cities and countries for a package
  * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client. If multiple cities are provided, the days between the departure and return will be distributed evenly among them 
@@ -103,13 +104,16 @@ exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,
         // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
         let airlineFound = false;
         for (let j = 0; j < filteredflightOffers.length; j++) {
-            if (currentOffer.flightLegs[0].carrier == filteredflightOffers[j].flightLegs[0].carrier) {
+            if (currentOffer.flightLegs[0].carrier.iataCode == filteredflightOffers[j].flightLegs[0].carrier.iataCode) {
                 airlineFound = true;
                 break;
             }
         }
         if (!airlineFound) {
             if (currentOffer.flightLegs[0].transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES ) { // also transit has to be less than a limit
+                // set the logos to the carrier before adding it
+                currentOffer.flightLegs[0].carrier.squareLogo = SQUARE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
+                currentOffer.flightLegs[0].carrier.wideLogo = WIDE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
                 filteredflightOffers.push(currentOffer);
             }
         }

@@ -3,7 +3,7 @@
  */
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
-var hwsPartnersDao = require('../dataaccess/hws_requests_dao.js');
+var hwsRequestsDao = require('../dataaccess/hws_requests_dao.js');
 var Promise = require('promise');
 
 var transporter = nodemailer.createTransport(
@@ -36,7 +36,7 @@ var sendEmail = function(to, from, subject, body, attachments) {
 					console.log(error);
 					reject({ email: to, done: false, message: error });
 				} else {
-					hwsPartnersDao.addNewMailHistory(
+					hwsRequestsDao.addNewMailHistory(
 						{ email: to, subject: subject, attachments: attachments },
 						function() {
 							console.log('Message sent: ' + info.response);

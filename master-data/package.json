@@ -40,6 +40,8 @@
 	"private": true,
 	"scripts": {
 		"start": "node server.js",
+		"predebug": "npm install",
+		"debug": "nodemon --inspect server.js",
 		"test": "mocha test/unit-test --no-timeouts",
 		"api-test": "mocha test/api-test --no-timeouts"
 	}

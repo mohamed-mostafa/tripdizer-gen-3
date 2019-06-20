@@ -9,7 +9,8 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "package-options-dot-tripdizer-dev.appspot.com"
+host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+# host: "localhost:8080"
 basePath: "/package-options-api/1.0.0"
 schemes:
 - "https"
@@ -274,12 +275,7 @@ definitions:
         type: "number"
         example: 120
       carrier:
-        type: "string"
-        example: "EgyptAir"
-      carrierThumbnail:
-        type: "string"
-        format: "url"
-        example: "https://static.tripdizer.comm/EgyptAir.png"
+       $ref: "#/definitions/carrier"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
   flightSegment:
@@ -404,3 +400,19 @@ definitions:
       displayName:
         type: "string"
         example: "التسوق"
+  carrier:
+    type: "object"
+    description: "describes an airline carrier"
+    properties:
+      iataCode:
+        type: "string"
+        example: "MS"
+      name:
+        type: "string"
+        example: "Egypt Air"
+      squareLogo:
+        type: "string"
+        example: "http://www.gstatic.com/flights/airline_logos/70px/MS.png"
+      wideLogo:
+        type: "string"
+        example: "https://www.skyscanner.net/images/airlines/small/MS.png"

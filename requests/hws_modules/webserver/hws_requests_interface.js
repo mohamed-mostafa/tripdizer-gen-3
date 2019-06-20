@@ -375,8 +375,8 @@ var toggleOptions = function(req, res) {
 		requestsBusiness.toggleOptions(
 			requestId,
 			option,
-			function(request) {
-				res.json(request);
+			function(result) {
+				res.json();
 			},
 			function(error) {
 				res
@@ -402,6 +402,7 @@ var getPackage = function(req, res) {
 		// call the business function and give it a callback function
 		requestsBusiness.getPackage(
 			requestId,
+			req.headers.authorization,
 			function(packageUrl) {
 				res.send(packageUrl);
 			},

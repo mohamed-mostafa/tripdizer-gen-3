@@ -1,4 +1,8 @@
 steps:
+- name: gcr.io/cloud-builders/gcloud
+  args: ['app', 'deploy', 'dispatch.yaml', '--project', '${PROJECT_ID}']
+  dir: website
+  id: 'GCLOUD DEPLOY DISPATCHER'
 - name: gcr.io/cloud-builders/npm
   args: ['run', 'build-dev']
   dir: website

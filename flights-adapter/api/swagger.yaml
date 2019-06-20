@@ -9,10 +9,11 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "flights-adapter-dot-tripdizer-dev.appspot.com"
+host: "tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com" 
+# host: "localhost:8081"
 basePath: "/tripdizer-flights-api/1.0.0"
 schemes:
-- "https"
+- "http"
 paths:
   /flights:
     get:
@@ -117,12 +118,12 @@ definitions:
         type: "number"
         example: 120
       carrier:
-        type: "string"
-        example: "EgyptAir"
+        $ref: "#/definitions/carrier"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
   flightSegment:
     type: "object"
+    description: "represents a part of a flight from an origin to a destination."
     properties:
       departure:
         type: "string"
@@ -144,4 +145,13 @@ definitions:
       durationInMinutes:
         type: "number"
         example: 120
-    description: "represents a part of a flight from an origin to a destination."
+  carrier:
+      type: "object"
+      description: "describes an airline carrier"
+      properties:
+        iataCode:
+          type: "string"
+          example: "MS"
+        name:
+          type: "string"
+          example: "Egypt Air"

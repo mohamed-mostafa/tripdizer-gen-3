@@ -1,8 +1,10 @@
+var budgetCalculationBusiness = require('../business/hws_budget_calculation_business.js')
+
 var budgetCalculation = function(req, res) {
 	try {
 		var request = req.body.request;
 		// call the business function and give it a callback function
-		requestsBusiness.budgetCalculation(
+		budgetCalculationBusiness.budgetCalculation(
 			request,
 			function(request) {
 				res.json(request);
@@ -17,7 +19,7 @@ var budgetCalculation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/budgetCalculation');
+		console.log('An error occured in /itineraries/budgetCalculation');
 		console.log(error);
 		res
 			.status(500)

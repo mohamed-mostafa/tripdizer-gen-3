@@ -4,12 +4,12 @@
  */
 
 var requestsDao = require('../dataaccess/hws_requests_dao.js');
-var itinerariesDao = require('../dataaccess/hws_itineraries_dao.js');
-// var partnersBusiness = require('./hws_partners_business.js');
-var emailBusiness = require('./hws_email_business.js');
+var emailBusiness = require('../adapters/hws_email_adapter.js');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
 
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function(request, onSuccess, onFailure, onUserError) {
@@ -180,6 +180,8 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	} else if (email.type === 'request') {
 		requestsDao.getRequestSummariesByStatus(
 			email.recipients,
+			Number.MAX_SAFE_INTEGER,
+			1,
 			function(travelers) {
 				var emails = [];
 				for (var i = 0; i < travelers.length; i++) emails.push(travelers[i].traveler.emailAddress);
@@ -281,7 +283,7 @@ var sendDailyReportOfRequestsCount = function() {
 	);
 };
 
-var getPackage = function(requestId, onSuccess, onFailure) {
+var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
 		function(request) {
@@ -289,11 +291,17 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 			const returnDate = new Date(request.returnDate);
 			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
 			if (request.itineraryId && request.itineraryId !== -1) {
-				itinerariesDao.getById(
-					request.itineraryId,
-					null,
-					async function(itinerary) {
-						if (itinerary.flights.length > 0) {
+				httpRequest.get({url: MASTER_DATA_ENDPOINT + "/itinerary/" + request.itineraryId, json: true, headers: {authorization: accessToken}}, 
+				// itinerariesDao.getById(
+				// 	request.itineraryId,
+				// 	null,
+					async function(error, response, itinerary) {
+						if (error || response.statusCode != 200) {
+							console.log('An error occured while getting request package');
+							console.log(error || response.statusMessage);
+							onFailure(error || response.statusMessage);
+						}
+						else if (itinerary.flights.length > 0) {
 							itinerary.flights = itinerary.flights.sort((a, b) => a.type - b.type);
 							itinerary.flights[0].date = departureDate.toLocaleDateString();
 							for (let i = itinerary.flights.length - 1; i >= 0; i--)
@@ -407,11 +415,6 @@ var getPackage = function(requestId, onSuccess, onFailure) {
 								onFailure(e);
 							}
 						);
-					},
-					function(err) {
-						console.log('An error occured while getting request package');
-						console.log(err);
-						onFailure(err);
 					}
 				);
 			} else {

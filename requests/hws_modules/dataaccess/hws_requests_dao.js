@@ -104,7 +104,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 										if (err) {
 											// if the 2nd insert statement fails
 											console.log(
-												'An error occurred while trying to create the question answers of the requestaa: ' +
+												'An error occurred while trying to create the interests of the requesta: ' +
 													JSON.stringify(request)
 											);
 											console.log(err);

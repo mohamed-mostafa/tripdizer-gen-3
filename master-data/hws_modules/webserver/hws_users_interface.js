@@ -5,6 +5,7 @@ var loginUser = function(req, res) {
 		// call the business function and give it a callback function
 		var username = req.body.username;
 		var password = req.body.password;
+		var encrypted = req.body.encrypted;
 		hwsUsersBusiness.login(
 			username,
 			password,
@@ -21,7 +22,8 @@ var loginUser = function(req, res) {
 				res
 					.status(500)
 					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
-			}
+			},
+			encrypted == null ? true : encrypted
 		);
 	} catch (error) {
 		console.log('An error occured in /users/login');

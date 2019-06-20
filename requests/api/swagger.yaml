@@ -1,0 +1,888 @@
+swagger: '2.0'
+info:
+  description: Tripdizer requests API
+  version: 1.0.0
+  title: Tripdizer requests API
+  # put the contact info for your development or API team
+  contact:
+    email: mohamed@tripdizer.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /request/dashboard/place:
+    put:
+      tags:
+        - Place Requests
+      summary: Creates a new request in the system
+      operationId: placeDashboardRequest
+      parameters:
+        - in: body
+          name: request
+          schema:
+            type: object
+            properties:
+              request:
+                $ref: '#/definitions/dashboardRequest'
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            $ref: '#/definitions/dashboardRequest'
+  /request/status:
+    post:
+      tags:
+        - Modify Requests
+      description: Sets the status of a request
+      operationId: setRequestStatus
+      parameters:
+      - in: body
+        name: status
+        schema:
+          type: object
+          required:
+          - requestId
+          - status
+          properties:
+            requestId:
+              type: integer
+            status:
+              type: integer
+              description: 'The ID of the status, as in the master data'
+      responses:
+        '200':
+          description: Successful Execution - No response body expected
+  /request/statuses/sendmails:
+    post:
+      tags:
+        - Traveler Emails
+      description: 'Sends emails to the specified recepients, which are a list of comma-separated request status Ids (as in the master data) or a list of comma-separated email addresses'
+      operationId: sendEmails
+      parameters:
+      - in: body
+        name: mail
+        schema:
+          type: object
+          required:
+          - email
+          properties:
+            email:
+              type: object
+              required:
+              - recipients
+              - subject
+              - type
+              - body
+              properties:
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                recipients:
+                  type: array
+                  items:
+                    type: integer
+                  description: 'a comma-separated list of request status ids, as in the master data, or a comma-separated list of actual email addresses'
+                subject:
+                  type: string
+                  description: 'The subject of the email' 
+                type:
+                  type: string
+                  enum: 
+                  - 'traveler'
+                  - 'request'
+                  example: 'traveler'
+                  description: 'If traveler, recipients input will be treated as a list of actual email addresses. If request, recipients input will be treated as a list of request statuses'
+                body:
+                  type: string
+                  description: 'The body of the email'
+      responses:
+        '200':
+          description: Successful execution
+  /request/statuses/count:
+    get:
+      tags:
+        - Query Requests
+      description: 'Returns the number of requests of a specific status matching a specific filter'
+      operationId: countRequests
+      parameters:
+        - name: filter
+          in: query
+          type: string
+          description: 'A JSON string representing a filter. Example: {"id":"4386","from":"2018-11-19","to":"2018-11-22","departureDateFrom":"2018-12-01","departureDateTo":"2018-12-26","purpose":"6","budgetCategory":"2","edit":"0","reachable":"0","packageSent":"0","referralType":"2","estimatedTo":200000,"channel":"2","name":"Moustafa","phone":"011","itinerary":"17"}'
+        - name: statuses
+          in: query
+          type: string
+          description: 'Comma-separated list of the ids of the statuses, as in the master data'
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+              revenue:
+                type: number
+              profit:
+                type: number
+              numberOfTravelers:
+                type: number
+  /request:
+    put:
+      tags:
+        - Modify Requests
+      description: Modifies a request by using the id
+      operationId: modifyRequest
+      parameters:
+      - in: body
+        name: request
+        schema:
+          type: object
+          required:
+          - request
+          properties:
+            request:
+              $ref: '#/definitions/editedRequest'
+      responses:
+        '200':
+          description: Successful execution - No response body expected
+  /request/send-package:
+    post:
+      tags:
+        - Request Packages Generation
+      description: Sends the generated pdf package of a request to the customer of that request
+      operationId: sendPackage
+      parameters:
+      - in: body
+        name: input
+        schema:
+          type: object
+          required:
+          - requestId
+          properties:
+            requestId:
+              type: integer
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            type: object
+            properties:
+              success:
+                type: string
+                enum:
+                - 'true'
+                - 'false'
+  /request/{requestId}:
+    get:
+      tags:
+        - Query Requests
+      description: Retrieves a request by its id
+      operationId: retrieveRequestById
+      parameters: 
+        - name: requestId
+          in: path
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            $ref: '#/definitions/retrievedRequest'
+  /request/statuses/summaries:
+    get:
+      tags:
+        - Query Requests
+      description: Retrieves a summary of the requests belonging to a specific list of statuses, with paging.
+      operationId: retrieveRequestSummaries
+      parameters:
+        - name: statuses
+          in: query
+          type: string
+          description: 'a comma-separated list of request status ids, as in the master data'
+        - name: size
+          in: query
+          type: string
+          description: 'The page size'
+        - name: page
+          in: query
+          type: string
+          description: 'The page number to retrieve'
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            type: object
+            properties:
+              totalRows:
+                type: number
+              requests:
+                type: array
+                items:
+                  $ref: '#/definitions/retrievedRequest'
+  /request/website/place:
+    put:
+      tags:
+        - Place Requests
+      description: Creates a new request in the system
+      operationId: placeWebsiteRequest
+      parameters:
+        - name: lang
+          in: query
+          type: string
+          default: 'en'
+        - name: request
+          in: body
+          schema:
+            $ref: '#/definitions/websiteRequest'
+      responses:
+        '200':
+          description: Auto generated using Swagger Inspector
+          schema:
+            $ref: '#/definitions/websiteRequest'
+  /request/package/{requestId}:
+    get:
+      tags:
+        - Request Packages Generation
+      description: Generates new package files for the request on google drive, sends the links to the customer of the request, and persist the files details to the request in the database, and returns these details
+      operationId: generateAndSendPackage
+      parameters: 
+        - name: requestId
+          in: path
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Successful execution
+          schema:
+            type: object
+            properties:
+              docId:
+                type: string
+                description: 'The unique ID of the word document on google drive'
+              docUrl:
+                type: string
+                description: 'The url of the word document on google drive'
+              pdfId:
+                type: string
+                description: 'The unique ID of the pdf document on google drive'
+              pdfUrl:
+                type: string
+                description: 'The url of the pdf document on google drive'
+              pdfDownloadUrl:
+                type: string
+                description: 'The download url of the pdf document on google drive'
+  /request/assign:
+    post:
+      tags:
+        - Modify Requests
+      description: Assigns a request to a specific system user (travel agent)
+      operationId: assignRequest
+      parameters:
+      - in: body
+        name: user
+        schema:
+          type: object
+          required:
+          - requestId
+          - userId  
+          properties:
+            requestId:
+              type: integer
+            userId:
+              type: integer
+              description: 'The ID of the system user, as in the master data'
+      responses:
+        '200':
+          description: Successful execution - No response body expected
+  /request/toggleoptions:
+    put:
+      tags:
+        - Modify Requests
+      description: Inverts the value of a boolean request attribute
+      operationId: toggleRequestAttribute
+      parameters:
+      - in: body
+        name: option
+        schema:
+          type: object
+          required:
+          - requestId
+          - option
+          properties:
+            requestId:
+              type: integer
+            option:
+              type: string
+              description: 'The name of the attribute.'
+              example: 'reachable'
+      responses:
+        '200':
+          description: Successful execution - No response body expected
+  /request/statuses/emails:
+    get:
+      tags:
+        - Traveler Emails
+      description: Retrieves a list of all the email addresses of all the requests in the system
+      operationId: retrieveAllEmails
+      responses:
+        '200':
+          description: Successful execution
+definitions:
+  websiteRequest:
+    required:
+    - traveler
+    - travelingFrom
+    - destination
+    - departureDate
+    - returnDate
+    - adultsNumber
+    - purpose
+    - budgetCategory
+    properties:
+      id:
+        type: number
+        description: 'The unique ID of the request'
+      traveler:
+        type: object
+        required:
+        - name
+        - emailAddress
+        - mobile
+        properties:
+          name:
+            type: string
+            description: 'The full name of the customer'
+          emailAddress:
+            type: string
+            description: 'The email address of the customer'
+          mobile:
+            type: string
+            description: 'The full name of the customer'
+          profession:
+            type: string
+            description: 'The id of the profession lookup, as in the master data'
+          gender:
+            type: string
+            description: 'The gender, 1 for male, 2 for female'
+            enum:
+            - "1"
+            - "2"
+          birthday:
+            type: string
+            format: date
+            description: 'The birthdate of the customer'
+      travelingFrom:
+        type: string
+        description: 'The origin city'
+      destination:
+        type: integer
+        description: 'The id of the selected itinerary, as in the master data'
+      departureDate:
+        type: string
+        format: date
+        description: 'The departure date'
+      returnDate:
+        type: string
+        format: date
+        description: 'The return date'
+      isFlexibleDates:
+        type: boolean
+      adultsNumber:
+        type: integer
+        description: 'The number of adults'
+      kidsNumber:
+        type: integer
+        description: 'The number of kids'
+      infantsNumber:
+        type: integer
+        description: 'The number of infants'
+      purpose:
+        type: integer
+        description: 'The id of the purpose lookup, as in the master data'
+      otherPurposeName:
+        type: string
+        description: 'The name of the custom purpose, if the user has typed one in the Other box. Will also be the name of the selected purpose, if the user has selected one.'
+      budgetCategory:
+        type: integer
+        description: 'The id of the budget category lookup, as in the master data'
+      budget:
+        type: integer
+        description: 'The budget amount specified by the user, if any'
+      preferences:
+        type: array
+        description: 'The users selection of interests. A list of the customers selected ids of interests lookups, as in the master data, each with is percentage' 
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+              description: 'The id of an interest lookup, as in the master data.'
+            percentage:
+              type: number
+              description: 'The percentage of desirability of the interest'
+              minimum: 0
+              maximum: 100
+      otherPreferenceName:
+        type: string
+        description: 'The name of the custom interest, if the user has typed one in the Other box'
+      visaAssistanceNeeded:
+        type: boolean
+      tourGuideNeeded:
+        type: boolean
+      specialRequests:
+        type: string
+      channel:
+        type: number
+        description: 'The id of a channel lookup, as in the master data'
+      travelHistory:
+        type: string
+        description: 'The id of the travel history lookup, as in the master data'
+      referralType:
+        type: number
+        description: 'The id of a referral type lookup, as in the master data'
+      estimatedCost:
+        description: 'The estimated cost that the customer have seen'
+        type: number
+      status:
+        type: number
+        description: 'The id of the status lookup of the request, as in the master data'
+      score:
+        type: number
+        description: 'The calculated score of the request'
+      packageUrl:
+        type: string
+      packageDownloadUrl:
+        type: string
+  dashboardRequest:
+    required:
+    - traveler
+    - travelingFrom
+    - destination
+    - departureDate
+    - returnDate
+    - adultsNumber
+    - purpose
+    - budgetCategory
+    properties:
+      id:
+        type: number
+        description: 'The unique ID of the request'
+      traveler:
+        type: object
+        required:
+        - name
+        - emailAddress
+        - mobile
+        properties:
+          name:
+            type: string
+            description: 'The full name of the customer'
+          emailAddress:
+            type: string
+            description: 'The email address of the customer'
+          mobile:
+            type: string
+            description: 'The full name of the customer'
+          profession:
+            type: string
+            description: 'The id of the profession lookup, as in the master data'
+          gender:
+            type: string
+            description: 'The gender, 1 for male, 2 for female'
+            enum:
+            - "1"
+            - "2"
+          dateOfBirth:
+            type: string
+            format: date
+            description: 'The birthdate of the customer'
+      travelingFrom:
+        type: string
+        description: 'The origin city'
+      destination:
+        type: string
+        description: 'The id of the selected itinerary, as in the master data'
+      departureDate:
+        type: string
+        format: date
+        description: 'The departure date'
+      returnDate:
+        type: string
+        format: date
+        description: 'The return date'
+      isFlexibleDates:
+        type: string
+        enum:
+        - '1'
+        - '0'
+      adultsNumber:
+        type: integer
+        description: 'The number of adults'
+      kidsNumber:
+        type: integer
+        description: 'The number of kids'
+      infantsNumber:
+        type: integer
+        description: 'The number of infants'
+      purpose:
+        type: integer
+        description: 'The id of the purpose lookup, as in the master data'
+      budgetCategory:
+        type: string
+        description: 'The id of the budget category lookup, as in the master data'
+      budget:
+        type: string
+        description: 'The budget amount specified by the user, if any'
+      preferences:
+        type: object
+        description: 'The users selection of interests. The keys of this objects are the ids of the interests lookups as in the master data, and the values are booleans indicating whether the customer has selected the interest' 
+        properties:
+          '0':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '1':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '2':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '3':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '4':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '5':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+          '6':
+            type: boolean
+            description: 'The key is the id of the interest ... the value is a boolean indicating if the customer has selected this interest'
+      otherInterestName:
+        type: string
+        description: 'The name of the custom interest, if the user has typed one in the Other box'
+      visaAssistanceNeeded:
+        type: string
+        enum:
+        - '1'
+        - '0'
+      tourGuideNeeded:
+        type: string
+        enum: 
+        - '1'
+        - '0'
+      specialRequests:
+        type: string
+      channel:
+        type: number
+        description: 'The id of a channel lookup, as in the master data'
+      travelHistory:
+        type: string
+        description: 'The id of the travel history lookup, as in the master data'
+      referralType:
+        type: number
+        description: 'The id of a referral type lookup, as in the master data'
+      status:
+        type: number
+        description: 'The id of the status lookup of the request, as in the master data'
+      score:
+        type: number
+        description: 'The calculated score of the request'
+      packageUrl:
+        type: string
+      packageDownloadUrl:
+        type: string
+  editedRequest:
+    required:
+    - id
+    properties:
+      id:
+        type: integer
+        description: 'The unique ID of the request'
+      traveler:
+        type: object
+        properties:
+          name:
+            type: string
+            description: 'The full name of the customer'
+          emailAddress:
+            type: string
+            description: 'The email address of the customer'
+          mobile:
+            type: string
+            description: 'The full name of the customer'
+          profession:
+            type: string
+            description: 'The id of the profession lookup, as in the master data'
+          gender:
+            type: string
+            description: 'The gender, 1 for male, 2 for female'
+            enum:
+            - "1"
+            - "2"
+          dateOfBirth:
+            type: string
+            format: date
+            description: 'The birthdate of the customer'
+      travelingFrom:
+        type: string
+        description: 'The origin city'
+      destination:
+        type: integer
+        description: 'The id of the selected itinerary, as in the master data'
+      departureDate:
+        type: string
+        format: date
+        description: 'The departure date'
+      returnDate:
+        type: string
+        format: date
+        description: 'The return date'
+      isFlexibleDates:
+        type: boolean
+      adultsNumber:
+        type: integer
+        description: 'The number of adults'
+      kidsNumber:
+        type: integer
+        description: 'The number of kids'
+      infantsNumber:
+        type: integer
+        description: 'The number of infants'
+      purpose:
+        type: integer
+        description: 'The id of the purpose lookup, as in the master data'
+      otherPurposeName:
+        type: string
+        description: 'The name of the custom purpose, if the user has typed one in the Other box. Will also be the name of the selected purpose, if the user has selected one.'
+      budgetCategory:
+        type: integer
+        description: 'The id of the budget category lookup, as in the master data'
+      budget:
+        type: integer
+        description: 'The budget amount specified by the user, if any'
+      otherInterestName:
+        type: string
+        description: 'The name of the custom interest, if the user has typed one in the Other box'
+      visaAssistanceNeeded:
+        type: boolean
+      tourGuideNeeded:
+        type: boolean
+      specialRequests:
+        type: string
+      date:
+        type: string
+        format: date
+        description: 'The submit date of the request'
+      actualDestination:
+        type: integer
+        description: 'The id of the destination set by the system users, as in the master data'
+      otherActualDestination:
+        type: string
+        description: 'The name of a custom destination set by the system users'
+      channel:
+        type: string
+        description: 'The id of the channel lookup, as in the master data'
+      travelHistory:
+        type: string
+        description: 'The id of the travel history lookup, as in the master data'
+      referralType:
+        type: string
+        description: 'The id of the referral type lookup, as in the master data'
+      status:
+        type: string
+        description: 'The id of the status lookup, as in the master data'
+      score:
+        type: integer
+      edit:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      reachable:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      packageSent:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      revenue:
+        type: integer
+      profit:
+        type: integer
+      firstCountry:
+        type: integer
+      secondCountry:
+        type: integer
+      thirdCountry:
+        type: integer
+      otherCountry:
+        type: string
+  retrievedRequest:
+    properties:
+      id:
+        type: integer
+        description: 'The unique ID of the request'
+      traveler:
+        type: object
+        properties:
+          name:
+            type: string
+            description: 'The full name of the customer'
+          emailAddress:
+            type: string
+            description: 'The email address of the customer'
+          mobile:
+            type: string
+            description: 'The full name of the customer'
+          profession:
+            type: string
+            description: 'The id of the profession lookup, as in the master data'
+          gender:
+            type: string
+            description: 'The gender, 1 for male, 2 for female'
+            enum:
+            - "1"
+            - "2"
+          dateOfBirth:
+            type: string
+            format: date
+            description: 'The birthdate of the customer'
+      travelingFrom:
+        type: string
+        description: 'The origin city'
+      destination:
+        type: integer
+        description: 'The id of the selected itinerary, as in the master data'
+      actualDestination:
+        type: integer
+        description: 'The id of the destination set by the system users, as in the master data'
+      otherActualDestination:
+        type: string
+        description: 'The name of a custom destination set by the system users'
+      departureDate:
+        type: string
+        format: date
+        description: 'The departure date'
+      returnDate:
+        type: string
+        format: date
+        description: 'The return date'
+      isFlexibleDates:
+        type: boolean
+      adultsNumber:
+        type: integer
+        description: 'The number of adults'
+      kidsNumber:
+        type: integer
+        description: 'The number of kids'
+      infantsNumber:
+        type: integer
+        description: 'The number of infants'
+      purpose:
+        type: integer
+        description: 'The id of the purpose lookup, as in the master data'
+      otherPurposeName:
+        type: string
+        description: 'The name of the custom purpose, if the user has typed one in the Other box. Will also be the name of the selected purpose, if the user has selected one.'
+      budgetCategory:
+        type: integer
+        description: 'The id of the budget category lookup, as in the master data'
+      budget:
+        type: integer
+        description: 'The budget amount specified by the user, if any'
+      interests:
+        type: array
+        description: 'The interests as chosen by the user'
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+              description: 'The id of an interest lookup, as in the master data.'
+            percentage:
+              type: number
+              description: 'The percentage of desirability of the interest'
+              minimum: 0
+              maximum: 100
+      otherInterestName:
+        type: string
+        description: 'The name of the custom interest, if the user has typed one in the Other box'
+      visaAssistanceNeeded:
+        type: boolean
+      tourGuideNeeded:
+        type: boolean
+      specialRequests:
+        type: string
+      date:
+        type: string
+        format: date
+        description: 'The submit date of the request'
+      channel:
+        type: string
+        description: 'The id of the channel lookup, as in the master data'
+      travelHistory:
+        type: string
+        description: 'The id of the travel history lookup, as in the master data'
+      referralType:
+        type: string
+        description: 'The id of the referral type lookup, as in the master data'
+      status:
+        type: string
+        description: 'The id of the status lookup, as in the master data'
+      score:
+        type: integer
+      edit:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      reachable:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      packageSent:
+        type: integer
+        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+      revenue:
+        type: integer
+      profit:
+        type: integer
+      firstCountry:
+        type: integer
+      secondCountry:
+        type: integer
+      thirdCountry:
+        type: integer
+      otherCountry:
+        type: string
+      userFullName:
+        description: 'The name of the user assigned to the request'
+        type: string
+      estimatedCost:
+        type: number
+        description: 'The estimated cost that the user has seen on the website'
+      promoCode:
+        type: string
+        description: 'The promo code submitted with the request, if any'
+      docUrl:
+        type: string
+        description: 'The URL of the package word document on google drive'
+      pdfUrl:
+        type: string
+        description: 'The URL of the package pdf on google drive'
+      pdfDownloadUrl:
+        type: string
+        description: 'The URL to download the package pdf from google drive'
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: authentication  
+  OAuth2:
+    type: oauth2
+    authorizationUrl: http://swagger.io/api/oauth/dialog
+    flow: implicit     
+
+# Added by API Auto Mocking Plugin
+host: tripdizer-requests-dot-tripdizer-dev.appspot.com
+basePath: /requests/1.0.0
+schemes:
+ - https

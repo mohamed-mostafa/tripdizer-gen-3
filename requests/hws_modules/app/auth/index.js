@@ -1,6 +1,8 @@
 const jwt = require('jwt-simple');
 
-const user = require('../../business/hws_users_business');
+var httpRequest = require('request');
+
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 
 const getToken = headers => {
 	if (headers && headers.authorization) {
@@ -26,50 +28,30 @@ const getDecodedToken = headers => {
 const isAuthenticated = (req, res, next) => {
 	const decodedData = getDecodedToken(req.headers);
 	if (decodedData) {
-		user.login(
-			decodedData.username,
-			decodedData.password,
-			user => {
+		httpRequest.post({url: MASTER_DATA_ENDPOINT + "/user/login", json: true, body: {username: decodedData.username, password: decodedData.password, encrypted: false}}, function(error, response, body) {
+			if (error || response.statusCode != 200) {
+				res.send(401);
+			} else {
 				next();
-			},
-			() => {
-				res.send(401);
-			},
-			() => {
-				res.send(401);
-			},
-			() => {
-				res.send(401);
-			},
-			false
-		);
+			}
+		});
 	} else res.send(401);
 };
 
 const isAuthenticatedAsAdmin = (req, res, next) => {
 	const decodedData = getDecodedToken(req.headers);
 	if (decodedData) {
-		user.login(
-			decodedData.username,
-			decodedData.password,
-			user => {
+		httpRequest.post({url: MASTER_DATA_ENDPOINT + "/user/login", json: true, body: {username: decodedData.username, password: decodedData.password}}, function(error, response, user) {
+			if (error || response.statusCode != 200) {
+				res.send(401);
+			} else {
 				if (user.admin) {
 					next();
 				} else {
 					res.send(401);
 				}
-			},
-			() => {
-				res.send(401);
-			},
-			() => {
-				res.send(401);
-			},
-			() => {
-				res.send(401);
-			},
-			false
-		);
+			}
+		});
 	} else res.send(401);
 };
 

@@ -22,9 +22,9 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  FLIGHTS_ADAPTER_ENDPOINT: https://flights-adapter-dot-tripdizer-dev.appspot.com/tripdizer-flights-api/1.0.0/flights
+  FLIGHTS_ADAPTER_ENDPOINT: https://tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com/tripdizer-flights-api/1.0.0/flights
 endpoints_api_service:
   # The following values are to be replaced by information from the output of
   # 'gcloud endpoints services deploy openapi-appengine.yaml' command.
-  name: package-options-dot-tripdizer-dev.appspot.com
+  name: tripdizer-package-options-dot-tripdizer-dev.appspot.com
   rollout_strategy: managed

@@ -43,7 +43,10 @@
 	},
 	"private": true,
 	"scripts": {
+		"prestart": "npm install",
 		"start": "node server.js",
+		"predebug": "npm install",
+		"debug": "nodemon --inspect server.js",
 		"api-test": "mocha test/api-test --no-timeouts"
 	}
 }

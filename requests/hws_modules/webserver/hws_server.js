@@ -39,18 +39,13 @@ var start = function() {
 	app.get('/request/statuses/summaries', auth.isAuthenticated, requestsInterface.getRequestSummaries);
 	app.get('/request/statuses/count', auth.isAuthenticated, requestsInterface.getRequestSummariesCount);
 	app.post('/request/statuses/sendmails', auth.isAuthenticated, requestsInterface.sendMailsToRequestTraveler);
-	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
-	app.post('/request/budgetcalc', requestsInterface.budgetCalculation);
-	app.post('/request/recommendation', requestsInterface.recommendation);
 	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 	app.post('/request/send-package', requestsInterface.sendPackageByMail);
 	app.get('/request/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
-
-	// 		set status
-	app.post('/request/status/placed', auth.isAuthenticated, requestsInterface.markRequestPlaced);
-	app.post('/request/status/beingprepared', auth.isAuthenticated, requestsInterface.markRequestBeingPrepared);
-	app.post('/request/status/delivered', auth.isAuthenticated, requestsInterface.markRequestDelivered);
+	
+	// 		set status and options
 	app.put('/request/toggleoptions', auth.isAuthenticated, requestsInterface.toggleOptions);
+	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
 
 	// Group Trips
 	app.get('/groupTrips', auth.isAuthenticated, grouptripsInterface.getAll);
