@@ -3,6 +3,10 @@ steps:
   args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
   dir: package-options
   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
+- name: gcr.io/cloud-builders/npm
+  args: ['install-test', '--dev', '--unsafe-perm']
+  dir: package-options
+  id: 'UNIT TEST'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
   dir: requests
