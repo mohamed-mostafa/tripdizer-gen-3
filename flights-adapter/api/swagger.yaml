@@ -11,9 +11,9 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com" 
 # host: "localhost:8081"
-basePath: "/tripdizer-flights-api/1.0.0"
+basePath: "/flights/1.0.0"
 schemes:
-- "http"
+- "https"
 paths:
   /flights:
     get:

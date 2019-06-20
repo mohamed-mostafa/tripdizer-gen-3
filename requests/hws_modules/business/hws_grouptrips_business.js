@@ -6,7 +6,7 @@
 var fs = require('fs');
 var dao = require('../dataaccess/hws_grouptrips_dao.js');
 var requestBusiness = require('../business/hws_requests_business.js');
-var emailBusiness = require('../adapters/hws_email_business.js/index.js');
+var emailBusiness = require('../adapters/hws_email_adapter.js');
 
 var register = function(requestData, onSuccess, onFailure) {
 	dao.getById(

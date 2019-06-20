@@ -5,7 +5,7 @@ const { routes } = require("./reverse-proxy-config.json");
 
 for (route of routes) {
   const webServer = require(route.path);
-  webServer.start();
+  if (webServer.start) webServer.start();
 
   app.use(
     route.route,

@@ -11,7 +11,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
 # host: "localhost:8080"
-basePath: "/package-options-api/1.0.0"
+basePath: "/package-options/1.0.0"
 schemes:
 - "https"
 paths:

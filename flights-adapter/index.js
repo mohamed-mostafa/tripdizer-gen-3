@@ -37,8 +37,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
   // Start the server
   http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+    console.log('%s: "flights adapter" Node server started on %d (http://localhost:%d)', Date(Date.now()), serverPort, serverPort);
+    console.log('flights adapter Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
 
 });
