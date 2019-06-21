@@ -79,6 +79,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 
 			getPackage(
 				request.id,
+				null,
 				data => {
 					request.packageUrl = data.pdfUrl;
 					request.packageDownloadUrl = data.pdfDownloadUrl;
@@ -297,7 +298,7 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 				// 	null,
 					async function(error, response, itinerary) {
 						if (error || response.statusCode != 200) {
-							console.log('An error occured while getting request package');
+							console.log('An error occured while getting itinerary from master-data to generate request package');
 							console.log(error || response.statusMessage);
 							onFailure(error || response.statusMessage);
 						}

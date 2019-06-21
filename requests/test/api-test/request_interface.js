@@ -3,7 +3,8 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-const serverURL = process.env.npm_config_server_url || 'http://localhost:8080';
+const serverURL = process.env.npm_config_server_url || 'http://localhost:8082';
+// const serverURL = process.env.npm_config_server_url || 'https://development-services.tripdizer.com';
 
 describe('public website request interface', function() {
 	describe('place request', function() {
@@ -47,6 +48,7 @@ describe('public website request interface', function() {
 			chai
 				.request(serverURL)
 				.put('/request/website/place')
+				.set('Content-type', 'application/json')
 				.send({
 					request: request,
 				})
@@ -94,6 +96,7 @@ describe('public website request interface', function() {
 			chai
 				.request(serverURL)
 				.put('/request/website/place')
+				.set('Content-type', 'application/json')
 				.send({
 					request: request,
 				})
@@ -145,6 +148,7 @@ describe('public website request interface', function() {
 			chai
 				.request(serverURL)
 				.put('/request/website/place')
+				.set('Content-type', 'application/json')
 				.send({
 					request: request,
 				})
