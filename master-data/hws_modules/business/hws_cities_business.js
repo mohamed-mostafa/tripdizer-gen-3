@@ -5,9 +5,20 @@
 
 var dao = require('../dataaccess/hws_cities_dao.js');
 
+var getAllCitiesByCountry = function(countryId, lang, onSuccess, onFailure) {
+	dao.getAll(
+		lang,
+		function(cities) {
+			var cities = cities.filter(city => city.countryId == countryId);
+			onSuccess(cities);
+		},
+		onFailure
+	);
+};
+
 exports.getById = dao.getById;
 exports.create = dao.create;
 exports.update = dao.update;
 exports.getAll = dao.getAll;
+exports.getAllCitiesByCountry = getAllCitiesByCountry;
 exports.getAllCitiesInIternaries = dao.getAllCitiesInIternaries;
-exports.updateAgentNotes = dao.updateAgentNotes;

@@ -56,12 +56,12 @@ var start = function() {
 	app.post('/country', auth.isAuthenticated, countriesInterface.update);
 
 	//		cities
+	app.get('/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
 	app.get('/cities', auth.isAuthenticated, citiesInterface.getAll);
 	app.get('/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
 	app.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
 	app.put('/city', auth.isAuthenticated, citiesInterface.create);
 	app.post('/city', auth.isAuthenticated, citiesInterface.update);
-	app.post('/city/note', auth.isAuthenticated, citiesInterface.updateAgentNotes);
 
 	//		itineraries
 	app.get('/itineraries', itinerariesInterface.getAll);
