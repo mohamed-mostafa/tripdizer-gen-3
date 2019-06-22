@@ -64,7 +64,8 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 				offerItem.services.forEach (service => {
 					// each service is a flight leg
 					var flightDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
-					var transitDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.departure.at).getTime() - new Date(service.segments[0].flightSegment.arrival.at).getTime();
+					// always assuming we have 2 segments max ... this however might not be correct !
+					var transitDurationInMillis = service.segments.length == 0 ? 0 : new Date(service.segments[service.segments.length -1].flightSegment.departure.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
 					var flightLeg = {
 						origin: service.segments[0].flightSegment.departure.iataCode,
 						destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,

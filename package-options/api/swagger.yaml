@@ -9,43 +9,34 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+# host: "localhost:8084"
 host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
-# host: "localhost:8080"
-basePath: "/package-options/1.0.0"
+basePath: "/tripdizer-package-options/1.0.0"
 schemes:
 - "https"
+# - "http"
 paths:
-  /cities:
-    get:
+  /cityOptions/search:
+    post:
       summary: "retrieve options of cities for a package"
       description: "retrieve the recommended options of cities in the countries choosen\
-        \ by the client, based on the client's interests\n"
+        \ by the client, based on the client's interests"
       operationId: "searchCities"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "language"
         in: "header"
-        required: false
+        required: true
         type: "string"
         default: "en"
-      - name: "countries"
-        in: "query"
-        description: "The list of countries ISO codes chosen by the client (e.g. FRA,\
-          \ ITA, EGY, ... etc)"
+      - in: "body"
+        name: "citiesSearchRequest"
         required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "interests"
-        in: "query"
-        description: "The list of interest names chosen by the client"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+        schema:
+          $ref: "#/definitions/citiesSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -54,58 +45,28 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /transportation:
-    get:
+  /transportationOfferOptions/search:
+    post:
       summary: "retrieve options of transportation between cities and countries for\
         \ a package"
       description: "Retrieve the recommended transportation options (flights or others)\
-        \ for a package, between the cities choosen by the client. If multiple cities\
-        \ are provided, the days between the departure and return will be distributed\
-        \ evenly among them\n"
+        \ for a package, between the cities choosen by the client."
       operationId: "searchTransportation"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "language"
         in: "header"
-        required: false
+        required: true
         type: "string"
         default: "en"
-      - name: "departure"
-        in: "query"
+      - in: "body"
+        name: "transportationSearchRequest"
         required: true
-        type: "string"
-        format: "date"
-      - name: "return"
-        in: "query"
-        required: false
-        type: "string"
-        format: "date"
-      - name: "citiesSequence"
-        in: "query"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "numberOfAdults"
-        in: "query"
-        required: true
-        type: "number"
-        default: 1
-        minimum: 1
-      - name: "numberOfChildren"
-        in: "query"
-        required: false
-        type: "number"
-        default: 0
-        minimum: 0
-      - name: "numberOfInfants"
-        in: "query"
-        required: false
-        type: "number"
-        default: 0
-        minimum: 0
+        schema:
+          $ref: "#/definitions/transportationSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -114,33 +75,27 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /accomodation:
-    get:
+  /accomodationOfferOptions/search:
+    post:
       summary: "retrieve options of accomodations for a package"
-      description: "By passing in the appropriate options, you can search for\navailable\
-        \ hotels in the system\n"
+      description: "By passing in the appropriate options, you can search for available\
+        \ hotels in the system"
       operationId: "searchAccomodations"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "language"
         in: "header"
-        required: false
+        required: true
         type: "string"
         default: "en"
-      - name: "cities"
-        in: "query"
-        description: "the client's chosen cities"
+      - in: "body"
+        name: "accomomdationSearchRequest"
         required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "budgetCategory"
-        in: "query"
-        description: "the client's chosen budget category"
-        required: true
-        type: "string"
+        schema:
+          $ref: "#/definitions/accomomdationSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -149,28 +104,28 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /activities:
-    get:
+  /activitiesOfferOptions/search:
+    post:
       summary: "retrieve options of activities of a city for a package"
       description: "By passing in the appropriate options, you can search for\navailable\
         \ activities in the system\n"
       operationId: "activitiesSearchActivities"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters:
       - name: "language"
         in: "header"
-        required: false
+        required: true
         type: "string"
         default: "en"
-      - name: "cities"
-        in: "query"
-        description: "the client's choosen cities"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
+      - in: "body"
+        name: "activitiesSearchRequest"
+        description: "the client's choosen cities IATA codes"
+        required: true
+        schema:
+          $ref: "#/definitions/activitiesSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -186,30 +141,39 @@ definitions:
       name:
         type: "string"
         example: "Cairo"
+        description: "The english name of the city"
       displayName:
         type: "string"
         example: "ألقاهرة"
+        description: "The localized name of the city, based on the language input"
       iataCode:
         type: "string"
         example: "CAI"
+        description: "The IATA code of the city"
       country:
         type: "string"
         example: "Egypt"
+        description: "The english name of the country"
       countryDisplayName:
         type: "string"
         example: "مصر"
-      countryIataCode:
+        description: "The localized name of the country, based on the language input"
+      countryIsoCode:
         type: "string"
         example: "EGY"
+        description: "The ISO code of the country"
       coordinates:
         type: "string"
         example: "30.06263, 31.24967"
+        description: "The coordinates of the city"
       thumbnail:
         type: "string"
         format: "url"
         example: "https://static.tripdizer.com/cairo.png"
+        description: "The URL of a photo of the city"
       interests:
         type: "array"
+        description: "A list of the interests (things to do) in the city"
         items:
           $ref: "#/definitions/city_interests"
   transportationLeg:
@@ -275,7 +239,7 @@ definitions:
         type: "number"
         example: 120
       carrier:
-       $ref: "#/definitions/carrier"
+        $ref: "#/definitions/carrier"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
   flightSegment:
@@ -397,22 +361,183 @@ definitions:
       name:
         type: "string"
         example: "Shopping"
+        description: "The english name of the interest"
       displayName:
         type: "string"
         example: "التسوق"
+        description: "The localized name of the interest, based on the language input"
   carrier:
     type: "object"
-    description: "describes an airline carrier"
     properties:
       iataCode:
         type: "string"
         example: "MS"
+        description: "The IATA code of the airline"
       name:
         type: "string"
         example: "Egypt Air"
+        description: "The english name of the airline"
+      displayName:
+        type: "string"
+        description: "The localized name of the airline based on the language input"
       squareLogo:
         type: "string"
         example: "http://www.gstatic.com/flights/airline_logos/70px/MS.png"
+        description: "The square logo of the airline, which usually contains only\
+          \ the logo"
       wideLogo:
         type: "string"
         example: "https://www.skyscanner.net/images/airlines/small/MS.png"
+        description: "The wide logo of the airline, which usually contains the logo\
+          \ and the name of the airline"
+    description: "describes an airline carrier"
+  citiesSearchRequest:
+    required:
+    - "countries"
+    properties:
+      countries:
+        type: "array"
+        example:
+        - "NED"
+        - "FRA"
+        - "ITA"
+        description: "The list of country ISO-alpha3 codes chosen by the client (e.g.\
+          \ FRA, ITA, EGY, etc)"
+        items:
+          type: "string"
+      interests:
+        type: "array"
+        example:
+        - "SHOPPING"
+        - "NIGHTLIFE"
+        - "HISTORY"
+        description: "The list of interest names chosen by the client"
+        items:
+          type: "string"
+  transportationOfferOptionssearch_citiesSequence:
+    required:
+    - "cityIata"
+    - "countryIso"
+    - "numberOfNights"
+    properties:
+      countryIso:
+        type: "string"
+        description: "The ISO-alpha3 code of the city's country"
+      cityIata:
+        type: "string"
+        description: "The IATA code of the city"
+      numberOfNights:
+        type: "number"
+        description: "The number of nights to stay in the city"
+  transportationSearchRequest:
+    required:
+    - "citiesSequence"
+    - "departure"
+    - "numberOfAdults"
+    - "origin"
+    properties:
+      departure:
+        type: "string"
+        format: "date"
+        example: "2019-09-10"
+        description: "The departure date of the trip from the origin city. The end\
+          \ date of the trip is decided using the number of nights in each city in\
+          \ the trip"
+      origin:
+        type: "string"
+        example: "CAI"
+        description: "The IATA code of the city that the trip starts from and ends\
+          \ at"
+      citiesSequence:
+        type: "array"
+        example:
+        - countryIso: "NED"
+          cityIata: "AMS"
+          numberOfNights: 3
+        - countryIso: "FRA"
+          cityIata: "PAR"
+          numberOfNights: 7
+        description: "The sequence of city IATA codes / number of night pairs of the\
+          \ trip"
+        items:
+          $ref: "#/definitions/transportationOfferOptionssearch_citiesSequence"
+      numberOfAdults:
+        type: "number"
+        description: "The number of adults in the trip"
+        minimum: 1
+      numberOfChildren:
+        type: "number"
+        description: "The number of children in the trip"
+        minimum: 0
+      numberOfInfants:
+        type: "number"
+        description: "The number of infants in the trip"
+        minimum: 0
+  accomodationOfferOptionssearch_cities:
+    required:
+    - "cityIata"
+    - "numberOfNights"
+    properties:
+      cityIata:
+        type: "string"
+      numberOfNights:
+        type: "number"
+  accomomdationSearchRequest:
+    required:
+    - "arrival"
+    - "budgetCategory"
+    - "cities"
+    properties:
+      arrival:
+        type: "string"
+        format: "date"
+        example: "2019-08-16"
+        description: "The date of arrival to the first city in the tirp. The return\
+          \ date is decided using the number of nights in each city"
+      cities:
+        type: "array"
+        example:
+        - cityIata: "AMS"
+          numberOfNights: 3
+        - cityIata: "FRA"
+          numberOfNights: 7
+        description: "The sequence of city IATA codes / number of n ights of the trip."
+        items:
+          $ref: "#/definitions/accomodationOfferOptionssearch_cities"
+      budgetCategory:
+        type: "string"
+        example: "ECONOMY"
+        description: "the client's chosen budget category"
+  activitiesOfferOptionssearch_cities:
+    required:
+    - "cityIata"
+    - "numberOfNights"
+    properties:
+      cityIata:
+        type: "string"
+        description: "The IATA code of the city"
+      numberOfNights:
+        type: "number"
+        description: "The number of nights to stay in the city"
+  activitiesSearchRequest:
+    properties:
+      cities:
+        type: "array"
+        example:
+        - cityIata: "AMS"
+          numberOfNights: 3
+        - cityIata: "PAR"
+          numberOfNights: 7
+        description: "The sequence of city IATA codes / number of night pairs of the\
+          \ trip"
+        items:
+          $ref: "#/definitions/activitiesOfferOptionssearch_cities"
+      interests:
+        type: "array"
+        example:
+        - "SHOPPING"
+        - "NIGHTLIFE"
+        - "HISTORY"
+        description: "The list of interest names chosen by the client"
+        items:
+          type: "string"

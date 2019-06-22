@@ -1,13 +1,13 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService.js');
-var TransportationService = require('../service/TransportationService.js');
+var Default = require('../service/DefaultService');
+var transportationSearchService = require('../service/TransportationService');
 
 module.exports.activitiesSearchActivities = function activitiesSearchActivities (req, res, next) {
   var language = req.swagger.params['language'].value;
-  var cities = req.swagger.params['cities'].value;
-  Default.activitiesSearchActivities(language,cities)
+  var activitiesSearchRequest = req.swagger.params['activitiesSearchRequest'].value;
+  Default.activitiesSearchActivities(language,activitiesSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -17,10 +17,9 @@ module.exports.activitiesSearchActivities = function activitiesSearchActivities 
 };
 
 module.exports.searchAccomodations = function searchAccomodations (req, res, next) {
-  var cities = req.swagger.params['cities'].value;
-  var budgetCategory = req.swagger.params['budgetCategory'].value;
   var language = req.swagger.params['language'].value;
-  Default.searchAccomodations(cities,budgetCategory,language)
+  var accomomdationSearchRequest = req.swagger.params['accomomdationSearchRequest'].value;
+  Default.searchAccomodations(language,accomomdationSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -30,10 +29,9 @@ module.exports.searchAccomodations = function searchAccomodations (req, res, nex
 };
 
 module.exports.searchCities = function searchCities (req, res, next) {
-  var countries = req.swagger.params['countries'].value;
-  var interests = req.swagger.params['interests'].value;
   var language = req.swagger.params['language'].value;
-  Default.searchCities(countries,interests,language)
+  var citiesSearchRequest = req.swagger.params['citiesSearchRequest'].value;
+  Default.searchCities(language,citiesSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,14 +41,9 @@ module.exports.searchCities = function searchCities (req, res, next) {
 };
 
 module.exports.searchTransportation = function searchTransportation (req, res, next) {
-  var departure = req.swagger.params['departure'].value;
-  var citiesSequence = req.swagger.params['citiesSequence'].value;
-  var numberOfAdults = req.swagger.params['numberOfAdults'].value;
   var language = req.swagger.params['language'].value;
-  var _return = req.swagger.params['return'].value;
-  var numberOfChildren = req.swagger.params['numberOfChildren'].value;
-  var numberOfInfants = req.swagger.params['numberOfInfants'].value;
-  TransportationService.searchTransportation(departure,citiesSequence,numberOfAdults,language,_return,numberOfChildren,numberOfInfants)
+  var transportationSearchRequest = req.swagger.params['transportationSearchRequest'].value;
+  transportationSearchService.searchTransportation(language,transportationSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })

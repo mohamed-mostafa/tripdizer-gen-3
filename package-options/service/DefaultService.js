@@ -5,11 +5,11 @@
  * retrieve options of activities of a city for a package
  * By passing in the appropriate options, you can search for available activities in the system 
  *
- * language String  (optional)
- * cities List the client's choosen cities (optional)
+ * language String 
+ * activitiesSearchRequest ActivitiesSearchRequest the client's choosen cities IATA codes
  * returns activityOffers
  **/
-exports.activitiesSearchActivities = function(language,cities) {
+exports.activitiesSearchActivities = function(language,activitiesSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";
@@ -24,14 +24,13 @@ exports.activitiesSearchActivities = function(language,cities) {
 
 /**
  * retrieve options of accomodations for a package
- * By passing in the appropriate options, you can search for available hotels in the system 
+ * By passing in the appropriate options, you can search for available hotels in the system
  *
- * cities List the client's chosen cities
- * budgetCategory String the client's chosen budget category
- * language String  (optional)
+ * language String 
+ * accomomdationSearchRequest AccomomdationSearchRequest 
  * returns accomodationOffers
  **/
-exports.searchAccomodations = function(cities,budgetCategory,language) {
+exports.searchAccomodations = function(language,accomomdationSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";
@@ -46,14 +45,13 @@ exports.searchAccomodations = function(cities,budgetCategory,language) {
 
 /**
  * retrieve options of cities for a package
- * retrieve the recommended options of cities in the countries choosen by the client, based on the client's interests 
+ * retrieve the recommended options of cities in the countries choosen by the client, based on the client's interests
  *
- * countries List The list of countries ISO codes chosen by the client (e.g. FRA, ITA, EGY, ... etc)
- * interests List The list of interest names chosen by the client
- * language String  (optional)
+ * language String 
+ * citiesSearchRequest CitiesSearchRequest 
  * returns citiesList
  **/
-exports.searchCities = function(countries,interests,language) {
+exports.searchCities = function(language,citiesSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";
@@ -68,18 +66,13 @@ exports.searchCities = function(countries,interests,language) {
 
 /**
  * retrieve options of transportation between cities and countries for a package
- * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client. If multiple cities are provided, the days between the departure and return will be distributed evenly among them 
+ * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client.
  *
- * departure date 
- * citiesSequence List 
- * numberOfAdults BigDecimal 
- * language String  (optional)
- * _return date  (optional)
- * numberOfChildren BigDecimal  (optional)
- * numberOfInfants BigDecimal  (optional)
+ * language String 
+ * transportationSearchRequest TransportationSearchRequest 
  * returns transportationLegOffers
  **/
-exports.searchTransportation = function(departure,citiesSequence,numberOfAdults,language,_return,numberOfChildren,numberOfInfants) {
+exports.searchTransportation = function(language,transportationSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";
