@@ -64,8 +64,7 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 				offerItem.services.forEach (service => {
 					// each service is a flight leg
 					var flightDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
-					// always assuming we have 2 segments max ... this however might not be correct !
-					var transitDurationInMillis = service.segments.length == 0 ? 0 : new Date(service.segments[service.segments.length -1].flightSegment.departure.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
+					var transitDurationInMillis = calculateTotalTransit(service.segments);
 					var flightLeg = {
 						origin: service.segments[0].flightSegment.departure.iataCode,
 						destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,
@@ -106,4 +105,19 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 		reject(responseError);
 	})
   });
+}
+
+var calculateTotalTransit = function(segments) {
+	var totalTransit = 0;
+	if (segments.length < 2) {
+		return totalTransit;
+	}  else {
+		for (var i = 0; i < segments.length - 1; i++) { // iterate over all segments except last one
+			var thisSegment = segments[i];
+			var nextSegment = segments[i + 1];
+			var transitBetween2Segments = new Date(nextSegment.flightSegment.departure.at).getTime() - new Date(thisSegment.flightSegment.arrival.at).getTime();
+			totalTransit += transitBetween2Segments;
+		}
+		return totalTransit;
+	}
 }
