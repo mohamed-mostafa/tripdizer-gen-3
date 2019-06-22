@@ -27,7 +27,7 @@ passport.use(
 			// callback with email and password from our form
 			request.post(
 				{
-					url: `${serverURL}/user/login`,
+					url: `${serverURL}/master-data/user/login`,
 					form: {
 						username: username,
 						password: password,

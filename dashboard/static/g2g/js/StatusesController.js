@@ -110,7 +110,7 @@ g2gControlCenterApplication.controller('StatusesController', [
 			if ($scope.newStatusIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/status', {
+					.post($rootScope.masterDataServerUrl + '/status', {
 						status: $scope.newStatus,
 					})
 					.success(function(response) {
@@ -134,7 +134,7 @@ g2gControlCenterApplication.controller('StatusesController', [
 			if ($scope.newStatusIsValid()) {
 				$scope.saving = true;
 				$http
-					.put($rootScope.serverURL + '/status', {
+					.put($rootScope.masterDataServerUrl + '/status', {
 						status: $scope.newStatus,
 					})
 					.success(function(response) {
@@ -161,7 +161,7 @@ g2gControlCenterApplication.controller('StatusesController', [
 			const id = $scope.newStatus.id;
 			$scope.saving = true;
 			$http
-				.delete($rootScope.serverURL + '/status/' + id + '?migrateTo=' + $scope.migratedStatus)
+				.delete($rootScope.masterDataServerUrl + '/status/' + id + '?migrateTo=' + $scope.migratedStatus)
 				.success(function(response) {
 					if (response && response.success) {
 						$scope.statuses.splice($scope.statuses.findIndex(s => s.id == response.id), 1);

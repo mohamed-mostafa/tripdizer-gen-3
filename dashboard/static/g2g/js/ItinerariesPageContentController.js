@@ -122,7 +122,7 @@ g2gControlCenterApplication
 				if ($scope.newItineraryIsValid()) {
 					$scope.saving = true;
 					$http
-						.put($rootScope.serverURL + '/itinerary', {
+						.put($rootScope.masterDataServerUrl + '/itinerary', {
 							itinerary: $scope.newItinerary,
 						})
 						.success(function(response) {
@@ -145,7 +145,7 @@ g2gControlCenterApplication
 				if ($scope.newItineraryIsValid()) {
 					$scope.saving = true;
 					$http
-						.post($rootScope.serverURL + '/itinerary', {
+						.post($rootScope.masterDataServerUrl + '/itinerary', {
 							itinerary: $scope.newItinerary,
 						})
 						.success(function(response) {
@@ -175,7 +175,7 @@ g2gControlCenterApplication
 			$scope.openDetailsDialog = function(id) {
 				$scope.editMode = true;
 				$http
-					.get($rootScope.serverURL + '/itinerary/' + id)
+					.get($rootScope.masterDataServerUrl + '/itinerary/' + id)
 					.success(function(response) {
 						for (let i = 0; i < response.seasons.length; i++) {
 							response.seasons[i].start = new Date(response.seasons[i].start);

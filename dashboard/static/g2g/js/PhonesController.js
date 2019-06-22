@@ -20,7 +20,7 @@ g2gControlCenterApplication.controller('PhonesController', [
 			for (let i = 0; i < $scope.phones.length; i++) {
 				if ($scope.phones[i].Id === phoneId) {
 					$http
-						.put($rootScope.serverURL + '/public/phone', { phone: $scope.phones[i] })
+						.put($rootScope.masterDataServerUrl + '/public/phone', { phone: $scope.phones[i] })
 						.success(function(response) {
 							$scope.saving = false;
 							$scope.phones[i] = response;

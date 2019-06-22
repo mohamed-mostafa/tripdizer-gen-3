@@ -5,6 +5,8 @@ var g2gControlCenterApplication = angular
 	.module('G2GControlCenterApplication', ['textAngular', 'ui.bootstrap'])
 	.run(function($rootScope) {
 		$rootScope.serverURL = globalVariables.serverURL;
+		$rootScope.requestsServerUrl = globalVariables.serverURL + '/requests';
+		$rootScope.masterDataServerUrl = globalVariables.serverURL + '/master-data';
 	})
 	.config([
 		'$locationProvider',
@@ -110,7 +112,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function CountriesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -127,7 +129,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function CitiesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -144,7 +146,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function PurposesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -161,7 +163,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function BudgetCategoriesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -178,7 +180,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function InterestsService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -195,7 +197,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function ItinerariesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -212,7 +214,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function VideosService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/public/';
+			var prefix = $rootScope.masterDataServerUrl + '/public/';
 
 			return {
 				getAll: getAll,
@@ -229,7 +231,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function PhonesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/public/';
+			var prefix = $rootScope.masterDataServerUrl + '/public/';
 
 			return {
 				getAll: getAll,
@@ -246,7 +248,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function GroupTripsService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -263,7 +265,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function ProfessionsService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -280,7 +282,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function ReferralTypesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -297,7 +299,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function StatusesService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,
@@ -314,7 +316,7 @@ var g2gControlCenterApplication = angular
 		'$rootScope',
 		'$http',
 		function ChannelsService($rootScope, $http) {
-			var prefix = $rootScope.serverURL + '/';
+			var prefix = $rootScope.masterDataServerUrl + '/';
 
 			return {
 				getAll: getAll,

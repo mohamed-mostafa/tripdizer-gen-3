@@ -44,7 +44,7 @@ g2gControlCenterApplication.controller('PartnersPageContentController', [
 		$scope.loadPartners = function() {
 			$scope.loading = true;
 			$http
-				.get($rootScope.serverURL + '/partners')
+				.get($rootScope.masterDataServerUrl + '/partners')
 				.success(function(response) {
 					$scope.partners = response;
 					$scope.loading = false;
@@ -58,7 +58,7 @@ g2gControlCenterApplication.controller('PartnersPageContentController', [
 			if ($scope.newPartnerIsValid()) {
 				$scope.saving = true;
 				$http
-					.put($rootScope.serverURL + '/partner', { partner: $scope.newPartner })
+					.put($rootScope.masterDataServerUrl + '/partner', { partner: $scope.newPartner })
 					.success(function(response) {
 						$scope.saving = false;
 						$scope.newPartner = { active: true };
@@ -79,7 +79,7 @@ g2gControlCenterApplication.controller('PartnersPageContentController', [
 			if ($scope.newPartnerIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/partner', { partner: $scope.newPartner })
+					.post($rootScope.masterDataServerUrl + '/partner', { partner: $scope.newPartner })
 					.success(function(response) {
 						for (var i = 0; i < $scope.partners.length; i++) {
 							if ($scope.partners[i].id == $scope.newPartner.id) {

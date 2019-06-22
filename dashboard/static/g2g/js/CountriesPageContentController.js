@@ -65,7 +65,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				$scope.saving = true;
 				console.log($scope.newCountry);
 				$http
-					.put($rootScope.serverURL + '/country', { country: $scope.newCountry })
+					.put($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						$scope.saving = false;
 						$scope.countries.push(response);
@@ -87,7 +87,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountryIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/country', { country: $scope.newCountry })
+					.post($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						for (var i = 0; i < $scope.countries.length; i++) {
 							if ($scope.countries[i].id == $scope.newCountry.id) {

@@ -24,7 +24,7 @@ g2gControlCenterApplication.controller('LoginPageContentController', [
 		$scope.login = function() {
 			$scope.loading = true;
 			$http
-				.post($rootScope.serverURL + '/user/login', {
+				.post($rootScope.masterDataServerUrl + '/user/login', {
 					username: $scope.username,
 					password: $scope.password,
 				})

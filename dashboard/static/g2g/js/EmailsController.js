@@ -10,7 +10,7 @@ g2gControlCenterApplication.controller('EmailsController', [
 		$scope.getEmails = function() {
 			$scope.saving = true;
 			$http
-				.get($rootScope.serverURL + '/request/statuses/emails')
+				.get($rootScope.requestsServerUrl + '/request/statuses/emails')
 				.success(function(response) {
 					$scope.saving = false;
 					$scope.emails = response;

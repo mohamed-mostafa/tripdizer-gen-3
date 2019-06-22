@@ -103,7 +103,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.statuses[statusIndex].refresh = true;
 			$http
 				.get(
-					$rootScope.serverURL +
+					$rootScope.requestsServerUrl +
 						'/request/statuses/count?statuses=' +
 						query +
 						'&filter=' +
@@ -150,7 +150,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 
 			$http
 				.get(
-					$rootScope.serverURL +
+					$rootScope.requestsServerUrl +
 						'/request/statuses/summaries?statuses=' +
 						$scope.currentRequest +
 						'&page=' +
@@ -180,7 +180,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.changeOrderStatus = function(order) {
 			$scope.markingOrder = true;
 			$http
-				.post($rootScope.serverURL + '/request/status', {
+				.post($rootScope.requestsServerUrl + '/request/status', {
 					requestId: order.id,
 					status: order.status,
 				})
@@ -212,7 +212,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			if (!$scope.email.body) $scope.email.bodyMissing = true;
 			if (!$scope.email.recipientsMissing && !$scope.email.subjectMissing && !$scope.email.bodyMissing) {
 				$http
-					.post($rootScope.serverURL + '/request/statuses/sendmails', {
+					.post($rootScope.requestsServerUrl + '/request/statuses/sendmails', {
 						email: $scope.email,
 					})
 					.success(function(response) {
@@ -256,7 +256,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.refreshRegisteredUsersCount = function() {
 			$scope.refreshingRegisteredUsersCount = true;
 			$http
-				.get($rootScope.serverURL + '/user/users/count')
+				.get($rootScope.requestsServerUrl + '/user/users/count')
 				.success(function(response) {
 					$scope.registeredUsersCount = response.registeredUsersIds;
 					$scope.refreshingRegisteredUsersCount = false;
@@ -274,7 +274,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		};
 		$scope.getAllUsersToAssign = function() {
 			$http
-				.get($rootScope.serverURL + '/users/ToAssign')
+				.get($rootScope.requestsServerUrl + '/users/ToAssign')
 				.success(function(response) {
 					$scope.users = response;
 				})
@@ -447,7 +447,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.markOrderDelivered = function(order) {
 			$scope.markingOrder = true;
 			$http
-				.post($rootScope.serverURL + '/request/status/delivered', {
+				.post($rootScope.requestsServerUrl + '/request/status/delivered', {
 					requestId: order.id,
 				})
 				.success(function() {
@@ -463,7 +463,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.markOrderPlaced = function(order) {
 			$scope.markingOrder = true;
 			$http
-				.post($rootScope.serverURL + '/request/status/placed', {
+				.post($rootScope.requestsServerUrl + '/request/status/placed', {
 					requestId: order.id,
 				})
 				.success(function() {
@@ -478,7 +478,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.markOrderBeingPrepared = function(order) {
 			$scope.markingOrder = true;
 			$http
-				.post($rootScope.serverURL + '/request/status/beingprepared', {
+				.post($rootScope.requestsServerUrl + '/request/status/beingprepared', {
 					requestId: order.id,
 				})
 				.success(function() {
@@ -499,7 +499,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.serverError = false;
 			$('#orderDetailsModal').modal('show');
 			$http
-				.get($rootScope.serverURL + '/request/' + requestId)
+				.get($rootScope.requestsServerUrl + '/request/' + requestId)
 				.success(function(request) {
 					$scope.loading = false;
 					if (request.date) request.date = new Date(request.date);
@@ -521,7 +521,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.loading = true;
 			$scope.serverError = false;
 			$http
-				.put($rootScope.serverURL + '/request', {
+				.put($rootScope.requestsServerUrl + '/request', {
 					request: $scope.currentOrder,
 				})
 				.success(function() {
@@ -543,7 +543,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.loading = true;
 			$scope.serverError = false;
 			$http
-				.post($rootScope.serverURL + '/request/assign', {
+				.post($rootScope.requestsServerUrl + '/request/assign', {
 					requestId: currentRequestId,
 					userId: selectedUserId,
 				})
@@ -563,7 +563,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.loading = true;
 			$scope.serverError = false;
 			$http
-				.put($rootScope.serverURL + '/request/toggleoptions', {
+				.put($rootScope.requestsServerUrl + '/request/toggleoptions', {
 					requestId: id,
 					option: option,
 				})
@@ -590,7 +590,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 
 		$scope.generatePackage = () => {
 			$scope.loading = true;
-			$http.get($rootScope.serverURL + '/request/package/' + $scope.currentOrder.id).then(
+			$http.get($rootScope.requestsServerUrl + '/request/package/' + $scope.currentOrder.id).then(
 				function(response) {
 					if (response) {
 						$scope.serverError = false;

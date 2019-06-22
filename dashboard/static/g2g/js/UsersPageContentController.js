@@ -66,7 +66,7 @@ g2gControlCenterApplication.controller('UsersPageContentController', [
 		$scope.loadUsers = function() {
 			$scope.loading = true;
 			$http
-				.get($rootScope.serverURL + '/users')
+				.get($rootScope.masterDataServerUrl + '/users')
 				.success(function(response) {
 					$scope.users = response;
 					$scope.loading = false;
@@ -80,7 +80,7 @@ g2gControlCenterApplication.controller('UsersPageContentController', [
 			if ($scope.newUserIsValid()) {
 				$scope.saving = true;
 				$http
-					.put($rootScope.serverURL + '/user', { user: $scope.newUser })
+					.put($rootScope.masterDataServerUrl + '/user', { user: $scope.newUser })
 					.success(function(response) {
 						$scope.saving = false;
 						$scope.newUser = { active: true };
@@ -101,7 +101,7 @@ g2gControlCenterApplication.controller('UsersPageContentController', [
 			if ($scope.newUserIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/user', { user: $scope.newUser })
+					.post($rootScope.masterDataServerUrl + '/user', { user: $scope.newUser })
 					.success(function(response) {
 						for (var i = 0; i < $scope.users.length; i++) {
 							if ($scope.users[i].id == $scope.newUser.id) {

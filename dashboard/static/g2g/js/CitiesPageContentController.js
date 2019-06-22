@@ -78,7 +78,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				$scope.saving = true;
 				console.log($scope.newCity);
 				$http
-					.put($rootScope.serverURL + '/city', { city: $scope.newCity })
+					.put($rootScope.masterDataServerUrl + '/city', { city: $scope.newCity })
 					.success(function(response) {
 						$scope.saving = false;
 						$scope.cities.push(response);
@@ -100,7 +100,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			if ($scope.newCityIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/city', { city: $scope.newCity })
+					.post($rootScope.masterDataServerUrl + '/city', { city: $scope.newCity })
 					.success(function(response) {
 						for (var i = 0; i < $scope.cities.length; i++) {
 							if ($scope.cities[i].id == $scope.newCity.id) {

@@ -32,7 +32,7 @@ g2gControlCenterApplication.controller('AgentNotesController', [
 			$scope.resetValidationFlags();
 			$scope.saving = true;
 			$http
-				.post($rootScope.serverURL + '/city/note', { id: $scope.city.id, note: $scope.city.agentNotes })
+				.post($rootScope.masterDataServerUrl + '/city/note', { id: $scope.city.id, note: $scope.city.agentNotes })
 				.success(function(response) {
 					$scope.saving = false;
 					$scope.editMode = false;

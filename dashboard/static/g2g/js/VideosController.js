@@ -60,7 +60,7 @@ g2gControlCenterApplication.controller('VideosController', [
 			if ($scope.newVideoIsValid()) {
 				$scope.saving = true;
 				$http
-					.post($rootScope.serverURL + '/public/video', {
+					.post($rootScope.masterDataServerUrl + '/public/video', {
 						video: $scope.newVideo,
 					})
 					.success(function(response) {
@@ -83,7 +83,7 @@ g2gControlCenterApplication.controller('VideosController', [
 			if ($scope.newVideoIsValid()) {
 				$scope.saving = true;
 				$http
-					.put($rootScope.serverURL + '/public/video', {
+					.put($rootScope.masterDataServerUrl + '/public/video', {
 						video: $scope.newVideo,
 					})
 					.success(function(response) {
