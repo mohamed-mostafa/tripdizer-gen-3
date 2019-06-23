@@ -125,6 +125,29 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
+	.factory('HotelsService', [
+		'$rootScope',
+		'$http',
+		function HotelsService($rootScope, $http) {
+			var prefix = $rootScope.masterDataServerUrl + '/';
+
+			return {
+				getAllByCity: getAllByCity,
+			};
+
+			function getAllByCity(cityId) {
+				if (cityId) {
+					return $http.get(prefix + 'hotels/' + cityId).then(function(response) {
+						return response.data;
+					});
+				} else {
+					return new Promise(function(resolve) {
+						resolve([]);
+					});
+				}
+			}
+		},
+	])
 	.factory('CitiesService', [
 		'$rootScope',
 		'$http',
@@ -143,9 +166,15 @@ var g2gControlCenterApplication = angular
 			}
 
 			function getAllByCountry(countryId) {
-				return $http.get(prefix + 'cities/' + countryId).then(function(response) {
-					return response.data;
-				});
+				if (countryId) {
+					return $http.get(prefix + 'cities/' + countryId).then(function(response) {
+						return response.data;
+					});
+				} else {
+					return new Promise(function(resolve) {
+						resolve([]);
+					});
+				}
 			}
 		},
 	])

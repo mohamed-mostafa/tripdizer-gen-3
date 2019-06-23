@@ -136,6 +136,16 @@ var start = () => {
 			user: req.user,
 		});
 	});
+	app.get('/admin/hotels', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Hotels',
+			controller: 'Hotels',
+		};
+		res.render('pages/hotels', {
+			user: req.user,
+		});
+	});
 	app.get('/admin/itineraries', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,
