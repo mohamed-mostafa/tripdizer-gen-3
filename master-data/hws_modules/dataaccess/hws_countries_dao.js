@@ -10,43 +10,56 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Countries WHERE id = ?', [id], function(err, rows) {
-				// if an error is thrown, end the connection and throw an error
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log('An error occurred while trying to find a country with id ' + id);
-					console.log(err);
-					onFailure(err);
-				} else {
-					// no error is thrown
-					if (rows.length != 0) {
-						// populate the country attributes
-						var country = {
-							id: rows[0].Id,
-							enName: rows[0].EN_Name,
-							enDescription: rows[0].EN_Description,
-							arName: rows[0].AR_Name,
-							arDescription: rows[0].AR_Description,
-							thumbnail: rows[0].Thumbnail,
-						};
-
-						if (lang) {
-							country.name = country[lang.toLowerCase() + '_name'];
-							country.description = country[lang.toLowerCase() + '_description'];
-						}
-
+			connection.query(
+				'SELECT C.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ?',
+				[id],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
 						// end the connection
 						connection.end();
-						// call the callback function provided by the caller, and give it the response
-						onSuccess(country);
+						console.log('An error occurred while trying to find a country with id ' + id);
+						console.log(err);
+						onFailure(err);
 					} else {
-						// no country is found with the id
-						connection.end();
-						onSuccess(null);
+						// no error is thrown
+						if (rows.length != 0) {
+							// populate the country attributes
+							var country = {
+								id: rows[0].Id,
+								enName: rows[0].EN_Name,
+								enDescription: rows[0].EN_Description,
+								arName: rows[0].AR_Name,
+								arDescription: rows[0].AR_Description,
+								thumbnail: rows[0].Thumbnail,
+								introduction: rows[0].Introduction,
+								includes: rows[0].Includes,
+								excludes: rows[0].Excludes,
+								visaType: rows[0].Visa_Type,
+								enVisaTypeName: rows[0].EN_Visa_Type_Name,
+								arVisaTypeName: rows[0].AR_Visa_Type_Name,
+								visaRequirements: rows[0].Visa_Requirements,
+								ISOCode: rows[0].ISO_Code,
+								active: rows[0].Active,
+							};
+
+							if (lang) {
+								country.name = country[lang.toLowerCase() + 'Name'];
+								country.description = country[lang.toLowerCase() + 'Description'];
+							}
+
+							// end the connection
+							connection.end();
+							// call the callback function provided by the caller, and give it the response
+							onSuccess(country);
+						} else {
+							// no country is found with the id
+							connection.end();
+							onSuccess(null);
+						}
 					}
 				}
-			});
+			);
 		}
 	});
 };
@@ -71,8 +84,20 @@ var create = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail) values (?, ?, ?, ?, ?)',
-						[country.enName, country.enDescription, country.arName, country.arDescription, country.thumbnail],
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						[
+							country.enName,
+							country.enDescription,
+							country.arName,
+							country.arDescription,
+							country.thumbnail,
+							country.introduction,
+							country.includes,
+							country.excludes,
+							country.visaType,
+							country.visaRequirements,
+							country.ISOCode,
+						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
@@ -123,13 +148,20 @@ var update = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ?, Active = ? WHERE Id = ?',
 						[
 							country.enName,
 							country.enDescription,
 							country.arName,
 							country.arDescription,
 							country.thumbnail,
+							country.introduction,
+							country.includes,
+							country.excludes,
+							country.visaType,
+							country.visaRequirements,
+							country.ISOCode,
+							country.active,
 							country.id,
 						],
 						function(err, result) {
@@ -168,39 +200,52 @@ var getAll = function(lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Countries', [], function(err, rows) {
-				// if an error is thrown, end the connection and throw an error
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log('An error occurred while list all countries');
-					console.log(err);
-					onFailure(err);
-				} else {
-					// no error is thrown
-					var countries = [];
-					// populate the attributes
-					for (var i = 0; i < rows.length; ++i) {
-						var country = {
-							id: rows[i].Id,
-							enName: rows[i].EN_Name,
-							enDescription: rows[i].EN_Description,
-							arName: rows[i].AR_Name,
-							arDescription: rows[i].AR_Description,
-							thumbnail: rows[i].Thumbnail,
-						};
-						if (lang) {
-							country.name = country[lang.toLowerCase() + '_name'];
-							country.description = country[lang.toLowerCase() + '_description'];
+			connection.query(
+				'SELECT C.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id',
+				[],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
+						// end the connection
+						connection.end();
+						console.log('An error occurred while list all countries');
+						console.log(err);
+						onFailure(err);
+					} else {
+						// no error is thrown
+						var countries = [];
+						// populate the attributes
+						for (var i = 0; i < rows.length; ++i) {
+							var country = {
+								id: rows[i].Id,
+								enName: rows[i].EN_Name,
+								enDescription: rows[i].EN_Description,
+								arName: rows[i].AR_Name,
+								arDescription: rows[i].AR_Description,
+								thumbnail: rows[i].Thumbnail,
+								introduction: rows[i].Introduction,
+								includes: rows[i].Includes,
+								excludes: rows[i].Excludes,
+								visaType: rows[i].Visa_Type,
+								enVisaTypeName: rows[i].EN_Visa_Type_Name,
+								arVisaTypeName: rows[i].AR_Visa_Type_Name,
+								visaRequirements: rows[i].Visa_Requirements,
+								ISOCode: rows[i].ISO_Code,
+								active: rows[i].Active,
+							};
+							if (lang) {
+								country.name = country[lang.toLowerCase() + 'Name'];
+								country.description = country[lang.toLowerCase() + 'Description'];
+							}
+							countries.push(country);
 						}
-						countries.push(country);
+						// end the connection
+						connection.end();
+						// call the callback function provided by the caller, and give it the response
+						onSuccess(countries);
 					}
-					// end the connection
-					connection.end();
-					// call the callback function provided by the caller, and give it the response
-					onSuccess(countries);
 				}
-			});
+			);
 		}
 	});
 };

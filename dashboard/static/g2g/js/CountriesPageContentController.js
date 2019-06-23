@@ -32,6 +32,12 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.enDescriptionMissing = false;
 			$scope.arDescriptionMissing = false;
 			$scope.thumbnailMissing = false;
+			$scope.introductionMissing = false;
+			$scope.includesMissing = false;
+			$scope.excludesMissing = false;
+			$scope.visaTypeMissing = false;
+			$scope.visaRequirementsMissing = false;
+			$scope.ISOCodeMissing = false;
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
@@ -52,12 +58,36 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '') {
 				$scope.thumbnailMissing = true;
 			}
+			if ($scope.newCountry.introduction == null || $scope.newCountry.introduction == '') {
+				$scope.introductionMissing = true;
+			}
+			if ($scope.newCountry.includes == null || $scope.newCountry.includes == '') {
+				$scope.includesMissing = true;
+			}
+			if ($scope.newCountry.excludes == null || $scope.newCountry.excludes == '') {
+				$scope.excludesMissing = true;
+			}
+			if ($scope.newCountry.visaType == null || $scope.newCountry.visaType == '') {
+				$scope.visaTypeMissing = true;
+			}
+			if ($scope.newCountry.visaRequirements == null || $scope.newCountry.visaRequirements == '') {
+				$scope.visaRequirementsMissing = true;
+			}
+			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '') {
+				$scope.ISOCodeMissing = true;
+			}
 			return (
 				$scope.enNameMissing !== true &&
 				$scope.arNameMissing !== true &&
 				$scope.enDescriptionMissing !== true &&
 				$scope.arDescriptionMissing !== true &&
-				$scope.thumbnailMissing !== true
+				$scope.thumbnailMissing !== true &&
+				$scope.introductionMissing !== true &&
+				$scope.includesMissing !== true &&
+				$scope.excludesMissing !== true &&
+				$scope.visaTypeMissing !== true &&
+				$scope.visaRequirementsMissing !== true &&
+				$scope.ISOCodeMissing !== true
 			);
 		};
 		$scope.addCountry = function(close) {
@@ -119,6 +149,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		};
 		$scope.openAddDialog = function(id) {
 			$scope.editMode = false;
+			$scope.newCountry = {};
 			$('#addCountryModal').modal('show');
 		};
 		$scope.buildTable = function() {
