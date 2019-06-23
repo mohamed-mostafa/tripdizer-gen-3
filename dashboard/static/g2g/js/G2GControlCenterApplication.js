@@ -133,10 +133,17 @@ var g2gControlCenterApplication = angular
 
 			return {
 				getAll: getAll,
+				getAllByCountry: getAllByCountry,
 			};
 
 			function getAll() {
 				return $http.get(prefix + 'cities').then(function(response) {
+					return response.data;
+				});
+			}
+
+			function getAllByCountry(countryId) {
+				return $http.get(prefix + 'cities/' + countryId).then(function(response) {
 					return response.data;
 				});
 			}

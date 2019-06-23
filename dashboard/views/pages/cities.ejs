@@ -1,8 +1,13 @@
 <div class="box">
 	<div class="box-header">
 		<h3 class="box-title">
-			<%= title %>
+			<%= title %> in :
 		</h3>
+		<select ng-model="selectedCountry">
+			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
+				{{ country.enName }}</option
+			>
+		</select>
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
@@ -13,27 +18,31 @@
 			<table id="citiesTable" class="table table-bordered table-striped">
 				<thead>
 					<tr>
+						<th>Iata Code</th>
 						<th>En Name</th>
 						<th>Ar Name</th>
 						<th>En Description</th>
 						<th>Ar Description</th>
-						<th>Country</th>
 						<th>Thumbnail</th>
 						<th>Latitude</th>
 						<th>Longitude</th>
+						<th>Visit Order</th>
+						<th>Active</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="city in cities">
+						<td>{{ city.iataCode }}</td>
 						<td>{{ city.enName }}</td>
 						<td>{{ city.arName }}</td>
 						<td>{{ city.enDescription }}</td>
 						<td>{{ city.arDescription }}</td>
-						<td>{{ city.countryName }}</td>
 						<td>{{ city.thumbnail }}</td>
 						<td>{{ city.lat }}</td>
 						<td>{{ city.lng }}</td>
+						<td>{{ city.visitOrder }}</td>
+						<td>{{ city.active }}</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(city.id)"> Edit</i>
 						</td>
@@ -41,7 +50,7 @@
 				</tbody>
 				<tfooter>
 					<tr>
-						<td colspan="11">
+						<td colspan="12">
 							<button
 								type="button"
 								class="btn btn-primary pull-right"
@@ -85,6 +94,7 @@
 						<h4>Saving failed!</h4>
 						<p>{{ serverErrorMessage }}</p>
 					</div>
+					{{ newCity }}
 					<form role="form" id="newCityForm">
 						<div class="box-body">
 							<div class="overlay" ng-show="saving == true">
@@ -101,7 +111,7 @@
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="basicTab">
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-3" ng-show="saving==false">
 											<label class="control-label text-red" for="enName" ng-show="enNameMissing==true">
 												<i class="fa fa-times-circle-o"></i>English Name is missing</label
 											>
@@ -116,7 +126,7 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-9" ng-show="saving==false">
 											<label class="control-label text-red" for="enDescription" ng-show="enDescriptionMissing==true">
 												<i class="fa fa-times-circle-o"></i>English Description is missing</label
 											>
@@ -131,7 +141,7 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-3" ng-show="saving==false">
 											<label class="control-label text-red" for="arName" ng-show="arNameMissing==true">
 												<i class="fa fa-times-circle-o"></i>Arabic Name is missing</label
 											>
@@ -146,7 +156,7 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-9" ng-show="saving==false">
 											<label class="control-label text-red" for="arDescription" ng-show="arDescriptionMissing==true">
 												<i class="fa fa-times-circle-o"></i>Arabic Description is missing</label
 											>
@@ -161,16 +171,30 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-6" ng-show="saving==false">
+											<label class="control-label text-red" for="iataCode" ng-show="iataCodeMissing==true">
+												<i class="fa fa-times-circle-o"></i>Iata Code is missing</label
+											>
+											<label for="iataCode" ng-show="iataCodeMissing==false">Iata Code</label>
+											<input
+												type="text"
+												class="form-control"
+												id="iataCode"
+												ng-model="newCity.iataCode"
+												placeholder="Iata Code"
+												required
+											/>
+										</div>
+										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="country" ng-show="countryIdMissing==true">
 												<i class="fa fa-times-circle-o"></i>Country is missing</label
 											>
 											<label for="country" ng-show="countryIdMissing==false">countryId</label>
-											<select class="form-control" id="country" ng-model="newCity.countryId">
+											<select disabled class="form-control" id="country" ng-model="newCity.countryId">
 												<option
 													ng-repeat="country in countries"
 													ng-value="country.id"
-													ng-selected="newCity.countryId === country.id"
+													ng-selected="newCity.countryId == country.id"
 												>
 													{{ country.enName }}</option
 												>
@@ -191,7 +215,7 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lat" ng-show="latMissing==true">
 												<i class="fa fa-times-circle-o"></i>Latitude is missing</label
 											>
@@ -206,7 +230,7 @@
 												required
 											/>
 										</div>
-										<div class="form-group" ng-show="saving==false">
+										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lng" ng-show="lngMissing==true">
 												<i class="fa fa-times-circle-o"></i>Longitude is missing</label
 											>
@@ -220,6 +244,28 @@
 												placeholder="Enter longitude"
 												required
 											/>
+										</div>
+
+										<div class="form-group-6" ng-show="saving==false">
+											<label class="control-label text-red" for="visitOrder" ng-show="visitOrderMissing==true">
+												<i class="fa fa-times-circle-o"></i>Visit order is missing</label
+											>
+											<label for="visitOrder" ng-show="visitOrderMissing==false">Visit order</label>
+											<input
+												type="text"
+												class="form-control"
+												id="visitOrder"
+												ng-model="newCity.visitOrder"
+												placeholder="Enter visit order"
+												required
+											/>
+										</div>
+										<div class="form-group-6" ng-show="saving==false">
+											<label class="control-label text-red" for="active" ng-show="activeMissing==true">
+												<i class="fa fa-times-circle-o"></i>Active is missing</label
+											>
+											<label for="active" ng-show="activeMissing==false">Active</label>
+											<input type="text" class="form-control" id="active" ng-model="newCity.active" required />
 										</div>
 									</div>
 									<!-- /.tab-pane -->
