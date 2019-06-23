@@ -18,6 +18,7 @@ var start = function() {
 	var usersInterface = require('./hws_users_interface.js');
 	var countriesInterface = require('./hws_countries_interface.js');
 	var citiesInterface = require('./hws_cities_interface.js');
+	var hotelsInterface = require('./hws_hotels_interface.js');
 	var itinerariesInterface = require('./hws_itineraries_interface.js');
 	var purposesInterface = require('./hws_purposes_interface.js');
 	var interestsInterface = require('./hws_interests_interface.js');
@@ -62,6 +63,12 @@ var start = function() {
 	app.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
 	app.put('/city', auth.isAuthenticated, citiesInterface.create);
 	app.post('/city', auth.isAuthenticated, citiesInterface.update);
+
+	//		hotels
+	app.get('/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
+	app.get('/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
+	app.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
+	app.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
 
 	//		itineraries
 	app.get('/itineraries', itinerariesInterface.getAll);
