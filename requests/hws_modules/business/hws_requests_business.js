@@ -292,7 +292,7 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 			const returnDate = new Date(request.returnDate);
 			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
 			if (request.itineraryId && request.itineraryId !== -1) {
-				httpRequest.get({url: MASTER_DATA_ENDPOINT + "/itinerary/" + request.itineraryId, json: true, headers: {authorization: accessToken}}, 
+				httpRequest.get({url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: {authorization: accessToken}}, 
 				// itinerariesDao.getById(
 				// 	request.itineraryId,
 				// 	null,

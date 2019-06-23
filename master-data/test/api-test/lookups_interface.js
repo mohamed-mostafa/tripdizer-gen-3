@@ -10,7 +10,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all itirnaries', function(done) {
 			chai
 				.request(serverURL)
-				.get('/itineraries')
+				.get('/master-data/itineraries')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -24,7 +24,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all itirnaries', function(done) {
 			chai
 				.request(serverURL)
-				.get('/itineraries')
+				.get('/master-data/itineraries')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -38,7 +38,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all purposes', function(done) {
 			chai
 				.request(serverURL)
-				.get('/purposes')
+				.get('/master-data/purposes')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -52,7 +52,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all purposes', function(done) {
 			chai
 				.request(serverURL)
-				.get('/purposes')
+				.get('/master-data/purposes')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -66,7 +66,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all videos', function(done) {
 			chai
 				.request(serverURL)
-				.get('/public/videos')
+				.get('/master-data/public/videos')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -80,7 +80,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all videos', function(done) {
 			chai
 				.request(serverURL)
-				.get('/public/videos')
+				.get('/master-data/public/videos')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -94,7 +94,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all interests', function(done) {
 			chai
 				.request(serverURL)
-				.get('/interests')
+				.get('/master-data/interests')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -108,7 +108,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all interests', function(done) {
 			chai
 				.request(serverURL)
-				.get('/interests')
+				.get('/master-data/interests')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -122,7 +122,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all budgetcategories', function(done) {
 			chai
 				.request(serverURL)
-				.get('/budgetcategories')
+				.get('/master-data/budgetcategories')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -136,7 +136,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all budgetcategories', function(done) {
 			chai
 				.request(serverURL)
-				.get('/budgetcategories')
+				.get('/master-data/budgetcategories')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -150,7 +150,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns 200 when requesting all referraltypes', function(done) {
 			chai
 				.request(serverURL)
-				.get('/referraltypes')
+				.get('/master-data/referraltypes')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -164,7 +164,7 @@ describe('all public website lookup interfaces', function() {
 		it('returns an array when requesting all referraltypes', function(done) {
 			chai
 				.request(serverURL)
-				.get('/referraltypes')
+				.get('/master-data/referraltypes')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
