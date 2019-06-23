@@ -85,7 +85,7 @@ var create = function(hotel, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Stars, Budget_Category_Id, Active) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Stars, Budget_Category_Id) values (?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							hotel.cityId,
 							hotel.enName,
@@ -95,7 +95,6 @@ var create = function(hotel, onSuccess, onFailure) {
 							hotel.thumbnail,
 							hotel.stars,
 							hotel.budgetCategoryId,
-							hotel.active,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
