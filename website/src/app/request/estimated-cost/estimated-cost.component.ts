@@ -16,14 +16,14 @@ export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
 
 	constructor(route: ActivatedRoute, private router: Router, private requestService: RequestService) {
-		requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {
-			if (response) {
-				this.estimatedCost = response;
-			} else {
-				this.router.navigate(['../', this.requestService.getPrevInvalidStepForEstimateCalc(route.routeConfig.path)], {
-					relativeTo: route,
-				});
-			}
-		});
+		// requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {
+		// 	if (response) {
+		// 		this.estimatedCost = response;
+		// 	} else {
+		// 		this.router.navigate(['../', this.requestService.getPrevInvalidStepForEstimateCalc(route.routeConfig.path)], {
+		// 			relativeTo: route,
+		// 		});
+		// 	}
+		// });
 	}
 }
