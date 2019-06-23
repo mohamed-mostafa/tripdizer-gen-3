@@ -15,7 +15,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.id = ?',
+				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.Id = ?',
 				[id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -211,10 +211,10 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 						var hotels = [];
 						// populate the attributes
 						for (var i = 0; i < rows.length; ++i) {
-							const hotelIndex = hotels.findIndex(hotel => hotel.id === rows[i].id);
+							const hotelIndex = hotels.findIndex(hotel => hotel.id === rows[i].Id);
 							if (hotelIndex === -1) {
 								var hotel = {
-									id: rows[i].id,
+									id: rows[i].Id,
 									cityId: rows[i].City_Id,
 									cityEnName: rows[i].City_EN_Name,
 									cityArName: rows[i].City_AR_Name,
