@@ -219,3 +219,32 @@
 	color: #000;
 	font-weight: bold
 }
+.tab-space, .tab-icon, .tab-text {
+	display:inline-block;
+}
+
+@media (max-width: 767px) {
+	.tab-icon, .tab-text {
+		display: block;
+	}
+	.tab-space {
+		display: none;
+	}
+	.nav-link {
+		padding: 5px;
+		min-width: 95px;
+	}
+	.nav-link {
+		border: 0
+	}
+	.tabs-section hr {
+		display: none
+	}
+	.nav-link .fa {
+		font-size: 46px;
+		margin-bottom: 10px
+	}
+	.nav-item a {
+		font-size: 12px
+	}
+}
