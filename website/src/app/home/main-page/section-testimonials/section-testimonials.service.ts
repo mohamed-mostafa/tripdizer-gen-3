@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 	providedIn: 'root',
 })
 export class SectionTestimonialService {
-	private endPoint = 'public/testimonial' /*+ (lang ? '?lang=' + lang : '')*/;
+	private endPoint = 'master-data/public/testimonial' /*+ (lang ? '?lang=' + lang : '')*/;
 	private testimonial: Array<any> = [
 		{
 			name: 'Rania Saleh',

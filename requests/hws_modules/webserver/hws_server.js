@@ -32,7 +32,7 @@ var start = function() {
 	// requests
 	app.put('/request/website/place', requestsInterface.placeWebsiteRequest);
 	app.put('/request/dashboard/place', requestsInterface.placeDashboardRequest);
-	app.get('/request/promocodevalidity', requestsInterface.validatePromoCode);
+	app.get('/request/promo-code-validity', requestsInterface.validatePromoCode);
 	app.get('/request/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	app.put('/request', auth.isAuthenticated, requestsInterface.updateRequest);
 	app.post('/request/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
@@ -42,7 +42,7 @@ var start = function() {
 	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 	app.post('/request/send-package', requestsInterface.sendPackageByMail);
 	app.get('/request/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
-	
+
 	// 		set status and options
 	app.put('/request/toggleoptions', auth.isAuthenticated, requestsInterface.toggleOptions);
 	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);

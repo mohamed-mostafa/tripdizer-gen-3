@@ -464,7 +464,7 @@ var validatePromoCode = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /request/promocodevalidity');
+		console.log('An error occurred in /request/promo-code-validity');
 		console.log(error);
 		res
 			.status(500)

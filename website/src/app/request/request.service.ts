@@ -29,7 +29,8 @@ import { Ticket } from './ticket/ticket.model';
 	providedIn: 'root',
 })
 export class RequestService {
-	private endPoint = 'request';
+	private endPoint = 'requests/request';
+	private LUTEndPoint = 'master-data';
 	private requestData;
 	private Lookups: {
 		destinations: Array<Destination>;
@@ -213,7 +214,7 @@ export class RequestService {
 		if (this.Lookups.destinations) {
 			observable = of(this.Lookups.destinations);
 		} else {
-			observable = this.http.get<Array<Destination>>('itineraries');
+			observable = this.http.get<Array<Destination>>(`${this.LUTEndPoint}/itineraries`);
 		}
 		return observable.pipe(
 			map(destinations => {
@@ -249,7 +250,7 @@ export class RequestService {
 		if (this.Lookups.budgetCategories) {
 			observable = of(this.Lookups.budgetCategories);
 		} else {
-			observable = this.http.get<Array<BudgetCategory>>('budget-categories');
+			observable = this.http.get<Array<BudgetCategory>>(`${this.LUTEndPoint}/budget-categories`);
 		}
 		return observable.pipe(
 			map(budgetCategories => {
@@ -266,7 +267,7 @@ export class RequestService {
 		if (this.Lookups.purposes) {
 			observable = of(this.Lookups.purposes);
 		} else {
-			observable = this.http.get<Array<Purpose>>('purposes');
+			observable = this.http.get<Array<Purpose>>(`${this.LUTEndPoint}/purposes`);
 		}
 		return observable.pipe(
 			map(purposes => {
@@ -313,7 +314,7 @@ export class RequestService {
 		if (this.Lookups.preferences) {
 			observable = of(this.Lookups.preferences);
 		} else {
-			observable = this.http.get<Array<Preference>>('interests');
+			observable = this.http.get<Array<Preference>>(`${this.LUTEndPoint}/interests`);
 		}
 		return observable.pipe(
 			map(preferences => {
@@ -339,7 +340,7 @@ export class RequestService {
 				this.requestData
 			);
 			return this.http
-				.post<Array<RecommendedDestinationsResponse>>(`${this.endPoint}/recommendation`, {
+				.post<Array<RecommendedDestinationsResponse>>(`${this.LUTEndPoint}/itinerary/recommendation`, {
 					request: recommendedDestinationsRequest,
 				})
 				.pipe(
@@ -361,7 +362,9 @@ export class RequestService {
 		if (this.isValidForEstimatedCost()) {
 			const estimatedCostRequest = EstimatedCostRequest.getEstimatedCostRequestFromRequest(this.requestData);
 			return this.http
-				.post<EstimatedCostResponse>(`${this.endPoint}/budgetcalc`, { request: estimatedCostRequest })
+				.post<EstimatedCostResponse>(`${this.LUTEndPoint}/itinerary/budget-calculation`, {
+					request: estimatedCostRequest,
+				})
 				.pipe(
 					map((estimatedCostResponse: EstimatedCostResponse) => {
 						this.setProperty('estimatedCost', estimatedCostResponse.totalBudget);
@@ -374,7 +377,7 @@ export class RequestService {
 	}
 
 	validatePromoCode(promoCode: string): Observable<boolean> {
-		return this.http.get<boolean>(`${this.endPoint}/promocodevalidity`, { params: { promoCode: promoCode } }).pipe(
+		return this.http.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode: promoCode } }).pipe(
 			map(isValid => {
 				if (isValid) {
 					this.setProperty('promoCode', promoCode);
@@ -392,7 +395,7 @@ export class RequestService {
 		if (this.Lookups.professions) {
 			observable = of(this.Lookups.professions);
 		} else {
-			observable = this.http.get<Array<DropDownItem>>('professions');
+			observable = this.http.get<Array<DropDownItem>>(`${this.LUTEndPoint}/professions`);
 		}
 		return observable.pipe(
 			map(professions => {
@@ -409,7 +412,7 @@ export class RequestService {
 		if (this.Lookups.referralTypes) {
 			observable = of(this.Lookups.referralTypes);
 		} else {
-			observable = this.http.get<Array<DropDownItem>>('referral-types');
+			observable = this.http.get<Array<DropDownItem>>(`${this.LUTEndPoint}/referral-types`);
 		}
 		return observable.pipe(
 			map(referralTypes => {
