@@ -152,7 +152,21 @@
 			"daily_spending": "Daily Spending",
 			"per_person": "per person",
 			"hint2": "International + Domestic flights",
-			"hint3": "Just an indicator for daily spendings per person, not included in the package cost"
+			"hint3": "Just an indicator for daily spendings per person, not included in the package cost",
+			"tab_cities": {
+				"title": "Cities",
+				"view_choose": "View and choose your cities",
+				"things_to_do": "Things to do in",
+				"select": "Select",
+				"view_map": "View map",
+				"eternal_city": "Eternal city"
+			},
+			"tab_flights": {
+				"title": "Flights"
+			},
+			"tab_accommodations": {
+				"title": "Accommodations"
+			}
 		},
 		"form_layout": {
 			"next_label": "Continue",
@@ -310,20 +324,6 @@
 					"name": "Sharm El-Sheikh"
 				}
 			]
-		},
-		"estimated_cost_tabs": {
-			"tab_titles": {
-				"cities": "Cities",
-				"flights": "Flights",
-				"accommodation": "Accommodation"
-			},
-			"cities_content": {
-				"view_choose": "View and choose your cities",
-				"things_to_do": "Things to do in",
-				"select": "Select",
-				"view_map": "View map",
-				"eternal_city": "Eternal city"
-			}
 		}
 	}
 }

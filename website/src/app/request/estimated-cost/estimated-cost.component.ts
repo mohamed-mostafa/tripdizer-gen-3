@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-/* Services */
 import { RequestService } from '../request.service';
-
-/* Models */
 import { EstimatedCostResponse } from './estimated-cost.model';
 
 @Component({

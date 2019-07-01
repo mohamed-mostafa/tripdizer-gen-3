@@ -1,5 +1,3 @@
-import { CitiesComponent } from './estimated-cost/c-estimated-cost-cities/c-estimated-cost-cities.component';
-import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,8 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { TabCitiesComponent } from './estimated-cost/tab-cities/tab-cities.component';
 import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
 import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
@@ -41,7 +41,7 @@ import { RequestComponent } from './request.component';
 		RequestNavBarComponent,
 		RequestFormLayoutComponent,
 		RequestLoadingComponent,
-		CitiesComponent,
+		TabCitiesComponent,
 	],
 })
 export class RequestModule {}

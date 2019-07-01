@@ -194,18 +194,15 @@
 
 .tab-icon .fa {
 	color: #2989ff;
-	font-size: 20px
+	font-size: 20px;
 }
 .tab-text {
 	color: #000;
-	font-weight: bold
+	font-weight: bold;
 }
 
 @media (max-width: 767px) {
 	.tab-icon .fa {
 		font-size: 46px;
-	}
-	.tab-pane-cities {
-		background-color: #e9e9e9
 	}
 }

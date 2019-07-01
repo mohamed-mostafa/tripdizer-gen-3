@@ -152,7 +152,21 @@
 			"daily_spending": "المصاريف اليومية",
 			"per_person": "للشخص",
 			"hint2": "طيران دولي + داخلي",
-			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري"
+			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري",
+			"tab_cities": {
+				"title": "المدن",
+				"view_choose": "عرض واختيار المدن",
+				"things_to_do": "أنشطة يمكن القيام بها فى",
+				"select": "اختيار",
+				"view_map": "عرض الخريطة",
+				"eternal_city": "مدينة رئيسية"
+			},
+			"tab_flights": {
+				"title": "الطيران"
+			},
+			"tab_accommodations": {
+				"title": "الفنادق"
+			}
 		},
 		"form_layout": {
 			"next_label": "التالي",
@@ -310,20 +324,6 @@
 					"name": "شرم الشيخ"
 				}
 			]
-		},
-		"estimated_cost_tabs": {
-			"tab_titles": {
-				"cities": "المدن",
-				"flights": "الطيران",
-				"accommodation": "الفنادق"
-			},
-			"cities_content": {
-				"view_choose": "عرض واختيار المدن",
-				"things_to_do": "أنشطة يمكن القيام بها فى",
-				"select": "اختيار",
-				"view_map": "عرض الخريطة",
-				"eternal_city": "مدينة رئيسية"
-			}
 		}
 	}
 }

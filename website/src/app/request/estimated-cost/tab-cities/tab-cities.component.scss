@@ -1,0 +1,86 @@
+.cities-list .list-title {
+	text-decoration: underline;
+}
+
+.cities-tab img {
+	max-width: 100%;
+}
+
+.item-image img {
+	width: 100%;
+	height: 100%;
+}
+
+.item-text {
+	line-height: 20px;
+}
+
+.item-img-container,
+.item-content {
+	border: 1px solid #707070;
+}
+
+.item-img-container {
+	border-right: 0;
+	height: 100%;
+}
+
+.custom-icon {
+	width: 18px;
+	height: 18px;
+	margin: 0 8px;
+	fill: #444;
+}
+
+.dark-grey {
+	color: #444;
+}
+
+.grey {
+	color: #979797;
+}
+
+.white {
+	color: #fff !important;
+}
+
+.country-name {
+	font-size: 1.2rem;
+}
+
+.select-btn {
+	height: 40px;
+}
+
+@media (max-width: 767px) {
+	.list-title {
+		font-size: 0.75rem;
+	}
+
+	.item-img-container {
+		border-color: #e4e1e1;
+		border-right: 1px solid #e4e1e1;
+		border-bottom: 0;
+		background-color: #fff;
+	}
+
+	.item-image img {
+		height: 120px;
+	}
+
+	.item-content {
+		border-top: 0;
+		border-color: #e4e1e1;
+		background-color: #fff;
+	}
+
+	.town-name-sm {
+		text-transform: uppercase;
+	}
+
+	.activities-title,
+	.activities-text,
+	.view-map {
+		font-size: 0.85rem;
+	}
+}
