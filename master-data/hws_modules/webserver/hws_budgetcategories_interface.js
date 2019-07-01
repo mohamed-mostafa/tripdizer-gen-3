@@ -21,7 +21,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /budgetcategory');
+		console.log('An error occurred in /budget-category');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /budgetcategory');
+		console.log('An error occurred in /budget-category');
 		console.log(error);
 		res
 			.status(500)
@@ -72,7 +72,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /budgetcategory');
+		console.log('An error occurred in /budget-category');
 		console.log(error);
 		res
 			.status(500)
@@ -86,8 +86,8 @@ var getAll = function(req, res) {
 		var lang = req.query.lang;
 		business.getAll(
 			lang,
-			function(budgetcategories) {
-				res.json(budgetcategories);
+			function(budgetCategories) {
+				res.json(budgetCategories);
 			},
 			function(error) {
 				res
@@ -96,7 +96,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /budgetcategories');
+		console.log('An error occurred in /budget-categories');
 		console.log(error);
 		res
 			.status(500)

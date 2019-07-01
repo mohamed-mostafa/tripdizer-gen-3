@@ -249,7 +249,7 @@ export class RequestService {
 		if (this.Lookups.budgetCategories) {
 			observable = of(this.Lookups.budgetCategories);
 		} else {
-			observable = this.http.get<Array<BudgetCategory>>('budgetcategories');
+			observable = this.http.get<Array<BudgetCategory>>('budget-categories');
 		}
 		return observable.pipe(
 			map(budgetCategories => {
@@ -409,7 +409,7 @@ export class RequestService {
 		if (this.Lookups.referralTypes) {
 			observable = of(this.Lookups.referralTypes);
 		} else {
-			observable = this.http.get<Array<DropDownItem>>('referralTypes');
+			observable = this.http.get<Array<DropDownItem>>('referral-types');
 		}
 		return observable.pipe(
 			map(referralTypes => {

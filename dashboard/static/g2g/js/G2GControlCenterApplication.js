@@ -206,7 +206,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'budgetcategories').then(function(response) {
+				return $http.get(prefix + 'budget-categories').then(function(response) {
 					return response.data;
 				});
 			}

@@ -22,7 +22,7 @@ var start = function() {
 	var itinerariesInterface = require('./hws_itineraries_interface.js');
 	var purposesInterface = require('./hws_purposes_interface.js');
 	var interestsInterface = require('./hws_interests_interface.js');
-	var budgetcategoriesInterface = require('./hws_budgetcategories_interface.js');
+	var budgetCategoriesInterface = require('./hws_budgetcategories_interface.js');
 	var professionsInterface = require('./hws_professions_interface.js');
 	var referralTypesInterface = require('./hws_referraltypes_interface.js');
 	var statusesInterface = require('./hws_statuses_interface.js');
@@ -92,10 +92,10 @@ var start = function() {
 	app.post('/master-data/interest', auth.isAuthenticated, interestsInterface.update);
 
 	//		BudgetCategories
-	app.get('/master-data/budgetcategories', budgetcategoriesInterface.getAll);
-	app.get('/master-data/budgetcategory/:id', auth.isAuthenticated, budgetcategoriesInterface.getById);
-	app.put('/master-data/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.create);
-	app.post('/master-data/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.update);
+	app.get('/master-data/budget-categories', budgetCategoriesInterface.getAll);
+	app.get('/master-data/budget-category/:id', auth.isAuthenticated, budgetCategoriesInterface.getById);
+	app.put('/master-data/budget-category', auth.isAuthenticated, budgetCategoriesInterface.create);
+	app.post('/master-data/budget-category', auth.isAuthenticated, budgetCategoriesInterface.update);
 
 	//		Professions
 	app.get('/master-data/professions', professionsInterface.getAll);
@@ -104,10 +104,10 @@ var start = function() {
 	app.post('/master-data/profession', auth.isAuthenticated, professionsInterface.update);
 
 	//		Referral Types
-	app.get('/master-data/referraltypes', referralTypesInterface.getAll);
-	app.get('/master-data/referraltype/:id', auth.isAuthenticated, referralTypesInterface.getById);
-	app.put('/master-data/referraltype', auth.isAuthenticated, referralTypesInterface.create);
-	app.post('/master-data/referraltype', auth.isAuthenticated, referralTypesInterface.update);
+	app.get('/master-data/referral-types', referralTypesInterface.getAll);
+	app.get('/master-data/referral-type/:id', auth.isAuthenticated, referralTypesInterface.getById);
+	app.put('/master-data/referral-type', auth.isAuthenticated, referralTypesInterface.create);
+	app.post('/master-data/referral-type', auth.isAuthenticated, referralTypesInterface.update);
 
 	//		Statuses
 	app.get('/master-data/statuses', auth.isAuthenticated, statusesInterface.getAll);
