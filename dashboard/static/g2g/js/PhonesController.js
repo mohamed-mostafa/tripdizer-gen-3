@@ -28,7 +28,7 @@ g2gControlCenterApplication.controller('PhonesController', [
 						.error(function(err) {
 							$scope.saving = false;
 							$scope.serverError = true;
-							$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+							$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 						});
 				}
 			}

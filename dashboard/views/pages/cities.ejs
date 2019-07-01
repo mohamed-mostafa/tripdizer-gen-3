@@ -94,7 +94,6 @@
 						<h4>Saving failed!</h4>
 						<p>{{ serverErrorMessage }}</p>
 					</div>
-					{{ newCity }}
 					<form role="form" id="newCityForm">
 						<div class="box-body">
 							<div class="overlay" ng-show="saving == true">
@@ -260,13 +259,13 @@
 												required
 											/>
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
+										<!-- <div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="active" ng-show="activeMissing==true">
 												<i class="fa fa-times-circle-o"></i>Active is missing</label
 											>
 											<label for="active" ng-show="activeMissing==false">Active</label>
 											<input type="text" class="form-control" id="active" ng-model="newCity.active" required />
-										</div>
+										</div> -->
 									</div>
 									<!-- /.tab-pane -->
 									<div class="tab-pane" id="dailySpending">

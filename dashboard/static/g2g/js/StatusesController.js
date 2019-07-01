@@ -125,7 +125,7 @@ g2gControlCenterApplication.controller('StatusesController', [
 					.error(function(err) {
 						$scope.saving = false;
 						$scope.serverError = true;
-						$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
@@ -153,7 +153,7 @@ g2gControlCenterApplication.controller('StatusesController', [
 					})
 					.error(function(err) {
 						$scope.serverError = true;
-						$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
@@ -171,12 +171,12 @@ g2gControlCenterApplication.controller('StatusesController', [
 						$scope.serverError = false;
 					} else {
 						$scope.serverError = true;
-						$scope.serverErrorMessage = 'An error occured at the server side';
+						$scope.serverErrorMessage = 'An error occurred at the server side';
 					}
 				})
 				.error(function(err) {
 					$scope.serverError = true;
-					$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+					$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 				});
 		};
 		$scope.openAddDialog = function(id) {

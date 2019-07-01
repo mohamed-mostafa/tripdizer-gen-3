@@ -22,7 +22,7 @@ var start = function() {
 	var itinerariesInterface = require('./hws_itineraries_interface.js');
 	var purposesInterface = require('./hws_purposes_interface.js');
 	var interestsInterface = require('./hws_interests_interface.js');
-	var budgetcategoriesInterface = require('./hws_budgetcategories_interface.js');
+	var budgetCategoriesInterface = require('./hws_budgetcategories_interface.js');
 	var professionsInterface = require('./hws_professions_interface.js');
 	var referralTypesInterface = require('./hws_referraltypes_interface.js');
 	var statusesInterface = require('./hws_statuses_interface.js');
@@ -43,88 +43,88 @@ var start = function() {
 	// routing - Start
 
 	//		users
-	app.get('/master-data/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
-	app.get('/master-data/users/ToAssign', usersInterface.getAllUsersToAssign);
-	app.get('/master-data/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
-	app.post('/master-data/user/login', usersInterface.loginUser);
-	app.put('/master-data/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
-	app.post('/master-data/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
+	app.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
+	app.get('/users/ToAssign', usersInterface.getAllUsersToAssign);
+	app.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
+	app.post('/user/login', usersInterface.loginUser);
+	app.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
+	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
 
 	//		countries
-	app.get('/master-data/countries', auth.isAuthenticated, countriesInterface.getAll);
-	app.get('/master-data/country/:id', auth.isAuthenticated, countriesInterface.getById);
-	app.put('/master-data/country', auth.isAuthenticated, countriesInterface.create);
-	app.post('/master-data/country', auth.isAuthenticated, countriesInterface.update);
+	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
+	app.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
+	app.put('/country', auth.isAuthenticated, countriesInterface.create);
+	app.post('/country', auth.isAuthenticated, countriesInterface.update);
 
 	//		cities
-	app.get('/master-data/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
-	app.get('/master-data/cities', auth.isAuthenticated, citiesInterface.getAll);
-	app.get('/master-data/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
-	app.get('/master-data/city/:id', auth.isAuthenticated, citiesInterface.getById);
-	app.put('/master-data/city', auth.isAuthenticated, citiesInterface.create);
-	app.post('/master-data/city', auth.isAuthenticated, citiesInterface.update);
+	app.get('/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
+	app.get('/cities', auth.isAuthenticated, citiesInterface.getAll);
+	app.get('/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
+	app.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
+	app.put('/city', auth.isAuthenticated, citiesInterface.create);
+	app.post('/city', auth.isAuthenticated, citiesInterface.update);
 
 	//		hotels
-	app.get('/master-data/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
-	app.get('/master-data/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
-	app.put('/master-data/hotel', auth.isAuthenticated, hotelsInterface.create);
-	app.post('/master-data/hotel', auth.isAuthenticated, hotelsInterface.update);
+	app.get('/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
+	app.get('/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
+	app.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
+	app.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
 
 	//		itineraries
-	app.get('/master-data/itineraries', itinerariesInterface.getAll);
-	app.get('/master-data/itinerary/:id', auth.isAuthenticated, itinerariesInterface.getById);
-	app.put('/master-data/itinerary', auth.isAuthenticated, itinerariesInterface.create);
-	app.post('/master-data/itinerary', auth.isAuthenticated, itinerariesInterface.update);
-	app.post('/master-data/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
-	app.post('/master-data/itinerary/budgetcalc', budgetCalculationInterface.budgetCalculation);
-	app.post('/master-data/itinerary/recommendation', recommendationInterface.recommendation);
+	app.get('/itineraries', itinerariesInterface.getAll);
+	app.get('/itinerary/:id', auth.isAuthenticated, itinerariesInterface.getById);
+	app.put('/itinerary', auth.isAuthenticated, itinerariesInterface.create);
+	app.post('/itinerary', auth.isAuthenticated, itinerariesInterface.update);
+	app.post('/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
+	app.post('/itinerary/budget-calculation', budgetCalculationInterface.budgetCalculation);
+	app.post('/itinerary/recommendation', recommendationInterface.recommendation);
 
 	//		Purposes
-	app.get('/master-data/purposes', purposesInterface.getAll);
-	app.get('/master-data/purpose/:id', auth.isAuthenticated, purposesInterface.getById);
-	app.put('/master-data/purpose', auth.isAuthenticated, purposesInterface.create);
-	app.post('/master-data/purpose', auth.isAuthenticated, purposesInterface.update);
+	app.get('/purposes', purposesInterface.getAll);
+	app.get('/purpose/:id', auth.isAuthenticated, purposesInterface.getById);
+	app.put('/purpose', auth.isAuthenticated, purposesInterface.create);
+	app.post('/purpose', auth.isAuthenticated, purposesInterface.update);
 
 	//		Interests
-	app.get('/master-data/interests', interestsInterface.getAll);
-	app.get('/master-data/interest/:id', auth.isAuthenticated, interestsInterface.getById);
-	app.put('/master-data/interest', auth.isAuthenticated, interestsInterface.create);
-	app.post('/master-data/interest', auth.isAuthenticated, interestsInterface.update);
+	app.get('/interests', interestsInterface.getAll);
+	app.get('/interest/:id', auth.isAuthenticated, interestsInterface.getById);
+	app.put('/interest', auth.isAuthenticated, interestsInterface.create);
+	app.post('/interest', auth.isAuthenticated, interestsInterface.update);
 
 	//		BudgetCategories
-	app.get('/master-data/budgetcategories', budgetcategoriesInterface.getAll);
-	app.get('/master-data/budgetcategory/:id', auth.isAuthenticated, budgetcategoriesInterface.getById);
-	app.put('/master-data/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.create);
-	app.post('/master-data/budgetcategory', auth.isAuthenticated, budgetcategoriesInterface.update);
+	app.get('/budget-categories', budgetCategoriesInterface.getAll);
+	app.get('/budget-category/:id', auth.isAuthenticated, budgetCategoriesInterface.getById);
+	app.put('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.create);
+	app.post('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.update);
 
 	//		Professions
-	app.get('/master-data/professions', professionsInterface.getAll);
-	app.get('/master-data/profession/:id', auth.isAuthenticated, professionsInterface.getById);
-	app.put('/master-data/profession', auth.isAuthenticated, professionsInterface.create);
-	app.post('/master-data/profession', auth.isAuthenticated, professionsInterface.update);
+	app.get('/professions', professionsInterface.getAll);
+	app.get('/profession/:id', auth.isAuthenticated, professionsInterface.getById);
+	app.put('/profession', auth.isAuthenticated, professionsInterface.create);
+	app.post('/profession', auth.isAuthenticated, professionsInterface.update);
 
 	//		Referral Types
-	app.get('/master-data/referraltypes', referralTypesInterface.getAll);
-	app.get('/master-data/referraltype/:id', auth.isAuthenticated, referralTypesInterface.getById);
-	app.put('/master-data/referraltype', auth.isAuthenticated, referralTypesInterface.create);
-	app.post('/master-data/referraltype', auth.isAuthenticated, referralTypesInterface.update);
+	app.get('/referral-types', referralTypesInterface.getAll);
+	app.get('/referral-type/:id', auth.isAuthenticated, referralTypesInterface.getById);
+	app.put('/referral-type', auth.isAuthenticated, referralTypesInterface.create);
+	app.post('/referral-type', auth.isAuthenticated, referralTypesInterface.update);
 
 	//		Statuses
-	app.get('/master-data/statuses', auth.isAuthenticated, statusesInterface.getAll);
-	app.get('/master-data/status/:id', auth.isAuthenticated, statusesInterface.getById);
-	app.put('/master-data/status', auth.isAuthenticated, statusesInterface.update);
-	app.post('/master-data/status', auth.isAuthenticated, statusesInterface.create);
-	app.delete('/master-data/status/:id', auth.isAuthenticated, statusesInterface.delete);
+	app.get('/statuses', auth.isAuthenticated, statusesInterface.getAll);
+	app.get('/status/:id', auth.isAuthenticated, statusesInterface.getById);
+	app.put('/status', auth.isAuthenticated, statusesInterface.update);
+	app.post('/status', auth.isAuthenticated, statusesInterface.create);
+	app.delete('/status/:id', auth.isAuthenticated, statusesInterface.delete);
 
 	// Videos
-	app.get('/master-data/public/videos', publicInterface.getVideos);
-	app.post('/master-data/public/video', auth.isAuthenticated, publicInterface.create);
-	app.put('/master-data/public/video', auth.isAuthenticated, publicInterface.update);
+	app.get('/public/videos', publicInterface.getVideos);
+	app.post('/public/video', auth.isAuthenticated, publicInterface.create);
+	app.put('/public/video', auth.isAuthenticated, publicInterface.update);
 
 	// Website
-	app.get('/master-data/public/phones', publicInterface.getPhones);
-	app.post('/master-data/public/phone', publicInterface.createPhone);
-	app.put('/master-data/public/phone', publicInterface.updatePhone);
+	app.get('/public/phones', publicInterface.getPhones);
+	app.post('/public/phone', publicInterface.createPhone);
+	app.put('/public/phone', publicInterface.updatePhone);
 
 	// routing - end
 

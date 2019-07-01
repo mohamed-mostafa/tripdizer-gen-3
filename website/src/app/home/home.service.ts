@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class HomeService {
-	private endPoint = 'public';
+	private endPoint = 'master-data/public';
 
 	constructor(private http: HttpClient) {}
 

@@ -87,7 +87,7 @@ var create = function(city, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Visit_Order, Active) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Visit_Order) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							city.countryId,
 							city.iataCode,
@@ -99,7 +99,6 @@ var create = function(city, onSuccess, onFailure) {
 							city.lat,
 							city.lng,
 							city.visitOrder,
-							city.active,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error

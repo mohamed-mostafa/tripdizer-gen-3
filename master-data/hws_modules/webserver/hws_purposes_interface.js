@@ -21,7 +21,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /purpose');
+		console.log('An error occurred in /purpose');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /purpose');
+		console.log('An error occurred in /purpose');
 		console.log(error);
 		res
 			.status(500)
@@ -72,7 +72,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /purpose');
+		console.log('An error occurred in /purpose');
 		console.log(error);
 		res
 			.status(500)
@@ -96,7 +96,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /purposes');
+		console.log('An error occurred in /purposes');
 		console.log(error);
 		res
 			.status(500)
