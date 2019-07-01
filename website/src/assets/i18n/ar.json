@@ -310,6 +310,20 @@
 					"name": "شرم الشيخ"
 				}
 			]
+		},
+		"estimated_cost_tabs": {
+			"tab_titles": {
+				"cities": "المدن",
+				"flights": "الطيران",
+				"accommodation": "الفنادق"
+			},
+			"cities_content": {
+				"view_choose": "عرض واختيار المدن",
+				"things_to_do": "أنشطة يمكن القيام بها فى",
+				"select": "اختيار",
+				"view_map": "عرض الخريطة",
+				"eternal_city": "مدينة رئيسية"
+			}
 		}
 	}
 }

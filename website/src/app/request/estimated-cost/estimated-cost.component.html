@@ -1,10 +1,58 @@
-<!-- <c-request-form-layout [isNextDisabled]="estimatedCost ? false : true">
-	<div class="row" [class.text-right]="('dir' | translate) === 'rtl'">
-		<div class="col-12 mb-1 p-0 total-budget">
-			{{ estimatedCost?.totalBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
-		</div>
-		<div class="col-12 p-2 hint-0">
-			{{
+<div class="row tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
+  <div class="col-12">
+
+    <hr class="d-none d-md-block"/>
+
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-container">
+            <div class="tab-icon d-block d-md-inline-block"><i class="fa fa-university mb-2 mb-md-0"></i></div>
+            <div class="tab-space d-none d-md-inline-block">&nbsp;&nbsp;</div>
+            <div class="tab-text d-block d-md-inline-block">{{ 'request.estimated_cost_tabs.tab_titles.cities' | translate }}</div>
+          </div>
+        </ng-template>
+        <div class="tab-pane-cities p-2 p-md-0 mt-3 mt-md-0">
+          <c-estimated-cost-cities></c-estimated-cost-cities>
+        </div>
+
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-container">
+            <div class="tab-icon d-block d-md-inline-block"><i class="fa fa-plane mb-2 mb-md-0"></i></div>
+            <div class="tab-space d-none d-md-inline-block">&nbsp;&nbsp;</div>
+            <div class="tab-text d-block d-md-inline-block">{{ 'request.estimated_cost_tabs.tab_titles.flights' | translate }}</div>
+          </div>
+        </ng-template>
+        <p>...</p>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-container">
+            <div class="tab-icon d-block d-md-inline-block"><i class="fa fa-building mb-2 mb-md-0"></i></div>
+            <div class="tab-space d-none d-md-inline-block">&nbsp;&nbsp;</div>
+            <div class="tab-text d-block d-md-inline-block">{{ 'request.estimated_cost_tabs.tab_titles.accommodation' | translate }}</div>
+          </div>
+        </ng-template>
+        <p>...</p>
+      </mat-tab>
+    </mat-tab-group>
+	
+  </div>
+</div>
+
+<c-request-form-layout [isNextDisabled]="estimatedCost ? false : true">
+
+  <div class="row" [class.text-right]="('dir' | translate) === 'rtl'">
+
+
+
+    <div class="col-12 mb-1 p-0 total-budget">
+      {{ estimatedCost?.totalBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
+    </div>
+    <div class="col-12 p-2 hint-0">
+      {{
 				'request.estimated_cost.hint0'
 					| translate
 						: {
@@ -12,88 +60,32 @@
 								withS: estimatedCost?.numberOfTravelers > 1 ? 's' : ''
 						  }
 			}}
-		</div>
-		<div class="col-12 p-2 hint-1">{{ 'request.estimated_cost.hint1' | translate }}</div>
-		<ul class="col-12 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-plane"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>*{{ 'request.estimated_cost.flights' | translate }}:
-					{{ estimatedCost?.flightsBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-home"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>{{ 'request.estimated_cost.accommodation' | translate }}:
-					{{ estimatedCost?.accommodationBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row" *ngIf="estimatedCost?.ferriesBudget">
-				<i class="col-1 p-0 text-center fas fa-ship"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>{{ 'request.estimated_cost.ferries' | translate }}:
-					{{ estimatedCost?.ferriesBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-dollar-sign"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>**{{ 'request.estimated_cost.daily_spending' | translate }}:
-					{{ estimatedCost?.dailySpending | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
-					{{ 'request.estimated_cost.per_person' | translate }}</span
-				>
-			</li>
-		</ul>
-		<div class="col-12 font-italic hint-2">* {{ 'request.estimated_cost.hint2' | translate }}</div>
-		<div class="col-12 font-italic hint-3">** {{ 'request.estimated_cost.hint3' | translate }}</div>
-	</div>
-</c-request-form-layout> -->
-
-
-<div class="row tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
-  <div class="col-12">
-
-    <hr />
-
-    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" style="border-right: 0" id="home-tab" data-toggle="tab" href="#home" role="tab"
-          aria-controls="home" aria-selected="true">
-          <div class="tab-container">
-            <div class="tab-icon"><i class="fa fa-university"></i></div>
-            <div class="tab-space">&nbsp;&nbsp;</div>
-            <div class="tab-text">Cities</div>
-          </div>
-        </a>
+    </div>
+    <div class="col-12 p-2 hint-1">{{ 'request.estimated_cost.hint1' | translate }}</div>
+    <ul class="col-12 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-plane"></i>
+        <span class="col-11 pl-2 pl-md-0 details-info">*{{ 'request.estimated_cost.flights' | translate }}:
+          {{ estimatedCost?.flightsBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" style="border-right: 0" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-          aria-controls="profile" aria-selected="false">
-          <div class="tab-container">
-            <div class="tab-icon"><i class="fa fa-plane"></i></div>
-            <div class="tab-space">&nbsp;&nbsp;</div>
-            <div class="tab-text">Flights</div>
-          </div>
-        </a>
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-home"></i>
+        <span class="col-11 pl-2 pl-md-0 details-info">{{ 'request.estimated_cost.accommodation' | translate }}:
+          {{ estimatedCost?.accommodationBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-          aria-selected="false">
-          <div class="tab-container">
-            <div class="tab-icon"><i class="fa fa-building"></i></div>
-            <div class="tab-space">&nbsp;&nbsp;</div>
-            <div class="tab-text">Accommodation</div>
-          </div>
-        </a>
+      <li class="row" *ngIf="estimatedCost?.ferriesBudget">
+        <i class="col-1 p-0 text-center fas fa-ship"></i>
+        <span class="col-11 pl-2 pl-md-0 details-info">{{ 'request.estimated_cost.ferries' | translate }}:
+          {{ estimatedCost?.ferriesBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
+      </li>
+      <li class="row">
+        <i class="col-1 p-0 text-center fas fa-dollar-sign"></i>
+        <span class="col-11 pl-2 pl-md-0 details-info">**{{ 'request.estimated_cost.daily_spending' | translate }}:
+          {{ estimatedCost?.dailySpending | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
+          {{ 'request.estimated_cost.per_person' | translate }}</span>
       </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane tab-pane-cities fade show active mt-2" id="home" role="tabpanel" aria-labelledby="home-tab" >
-		  <app-cities></app-cities>
-	  </div>
-      <div class="tab-pane fade mt-2" id="profile" role="tabpanel" aria-labelledby="profile-tab">Tab 2 content</div>
-      <div class="tab-pane fade mt-2" id="contact" role="tabpanel" aria-labelledby="contact-tab">Tab 3 content</div>
-    </div>
+    <div class="col-12 font-italic hint-2">* {{ 'request.estimated_cost.hint2' | translate }}</div>
+    <div class="col-12 font-italic hint-3">** {{ 'request.estimated_cost.hint3' | translate }}</div>
   </div>
-</div>
+</c-request-form-layout>

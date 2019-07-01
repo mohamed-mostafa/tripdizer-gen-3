@@ -8,39 +8,66 @@ $color-blue: #2989ff;
 
 html,
 body {
-	height: 100%;
+  height: 100%;
 }
 
 body {
-	font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 
-	&::-webkit-scrollbar {
-		width: 10px;
-	}
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
 
-	&::-webkit-scrollbar-thumb {
-		border-radius: 2px;
-		-webkit-box-shadow: inset 2px 2px 10px rgba(0, 0, 0, 0.5);
-		background-color: $color-blue;
-	}
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    -webkit-box-shadow: inset 2px 2px 10px rgba(0, 0, 0, 0.5);
+    background-color: $color-blue;
+  }
 }
 
 /* START Extend Bootstrap */
 .custom-bs {
-	&.btn {
-		&.btn-rounded {
-			-webkit-border-radius: 10em;
-			border-radius: 10em;
-		}
-	}
+  &.btn {
+    &.btn-rounded {
+      -webkit-border-radius: 10em;
+      border-radius: 10em;
+    }
+  }
 
-	&.text-yellow {
-		color: $color-yellow;
-	}
+  &.text-yellow {
+    color: $color-yellow;
+  }
 
-	&.text-blue {
-		color: $color-blue;
-	}
+  &.text-blue {
+    color: $color-blue;
+  }
 }
 
 /* END Extend Bootstrap */
+
+/* should be in global style to work */
+.tabs-section .mat-tab-header {
+  border-bottom-style: none !important;
+}
+
+.tabs-section .mat-tab-labels .mat-tab-label {
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  opacity: 1;
+}
+
+.tabs-section .mat-tab-group {
+  margin-top: -40px
+}
+
+.tabs-section .mat-ink-bar {
+	height: 4px;
+	background-color: #2989ff !important;
+}
+
+@media (max-width: 767px) {
+	.tabs-section .mat-tab-labels .mat-tab-label {
+		border: 0;
+		height: 100px;
+	}
+}
