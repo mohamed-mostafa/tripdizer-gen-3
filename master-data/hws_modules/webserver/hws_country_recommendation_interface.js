@@ -21,7 +21,7 @@ var recommendation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itinerary/recommendation');
+		console.log('An error occurred in /itinerary/recommendation');
 		console.log(error);
 		res
 			.status(500)

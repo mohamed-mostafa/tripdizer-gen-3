@@ -21,7 +21,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itinerary');
+		console.log('An error occurred in /itinerary');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itinerary');
+		console.log('An error occurred in /itinerary');
 		console.log(error);
 		res
 			.status(500)
@@ -72,7 +72,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itinerary');
+		console.log('An error occurred in /itinerary');
 		console.log(error);
 		res
 			.status(500)
@@ -96,7 +96,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itineraries');
+		console.log('An error occurred in /itineraries');
 		console.log(error);
 		res
 			.status(500)
@@ -121,7 +121,7 @@ var updateAgentNotes = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /iternary/note');
+		console.log('An error occurred in /itinerary/note');
 		console.log(error);
 		res
 			.status(500)

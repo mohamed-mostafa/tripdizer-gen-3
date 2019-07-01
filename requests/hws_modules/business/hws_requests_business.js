@@ -121,14 +121,14 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		},
 		function(err) {
 			// respond to caller
-			console.log('An error occured while saving a new request');
+			console.log('An error occurred while saving a new request');
 			console.log(err);
 			onFailure(err);
 			// });
 			// }
 		},
 		function(err) {
-			console.log('An error occured while checking if traveler exists before');
+			console.log('An error occurred while checking if traveler exists before');
 			console.log(err);
 			onFailure(err);
 		}
@@ -144,7 +144,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			onSuccess(request);
 		},
 		function(err) {
-			console.log('An error occured while getting request package');
+			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure(err);
 		}
@@ -189,7 +189,7 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 				sendMails(emails, email, onSuccess);
 			},
 			function(err) {
-				console.log('An error occured while getting travelers');
+				console.log('An error occurred while getting travelers');
 				console.log(err);
 				onFailure(err);
 			}
@@ -279,7 +279,7 @@ var sendDailyReportOfRequestsCount = function() {
 			);
 		},
 		function() {
-			console.log('An error occured while getting request counts');
+			console.log('An error occurred while getting request counts');
 		}
 	);
 };
@@ -298,7 +298,7 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 				// 	null,
 					async function(error, response, itinerary) {
 						if (error || response.statusCode != 200) {
-							console.log('An error occured while getting itinerary from master-data to generate request package');
+							console.log('An error occurred while getting itinerary from master-data to generate request package');
 							console.log(error || response.statusMessage);
 							onFailure(error || response.statusMessage);
 						}
@@ -406,13 +406,13 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 										);
 									},
 									e => {
-										console.log('An error occured while getting request package pdf: ' + e);
+										console.log('An error occurred while getting request package pdf: ' + e);
 										onSuccess(doc);
 									}
 								);
 							},
 							e => {
-								console.log('An error occured while getting request package document: ' + e);
+								console.log('An error occurred while getting request package document: ' + e);
 								onFailure(e);
 							}
 						);
@@ -423,7 +423,7 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 			}
 		},
 		function(err) {
-			console.log('An error occured while getting request package');
+			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure(err);
 		}
@@ -464,7 +464,7 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 			onSuccess({ success: true });
 		},
 		function(err) {
-			console.log('An error occured while getting request package');
+			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure({ ...err, success: false });
 		}

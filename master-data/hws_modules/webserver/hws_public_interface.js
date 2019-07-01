@@ -16,7 +16,7 @@ var getVideos = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /public/videos');
+		console.log('An error occurred in /public/videos');
 		console.log(error);
 		res
 			.status(500)
@@ -40,7 +40,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /video');
+		console.log('An error occurred in /video');
 		console.log(error);
 		res
 			.status(500)
@@ -67,7 +67,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /video');
+		console.log('An error occurred in /video');
 		console.log(error);
 		res
 			.status(500)
@@ -121,7 +121,7 @@ var getPhones = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /public/phones');
+		console.log('An error occurred in /public/phones');
 		console.log(error);
 		res
 			.status(500)

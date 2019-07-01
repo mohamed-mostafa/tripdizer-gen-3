@@ -26,7 +26,7 @@ var loginUser = function(req, res) {
 			encrypted == null ? true : encrypted
 		);
 	} catch (error) {
-		console.log('An error occured in /users/login');
+		console.log('An error occurred in /users/login');
 		console.log(error);
 		res
 			.status(500)
@@ -53,7 +53,7 @@ var updateUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /user');
+		console.log('An error occurred in /user');
 		console.log(error);
 		res
 			.status(500)
@@ -77,7 +77,7 @@ var createUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /users');
+		console.log('An error occurred in /users');
 		console.log(error);
 		res
 			.status(500)
@@ -99,7 +99,7 @@ var getAllUsers = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /users');
+		console.log('An error occurred in /users');
 		console.log(error);
 		res
 			.status(500)
@@ -121,7 +121,7 @@ var getAllUsersToAssign = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /users/ToAssign');
+		console.log('An error occurred in /users/ToAssign');
 		console.log(error);
 		res
 			.status(500)
@@ -143,7 +143,7 @@ var getAllActiveUsers = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /users/active');
+		console.log('An error occurred in /users/active');
 		console.log(error);
 		res
 			.status(500)
