@@ -40,93 +40,95 @@ var start = function() {
 	app.use(bodyParser.json()); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
+	var router = express.Router();
 	// routing - Start
 
 	//		users
-	app.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
-	app.get('/users/ToAssign', usersInterface.getAllUsersToAssign);
-	app.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
-	app.post('/user/login', usersInterface.loginUser);
-	app.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
-	app.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
+	router.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
+	router.get('/users/ToAssign', usersInterface.getAllUsersToAssign);
+	router.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
+	router.post('/user/login', usersInterface.loginUser);
+	router.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);
+	router.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
 
 	//		countries
-	app.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
-	app.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
-	app.put('/country', auth.isAuthenticated, countriesInterface.create);
-	app.post('/country', auth.isAuthenticated, countriesInterface.update);
+	router.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
+	router.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
+	router.put('/country', auth.isAuthenticated, countriesInterface.create);
+	router.post('/country', auth.isAuthenticated, countriesInterface.update);
 
 	//		cities
-	app.get('/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
-	app.get('/cities', auth.isAuthenticated, citiesInterface.getAll);
-	app.get('/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
-	app.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
-	app.put('/city', auth.isAuthenticated, citiesInterface.create);
-	app.post('/city', auth.isAuthenticated, citiesInterface.update);
+	router.get('/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
+	router.get('/cities', auth.isAuthenticated, citiesInterface.getAll);
+	router.get('/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
+	router.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
+	router.put('/city', auth.isAuthenticated, citiesInterface.create);
+	router.post('/city', auth.isAuthenticated, citiesInterface.update);
 
 	//		hotels
-	app.get('/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
-	app.get('/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
-	app.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
-	app.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
+	router.get('/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
+	router.get('/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
+	router.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
+	router.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
 
 	//		itineraries
-	app.get('/itineraries', itinerariesInterface.getAll);
-	app.get('/itinerary/:id', auth.isAuthenticated, itinerariesInterface.getById);
-	app.put('/itinerary', auth.isAuthenticated, itinerariesInterface.create);
-	app.post('/itinerary', auth.isAuthenticated, itinerariesInterface.update);
-	app.post('/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
-	app.post('/itinerary/budget-calculation', budgetCalculationInterface.budgetCalculation);
-	app.post('/itinerary/recommendation', recommendationInterface.recommendation);
+	router.get('/itineraries', itinerariesInterface.getAll);
+	router.get('/itinerary/:id', auth.isAuthenticated, itinerariesInterface.getById);
+	router.put('/itinerary', auth.isAuthenticated, itinerariesInterface.create);
+	router.post('/itinerary', auth.isAuthenticated, itinerariesInterface.update);
+	router.post('/itinerary/note', auth.isAuthenticated, itinerariesInterface.updateAgentNotes);
+	router.post('/itinerary/budget-calculation', budgetCalculationInterface.budgetCalculation);
+	router.post('/itinerary/recommendation', recommendationInterface.recommendation);
 
 	//		Purposes
-	app.get('/purposes', purposesInterface.getAll);
-	app.get('/purpose/:id', auth.isAuthenticated, purposesInterface.getById);
-	app.put('/purpose', auth.isAuthenticated, purposesInterface.create);
-	app.post('/purpose', auth.isAuthenticated, purposesInterface.update);
+	router.get('/purposes', purposesInterface.getAll);
+	router.get('/purpose/:id', auth.isAuthenticated, purposesInterface.getById);
+	router.put('/purpose', auth.isAuthenticated, purposesInterface.create);
+	router.post('/purpose', auth.isAuthenticated, purposesInterface.update);
 
 	//		Interests
-	app.get('/interests', interestsInterface.getAll);
-	app.get('/interest/:id', auth.isAuthenticated, interestsInterface.getById);
-	app.put('/interest', auth.isAuthenticated, interestsInterface.create);
-	app.post('/interest', auth.isAuthenticated, interestsInterface.update);
+	router.get('/interests', interestsInterface.getAll);
+	router.get('/interest/:id', auth.isAuthenticated, interestsInterface.getById);
+	router.put('/interest', auth.isAuthenticated, interestsInterface.create);
+	router.post('/interest', auth.isAuthenticated, interestsInterface.update);
 
 	//		BudgetCategories
-	app.get('/budget-categories', budgetCategoriesInterface.getAll);
-	app.get('/budget-category/:id', auth.isAuthenticated, budgetCategoriesInterface.getById);
-	app.put('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.create);
-	app.post('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.update);
+	router.get('/budget-categories', budgetCategoriesInterface.getAll);
+	router.get('/budget-category/:id', auth.isAuthenticated, budgetCategoriesInterface.getById);
+	router.put('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.create);
+	router.post('/budget-category', auth.isAuthenticated, budgetCategoriesInterface.update);
 
 	//		Professions
-	app.get('/professions', professionsInterface.getAll);
-	app.get('/profession/:id', auth.isAuthenticated, professionsInterface.getById);
-	app.put('/profession', auth.isAuthenticated, professionsInterface.create);
-	app.post('/profession', auth.isAuthenticated, professionsInterface.update);
+	router.get('/professions', professionsInterface.getAll);
+	router.get('/profession/:id', auth.isAuthenticated, professionsInterface.getById);
+	router.put('/profession', auth.isAuthenticated, professionsInterface.create);
+	router.post('/profession', auth.isAuthenticated, professionsInterface.update);
 
 	//		Referral Types
-	app.get('/referral-types', referralTypesInterface.getAll);
-	app.get('/referral-type/:id', auth.isAuthenticated, referralTypesInterface.getById);
-	app.put('/referral-type', auth.isAuthenticated, referralTypesInterface.create);
-	app.post('/referral-type', auth.isAuthenticated, referralTypesInterface.update);
+	router.get('/referral-types', referralTypesInterface.getAll);
+	router.get('/referral-type/:id', auth.isAuthenticated, referralTypesInterface.getById);
+	router.put('/referral-type', auth.isAuthenticated, referralTypesInterface.create);
+	router.post('/referral-type', auth.isAuthenticated, referralTypesInterface.update);
 
 	//		Statuses
-	app.get('/statuses', auth.isAuthenticated, statusesInterface.getAll);
-	app.get('/status/:id', auth.isAuthenticated, statusesInterface.getById);
-	app.put('/status', auth.isAuthenticated, statusesInterface.update);
-	app.post('/status', auth.isAuthenticated, statusesInterface.create);
-	app.delete('/status/:id', auth.isAuthenticated, statusesInterface.delete);
+	router.get('/statuses', auth.isAuthenticated, statusesInterface.getAll);
+	router.get('/status/:id', auth.isAuthenticated, statusesInterface.getById);
+	router.put('/status', auth.isAuthenticated, statusesInterface.update);
+	router.post('/status', auth.isAuthenticated, statusesInterface.create);
+	router.delete('/status/:id', auth.isAuthenticated, statusesInterface.delete);
 
 	// Videos
-	app.get('/public/videos', publicInterface.getVideos);
-	app.post('/public/video', auth.isAuthenticated, publicInterface.create);
-	app.put('/public/video', auth.isAuthenticated, publicInterface.update);
+	router.get('/public/videos', publicInterface.getVideos);
+	router.post('/public/video', auth.isAuthenticated, publicInterface.create);
+	router.put('/public/video', auth.isAuthenticated, publicInterface.update);
 
 	// Website
-	app.get('/public/phones', publicInterface.getPhones);
-	app.post('/public/phone', publicInterface.createPhone);
-	app.put('/public/phone', publicInterface.updatePhone);
+	router.get('/public/phones', publicInterface.getPhones);
+	router.post('/public/phone', publicInterface.createPhone);
+	router.put('/public/phone', publicInterface.updatePhone);
 
 	// routing - end
+	app.use('/master-data', router);
 
 	var port = process.env.PORT || 8083;
 
