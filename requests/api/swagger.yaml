@@ -10,7 +10,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /request/dashboard/place:
+  /dashboard/place:
     put:
       tags:
         - Place Requests
@@ -29,7 +29,7 @@ paths:
           description: Successful execution
           schema:
             $ref: '#/definitions/dashboardRequest'
-  /request/status:
+  /status:
     post:
       tags:
         - Modify Requests
@@ -52,7 +52,7 @@ paths:
       responses:
         '200':
           description: Successful Execution - No response body expected
-  /request/statuses/sendmails:
+  /statuses/send-mails:
     post:
       tags:
         - Traveler Emails
@@ -99,7 +99,7 @@ paths:
       responses:
         '200':
           description: Successful execution
-  /request/statuses/count:
+  /statuses/count:
     get:
       tags:
         - Query Requests
@@ -128,7 +128,7 @@ paths:
                 type: number
               numberOfTravelers:
                 type: number
-  /request:
+  /:
     put:
       tags:
         - Modify Requests
@@ -147,7 +147,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /request/send-package:
+  /send-package:
     post:
       tags:
         - Request Packages Generation
@@ -174,7 +174,7 @@ paths:
                 enum:
                 - 'true'
                 - 'false'
-  /request/{requestId}:
+  /{requestId}:
     get:
       tags:
         - Query Requests
@@ -190,7 +190,7 @@ paths:
           description: Successful execution
           schema:
             $ref: '#/definitions/retrievedRequest'
-  /request/statuses/summaries:
+  /statuses/summaries:
     get:
       tags:
         - Query Requests
@@ -221,7 +221,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/retrievedRequest'
-  /request/website/place:
+  /website/place:
     put:
       tags:
         - Place Requests
@@ -241,7 +241,7 @@ paths:
           description: Auto generated using Swagger Inspector
           schema:
             $ref: '#/definitions/websiteRequest'
-  /request/package/{requestId}:
+  /package/{requestId}:
     get:
       tags:
         - Request Packages Generation
@@ -273,7 +273,7 @@ paths:
               pdfDownloadUrl:
                 type: string
                 description: 'The download url of the pdf document on google drive'
-  /request/assign:
+  /assign:
     post:
       tags:
         - Modify Requests
@@ -296,7 +296,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /request/toggleoptions:
+  /toggle-options:
     put:
       tags:
         - Modify Requests
@@ -320,7 +320,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /request/statuses/emails:
+  /statuses/emails:
     get:
       tags:
         - Traveler Emails
@@ -698,13 +698,13 @@ definitions:
         type: integer
       edit:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       reachable:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       packageSent:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       revenue:
         type: integer
       profit:
@@ -833,13 +833,13 @@ definitions:
         type: integer
       edit:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       reachable:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       packageSent:
         type: integer
-        description: 'A 1/0 flag that can be set on the request, modified by the toggleoptions operation.'
+        description: 'A 1/0 flag that can be set on the request, modified by the toggle-options operation.'
       revenue:
         type: integer
       profit:

@@ -325,7 +325,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll(lang) {
-				return $http.get(prefix + 'referralTypes' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+				return $http.get(prefix + 'referral-types' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
 					return response.data;
 				});
 			}

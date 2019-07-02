@@ -29,7 +29,7 @@ import { Ticket } from './ticket/ticket.model';
 	providedIn: 'root',
 })
 export class RequestService {
-	private endPoint = 'requests/request';
+	private endPoint = 'requests';
 	private LUTEndPoint = 'master-data';
 	private requestData;
 	private Lookups: {

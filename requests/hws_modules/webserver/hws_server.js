@@ -27,36 +27,38 @@ var start = function() {
 	app.use(bodyParser.json()); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
+	var router = express.Router();
 	// routing - Start
 
 	// requests
-	app.put('/request/website/place', requestsInterface.placeWebsiteRequest);
-	app.put('/request/dashboard/place', requestsInterface.placeDashboardRequest);
-	app.get('/request/promo-code-validity', requestsInterface.validatePromoCode);
-	app.get('/request/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
-	app.put('/request', auth.isAuthenticated, requestsInterface.updateRequest);
-	app.post('/request/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
-	app.get('/request/statuses/summaries', auth.isAuthenticated, requestsInterface.getRequestSummaries);
-	app.get('/request/statuses/count', auth.isAuthenticated, requestsInterface.getRequestSummariesCount);
-	app.post('/request/statuses/sendmails', auth.isAuthenticated, requestsInterface.sendMailsToRequestTraveler);
-	app.get('/request/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
-	app.post('/request/send-package', requestsInterface.sendPackageByMail);
-	app.get('/request/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
+	router.put('/website/place', requestsInterface.placeWebsiteRequest);
+	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
+	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
+	router.get('/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
+	router.put('/', auth.isAuthenticated, requestsInterface.updateRequest);
+	router.post('/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
+	router.get('/statuses/summaries', auth.isAuthenticated, requestsInterface.getRequestSummaries);
+	router.get('/statuses/count', auth.isAuthenticated, requestsInterface.getRequestSummariesCount);
+	router.post('/statuses/send-mails', auth.isAuthenticated, requestsInterface.sendMailsToRequestTraveler);
+	router.get('/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
+	router.post('/send-package', requestsInterface.sendPackageByMail);
+	router.get('/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
 
 	// 		set status and options
-	app.put('/request/toggleoptions', auth.isAuthenticated, requestsInterface.toggleOptions);
-	app.post('/request/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
+	router.put('/toggle-options', auth.isAuthenticated, requestsInterface.toggleOptions);
+	router.post('/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
 
 	// Group Trips
-	app.get('/groupTrips', auth.isAuthenticated, grouptripsInterface.getAll);
-	app.get('/groupTrips/current', grouptripsInterface.getAllCurrentTrips);
-	app.get('/groupTrips/:id', auth.isAuthenticated, grouptripsInterface.getById);
-	app.post('/groupTrips', auth.isAuthenticated, grouptripsInterface.create);
-	app.post('/groupTrips/register', grouptripsInterface.register);
-	app.put('/groupTrips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
-	app.put('/groupTrips', auth.isAuthenticated, grouptripsInterface.update);
+	router.get('/group-trips', auth.isAuthenticated, grouptripsInterface.getAll);
+	router.get('/group-trips/current', grouptripsInterface.getAllCurrentTrips);
+	router.get('/group-trips/:id', auth.isAuthenticated, grouptripsInterface.getById);
+	router.post('/group-trips', auth.isAuthenticated, grouptripsInterface.create);
+	router.post('/group-trips/register', grouptripsInterface.register);
+	router.put('/group-trips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
+	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
 
 	// routing - end
+	app.use('/requests', router);
 
 	var port = process.env.PORT || 8082;
 
