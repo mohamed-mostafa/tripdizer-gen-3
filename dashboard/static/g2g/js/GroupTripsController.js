@@ -86,7 +86,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 				$scope.saving = true;
 				$http({
 					method: 'POST',
-					url: $rootScope.requestsServerUrl + '/groupTrips',
+					url: $rootScope.requestsServerUrl + '/group-trips',
 					headers: {
 						'Content-Type': undefined,
 					},
@@ -133,7 +133,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 				$scope.saving = true;
 				$http({
 					method: 'PUT',
-					url: $rootScope.requestsServerUrl + '/groupTrips',
+					url: $rootScope.requestsServerUrl + '/group-trips',
 					headers: {
 						'Content-Type': undefined,
 					},
@@ -194,7 +194,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 		$scope.toggle = function(groupTripId, type) {
 			$scope.saving = true;
 			$http
-				.put($rootScope.requestsServerUrl + '/groupTrips/toggle', {
+				.put($rootScope.requestsServerUrl + '/group-trips/toggle', {
 					tripId: groupTripId,
 					type: type,
 				})

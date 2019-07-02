@@ -121,7 +121,7 @@ var getAllUsersToAssign = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /users/ToAssign');
+		console.log('An error occurred in /users/to-assign');
 		console.log(error);
 		res
 			.status(500)

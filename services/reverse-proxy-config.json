@@ -1,24 +1,24 @@
 {
   "routes": [
     {
-      "route": "/requests",
+      "route": "requests",
       "address": "http://localhost:8082",
       "path": "../requests/hws_modules/webserver/hws_server.js"
     },
     {
-      "route": "/package-options",
+      "route": "master-data",
+      "address": "http://localhost:8083",
+      "path": "../master-data/hws_modules/webserver/hws_server.js"
+    },
+    {
+      "route": "package-options",
       "address": "http://localhost:8084",
       "path": "../package-options/index.js"
     },
     {
-      "route": "/flights",
-      "address": "http://localhost:8081",
+      "route": "flights",
+      "address": "http://localhost:8085",
       "path": "../flights-adapter/index.js"
-    },
-    {
-      "route": "/master-data",
-      "address": "http://localhost:8083",
-      "path": "../master-data/hws_modules/webserver/hws_server.js"
     }
   ]
 }

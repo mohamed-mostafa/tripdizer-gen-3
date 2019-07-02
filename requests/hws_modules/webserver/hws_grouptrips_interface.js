@@ -27,7 +27,7 @@ var register = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips/{Id}');
+		console.log('An error occurred in /group-trips/{Id}');
 		console.log(error);
 		res
 			.status(500)
@@ -56,7 +56,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips/{Id}');
+		console.log('An error occurred in /group-trips/{Id}');
 		console.log(error);
 		res
 			.status(500)
@@ -85,7 +85,7 @@ var toggle = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips');
+		console.log('An error occurred in /group-trips');
 		console.log(error);
 		res
 			.status(500)
@@ -121,7 +121,7 @@ var create = function(req, res) {
 		});
 		form.parse(req);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips');
+		console.log('An error occurred in /group-trips');
 		console.log(error);
 		res
 			.status(500)
@@ -157,7 +157,7 @@ var update = function(req, res) {
 		});
 		form.parse(req);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips');
+		console.log('An error occurred in /group-trips');
 		console.log(error);
 		res
 			.status(500)
@@ -181,7 +181,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips');
+		console.log('An error occurred in /group-trips');
 		console.log(error);
 		res
 			.status(500)
@@ -205,7 +205,7 @@ var getAllCurrentTrips = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /groupTrips');
+		console.log('An error occurred in /group-trips');
 		console.log(error);
 		res
 			.status(500)
