@@ -10,7 +10,7 @@ import { Flight, FlightRequest } from './flight.model';
 
 @Injectable({ providedIn: 'root' })
 export class FlightsService {
-	private endPoint = 'flights/flights/1.0.0/flights';
+	private endPoint = 'package-options/1.0.0/transportationOfferOptions';
 	private flights: Array<Flight> = [
 		{
 			origin: 'CAI',
@@ -348,13 +348,7 @@ export class FlightsService {
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 
-		let params = new HttpParams();
-		for (const key in flightRequest) {
-			if (flightRequest.hasOwnProperty(key) && !params.has(key)) {
-				params = params.set(key, flightRequest[key]);
-			}
-		}
-		return this.http.get<string>(this.endPoint, { params }).pipe(
+		return this.http.post<any>(`${this.endPoint}/search`, flightRequest).pipe(
 			map(response => {
 				console.log(response);
 				return this.flights;
