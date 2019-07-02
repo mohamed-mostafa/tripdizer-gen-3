@@ -45,7 +45,7 @@ var start = function() {
 
 	//		users
 	router.get('/users', auth.isAuthenticatedAsAdmin, usersInterface.getAllUsers);
-	router.get('/users/ToAssign', usersInterface.getAllUsersToAssign);
+	router.get('/users/to-assign', usersInterface.getAllUsersToAssign);
 	router.get('/users/active', auth.isAuthenticatedAsAdmin, usersInterface.getAllActiveUsers);
 	router.post('/user/login', usersInterface.loginUser);
 	router.put('/user', auth.isAuthenticatedAsAdmin, usersInterface.createUser);

@@ -274,7 +274,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		};
 		$scope.getAllUsersToAssign = function() {
 			$http
-				.get($rootScope.requestsServerUrl + '/users/ToAssign')
+				.get($rootScope.masterDataServerUrl + '/users/to-assign')
 				.success(function(response) {
 					$scope.users = response;
 				})
