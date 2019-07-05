@@ -162,7 +162,8 @@
 				"eternal_city": "مدينة رئيسية"
 			},
 			"tab_flights": {
-				"title": "الطيران"
+				"title": "الطيران",
+				"view_edit": "عرض / تعديل المسار"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق"

@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
 import { TabCitiesComponent } from './estimated-cost/tab-cities/tab-cities.component';
+import { FlightRowComponent } from './estimated-cost/tab-flights/flight-row/flight-row.component';
 import { TabFlightsComponent } from './estimated-cost/tab-flights/tab-flights.component';
 import { RequestFormLayoutComponent } from './form-layout/form-layout.component';
 import { RequestLoadingComponent } from './loading/loading.component';
@@ -44,6 +45,7 @@ import { RequestComponent } from './request.component';
 		RequestLoadingComponent,
 		TabCitiesComponent,
 		TabFlightsComponent,
+		FlightRowComponent,
 	],
 })
 export class RequestModule {}

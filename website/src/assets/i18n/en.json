@@ -162,7 +162,8 @@
 				"eternal_city": "Eternal city"
 			},
 			"tab_flights": {
-				"title": "Flights"
+				"title": "Flights",
+				"view_edit": "View / edit route"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations"
