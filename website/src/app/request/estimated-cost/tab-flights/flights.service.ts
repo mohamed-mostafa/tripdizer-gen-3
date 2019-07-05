@@ -170,6 +170,61 @@ export class FlightsService {
 			],
 		},
 		{
+			origin: { id: null, iataCode: 'PAR', name: 'Paris', description: null, image: null },
+			destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+			departure: '2019-07-11T21:00:00.000Z',
+			flightOffers: [
+				{
+					price: 5077.0,
+					currency: 'EGP',
+					totalDurationInWords: '1 h, 15 m',
+					transitDurationInWords: '0 undefined',
+					totalDurationInMinutes: 75,
+					transitDurationInMinutes: 0,
+					segments: [
+						{
+							origin: { id: null, iataCode: 'CDG', name: 'Charles', description: null, image: null },
+							destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							departure: '2019-07-12T17:50:00+02:00',
+							return: '2019-07-12T19:05:00+02:00',
+							durationInWords: '1 h, 15 m',
+							durationInMinutes: 75,
+						},
+					],
+					carrier: {
+						iataCode: 'KL',
+						name: 'KLM ROYAL DUTCH AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/KL.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/KL.png',
+					},
+				},
+				{
+					price: 5246.0,
+					currency: 'EGP',
+					totalDurationInWords: '1 h, 15 m',
+					transitDurationInWords: '0 undefined',
+					totalDurationInMinutes: 75,
+					transitDurationInMinutes: 0,
+					segments: [
+						{
+							origin: { id: null, iataCode: 'CDG', name: 'Charles', description: null, image: null },
+							destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							departure: '2019-07-12T17:50:00+02:00',
+							return: '2019-07-12T19:05:00+02:00',
+							durationInWords: '1 h, 15 m',
+							durationInMinutes: 75,
+						},
+					],
+					carrier: {
+						iataCode: 'AF',
+						name: 'AIR FRANCE',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AF.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/AF.png',
+					},
+				},
+			],
+		},
+		{
 			origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
 			destination: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
 			departure: '2019-07-18T21:00:00.000Z',
