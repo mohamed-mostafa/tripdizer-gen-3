@@ -196,13 +196,6 @@ definitions:
   flightOffer:
     type: "object"
     properties:
-      flightLegs:
-        type: "array"
-        description: "a list of flights from an origin to a destination. if there's\
-          \ only one leg, then its a one-way flight, if its two legs, then its a return\
-          \ flight, if its more than 2 legs, then its a multi-city flight"
-        items:
-          $ref: "#/definitions/flightLeg"
       price:
         type: "number"
         format: "currency"
@@ -210,16 +203,6 @@ definitions:
       currency:
         type: "string"
         example: "EGP"
-    description: "represents an offer to the client"
-  flightLeg:
-    type: "object"
-    properties:
-      origin:
-        type: "string"
-        example: "CAI"
-      destination:
-        type: "string"
-        example: "AMS"
       segments:
         type: "array"
         description: "represents one segment in a flight leg. if there's only one,\
@@ -242,6 +225,15 @@ definitions:
         $ref: "#/definitions/carrier"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
+  flightLeg:
+    type: "object"
+    properties:
+      origin:
+        type: "string"
+        example: "CAI"
+      destination:
+        type: "string"
+        example: "AMS"
   flightSegment:
     type: "object"
     properties:
