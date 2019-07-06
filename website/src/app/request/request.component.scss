@@ -1077,14 +1077,13 @@ $color-blue: #2989ff;
 
 	&.mat-form-field {
 		width: 100%;
-		font-size: 0.8rem;
-		padding-top: 1rem;
+		font-size: 0.65rem;
+		padding: 0;
 
 		.mat-form-field-wrapper {
 			padding: 0;
 
 			.mat-form-field-infix {
-				padding: 0.35em 0 0;
 				border-top: 0;
 
 				.mat-form-field-label-wrapper {
@@ -1095,7 +1094,7 @@ $color-blue: #2989ff;
 			.mat-form-field-subscript-wrapper {
 				font-size: 0.4rem;
 				margin-top: 0;
-				top: -0.13rem;
+				top: -1.05em;
 				padding-left: 0.55rem;
 			}
 		}
@@ -1110,53 +1109,53 @@ $color-blue: #2989ff;
 
 	@media (min-width: 576px) {
 		&.mat-form-field {
-			font-size: 0.91rem;
+			font-size: 0.69rem;
 		}
 
 		.mat-form-field-appearance-legacy .mat-form-field-label,
 		.mat-form-field-label,
 		.mat-radio-group-label {
-			font-size: 0.91rem;
-			line-height: 0.91rem;
+			font-size: 0.69rem;
+			line-height: 0.69rem;
 		}
 	}
 
 	@media (min-width: 768px) {
 		&.mat-form-field {
-			font-size: 1.02rem;
+			font-size: 0.73rem;
 		}
 
 		.mat-form-field-appearance-legacy .mat-form-field-label,
 		.mat-form-field-label,
 		.mat-radio-group-label {
-			font-size: 1.02rem;
-			line-height: 1.02rem;
+			font-size: 0.73rem;
+			line-height: 0.73rem;
 		}
 	}
 
 	@media (min-width: 992px) {
 		&.mat-form-field {
-			font-size: ‭1.14rem;
+			font-size: ‭0.76rem;
 		}
 
 		.mat-form-field-appearance-legacy .mat-form-field-label,
 		.mat-form-field-label,
 		.mat-radio-group-label {
-			font-size: ‭1.14rem;
-			line-height: ‭1.14rem;
+			font-size: ‭0.76rem;
+			line-height: ‭0.76rem;
 		}
 	}
 
 	@media (min-width: 1200px) {
 		&.mat-form-field {
-			font-size: 1.25rem;
+			font-size: 0.8rem;
 		}
 
 		.mat-form-field-appearance-legacy .mat-form-field-label,
 		.mat-form-field-label,
 		.mat-radio-group-label {
-			font-size: 1.25rem;
-			line-height: 1.25rem;
+			font-size: 0.8rem;
+			line-height: 0.8rem;
 		}
 	}
 }
