@@ -32,8 +32,8 @@ exports.searchAccomodations = function(language,accomomdationSearchRequest) {
                         checkin: cityArrival.toString(),
                         checkout: cityDeparture.toString(),
                         numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
-                        rate: 100, // FIX THIS
-                        price: 100 * citiesNumberOfNightPairs[i].numberOfNights, // FIX THIS
+                        rate: findRate(cityArrival, cityDeparture, hotel.rates), // FIX THIS
+                        price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights), // FIX THIS
                         currency: "EGP",
                         hotel: {
                             // here goes the hotel
@@ -102,3 +102,18 @@ function getCityByIata(cityIata) {
         );
     })
 };
+
+function findRate(cityArrival, cityDeparture, rates) {
+    var arrivalMonth = cityArrival.format('MMM').toUpperCase(); // short name of the mongh
+    var departureMonth = cityDeparture.format('MMM').toUpperCase(); // short name of the month
+
+    var rateOfArrivalMonth = rates[arrivalMonth];
+    var rateOfDepartureMonth = rates[departureMonth];
+    return (rateOfArrivalMonth + rateOfDepartureMonth) / 2
+}
+
+function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights) {
+    var nightRate = findRate(cityArrival, cityDeparture, rates);
+    var totalPrice = nightRate * numberOfNights;
+    return totalPrice;
+}

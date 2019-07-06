@@ -15,7 +15,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.Id = ?',
+				'SELECT H.*, mp.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id LEFT JOIN month_price mp on mp.id = H.night_price WHERE H.Id = ?',
 				[id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -42,6 +42,20 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								stars: rows[0].Stars,
 								budgetCategoryId: rows[0].Budget_Category_Id,
 								budgetCategoryName: rows[0].Budget_Category_Name,
+								rates: {
+									JAN: rows[0].JAN,
+									FEB: rows[0].FEB,
+									MAR: rows[0].MAR,
+									APR: rows[0].APR,
+									MAY: rows[0].MAY,
+									JUN: rows[0].JUN,
+									JUL: rows[0].JUL,
+									AUG: rows[0].AUG,
+									SEP: rows[0].SEP,
+									OCT: rows[0].OCT,
+									NOV: rows[0].NOV,
+									DEC: rows[0].DEC,
+								},
 								active: rows[0].Active,
 							};
 							if (lang) {
@@ -195,7 +209,7 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.City_Id = ? OR CI.Iata_Code = ?',
+				'SELECT H.*, mp.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id LEFT JOIN month_price mp on mp.id = H.night_price WHERE H.City_Id = ? OR CI.Iata_Code = ?',
 				[cityId, cityId],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -225,6 +239,20 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 									stars: rows[i].Stars,
 									budgetCategoryId: rows[i].Budget_Category_Id,
 									budgetCategoryName: rows[i].Budget_Category_Name,
+									rates: {
+										JAN: rows[i].JAN,
+										FEB: rows[i].FEB,
+										MAR: rows[i].MAR,
+										APR: rows[i].APR,
+										MAY: rows[i].MAY,
+										JUN: rows[i].JUN,
+										JUL: rows[i].JUL,
+										AUG: rows[i].AUG,
+										SEP: rows[i].SEP,
+										OCT: rows[i].OCT,
+										NOV: rows[i].NOV,
+										DEC: rows[i].DEC,
+									},
 									active: rows[i].Active,
 								};
 								if (lang) {
