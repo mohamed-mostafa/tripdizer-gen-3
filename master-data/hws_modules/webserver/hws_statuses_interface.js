@@ -19,7 +19,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /status/:id');
+		console.log('An error occurred in /status/:id');
 		console.log(error);
 		res
 			.status(500)
@@ -46,7 +46,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /status');
+		console.log('An error occurred in /status');
 		console.log(error);
 		res
 			.status(500)
@@ -70,7 +70,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /status');
+		console.log('An error occurred in /status');
 		console.log(error);
 		res
 			.status(500)
@@ -96,7 +96,7 @@ var deleteFunc = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /status/:id');
+		console.log('An error occurred in /status/:id');
 		console.log(error);
 		res
 			.status(500)
@@ -118,7 +118,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /statuses');
+		console.log('An error occurred in /statuses');
 		console.log(error);
 		res
 			.status(500)

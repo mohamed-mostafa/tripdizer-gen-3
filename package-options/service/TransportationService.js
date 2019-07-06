@@ -3,7 +3,7 @@ let moment = require('moment');
 let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8*60;
-const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8081/flights/1.0.0/flights'
+const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8080/flights/1.0.0/flights'
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 /**

@@ -21,7 +21,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /hotel');
+		console.log('An error occurred in /hotel');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /hotel');
+		console.log('An error occurred in /hotel');
 		console.log(error);
 		res
 			.status(500)
@@ -72,7 +72,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /hotels');
+		console.log('An error occurred in /hotels');
 		console.log(error);
 		res
 			.status(500)
@@ -101,7 +101,7 @@ var getAllByCity = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /hotels/city-id');
+		console.log('An error occurred in /hotels/city-id');
 		console.log(error);
 		res
 			.status(500)

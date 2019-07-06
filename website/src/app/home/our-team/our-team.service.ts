@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 	providedIn: 'root',
 })
 export class OurTeamService {
-	private endPoint = 'public/team' /*+ (lang ? '?lang=' + lang : '')*/;
+	private endPoint = 'master-data/public/team' /*+ (lang ? '?lang=' + lang : '')*/;
 	private team: Array<any> = [
 		{
 			name: 'Ziad Eladawy',

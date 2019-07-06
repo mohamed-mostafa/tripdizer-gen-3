@@ -140,7 +140,7 @@ g2gControlCenterApplication.controller('NewRequestController', [
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 			$http
-				.put($rootScope.requestsServerUrl + '/request/dashboard/place', { request: $scope.currentOrder })
+				.put($rootScope.requestsServerUrl + '/dashboard/place', { request: $scope.currentOrder })
 				.success(function(request) {
 					$scope.resetCurrentOrder();
 					// $scope.currentOrder = request;

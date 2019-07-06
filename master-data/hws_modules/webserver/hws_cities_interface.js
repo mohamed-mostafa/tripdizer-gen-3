@@ -21,7 +21,7 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /city');
+		console.log('An error occurred in /city');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /city');
+		console.log('An error occurred in /city');
 		console.log(error);
 		res
 			.status(500)
@@ -72,7 +72,7 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /cities');
+		console.log('An error occurred in /cities');
 		console.log(error);
 		res
 			.status(500)
@@ -96,7 +96,7 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /cities');
+		console.log('An error occurred in /cities');
 		console.log(error);
 		res
 			.status(500)
@@ -125,7 +125,7 @@ var getAllCitiesByCountry = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /cities/country-id');
+		console.log('An error occurred in /cities/country-id');
 		console.log(error);
 		res
 			.status(500)
@@ -149,7 +149,7 @@ var getAllCitiesInIternaries = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /citiesInIternaries');
+		console.log('An error occurred in /citiesInIternaries');
 		console.log(error);
 		res
 			.status(500)

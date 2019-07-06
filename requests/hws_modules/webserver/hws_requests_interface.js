@@ -20,7 +20,7 @@ var placeWebsiteRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/website/place');
+		console.log('An error occurred in /website/place');
 		console.log(error);
 		res
 			.status(500)
@@ -48,7 +48,7 @@ var placeDashboardRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/dashboard/place');
+		console.log('An error occurred in /dashboard/place');
 		console.log(error);
 		res
 			.status(500)
@@ -73,7 +73,7 @@ var getRequestById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request');
+		console.log('An error occurred in /');
 		console.log(error);
 		res
 			.status(500)
@@ -101,7 +101,7 @@ var getRequestSummaries = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/status');
+		console.log('An error occurred in /status');
 		console.log(error);
 		res
 			.status(500)
@@ -127,7 +127,7 @@ var getRequestSummariesCount = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/status/' + statuses + '/count');
+		console.log('An error occurred in /status/' + statuses + '/count');
 		console.log(error);
 		res
 			.status(500)
@@ -151,7 +151,7 @@ var sendMailsToRequestTraveler = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/statuses/sendmails');
+		console.log('An error occurred in /statuses/send-mails');
 		console.log(error);
 		res
 			.status(500)
@@ -177,7 +177,7 @@ var changeRequestStatus = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/status');
+		console.log('An error occurred in /status');
 		console.log(error);
 		res
 			.status(500)
@@ -203,7 +203,7 @@ var markRequestBeingPrepared = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/ststus/beingprepared');
+		console.log('An error occurred in /ststus/beingprepared');
 		console.log(error);
 		res
 			.status(500)
@@ -227,7 +227,7 @@ var markRequestDelivered = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/ststus/delivered');
+		console.log('An error occurred in /ststus/delivered');
 		console.log(error);
 		res
 			.status(500)
@@ -251,7 +251,7 @@ var markRequestPlaced = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/ststus/placed');
+		console.log('An error occurred in /status/placed');
 		console.log(error);
 		res
 			.status(500)
@@ -277,7 +277,7 @@ var assignRequestToUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/assign');
+		console.log('An error occurred in /assign');
 		console.log(error);
 		res
 			.status(500)
@@ -301,7 +301,7 @@ var updateRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request');
+		console.log('An error occurred in /');
 		console.log(error);
 		res
 			.status(500)
@@ -330,7 +330,7 @@ var budgetCalculation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/budgetCalculation');
+		console.log('An error occurred in /budgetCalculation');
 		console.log(error);
 		res
 			.status(500)
@@ -359,7 +359,7 @@ var recommendation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/recommendation');
+		console.log('An error occurred in /recommendation');
 		console.log(error);
 		res
 			.status(500)
@@ -388,7 +388,7 @@ var toggleOptions = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/toggleOptions');
+		console.log('An error occurred in /toggleOptions');
 		console.log(error);
 		res
 			.status(500)
@@ -414,7 +414,7 @@ var getPackage = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request');
+		console.log('An error occurred in /');
 		console.log(error);
 		res
 			.status(500)
@@ -439,7 +439,7 @@ var sendPackageByMail = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request');
+		console.log('An error occurred in /');
 		console.log(error);
 		res
 			.status(500)
@@ -464,7 +464,7 @@ var validatePromoCode = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/promocodevalidity');
+		console.log('An error occurred in /promo-code-validity');
 		console.log(error);
 		res
 			.status(500)
@@ -487,7 +487,7 @@ var getTravelerEmails = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /request/emails');
+		console.log('An error occurred in /emails');
 		console.log(error);
 		res
 			.status(500)

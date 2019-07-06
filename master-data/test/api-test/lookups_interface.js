@@ -119,10 +119,10 @@ describe('all public website lookup interfaces', function() {
 				});
 		});
 
-		it('returns 200 when requesting all budgetcategories', function(done) {
+		it('returns 200 when requesting all budget categories', function(done) {
 			chai
 				.request(serverURL)
-				.get('/master-data/budgetcategories')
+				.get('/master-data/budget-categories')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -133,10 +133,10 @@ describe('all public website lookup interfaces', function() {
 				});
 		});
 
-		it('returns an array when requesting all budgetcategories', function(done) {
+		it('returns an array when requesting all budget categories', function(done) {
 			chai
 				.request(serverURL)
-				.get('/master-data/budgetcategories')
+				.get('/master-data/budget-categories')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');
@@ -147,10 +147,10 @@ describe('all public website lookup interfaces', function() {
 				});
 		});
 
-		it('returns 200 when requesting all referraltypes', function(done) {
+		it('returns 200 when requesting all referral types', function(done) {
 			chai
 				.request(serverURL)
-				.get('/master-data/referraltypes')
+				.get('/master-data/referral-types')
 				.send()
 				.then(function(res) {
 					expect(res).to.have.status(200);
@@ -161,10 +161,10 @@ describe('all public website lookup interfaces', function() {
 				});
 		});
 
-		it('returns an array when requesting all referraltypes', function(done) {
+		it('returns an array when requesting all referral types', function(done) {
 			chai
 				.request(serverURL)
-				.get('/master-data/referraltypes')
+				.get('/master-data/referral-types')
 				.send()
 				.then(function(res) {
 					expect(res.body).to.be.an('array');

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 	providedIn: 'root',
 })
 export class SectionVideosService {
-	private endPoint = 'public/video' /*+ (lang ? '?lang=' + lang : '')*/;
+	private endPoint = 'master-data/public/video' /*+ (lang ? '?lang=' + lang : '')*/;
 
 	constructor(private http: HttpClient) {}
 

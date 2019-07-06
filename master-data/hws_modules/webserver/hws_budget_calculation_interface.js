@@ -19,7 +19,7 @@ var budgetCalculation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occured in /itineraries/budgetCalculation');
+		console.log('An error occurred in /itineraries/budgetCalculation');
 		console.log(error);
 		res
 			.status(500)

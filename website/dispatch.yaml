@@ -1,11 +1,11 @@
 dispatch:
-  - url: "development-services.tripdizer.com/package-options/*"
+  - url: 'development-services.tripdizer.com/package-options/*'
     service: tripdizer-package-options
-  - url: "development-services.tripdizer.com/request/*"
+  - url: 'development-services.tripdizer.com/requests/*'
     service: tripdizer-requests
-  - url: "development-services.tripdizer.com/master-data/*"
+  - url: 'development-services.tripdizer.com/master-data/*'
     service: tripdizer-master-data
-  - url: "development-dashboard.tripdizer.com/*"
+  - url: 'development-dashboard.tripdizer.com/*'
     service: tripdizer-dashboard
-  - url: "development.tripdizer.com/*"
+  - url: 'development.tripdizer.com/*'
     service: default

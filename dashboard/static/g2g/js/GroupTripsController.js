@@ -86,7 +86,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 				$scope.saving = true;
 				$http({
 					method: 'POST',
-					url: $rootScope.requestsServerUrl + '/groupTrips',
+					url: $rootScope.requestsServerUrl + '/group-trips',
 					headers: {
 						'Content-Type': undefined,
 					},
@@ -123,7 +123,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 					.error(function(err) {
 						$scope.saving = false;
 						$scope.serverError = true;
-						$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
@@ -133,7 +133,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 				$scope.saving = true;
 				$http({
 					method: 'PUT',
-					url: $rootScope.requestsServerUrl + '/groupTrips',
+					url: $rootScope.requestsServerUrl + '/group-trips',
 					headers: {
 						'Content-Type': undefined,
 					},
@@ -174,7 +174,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 					})
 					.error(function(err) {
 						$scope.serverError = true;
-						$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
@@ -194,7 +194,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 		$scope.toggle = function(groupTripId, type) {
 			$scope.saving = true;
 			$http
-				.put($rootScope.requestsServerUrl + '/groupTrips/toggle', {
+				.put($rootScope.requestsServerUrl + '/group-trips/toggle', {
 					tripId: groupTripId,
 					type: type,
 				})
@@ -211,7 +211,7 @@ g2gControlCenterApplication.controller('GroupTripsController', [
 				.error(function(err) {
 					$scope.saving = false;
 					$scope.serverError = true;
-					$scope.serverErrorMessage = 'An error occured at the server side: ' + err;
+					$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 				});
 		};
 		$scope.buildTable = function() {

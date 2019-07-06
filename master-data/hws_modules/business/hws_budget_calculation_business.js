@@ -140,7 +140,7 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 				}
 			},
 			function(err) {
-				console.log('An error occured while getting itinerary');
+				console.log('An error occurred while getting itinerary');
 				console.log(err);
 				onFailure(err);
 			}
