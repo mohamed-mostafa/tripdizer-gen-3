@@ -15,8 +15,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT c.*, cds.Budget_Category_Id, cds.Daily_Spending FROM Cities c LEFT JOIN City_Daily_Spending cds on c.Id = cds.City_Id WHERE id = ?',
-				[id],
+				'SELECT c.*, cds.Budget_Category_Id, cds.Daily_Spending, CO.EN_Name Country_EN_Name, CO.AR_NAME Country_AR_Name, CO.ISO_CODE Country_ISO_Code FROM Cities c LEFT JOIN City_Daily_Spending cds on c.Id = cds.City_Id LEFT JOIN Countries CO on CO.Id = c.Country_Id WHERE c.id = ? OR c.Iata_Code = ?',
+				[id, id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
@@ -32,6 +32,9 @@ var getById = function(id, lang, onSuccess, onFailure) {
 							var city = {
 								id: rows[0].Id,
 								countryId: rows[0].Country_Id,
+								countryIsoCode: rows[0].Country_ISO_Code,
+								countryEnName: rows[0].Country_EN_Name,
+								countryArName: rows[0].Country_EN_Name,
 								iataCode: rows[0].Iata_Code,
 								enName: rows[0].EN_Name,
 								enDescription: rows[0].EN_Description,
@@ -265,7 +268,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT CI.*, CO.EN_Name Country_EN_Name, CO.AR_Name Country_AR_Name, cds.Budget_Category_Id, cds.Daily_Spending FROM Cities CI JOIN Countries CO ON CI.Country_Id = CO.Id LEFT JOIN City_Daily_Spending cds on CI.Id = cds.City_Id',
+				'SELECT CI.*, CO.EN_Name Country_EN_Name, CO.AR_Name Country_AR_Name, CO.ISO_Code Country_ISO_Code, cds.Budget_Category_Id, cds.Daily_Spending FROM Cities CI JOIN Countries CO ON CI.Country_Id = CO.Id LEFT JOIN City_Daily_Spending cds on CI.Id = cds.City_Id ORDER BY CI.Visit_Order ASC',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -290,7 +293,9 @@ var getAll = function(lang, onSuccess, onFailure) {
 									enDescription: rows[i].EN_Description,
 									arName: rows[i].AR_Name,
 									arDescription: rows[i].AR_Description,
-									countryName: rows[i].Country_EN_Name,
+									countryIsoCode: rows[i].Country_ISO_Code,
+									countryEnName: rows[i].Country_EN_Name,
+									countryArName: rows[i].Country_EN_Name,
 									thumbnail: rows[i].Thumbnail,
 									lat: rows[i].Latitude,
 									lng: rows[i].Longitude,

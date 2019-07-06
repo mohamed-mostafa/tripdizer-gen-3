@@ -51,22 +51,22 @@ var start = function() {
 	app.post('/master-data/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
 
 	//		countries
-	app.get('/master-data/countries', auth.isAuthenticated, countriesInterface.getAll);
-	app.get('/master-data/country/:id', auth.isAuthenticated, countriesInterface.getById);
+	app.get('/master-data/countries', countriesInterface.getAll);
+	app.get('/master-data/country/:id', countriesInterface.getById);
 	app.put('/master-data/country', auth.isAuthenticated, countriesInterface.create);
 	app.post('/master-data/country', auth.isAuthenticated, countriesInterface.update);
 
 	//		cities
-	app.get('/master-data/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
-	app.get('/master-data/cities', auth.isAuthenticated, citiesInterface.getAll);
+	app.get('/master-data/cities/:countryId', citiesInterface.getAllCitiesByCountry);
+	app.get('/master-data/cities', citiesInterface.getAll);
 	app.get('/master-data/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
-	app.get('/master-data/city/:id', auth.isAuthenticated, citiesInterface.getById);
+	app.get('/master-data/city/:id', citiesInterface.getById);
 	app.put('/master-data/city', auth.isAuthenticated, citiesInterface.create);
 	app.post('/master-data/city', auth.isAuthenticated, citiesInterface.update);
 
 	//		hotels
-	app.get('/master-data/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
-	app.get('/master-data/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
+	app.get('/master-data/hotels/:cityId', hotelsInterface.getAllByCity);
+	app.get('/master-data/hotel/:id', hotelsInterface.getById);
 	app.put('/master-data/hotel', auth.isAuthenticated, hotelsInterface.create);
 	app.post('/master-data/hotel', auth.isAuthenticated, hotelsInterface.update);
 

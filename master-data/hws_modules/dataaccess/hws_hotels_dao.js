@@ -195,8 +195,8 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.City_Id = ?',
-				[cityId],
+				'SELECT H.*, CI.EN_Name City_EN_Name, CI.AR_Name City_AR_Name, BC.EN_Name Budget_Category_Name FROM Hotels H JOIN Cities CI ON H.City_Id = CI.Id LEFT JOIN Budget_Category BC on H.Budget_Category_Id = BC.Id WHERE H.City_Id = ? OR CI.Iata_Code = ?',
+				[cityId, cityId],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {

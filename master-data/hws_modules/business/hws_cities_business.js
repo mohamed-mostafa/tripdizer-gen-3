@@ -9,7 +9,7 @@ var getAllCitiesByCountry = function(countryId, lang, onSuccess, onFailure) {
 	dao.getAll(
 		lang,
 		function(cities) {
-			var cities = cities.filter(city => city.countryId == countryId);
+			var cities = cities.filter(city => city.countryId == countryId || city.countryIsoCode == countryId);
 			onSuccess(cities);
 		},
 		onFailure
