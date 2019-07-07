@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { RequestService } from '../../request.service';
 import { TravelingFrom } from '../../traveling-from/traveling-from.model';
 import { Flight, FlightRequest } from './flight.model';
@@ -353,6 +352,6 @@ export class FlightsService {
 		};
 
 		// return this.http.post<Array<Flight>>(`${this.endPoint}/search`, flightRequest);
-		return of(this.flights).pipe(delay(2000));
+		return of(this.flights);
 	}
 }
