@@ -2,6 +2,7 @@ let httpRequest = require('request');
 let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MAX_NUMBER_OF_HOTELS_PER_CITY = 3;
 
 /**
  * retrieve options of accomodations for a package
@@ -24,41 +25,49 @@ exports.searchAccomodations = function(language,accomomdationSearchRequest) {
             var cityDeparture = new moment(arrivalMoment).add(citiesNumberOfNightPairs[i].numberOfNights, 'Days');
 
             try {
+                var hotelCity = await getCityByIata(cityIata);
+                if (!hotelCity) continue;
+                var newAccomodationOffer = {
+                    city: {
+                        // here goes the city
+                        displayName: language == 'ar' ? hotelCity.arName : hotelCity.enName,
+                        iataCode: hotelCity.iataCode,
+                        country: hotelCity.countryEnName,
+                        countryDisplayName: language == 'ar' ? hotelCity.countryArName : hotelCity.countryEnName,
+                        countryIsoCode: hotelCity.countryIsoCode,
+                        coordinates: hotelCity.lng + ", " + hotelCity.lat,
+                        thumbnail: hotelCity.thumbnail,
+                        // interests: [] // FIX THIS
+                    },
+                    hotels: [],
+                }
+                
                 var cityHotelsList = await getHotelsOfCity(cityIata);
-                var city = await getCityByIata(cityIata);
-
                 cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase()).forEach(hotel => {
-                    var newAccomodationOffer = {
+                      var newHotel = {
+                        name: hotel.enName,
+                        displaName: language == 'ar' ? hotel.arName : hotel.enName,
+                        description: language == 'ar' ? hotel.arDescription: hotel.enDescription,
+                        thumbnail: hotel.thumbnail,
+                        address: hotel.address,
+                        stars: hotel.stars,
                         checkin: cityArrival.toString(),
                         checkout: cityDeparture.toString(),
                         numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
-                        rate: findRate(cityArrival, cityDeparture, hotel.rates), // FIX THIS
+                        rate: findRate(cityArrival, cityDeparture, hotel.rates),
                         price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights), // FIX THIS
                         currency: "EGP",
-                        hotel: {
-                            // here goes the hotel
-                            name: hotel.enName,
-                            displaName: language == 'ar' ? hotel.arName : hotel.enName,
-                            description: language == 'ar' ? hotel.arDescription: hotel.enDescription,
-                            thumbnail: hotel.thumbnail,
-                            stars: hotel.stars
-                        },
-                        city: {
-                            // here goes the city
-                            displayName: language == 'ar' ? city.arName : city.enName,
-                            iataCode: city.iataCode,
-                            country: city.countryEnName,
-                            countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
-                            countryIsoCode: city.countryIsoCode,
-                            coordinates: city.lng + ", " + city.lat,
-                            thumbnail: city.thumbnail,
-                            // interests: [] // FIX THIS
-                        },
-                        
-                      }
-                      accomodationOffers.push(newAccomodationOffer);
-                });
-                
+                        }
+                        newAccomodationOffer.hotels.push(newHotel);
+
+                    });
+                    // sort hotels in each offer by price
+                    newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
+                    // limit number of hotels in each offer
+                    if (newAccomodationOffer.hotels.length > MAX_NUMBER_OF_HOTELS_PER_CITY) {
+                        newAccomodationOffer.hotels = newAccomodationOffer.hotels.slice(0, MAX_NUMBER_OF_HOTELS_PER_CITY);
+                    }
+                    accomodationOffers.push(newAccomodationOffer);
             } catch (error) {
                 console.log(error);
                 reject(error);

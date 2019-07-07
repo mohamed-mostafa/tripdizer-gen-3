@@ -39,6 +39,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								arName: rows[0].AR_Name,
 								arDescription: rows[0].Ar_Description,
 								thumbnail: rows[0].Thumbnail,
+								address: rows[0].Address,
 								stars: rows[0].Stars,
 								budgetCategoryId: rows[0].Budget_Category_Id,
 								budgetCategoryName: rows[0].Budget_Category_Name,
@@ -99,7 +100,7 @@ var create = function(hotel, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Stars, Budget_Category_Id) values (?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Address, Stars, Budget_Category_Id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							hotel.cityId,
 							hotel.enName,
@@ -107,6 +108,7 @@ var create = function(hotel, onSuccess, onFailure) {
 							hotel.arName,
 							hotel.arDescription,
 							hotel.thumbnail,
+							hote.address,
 							hotel.stars,
 							hotel.budgetCategoryId,
 						],
@@ -159,7 +161,7 @@ var update = function(hotel, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Stars = ?, Budget_Category_Id = ?, Active = ? WHERE Id = ?',
+						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Address = ?, Stars = ?, Budget_Category_Id = ?, Active = ? WHERE Id = ?',
 						[
 							hotel.cityId,
 							hotel.enName,
@@ -167,6 +169,7 @@ var update = function(hotel, onSuccess, onFailure) {
 							hotel.arName,
 							hotel.arDescription,
 							hotel.thumbnail,
+							hotel.address,
 							hotel.stars,
 							hotel.budgetCategoryId,
 							hotel.active,
@@ -236,6 +239,7 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 									arName: rows[i].AR_Name,
 									arDescription: rows[i].Ar_Description,
 									thumbnail: rows[i].Thumbnail,
+									address: rows[i].Address,
 									stars: rows[i].Stars,
 									budgetCategoryId: rows[i].Budget_Category_Id,
 									budgetCategoryName: rows[i].Budget_Category_Name,

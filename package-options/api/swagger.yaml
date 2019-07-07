@@ -9,14 +9,14 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-# host: "localhost:8084"
-host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+host: "localhost:8084"
+# host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
 basePath: "/package-options/1.0.0"
 schemes:
-- "https"
-# - "http"
+# - "https"
+- "http"
 paths:
-  /cityOptions/search:
+  /countryCities/search:
     post:
       summary: "retrieve options of cities for a package"
       description: "retrieve the recommended options of cities in the countries choosen\
@@ -45,7 +45,7 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /transportationOfferOptions/search:
+  /transportationOffers/search:
     post:
       summary: "retrieve options of transportation between cities and countries for\
         \ a package"
@@ -75,7 +75,7 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /accomodationOfferOptions/search:
+  /accomodationOffers/search:
     post:
       summary: "retrieve options of accomodations for a package"
       description: "By passing in the appropriate options, you can search for available\
@@ -104,12 +104,12 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /activitiesOfferOptions/search:
+  /cityAttractions/search:
     post:
-      summary: "retrieve options of activities of a city for a package"
+      summary: "retrieve options of attractions of a city for a package"
       description: "By passing in the appropriate options, you can search for\navailable\
-        \ activities in the system\n"
-      operationId: "activitiesSearchActivities"
+        \ attractions in the system\n"
+      operationId: "searchAttractions"
       consumes:
       - "application/json"
       produces:
@@ -121,16 +121,16 @@ paths:
         type: "string"
         default: "en"
       - in: "body"
-        name: "activitiesSearchRequest"
+        name: "attractionsSearchRequest"
         description: "the client's choosen cities IATA codes"
         required: true
         schema:
-          $ref: "#/definitions/activitiesSearchRequest"
+          $ref: "#/definitions/attractionsSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
           schema:
-            $ref: "#/definitions/activityOffers"
+            $ref: "#/definitions/attractionOffers"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
@@ -262,6 +262,32 @@ definitions:
     properties:
       city:
         $ref: "#/definitions/city"
+      hotels:
+        type: "array"
+        items:
+          $ref: "#/definitions/hotel"
+  hotel:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Hilton Capetown Hotel"
+      displaName:
+        type: "string"
+        example: "هيلتون كيب تاون"
+      description:
+        type: "string"
+        example: "One of the best hotels in Cape Town"
+      thumbnail:
+        type: "string"
+        format: "url"
+        example: "https://static.tripdizer.com/hilton-capetown-hotel.png"
+      address:
+        type: "string"
+        example: "10 Sukhumvit Str."
+      stars:
+        type: "number"
+        example: 5
       checkin:
         type: "string"
         format: "date"
@@ -285,40 +311,17 @@ definitions:
         type: "number"
         format: "currency"
         example: 2000
-      hotel:
-        $ref: "#/definitions/hotel"
-  hotel:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-        example: "Hilton Capetown Hotel"
-      displaName:
-        type: "string"
-        example: "هيلتون كيب تاون"
-      description:
-        type: "string"
-        example: "One of the best hotels in Cape Town"
-      thumbnail:
-        type: "string"
-        format: "url"
-        example: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-      stars:
-        type: "number"
-        example: 5
-  activityOffer:
-    properties:
-      date:
-        type: "string"
-        format: "date"
-        example: "2019-06-03"
-      activity:
-        $ref: "#/definitions/activity"
-  activity:
-    type: "object"
+  attractionsOffer:
     properties:
       city:
         $ref: "#/definitions/city"
+      attractions:
+        type: "array"
+        items:
+          $ref: "#/definitions/attraction"
+  attraction:
+    type: "object"
+    properties:
       name:
         type: "string"
         example: "Spend a day in the waterboom park"
@@ -336,10 +339,10 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/city"
-  activityOffers:
+  attractionOffers:
     type: "array"
     items:
-      $ref: "#/definitions/activityOffer"
+      $ref: "#/definitions/attractionsOffer"
   transportationLegOffers:
     type: "array"
     items:
@@ -500,7 +503,7 @@ definitions:
         type: "string"
         example: "ECONOMY"
         description: "the client's chosen budget category"
-  activitiesOfferOptionssearch_cities:
+  attractionsOfferOptionssearch_cities:
     required:
     - "cityIata"
     - "numberOfNights"
@@ -511,7 +514,7 @@ definitions:
       numberOfNights:
         type: "number"
         description: "The number of nights to stay in the city"
-  activitiesSearchRequest:
+  attractionsSearchRequest:
     properties:
       cities:
         type: "array"
@@ -523,7 +526,7 @@ definitions:
         description: "The sequence of city IATA codes / number of night pairs of the\
           \ trip"
         items:
-          $ref: "#/definitions/activitiesOfferOptionssearch_cities"
+          $ref: "#/definitions/attractionsOfferOptionssearch_cities"
       interests:
         type: "array"
         example:
