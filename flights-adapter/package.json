@@ -18,6 +18,7 @@
     "amadeus": "1.1.0",
     "dateformat": "3.0.3",
     "humanize-duration": "3.18.0",
+    "async-retry": "^1.2.3",
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
     "swagger-tools": "0.10.1"
