@@ -158,14 +158,16 @@
 				"view_choose": "View and choose your cities",
 				"things_to_do": "Things to do in",
 				"select": "Select",
-				"view_map": "View map",
-				"eternal_city": "Eternal city"
+				"view_map": "View map"
 			},
 			"tab_flights": {
 				"title": "Flights"
 			},
 			"tab_accommodations": {
-				"title": "Accommodations"
+				"title": "Accommodations",
+				"choose_hotel": "View and choose your hotels",
+				"select": "Select",
+				"total_price": "Total price"
 			}
 		},
 		"form_layout": {

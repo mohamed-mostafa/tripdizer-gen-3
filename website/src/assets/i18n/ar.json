@@ -158,14 +158,16 @@
 				"view_choose": "عرض واختيار المدن",
 				"things_to_do": "أنشطة يمكن القيام بها فى",
 				"select": "اختيار",
-				"view_map": "عرض الخريطة",
-				"eternal_city": "مدينة رئيسية"
+				"view_map": "عرض الخريطة"
 			},
 			"tab_flights": {
 				"title": "الطيران"
 			},
 			"tab_accommodations": {
-				"title": "الفنادق"
+				"title": "الفنادق",
+				"choose_hotel": "عرض واختيار الفنادق",
+				"select": "اختيار",
+				"total_price": "إجمالى السعر"
 			}
 		},
 		"form_layout": {

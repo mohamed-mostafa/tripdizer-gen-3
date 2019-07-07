@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { City } from './city.model';
 
 @Injectable({ providedIn: 'root' })
 export class CitiesService {
 	private endPoint = 'request/cities' /*+ (lang ? '?lang=' + lang : '')*/;
-	private cities: Array<any> = [
+	private cities: Array<City> = [
 		{
-			country: 'Rome',
+			country: 'Rome - Eternal city',
 			town: 'Italy',
 			description:
-				'Rome’s great gladiatorial arena is the most thrilling of the city\'s ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ',
+				"Rome’s great gladiatorial arena is the most thrilling of the city's ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ",
 			image: '../../../assets/img/landmark.jpg',
 			activities: ['Outdoors', 'Parks', 'Beaches'],
 			icons: [
@@ -21,10 +22,10 @@ export class CitiesService {
 			],
 		},
 		{
-			country: 'Rome',
+			country: 'Rome - Eternal city',
 			town: 'Italy',
 			description:
-				'Rome’s great gladiatorial arena is the most thrilling of the city\'s ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ',
+				"Rome’s great gladiatorial arena is the most thrilling of the city's ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ",
 			image: '../../../assets/img/landmark.jpg',
 			activities: ['Outdoors', 'Parks', 'Beaches'],
 			icons: [
@@ -35,10 +36,10 @@ export class CitiesService {
 			],
 		},
 		{
-			country: 'Rome',
+			country: 'Rome - Eternal city',
 			town: 'Italy',
 			description:
-				'Rome’s great gladiatorial arena is the most thrilling of the city\'s ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ',
+				"Rome’s great gladiatorial arena is the most thrilling of the city's ancient sights.Inaugurated in AD 80, the 50,000- seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. ",
 			image: '../../../assets/img/landmark.jpg',
 			activities: ['Outdoors', 'Parks', 'Beaches'],
 			icons: [
@@ -52,7 +53,7 @@ export class CitiesService {
 
 	constructor(private http: HttpClient) {}
 
-	getCities(): Observable<Array<any>> {
+	getCities(): Observable<Array<City>> {
 		return of(this.cities);
 		// return this.http.get<Array<any>>(`${this.endPoint}s`);
 	}

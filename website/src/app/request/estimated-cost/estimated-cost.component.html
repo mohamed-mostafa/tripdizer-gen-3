@@ -5,34 +5,48 @@
 		<mat-tab-group mat-align-tabs="center">
 			<mat-tab>
 				<ng-template mat-tab-label>
-					<div class="tab-icon d-block d-md-inline-block">
-						<i class="fa fa-university mb-2 mb-md-0 mr-1"></i>
+					<div class="tab-icon">
+						<i class="fa fa-university mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 						{{ 'request.estimated_cost.tab_cities.title' | translate }}
 					</div>
 				</ng-template>
-				<div class="bg-white p-2 p-md-0 mt-3 mt-md-0">
-					<c-estimated-cost-cities></c-estimated-cost-cities>
+				<div class="row mx-0">
+					<div class="col-12">
+						<div class="bg-white m-2 p-md-0 mt-3 mt-md-0">
+							<c-estimated-cost-cities></c-estimated-cost-cities>
+						</div>
+					</div>
 				</div>
 			</mat-tab>
 			<mat-tab>
 				<ng-template mat-tab-label>
-					<div class="tab-icon d-block d-md-inline-block mr-1">
-						<i class="fa fa-plane mb-2 mb-md-0 mr-1"></i>
+					<div class="tab-icon">
+						<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 						{{ 'request.estimated_cost.tab_flights.title' | translate }}
 					</div>
 				</ng-template>
-				<div class="bg-white p-2 p-md-0 mt-3 mt-md-0">
-					<c-estimated-cost-flights></c-estimated-cost-flights>
+				<div class="row mx-0">
+					<div class="col-12">
+						<div class="bg-white p-2 p-md-0 mt-3 mt-md-0">
+							<c-estimated-cost-flights></c-estimated-cost-flights>
+						</div>
+					</div>
 				</div>
 			</mat-tab>
 			<mat-tab>
 				<ng-template mat-tab-label>
-					<div class="tab-icon d-block d-md-inline-block">
-						<i class="fa fa-building mb-2 mb-md-0 mr-1"></i>
+					<div class="tab-icon">
+						<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 						{{ 'request.estimated_cost.tab_accommodations.title' | translate }}
 					</div>
 				</ng-template>
-				<p>...</p>
+				<div class="row mx-0">
+					<div class="col-12">
+						<div class="bg-white p-2 p-md-0 mt-3 mt-md-0">
+							<c-app-tab-accommodation></c-app-tab-accommodation>
+						</div>
+					</div>
+				</div>
 			</mat-tab>
 		</mat-tab-group>
 	</div>

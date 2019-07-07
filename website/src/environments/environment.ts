@@ -4,7 +4,7 @@
 
 export const environment = {
 	production: false,
-	apiUrl: 'http://localhost:8080/',
+	apiUrl: 'https://development-services.tripdizer.com/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	facebook: {

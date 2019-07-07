@@ -1,0 +1,94 @@
+.hotels-list .list-title {
+	text-decoration: underline;
+}
+
+.hotels-tab img {
+	max-width: 100%;
+}
+
+.item-image img {
+	width: 100%;
+	height: 100%;
+}
+
+.item-text {
+	line-height: 20px;
+}
+
+.hotel-item {
+	border: 1px solid #707070;
+}
+
+.item-img-container {
+	height: 100%;
+}
+
+.dark-grey {
+	color: #444;
+}
+
+.grey {
+	color: #979797;
+}
+
+.white {
+	color: #fff !important;
+}
+
+.price-text {
+	font-weight: bold;
+	font-size: 1.4rem !important;
+}
+.hotel-name {
+	font-size: 1.2rem;
+}
+.rating {
+	font-size: .75rem;
+}
+.rating-stars .fa {
+	color: #d5b40d
+}
+.destination-name {
+	text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+	.list-title {
+		font-size: 0.75rem;
+	}
+	.hotels-title,
+	.hotels-text {
+		font-size: 0.85rem;
+	}
+	.item-image img {
+		height: 120px;
+	}
+
+	.item-content {
+		border-top: 0;
+		border-color: #e4e1e1;
+		background-color: #fff;
+	}
+	.hotels-tab {
+		background-color: #e9e9e9;
+	}
+	.hotel-item {
+		border-color: #e4e1e1;
+		background-color: #fff;
+	}
+	.item-text {
+		line-height: 18px;
+		font-size: 0.8rem;
+	}
+	.destination-name {
+		text-decoration: none;
+		font-size: 1.2rem;
+	}
+	.additional-destination {
+		text-align: center;
+		background-color: #e9e9e9;
+		margin: 0 auto;
+		width: 75px;
+		margin-top: -35px;
+	}
+}
