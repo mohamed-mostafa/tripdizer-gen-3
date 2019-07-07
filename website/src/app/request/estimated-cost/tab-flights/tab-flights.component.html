@@ -5,15 +5,7 @@
 		</h5>
 
 		<div class="routes position-relative">
-			<div
-				*ngFor="
-					let flight of (flights | async);
-					let index = index;
-					let isEven = even;
-					let isFirst = first;
-					let isLast = last
-				"
-			>
+			<div *ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
 				<c-estimated-cost-flight-row
 					[flight]="flight"
 					[index]="index"
@@ -24,11 +16,8 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="d-none d-lg-block col-4">
-		<hr class="d-lg-none" />
-		<h6 class="font-weight-bold font-italic view-map">
-			{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
-		</h6>
-		<img src="../../../assets/img/map.png" alt="" />
+		<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
 	</div>
 </div>
