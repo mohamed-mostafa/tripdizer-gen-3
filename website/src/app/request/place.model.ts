@@ -10,4 +10,6 @@ export class Place {
 	image: string;
 	temperatureLo?: number;
 	temperatureHi?: number;
+	latitude?: number;
+	longitude?: number;
 }
