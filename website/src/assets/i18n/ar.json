@@ -161,7 +161,8 @@
 				"view_map": "عرض الخريطة"
 			},
 			"tab_flights": {
-				"title": "الطيران"
+				"title": "الطيران",
+				"view_edit": "عرض / تعديل المسار"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

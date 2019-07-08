@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Destination } from '../../destinations/destination.model';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { RequestService } from '../../request.service';
 import { TravelingFrom } from '../../traveling-from/traveling-from.model';
 import { Flight, FlightRequest } from './flight.model';
@@ -13,311 +12,263 @@ export class FlightsService {
 	private endPoint = 'package-options/1.0.0/transportationOfferOptions';
 	private flights: Array<Flight> = [
 		{
-			origin: 'CAI',
-			destination: 'AMS',
-			departure: '2019-09-09T21:00:00.000Z',
+			origin: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+			destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+			departure: '2019-07-08T21:00:00.000Z',
 			flightOffers: [
 				{
-					price: 7934.0,
+					price: 3959.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '6 h, 25 m',
+					transitDurationInWords: '55 m',
+					totalDurationInMinutes: 385,
+					transitDurationInMinutes: 55,
+					segments: [
 						{
-							origin: 'CAI',
-							destination: 'AMS',
-							totalDurationInWords: '12 h, 35 m',
-							transitDurationInWords: '7 h, 5 m',
-							totalDurationInMinutes: 755,
-							transitDurationInMinutes: 425,
-							segments: [
-								{
-									origin: 'CAI',
-									destination: 'ATH',
-									departure: '2019-09-10T03:10:00+02:00',
-									return: '2019-09-10T06:10:00+03:00',
-									durationInWords: '2 h',
-									durationInMinutes: 120,
-								},
-								{
-									origin: 'ATH',
-									destination: 'AMS',
-									departure: '2019-09-10T13:15:00+03:00',
-									return: '2019-09-10T15:45:00+02:00',
-									durationInWords: '3 h, 30 m',
-									durationInMinutes: 210,
-								},
-							],
-							carrier: {
-								iataCode: 'A3',
-								name: 'AEGEAN AIRLINES',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/A3.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/A3.png',
-							},
+							origin: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							destination: { id: null, iataCode: 'ATH', name: 'Athens', description: null, image: null },
+							departure: '2019-07-09T09:20:00+02:00',
+							return: '2019-07-09T12:20:00+03:00',
+							durationInWords: '2 h',
+							durationInMinutes: 120,
+						},
+						{
+							origin: { id: null, iataCode: 'ATH', name: 'Athens', description: null, image: null },
+							destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							departure: '2019-07-09T13:15:00+03:00',
+							return: '2019-07-09T15:45:00+02:00',
+							durationInWords: '3 h, 30 m',
+							durationInMinutes: 210,
 						},
 					],
+					carrier: {
+						iataCode: 'A3',
+						name: 'AEGEAN AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/A3.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/A3.png',
+					},
 				},
 				{
-					price: 10198.0,
+					price: 5462.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '10 h, 20 m',
+					transitDurationInWords: '1 h, 45 m',
+					totalDurationInMinutes: 620,
+					transitDurationInMinutes: 105,
+					segments: [
 						{
-							origin: 'CAI',
-							destination: 'AMS',
-							totalDurationInWords: '11 h, 10 m',
-							transitDurationInWords: '2 h, 10 m',
-							totalDurationInMinutes: 670,
-							transitDurationInMinutes: 130,
-							segments: [
-								{
-									origin: 'CAI',
-									destination: 'CMN',
-									departure: '2019-09-10T06:30:00+02:00',
-									return: '2019-09-10T11:05:00+01:00',
-									durationInWords: '5 h, 35 m',
-									durationInMinutes: 335,
-								},
-								{
-									origin: 'CMN',
-									destination: 'AMS',
-									departure: '2019-09-10T13:15:00+01:00',
-									return: '2019-09-10T17:40:00+02:00',
-									durationInWords: '3 h, 25 m',
-									durationInMinutes: 205,
-								},
-							],
-							carrier: {
-								iataCode: 'AT',
-								name: 'ROYAL AIR MAROC',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AT.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/AT.png',
-							},
+							origin: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							destination: { id: null, iataCode: 'SVO', name: 'Sheremetyevo', description: null, image: null },
+							departure: '2019-07-09T01:40:00+02:00',
+							return: '2019-07-09T07:25:00+03:00',
+							durationInWords: '4 h, 45 m',
+							durationInMinutes: 285,
+						},
+						{
+							origin: { id: null, iataCode: 'SVO', name: 'Sheremetyevo', description: null, image: null },
+							destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							departure: '2019-07-09T09:10:00+03:00',
+							return: '2019-07-09T12:00:00+02:00',
+							durationInWords: '3 h, 50 m',
+							durationInMinutes: 230,
 						},
 					],
+					carrier: {
+						iataCode: 'SU',
+						name: 'AEROFLOT',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/SU.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/SU.png',
+					},
 				},
 				{
-					price: 10974.0,
+					price: 5664.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '10 h, 15 m',
+					transitDurationInWords: '4 h, 10 m',
+					totalDurationInMinutes: 615,
+					transitDurationInMinutes: 250,
+					segments: [
 						{
-							origin: 'CAI',
-							destination: 'AMS',
-							totalDurationInWords: '10 h, 20 m',
-							transitDurationInWords: '1 h, 45 m',
-							totalDurationInMinutes: 620,
-							transitDurationInMinutes: 105,
-							segments: [
-								{
-									origin: 'CAI',
-									destination: 'SVO',
-									departure: '2019-09-10T01:40:00+02:00',
-									return: '2019-09-10T07:25:00+03:00',
-									durationInWords: '4 h, 45 m',
-									durationInMinutes: 285,
-								},
-								{
-									origin: 'SVO',
-									destination: 'AMS',
-									departure: '2019-09-10T09:10:00+03:00',
-									return: '2019-09-10T12:00:00+02:00',
-									durationInWords: '3 h, 50 m',
-									durationInMinutes: 230,
-								},
-							],
-							carrier: {
-								iataCode: 'SU',
-								name: 'AEROFLOT',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/SU.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/SU.png',
-							},
+							origin: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							destination: { id: null, iataCode: 'IST', name: 'Istanbul', description: null, image: null },
+							departure: '2019-07-09T02:50:00+02:00',
+							return: '2019-07-09T06:25:00+03:00',
+							durationInWords: '2 h, 35 m',
+							durationInMinutes: 155,
+						},
+						{
+							origin: { id: null, iataCode: 'IST', name: 'Istanbul', description: null, image: null },
+							destination: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							departure: '2019-07-09T10:35:00+03:00',
+							return: '2019-07-09T13:05:00+02:00',
+							durationInWords: '3 h, 30 m',
+							durationInMinutes: 210,
 						},
 					],
+					carrier: {
+						iataCode: 'TK',
+						name: 'TURKISH AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/TK.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/TK.png',
+					},
 				},
 			],
 		},
 		{
-			origin: 'AMS',
-			destination: 'PAR',
-			departure: '2019-09-12T21:00:00.000Z',
+			origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+			destination: { id: null, iataCode: 'PAR', name: 'Paris', description: null, image: null },
+			departure: '2019-07-11T21:00:00.000Z',
 			flightOffers: [
 				{
-					price: 4524.0,
+					price: 5077.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '1 h, 15 m',
+					transitDurationInWords: '0 undefined',
+					totalDurationInMinutes: 75,
+					transitDurationInMinutes: 0,
+					segments: [
 						{
-							origin: 'AMS',
-							destination: 'CDG',
-							totalDurationInWords: '1 h, 15 m',
-							transitDurationInWords: '0 undefined',
-							totalDurationInMinutes: 75,
-							transitDurationInMinutes: 0,
-							segments: [
-								{
-									origin: 'AMS',
-									destination: 'CDG',
-									departure: '2019-09-13T14:30:00+02:00',
-									return: '2019-09-13T15:45:00+02:00',
-									durationInWords: '1 h, 15 m',
-									durationInMinutes: 75,
-								},
-							],
-							carrier: {
-								iataCode: 'AF',
-								name: 'AIR FRANCE',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AF.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/AF.png',
-							},
+							origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							destination: { id: null, iataCode: 'CDG', name: 'Charles', description: null, image: null },
+							departure: '2019-07-12T17:50:00+02:00',
+							return: '2019-07-12T19:05:00+02:00',
+							durationInWords: '1 h, 15 m',
+							durationInMinutes: 75,
 						},
 					],
+					carrier: {
+						iataCode: 'KL',
+						name: 'KLM ROYAL DUTCH AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/KL.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/KL.png',
+					},
 				},
 				{
-					price: 4524.0,
+					price: 5246.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '1 h, 15 m',
+					transitDurationInWords: '0 undefined',
+					totalDurationInMinutes: 75,
+					transitDurationInMinutes: 0,
+					segments: [
 						{
-							origin: 'AMS',
-							destination: 'CDG',
-							totalDurationInWords: '1 h, 15 m',
-							transitDurationInWords: '0 undefined',
-							totalDurationInMinutes: 75,
-							transitDurationInMinutes: 0,
-							segments: [
-								{
-									origin: 'AMS',
-									destination: 'CDG',
-									departure: '2019-09-13T09:30:00+02:00',
-									return: '2019-09-13T10:45:00+02:00',
-									durationInWords: '1 h, 15 m',
-									durationInMinutes: 75,
-								},
-							],
-							carrier: {
-								iataCode: 'KL',
-								name: 'KLM ROYAL DUTCH AIRLINES',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/KL.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/KL.png',
-							},
+							origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							destination: { id: null, iataCode: 'CDG', name: 'Charles', description: null, image: null },
+							departure: '2019-07-12T17:50:00+02:00',
+							return: '2019-07-12T19:05:00+02:00',
+							durationInWords: '1 h, 15 m',
+							durationInMinutes: 75,
 						},
 					],
+					carrier: {
+						iataCode: 'AF',
+						name: 'AIR FRANCE',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AF.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/AF.png',
+					},
 				},
 			],
 		},
 		{
-			origin: 'AMS',
-			destination: 'CAI',
-			departure: '2019-09-19T21:00:00.000Z',
+			origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+			destination: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+			departure: '2019-07-18T21:00:00.000Z',
 			flightOffers: [
 				{
-					price: 6586.0,
+					price: 4890.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '8 h, 15 m',
+					transitDurationInWords: '3 h, 5 m',
+					totalDurationInMinutes: 495,
+					transitDurationInMinutes: 185,
+					segments: [
 						{
-							origin: 'AMS',
-							destination: 'CAI',
-							totalDurationInWords: '8 h, 15 m',
-							transitDurationInWords: '3 h, 5 m',
-							totalDurationInMinutes: 495,
-							transitDurationInMinutes: 185,
-							segments: [
-								{
-									origin: 'AMS',
-									destination: 'ATH',
-									departure: '2019-09-20T16:35:00+02:00',
-									return: '2019-09-20T20:50:00+03:00',
-									durationInWords: '3 h, 15 m',
-									durationInMinutes: 195,
-								},
-								{
-									origin: 'ATH',
-									destination: 'CAI',
-									departure: '2019-09-20T23:55:00+03:00',
-									return: '2019-09-21T00:50:00+02:00',
-									durationInWords: '1 h, 55 m',
-									durationInMinutes: 115,
-								},
-							],
-							carrier: {
-								iataCode: 'A3',
-								name: 'AEGEAN AIRLINES',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/A3.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/A3.png',
-							},
+							origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							destination: { id: null, iataCode: 'ATH', name: 'Athens', description: null, image: null },
+							departure: '2019-07-19T16:35:00+02:00',
+							return: '2019-07-19T20:50:00+03:00',
+							durationInWords: '3 h, 15 m',
+							durationInMinutes: 195,
+						},
+						{
+							origin: { id: null, iataCode: 'ATH', name: 'Athens', description: null, image: null },
+							destination: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							departure: '2019-07-19T23:55:00+03:00',
+							return: '2019-07-20T00:50:00+02:00',
+							durationInWords: '1 h, 55 m',
+							durationInMinutes: 115,
 						},
 					],
+					carrier: {
+						iataCode: 'A3',
+						name: 'AEGEAN AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/A3.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/A3.png',
+					},
 				},
 				{
-					price: 10626.0,
+					price: 12128.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '12 h, 25 m',
+					transitDurationInWords: '3 h, 50 m',
+					totalDurationInMinutes: 745,
+					transitDurationInMinutes: 230,
+					segments: [
 						{
-							origin: 'AMS',
-							destination: 'CAI',
-							totalDurationInWords: '8 h, 10 m',
-							transitDurationInWords: '2 h, 35 m',
-							totalDurationInMinutes: 490,
-							transitDurationInMinutes: 155,
-							segments: [
-								{
-									origin: 'AMS',
-									destination: 'FCO',
-									departure: '2019-09-20T17:30:00+02:00',
-									return: '2019-09-20T19:45:00+02:00',
-									durationInWords: '2 h, 15 m',
-									durationInMinutes: 135,
-								},
-								{
-									origin: 'FCO',
-									destination: 'CAI',
-									departure: '2019-09-20T22:20:00+02:00',
-									return: '2019-09-21T01:40:00+02:00',
-									durationInWords: '3 h, 20 m',
-									durationInMinutes: 200,
-								},
-							],
-							carrier: {
-								iataCode: 'AZ',
-								name: 'ALITALIA S.P.A. IN A.S',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AZ.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/AZ.png',
-							},
+							origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							destination: { id: null, iataCode: 'CMN', name: 'CMN name', description: null, image: null },
+							departure: '2019-07-19T18:40:00+02:00',
+							return: '2019-07-19T21:20:00+01:00',
+							durationInWords: '3 h, 40 m',
+							durationInMinutes: 220,
+						},
+						{
+							origin: { id: null, iataCode: 'CMN', name: 'CMN name', description: null, image: null },
+							destination: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							departure: '2019-07-20T01:10:00+01:00',
+							return: '2019-07-20T07:05:00+02:00',
+							durationInWords: '4 h, 55 m',
+							durationInMinutes: 295,
 						},
 					],
+					carrier: {
+						iataCode: 'AT',
+						name: 'ROYAL AIR MAROC',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/AT.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/AT.png',
+					},
 				},
 				{
-					price: 11836.0,
+					price: 12220.0,
 					currency: 'EGP',
-					flightLegs: [
+					totalDurationInWords: '7 h, 40 m',
+					transitDurationInWords: '2 h, 15 m',
+					totalDurationInMinutes: 460,
+					transitDurationInMinutes: 135,
+					segments: [
 						{
-							origin: 'AMS',
-							destination: 'CAI',
-							totalDurationInWords: '11 h, 20 m',
-							transitDurationInWords: '3 h',
-							totalDurationInMinutes: 680,
-							transitDurationInMinutes: 180,
-							segments: [
-								{
-									origin: 'AMS',
-									destination: 'SVO',
-									departure: '2019-09-20T13:15:00+02:00',
-									return: '2019-09-20T17:45:00+03:00',
-									durationInWords: '3 h, 30 m',
-									durationInMinutes: 210,
-								},
-								{
-									origin: 'SVO',
-									destination: 'CAI',
-									departure: '2019-09-20T20:45:00+03:00',
-									return: '2019-09-21T00:35:00+02:00',
-									durationInWords: '4 h, 50 m',
-									durationInMinutes: 290,
-								},
-							],
-							carrier: {
-								iataCode: 'SU',
-								name: 'AEROFLOT',
-								squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/SU.png',
-								wideLogo: 'https://www.skyscanner.net/images/airlines/small/SU.png',
-							},
+							origin: { id: null, iataCode: 'AMS', name: 'Amsterdam', description: null, image: null },
+							destination: { id: null, iataCode: 'VIE', name: 'VIE name', description: null, image: null },
+							departure: '2019-07-19T07:00:00+02:00',
+							return: '2019-07-19T08:55:00+02:00',
+							durationInWords: '1 h, 55 m',
+							durationInMinutes: 115,
+						},
+						{
+							origin: { id: null, iataCode: 'VIE', name: 'VIE name', description: null, image: null },
+							destination: { id: null, iataCode: 'CAI', name: 'Cairo', description: null, image: null },
+							departure: '2019-07-19T11:10:00+02:00',
+							return: '2019-07-19T14:40:00+02:00',
+							durationInWords: '3 h, 30 m',
+							durationInMinutes: 210,
 						},
 					],
+					carrier: {
+						iataCode: 'OS',
+						name: 'AUSTRIAN AIRLINES',
+						squareLogo: 'https://www.gstatic.com/flights/airline_logos/70px/OS.png',
+						wideLogo: 'https://www.skyscanner.net/images/airlines/small/OS.png',
+					},
 				},
 			],
 		},
@@ -328,8 +279,7 @@ export class FlightsService {
 	getFlights(): Observable<Array<Flight>> {
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-			// departure: (this.requestService.getProperty('departureDate') as Moment).toISOString(),
-			departure: '2019-07-10',
+			departure: (this.requestService.getProperty('departureDate') as Moment).format('YYYY-MM-DD'),
 			citiesSequence: [
 				{
 					countryIso: 'NED',
@@ -342,17 +292,12 @@ export class FlightsService {
 					numberOfNights: 7,
 				},
 			],
-			// citiesSequence: [],
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 
-		return this.http.post<any>(`${this.endPoint}/search`, flightRequest).pipe(
-			map(response => {
-				console.log(response);
-				return this.flights;
-			})
-		);
+		// return this.http.post<Array<Flight>>(`${this.endPoint}/search`, flightRequest);
+		return of(this.flights).pipe(delay(2000));
 	}
 }

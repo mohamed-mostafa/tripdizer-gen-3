@@ -1,6 +1,9 @@
+import { City } from '../../city.model';
+import { Carrier } from './carrier.model';
+
 export class Flight {
-	origin: string;
-	destination: string;
+	origin: City;
+	destination: City;
 	departure: string;
 	flightOffers: Array<FlightOffer>;
 }
@@ -8,12 +11,6 @@ export class Flight {
 export class FlightOffer {
 	price: number;
 	currency: string;
-	flightLegs: Array<FlightLeg>;
-}
-
-export class FlightLeg {
-	origin: string;
-	destination: string;
 	totalDurationInWords: string;
 	transitDurationInWords: string;
 	totalDurationInMinutes: number;
@@ -23,19 +20,12 @@ export class FlightLeg {
 }
 
 export class Segment {
-	origin: string;
-	destination: string;
+	origin: City;
+	destination: City;
 	departure: string;
 	return: string;
 	durationInWords: string;
 	durationInMinutes: number;
-}
-
-export class Carrier {
-	iataCode: string;
-	name: string;
-	squareLogo: string;
-	wideLogo: string;
 }
 
 export class FlightRequest {
