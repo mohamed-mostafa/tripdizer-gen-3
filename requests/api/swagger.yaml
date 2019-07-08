@@ -871,16 +871,6 @@ definitions:
         type: string
         description: 'The URL to download the package pdf from google drive'
 
-securityDefinitions:
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: authentication  
-  OAuth2:
-    type: oauth2
-    authorizationUrl: http://swagger.io/api/oauth/dialog
-    flow: implicit     
-
 # Added by API Auto Mocking Plugin
 host: tripdizer-requests-dot-tripdizer-dev.appspot.com
 basePath: /requests/1.0.0
