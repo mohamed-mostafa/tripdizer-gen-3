@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HotelsService } from './hotels.service';
 
 @Component({
-	selector: 'c-app-tab-accommodation',
+	selector: 'c-estimated-cost-accommodation',
 	templateUrl: './tab-accommodation.component.html',
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
