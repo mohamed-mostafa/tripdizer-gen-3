@@ -4,6 +4,8 @@
 'use strict';
 
 const mysql = require('mysql');
+const {Firestore} = require('@google-cloud/firestore');
+const firestore = new Firestore({ projectId: 'tripdizer-dev', keyFilename: './tripdizer-dev-da0d594753eb.json'});
 
 const options = {
 	user: process.env.MYSQL_USER || 'root',
@@ -25,4 +27,8 @@ var createConnection = function() {
 	return connection;
 };
 
+var getFireStoreClient = function() {
+	return firestore;
+}
 exports.createConnection = createConnection;
+exports.getFireStoreClient = getFireStoreClient;

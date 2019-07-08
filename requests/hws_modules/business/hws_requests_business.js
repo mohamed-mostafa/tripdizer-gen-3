@@ -4,6 +4,10 @@
  */
 
 var requestsDao = require('../dataaccess/hws_requests_dao.js');
+let transportationDao = require('../dataaccess/hws_request_transporation_dao');
+let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
+let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
+let citiesDao = require('../dataaccess/hws_request_cities_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
 var Promise = require('promise');
 var httpRequest = require('request');
@@ -75,8 +79,11 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	requestsDao.createNewRequest(
 		request,
 		function(request) {
-			// create the request
-
+			// request is created. now persist the cities/accomodation/transportation/attractions
+			accomodationDao.save(request.id, request.accomodationOffers);
+			transportationDao.save(request.id, request.transportationOffers);
+			citiesDao.save(request.id, request.cities);
+			attractionsDao.save(request.id, request.attractions);
 			getPackage(
 				request.id,
 				null,
@@ -556,11 +563,42 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 	);
 }
 
+function getRequestById (requestId, onSuccess, onFailure) {
+	requestsDao.getRequestById(requestId, async function(request) {
+		try {
+			var accomodationOffers = await accomodationDao.get(requestId);
+			if (accomodationOffers.exists)
+				request.accomodationOffers = accomodationOffers.data(); 
+			
+			var transportationOffers = await transportationDao.get(requestId); 
+			if (transportationOffers.exists)
+				request.transportationOffers = transportationOffers.data();
+				
+			var cities = await citiesDao.get(requestId);
+			if (cities.exists)
+				request.cities = cities.data();;
+				
+			var attractions = await attractionsDao.get(requestId);
+			if (attractions.exists)
+				request.attractions = attractions.data();;
+	
+			onSuccess(request);
+		} catch (err) {
+			console.log("Failed to retrieve data for request by id: " + requestId);
+			console.log(err);
+			onFailure(err);
+		}
+	}, function(err) {
+		console.log("Failed to retrieve a request by Id: " + requestId);
+		console.log(err);
+		onFailure(err);
+	})
+}
+
 exports.placeRequest = placeRequest;
-exports.getRequestById = requestsDao.getRequestById;
+exports.getRequestById = getRequestById;
 exports.assignRequestToUser = requestsDao.assignRequestToUser;
 exports.updateRequest = updateRequest;
-
 exports.getRequestSummaries = requestsDao.getRequestSummariesByStatus;
 exports.getRequestSummariesCount = requestsDao.getRequestSummariesCountByStatus;
 exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;

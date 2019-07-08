@@ -394,7 +394,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 									// if an error is thrown, end the connection and throw an error
 									if (itemsErr) {
 										console.log(
-											'An error occurred while trying to find the question answers of request with id ' + requestId
+											'An error occurred while trying to find the interests of request with id ' + requestId
 										);
 										console.log(itemsErr);
 										connection.end();

@@ -9,12 +9,12 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:8084"
-# host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+# host: "localhost:8084"
+host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
 basePath: "/package-options/1.0.0"
 schemes:
-# - "https"
-- "http"
+- "https"
+# - "http"
 paths:
   /countryCities/search:
     post:
@@ -460,14 +460,17 @@ definitions:
         type: "number"
         description: "The number of adults in the trip"
         minimum: 1
+        example: 1
       numberOfChildren:
         type: "number"
         description: "The number of children in the trip"
         minimum: 0
+        example: 0
       numberOfInfants:
         type: "number"
         description: "The number of infants in the trip"
         minimum: 0
+        example: 0
   accomodationOfferOptionssearch_cities:
     required:
     - "cityIata"
