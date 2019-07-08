@@ -1,0 +1,21 @@
+$bullet-margin: 2rem;
+.bullet {
+	.w-text {
+		width: $bullet-margin;
+		line-height: $bullet-margin;
+		border-radius: 50%;
+	}
+	.wo-text {
+		width: $bullet-margin / 2;
+		height: $bullet-margin / 2;
+		margin: calc(#{$bullet-margin} / 4);
+		border-radius: 50%;
+	}
+}
+.city-name {
+	line-height: $bullet-margin;
+}
+.icon {
+	width: $bullet-margin;
+	line-height: $bullet-margin;
+}

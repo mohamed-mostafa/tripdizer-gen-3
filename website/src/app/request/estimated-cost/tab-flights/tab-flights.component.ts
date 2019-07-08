@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { FlightsService } from './flights.service';
-import { Observable } from 'rxjs';
 import { Flight } from './flight.model';
+import { FlightsService } from './flights.service';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -9,9 +8,13 @@ import { Flight } from './flight.model';
 	styleUrls: ['./tab-flights.component.scss'],
 })
 export class TabFlightsComponent {
-	flights: Observable<Array<Flight>>;
+	flights: Array<Flight>;
+	flightPaths: Array<{ lat: number; lng: number }>;
 
 	constructor(service: FlightsService) {
-		this.flights = service.getFlights();
+		service.getFlights().subscribe(flights => {
+			this.flights = flights;
+			this.flightPaths = flights.map(flight => ({ lat: flight.origin.latitude, lng: flight.origin.longitude }));
+		});
 	}
 }

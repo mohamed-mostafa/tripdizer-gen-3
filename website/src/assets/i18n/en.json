@@ -162,7 +162,9 @@
 			},
 			"tab_flights": {
 				"title": "Flights",
-				"view_edit": "View / edit route"
+				"view_edit": "View / edit route",
+				"change_city": "Change City",
+				"reorder_route": "Reorder Route"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

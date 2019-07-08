@@ -6,7 +6,7 @@
 			formControlName="travelingFrom"
 			[placeholder]="'request.traveling_from.traveling_from' | translate"
 			[compareWith]="compareObjects"
-			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			class="text-yellow text-uppercase font-weight-bold"
 		>
 			<mat-option *ngFor="let airport of ('request.traveling_from.airports' | translate)" [value]="airport">{{
 				airport.name
