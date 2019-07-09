@@ -1,4 +1,4 @@
-import { City } from '../../city.model';
+import { City } from '../../../shared/models/city.model';
 import { Carrier } from './carrier.model';
 
 export class Flight {

@@ -1,17 +1,17 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { Gender } from '../shared/models/gender.enum';
 import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
-import { Gender } from './gender.enum';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
-import { TravelingFrom } from './traveling-from/traveling-from.model';
 import { TravelHistory } from './travel-history.enum';
+import { TravelingFrom } from './traveling-from/traveling-from.model';
 
 export class Request extends CommonFunctions {
 	private _requestType: RequestType;

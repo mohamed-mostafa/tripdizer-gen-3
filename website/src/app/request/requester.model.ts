@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { Gender } from './gender.enum';
+import { Gender } from '../shared/models/gender.enum';
 
 export interface IRequester {
 	name: string;

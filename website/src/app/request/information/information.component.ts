@@ -4,9 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { CustomValidators } from 'src/app/shared/utils';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-import { DropDownItem } from '../../shared/models/drop-down-item.model';
-import { Gender } from '../gender.enum';
-import { TravelHistory } from '../travel-history.enum';
 
 @Component({
 	selector: 'c-request-information',
