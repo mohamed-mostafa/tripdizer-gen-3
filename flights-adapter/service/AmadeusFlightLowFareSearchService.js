@@ -3,6 +3,8 @@
 var Amadeus = require('amadeus');
 var dateFormat = require('dateformat');
 const humanizeDuration = require('humanize-duration');
+const retry = require('async-retry')
+
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
   languages: {
@@ -48,63 +50,89 @@ exports.searchFlights = function(origin,destination,departure,numberOfAdults,_re
 		children: numberOfChildren
 	};
 	if (_return == null) delete amadeusRequest.returnDate;
-	amadeus.shopping.flightOffers.get(amadeusRequest).then(response => {
-	var flightOffers = [];
-	var offers = response.result.data; // array of offers
-	var carriersMap = response.result.dictionaries.carriers;
-	var locationsMap = response.result.dictionaries.locations;
-	try {
-		offers.forEach (offer => {
-			offer.offerItems.forEach(offerItem => { // usually will be one item
-				var flightOffer = {
-					price: offerItem.price.total,
-					currency: amadeusRequest.currency,
-					flightLegs: []
-				}
-				offerItem.services.forEach (service => {
-					// each service is a flight leg
-					var flightDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
-					var transitDurationInMillis = calculateTotalTransit(service.segments);
-					var flightLeg = {
-						origin: service.segments[0].flightSegment.departure.iataCode,
-						destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,
-						totalDurationInWords: shortEnglishHumanizer(flightDurationInMillis),
-						transitDurationInWords: shortEnglishHumanizer(transitDurationInMillis),
-						totalDurationInMinutes: flightDurationInMillis / (1000 * 60 ),
-						transitDurationInMinutes: transitDurationInMillis / (1000 * 60 ),
-						segments: []
-					};
-					flightLeg.carrier = {
-						iataCode: service.segments[0].flightSegment.carrierCode, 
-						name: carriersMap[service.segments[0].flightSegment.carrierCode]
-					};
 
-					service.segments.forEach(segment => {
-						var segmentDurationInMillis = new Date(segment.flightSegment.arrival.at).getTime() - new Date(segment.flightSegment.departure.at).getTime();
-						var flightLegSegment = {
-							origin: segment.flightSegment.departure.iataCode,
-							destination: segment.flightSegment.arrival.iataCode,
-							departure: segment.flightSegment.departure.at,
-							"return": segment.flightSegment.arrival.at,
-							durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
-							durationInMinutes: segmentDurationInMillis / (1000 * 60)
-						}
-						flightLeg.segments.push(flightLegSegment);
+	faultTolerantAmadeusFlighLowFareSearch(amadeusRequest).then(response => {
+		var flightOffers = [];
+		var offers = response.result.data; // array of offers
+		var carriersMap = response.result.dictionaries.carriers;
+		var locationsMap = response.result.dictionaries.locations;
+		try {
+			offers.forEach (offer => {
+				offer.offerItems.forEach(offerItem => { // usually will be one item
+					var flightOffer = {
+						price: offerItem.price.total,
+						currency: amadeusRequest.currency,
+						flightLegs: []
+					}
+					offerItem.services.forEach (service => {
+						// each service is a flight leg
+						var flightDurationInMillis = new Date(service.segments[service.segments.length -1].flightSegment.arrival.at).getTime() - new Date(service.segments[0].flightSegment.departure.at).getTime();
+						var transitDurationInMillis = calculateTotalTransit(service.segments);
+						var flightLeg = {
+							origin: service.segments[0].flightSegment.departure.iataCode,
+							destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,
+							totalDurationInWords: shortEnglishHumanizer(flightDurationInMillis),
+							transitDurationInWords: shortEnglishHumanizer(transitDurationInMillis),
+							totalDurationInMinutes: flightDurationInMillis / (1000 * 60 ),
+							transitDurationInMinutes: transitDurationInMillis / (1000 * 60 ),
+							segments: []
+						};
+						flightLeg.carrier = {
+							iataCode: service.segments[0].flightSegment.carrierCode, 
+							name: carriersMap[service.segments[0].flightSegment.carrierCode]
+						};
+						
+						service.segments.forEach(segment => {
+							var segmentDurationInMillis = new Date(segment.flightSegment.arrival.at).getTime() - new Date(segment.flightSegment.departure.at).getTime();
+							var flightLegSegment = {
+								origin: segment.flightSegment.departure.iataCode,
+								destination: segment.flightSegment.arrival.iataCode,
+								departure: segment.flightSegment.departure.at,
+								"return": segment.flightSegment.arrival.at,
+								durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
+								durationInMinutes: segmentDurationInMillis / (1000 * 60)
+							}
+							flightLeg.segments.push(flightLegSegment);
+						});
+						flightOffer.flightLegs.push(flightLeg);
 					});
-					flightOffer.flightLegs.push(flightLeg);
+					flightOffers.push(flightOffer);
 				});
-				flightOffers.push(flightOffer);
 			});
-		});
-		flightOffers.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-	} catch (err) {
-		reject(err);
+			flightOffers.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+		} catch (err) {
+			reject(err);
 	}
 	resolve(flightOffers);
-	}).catch(responseError => {
-		reject(responseError);
-	})
-  });
+}).catch(responseError => {
+	console.log(responseError);
+	reject(responseError);
+})
+});
+}
+
+var faultTolerantAmadeusFlighLowFareSearch = function(amadeusRequest) {
+	return new Promise((resolve, reject) => {
+		var opts = {
+			retries: 10,
+			minTimeout: 50,
+			factor: 2
+		}
+		retry (async () => {
+			try {
+				console.log("Requesting flights from amadeus at: " + new Date());
+				var response = await amadeus.shopping.flightOffers.get(amadeusRequest);
+				resolve(response);
+			} catch (err) {
+				if (err.response.statusCode == 429) { // only retry in the case of TOO MANY REQUESTS error
+					console.log(err.response.statusCode  + " - Retrying ...");
+				} else {
+					console.log(err.response.statusCode  + " - Aborting");
+					reject(err);
+				}
+			}
+		}, opts);
+	});
 }
 
 var calculateTotalTransit = function(segments) {

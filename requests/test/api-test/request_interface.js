@@ -43,11 +43,15 @@ describe('public website request interface', function() {
 					{ id: 5, percentage: '91' },
 					{ id: 6, percentage: '100' },
 				],
+				transportationOffers: {name: "this is a transportation offers object"},
+				accomodationOffers: {name: "this is an accomodation offers object"},
+				cities: {name: "this is the list of cities of a request"},
+				attractions: {name: "this is the list of attractions of a request"}
 			};
 
 			chai
 				.request(serverURL)
-				.put('/website/place')
+				.put('/requests/website/place')
 				.set('Content-type', 'application/json')
 				.send({
 					request: request,
@@ -95,7 +99,7 @@ describe('public website request interface', function() {
 
 			chai
 				.request(serverURL)
-				.put('/website/place')
+				.put('/requests/website/place')
 				.set('Content-type', 'application/json')
 				.send({
 					request: request,
@@ -143,11 +147,15 @@ describe('public website request interface', function() {
 					{ id: 5, percentage: '91' },
 					{ id: 6, percentage: '100' },
 				],
+				transportationOffers: {name: "this is a transportation offers object"},
+				accomodationOffers: {name: "this is an accomodation offers object"},
+				cities: {name: "this is the list of cities of a request"},
+				attractions: {name: "this is the list of attractions of a request"}
 			};
 
 			chai
 				.request(serverURL)
-				.put('/website/place')
+				.put('/requests/website/place')
 				.set('Content-type', 'application/json')
 				.send({
 					request: request,

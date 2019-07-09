@@ -6,10 +6,10 @@
  * By passing in the appropriate options, you can search for available activities in the system 
  *
  * language String 
- * activitiesSearchRequest ActivitiesSearchRequest the client's choosen cities IATA codes
- * returns activityOffers
+ * attractionsSearchRequest AttractionsSearchRequest the client's choosen cities IATA codes
+ * returns attractionOffers
  **/
-exports.activitiesSearchActivities = function(language,activitiesSearchRequest) {
+exports.searchAttractions = function(language,attractionsSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";

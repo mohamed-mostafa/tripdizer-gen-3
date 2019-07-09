@@ -3,7 +3,7 @@ let moment = require('moment');
 let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8*60;
-const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8080/flights/1.0.0/flights'
+const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8085/flights/1.0.0/flights'
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 /**
@@ -36,7 +36,7 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
     
             // retrieve the leg from the last city back to the origin
             departureMoment = departureMoment.add(transportationSearchRequest.citiesSequence[transportationSearchRequest.citiesSequence.length - 1].numberOfNights, 'Days');
-            let lastCityToOriginLeg = await createFlightLegBetweenOriginAndDestination(transportationSearchRequest.citiesSequence[0].cityIata, transportationSearchRequest.origin, departureMoment, transportationSearchRequest.numberOfAdults, transportationSearchRequest.numberOfChildren, transportationSearchRequest.numberOfInfants, true);
+            let lastCityToOriginLeg = await createFlightLegBetweenOriginAndDestination(transportationSearchRequest.citiesSequence[transportationSearchRequest.citiesSequence.length - 1].cityIata, transportationSearchRequest.origin, departureMoment, transportationSearchRequest.numberOfAdults, transportationSearchRequest.numberOfChildren, transportationSearchRequest.numberOfInfants, true);
             transportationLegs.push(lastCityToOriginLeg);
     
             if (transportationLegs) {
@@ -67,7 +67,7 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
                 if (err) {
                     reject(err);
                 } else {
-                    let legFlightOffers = body;
+                    let legFlightOffers = body; // offers coming form flights adapter
                     if (isInternationalLeg) {
                         let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
                         transportationLeg.flightOffers = filteredLegFlightOffers;
@@ -97,17 +97,17 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
         // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
         let airlineFound = false;
         for (let j = 0; j < filteredflightOffers.length; j++) {
-            if (currentOffer.flightLegs[0].carrier.iataCode == filteredflightOffers[j].flightLegs[0].carrier.iataCode) {
+            // compare the carriers from the flights-adapter offer with the carrier in the package-options offer
+            if (currentOffer.flightLegs[0].carrier.iataCode == filteredflightOffers[j].carrier.iataCode) {
                 airlineFound = true;
                 break;
             }
         }
         if (!airlineFound) {
             if (currentOffer.flightLegs[0].transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES ) { // also transit has to be less than a limit
-                // set the logos to the carrier before adding it
-                currentOffer.flightLegs[0].carrier.squareLogo = SQUARE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
-                currentOffer.flightLegs[0].carrier.wideLogo = WIDE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
-                filteredflightOffers.push(currentOffer);
+                // create a new offer in package-options format
+                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer);
+                filteredflightOffers.push(newOffer);
             }
         }
 
@@ -129,23 +129,42 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
       // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
       let airlineFound = false;
       for (let j = 0; j < filteredflightOffers.length; j++) {
-          if (currentOffer.flightLegs[0].carrier.iataCode == filteredflightOffers[j].flightLegs[0].carrier.iataCode) {
+          // compare the carriers from the flights-adapter offer with the carrier in the package-options offer
+          if (currentOffer.flightLegs[0].carrier.iataCode == filteredflightOffers[j].carrier.iataCode) {
               airlineFound = true;
               break;
           }
       }
       if (!airlineFound) {
           if (currentOffer.flightLegs[0].transitDurationInMinutes == 0 ) { // Internal flights should be direct
-              // set the logos to the carrier before adding it
-              currentOffer.flightLegs[0].carrier.squareLogo = SQUARE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
-              currentOffer.flightLegs[0].carrier.wideLogo = WIDE_LOGOS_ROOT + currentOffer.flightLegs[0].carrier.iataCode + ".png";
-              filteredflightOffers.push(currentOffer);
+                // create a new offer in package-options format
+                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer);
+                filteredflightOffers.push(newOffer);
           }
       }
-
       if (filteredflightOffers.length == MAX_NUMBER_OF_OFFERS_PER_LEG) {
           break;
       }
     }
     return filteredflightOffers;
+}
+
+function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
+    let newOffer = {
+        price: flightOffer.price,
+        currency: flightOffer.currency,
+        totalDurationInWords: flightOffer.totalDurationInWords,
+        transitDurationInWords: flightOffer.transitDurationInWords,
+        totalDurationInMinutes: flightOffer.totalDurationInMinutes,
+        transitDurationInMinutes: flightOffer.transitDurationInMinutes,
+        segments: flightOffer.flightLegs[0].segments,
+        carrier: {
+            iataCode: flightOffer.flightLegs[0].carrier.iataCode,
+            name: flightOffer.flightLegs[0].carrier.name,
+            displayName: flightOffer.flightLegs[0].carrier.displayName,
+            squareLogo: SQUARE_LOGOS_ROOT + flightOffer.flightLegs[0].carrier.iataCode + ".png",
+            wideLogo: WIDE_LOGOS_ROOT + flightOffer.flightLegs[0].carrier.iataCode + ".png"
+        }
+    };
+    return newOffer
 }

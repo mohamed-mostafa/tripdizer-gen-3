@@ -1,13 +1,15 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Default = require('../service/DefaultService');
 var transportationSearchService = require('../service/TransportationService');
+var citiesSearchService = require('../service/citiesService');
+var accomodationSearchService = require('../service/AccomodationService');
+var attractionsSearchService = require('../service/AttractionsService');
 
-module.exports.activitiesSearchActivities = function activitiesSearchActivities (req, res, next) {
+module.exports.searchAttractions = function searchAttractions (req, res, next) {
   var language = req.swagger.params['language'].value;
-  var activitiesSearchRequest = req.swagger.params['activitiesSearchRequest'].value;
-  Default.activitiesSearchActivities(language,activitiesSearchRequest)
+  var attractionsSearchRequest = req.swagger.params['attractionsSearchRequest'].value;
+  attractionsSearchService.searchAttractions(language,attractionsSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -19,7 +21,7 @@ module.exports.activitiesSearchActivities = function activitiesSearchActivities 
 module.exports.searchAccomodations = function searchAccomodations (req, res, next) {
   var language = req.swagger.params['language'].value;
   var accomomdationSearchRequest = req.swagger.params['accomomdationSearchRequest'].value;
-  Default.searchAccomodations(language,accomomdationSearchRequest)
+  accomodationSearchService.searchAccomodations(language,accomomdationSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -31,7 +33,7 @@ module.exports.searchAccomodations = function searchAccomodations (req, res, nex
 module.exports.searchCities = function searchCities (req, res, next) {
   var language = req.swagger.params['language'].value;
   var citiesSearchRequest = req.swagger.params['citiesSearchRequest'].value;
-  Default.searchCities(language,citiesSearchRequest)
+  citiesSearchService.searchCities(language,citiesSearchRequest)
     .then(function (response) {
       utils.writeJson(res, response);
     })

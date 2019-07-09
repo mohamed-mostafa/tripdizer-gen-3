@@ -19,6 +19,7 @@ var start = function() {
 	var countriesInterface = require('./hws_countries_interface.js');
 	var citiesInterface = require('./hws_cities_interface.js');
 	var hotelsInterface = require('./hws_hotels_interface.js');
+	var attractionsInterface = require('./hws_attractions_interface.js');
 	var itinerariesInterface = require('./hws_itineraries_interface.js');
 	var purposesInterface = require('./hws_purposes_interface.js');
 	var interestsInterface = require('./hws_interests_interface.js');
@@ -52,24 +53,30 @@ var start = function() {
 	router.post('/user', auth.isAuthenticatedAsAdmin, usersInterface.updateUser);
 
 	//		countries
-	router.get('/countries', auth.isAuthenticated, countriesInterface.getAll);
-	router.get('/country/:id', auth.isAuthenticated, countriesInterface.getById);
+	router.get('/countries', countriesInterface.getAll);
+	router.get('/country/:id', countriesInterface.getById);
 	router.put('/country', auth.isAuthenticated, countriesInterface.create);
 	router.post('/country', auth.isAuthenticated, countriesInterface.update);
 
 	//		cities
-	router.get('/cities/:countryId', auth.isAuthenticated, citiesInterface.getAllCitiesByCountry);
-	router.get('/cities', auth.isAuthenticated, citiesInterface.getAll);
+	router.get('/cities/:countryId', citiesInterface.getAllCitiesByCountry);
+	router.get('/cities', citiesInterface.getAll);
 	router.get('/citiesInIternaries', auth.isAuthenticated, citiesInterface.getAllCitiesInIternaries);
-	router.get('/city/:id', auth.isAuthenticated, citiesInterface.getById);
+	router.get('/city/:id', citiesInterface.getById);
 	router.put('/city', auth.isAuthenticated, citiesInterface.create);
 	router.post('/city', auth.isAuthenticated, citiesInterface.update);
 
 	//		hotels
-	router.get('/hotels/:cityId', auth.isAuthenticated, hotelsInterface.getAllByCity);
-	router.get('/hotel/:id', auth.isAuthenticated, hotelsInterface.getById);
+	router.get('/hotels/:cityId', hotelsInterface.getAllByCity);
+	router.get('/hotel/:id', hotelsInterface.getById);
 	router.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
 	router.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
+
+	//		attractions
+	router.get('/attractions/:cityId', attractionsInterface.getAllAttractionsByCity);
+	router.get('/attraction/:id', attractionsInterface.getById);
+	router.put('/attractsion', auth.isAuthenticated, attractionsInterface.create);
+	router.post('/attraction', auth.isAuthenticated, attractionsInterface.update);
 
 	//		itineraries
 	router.get('/itineraries', itinerariesInterface.getAll);
