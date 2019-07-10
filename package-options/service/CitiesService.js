@@ -1,5 +1,5 @@
 let httpRequest = require('request');
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
 
 /**
  * retrieve options of cities for a package
@@ -42,7 +42,7 @@ exports.searchCities = function(language,citiesSearchRequest) {
 
 function getCitiesOfCountry(countryIsoCode) {
     return new Promise(function(resolve, reject) {
-        var countryCitiesUrl = MASTER_DATA_ENDPOINT + "/master-data/cities/" + countryIsoCode;
+        var countryCitiesUrl = MASTER_DATA_ENDPOINT + "/cities/" + countryIsoCode;
 
         httpRequest.get({url: countryCitiesUrl, json: true}, function(error, response, cities) {
                 if (error) {

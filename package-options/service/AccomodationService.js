@@ -1,7 +1,7 @@
 let httpRequest = require('request');
 let moment = require('moment');
 
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
 const MAX_NUMBER_OF_HOTELS_PER_CITY = 3;
 
 /**
@@ -80,7 +80,7 @@ exports.searchAccomodations = function(language,accomomdationSearchRequest) {
 
 function getHotelsOfCity(cityIata) {
     return new Promise(function(resolve, reject) {
-        var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/master-data/hotels/" + cityIata;
+        var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/hotels/" + cityIata;
 
         httpRequest.get({url: cityHotelsUrl, json: true}, function(error, response, hotels) {
                 if (error) {
@@ -97,7 +97,7 @@ function getHotelsOfCity(cityIata) {
 
 function getCityByIata(cityIata) {
     return new Promise(function(resolve, reject) {
-        var cityUrl = MASTER_DATA_ENDPOINT + "/master-data/city/" + cityIata;
+        var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
         httpRequest.get({url: cityUrl, json: true}, function(error, response, city) {
                 if (error) {

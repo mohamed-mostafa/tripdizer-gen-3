@@ -1,6 +1,6 @@
 let httpRequest = require('request');
 
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
 
 /**
  * retrieve options of activities of a city for a package
@@ -66,7 +66,7 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
 
 function getAttractionsOfCity(cityIata) {
     return new Promise(function(resolve, reject) {
-        var cityAttractionsUrl = MASTER_DATA_ENDPOINT + "/master-data/attractions/" + cityIata;
+        var cityAttractionsUrl = MASTER_DATA_ENDPOINT + "/attractions/" + cityIata;
 
         httpRequest.get({url: cityAttractionsUrl, json: true}, function(error, response, attractions) {
                 if (error) {
@@ -83,7 +83,7 @@ function getAttractionsOfCity(cityIata) {
 
 function getCityByIata(cityIata) {
     return new Promise(function(resolve, reject) {
-        var cityUrl = MASTER_DATA_ENDPOINT + "/master-data/city/" + cityIata;
+        var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
         httpRequest.get({url: cityUrl, json: true}, function(error, response, city) {
                 if (error) {
