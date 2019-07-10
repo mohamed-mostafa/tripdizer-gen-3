@@ -1,9 +1,9 @@
 let request = require('request');
 let moment = require('moment');
-let errorPayloadCreator = require('../utils/writer.js');
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8*60;
-const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8085/flights/1.0.0/flights'
+const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http://localhost:8085/flights/1.0.0/flights';
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data';
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 /**
@@ -52,13 +52,15 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
   }
 
   function createFlightLegBetweenOriginAndDestination(origin, destination, departure, numberOfAdults, numberOfChildren, numberOfInfants, isInternationalLeg) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(async function(resolve, reject) {
         try {
-            let transportationLeg = {origin: origin, destination: destination, departure: departure.toISOString()};
+            let originCity = await getCityByIata(origin);
+            let destinationCity = await getCityByIata(destination);
+            let transportationLeg = {origin: originCity, destination: destinationCity, departure: departure.toISOString()};
             let legSearchRequest = {
                 departure: transportationLeg.departure,
-                origin: transportationLeg.origin,
-                destination: transportationLeg.destination,
+                origin: transportationLeg.origin.iataCode,
+                destination: transportationLeg.destination.iataCode,
                 numberOfAdults: numberOfAdults,
                 numberOfChildren: numberOfChildren,
                 numberOfInfants: numberOfInfants
@@ -168,3 +170,25 @@ function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
     };
     return newOffer
 }
+
+function getCityByIata(cityIata, language) {
+    return new Promise(function(resolve, reject) {
+        var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
+
+        request.get({url: cityUrl, json: true}, function(error, response, city) {
+                if (error) {
+                    reject(error);
+                } else if (response.statusCode != 200) {
+                    reject(response.statusMessage);
+                } else {
+                    resolve({
+                        iataCode: city != null ? city.iataCode : cityIata,
+                        name: city != null ? (language == 'ar' ? city.arName : city.enName) : null,
+                        latitude: city != null ? city.lat : null,
+                        longitude: city != null ? city.lng : null,
+                    });
+                }
+            }
+        );
+    })
+};
