@@ -1,3 +1,4 @@
+import { City } from './city.model';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CitiesService } from './cities.service';
@@ -8,7 +9,7 @@ import { CitiesService } from './cities.service';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
-	cities: Observable<Array<any>>;
+	cities: Observable<Array<City>>;
 
 	constructor(service: CitiesService) {
 		this.cities = service.getCities();

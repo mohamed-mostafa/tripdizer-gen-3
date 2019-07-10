@@ -171,6 +171,11 @@
 				"choose_hotel": "عرض واختيار الفنادق",
 				"select": "اختيار",
 				"total_price": "إجمالى السعر"
+			},
+			"summary": {
+				"view_details": "إظهار تفاصيل الرحلة",
+				"accommodation": "الإقامة",
+				"activities": "الأنشطة"
 			}
 		},
 		"form_layout": {

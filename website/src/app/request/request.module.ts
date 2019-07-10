@@ -21,6 +21,7 @@ import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
 import { TabAccommodationComponent } from './estimated-cost/tab-accommodation/tab-accommodation.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
 	imports: [
@@ -50,6 +51,7 @@ import { TabAccommodationComponent } from './estimated-cost/tab-accommodation/ta
 		TabAccommodationComponent,
 		FlightRowComponent,
 		FlightOptionsComponent,
+		SummaryComponent,
 	],
 })
 export class RequestModule {}

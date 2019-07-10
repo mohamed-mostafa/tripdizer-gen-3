@@ -171,6 +171,11 @@
 				"choose_hotel": "View and choose your hotels",
 				"select": "Select",
 				"total_price": "Total price"
+			},
+			"summary": {
+				"view_details": "View details for your trip",
+				"accommodation": "Accommodation",
+				"activities": "Activities"
 			}
 		},
 		"form_layout": {
