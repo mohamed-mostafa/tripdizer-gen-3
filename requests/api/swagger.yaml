@@ -10,7 +10,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
-  /dashboard/place:
+  /requests/dashboard/place:
     put:
       tags:
         - Place Requests
@@ -29,7 +29,7 @@ paths:
           description: Successful execution
           schema:
             $ref: '#/definitions/dashboardRequest'
-  /status:
+  /requests/status:
     post:
       tags:
         - Modify Requests
@@ -52,7 +52,7 @@ paths:
       responses:
         '200':
           description: Successful Execution - No response body expected
-  /statuses/send-mails:
+  /requests/statuses/send-mails:
     post:
       tags:
         - Traveler Emails
@@ -99,7 +99,7 @@ paths:
       responses:
         '200':
           description: Successful execution
-  /statuses/count:
+  /requests/statuses/count:
     get:
       tags:
         - Query Requests
@@ -128,7 +128,7 @@ paths:
                 type: number
               numberOfTravelers:
                 type: number
-  /:
+  /requests/:
     put:
       tags:
         - Modify Requests
@@ -147,7 +147,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /send-package:
+  /requests/send-package:
     post:
       tags:
         - Request Packages Generation
@@ -174,7 +174,7 @@ paths:
                 enum:
                 - 'true'
                 - 'false'
-  /{requestId}:
+  /requests/{requestId}:
     get:
       tags:
         - Query Requests
@@ -190,7 +190,7 @@ paths:
           description: Successful execution
           schema:
             $ref: '#/definitions/retrievedRequest'
-  /statuses/summaries:
+  /requests/statuses/summaries:
     get:
       tags:
         - Query Requests
@@ -221,7 +221,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/retrievedRequest'
-  /website/place:
+  /requests/website/place:
     put:
       tags:
         - Place Requests
@@ -241,7 +241,7 @@ paths:
           description: Auto generated using Swagger Inspector
           schema:
             $ref: '#/definitions/websiteRequest'
-  /package/{requestId}:
+  /requests/package/{requestId}:
     get:
       tags:
         - Request Packages Generation
@@ -273,7 +273,7 @@ paths:
               pdfDownloadUrl:
                 type: string
                 description: 'The download url of the pdf document on google drive'
-  /assign:
+  /requests/assign:
     post:
       tags:
         - Modify Requests
@@ -296,7 +296,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /toggle-options:
+  /requests/toggle-options:
     put:
       tags:
         - Modify Requests
@@ -320,7 +320,7 @@ paths:
       responses:
         '200':
           description: Successful execution - No response body expected
-  /statuses/emails:
+  /requests/statuses/emails:
     get:
       tags:
         - Traveler Emails

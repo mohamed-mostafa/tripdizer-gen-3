@@ -2,7 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var transportationSearchService = require('../service/TransportationService');
-var citiesSearchService = require('../service/citiesService');
+var citiesSearchService = require('../service/CitiesService');
 var accomodationSearchService = require('../service/AccomodationService');
 var attractionsSearchService = require('../service/AttractionsService');
 
