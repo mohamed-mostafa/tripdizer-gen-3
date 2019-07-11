@@ -75,7 +75,7 @@ var start = function() {
 	//		attractions
 	router.get('/attractions/:cityId', attractionsInterface.getAllAttractionsByCity);
 	router.get('/attraction/:id', attractionsInterface.getById);
-	router.put('/attractsion', auth.isAuthenticated, attractionsInterface.create);
+	router.put('/attraction', auth.isAuthenticated, attractionsInterface.create);
 	router.post('/attraction', auth.isAuthenticated, attractionsInterface.update);
 
 	//		itineraries

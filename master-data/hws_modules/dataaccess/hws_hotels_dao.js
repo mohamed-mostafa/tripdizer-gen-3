@@ -108,7 +108,7 @@ var create = function(hotel, onSuccess, onFailure) {
 							hotel.arName,
 							hotel.arDescription,
 							hotel.thumbnail,
-							hote.address,
+							hotel.address,
 							hotel.stars,
 							hotel.budgetCategoryId,
 						],

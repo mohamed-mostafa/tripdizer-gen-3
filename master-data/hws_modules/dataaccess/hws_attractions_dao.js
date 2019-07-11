@@ -90,7 +90,7 @@ var create = function(attraction, onSuccess, onFailure) {
 							attraction.arName,
 							attraction.arDescription,
 							attraction.enCategory,
-							attratcion.arCategory,
+							attraction.arCategory,
 							attraction.thumbnail,
 							attraction.priority,
 							attraction.cityId

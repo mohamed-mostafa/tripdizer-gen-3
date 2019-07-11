@@ -31,6 +31,7 @@
 						<th>Thumbnail</th>
 						<th>Stars</th>
 						<th>Budget Category</th>
+						<th>Address</th>
 						<th>Active</th>
 						<th></th>
 					</tr>
@@ -44,6 +45,7 @@
 						<td>{{ hotel.thumbnail }}</td>
 						<td>{{ hotel.stars }}</td>
 						<td>{{ hotel.budgetCategoryName }}</td>
+						<td>{{ hotel.address }}</td>
 						<td>{{ hotel.active }}</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(hotel.id)"> Edit</i>
@@ -166,7 +168,7 @@
 									<i class="fa fa-times-circle-o"></i>City is missing</label
 								>
 								<label for="city" ng-show="cityIdMissing==false">City</label>
-								<select disabled class="form-control" id="city" ng-model="newHotel.cityId">
+								<select class="form-control" id="city" ng-model="newHotel.cityId">
 									<option ng-repeat="city in cities" ng-value="city.id" ng-selected="newHotel.cityId == city.id">
 										{{ city.enName }}</option
 									>
@@ -176,7 +178,7 @@
 								<label class="control-label text-red" for="budgetCategory" ng-show="budgetCategoryMissing==true">
 									<i class="fa fa-times-circle-o"></i>Budget Category is missing</label
 								>
-								<label for="budgetCategory" ng-show="budgetCategoryMissing==false">countryId</label>
+								<label for="budgetCategory" ng-show="budgetCategoryMissing==false">Budget Category</label>
 								<select class="form-control" id="budgetCategory" ng-model="newHotel.budgetCategoryId">
 									<option
 										ng-repeat="budgetCategory in budgetCategories"
@@ -193,7 +195,7 @@
 								>
 								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
 								<input
-									type="text"
+									type="url"
 									required
 									class="form-control"
 									id="thumbnail"
@@ -208,11 +210,27 @@
 								>
 								<label for="stars" ng-show="starsMissing==false">Stars</label>
 								<input
-									type="text"
+									type="number"
 									class="form-control"
 									id="stars"
 									ng-model="newHotel.stars"
-									placeholder="Enter stars"
+									placeholder="Enter stars (1, 2, 3, 4 or 5)"
+									required
+									min="1"
+									max="5"
+								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="stars" ng-show="addressMissing==true">
+									<i class="fa fa-times-circle-o"></i>Address is missing</label
+								>
+								<label for="stars" ng-show="starsMissing==false">Address</label>
+								<input
+									type="text"
+									class="form-control"
+									id="address"
+									ng-model="newHotel.address"
+									placeholder="Enter Address"
 									required
 								/>
 							</div>

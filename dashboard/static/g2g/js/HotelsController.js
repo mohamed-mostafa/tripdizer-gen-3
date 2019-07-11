@@ -37,6 +37,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			$scope.thumbnailMissing = false;
 			$scope.budgetCategoryMissing = false;
 			$scope.starsMissing = false;
+			$scope.addressMissing = false;
 			$scope.activeMissing = false;
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
@@ -67,6 +68,9 @@ g2gControlCenterApplication.controller('HotelsController', [
 			if ($scope.newHotel.stars == null || $scope.newHotel.stars == '') {
 				$scope.starsMissing = true;
 			}
+			if ($scope.newHotel.address == null || $scope.newHotel.address == '') {
+				$scope.addressMissing = true;
+			}
 			return (
 				$scope.enNameMissing !== true &&
 				$scope.arNameMissing !== true &&
@@ -75,7 +79,8 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.cityIdMissing !== true &&
 				$scope.thumbnailMissing !== true &&
 				$scope.budgetCategoryMissing !== true &&
-				$scope.starsMissing !== true
+				$scope.starsMissing !== true &&
+				$scope.addressMissing != true
 			);
 		};
 		$scope.addHotel = function(close) {

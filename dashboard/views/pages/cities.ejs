@@ -94,6 +94,9 @@
 						<h4>Saving failed!</h4>
 						<p>{{ serverErrorMessage }}</p>
 					</div>
+					<label class="control-label text-red" for="dailySpendingValidationMsg" ng-show="dailySpendingMissing==true">
+						<i class="fa fa-times-circle-o"></i>Daily Spendings are not complete</label
+					>
 					<form role="form" id="newCityForm">
 						<div class="box-body">
 							<div class="overlay" ng-show="saving == true">
@@ -180,7 +183,7 @@
 												class="form-control"
 												id="iataCode"
 												ng-model="newCity.iataCode"
-												placeholder="Iata Code"
+												placeholder="Iata Code - 3 letters code, MUST BE A VALID CODE"
 												required
 											/>
 										</div>
@@ -188,8 +191,8 @@
 											<label class="control-label text-red" for="country" ng-show="countryIdMissing==true">
 												<i class="fa fa-times-circle-o"></i>Country is missing</label
 											>
-											<label for="country" ng-show="countryIdMissing==false">countryId</label>
-											<select disabled class="form-control" id="country" ng-model="newCity.countryId">
+											<label for="country" ng-show="countryIdMissing==false">Country</label>
+											<select class="form-control" id="country" ng-model="newCity.countryId">
 												<option
 													ng-repeat="country in countries"
 													ng-value="country.id"
@@ -205,7 +208,7 @@
 											>
 											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
 											<input
-												type="text"
+												type="url"
 												required
 												class="form-control"
 												id="thumbnail"
@@ -220,13 +223,15 @@
 											>
 											<label for="lat" ng-show="latMissing==false">Latitude</label>
 											<input
-												type="text"
+												type="number"
 												required
 												class="form-control"
 												id="lat"
 												ng-model="newCity.lat"
-												placeholder="Enter latitude"
+												placeholder="Enter latitude (eg: 123.123456)"
 												required
+												min="0.0"
+												max="999.999999"
 											/>
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
@@ -235,13 +240,15 @@
 											>
 											<label for="lng" ng-show="lngMissing==false">Longitude</label>
 											<input
-												type="text"
+												type="number"
 												required
 												class="form-control"
 												id="lng"
 												ng-model="newCity.lng"
-												placeholder="Enter longitude"
+												placeholder="Enter longitude (eg: 123.123456)"
 												required
+												min="0.0"
+												max="999.999999"
 											/>
 										</div>
 
@@ -251,7 +258,7 @@
 											>
 											<label for="visitOrder" ng-show="visitOrderMissing==false">Visit order</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												id="visitOrder"
 												ng-model="newCity.visitOrder"

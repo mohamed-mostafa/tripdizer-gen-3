@@ -38,6 +38,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			$scope.visitOrderMissing = false;
 			$scope.activeMissing = false;
 			$scope.serverError = false;
+			$scope.dailySpendingMissing = false;
 			$scope.serverErrorMessage = '';
 		};
 		$scope.newCityIsValid = function() {
@@ -72,6 +73,17 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			if ($scope.newCity.visitOrder == null || $scope.newCity.visitOrder == '') {
 				$scope.visitOrderMissing = true;
 			}
+			if ($scope.newCity.dailySpending != null && $scope.newCity.dailySpending.length != 0) {
+				for (var i = 0; i < $scope.budgetCategories.length; i++) {
+					if ($scope.budgetCategories[i].id !== 1) {
+						if ($scope.newCity.dailySpending[$scope.budgetCategories[i].id] == null || $scope.newCity.dailySpending[$scope.budgetCategories[i].id] == "") {
+							$scope.dailySpendingMissing = true;
+						}
+					}
+				}
+			} else {
+				$scope.dailySpendingMissing = true;
+			}
 			return (
 				$scope.enNameMissing !== true &&
 				$scope.arNameMissing !== true &&
@@ -80,6 +92,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				$scope.latMissing !== true &&
 				$scope.lngMissing !== true &&
 				$scope.countryIdMissing !== true &&
+				$scope.dailySpendingMissing !== true &&
 				$scope.thumbnailMissing !== true
 			);
 		};
@@ -133,6 +146,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
+			$scope.resetValidationFlags();
 			for (var i = 0; i < $scope.cities.length; i++) {
 				if ($scope.cities[i].id == id) {
 					$scope.newCity = $scope.cities[i];
@@ -142,6 +156,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		};
 		$scope.openAddDialog = function(id) {
 			$scope.editMode = false;
+			$scope.resetValidationFlags();
 			$scope.newCity = { countryId: $scope.selectedCountry };
 			$('#addCityModal').modal('show');
 		};
