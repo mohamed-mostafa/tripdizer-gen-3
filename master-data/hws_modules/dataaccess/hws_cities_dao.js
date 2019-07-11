@@ -295,7 +295,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 									arDescription: rows[i].AR_Description,
 									countryIsoCode: rows[i].Country_ISO_Code,
 									countryEnName: rows[i].Country_EN_Name,
-									countryArName: rows[i].Country_EN_Name,
+									countryArName: rows[i].Country_AR_Name,
 									thumbnail: rows[i].Thumbnail,
 									lat: rows[i].Latitude,
 									lng: rows[i].Longitude,

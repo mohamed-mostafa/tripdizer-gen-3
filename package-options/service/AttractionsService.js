@@ -26,6 +26,7 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
                 var newAttractionOffer = {
                     city: {
                         // here goes the city
+                        name: city.enName,
                         displayName: language == 'ar' ? city.arName : city.enName,
                         iataCode: city.iataCode,
                         country: city.countryEnName,
