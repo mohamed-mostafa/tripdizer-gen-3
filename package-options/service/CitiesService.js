@@ -9,8 +9,8 @@ const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localho
  * citiesSearchRequest CitiesSearchRequest 
  * returns citiesList
  **/
-exports.searchCities = function(language,citiesSearchRequest) {
-    return new Promise(async function(resolve, reject) {
+exports.searchCities = function (language, citiesSearchRequest) {
+    return new Promise(async function (resolve, reject) {
         var countriesList = citiesSearchRequest.countries;
         var citiesList = [];
         for (var i = 0; i < countriesList.length; i++) {
@@ -21,6 +21,7 @@ exports.searchCities = function(language,citiesSearchRequest) {
                     var newCity = {
                         name: city.enName,
                         displayName: language == 'ar' ? city.arName : city.enName,
+                        description: language == 'ar' ? city.arDescription : city.enDescription,
                         iataCode: city.iataCode,
                         country: city.countryName,
                         countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
@@ -28,31 +29,30 @@ exports.searchCities = function(language,citiesSearchRequest) {
                         coordinates: city.lng + ", " + city.lat,
                         thumbnail: city.thumbnail,
                         interests: [] // FIX THIS
-                      }
-                      citiesList.push(newCity);
+                    }
+                    citiesList.push(newCity);
                 });
-                
+
             } catch (error) {
                 reject(error);
             }
         }
-        resolve(citiesList);        
-      })
-    };
+        resolve(citiesList);
+    })
+};
 
 function getCitiesOfCountry(countryIsoCode) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var countryCitiesUrl = MASTER_DATA_ENDPOINT + "/cities/" + countryIsoCode;
-
-        httpRequest.get({url: countryCitiesUrl, json: true}, function(error, response, cities) {
-                if (error) {
-                    reject(error);
-                } else if (response.statusCode != 200) {
-                    reject(response.statusMessage);
-                } else {
-                    resolve(cities);
-                }
+        httpRequest.get({ url: countryCitiesUrl, json: true }, function (error, response, cities) {
+            if (error) {
+                reject(error);
+            } else if (response.statusCode != 200) {
+                reject(response.statusMessage);
+            } else {
+                resolve(cities);
             }
+        }
         );
     })
 };
