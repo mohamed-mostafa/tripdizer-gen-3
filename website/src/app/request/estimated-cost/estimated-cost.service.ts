@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
-import { RequestService } from '../../request.service';
-import { TravelingFrom } from '../../traveling-from/traveling-from.model';
-import { Flight, FlightRequest } from './flight.model';
+import { RequestService } from '../request.service';
+import { TravelingFrom } from '../traveling-from/traveling-from.model';
+import { Flight, FlightRequest } from './tab-flights/flight.model';
 
 @Injectable({ providedIn: 'root' })
-export class FlightsService {
-	private endPoint = 'package-options/1.0.0/transportationOffers';
+export class EstimatedCostService {
+	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 
 	constructor(private http: HttpClient, private requestService: RequestService) {}
 
@@ -33,6 +33,6 @@ export class FlightsService {
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 
-		return this.http.post<Array<Flight>>(`${this.endPoint}/search`, flightRequest);
+		return this.http.post<Array<Flight>>(`${this.transportationEndPoint}/search`, flightRequest);
 	}
 }
