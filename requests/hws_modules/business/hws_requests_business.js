@@ -15,6 +15,9 @@ var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
 
+
+
+
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
@@ -80,10 +83,10 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		request,
 		function(request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
-			accomodationDao.save(request.id, request.accomodationOffers);
-			transportationDao.save(request.id, request.transportationOffers);
-			citiesDao.save(request.id, request.cities);
-			attractionsDao.save(request.id, request.attractions);
+			accomodationDao.save(request.id, {choices: request.accomodationOffers});
+			transportationDao.save(request.id, {choices: request.transportationOffers});
+			citiesDao.save(request.id, {choices: request.cities});
+			attractionsDao.save(request.id, {choices: request.attractions});
 			getPackage(
 				request.id,
 				null,
