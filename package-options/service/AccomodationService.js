@@ -30,7 +30,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 var newAccomodationOffer = {
                     city: {
                         // here goes the city
-                        name: city.enName,
+                        name: hotelCity.enName,
                         displayName: language == 'ar' ? hotelCity.arName : hotelCity.enName,
                         iataCode: hotelCity.iataCode,
                         country: hotelCity.countryEnName,
