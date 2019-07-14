@@ -13,5 +13,6 @@ export class TabCitiesComponent {
 
 	constructor(service: CitiesService) {
 		this.cities = service.getCities();
+		console.log(this.cities);
 	}
 }

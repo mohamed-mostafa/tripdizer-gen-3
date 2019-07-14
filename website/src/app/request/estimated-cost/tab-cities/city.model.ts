@@ -1,5 +1,5 @@
 export class City {
-	country: string;
+	displayName: string;
 	town: string;
 	description: string;
 	image: string;
