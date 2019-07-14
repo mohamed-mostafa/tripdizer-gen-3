@@ -73,7 +73,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.visaRequirements == null || $scope.newCountry.visaRequirements == '') {
 				$scope.visaRequirementsMissing = true;
 			}
-			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '') {
+			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '' || $scope.newCountry.ISOCode.length != 3) {
 				$scope.ISOCodeMissing = true;
 			}
 			return (

@@ -43,7 +43,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		};
 		$scope.newCityIsValid = function() {
 			$scope.resetValidationFlags();
-			if ($scope.newCity.iataCode == null || $scope.newCity.iataCode == '') {
+			if ($scope.newCity.iataCode == null || $scope.newCity.iataCode == '' || $scope.newCity.iataCode.length != 3) {
 				$scope.iataCodeMissing = true;
 			}
 			if ($scope.newCity.enName == null || $scope.newCity.enName == '') {
@@ -64,13 +64,13 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			if ($scope.newCity.thumbnail == null || $scope.newCity.thumbnail == '') {
 				$scope.thumbnailMissing = true;
 			}
-			if ($scope.newCity.lat == null || $scope.newCity.lat == '') {
+			if ($scope.newCity.lat == null || $scope.newCity.lat == ''|| isNaN($scope.newCity.lat)) {
 				$scope.latMissing = true;
 			}
-			if ($scope.newCity.lng == null || $scope.newCity.lng == '') {
+			if ($scope.newCity.lng == null || $scope.newCity.lng == '' || isNaN($scope.newCity.lng)) {
 				$scope.lngMissing = true;
 			}
-			if ($scope.newCity.visitOrder == null || $scope.newCity.visitOrder == '') {
+			if ($scope.newCity.visitOrder == null || $scope.newCity.visitOrder == ''|| isNaN($scope.newCity.visitOrder)) {
 				$scope.visitOrderMissing = true;
 			}
 			if ($scope.newCity.dailySpending != null && $scope.newCity.dailySpending.length != 0) {

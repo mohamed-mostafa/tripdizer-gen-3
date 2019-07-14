@@ -15,6 +15,7 @@
 					<tr>
 						<th>En Name</th>
 						<th>Ar Name</th>
+						<th>ISO Code</th>
 						<th>En Description</th>
 						<th>Ar Description</th>
 						<th>Thumbnail</th>
@@ -28,6 +29,7 @@
 							<a ng-click="openEditDialog(country.id)" href="#">{{ country.enName }}</a>
 						</td>
 						<td>{{ country.arName }}</td>
+						<td>{{ country.ISOCode }}</td>
 						<td>{{ country.enDescription }}</td>
 						<td>{{ country.arDescription }}</td>
 						<td>{{ country.thumbnail }}</td>
@@ -233,7 +235,7 @@
 							</div>
 							<div class="form-group" ng-show="saving==false">
 								<label class="control-label text-red" for="ISOCode" ng-show="ISOCodeMissing==true">
-									<i class="fa fa-times-circle-o"></i>ISO Code is missing</label
+									<i class="fa fa-times-circle-o"></i>ISO Code is missing or is not a 3-letters text</label
 								>
 								<label for="ISOCode" ng-show="ISOCodeMissing==false">ISO Code</label>
 								<input

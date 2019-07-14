@@ -40,6 +40,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			$scope.addressMissing = false;
 			$scope.activeMissing = false;
 			$scope.serverError = false;
+			$scope.ratesIncomplete = false;
 			$scope.serverErrorMessage = '';
 		};
 		$scope.newHotelIsValid = function() {
@@ -65,11 +66,14 @@ g2gControlCenterApplication.controller('HotelsController', [
 			if ($scope.newHotel.budgetCategoryId == null || $scope.newHotel.budgetCategoryId == '') {
 				$scope.budgetCategoryMissing = true;
 			}
-			if ($scope.newHotel.stars == null || $scope.newHotel.stars == '') {
+			if ($scope.newHotel.stars == null || $scope.newHotel.stars == '' || isNaN($scope.newHotel.stars) || $scope.newHotel.stars < 1 || $scope.newHotel.stars > 5) {
 				$scope.starsMissing = true;
 			}
 			if ($scope.newHotel.address == null || $scope.newHotel.address == '') {
 				$scope.addressMissing = true;
+			}
+			if (!$scope.validateRates($scope.newHotel.rates)) {
+				$scope.ratesIncomplete = true;
 			}
 			return (
 				$scope.enNameMissing !== true &&
@@ -80,9 +84,20 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.thumbnailMissing !== true &&
 				$scope.budgetCategoryMissing !== true &&
 				$scope.starsMissing !== true &&
+				$scope.ratesIncomplete !== true &&
 				$scope.addressMissing != true
 			);
 		};
+		$scope.validateRates = function(rates) {
+			for (var key in rates) {
+				if (rates.hasOwnProperty(key)) {
+					if (rates[key] == null || rates[key] == '' || rates[key] == 0 || isNaN(rates[key])) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
 		$scope.addHotel = function(close) {
 			if ($scope.newHotelIsValid()) {
 				$scope.saving = true;

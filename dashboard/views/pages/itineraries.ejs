@@ -627,9 +627,9 @@
                                             <div class="box-header with-border">
                                                 <h3 class="box-title">{{hotel.EN_Name}}</h3>
                                                 <div class="box-tools pull-right">
-                                                    <button class="btn btn-box-tool" ng-click="removeHotel($index)">
+                                                    <!-- <button class="btn btn-box-tool" ng-click="removeHotel($index)">
                                                         <i class="fa fa-times-circle text-danger"></i>
-                                                    </button>
+                                                    </button> -->
                                                     <button class="btn btn-box-tool" data-widget="collapse">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
@@ -641,28 +641,28 @@
                                                 <div class="form-group" style="border: 1px solid #eee;padding: 15px;">
                                                     <div class="form-control-6">
                                                         <label>Name in EN:</label>
-                                                        <input class="form-control" type="text" ng-model="hotel.EN_Name" required>
+                                                        <input class="form-control" type="text" ng-model="hotel.EN_Name" required disabled>
                                                     </div>
                                                     <div class="form-control-6">
                                                         <label>Name in AR:</label>
-                                                        <input class="form-control" type="text" ng-model="hotel.AR_Name" required>
+                                                        <input class="form-control" type="text" ng-model="hotel.AR_Name" required disabled>
                                                     </div>
                                                     <div class="form-control-4">
                                                         <label>Private:</label>
-                                                        <select class="form-control" ng-model="hotel.private">
+                                                        <select class="form-control" ng-model="hotel.private" disabled>
                                                             <option value="1" ng-selected="flight.private == 1">Yes</option>
                                                             <option value="0" ng-selected="flight.private == 0">No</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-control-4">
                                                         <label>Budget Category:</label>
-                                                        <select class="form-control" id="budget" ng-model="hotel.budget_category_id">
-                                                            <option ng-repeat="budget in budgetCategories" ng-value="budget.id" ng-selected="hotel.budget_category_id === budget.id">{{budget.en_name}}</option>
+                                                        <select class="form-control" id="budget" ng-model="hotel.Budget_Category_Id" disabled>
+                                                            <option ng-repeat="budget in budgetCategories" ng-value="budget.id" ng-selected="hotel.Budget_Category_Id === budget.id">{{budget.en_name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-control-4">
                                                         <label>City:</label>
-                                                        <select class="form-control" id="city" ng-model="hotel.City_Id">
+                                                        <select class="form-control" id="city" ng-model="hotel.City_Id" disabled>
                                                             <option ng-repeat="city in newItinerary.cities" ng-value="city.id" ng-selected="hotel.City_Id === city.id">{{getCityById(city.id).enName}}</option>
                                                         </select>
                                                     </div>
@@ -670,51 +670,51 @@
                                                     <br>
                                                     <div class="form-control-2">
                                                         <label>Jan:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.JAN" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.JAN" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Feb:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.FEB" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.FEB" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Mar:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.MAR" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.MAR" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Apr:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.APR" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.APR" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>May:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.MAY" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.MAY" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Jun:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.JUN" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.JUN" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Jul:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.JUL" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.JUL" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Aug:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.AUG" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.AUG" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Sept:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.SEP" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.SEP" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Oct:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.OCT" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.OCT" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Nov:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.NOV" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.NOV" required disabled>
                                                     </div>
                                                     <div class="form-control-2">
                                                         <label>Dec:</label>
-                                                        <input class="form-control" type="number" ng-model="hotel.DEC" required>
+                                                        <input class="form-control" type="number" ng-model="hotel.DEC" required disabled>
                                                     </div>
                                                 </div>
                                                 <!-- /.form group -->
