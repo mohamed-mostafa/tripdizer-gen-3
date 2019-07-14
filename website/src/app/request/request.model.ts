@@ -5,6 +5,7 @@ import { Gender } from '../shared/models/gender.enum';
 import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
+import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.enum';
@@ -46,6 +47,7 @@ export class Request extends CommonFunctions {
 	private _purposeName: string;
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
+	private _flightOffers: Array<FlightOffer>;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
 	private _tourGuideNeeded: boolean;
@@ -145,6 +147,12 @@ export class Request extends CommonFunctions {
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
 		this._destination = value;
+	}
+	get flightOffers(): Array<FlightOffer> {
+		return this._flightOffers;
+	}
+	set flightOffers(value: Array<FlightOffer>) {
+		this._flightOffers = value;
 	}
 	get destination(): Destination {
 		return this._destination;

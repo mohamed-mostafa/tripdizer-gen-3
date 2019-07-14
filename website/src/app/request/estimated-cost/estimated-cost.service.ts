@@ -45,5 +45,7 @@ export class EstimatedCostService {
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.selectedFlightOffers = flightOffers;
+
+		this.requestService.setProperty('flightOffers', flightOffers);
 	}
 }
