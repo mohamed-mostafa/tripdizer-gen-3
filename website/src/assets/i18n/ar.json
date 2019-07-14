@@ -164,7 +164,9 @@
 				"title": "الطيران",
 				"view_edit": "عرض / تعديل المسار",
 				"change_city": "تغيير المدينة",
-				"reorder_route": "ترتيب المسار"
+				"reorder_route": "ترتيب المسار",
+				"total_cost": "السعر الاجمالي",
+				"next_label": "التالي"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

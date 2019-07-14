@@ -5,7 +5,7 @@
 
 	<div class="col-5">
 		<mat-form-field class="form-control-sm flight-form-control">
-			<mat-select [(value)]="selectedOffer">
+			<mat-select [(ngModel)]="selectedOffer" (selectionChange)="selectedOfferChanged()">
 				<mat-option *ngFor="let offer of flight.flightOffers" [value]="offer">
 					{{ offer.carrier.name }}: {{ offer.totalDurationInWords }}
 				</mat-option>

@@ -164,7 +164,9 @@
 				"title": "Flights",
 				"view_edit": "View / edit route",
 				"change_city": "Change City",
-				"reorder_route": "Reorder Route"
+				"reorder_route": "Reorder Route",
+				"total_cost": "Total Cost",
+				"next_label": "Continue"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",
