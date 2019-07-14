@@ -99,11 +99,11 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.addCity = function(close) {
 			if ($scope.newCityIsValid()) {
 				$scope.saving = true;
-				console.log($scope.newCity);
 				$http
 					.put($rootScope.masterDataServerUrl + '/city', { city: $scope.newCity })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.cities.push(response);
 						if (close) {
 							$('#addCityModal').modal('hide');

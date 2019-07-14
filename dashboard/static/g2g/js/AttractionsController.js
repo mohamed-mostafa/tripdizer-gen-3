@@ -19,7 +19,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.serverError = false;
 		$scope.serverErrorMessage = '';
 		// form fields
-		$scope.newAttraction = { cityId: $scope.selectedCity };
+		$scope.newAttraction = { cityId: $scope.selectedCity, active: 0 };
 		$scope.editMode = false;
 
 		$scope.loading = false;
@@ -84,11 +84,11 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.addAttraction = function(close) {
 			if ($scope.newAttractionIsValid()) {
 				$scope.saving = true;
-				console.log($scope.newAttraction);
 				$http
 					.put($rootScope.masterDataServerUrl + '/attraction', { attraction: $scope.newAttraction })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.attractions.push(response);
 						if (close) {
 							$('#addAttractionModal').modal('hide');

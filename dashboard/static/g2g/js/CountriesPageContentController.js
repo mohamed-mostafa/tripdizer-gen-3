@@ -93,11 +93,11 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		$scope.addCountry = function(close) {
 			if ($scope.newCountryIsValid()) {
 				$scope.saving = true;
-				console.log($scope.newCountry);
 				$http
 					.put($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.countries.push(response);
 						if (close) {
 							$('#addCountryModal').modal('hide');

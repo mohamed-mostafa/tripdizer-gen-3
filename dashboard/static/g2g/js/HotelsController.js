@@ -86,11 +86,11 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.addHotel = function(close) {
 			if ($scope.newHotelIsValid()) {
 				$scope.saving = true;
-				console.log($scope.newHotel);
 				$http
 					.put($rootScope.masterDataServerUrl + '/hotel', { hotel: $scope.newHotel })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.hotels.push(response);
 						if (close) {
 							$('#addHotelModal').modal('hide');
