@@ -17,6 +17,10 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+			Data entry is not complete! There should be at least <b>3 active hotels per budget category</b> for the selected city
+		</div>
 		<div class="overlay" ng-show="loading == true">
 			<i class="fa fa-refresh fa-spin"></i>
 		</div>

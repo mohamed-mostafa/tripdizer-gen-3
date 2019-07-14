@@ -23,8 +23,16 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.loading = false;
 		$scope.saving = false;
 		$scope.currentId = 0;
-
+		
 		// functions
+		$scope.validateDataEntry = function() {
+			var activeCitiesInCountry = $scope.cities.filter(city => city.active == 1);
+			if (activeCitiesInCountry.length == 0) {
+				$scope.dataEntryValid = false;
+			} else {
+				$scope.dataEntryValid = true;
+			}
+		}
 		$scope.resetValidationFlags = function() {
 			$scope.iataCodeMissing = false;
 			$scope.enNameMissing = false;
@@ -105,6 +113,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 						$scope.saving = false;
 						response.active = false;
 						$scope.cities.push(response);
+						$scope.validateDataEntry();
 						if (close) {
 							$('#addCityModal').modal('hide');
 						}
@@ -154,6 +163,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 						}
 					}
 					alert("City is now visible on the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Activation Failed: " + err.toString());
@@ -169,6 +179,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 						}
 					}
 					alert("City is now hidden from the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Deactivation Failed: " + err.toString());
@@ -207,6 +218,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.$watch('selectedCountry', function(val) {
 			CitiesService.getAllByCountry(val).then(function(cities) {
 				if (cities) $scope.cities = cities;
+				$scope.validateDataEntry();
 			});
 		});
 

@@ -28,6 +28,21 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.currentId = 0;
 
 		// functions
+		$scope.validateDataEntry = function() {
+			var superEconomyHotels = 0, economyHotels = 0, splurgeHotels = 0, midRangeHotels = 0;
+			var activeHotels = $scope.hotels.filter(hotel => hotel.active == 1);
+			activeHotels.forEach(hotel => {
+				if (hotel.budgetCategoryName.toUpperCase() == 'SUPER ECONOMY') superEconomyHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'ECONOMY') economyHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'MID RANGE') midRangeHotelsHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'SPLURGE') splurgeHotels++;
+			})
+			if (superEconomyHotels < 3 || economyHotels < 3 || splurgeHotels < 3 || midRangeHotels < 3) {
+				$scope.dataEntryValid = false;
+			} else {
+				$scope.dataEntryValid = true;
+			}
+		}
 		$scope.resetValidationFlags = function() {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
@@ -107,6 +122,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 						$scope.saving = false;
 						response.active = false;
 						$scope.hotels.push(response);
+						$scope.validateDataEntry();
 						if (close) {
 							$('#addHotelModal').modal('hide');
 						}
@@ -154,6 +170,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 						}
 					}
 					alert("Hotel is now visible on the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Activation Failed: " + err.toString());
@@ -169,6 +186,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 						}
 					}
 					alert("Hotel is now hidden from the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Deactivation Failed: " + err.toString());
@@ -205,6 +223,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.$watch('selectedCity', function(val) {
 			HotelsService.getAllByCity($scope.selectedCity).then(function(hotels) {
 				if (hotels) $scope.hotels = hotels;
+				$scope.validateDataEntry();
 			});
 		});
 

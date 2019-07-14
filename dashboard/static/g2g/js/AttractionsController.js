@@ -27,6 +27,14 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.currentId = 0;
 
 		// functions
+		$scope.validateDataEntry = function() {
+			var activeAttractionsInCity = $scope.attractions.filter(attraction => attraction.active == 1);
+			if (activeAttractionsInCity.length < 3) {
+				$scope.dataEntryValid = false;
+			} else {
+				$scope.dataEntryValid = true;
+			}
+		}
 		$scope.resetValidationFlags = function() {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
@@ -90,6 +98,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 						$scope.saving = false;
 						response.active = false;
 						$scope.attractions.push(response);
+						$scope.validateDataEntry();
 						if (close) {
 							$('#addAttractionModal').modal('hide');
 						}
@@ -137,6 +146,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 						}
 					}
 					alert("Attraction is now visible on the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Activation Failed: " + err.toString());
@@ -152,6 +162,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 						}
 					}
 					alert("Attraction is now hidden from the website");
+					$scope.validateDataEntry();
 				})
 				.error(function(err) {
 					alert("Deactivation Failed: " + err.toString());
@@ -190,6 +201,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.$watch('selectedCity', function(val) {
 			AttractionsService.getAllByCity($scope.selectedCity).then(function(attractions) {
 				if (attractions) $scope.attractions = attractions;
+				$scope.validateDataEntry();
 			});
 		});
 

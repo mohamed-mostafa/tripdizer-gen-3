@@ -5,18 +5,19 @@
 		</h3>
 		<select ng-model="selectedCountry">
 			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
-				{{ country.enName }}</option
-			>
+				{{ country.enName }}</option>
 		</select>
-
 		<select ng-model="selectedCity">
 			<option ng-repeat="city in cities" ng-value="city.id" ng-selected="city.id == selectedCity">
-				{{ city.enName }}</option
-			>
+				{{ city.enName }}</option>
 		</select>
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+			Data entry is not complete! There should be at least <b>3 active attractions</b> for the selected city
+		</div>
 		<div class="overlay" ng-show="loading == true">
 			<i class="fa fa-refresh fa-spin"></i>
 		</div>

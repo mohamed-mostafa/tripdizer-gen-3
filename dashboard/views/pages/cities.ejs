@@ -11,6 +11,10 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+			Data entry is not complete! There should be at least <b>1 active city</b> for the selected country
+		</div>
 		<div class="overlay" ng-show="loading == true">
 			<i class="fa fa-refresh fa-spin"></i>
 		</div>
