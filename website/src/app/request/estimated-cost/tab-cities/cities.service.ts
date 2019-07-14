@@ -1,7 +1,7 @@
+import { City } from './../../../shared/models/city.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { City } from './city.model';
 
 @Injectable({ providedIn: 'root' })
 export class CitiesService {

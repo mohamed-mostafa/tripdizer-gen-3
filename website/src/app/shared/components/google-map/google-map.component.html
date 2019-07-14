@@ -1,4 +1,4 @@
-<agm-map [fitBounds]="true" [style.height.px]="height">
+<agm-map [hidden]="!paths?.length" [fitBounds]="true" [style.height.px]="height">
 	<agm-marker
 		*ngFor="let path of paths"
 		[latitude]="path.lat"
