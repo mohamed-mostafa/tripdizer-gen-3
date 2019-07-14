@@ -27,7 +27,6 @@
 						<th>Ar Name</th>
 						<th>En Description</th>
 						<th>Ar Description</th>
-						<th>Thumbnail</th>
 						<th>Latitude</th>
 						<th>Longitude</th>
 						<th>Visit Order</th>
@@ -42,7 +41,6 @@
 						<td>{{ city.arName }}</td>
 						<td>{{ city.enDescription }}</td>
 						<td>{{ city.arDescription }}</td>
-						<td>{{ city.thumbnail }}</td>
 						<td>{{ city.lat }}</td>
 						<td>{{ city.lng }}</td>
 						<td>{{ city.visitOrder }}</td>
@@ -212,8 +210,8 @@
 											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
 											>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
-											<input
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 100 X 100 pixels)</label>
+											<!-- <input
 												type="url"
 												required
 												class="form-control"
@@ -221,7 +219,8 @@
 												ng-model="newCity.thumbnail"
 												placeholder="Enter thumbnail"
 												required
-											/>
+											/> -->
+											<input type="file" fileread="newCity.thumbnail" />
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lat" ng-show="latMissing==true">

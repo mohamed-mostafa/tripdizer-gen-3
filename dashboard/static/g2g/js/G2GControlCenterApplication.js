@@ -41,38 +41,56 @@ var g2gControlCenterApplication = angular
 			});
 		},
 	])
-	.directive('ngFileModel', [
-		'$parse',
-		function($parse) {
-			return {
-				restrict: 'A',
-				link: function(scope, element, attrs) {
-					var model = $parse(attrs.ngFileModel);
-					var isMultiple = attrs.multiple;
-					var modelSetter = model.assign;
-					element.bind('change', function() {
-						var values = [];
-						angular.forEach(element[0].files, function(item) {
-							var value = {
-								filename: item.name,
-								path: URL.createObjectURL(item),
-								contentType: item.type,
-								_file: item,
-							};
-							values.push(value);
+	.directive("fileread", [function () {
+		return {
+			scope: {
+				fileread: "="
+			},
+			link: function (scope, element, attributes) {
+				element.bind("change", function (changeEvent) {
+					var reader = new FileReader();
+					reader.onload = function (loadEvent) {
+						scope.$apply(function () {
+							scope.fileread = loadEvent.target.result;
 						});
-						scope.$apply(function() {
-							if (isMultiple) {
-								modelSetter(scope, values);
-							} else {
-								modelSetter(scope, values[0]);
-							}
-						});
-					});
-				},
-			};
-		},
-	])
+					}
+					reader.readAsDataURL(changeEvent.target.files[0]);
+				});
+			}
+		}
+	}])
+	// .directive('ngFileModel', [
+	// 	'$parse',
+	// 	function($parse) {
+	// 		return {
+	// 			restrict: 'A',
+	// 			link: function(scope, element, attrs) {
+	// 				var model = $parse(attrs.ngFileModel);
+	// 				var isMultiple = attrs.multiple;
+	// 				var modelSetter = model.assign;
+	// 				element.bind('change', function() {
+	// 					var values = [];
+	// 					angular.forEach(element[0].files, function(item) {
+	// 						var value = {
+	// 							filename: item.name,
+	// 							path: URL.createObjectURL(item),
+	// 							contentType: item.type,
+	// 							_file: item,
+	// 						};
+	// 						values.push(value);
+	// 					});
+	// 					scope.$apply(function() {
+	// 						if (isMultiple) {
+	// 							modelSetter(scope, values);
+	// 						} else {
+	// 							modelSetter(scope, values[0]);
+	// 						}
+	// 					});
+	// 				});
+	// 			},
+	// 		};
+	// 	},
+	// ])
 	.directive('format', function(dateFilter) {
 		return {
 			require: 'ngModel',

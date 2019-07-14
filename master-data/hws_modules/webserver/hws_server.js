@@ -38,7 +38,7 @@ var start = function() {
 			extended: true,
 		})
 	);
-	app.use(bodyParser.json()); // for parsing application/json
+	app.use(bodyParser.json({limit: '50mb'})); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
 	var router = express.Router();

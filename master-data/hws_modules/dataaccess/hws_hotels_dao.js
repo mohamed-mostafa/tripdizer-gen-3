@@ -109,14 +109,14 @@ var create = function(hotel, onSuccess, onFailure) {
 						} else {
 							var nightPriceId = result.insertId; // the primary key in the month_price table
 							connection.query(
-								'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Address, Stars, Budget_Category_Id, night_price) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+								'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Address, Stars, Budget_Category_Id, night_price) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 								[
 									hotel.cityId,
 									hotel.enName,
 									hotel.enDescription,
 									hotel.arName,
 									hotel.arDescription,
-									hotel.thumbnail,
+									// hotel.thumbnail,
 									hotel.address,
 									hotel.stars,
 									hotel.budgetCategoryId,
@@ -161,14 +161,13 @@ var update = function(hotel, onSuccess, onFailure) {
 					console.log(err); onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Address = ?, Stars = ?, Budget_Category_Id = ? WHERE Id = ?',
+						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Address = ?, Stars = ?, Budget_Category_Id = ? WHERE Id = ?',
 						[
 							hotel.cityId,
 							hotel.enName,
 							hotel.enDescription,
 							hotel.arName,
 							hotel.arDescription,
-							hotel.thumbnail,
 							hotel.address,
 							hotel.stars,
 							hotel.budgetCategoryId,

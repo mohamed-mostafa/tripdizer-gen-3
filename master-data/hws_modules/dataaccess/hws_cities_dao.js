@@ -90,7 +90,7 @@ var create = function(city, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Visit_Order) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Latitude, Longitude, Visit_Order) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							city.countryId,
 							city.iataCode,
@@ -98,7 +98,6 @@ var create = function(city, onSuccess, onFailure) {
 							city.enDescription,
 							city.arName,
 							city.arDescription,
-							city.thumbnail,
 							city.lat,
 							city.lng,
 							city.visitOrder,
@@ -182,7 +181,7 @@ var update = function(city, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Cities SET Country_Id = ?, Iata_Code = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ?, Visit_Order = ? WHERE Id = ?',
+						'UPDATE Cities SET Country_Id = ?, Iata_Code = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Latitude = ?, Longitude = ?, Visit_Order = ? WHERE Id = ?',
 						[
 							city.countryId,
 							city.iataCode,
@@ -190,7 +189,6 @@ var update = function(city, onSuccess, onFailure) {
 							city.enDescription,
 							city.arName,
 							city.arDescription,
-							city.thumbnail,
 							city.lat,
 							city.lng,
 							city.visitOrder,

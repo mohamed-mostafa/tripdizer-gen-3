@@ -18,7 +18,6 @@
 						<th>ISO Code</th>
 						<th>En Description</th>
 						<th>Ar Description</th>
-						<th>Thumbnail</th>
 						<th>Active</th>
 						<th></th>
 					</tr>
@@ -32,7 +31,6 @@
 						<td>{{ country.ISOCode }}</td>
 						<td>{{ country.enDescription }}</td>
 						<td>{{ country.arDescription }}</td>
-						<td>{{ country.thumbnail }}</td>
 						<td><a ng-show="country.active == 1" href="#" ng-click="deactivate(country.id)">Deactivate</a>
 							<a ng-show="country.active == 0" href="#" ng-click="activate(country.id)">Activate</a>
 						</td>
@@ -156,8 +154,8 @@
 								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
 								>
-								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
-								<input
+								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 4/3 aspect-ratio PNG photo, maximum 800 X 600 pixels)</label>
+								<!-- <input
 									type="text"
 									required
 									class="form-control"
@@ -165,7 +163,9 @@
 									ng-model="newCountry.thumbnail"
 									placeholder="Enter thumbnail"
 									required
-								/>
+								/> -->
+								<input type="file" fileread="newCountry.thumbnail" />
+
 							</div>
 							<div class="form-group" ng-show="saving==false">
 								<label class="control-label text-red" for="introduction" ng-show="introductionMissing==true">

@@ -34,7 +34,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			activeHotels.forEach(hotel => {
 				if (hotel.budgetCategoryName.toUpperCase() == 'SUPER ECONOMY') superEconomyHotels++;
 				else if (hotel.budgetCategoryName.toUpperCase() == 'ECONOMY') economyHotels++;
-				else if (hotel.budgetCategoryName.toUpperCase() == 'MID RANGE') midRangeHotelsHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'MID RANGE') midRangeHotels++;
 				else if (hotel.budgetCategoryName.toUpperCase() == 'SPLURGE') splurgeHotels++;
 			})
 			if (superEconomyHotels < 3 || economyHotels < 3 || splurgeHotels < 3 || midRangeHotels < 3) {
@@ -114,6 +114,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			return true;
 		}
 		$scope.addHotel = function(close) {
+			debugger;
 			if ($scope.newHotelIsValid()) {
 				$scope.saving = true;
 				$http
@@ -135,6 +136,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			}
 		};
 		$scope.editHotel = function(id) {
+			debugger;
 			$scope.resetValidationFlags();
 			if ($scope.newHotelIsValid()) {
 				$scope.saving = true;

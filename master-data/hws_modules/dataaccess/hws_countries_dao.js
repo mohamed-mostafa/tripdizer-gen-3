@@ -84,13 +84,12 @@ var create = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							country.enName,
 							country.enDescription,
 							country.arName,
 							country.arDescription,
-							country.thumbnail,
 							country.introduction,
 							country.includes,
 							country.excludes,
@@ -148,13 +147,12 @@ var update = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ? WHERE Id = ?',
 						[
 							country.enName,
 							country.enDescription,
 							country.arName,
 							country.arDescription,
-							country.thumbnail,
 							country.introduction,
 							country.includes,
 							country.excludes,
