@@ -411,7 +411,7 @@ var update = function(itinerary, onSuccess, onFailure) {
 							citiesQuery +
 							ferriesQuery +
 							flightsQuery +
-							hotelsQuery +
+							// hotelsQuery +
 							seasonsQuery +
 							budgetsQuery +
 							purposesQuery +
