@@ -18,6 +18,7 @@
 						<th>En Description</th>
 						<th>Ar Description</th>
 						<th>Thumbnail</th>
+						<th>Active</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -30,6 +31,9 @@
 						<td>{{ country.enDescription }}</td>
 						<td>{{ country.arDescription }}</td>
 						<td>{{ country.thumbnail }}</td>
+						<td><a ng-show="country.active == 1" href="#" ng-click="deactivate(country.id)">Deactivate</a>
+							<a ng-show="country.active == 0" href="#" ng-click="activate(country.id)">Activate</a>
+						</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(country.id)"> Edit</i>
 						</td>

@@ -119,32 +119,9 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'countries').then(function(response) {
+				return $http.get(prefix + 'countries' + "?includeInactive=true").then(function(response) {
 					return response.data;
 				});
-			}
-		},
-	])
-	.factory('HotelsService', [
-		'$rootScope',
-		'$http',
-		function HotelsService($rootScope, $http) {
-			var prefix = $rootScope.masterDataServerUrl + '/';
-
-			return {
-				getAllByCity: getAllByCity,
-			};
-
-			function getAllByCity(cityId) {
-				if (cityId) {
-					return $http.get(prefix + 'hotels/' + cityId).then(function(response) {
-						return response.data;
-					});
-				} else {
-					return new Promise(function(resolve) {
-						resolve([]);
-					});
-				}
 			}
 		},
 	])
@@ -160,14 +137,14 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'cities').then(function(response) {
+				return $http.get(prefix + 'cities' + "?includeInactive=true").then(function(response) {
 					return response.data;
 				});
 			}
 
 			function getAllByCountry(countryId) {
 				if (countryId) {
-					return $http.get(prefix + 'cities/' + countryId).then(function(response) {
+					return $http.get(prefix + 'cities/' + countryId + "?includeInactive=true").then(function(response) {
 						return response.data;
 					});
 				} else {
@@ -190,7 +167,7 @@ var g2gControlCenterApplication = angular
 
 			function getAllByCity(cityId) {
 				if (cityId) {
-					return $http.get(prefix + 'hotels/' + cityId).then(function(response) {
+					return $http.get(prefix + 'hotels/' + cityId+ "?includeInactive=true").then(function(response) {
 						return response.data;
 					});
 				} else {
@@ -213,7 +190,7 @@ var g2gControlCenterApplication = angular
 
 			function getAllByCity(cityId) {
 				if (cityId) {
-					return $http.get(prefix + 'attractions/' + cityId).then(function(response) {
+					return $http.get(prefix + 'attractions/' + cityId + "?includeInactive=true").then(function(response) {
 						return response.data;
 					});
 				} else {

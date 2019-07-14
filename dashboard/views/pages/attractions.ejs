@@ -32,6 +32,7 @@
 						<th>EN Category</th>
 						<th>Ar Category</th>
 						<th>Priority</th>
+						<th>Active</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -41,9 +42,13 @@
 						<td>{{ attraction.arName }}</td>
 						<td>{{ attraction.enDescription }}</td>
 						<td>{{ attraction.arDescription }}</td>
+						<td>{{attraction.thumbnail}}</td>
 						<td>{{ attraction.enCategory }}</td>
 						<td>{{ attraction.arCategory }}</td>
 						<td>{{ attraction.priority }}</td>
+						<td><a ng-show="attraction.active == 1" href="#" ng-click="deactivate(attraction.id)">Deactivate</a>
+							<a ng-show="attraction.active == 0" href="#" ng-click="activate(attraction.id)">Activate</a>
+						</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(attraction.id)"> Edit</i>
 						</td>

@@ -20,5 +20,6 @@ exports.getById = dao.getById;
 exports.create = dao.create;
 exports.update = dao.update;
 exports.getAll = dao.getAll;
+exports.toggleActivation = dao.toggleActivation;
 exports.getAllCitiesByCountry = getAllCitiesByCountry;
 exports.getAllCitiesInIternaries = dao.getAllCitiesInIternaries;

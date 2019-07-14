@@ -144,6 +144,36 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 					});
 			}
 		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/city/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.cities.length; i++) {
+						if ($scope.cities[i].id == id) {
+							$scope.cities[i].active = 1;
+						}
+					}
+					alert("City is now visible on the website");
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/city/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.cities.length; i++) {
+						if ($scope.cities[i].id == id) {
+							$scope.cities[i].active = 0;
+						}
+					}
+					alert("City is now hidden from the website");
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
+		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
 			$scope.resetValidationFlags();

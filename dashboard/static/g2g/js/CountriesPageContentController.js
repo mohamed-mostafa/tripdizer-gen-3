@@ -138,6 +138,36 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 					});
 			}
 		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/country/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.countries.length; i++) {
+						if ($scope.countries[i].id == id) {
+							$scope.countries[i].active = 1;
+						}
+					}
+					alert("Country is now visible on the website");
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/country/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.countries.length; i++) {
+						if ($scope.countries[i].id == id) {
+							$scope.countries[i].active = 0;
+						}
+					}
+					alert("Country is now hidden from the website");
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
+		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.countries.length; i++) {

@@ -42,7 +42,9 @@
 						<td>{{ city.lat }}</td>
 						<td>{{ city.lng }}</td>
 						<td>{{ city.visitOrder }}</td>
-						<td>{{ city.active }}</td>
+						<td><a ng-show="city.active == 1" href="#" ng-click="deactivate(city.id)">Deactivate</a>
+							<a ng-show="city.active == 0" href="#" ng-click="activate(city.id)">Activate</a>
+						</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(city.id)"> Edit</i>
 						</td>

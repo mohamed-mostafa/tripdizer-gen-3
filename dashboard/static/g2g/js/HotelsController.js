@@ -129,6 +129,36 @@ g2gControlCenterApplication.controller('HotelsController', [
 					});
 			}
 		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.hotels.length; i++) {
+						if ($scope.hotels[i].id == id) {
+							$scope.hotels[i].active = 1;
+						}
+					}
+					alert("Hotel is now visible on the website");
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.hotels.length; i++) {
+						if ($scope.hotels[i].id == id) {
+							$scope.hotels[i].active = 0;
+						}
+					}
+					alert("Hotel is now hidden from the website");
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
+		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.hotels.length; i++) {

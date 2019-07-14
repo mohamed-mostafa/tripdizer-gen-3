@@ -9,3 +9,4 @@ exports.getById = dao.getById;
 exports.create = dao.create;
 exports.update = dao.update;
 exports.getAllByCity = dao.getAllByCity;
+exports.toggleActivation = dao.toggleActivation;

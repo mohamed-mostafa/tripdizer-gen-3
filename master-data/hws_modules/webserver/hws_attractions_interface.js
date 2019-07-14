@@ -85,9 +85,13 @@ var getAll = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		var lang = req.query.lang;
+		var includeInactive = req.query.includeInactive;
 		business.getAll(
 			lang,
 			function(attractions) {
+				if (!includeInactive) {
+					attractions = attractions.filter(attraction => attraction.active == 1);
+				}
 				res.json(attractions);
 			},
 			function(error) {
@@ -110,10 +114,14 @@ var getAllAttractionsByCity = function(req, res) {
 		// call the business function and give it a callback function
 		var cityId = req.params.cityId;
 		var lang = req.query.lang;
+		var includeInactive = req.query.includeInactive;
 		business.getAllAttractionsByCity(
 			cityId,
 			lang,
 			function(attractions) {
+				if (!includeInactive) {
+					attractions = attractions.filter(attraction => attraction.active == 1);
+				}
 				res.json(attractions);
 			},
 			function(error) {
@@ -134,6 +142,34 @@ var getAllAttractionsByCity = function(req, res) {
 	}
 };
 
+var toggleActivation = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		var id = req.params.id;
+		var active = req.params.active == 'activate' ? 1 : 0;
+		business.toggleActivation(
+			id, active,
+			function() {
+				res.send('success');
+			},
+			function(error) {
+				res
+					.status(500)
+					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			},
+			function(businessError) {
+				res.status(500).send(businessError);
+			}
+		);
+	} catch (error) {
+		console.log('An error occurred in /attraction');
+		console.log(error);
+		res
+			.status(500)
+			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+exports.toggleActivation = toggleActivation;
 
 exports.getById = getById;
 exports.create = create;

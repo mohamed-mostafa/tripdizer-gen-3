@@ -82,7 +82,6 @@ g2gControlCenterApplication.controller('AttractionsController', [
 			);
 		};
 		$scope.addAttraction = function(close) {
-			debugger;
 			if ($scope.newAttractionIsValid()) {
 				$scope.saving = true;
 				console.log($scope.newAttraction);
@@ -127,6 +126,36 @@ g2gControlCenterApplication.controller('AttractionsController', [
 						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
+		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/attraction/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.attractions.length; i++) {
+						if ($scope.attractions[i].id == id) {
+							$scope.attractions[i].active = 1;
+						}
+					}
+					alert("Attraction is now visible on the website");
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/attraction/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.attractions.length; i++) {
+						if ($scope.attractions[i].id == id) {
+							$scope.attractions[i].active = 0;
+						}
+					}
+					alert("Attraction is now hidden from the website");
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
 		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;

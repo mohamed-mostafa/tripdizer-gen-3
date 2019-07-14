@@ -46,7 +46,9 @@
 						<td>{{ hotel.stars }}</td>
 						<td>{{ hotel.budgetCategoryName }}</td>
 						<td>{{ hotel.address }}</td>
-						<td>{{ hotel.active }}</td>
+						<td><a ng-show="hotel.active == 1" href="#" ng-click="deactivate(hotel.id)">Deactivate</a>
+							<a ng-show="hotel.active == 0" href="#" ng-click="activate(hotel.id)">Activate</a>
+						</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(hotel.id)"> Edit</i>
 						</td>
