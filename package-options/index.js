@@ -4,7 +4,9 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
-var app = require('connect')();
+var express = require('express');
+var app = express();
+
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = process.env.PORT || 8084;
@@ -40,7 +42,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Start the server
-  http.createServer(app).listen(serverPort, function () {
+  app.listen(serverPort, function () {
     console.log('%s: "package-options" Node server started on  %d (http://localhost:%d)', Date(Date.now()), serverPort, serverPort);
     console.log('package-options Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
