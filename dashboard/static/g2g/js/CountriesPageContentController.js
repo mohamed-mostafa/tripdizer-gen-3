@@ -41,7 +41,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newCountryIsValid = function() {
+		$scope.newCountryIsValid = function(validateThumbnail) {
 			$scope.resetValidationFlags();
 			if ($scope.newCountry.enName == null || $scope.newCountry.enName == '') {
 				$scope.enNameMissing = true;
@@ -55,7 +55,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.arDescription == null || $scope.newCountry.arDescription == '') {
 				$scope.arDescriptionMissing = true;
 			}
-			if ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '') {
+			if (validateThumbnail && ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '')) {
 				$scope.thumbnailMissing = true;
 			}
 			if ($scope.newCountry.introduction == null || $scope.newCountry.introduction == '') {
@@ -91,7 +91,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			);
 		};
 		$scope.addCountry = function(close) {
-			if ($scope.newCountryIsValid()) {
+			if ($scope.newCountryIsValid(true)) {
 				$scope.saving = true;
 				$http
 					.put($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
@@ -111,17 +111,19 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			}
 		};
 		$scope.editCountry = function(id) {
-			console.log($scope.newCountry);
-			console.log($scope.newCountryIsValid());
 			$scope.resetValidationFlags();
-			if ($scope.newCountryIsValid()) {
+			if ($scope.newCountryIsValid(false)) {
 				$scope.saving = true;
+				if ($scope.newCountry.thumbnail.includes($rootScope.mediaBaseUrl)) {
+					delete $scope.newCountry.thumbnail;
+				}
 				$http
 					.post($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						for (var i = 0; i < $scope.countries.length; i++) {
 							if ($scope.countries[i].id == $scope.newCountry.id) {
 								$scope.countries[i] = $scope.newCountry;
+								$scope.countries[i].thumbnail = $rootScope.mediaBaseUrl + "/countries/" + $scope.countries[i].ISOCode + ".png";
 								break;
 							}
 						}
@@ -173,6 +175,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			for (var i = 0; i < $scope.countries.length; i++) {
 				if ($scope.countries[i].id == id) {
 					$scope.newCountry = $scope.countries[i];
+					$scope.newCountry.thumbnail = $rootScope.mediaBaseUrl + "/countries/" + $scope.countries[i].ISOCode + ".png";
 				}
 			}
 			$('#addCountryModal').modal('show');

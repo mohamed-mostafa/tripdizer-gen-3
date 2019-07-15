@@ -21,13 +21,17 @@ exports.getById = dao.getById;
 exports.create = function(city, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
     dao.create(city, function(city) {
-        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', onSuccess, onFailure);
+        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', function() {
+            onSuccess(city);
+        }, onFailure);
     }, onFailure);
 };
 exports.update = function(city, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
     dao.update(city, function(city) {
-        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', onSuccess, onFailure);
+        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', function() {
+            onSuccess(city);
+        }, onFailure);
     }, onFailure);
 };
 exports.getAll = dao.getAll;

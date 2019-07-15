@@ -176,7 +176,7 @@
 												placeholder="Enter description in Arabic"
 												required/>
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
+										<div class="form-group-4" ng-show="saving==false">
 											<label class="control-label text-red" for="city" ng-show="cityIdMissing==true">
 												<i class="fa fa-times-circle-o"></i>City is missing</label>
 											<label for="city" ng-show="cityIdMissing==false">City</label>
@@ -185,7 +185,7 @@
 													{{ city.enName }}</option>
 											</select>
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
+										<div class="form-group-4" ng-show="saving==false">
 											<label class="control-label text-red" for="budgetCategory" ng-show="budgetCategoryMissing==true">
 												<i class="fa fa-times-circle-o"></i>Budget Category is missing</label>
 											<label for="budgetCategory" ng-show="budgetCategoryMissing==false">Budget Category</label>
@@ -197,21 +197,7 @@
 													{{ budgetCategory.en_name }}</option>
 											</select>
 										</div>
-										<div class="form-group" ng-show="saving==false">
-											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
-												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 100 X 100 pixels)</label>
-											<!-- <input
-												type="url"
-												required
-												class="form-control"
-												id="thumbnail"
-												ng-model="newHotel.file.name"
-												placeholder="Enter thumbnail"
-												required disabled/> -->
-												<input type="file" fileread="newHotel.thumbnail" />
-										</div>
-										<div class="form-group-6" ng-show="saving==false">
+										<div class="form-group-4" ng-show="saving==false">
 											<label class="control-label text-red" for="stars" ng-show="starsMissing==true">
 												<i class="fa fa-times-circle-o"></i>Stars is missing or has an incorrect value</label>
 											<label for="stars" ng-show="starsMissing==false">Stars</label>
@@ -225,7 +211,7 @@
 												min="1"
 												max="5"/>
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
+										<div class="form-group" ng-show="saving==false">
 											<label class="control-label text-red" for="stars" ng-show="addressMissing==true">
 												<i class="fa fa-times-circle-o"></i>Address is missing</label>
 											<label for="stars" ng-show="starsMissing==false">Address</label>
@@ -236,6 +222,37 @@
 												ng-model="newHotel.address"
 												placeholder="Enter Address"
 												required/>
+										</div>
+										<div class="form-group-6" ng-show="saving==false">
+											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
+												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 100 X 100 pixels)</label>
+											<!-- <input
+												type="url"
+												required
+												class="form-control"
+												id="thumbnail"
+												ng-model="newHotel.file.name"
+												placeholder="Enter thumbnail"
+												required disabled/> -->
+												<style>
+													input[type="file"] {
+														display: none;
+													}
+													.custom-file-upload {
+														border: 1px solid #ccc;
+														display: inline-block;
+														padding: 6px 12px;
+														cursor: pointer;
+													}
+												</style>
+												<label for="file-upload" class="custom-file-upload">
+													<i class="fa fa-cloud-upload"></i> Choose Image
+												</label>
+												<input id="file-upload" type="file" fileread="newHotel.thumbnail" />
+										</div>
+										<div class="form-group-6" ng-show="saving==false">
+											<img alt="No image available!" src="{{newHotel.thumbnail}}" style="width: 100px; height: 100px;"/>
 										</div>
 									</div>
 									<div class="tab-pane" id="ratesTab">

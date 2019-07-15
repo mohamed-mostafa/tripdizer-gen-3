@@ -7,6 +7,7 @@ var g2gControlCenterApplication = angular
 		$rootScope.serverURL = globalVariables.serverURL;
 		$rootScope.requestsServerUrl = globalVariables.serverURL + '/requests';
 		$rootScope.masterDataServerUrl = globalVariables.serverURL + '/master-data';
+		$rootScope.mediaBaseUrl = globalVariables.MEDIA_STORAGE_BASE_URL;
 	})
 	.config([
 		'$locationProvider',

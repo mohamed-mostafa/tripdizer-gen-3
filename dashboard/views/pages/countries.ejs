@@ -151,23 +151,6 @@
 								/>
 							</div>
 							<div class="form-group" ng-show="saving==false">
-								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
-									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
-								>
-								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 4/3 aspect-ratio PNG photo, maximum 800 X 600 pixels)</label>
-								<!-- <input
-									type="text"
-									required
-									class="form-control"
-									id="thumbnail"
-									ng-model="newCountry.thumbnail"
-									placeholder="Enter thumbnail"
-									required
-								/> -->
-								<input type="file" fileread="newCountry.thumbnail" />
-
-							</div>
-							<div class="form-group" ng-show="saving==false">
 								<label class="control-label text-red" for="introduction" ng-show="introductionMissing==true">
 									<i class="fa fa-times-circle-o"></i>Introduction is missing</label
 								>
@@ -246,6 +229,39 @@
 									placeholder="Enter ISO Code"
 									required
 								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
+									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
+								>
+								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 4/3 aspect-ratio PNG photo, around 800 X 600 pixels)</label>
+								<!-- <input
+									type="text"
+									required
+									class="form-control"
+									id="thumbnail"
+									ng-model="newCountry.thumbnail"
+									placeholder="Enter thumbnail"
+									required
+								/> -->
+								<style>
+									input[type="file"] {
+										display: none;
+									}
+									.custom-file-upload {
+										border: 1px solid #ccc;
+										display: inline-block;
+										padding: 6px 12px;
+										cursor: pointer;
+									}
+								</style>
+								<label for="file-upload" class="custom-file-upload">
+									<i class="fa fa-cloud-upload"></i> Choose Image
+								</label>
+								<input id="file-upload" type="file" fileread="newCountry.thumbnail" />
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<img alt="No image available!" src="{{newCountry.thumbnail}}" style="width: 100px; height: 100px;"/>
 							</div>
 							<!-- /.form group -->
 						</div>

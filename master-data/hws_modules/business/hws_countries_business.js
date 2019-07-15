@@ -10,13 +10,17 @@ exports.getById = dao.getById;
 exports.create = function(country, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
     dao.create(country, function(country) {
-        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', onSuccess, onFailure);
+        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', function() {
+            onSuccess(country);
+        }, onFailure);
     }, onFailure);
 };
 exports.update = function(country, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
     dao.update(country, function(country) {
-        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', onSuccess, onFailure);
+        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', function() {
+            onSuccess(country);
+        }, onFailure);
     }, onFailure);
 };
 exports.getAll = dao.getAll;

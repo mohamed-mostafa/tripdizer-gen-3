@@ -6,19 +6,23 @@ const gcs = new Storage({
 
 module.exports = {
     upload: function (fileName, fileContent, folder, onSuccess, onFailure) {
-        const bucket = gcs.bucket(process.env.MEDIA_BUCKET_NAME || 'tripdizer-dev.appspot.com');
-        const file = bucket.file(folder + "/" + fileName+".png");
-        var strImage = fileContent.replace(/^data:image\/[a-z]+;base64,/, "");
-        fileContent = null;
-        var buf = Buffer.from(strImage, 'base64'); // Ta-da
-        file.save(buf, {contentType: "auto"}, function(err) {
-            strImage = null;
-            if (err) {
-                console.log(err);
-                onFailure(err)
-            } else {
-                onSuccess();
-            }
-        });
+        if (fileContent == null || fileContent == '') {
+            onSuccess();
+        } else {
+            const bucket = gcs.bucket(process.env.MEDIA_BUCKET_NAME || 'tripdizer-dev.appspot.com');
+            const file = bucket.file(folder + "/" + fileName+".png");
+            var strImage = fileContent.replace(/^data:image\/[a-z]+;base64,/, "");
+            fileContent = null;
+            var buf = Buffer.from(strImage, 'base64'); // Ta-da
+            file.save(buf, {contentType: "auto"}, function(err) {
+                strImage = null;
+                if (err) {
+                    console.log(err);
+                    onFailure(err)
+                } else {
+                    onSuccess();
+                }
+            });
+        }
     }
 }
