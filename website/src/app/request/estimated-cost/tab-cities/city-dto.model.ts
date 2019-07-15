@@ -11,4 +11,7 @@ export class CityDTO {
 	countryIso: string;
 	cityIata: string;
 	numberOfNights?: number;
+	countryDisplayName: string;
+	thumbnail: string;
+	iataCode: string;
 }

@@ -1,7 +1,7 @@
-import { City } from './../../../shared/models/city.model';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CitiesService } from './cities.service';
+import { CityDTO } from './city-dto.model';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
@@ -9,8 +9,8 @@ import { CitiesService } from './cities.service';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
-	cities: Observable<Array<City>>;
-	selectedCities: Array<City>;
+	cities: Observable<Array<CityDTO>>;
+	selectedCities: Array<CityDTO>;
 
 	constructor(service: CitiesService) {
 		this.cities = service.getCities();
