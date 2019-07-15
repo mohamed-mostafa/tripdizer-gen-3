@@ -11,6 +11,9 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 # host: "localhost:8084"
 host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+x-google-endpoints:
+- name: "tripdizer-package-options.endpoints.tripdizer-dev.cloud.goog"
+  allowCors: True
 basePath: "/package-options/1.0.0"
 schemes:
 - "https"

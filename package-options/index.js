@@ -6,26 +6,12 @@ var fs = require('fs'),
 
 var express = require('express');
 var app = express();
+var cors = require('cors');
 
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = process.env.PORT || 8084;
 
-// enable CORS
-// Add headers
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  // Request headers you wish to allow
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  // Pass to next layer of middleware
-  next();
-  });
 
 // swaggerRouter configuration
 var options = {
@@ -33,6 +19,9 @@ var options = {
   controllers: path.join(__dirname, './controllers'),
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
+
+// enable CORS
+app.use(cors());
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
