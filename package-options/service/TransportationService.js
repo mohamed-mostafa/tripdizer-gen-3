@@ -6,6 +6,7 @@ const FLIGHTS_ADAPTER_ENDPOINT = process.env.FLIGHTS_ADAPTER_ENDPOINT || 'http:/
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data';
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 /**
  * retrieve options of transportation between cities and countries for a package
  * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client.

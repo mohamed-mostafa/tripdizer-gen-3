@@ -5,7 +5,7 @@
 
 const mysql = require('mysql');
 const {Firestore} = require('@google-cloud/firestore');
-const firestore = new Firestore({ projectId: 'tripdizer-dev', keyFilename: './tripdizer-dev-da0d594753eb.json'});
+const firestore = new Firestore({ projectId: process.env.PROJECT_NAME || 'tripdizer-dev', keyFilename: './tripdizer-service-account.json'});
 
 const options = {
 	user: process.env.MYSQL_USER || 'root',

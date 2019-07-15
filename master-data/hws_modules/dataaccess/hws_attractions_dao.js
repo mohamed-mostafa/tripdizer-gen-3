@@ -37,7 +37,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								arDescription: rows[0].AR_Description,
 								enCategory: rows[0].EN_Category,
 								arCategory: rows[0].AR_Category,
-								thumbnail: rows[0].thumbnail,
 								priority: rows[0].Priority,
 								cityId: rows[0].City_Id,
 								active: rows[0].Active
@@ -84,7 +83,7 @@ var create = function(attraction, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Attractions (EN_Name, EN_Description, AR_Name, AR_Description, EN_Category, AR_Category, Thumbnail, Priority, City_Id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Attractions (EN_Name, EN_Description, AR_Name, AR_Description, EN_Category, AR_Category, Priority, City_Id) values (?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							attraction.enName,
 							attraction.enDescription,
@@ -92,7 +91,6 @@ var create = function(attraction, onSuccess, onFailure) {
 							attraction.arDescription,
 							attraction.enCategory,
 							attraction.arCategory,
-							attraction.thumbnail,
 							attraction.priority,
 							attraction.cityId
 						],
@@ -145,7 +143,7 @@ var update = function(attraction, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Attractions SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, EN_Category = ?, AR_Category = ?, Thumbnail = ?, Priority = ? WHERE Id = ?',
+						'UPDATE Attractions SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, EN_Category = ?, AR_Category = ?, Priority = ? WHERE Id = ?',
 						[
 							attraction.cityId,
 							attraction.enName,
@@ -154,7 +152,6 @@ var update = function(attraction, onSuccess, onFailure) {
 							attraction.arDescription,
 							attraction.enCategory,
 							attraction.arCategory,
-							attraction.thumbnail,
 							attraction.priority,
 							attraction.id,
 						],
@@ -246,7 +243,6 @@ var getAll = function(lang, onSuccess, onFailure) {
 								arDescription: rows[i].AR_Description,
 								enCategory: rows[i].EN_Category,
 								arCategory: rows[i].AR_Category,
-								thumbnail: rows[i].Thumbnail,
 								priority: rows[i].Priority,
 								cityIata: rows[i].Iata_Code,
 								active: rows[i].Active

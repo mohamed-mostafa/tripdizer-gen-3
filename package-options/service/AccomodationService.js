@@ -3,7 +3,7 @@ let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
 const MAX_NUMBER_OF_HOTELS_PER_CITY = 3;
-
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 /**
  * retrieve options of accomodations for a package
  * By passing in the appropriate options, you can search for available hotels in the system
@@ -37,7 +37,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                         countryDisplayName: language == 'ar' ? hotelCity.countryArName : hotelCity.countryEnName,
                         countryIsoCode: hotelCity.countryIsoCode,
                         coordinates: hotelCity.lng + ", " + hotelCity.lat,
-                        thumbnail: hotelCity.thumbnail,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + hotelCity.iataCode + ".png",
                         // interests: [] // FIX THIS
                     },
                     hotels: [],
@@ -50,7 +50,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                         displaName: language == 'ar' ? hotel.arName : hotel.enName,
                         description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
                         city: hotelCity.enName,
-                        thumbnail: hotel.thumbnail,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
                         address: hotel.address,
                         stars: hotel.stars,
                         checkin: cityArrival.toISOString(),

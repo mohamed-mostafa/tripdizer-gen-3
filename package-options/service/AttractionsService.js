@@ -1,7 +1,7 @@
 let httpRequest = require('request');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
-
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 /**
  * retrieve options of activities of a city for a package
  * By passing in the appropriate options, you can search for available activities in the system 
@@ -33,7 +33,7 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
                         countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
                         countryIsoCode: city.countryIsoCode,
                         coordinates: city.lng + ", " + city.lat,
-                        thumbnail: city.thumbnail,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
                         // interests: [] // FIX THIS
                     },
                     attractions: []
@@ -49,8 +49,8 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
                     var newAttraction = {
                         name: language == 'ar' ? attraction.arName : attraction.enName,
                         description: language == 'ar' ? attraction.arDescription : attraction.enDescription,
-                        category: language == 'ar' ? attraction.arCategory: attraction.enCategory,
-                        thumbnail: attraction.thumbnail
+                        category: language == 'ar' ? attraction.arCategory: attraction.enCategory
+                        // thumbnail: attraction.thumbnail
                     }
                     newAttractionOffer.attractions.push(newAttraction);
                 });

@@ -1,6 +1,6 @@
 let httpRequest = require('request');
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
-
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 /**
  * retrieve options of cities for a package
  * retrieve the recommended options of cities in the countries choosen by the client, based on the client's interests
@@ -27,7 +27,7 @@ exports.searchCities = function (language, citiesSearchRequest) {
                         countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
                         countryIsoCode: city.countryIsoCode,
                         coordinates: city.lng + ", " + city.lat,
-                        thumbnail: city.thumbnail,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
                         interests: [] // FIX THIS
                     }
                     citiesList.push(newCity);

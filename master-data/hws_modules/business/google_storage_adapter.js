@@ -1,12 +1,12 @@
 const {Storage} = require('@google-cloud/storage');
 const gcs = new Storage({
-    projectId: 'tripdizer-dev',
-    keyFilename: './tripdizer-dev-da0d594753eb.json'
+    projectId: process.env.PROJECT_NAME || 'tripdizer-dev',
+    keyFilename: './tripdizer-service-account.json'
 });
 
 module.exports = {
     upload: function (fileName, fileContent, folder, onSuccess, onFailure) {
-        const bucket = gcs.bucket('tripdizer-dev.appspot.com');
+        const bucket = gcs.bucket(process.env.MEDIA_BUCKET_NAME || 'tripdizer-dev.appspot.com');
         const file = bucket.file(folder + "/" + fileName+".png");
         var strImage = fileContent.replace(/^data:image\/[a-z]+;base64,/, "");
         fileContent = null;
