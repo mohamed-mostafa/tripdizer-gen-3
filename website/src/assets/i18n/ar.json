@@ -45,8 +45,9 @@
 	"home": {
 		"landing": {
 			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-			"landing_question": "هل تعرف وجهتك؟",
-			"have_plan": "نعم ... لدى خطة",
+			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
+			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
+			"have_plan": "ابدأ التخطيط",
 			"surprise_me": "لا ... ساعدنى",
 			"scroll_down": "انتقل لـلأســــفــــــــــــــــــل"
 		},
@@ -163,7 +164,9 @@
 				"title": "الطيران",
 				"view_edit": "عرض / تعديل المسار",
 				"change_city": "تغيير المدينة",
-				"reorder_route": "ترتيب المسار"
+				"reorder_route": "ترتيب المسار",
+				"total_cost": "السعر الاجمالي",
+				"next_label": "التالي"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

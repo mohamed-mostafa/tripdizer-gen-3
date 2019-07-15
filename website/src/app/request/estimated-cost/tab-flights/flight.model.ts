@@ -17,6 +17,7 @@ export class FlightOffer {
 	transitDurationInMinutes: number;
 	segments: Array<Segment>;
 	carrier: Carrier;
+	flightIndex?: number;
 }
 
 export class Segment {

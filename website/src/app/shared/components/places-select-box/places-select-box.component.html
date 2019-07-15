@@ -1,0 +1,21 @@
+<mat-form-field class="w-100 p-2 bg-white border-blue">
+	<mat-chip-list #chipList>
+		<mat-chip *ngFor="let place of selectedPlaces" [removable]="true" (removed)="remove(place[property])">
+			{{ place.name }}
+			<i matChipRemove class="far fa-times-circle h-auto w-auto"></i>
+		</mat-chip>
+		<input
+			*ngIf="selectedPlaces.length < 3"
+			#placeInput
+			[formControl]="placeCtrl"
+			[placeholder]="!selectedPlaces.length ? placeHolder : ''"
+			[matAutocomplete]="matAutocomplete"
+			[matChipInputFor]="chipList"
+			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+			(matChipInputTokenEnd)="!matAutocomplete.isOpen ? (placeInput.value = '') : false"
+		/>
+	</mat-chip-list>
+	<mat-autocomplete #matAutocomplete (optionSelected)="add($event)">
+		<mat-option *ngFor="let place of (filteredPlaces | async)" [value]="place[property]">{{ place.name }}</mat-option>
+	</mat-autocomplete>
+</mat-form-field>

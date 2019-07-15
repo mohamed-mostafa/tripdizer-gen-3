@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Flight } from '../flight.model';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Flight, FlightOffer } from '../flight.model';
 
 @Component({
 	selector: 'c-estimated-cost-flight-row',
@@ -12,4 +12,10 @@ export class FlightRowComponent {
 	@Input() isEven: boolean;
 	@Input() isFirst: boolean;
 	@Input() isLast: boolean;
+
+	@Output() offerChanged = new EventEmitter<FlightOffer>();
+
+	selectedOfferChanged(flightOffer: FlightOffer): void {
+		this.offerChanged.emit(flightOffer);
+	}
 }

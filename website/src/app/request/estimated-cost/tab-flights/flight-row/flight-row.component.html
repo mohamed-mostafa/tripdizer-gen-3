@@ -17,7 +17,10 @@
 <div class="my-3">
 	<i class="fa fa-plane icon position-relative float-left text-center text-secondary bg-white"></i>
 	<div class="ml-5 ml-lg-6">
-		<c-estimated-cost-flight-row-options [flight]="flight"></c-estimated-cost-flight-row-options>
+		<c-estimated-cost-flight-row-options
+			[flight]="flight"
+			(offerChanged)="selectedOfferChanged($event)"
+		></c-estimated-cost-flight-row-options>
 	</div>
 </div>
 

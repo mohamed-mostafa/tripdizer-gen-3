@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { CommonFunctions } from '../shared/utils';
+import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
 import { LUTPreference } from './preferences/preference.model';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
@@ -20,6 +21,7 @@ export class RequestRequest {
 	preferences: Array<number>;
 	otherPreferenceName?: string;
 	destination: number;
+	flightOffers: Array<FlightOffer>;
 	estimatedCost: number;
 	visaAssistanceNeeded: boolean;
 	tourGuideNeeded: boolean;
@@ -45,6 +47,7 @@ export class RequestRequest {
 			preferences: request.preferences,
 			otherPreferenceName: request.getPreferenceName(LUTPreference.Other),
 			destination: request.destination.id,
+			flightOffers: request.flightOffers,
 			estimatedCost: request.estimatedCost,
 			visaAssistanceNeeded: request.visaAssistanceNeeded,
 			tourGuideNeeded: request.tourGuideNeeded,

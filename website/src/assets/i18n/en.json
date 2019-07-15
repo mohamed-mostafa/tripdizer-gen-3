@@ -45,8 +45,9 @@
 	"home": {
 		"landing": {
 			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-			"landing_question": "Do you know where to travel?",
-			"have_plan": "Yes, I have a plan",
+			"landing_question": "The new way to plan your next trip",
+			"destination_place_holder": "Enter Destination ( italy, spain, france... )",
+			"have_plan": "Start my plan",
 			"surprise_me": "No, Surprise me",
 			"scroll_down": "ScrollDown"
 		},
@@ -163,7 +164,9 @@
 				"title": "Flights",
 				"view_edit": "View / edit route",
 				"change_city": "Change City",
-				"reorder_route": "Reorder Route"
+				"reorder_route": "Reorder Route",
+				"total_cost": "Total Cost",
+				"next_label": "Continue"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

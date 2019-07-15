@@ -1,6 +1,5 @@
 export class Place {
 	id: number;
-	iataCode: string;
 	name: string;
 	description: string;
 	enName?: string;
