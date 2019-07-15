@@ -93,7 +93,7 @@ export class DestinationsComponent {
 					id: -1,
 					name: inputs[0].value,
 					description: null,
-					iataCode: inputs[0].value,
+					ISOCode: inputs[0].value,
 					image: null,
 					visaTypeName: null,
 				};

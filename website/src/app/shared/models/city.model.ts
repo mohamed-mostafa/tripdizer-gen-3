@@ -1,3 +1,5 @@
 import { Place } from './place.model';
 
-export class City extends Place {}
+export class City extends Place {
+	iataCode: string;
+}

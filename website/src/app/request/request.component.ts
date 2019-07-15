@@ -1,4 +1,5 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RequestService } from './request.service';
 
 @Component({
@@ -8,7 +9,11 @@ import { RequestService } from './request.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class RequestComponent implements OnDestroy {
-	constructor(private requestService: RequestService) {}
+	constructor(private requestService: RequestService, private activatedRoute: ActivatedRoute) {
+		this.activatedRoute.queryParams.subscribe(params =>
+			this.requestService.setProperty('countries', params['countries'])
+		);
+	}
 
 	ngOnDestroy() {
 		this.requestService.resetRequestState();
