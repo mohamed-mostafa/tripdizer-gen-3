@@ -15,6 +15,10 @@ export class EstimatedCostService {
 
 	constructor(private http: HttpClient, private requestService: RequestService) {}
 
+	getSelectedCountriesISO(): Array<string> {
+		return this.requestService.getProperty('countries');
+	}
+
 	getSelectedCities(): Array<CityDTO> {
 		return [
 			{
