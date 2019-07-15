@@ -12,7 +12,7 @@ info:
 # host: "localhost:8084"
 host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
 x-google-endpoints:
-- name: "tripdizer-package-options.endpoints.tripdizer-dev.cloud.goog"
+- name: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
   allowCors: True
 basePath: "/package-options/1.0.0"
 schemes:
