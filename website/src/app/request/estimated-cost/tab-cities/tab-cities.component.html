@@ -7,24 +7,24 @@
 		<div class="row city-item my-2" *ngFor="let city of (cities | async)">
 			<div class="col-md-4 item-image px-3 pr-md-0">
 				<div class="item-img-container p-2 p-md-0">
-					<img [src]="city.image" alt="" />
+					<img [src]="city.thumbnail" alt="" />
 				</div>
 			</div>
 			<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
 				<p class="dark-grey country-name mb-1">
 					<span class="font-weight-bold"
-						>{{ city.country }}</span
+						>{{ city.name }}</span
 					><br class="d-none d-md-inline-block" /><span class="town-name-sm d-inline-block ml-2 ml-md-0">{{
-						city.town
+						city.countryDisplayName
 					}}</span>
 				</p>
 				<p class="grey item-text font-italic d-none d-md-block">{{ city.description }}</p>
 				<div class="row">
 					<div class="col-md-8">
-						<h6 class="font-weight-bold activities-title mt-2 mt-md-0">
+						<!-- <h6 class="font-weight-bold activities-title mt-2 mt-md-0">
 							{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }} {{ city.country }}
-						</h6>
-						<p class="grey item-text font-italic activities-text">
+						</h6> -->
+						<!-- <p class="grey item-text font-italic activities-text">
 							<span *ngFor="let activity of city.activities; let i = index"
 								>{{ activity }} <span *ngIf="i < city.activities.length - 1">- </span></span
 							>
@@ -36,12 +36,10 @@
 								height="16px"
 								[alt]="icon.alt"
 							/>
-						</p>
+						</p> -->
 					</div>
 					<div class="col-md-4 d-flex justify-content-end">
-						<a class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3" role="button">{{
-							'request.estimated_cost.tab_cities.select' | translate
-						}}</a>
+							<mat-checkbox (change)="updateSelectedCities(city, $event)"></mat-checkbox>
 					</div>
 				</div>
 			</div>
