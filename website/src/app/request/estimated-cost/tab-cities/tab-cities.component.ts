@@ -18,7 +18,7 @@ export class TabCitiesComponent {
 		console.log(this.cities);
 	}
 
-	updateSelectedCities(city, e, classId) {
+	updateSelectedCities(city, e) {
 
 		if (e.checked === true) {
 			this.selectedCities.push(city);
