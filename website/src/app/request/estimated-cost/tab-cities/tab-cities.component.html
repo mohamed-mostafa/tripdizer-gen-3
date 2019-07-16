@@ -1,63 +1,68 @@
-<div class="row cities-tab py-2 py-md-4">
-	<div class="col-lg-8 cities-list">
-		<h4 class="list-title font-weight-bold">
-			{{ 'request.estimated_cost.tab_cities.view_choose' | translate }}
-		</h4>
-
-		<div class="row city-item my-2" *ngFor="let city of (cities | async)">
-			<div class="col-md-4 item-image px-3 pr-md-0">
-				<div class="item-img-container p-2 p-md-0">
-					<img [src]="city.thumbnail" alt="" />
+<div class="row justify-content-center">
+	<div class="col-lg-11">
+		<div class="row cities-tab py-2 py-md-4">
+			<div class="col-lg-8 cities-list">
+				<h4 class="list-title grey font-italic">
+					{{ 'request.estimated_cost.tab_cities.view_choose' | translate }}
+				</h4>
+		
+				<div class="row city-item my-4 selected-city" *ngFor="let city of (cities | async)" 
+				[class.selected-city]="city.select">
+					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
+						<div class="item-img-container p-2 p-md-0">
+							<img [src]="city.thumbnail" alt="" />
+						</div>
+					</div>
+					<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
+						<p class="dark-grey country-name mb-1">
+							<span class="font-weight-bold">{{ city.name }}</span><br class="d-none d-md-inline-block" />
+							<span class="town-name-sm d-inline-block ml-2 ml-md-0">{{ city.countryDisplayName }}</span>
+						</p>
+						<p class="grey item-text font-italic">{{ city.description.substring(0, 200) }} ...</p>
+						<div class="row">
+							<div class="col-md-8">
+								<!-- <h6 class="font-weight-bold activities-title mt-2 mt-md-0">
+									{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }} {{ city.country }}
+								</h6> -->
+								<!-- <p class="grey item-text font-italic activities-text">
+									<span *ngFor="let activity of city.activities; let i = index"
+										>{{ activity }} <span *ngIf="i < city.activities.length - 1">- </span></span
+									>
+									<img
+										*ngFor="let icon of city.icons"
+										[src]="icon.link"
+										class="custom-icon d-none d-md-inline-block"
+										width="16px"
+										height="16px"
+										[alt]="icon.alt"
+									/>
+								</p> -->
+							</div>
+							<div class="col-md-4 d-flex justify-content-end">
+								<mat-checkbox 
+								(change)="city.select = !city.select"
+								(change)="updateSelectedCities(city, $event)"></mat-checkbox>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
-				<p class="dark-grey country-name mb-1">
-					<span class="font-weight-bold"
-						>{{ city.name }}</span
-					><br class="d-none d-md-inline-block" /><span class="town-name-sm d-inline-block ml-2 ml-md-0">{{
-						city.countryDisplayName
-					}}</span>
-				</p>
-				<p class="grey item-text font-italic">{{ city.description }}</p>
+		
 				<div class="row">
-					<div class="col-md-8">
-						<!-- <h6 class="font-weight-bold activities-title mt-2 mt-md-0">
-							{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }} {{ city.country }}
-						</h6> -->
-						<!-- <p class="grey item-text font-italic activities-text">
-							<span *ngFor="let activity of city.activities; let i = index"
-								>{{ activity }} <span *ngIf="i < city.activities.length - 1">- </span></span
-							>
-							<img
-								*ngFor="let icon of city.icons"
-								[src]="icon.link"
-								class="custom-icon d-none d-md-inline-block"
-								width="16px"
-								height="16px"
-								[alt]="icon.alt"
-							/>
-						</p> -->
-					</div>
-					<div class="col-md-4 d-flex justify-content-end">
-							<mat-checkbox (change)="updateSelectedCities(city, $event)"></mat-checkbox>
+					<div class="col-12">
+						<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+							{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
+						</button>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-12">
-				<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-					{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
-				</button>
+			<div class="col-lg-4 map-section pl-lg-6">
+				<hr class="d-lg-none" />
+				<h6 class="font-weight-bold font-italic view-map">
+					{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
+				</h6>
+				<img src="../../../assets/img/map.png" alt="" />
 			</div>
 		</div>
-	</div>
-	<div class="col-lg-4 map-section">
-		<hr class="d-lg-none" />
-		<h6 class="font-weight-bold font-italic view-map">
-			{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
-		</h6>
-		<img src="../../../assets/img/map.png" alt="" />
+		
 	</div>
 </div>

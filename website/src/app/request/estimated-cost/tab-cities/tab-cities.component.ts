@@ -18,7 +18,7 @@ export class TabCitiesComponent {
 		console.log(this.cities);
 	}
 
-	updateSelectedCities(city, e) {
+	updateSelectedCities(city, e, classId) {
 
 		if (e.checked === true) {
 			this.selectedCities.push(city);
@@ -29,7 +29,6 @@ export class TabCitiesComponent {
 				}
 			}
 		}
-
 		console.log(this.selectedCities);
 	}
 

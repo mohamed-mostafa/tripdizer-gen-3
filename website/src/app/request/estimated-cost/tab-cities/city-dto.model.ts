@@ -15,4 +15,5 @@ export class CityDTO {
 	thumbnail: string;
 	iataCode: string;
 	name: string;
+	select?: boolean;
 }

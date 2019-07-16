@@ -1,5 +1,6 @@
 .cities-list .list-title {
 	text-decoration: underline;
+	font-weight: normal;
 }
 
 .cities-tab img {
@@ -50,6 +51,16 @@
 
 .select-btn {
 	height: 40px;
+}
+.image-column {
+	max-height: 200px;
+}
+
+.selected-city {
+	-webkit-box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.75);
+	border: 3px solid #2680eb;
 }
 
 @media (max-width: 767px) {
