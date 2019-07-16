@@ -10,7 +10,7 @@ import { CityDTO } from './city-dto.model';
 })
 export class TabCitiesComponent {
 	cities: Observable<Array<CityDTO>>;
-	selectedCities: Array<CityDTO>;
+	selectedCities: Array<CityDTO> = [];
 
 	constructor(service: CitiesService) {
 		this.cities = service.getCities();
@@ -30,5 +30,9 @@ export class TabCitiesComponent {
 		}
 
 		console.log(this.selectedCities);
+	}
+
+	next(): void {
+
 	}
 }

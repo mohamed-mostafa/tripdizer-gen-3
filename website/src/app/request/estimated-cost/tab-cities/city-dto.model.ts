@@ -14,4 +14,5 @@ export class CityDTO {
 	countryDisplayName: string;
 	thumbnail: string;
 	iataCode: string;
+	name: string;
 }

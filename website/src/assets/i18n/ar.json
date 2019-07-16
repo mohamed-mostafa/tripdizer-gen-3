@@ -158,7 +158,8 @@
 				"title": "المدن",
 				"view_choose": "عرض واختيار المدن",
 				"things_to_do": "أنشطة يمكن القيام بها فى",
-				"view_map": "عرض الخريطة"
+				"view_map": "عرض الخريطة",
+				"next_label": "التالي"
 			},
 			"tab_flights": {
 				"title": "الطيران",

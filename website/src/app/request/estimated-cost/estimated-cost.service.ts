@@ -25,11 +25,19 @@ export class EstimatedCostService {
 				countryIso: 'NED',
 				cityIata: 'AMS',
 				numberOfNights: 3,
+				countryDisplayName: 'Holland',
+				name: 'Amsterdam',
+				iataCode: 'AMS',
+				thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/AMS.png'
 			},
 			{
 				countryIso: 'FRA',
 				cityIata: 'PAR',
 				numberOfNights: 7,
+				countryDisplayName: 'France',
+				name: 'Paris',
+				iataCode: 'PAR',
+				thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/PAR.png'
 			},
 		];
 	}
