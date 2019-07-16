@@ -636,6 +636,7 @@ export class Request extends CommonFunctions {
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
 		this._countriesISO = [];
+		// here accommodation & cities
 		this._preferences = [];
 		this._traveler = {
 			name: null,

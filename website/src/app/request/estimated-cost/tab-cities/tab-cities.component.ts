@@ -11,6 +11,7 @@ import { CityDTO } from './city-dto.model';
 export class TabCitiesComponent {
 	cities: Observable<Array<CityDTO>>;
 	selectedCities: Array<CityDTO> = [];
+	nightsArray: Array<number> = [];
 
 	constructor(service: CitiesService) {
 		this.cities = service.getCities();
@@ -18,7 +19,7 @@ export class TabCitiesComponent {
 	}
 
 	updateSelectedCities(city, e) {
-		
+
 		if (e.checked === true) {
 			this.selectedCities.push(city);
 		} else if (e.checked === false) {
@@ -30,6 +31,13 @@ export class TabCitiesComponent {
 		}
 
 		console.log(this.selectedCities);
+	}
+
+	calculateCitiesNights(nights, cities) {
+		const floorDivision = Math.floor(nights / cities);
+		const modulus = nights % cities;
+		for (let z = 0; z < cities; z++) { this.nightsArray[z] = floorDivision; }
+		return this.nightsArray[0] + modulus;
 	}
 
 	next(): void {
