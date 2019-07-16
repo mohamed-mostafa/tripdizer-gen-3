@@ -11,7 +11,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT C.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ? OR ISO_Code = ?',
+				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ? OR ISO_Code = ?',
 				[id, id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
