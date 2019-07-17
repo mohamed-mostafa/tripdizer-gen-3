@@ -4,6 +4,7 @@
  */
 
 var dao = require('../dataaccess/hws_cities_dao.js');
+var cloudStorageAdapter = require('../business/google_storage_adapter');
 
 var getAllCitiesByCountry = function(countryId, lang, onSuccess, onFailure) {
 	dao.getAll(
@@ -17,8 +18,23 @@ var getAllCitiesByCountry = function(countryId, lang, onSuccess, onFailure) {
 };
 
 exports.getById = dao.getById;
-exports.create = dao.create;
-exports.update = dao.update;
+exports.create = function(city, onSuccess, onFailure) {
+    // save the data to the database first, then save the thumbnail to the cloud storage
+    dao.create(city, function(city) {
+        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', function() {
+            onSuccess(city);
+        }, onFailure);
+    }, onFailure);
+};
+exports.update = function(city, onSuccess, onFailure) {
+    // save the data to the database first, then save the thumbnail to the cloud storage
+    dao.update(city, function(city) {
+        cloudStorageAdapter.upload(city.iataCode, city.thumbnail, 'cities', function() {
+            onSuccess(city);
+        }, onFailure);
+    }, onFailure);
+};
 exports.getAll = dao.getAll;
+exports.toggleActivation = dao.toggleActivation;
 exports.getAllCitiesByCountry = getAllCitiesByCountry;
 exports.getAllCitiesInIternaries = dao.getAllCitiesInIternaries;

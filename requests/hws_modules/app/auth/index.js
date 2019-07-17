@@ -2,7 +2,7 @@ const jwt = require('jwt-simple');
 
 var httpRequest = require('request');
 
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8080/master-data';
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8080';
 
 const getToken = headers => {
 	if (headers && headers.authorization) {
@@ -30,7 +30,7 @@ const isAuthenticated = (req, res, next) => {
 	if (decodedData) {
 		httpRequest.post(
 			{
-				url: MASTER_DATA_ENDPOINT + '/user/login',
+				url: MASTER_DATA_ENDPOINT + '/master-data/user/login',
 				json: true,
 				body: { username: decodedData.username, password: decodedData.password, encrypted: false },
 			},
@@ -50,7 +50,7 @@ const isAuthenticatedAsAdmin = (req, res, next) => {
 	if (decodedData) {
 		httpRequest.post(
 			{
-				url: MASTER_DATA_ENDPOINT + '/user/login',
+				url: MASTER_DATA_ENDPOINT + '/master-data/user/login',
 				json: true,
 				body: { username: decodedData.username, password: decodedData.password },
 			},

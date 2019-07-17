@@ -28,7 +28,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 			FROM iternary i join iternary_flight ifl on i.Id = ifl.Iternary_id join month_price mpa on mpa.id = ifl.adult_price join month_price mpk on mpk.id = ifl.kid_price join month_price mpi on mpi.id = ifl.infant_price WHERE i.Id = ${connection.escape(
 				id
 			)};`;
-			var hotelQuery = `SELECT ih.*, c.EN_Name AS City_Name, mp.* FROM iternary i join iternary_hotel ih on i.Id = ih.Iternary_id join month_price mp on mp.id = ih.night_price LEFT JOIN Cities c on c.Id = ih.City_Id WHERE i.Id =  ${connection.escape(
+			var hotelQuery = `SELECT ih.*, c.EN_Name AS City_Name, mp.* FROM iternary i JOIN Iternary_Cities IC on IC.Iternary_Id = i.Id join Hotels ih on IC.City_Id = ih.City_id join month_price mp on mp.id = ih.night_price LEFT JOIN Cities c on c.Id = ih.City_Id WHERE i.Id =  ${connection.escape(
 				id
 			)};`;
 			var seasonQuery = `SELECT Start AS start, End AS end, Type AS type FROM iternary i join iternary_season s on i.Id = s.Iternary_Id WHERE i.Id = ${connection.escape(
@@ -333,35 +333,35 @@ var update = function(itinerary, onSuccess, onFailure) {
 							)}, (SELECT id FROM month_price ORDER BY id DESC LIMIT 2, 1), (SELECT id FROM month_price ORDER BY id DESC LIMIT 1, 1), (SELECT id FROM month_price ORDER BY id DESC LIMIT 0, 1));`;
 						}
 					}
-					var hotelsQuery = `DELETE FROM month_price WHERE id in (SELECT night_price FROM iternary_hotel WHERE Iternary_Id = ${connection.escape(
-						itinerary.id
-					)});DELETE FROM iternary_hotel WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
-					for (let i = 0; i < itinerary.hotels.length; i++) {
-						if (itinerary.hotels[i].EN_Name) {
-							hotelsQuery += `INSERT INTO month_price VALUES (0, ${connection.escape(
-								itinerary.hotels[i].JAN || 0
-							)}, ${connection.escape(itinerary.hotels[i].FEB || 0)}, ${connection.escape(
-								itinerary.hotels[i].MAR || 0
-							)}, ${connection.escape(itinerary.hotels[i].APR || 0)}, ${connection.escape(
-								itinerary.hotels[i].MAY || 0
-							)}, ${connection.escape(itinerary.hotels[i].JUN || 0)}, ${connection.escape(
-								itinerary.hotels[i].JUL || 0
-							)}, ${connection.escape(itinerary.hotels[i].AUG || 0)}, ${connection.escape(
-								itinerary.hotels[i].SEP || 0
-							)}, ${connection.escape(itinerary.hotels[i].OCT || 0)}, ${connection.escape(
-								itinerary.hotels[i].NOV || 0
-							)}, ${connection.escape(itinerary.hotels[i].DEC || 0)});`;
-							hotelsQuery +=
-								'INSERT INTO iternary_hotel (`Iternary_id`, `EN_Name`, `AR_Name`, `private`, `budget_category_id`, `City_Id`, `night_price`) VALUES ';
-							hotelsQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
-								itinerary.hotels[i].EN_Name || ''
-							)}, ${connection.escape(itinerary.hotels[i].AR_Name || '')}, ${connection.escape(
-								itinerary.hotels[i].private || 0
-							)}, ${connection.escape(itinerary.hotels[i].budget_category_id || 1)}, ${connection.escape(
-								itinerary.cities.length === 1 ? itinerary.cities[0].id : itinerary.hotels[i].City_Id || 1
-							)}, LAST_INSERT_ID());`;
-						}
-					}
+					// var hotelsQuery = `DELETE FROM month_price WHERE id in (SELECT night_price FROM iternary_hotel WHERE Iternary_Id = ${connection.escape(
+					// 	itinerary.id
+					// )});DELETE FROM iternary_hotel WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
+					// for (let i = 0; i < itinerary.hotels.length; i++) {
+					// 	if (itinerary.hotels[i].EN_Name) {
+					// 		hotelsQuery += `INSERT INTO month_price VALUES (0, ${connection.escape(
+					// 			itinerary.hotels[i].JAN || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].FEB || 0)}, ${connection.escape(
+					// 			itinerary.hotels[i].MAR || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].APR || 0)}, ${connection.escape(
+					// 			itinerary.hotels[i].MAY || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].JUN || 0)}, ${connection.escape(
+					// 			itinerary.hotels[i].JUL || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].AUG || 0)}, ${connection.escape(
+					// 			itinerary.hotels[i].SEP || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].OCT || 0)}, ${connection.escape(
+					// 			itinerary.hotels[i].NOV || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].DEC || 0)});`;
+					// 		hotelsQuery +=
+					// 			'INSERT INTO iternary_hotel (`Iternary_id`, `EN_Name`, `AR_Name`, `private`, `budget_category_id`, `City_Id`, `night_price`) VALUES ';
+					// 		hotelsQuery += `(${connection.escape(itinerary.id)}, ${connection.escape(
+					// 			itinerary.hotels[i].EN_Name || ''
+					// 		)}, ${connection.escape(itinerary.hotels[i].AR_Name || '')}, ${connection.escape(
+					// 			itinerary.hotels[i].private || 0
+					// 		)}, ${connection.escape(itinerary.hotels[i].budget_category_id || 1)}, ${connection.escape(
+					// 			itinerary.cities.length === 1 ? itinerary.cities[0].id : itinerary.hotels[i].City_Id || 1
+					// 		)}, LAST_INSERT_ID());`;
+					// 	}
+					// }
 					var seasonsQuery = `DELETE FROM iternary_season WHERE Iternary_Id = ${connection.escape(itinerary.id)};`;
 					for (let i = 0; i < itinerary.seasons.length; i++) {
 						if (itinerary.seasons[i].type) {
@@ -411,7 +411,7 @@ var update = function(itinerary, onSuccess, onFailure) {
 							citiesQuery +
 							ferriesQuery +
 							flightsQuery +
-							hotelsQuery +
+							// hotelsQuery +
 							seasonsQuery +
 							budgetsQuery +
 							purposesQuery +
@@ -561,54 +561,6 @@ var getAllLong = function(onSuccess, onFailure) {
 	});
 };
 
-var updateAgentNotes = function(id, note, onSuccess, onFailure) {
-	// get a connection and open it
-	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
-		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
-			onFailure(err);
-		} else {
-			// begin a transaction to update the itinerary
-			connection.beginTransaction(function(err) {
-				// execute the query
-				if (err) {
-					// end the connection
-					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
-					onFailure(err);
-				} else {
-					var updateQuery = `UPDATE iternary SET Agent_Notes = ${connection.escape(
-						note || ''
-					)} WHERE Id = ${connection.escape(id)};`;
-
-					connection.query(updateQuery, [], function(err, result) {
-						// if an error is thrown, end the connection and throw an error
-						if (err) {
-							// if the statement fails
-							console.log(
-								'An error occurred while trying to update the existing itinerary: ' + id + ' with note: ' + note
-							);
-							console.log(err);
-							connection.rollback(); // rollback the transaction
-							// end the connection
-							connection.end();
-							onFailure(err);
-						} else {
-							connection.commit();
-							connection.end();
-							// call the callback function provided by the caller, and give it the response
-							onSuccess();
-						}
-					});
-				}
-			});
-		}
-	});
-};
-
 var formatDateForSql = function(date) {
 	var year = date.getFullYear();
 	var month = date.getMonth() + 1;
@@ -630,4 +582,3 @@ exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
 exports.getAllLong = getAllLong;
-exports.updateAgentNotes = updateAgentNotes;

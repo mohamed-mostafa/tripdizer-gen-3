@@ -28,6 +28,21 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.currentId = 0;
 
 		// functions
+		$scope.validateDataEntry = function() {
+			var superEconomyHotels = 0, economyHotels = 0, splurgeHotels = 0, midRangeHotels = 0;
+			var activeHotels = $scope.hotels.filter(hotel => hotel.active == 1);
+			activeHotels.forEach(hotel => {
+				if (hotel.budgetCategoryName.toUpperCase() == 'SUPER ECONOMY') superEconomyHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'ECONOMY') economyHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'MID RANGE') midRangeHotels++;
+				else if (hotel.budgetCategoryName.toUpperCase() == 'SPLURGE') splurgeHotels++;
+			})
+			if (superEconomyHotels < 3 || economyHotels < 3 || splurgeHotels < 3 || midRangeHotels < 3) {
+				$scope.dataEntryValid = false;
+			} else {
+				$scope.dataEntryValid = true;
+			}
+		}
 		$scope.resetValidationFlags = function() {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
@@ -37,11 +52,13 @@ g2gControlCenterApplication.controller('HotelsController', [
 			$scope.thumbnailMissing = false;
 			$scope.budgetCategoryMissing = false;
 			$scope.starsMissing = false;
+			$scope.addressMissing = false;
 			$scope.activeMissing = false;
 			$scope.serverError = false;
+			$scope.ratesIncomplete = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newHotelIsValid = function() {
+		$scope.newHotelIsValid = function(validateThumbnail) {
 			$scope.resetValidationFlags();
 			if ($scope.newHotel.enName == null || $scope.newHotel.enName == '') {
 				$scope.enNameMissing = true;
@@ -58,14 +75,20 @@ g2gControlCenterApplication.controller('HotelsController', [
 			if ($scope.newHotel.cityId == null || $scope.newHotel.cityId == '') {
 				$scope.cityIdMissing = true;
 			}
-			if ($scope.newHotel.thumbnail == null || $scope.newHotel.thumbnail == '') {
+			if (validateThumbnail&& ($scope.newHotel.thumbnail == null || $scope.newHotel.thumbnail == '')) {
 				$scope.thumbnailMissing = true;
 			}
 			if ($scope.newHotel.budgetCategoryId == null || $scope.newHotel.budgetCategoryId == '') {
 				$scope.budgetCategoryMissing = true;
 			}
-			if ($scope.newHotel.stars == null || $scope.newHotel.stars == '') {
+			if ($scope.newHotel.stars == null || $scope.newHotel.stars == '' || isNaN($scope.newHotel.stars) || $scope.newHotel.stars < 1 || $scope.newHotel.stars > 5) {
 				$scope.starsMissing = true;
+			}
+			if ($scope.newHotel.address == null || $scope.newHotel.address == '') {
+				$scope.addressMissing = true;
+			}
+			if (!$scope.validateRates($scope.newHotel.rates)) {
+				$scope.ratesIncomplete = true;
 			}
 			return (
 				$scope.enNameMissing !== true &&
@@ -75,18 +98,36 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.cityIdMissing !== true &&
 				$scope.thumbnailMissing !== true &&
 				$scope.budgetCategoryMissing !== true &&
-				$scope.starsMissing !== true
+				$scope.starsMissing !== true &&
+				$scope.ratesIncomplete !== true &&
+				$scope.addressMissing != true
 			);
 		};
+		$scope.validateRates = function(rates) {
+			if (rates == null) {
+				return false;
+			}
+
+			for (var key in rates) {
+				if (rates.hasOwnProperty(key)) {
+					if (rates[key] == null || rates[key] == '' || rates[key] == 0 || isNaN(rates[key])) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
 		$scope.addHotel = function(close) {
-			if ($scope.newHotelIsValid()) {
+			debugger;
+			if ($scope.newHotelIsValid(true)) {
 				$scope.saving = true;
-				console.log($scope.newHotel);
 				$http
 					.put($rootScope.masterDataServerUrl + '/hotel', { hotel: $scope.newHotel })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.hotels.push(response);
+						$scope.validateDataEntry();
 						if (close) {
 							$('#addHotelModal').modal('hide');
 						}
@@ -100,14 +141,18 @@ g2gControlCenterApplication.controller('HotelsController', [
 		};
 		$scope.editHotel = function(id) {
 			$scope.resetValidationFlags();
-			if ($scope.newHotelIsValid()) {
+			if ($scope.newHotelIsValid(false)) {
 				$scope.saving = true;
+				if ($scope.newHotel.thumbnail.includes($rootScope.mediaBaseUrl)) {
+					delete $scope.newHotel.thumbnail;
+				}
 				$http
 					.post($rootScope.masterDataServerUrl + '/hotel', { hotel: $scope.newHotel })
 					.success(function(response) {
 						for (var i = 0; i < $scope.hotels.length; i++) {
 							if ($scope.hotels[i].id == $scope.newHotel.id) {
 								$scope.hotels[i] = $scope.newHotel;
+								$scope.hotels[i].thumbnail = $rootScope.mediaBaseUrl + "/hotels/" + $scope.hotels[i].id + ".png";
 								break;
 							}
 						}
@@ -124,11 +169,44 @@ g2gControlCenterApplication.controller('HotelsController', [
 					});
 			}
 		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.hotels.length; i++) {
+						if ($scope.hotels[i].id == id) {
+							$scope.hotels[i].active = 1;
+						}
+					}
+					alert("Hotel is now visible on the website");
+					$scope.validateDataEntry();
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.hotels.length; i++) {
+						if ($scope.hotels[i].id == id) {
+							$scope.hotels[i].active = 0;
+						}
+					}
+					alert("Hotel is now hidden from the website");
+					$scope.validateDataEntry();
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
+		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.hotels.length; i++) {
 				if ($scope.hotels[i].id == id) {
 					$scope.newHotel = $scope.hotels[i];
+					$scope.newHotel.thumbnail = $rootScope.mediaBaseUrl + "/hotels/" + $scope.hotels[i].id + ".png";
 				}
 			}
 			$('#addHotelModal').modal('show');
@@ -155,6 +233,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.$watch('selectedCity', function(val) {
 			HotelsService.getAllByCity($scope.selectedCity).then(function(hotels) {
 				if (hotels) $scope.hotels = hotels;
+				$scope.validateDataEntry();
 			});
 		});
 

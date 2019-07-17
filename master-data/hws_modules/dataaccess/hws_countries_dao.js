@@ -11,7 +11,7 @@ var getById = function(id, lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT C.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ? OR ISO_Code = ?',
+				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ? OR ISO_Code = ?',
 				[id, id],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -31,7 +31,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								enDescription: rows[0].EN_Description,
 								arName: rows[0].AR_Name,
 								arDescription: rows[0].AR_Description,
-								thumbnail: rows[0].Thumbnail,
 								introduction: rows[0].Introduction,
 								includes: rows[0].Includes,
 								excludes: rows[0].Excludes,
@@ -84,13 +83,12 @@ var create = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							country.enName,
 							country.enDescription,
 							country.arName,
 							country.arDescription,
-							country.thumbnail,
 							country.introduction,
 							country.includes,
 							country.excludes,
@@ -148,20 +146,18 @@ var update = function(country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ?, Active = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ? WHERE Id = ?',
 						[
 							country.enName,
 							country.enDescription,
 							country.arName,
 							country.arDescription,
-							country.thumbnail,
 							country.introduction,
 							country.includes,
 							country.excludes,
 							country.visaType,
 							country.visaRequirements,
 							country.ISOCode,
-							country.active,
 							country.id,
 						],
 						function(err, result) {
@@ -201,7 +197,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 		} else {
 			// execute the query
 			connection.query(
-				'SELECT C.*, vt.EN_Name as EN_Visa_Type_Name, vt.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id',
+				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id',
 				[],
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
@@ -222,7 +218,6 @@ var getAll = function(lang, onSuccess, onFailure) {
 								enDescription: rows[i].EN_Description,
 								arName: rows[i].AR_Name,
 								arDescription: rows[i].AR_Description,
-								thumbnail: rows[i].Thumbnail,
 								introduction: rows[i].Introduction,
 								includes: rows[i].Includes,
 								excludes: rows[i].Excludes,
@@ -250,7 +245,35 @@ var getAll = function(lang, onSuccess, onFailure) {
 	});
 };
 
+var toggleActivation = function(id, active, onSuccess, onFailure) {
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+		} else {
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
+				} else {
+					connection.query('UPDATE hws.Countries SET Active = ? WHERE Id = ?', [active, id],
+						function(err, result) {
+							if (err) {
+								console.log('An error occurred while trying to activate/deactivate country: ' + id);
+								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+							} else {
+								connection.commit(); connection.end(); onSuccess();
+							}
+					});
+				}
+			});
+		}
+	});
+}
+
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
+exports.toggleActivation = toggleActivation;

@@ -1,9 +1,9 @@
 let httpRequest = require('request');
 let moment = require('moment');
 
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083/master-data'
 const MAX_NUMBER_OF_HOTELS_PER_CITY = 3;
-
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 /**
  * retrieve options of accomodations for a package
  * By passing in the appropriate options, you can search for available hotels in the system
@@ -12,8 +12,8 @@ const MAX_NUMBER_OF_HOTELS_PER_CITY = 3;
  * accomomdationSearchRequest AccomomdationSearchRequest 
  * returns accomodationOffers
  **/
-exports.searchAccomodations = function(language,accomomdationSearchRequest) {
-    return new Promise(async function(resolve, reject) {
+exports.searchAccomodations = function (language, accomomdationSearchRequest) {
+    return new Promise(async function (resolve, reject) {
         var citiesNumberOfNightPairs = accomomdationSearchRequest.cities;
         var selectedBudgetCategory = accomomdationSearchRequest.budgetCategory;
         let arrivalMoment = new moment(accomomdationSearchRequest.arrival); // start moment
@@ -30,84 +30,86 @@ exports.searchAccomodations = function(language,accomomdationSearchRequest) {
                 var newAccomodationOffer = {
                     city: {
                         // here goes the city
+                        name: hotelCity.enName,
                         displayName: language == 'ar' ? hotelCity.arName : hotelCity.enName,
                         iataCode: hotelCity.iataCode,
                         country: hotelCity.countryEnName,
                         countryDisplayName: language == 'ar' ? hotelCity.countryArName : hotelCity.countryEnName,
                         countryIsoCode: hotelCity.countryIsoCode,
                         coordinates: hotelCity.lng + ", " + hotelCity.lat,
-                        thumbnail: hotelCity.thumbnail,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + hotelCity.iataCode + ".png",
                         // interests: [] // FIX THIS
                     },
                     hotels: [],
                 }
-                
+
                 var cityHotelsList = await getHotelsOfCity(cityIata);
                 cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase()).forEach(hotel => {
-                      var newHotel = {
+                    var newHotel = {
                         name: hotel.enName,
                         displaName: language == 'ar' ? hotel.arName : hotel.enName,
-                        description: language == 'ar' ? hotel.arDescription: hotel.enDescription,
-                        thumbnail: hotel.thumbnail,
+                        description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
+                        city: hotelCity.enName,
+                        thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
                         address: hotel.address,
                         stars: hotel.stars,
-                        checkin: cityArrival.toString(),
-                        checkout: cityDeparture.toString(),
+                        checkin: cityArrival.toISOString(),
+                        checkout: cityDeparture.toISOString(),
                         numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
                         rate: findRate(cityArrival, cityDeparture, hotel.rates),
                         price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights), // FIX THIS
                         currency: "EGP",
-                        }
-                        newAccomodationOffer.hotels.push(newHotel);
-
-                    });
-                    // sort hotels in each offer by price
-                    newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
-                    // limit number of hotels in each offer
-                    if (newAccomodationOffer.hotels.length > MAX_NUMBER_OF_HOTELS_PER_CITY) {
-                        newAccomodationOffer.hotels = newAccomodationOffer.hotels.slice(0, MAX_NUMBER_OF_HOTELS_PER_CITY);
                     }
-                    accomodationOffers.push(newAccomodationOffer);
+                    newAccomodationOffer.hotels.push(newHotel);
+
+                });
+                // sort hotels in each offer by price
+                newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
+                // limit number of hotels in each offer
+                if (newAccomodationOffer.hotels.length > MAX_NUMBER_OF_HOTELS_PER_CITY) {
+                    newAccomodationOffer.hotels = newAccomodationOffer.hotels.slice(0, MAX_NUMBER_OF_HOTELS_PER_CITY);
+                }
+                accomodationOffers.push(newAccomodationOffer);
             } catch (error) {
                 console.log(error);
                 reject(error);
             }
             arrivalMoment = cityDeparture; // move the arrival moment to the next city
         }
-        resolve(accomodationOffers);        
-      })
-    };
+        resolve(accomodationOffers);
+    })
+};
 
 function getHotelsOfCity(cityIata) {
-    return new Promise(function(resolve, reject) {
-        var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/master-data/hotels/" + cityIata;
+    return new Promise(function (resolve, reject) {
+        var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/hotels/" + cityIata;
 
-        httpRequest.get({url: cityHotelsUrl, json: true}, function(error, response, hotels) {
-                if (error) {
-                    reject(error);
-                } else if (response.statusCode != 200) {
-                    reject(response.statusMessage);
-                } else {
-                    resolve(hotels);
-                }
+        httpRequest.get({ url: cityHotelsUrl, json: true }, function (error, response, hotels) {
+            if (error) {
+                reject(error);
+            } else if (response.statusCode != 200) {
+                reject(response.statusMessage);
+            } else {
+                resolve(hotels);
             }
+        }
         );
     })
 };
 
 function getCityByIata(cityIata) {
-    return new Promise(function(resolve, reject) {
-        var cityUrl = MASTER_DATA_ENDPOINT + "/master-data/city/" + cityIata;
+    return new Promise(function (resolve, reject) {
+        var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
-        httpRequest.get({url: cityUrl, json: true}, function(error, response, city) {
-                if (error) {
-                    reject(error);
-                } else if (response.statusCode != 200) {
-                    reject(response.statusMessage);
-                } else {
-                    resolve(city);
-                }
+        httpRequest.get({ url: cityUrl, json: true }, function (error, response, city) {
+            if (error) {
+                reject(error);
+            } else if (response.statusCode != 200) {
+                reject(response.statusMessage);
+            } else {
+                resolve(city);
             }
+        }
         );
     })
 };

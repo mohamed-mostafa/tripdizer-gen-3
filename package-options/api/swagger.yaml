@@ -11,6 +11,9 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 # host: "localhost:8084"
 host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+x-google-endpoints:
+- name: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+  allowCors: True
 basePath: "/package-options/1.0.0"
 schemes:
 - "https"
@@ -180,11 +183,35 @@ definitions:
     type: "object"
     properties:
       origin:
-        type: "string"
-        example: "CAI"
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Cairo"
+          iataCode:
+            type: "string"
+            example: "CAI"
+          longitude:
+            type: "string"
+            example: "23523.543"
+          latitude:
+            type: "string"
+            example: "3765.87"
       destination:
-        type: "string"
-        example: "AMS"
+        type: "object"
+        properties:
+          name:
+            type: "string"
+            example: "Amsterdam"
+          iataCode:
+            type: "string"
+            example: "AMS"
+          longitude:
+            type: "string"
+            example: "376345.8557"
+          latitude:
+            type: "string"
+            example: "344773765.687"
       departure:
         type: "string"
         format: "date"

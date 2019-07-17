@@ -7,6 +7,7 @@ var g2gControlCenterApplication = angular
 		$rootScope.serverURL = globalVariables.serverURL;
 		$rootScope.requestsServerUrl = globalVariables.serverURL + '/requests';
 		$rootScope.masterDataServerUrl = globalVariables.serverURL + '/master-data';
+		$rootScope.mediaBaseUrl = globalVariables.MEDIA_STORAGE_BASE_URL;
 	})
 	.config([
 		'$locationProvider',
@@ -41,38 +42,56 @@ var g2gControlCenterApplication = angular
 			});
 		},
 	])
-	.directive('ngFileModel', [
-		'$parse',
-		function($parse) {
-			return {
-				restrict: 'A',
-				link: function(scope, element, attrs) {
-					var model = $parse(attrs.ngFileModel);
-					var isMultiple = attrs.multiple;
-					var modelSetter = model.assign;
-					element.bind('change', function() {
-						var values = [];
-						angular.forEach(element[0].files, function(item) {
-							var value = {
-								filename: item.name,
-								path: URL.createObjectURL(item),
-								contentType: item.type,
-								_file: item,
-							};
-							values.push(value);
+	.directive("fileread", [function () {
+		return {
+			scope: {
+				fileread: "="
+			},
+			link: function (scope, element, attributes) {
+				element.bind("change", function (changeEvent) {
+					var reader = new FileReader();
+					reader.onload = function (loadEvent) {
+						scope.$apply(function () {
+							scope.fileread = loadEvent.target.result;
 						});
-						scope.$apply(function() {
-							if (isMultiple) {
-								modelSetter(scope, values);
-							} else {
-								modelSetter(scope, values[0]);
-							}
-						});
-					});
-				},
-			};
-		},
-	])
+					}
+					reader.readAsDataURL(changeEvent.target.files[0]);
+				});
+			}
+		}
+	}])
+	// .directive('ngFileModel', [
+	// 	'$parse',
+	// 	function($parse) {
+	// 		return {
+	// 			restrict: 'A',
+	// 			link: function(scope, element, attrs) {
+	// 				var model = $parse(attrs.ngFileModel);
+	// 				var isMultiple = attrs.multiple;
+	// 				var modelSetter = model.assign;
+	// 				element.bind('change', function() {
+	// 					var values = [];
+	// 					angular.forEach(element[0].files, function(item) {
+	// 						var value = {
+	// 							filename: item.name,
+	// 							path: URL.createObjectURL(item),
+	// 							contentType: item.type,
+	// 							_file: item,
+	// 						};
+	// 						values.push(value);
+	// 					});
+	// 					scope.$apply(function() {
+	// 						if (isMultiple) {
+	// 							modelSetter(scope, values);
+	// 						} else {
+	// 							modelSetter(scope, values[0]);
+	// 						}
+	// 					});
+	// 				});
+	// 			},
+	// 		};
+	// 	},
+	// ])
 	.directive('format', function(dateFilter) {
 		return {
 			require: 'ngModel',
@@ -119,32 +138,9 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'countries').then(function(response) {
+				return $http.get(prefix + 'countries' + "?includeInactive=true").then(function(response) {
 					return response.data;
 				});
-			}
-		},
-	])
-	.factory('HotelsService', [
-		'$rootScope',
-		'$http',
-		function HotelsService($rootScope, $http) {
-			var prefix = $rootScope.masterDataServerUrl + '/';
-
-			return {
-				getAllByCity: getAllByCity,
-			};
-
-			function getAllByCity(cityId) {
-				if (cityId) {
-					return $http.get(prefix + 'hotels/' + cityId).then(function(response) {
-						return response.data;
-					});
-				} else {
-					return new Promise(function(resolve) {
-						resolve([]);
-					});
-				}
 			}
 		},
 	])
@@ -160,14 +156,60 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'cities').then(function(response) {
+				return $http.get(prefix + 'cities' + "?includeInactive=true").then(function(response) {
 					return response.data;
 				});
 			}
 
 			function getAllByCountry(countryId) {
 				if (countryId) {
-					return $http.get(prefix + 'cities/' + countryId).then(function(response) {
+					return $http.get(prefix + 'cities/' + countryId + "?includeInactive=true").then(function(response) {
+						return response.data;
+					});
+				} else {
+					return new Promise(function(resolve) {
+						resolve([]);
+					});
+				}
+			}
+		},
+	])
+	.factory('HotelsService', [
+		'$rootScope',
+		'$http',
+		function HotelsService($rootScope, $http) {
+			var prefix = $rootScope.masterDataServerUrl + '/';
+
+			return {
+				getAllByCity: getAllByCity,
+			};
+
+			function getAllByCity(cityId) {
+				if (cityId) {
+					return $http.get(prefix + 'hotels/' + cityId+ "?includeInactive=true").then(function(response) {
+						return response.data;
+					});
+				} else {
+					return new Promise(function(resolve) {
+						resolve([]);
+					});
+				}
+			}
+		},
+	])
+	.factory('AttractionsService', [
+		'$rootScope',
+		'$http',
+		function AttractionsService($rootScope, $http) {
+			var prefix = $rootScope.masterDataServerUrl + '/';
+
+			return {
+				getAllByCity: getAllByCity,
+			};
+
+			function getAllByCity(cityId) {
+				if (cityId) {
+					return $http.get(prefix + 'attractions/' + cityId + "?includeInactive=true").then(function(response) {
 						return response.data;
 					});
 				} else {

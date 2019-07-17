@@ -23,13 +23,9 @@ resources:
   cpu: 0.4
   memory_gb: 0.8
   disk_size_gb: 10
-endpoints_api_service:
-  # The following values are to be replaced by information from the output of
-  # 'gcloud endpoints services deploy openapi-appengine.yaml' command.
-  name: tripdizer-requests-dot-tripdizer-dev.appspot.com
-  rollout_strategy: managed
 env_variables:
   MASTER_DATA_ENDPOINT: https://tripdizer-master-data-dot-tripdizer-dev.appspot.com
+  MEDIA_STORAGE_BASE_URL: https://storage.cloud.google.com/tripdizer-dev.appspot.com
   DATA_BACKEND: "cloudsql"
   MYSQL_USER: "application"
   MYSQL_PASSWORD: "tripdizer"
@@ -41,3 +37,4 @@ env_variables:
   ENABLE_PARTNERS_NOTIFICATION_EMAIL: "TRUE"
   ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION: "TRUE"
   GOOGLE_PEOPLE_CONTACTS_ACCOUNT: "test@tripdizer.com"
+  PROJECT_NAME: "tripdizer-dev"

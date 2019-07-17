@@ -1,0 +1,263 @@
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">
+			<%= title %> in :
+		</h3>
+		<select ng-model="selectedCountry">
+			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
+				{{ country.enName }}</option>
+		</select>
+		<select ng-model="selectedCity">
+			<option ng-repeat="city in cities" ng-value="city.id" ng-selected="city.id == selectedCity">
+				{{ city.enName }}</option>
+		</select>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+			Data entry is not complete! There should be at least <b>3 active attractions</b> for the selected city
+		</div>
+		<div class="overlay" ng-show="loading == true">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+		<div class="box-body table-responsive no-padding" ng-show="loading == false">
+			<table id="attractionsTable" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>En Name</th>
+						<th>Ar Name</th>
+						<th>En Description</th>
+						<th>Ar Description</th>
+						<th>Thumbnail</th>
+						<th>EN Category</th>
+						<th>Ar Category</th>
+						<th>Priority</th>
+						<th>Active</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="attraction in attractions">
+						<td>{{ attraction.enName }}</td>
+						<td>{{ attraction.arName }}</td>
+						<td>{{ attraction.enDescription }}</td>
+						<td>{{ attraction.arDescription }}</td>
+						<td>{{attraction.thumbnail}}</td>
+						<td>{{ attraction.enCategory }}</td>
+						<td>{{ attraction.arCategory }}</td>
+						<td>{{ attraction.priority }}</td>
+						<td><a ng-show="attraction.active == 1" href="#" ng-click="deactivate(attraction.id)">Deactivate</a>
+							<a ng-show="attraction.active == 0" href="#" ng-click="activate(attraction.id)">Activate</a>
+						</td>
+						<td>
+							<i class="fa fa-edit cursor" ng-click="openEditDialog(attraction.id)"> Edit</i>
+						</td>
+					</tr>
+				</tbody>
+				<tfooter>
+					<tr>
+						<td colspan="12">
+							<button
+								type="button"
+								class="btn btn-primary pull-right"
+								data-toggle="modal"
+								data-target="addAttractionModal"
+								ng-click="openAddDialog()"
+							>
+								Add Attraction
+							</button>
+						</td>
+					</tr>
+				</tfooter>
+			</table>
+		</div>
+	</div>
+	<!-- /.box-body -->
+</div>
+<!-- /.box -->
+<!-- Main row -->
+<div class="row">
+	<!-- MODALS -->
+
+	<div
+		class="modal fade"
+		id="addAttractionModal"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="myModalLabel"
+		aria-hidden="true"
+	>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Add or Modify Attraction</h4>
+				</div>
+				<div class="modal-body">
+					<div class="callout callout-danger" ng-show="serverError==true">
+						<h4>Saving failed!</h4>
+						<p>{{ serverErrorMessage }}</p>
+					</div>
+					<form role="form" id="newAttractionForm">
+						<div class="box-body">
+							<div class="overlay" ng-show="saving == true">
+								<i class="fa fa-refresh fa-spin"></i>
+							</div>
+							<div class="form-group-3" ng-show="saving==false">
+								<label class="control-label text-red" for="enName" ng-show="enNameMissing==true">
+									<i class="fa fa-times-circle-o"></i>English Name is missing</label
+								>
+								<label for="enName" ng-show="enNameMissing==false">En Name</label>
+								<input
+									type="text"
+									required
+									class="form-control"
+									id="enName"
+									ng-model="newAttraction.enName"
+									placeholder="Enter name in English"
+									required
+								/>
+							</div>
+							<div class="form-group-9" ng-show="saving==false">
+								<label class="control-label text-red" for="enDescription" ng-show="enDescriptionMissing==true">
+									<i class="fa fa-times-circle-o"></i>English Description is missing</label
+								>
+								<label for="enDescription" ng-show="enDescriptionMissing==false">En Desc</label>
+								<input
+									type="text"
+									required
+									class="form-control"
+									id="enDescription"
+									ng-model="newAttraction.enDescription"
+									placeholder="Enter description in English"
+									required
+								/>
+							</div>
+							<div class="form-group-3" ng-show="saving==false">
+								<label class="control-label text-red" for="arName" ng-show="arNameMissing==true">
+									<i class="fa fa-times-circle-o"></i>Arabic Name is missing</label
+								>
+								<label for="arName" ng-show="arNameMissing==false">Ar Name</label>
+								<input
+									type="text"
+									required
+									class="form-control"
+									id="arName"
+									ng-model="newAttraction.arName"
+									placeholder="Enter name in Arabic"
+									required
+								/>
+							</div>
+							<div class="form-group-9" ng-show="saving==false">
+								<label class="control-label text-red" for="arDescription" ng-show="arDescriptionMissing==true">
+									<i class="fa fa-times-circle-o"></i>Arabic Description is missing</label
+								>
+								<label for="arDescription" ng-show="arDescriptionMissing==false">Ar Desc</label>
+								<input
+									type="text"
+									required
+									class="form-control"
+									id="arDescription"
+									ng-model="newAttraction.arDescription"
+									placeholder="Enter description in Arabic"
+									required
+								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="city" ng-show="cityIdMissing==true">
+									<i class="fa fa-times-circle-o"></i>City is missing</label
+								>
+								<label for="city" ng-show="cityIdMissing==false">City</label>
+								<select class="form-control" id="city" ng-model="newAttraction.cityId">
+									<option ng-repeat="city in cities" ng-value="city.id" ng-selected="newAttraction.cityId == city.id">
+										{{ city.enName }}</option
+									>
+								</select>
+							</div>
+							<div class="form-group" ng-show="saving==false">
+								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
+									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
+								>
+								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
+								<input
+									type="url"
+									required
+									class="form-control"
+									id="thumbnail"
+									ng-model="newAttraction.thumbnail"
+									placeholder="Enter thumbnail"
+									required
+								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="enCategory" ng-show="enCategoryMissing==true">
+									<i class="fa fa-times-circle-o"></i>English Category is missing</label
+								>
+								<label for="stars" ng-show="enCategoryMissing==false">Englih Category</label>
+								<input
+									type="text"
+									class="form-control"
+									id="enCategory"
+									ng-model="newAttraction.enCategory"
+									placeholder="Enter Category in English"
+									required
+								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="arCategory" ng-show="arCategoryMissing==true">
+									<i class="fa fa-times-circle-o"></i>Arabic Category is missing</label
+								>
+								<label for="stars" ng-show="arCategoryMissing==false">Arabic Category</label>
+								<input
+									type="text"
+									class="form-control"
+									id="arCategory"
+									ng-model="newAttraction.arCategory"
+									placeholder="Enter Category in Arabic"
+									required
+								/>
+							</div>
+							<div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="priority" ng-show="priorityMissing==true">
+									<i class="fa fa-times-circle-o"></i>Priority is missing</label
+								>
+								<label for="priority" ng-show="priorityMissing==false">Priority</label>
+								<input
+									type="number"
+									required
+									class="form-control"
+									id="priority"
+									ng-model="newAttraction.priority"
+									placeholder="Enter priority"
+									required
+								/>
+							</div>
+							<!-- <div class="form-group-6" ng-show="saving==false">
+								<label class="control-label text-red" for="active" ng-show="activeMissing==true">
+									<i class="fa fa-times-circle-o"></i>Active is missing</label
+								>
+								<label for="active" ng-show="activeMissing==false">Active</label>
+								<input type="text" class="form-control" id="active" ng-model="newHotel.active" required />
+							</div> -->
+						</div>
+						<!-- /.box-body -->
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" ng-click="addAttraction(true)" ng-show="editMode==false">
+						Save and close
+					</button>
+					<button type="button" class="btn btn-primary" ng-click="addAttraction(false)" ng-show="editMode==false">
+						Save and add another
+					</button>
+					<button type="button" class="btn btn-primary" ng-click="editAttraction()" ng-show="editMode==true">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- MODALS END -->
+</div>

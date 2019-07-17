@@ -13,7 +13,8 @@ var start = () => {
 	var bodyParser = require('body-parser');
 	var flash = require('express-flash');
 	var locals = {
-		serverURL: process.env.SERVICES_URL || 'http://localhost:8080', // remote test backend server
+		serverURL: process.env.SERVICES_URL || 'http://localhost:8083', // remote test backend server
+		MEDIA_STORAGE_BASE_URL: process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com'
 	};
 
 	// your express configuration here
@@ -66,8 +67,8 @@ var start = () => {
 		req.logout();
 		var match = req.headers.referer
 			? req.headers.referer.match(
-					/^(?:[a-z][a-z0-9+\-.]*:(?:\/\/([^/?#]+))?)?(\/?[a-z0-9\-._~%!$&'()*+,;=@]+(?:\/[a-z0-9\-._~%!$&'()*+,;=:@]+)*\/?|\/)(?:[#?]|$)/
-			  )
+				/^(?:[a-z][a-z0-9+\-.]*:(?:\/\/([^/?#]+))?)?(\/?[a-z0-9\-._~%!$&'()*+,;=@]+(?:\/[a-z0-9\-._~%!$&'()*+,;=:@]+)*\/?|\/)(?:[#?]|$)/
+			)
 			: null;
 		if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
 			req.originalUrl = match[2];
@@ -143,6 +144,16 @@ var start = () => {
 			controller: 'Hotels',
 		};
 		res.render('pages/hotels', {
+			user: req.user,
+		});
+	});
+	app.get('/admin/attractions', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Attractions',
+			controller: 'Attractions',
+		};
+		res.render('pages/attractions', {
 			user: req.user,
 		});
 	});

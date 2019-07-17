@@ -41,7 +41,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newCountryIsValid = function() {
+		$scope.newCountryIsValid = function(validateThumbnail) {
 			$scope.resetValidationFlags();
 			if ($scope.newCountry.enName == null || $scope.newCountry.enName == '') {
 				$scope.enNameMissing = true;
@@ -55,7 +55,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.arDescription == null || $scope.newCountry.arDescription == '') {
 				$scope.arDescriptionMissing = true;
 			}
-			if ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '') {
+			if (validateThumbnail && ($scope.newCountry.thumbnail == null || $scope.newCountry.thumbnail == '')) {
 				$scope.thumbnailMissing = true;
 			}
 			if ($scope.newCountry.introduction == null || $scope.newCountry.introduction == '') {
@@ -73,7 +73,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.visaRequirements == null || $scope.newCountry.visaRequirements == '') {
 				$scope.visaRequirementsMissing = true;
 			}
-			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '') {
+			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '' || $scope.newCountry.ISOCode.length != 3) {
 				$scope.ISOCodeMissing = true;
 			}
 			return (
@@ -91,13 +91,13 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			);
 		};
 		$scope.addCountry = function(close) {
-			if ($scope.newCountryIsValid()) {
+			if ($scope.newCountryIsValid(true)) {
 				$scope.saving = true;
-				console.log($scope.newCountry);
 				$http
 					.put($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						$scope.saving = false;
+						response.active = false;
 						$scope.countries.push(response);
 						if (close) {
 							$('#addCountryModal').modal('hide');
@@ -111,17 +111,19 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			}
 		};
 		$scope.editCountry = function(id) {
-			console.log($scope.newCountry);
-			console.log($scope.newCountryIsValid());
 			$scope.resetValidationFlags();
-			if ($scope.newCountryIsValid()) {
+			if ($scope.newCountryIsValid(false)) {
 				$scope.saving = true;
+				if ($scope.newCountry.thumbnail.includes($rootScope.mediaBaseUrl)) {
+					delete $scope.newCountry.thumbnail;
+				}
 				$http
 					.post($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
 					.success(function(response) {
 						for (var i = 0; i < $scope.countries.length; i++) {
 							if ($scope.countries[i].id == $scope.newCountry.id) {
 								$scope.countries[i] = $scope.newCountry;
+								$scope.countries[i].thumbnail = $rootScope.mediaBaseUrl + "/countries/" + $scope.countries[i].ISOCode + ".png";
 								break;
 							}
 						}
@@ -138,11 +140,42 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 					});
 			}
 		};
+		$scope.activate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/country/' + id + '/activate')
+				.success(function() {
+					for (var i = 0; i < $scope.countries.length; i++) {
+						if ($scope.countries[i].id == id) {
+							$scope.countries[i].active = 1;
+						}
+					}
+					alert("Country is now visible on the website");
+				})
+				.error(function(err) {
+					alert("Activation Failed: " + err.toString());
+				});
+		};
+		$scope.deactivate = function(id) {
+			$http
+				.post($rootScope.masterDataServerUrl + '/country/' + id + '/deactivate')
+				.success(function() {
+					for (var i = 0; i < $scope.countries.length; i++) {
+						if ($scope.countries[i].id == id) {
+							$scope.countries[i].active = 0;
+						}
+					}
+					alert("Country is now hidden from the website");
+				})
+				.error(function(err) {
+					alert("Deactivation Failed: " + err.toString());
+				});
+		};
 		$scope.openEditDialog = function(id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.countries.length; i++) {
 				if ($scope.countries[i].id == id) {
 					$scope.newCountry = $scope.countries[i];
+					$scope.newCountry.thumbnail = $rootScope.mediaBaseUrl + "/countries/" + $scope.countries[i].ISOCode + ".png";
 				}
 			}
 			$('#addCountryModal').modal('show');

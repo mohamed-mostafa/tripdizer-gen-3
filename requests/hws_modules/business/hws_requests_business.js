@@ -14,9 +14,10 @@ var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
+const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 
 //calls the onSuccess with a user object if the user was successfully created
-var placeRequest = function(request, onSuccess, onFailure, onUserError) {
+var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
 		status: request.isFromWebsite ? 3 : request.status,
@@ -78,12 +79,12 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request.score = calculateRequestScore(request);
 	requestsDao.createNewRequest(
 		request,
-		function(request) {
+		function (request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
-			accomodationDao.save(request.id, request.accomodationOffers);
-			transportationDao.save(request.id, request.transportationOffers);
-			citiesDao.save(request.id, request.cities);
-			attractionsDao.save(request.id, request.attractions);
+			accomodationDao.save(request.id, { choices: request.accomodationOffers });
+			transportationDao.save(request.id, { choices: request.transportationOffers });
+			citiesDao.save(request.id, { choices: request.cities });
+			attractionsDao.save(request.id, { choices: request.attractions });
 			getPackage(
 				request.id,
 				null,
@@ -102,7 +103,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 
 			if (request.traveler.name === 'Essawy') {
-				requestsDao.modifyRequestStatusById(request.id, 11, () => {}, () => {});
+				requestsDao.modifyRequestStatusById(request.id, 11, () => { }, () => { });
 			} else {
 				// notify creation
 				if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
@@ -111,7 +112,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						'notifications@tripdizer.com',
 						'Request #' + request.id + ' is placed at Tripdizer',
 						request.traveler.name +
-							' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+						' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
 					);
 
 				if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE')
@@ -126,7 +127,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					);
 			}
 		},
-		function(err) {
+		function (err) {
 			// respond to caller
 			console.log('An error occurred while saving a new request');
 			console.log(err);
@@ -134,7 +135,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			// });
 			// }
 		},
-		function(err) {
+		function (err) {
 			console.log('An error occurred while checking if traveler exists before');
 			console.log(err);
 			onFailure(err);
@@ -142,15 +143,15 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	);
 };
 
-var updateRequest = function(request, onSuccess, onFailure) {
+var updateRequest = function (request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
 		request,
-		function(request) {
+		function (request) {
 			onSuccess(request);
 		},
-		function(err) {
+		function (err) {
 			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure(err);
@@ -158,7 +159,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 	);
 };
 
-var notifyCustomer = function(to, customerName, requestId) {
+var notifyCustomer = function (to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
@@ -182,7 +183,7 @@ var notifyCustomer = function(to, customerName, requestId) {
 		emailBody
 	);
 };
-var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
+var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
 	} else if (email.type === 'request') {
@@ -190,12 +191,12 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 			email.recipients,
 			Number.MAX_SAFE_INTEGER,
 			1,
-			function(travelers) {
+			function (travelers) {
 				var emails = [];
 				for (var i = 0; i < travelers.length; i++) emails.push(travelers[i].traveler.emailAddress);
 				sendMails(emails, email, onSuccess);
 			},
-			function(err) {
+			function (err) {
 				console.log('An error occurred while getting travelers');
 				console.log(err);
 				onFailure(err);
@@ -204,26 +205,26 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	}
 };
 
-var sendMails = function(emails, email, onSuccess) {
+var sendMails = function (emails, email, onSuccess) {
 	responses = [];
 	for (var i = 0; i < emails.length; ++i)
 		responses.push(
 			emailBusiness
 				.sendEmail(emails[i], 'notifications@tripdizer.com', email.subject, email.body, email.attachments)
-				.then(function(response) {
+				.then(function (response) {
 					return response;
 				})
-				.catch(function(response) {
+				.catch(function (response) {
 					return response;
 				})
 		);
-	Promise.all(responses).then(function(resp) {
+	Promise.all(responses).then(function (resp) {
 		email.response = resp;
 		email.count = {
-			success: resp.filter(function(item) {
+			success: resp.filter(function (item) {
 				return item.done;
 			}).length,
-			fail: resp.filter(function(item) {
+			fail: resp.filter(function (item) {
 				return !item.done;
 			}).length,
 		};
@@ -231,11 +232,11 @@ var sendMails = function(emails, email, onSuccess) {
 	});
 };
 
-var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+var validatePromoCode = function (promoCode, onSuccess, onFailure) {
 	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(
 			promoCode,
-			function(count) {
+			function (count) {
 				if (count < 50) {
 					onSuccess(true);
 				} else {
@@ -249,9 +250,9 @@ var validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	}
 };
 
-var sendDailyReportOfRequestsCount = function() {
+var sendDailyReportOfRequestsCount = function () {
 	requestsDao.getRequestCounts(
-		function(counts) {
+		function (counts) {
 			// prepare email body
 			var emailBody = '';
 			emailBody +=
@@ -285,25 +286,22 @@ var sendDailyReportOfRequestsCount = function() {
 				emailBody
 			);
 		},
-		function() {
+		function () {
 			console.log('An error occurred while getting request counts');
 		}
 	);
 };
 
-var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
-	requestsDao.getRequestById(
+var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
+	getRequestById(
 		requestId,
-		function(request) {
+		async function (request) {
 			const departureDate = new Date(request.departureDate);
 			const returnDate = new Date(request.returnDate);
 			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
 			if (request.itineraryId && request.itineraryId !== -1) {
-				httpRequest.get({url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: {authorization: accessToken}}, 
-				// itinerariesDao.getById(
-				// 	request.itineraryId,
-				// 	null,
-					async function(error, response, itinerary) {
+				httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: { authorization: accessToken } },
+					async function (error, response, itinerary) {
 						if (error || response.statusCode != 200) {
 							console.log('An error occurred while getting itinerary from master-data to generate request package');
 							console.log(error || response.statusMessage);
@@ -331,8 +329,8 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 								i === 0
 									? departureDate
 									: new Date(
-											new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
-									  );
+										new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
+									);
 							itinerary.cities[i].endDate = new Date(
 								new Date(itinerary.cities[i].startDate).setDate(
 									itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
@@ -392,14 +390,14 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 							'post',
 							'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
 							JSON.stringify(request),
-							function(doc) {
+							function (doc) {
 								packageHttp(
 									'get',
 									`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
-										doc.docId
+									doc.docId
 									}`,
 									null,
-									function(package) {
+									function (package) {
 										requestsDao.modifyRequestPackageInfo(
 											request.id,
 											package.docId,
@@ -425,22 +423,111 @@ var getPackage = function(requestId, accessToken, onSuccess, onFailure) {
 						);
 					}
 				);
+			} else if (request.transportationOffers.choices && request.accomodationOffers.choices && request.cities.choices) {
+				var detailsOfFirstCountry = await getPackageDetailsOfCountry(request.cities.choices[0].countryIsoCode);
+				request = {
+					id: request.id,
+					travelerName: request.traveler.name ? request.traveler.name : '',
+					estimatedCost: getItineraryCostFromRequest(request.transportationOffers.choices, request.accomodationOffers.choices),
+					numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
+					itinerary: {
+						name: request.cities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
+						... detailsOfFirstCountry,
+						image1: (await isValidImage(MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png")) ? MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png" : 'https://i.imgur.com/LsHCFiD.jpg',
+						flights: request.transportationOffers.choices.map(offer => ({
+							date: offer.segments ? new Date(offer.segments[0].departure).toDateString() : '',
+							departingFrom: offer.segments ? offer.segments[0].origin : '',
+							arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destination : '',
+							departureTime: offer.segments ? new Date(offer.segments[0].departure).toTimeString() : '',
+							arrivalTime: offer.segments ? new Date(offer.segments[offer.segments.length - 1].return).toTimeString() : '',
+							layOver: offer.segments.length == 0 ? 'N' : 'Y',
+						})),
+						hotels: request.accomodationOffers.choices.map(offer => ({
+							cityName: offer.cityName ? offer.cityName : (offer.cityIata ? offer.cityIata : ''),
+							checkIn: offer.checkin ? new Date(offer.checkin).toDateString() : '',
+							checkOut: offer.checkout ? new Date(offer.checkout).toDateString() : '',
+							nights: offer.numberOfNights ? offer.numberOfNights : '',
+							name: offer.name ? offer.name : '',
+						}))
+					},
+				};
+				packageHttp(
+					'post',
+					'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+					JSON.stringify(request),
+					function (doc) {
+						packageHttp(
+							'get',
+							`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
+							doc.docId
+							}`,
+							null,
+							function (package) {
+								requestsDao.modifyRequestPackageInfo(
+									request.id,
+									package.docId,
+									package.pdfId,
+									() => {
+										onSuccess(package);
+									},
+									() => {
+										onSuccess(package);
+									}
+								);
+							},
+							e => {
+								console.log('An error occurred while getting request package pdf: ' + e);
+								onSuccess(doc);
+							}
+						);
+					},
+					e => {
+						console.log('An error occurred while getting request package document: ' + e);
+						onFailure(e);
+					}
+				);
 			} else {
 				onFailure("Itinerary Id doesn't exists!.");
 			}
 		},
-		function(err) {
+		function (err) {
 			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure(err);
 		}
 	);
 };
+var getItineraryCostFromRequest = function(transportationOffers, accomodationOffers) {
+	var cost = 0;
+	cost += transportationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	return cost;
+}
 
-var sendPackageByMail = function(requestId, onSuccess, onFailure) {
+var getPackageDetailsOfCountry = function(isoCode) {
+	return new Promise((resolve, reject) => {
+
+		httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/country/" + isoCode, json: true },
+			function (error, response, country) {
+				if (error || response.statusCode != 200) {
+					reject(error || response.statusMessage);
+				} else {
+					resolve({
+						introduction: country.introduction,
+						includes: country.includes,
+						excludes: country.excludes,
+						visaRequirements: country.visaRequirements
+					})
+				}
+			}
+		);
+	});
+}
+
+var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
-		function(request) {
+		function (request) {
 			// prepare email body
 			var emailBody = '';
 			emailBody += '<html>';
@@ -470,7 +557,7 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 			);
 			onSuccess({ success: true });
 		},
-		function(err) {
+		function (err) {
 			console.log('An error occurred while getting request package');
 			console.log(err);
 			onFailure({ ...err, success: false });
@@ -496,7 +583,7 @@ function currencyFormat(value) {
 
 async function isValidImage(url) {
 	return await new Promise(resolve => {
-		httpRequest(url, function(error, response, body) {
+		httpRequest(url, function (error, response, body) {
 			if (!error && response.statusCode == 200 && response.headers['content-type'].match(/(image)+\//g)) {
 				resolve(true);
 			} else {
@@ -543,7 +630,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 				'Content-Type': 'text/plain',
 			},
 		},
-		function(error, response, body) {
+		function (error, response, body) {
 			try {
 				const package = JSON.parse(body);
 				if (response.statusCode === 200 && package.docId) {
@@ -563,32 +650,32 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 	);
 }
 
-function getRequestById (requestId, onSuccess, onFailure) {
-	requestsDao.getRequestById(requestId, async function(request) {
+function getRequestById(requestId, onSuccess, onFailure) {
+	requestsDao.getRequestById(requestId, async function (request) {
 		try {
 			var accomodationOffers = await accomodationDao.get(requestId);
 			if (accomodationOffers.exists)
-				request.accomodationOffers = accomodationOffers.data(); 
-			
-			var transportationOffers = await transportationDao.get(requestId); 
+				request.accomodationOffers = accomodationOffers.data();
+
+			var transportationOffers = await transportationDao.get(requestId);
 			if (transportationOffers.exists)
 				request.transportationOffers = transportationOffers.data();
-				
+
 			var cities = await citiesDao.get(requestId);
 			if (cities.exists)
 				request.cities = cities.data();;
-				
+
 			var attractions = await attractionsDao.get(requestId);
 			if (attractions.exists)
 				request.attractions = attractions.data();;
-	
+
 			onSuccess(request);
 		} catch (err) {
 			console.log("Failed to retrieve data for request by id: " + requestId);
 			console.log(err);
 			onFailure(err);
 		}
-	}, function(err) {
+	}, function (err) {
 		console.log("Failed to retrieve a request by Id: " + requestId);
 		console.log(err);
 		onFailure(err);

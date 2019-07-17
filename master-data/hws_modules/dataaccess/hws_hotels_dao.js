@@ -38,7 +38,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								enDescription: rows[0].En_Description,
 								arName: rows[0].AR_Name,
 								arDescription: rows[0].Ar_Description,
-								thumbnail: rows[0].Thumbnail,
 								address: rows[0].Address,
 								stars: rows[0].Stars,
 								budgetCategoryId: rows[0].Budget_Category_Id,
@@ -85,54 +84,55 @@ var create = function(hotel, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
-			onFailure(err);
+			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
 		} else {
 			// begin a transaction to insert the hotel and his addresses
 			connection.beginTransaction(function(err) {
 				// execute the query
 				if (err) {
 					// end the connection
-					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
-					onFailure(err);
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
 				} else {
-					connection.query(
-						'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Address, Stars, Budget_Category_Id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-						[
-							hotel.cityId,
-							hotel.enName,
-							hotel.enDescription,
-							hotel.arName,
-							hotel.arDescription,
-							hotel.thumbnail,
-							hote.address,
-							hotel.stars,
-							hotel.budgetCategoryId,
-						],
-						function(err, result) {
-							// if an error is thrown, end the connection and throw an error
-							if (err) {
-								// if the first insert statement fails
-								// end the connection
-								connection.end();
-								console.log('An error occurred while trying to create the new hotel: ' + hotel.enName);
-								console.log(err);
-								connection.rollback(); // rollback the transaction
-								onFailure(err);
-							} else {
-								// set the hotelId to the hotel
-								hotel.id = result.insertId;
-
-								connection.commit();
-								connection.end();
-								// call the callback function provided by the caller, and give it the response
-								onSuccess(hotel);
-							}
+					var hotelsQuery = `INSERT INTO month_price VALUES (0, ${connection.escape(hotel.rates.JAN || 0
+					)}, ${connection.escape(hotel.rates.FEB || 0)}, ${connection.escape(hotel.rates.MAR || 0
+					)}, ${connection.escape(hotel.rates.APR || 0)}, ${connection.escape(hotel.rates.MAY || 0
+					)}, ${connection.escape(hotel.rates.JUN || 0)}, ${connection.escape(hotel.rates.JUL || 0
+					)}, ${connection.escape(hotel.rates.AUG || 0)}, ${connection.escape(hotel.rates.SEP || 0
+					)}, ${connection.escape(hotel.rates.OCT || 0)}, ${connection.escape(hotel.rates.NOV || 0
+					)}, ${connection.escape(hotel.rates.DEC || 0)});`;
+					connection.query(hotelsQuery, function(err, result) {
+						if (err) {
+							connection.end(); console.log('An error occurred while trying to create the month prices for the new hotel: ' + hotel.enName);
+							console.log(err);connection.rollback(); onFailure(err);
+						} else {
+							var nightPriceId = result.insertId; // the primary key in the month_price table
+							connection.query(
+								'INSERT INTO Hotels (City_Id, EN_Name, EN_Description, AR_Name, AR_Description, Address, Stars, Budget_Category_Id, night_price) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+								[
+									hotel.cityId,
+									hotel.enName,
+									hotel.enDescription,
+									hotel.arName,
+									hotel.arDescription,
+									hotel.address,
+									hotel.stars,
+									hotel.budgetCategoryId,
+									nightPriceId
+								],
+								function(err, result) {
+									if (err) {
+										connection.end(); console.log('An error occurred while trying to create the new hotel: ' + hotel.enName);
+										console.log(err);connection.rollback(); onFailure(err);
+									} else {
+										// set the hotelId to the hotel
+										hotel.id = result.insertId;
+										connection.commit(); connection.end(); onSuccess(hotel);
+									}
+								}
+							);
 						}
-					);
+					})
 				}
 			});
 		}
@@ -155,41 +155,41 @@ var update = function(hotel, onSuccess, onFailure) {
 				// execute the query
 				if (err) {
 					// end the connection
-					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
-					onFailure(err);
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Address = ?, Stars = ?, Budget_Category_Id = ?, Active = ? WHERE Id = ?',
+						'UPDATE Hotels SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Address = ?, Stars = ?, Budget_Category_Id = ? WHERE Id = ?',
 						[
 							hotel.cityId,
 							hotel.enName,
 							hotel.enDescription,
 							hotel.arName,
 							hotel.arDescription,
-							hotel.thumbnail,
 							hotel.address,
 							hotel.stars,
 							hotel.budgetCategoryId,
-							hotel.active,
 							hotel.id,
 						],
 						function(err, result) {
-							// if an error is thrown, end the connection and throw an error
 							if (err) {
-								// if the first insert statement fails
 								console.log('An error occurred while trying to update the existing hotel: ' + hotel.enName);
-								console.log(err);
-								connection.rollback(); // rollback the transaction
-								// end the connection
-								connection.end();
-								onFailure(err);
+								console.log(err); connection.rollback(); connection.end(); onFailure(err);
 							} else {
-								connection.commit();
-								connection.end();
-								// call the callback function provided by the caller, and give it the response
-								onSuccess(hotel);
+								var monthPriceQuery = 'UPDATE hws.month_price SET JAN=?, FEB=?, MAR=?, APR=?, MAY=?, JUN=?, JUL=?, AUG=?, SEP=?, OCT=?, NOV=?, hws.month_price.DEC=? WHERE id in (select night_price from hws.Hotels WHERE Id = ?)'
+								connection.query(monthPriceQuery, [
+									hotel.rates.JAN, hotel.rates.FEB, hotel.rates.MAR, hotel.rates.APR,
+									hotel.rates.MAY, hotel.rates.JUN, hotel.rates.JUL, hotel.rates.AUG,
+									hotel.rates.SEP, hotel.rates.OCT, hotel.rates.NOV, hotel.rates.DEC,
+									hotel.id
+								], function(err, result) {
+									if (err) {
+										console.log('An error occurred while trying to update the month price of the existing hotel: ' + hotel.enName);
+										console.log(err); connection.rollback(); connection.end(); onFailure(err);
+									} else {
+										connection.commit(); connection.end(); onSuccess(hotel);
+									}
+								})
 							}
 						}
 					);
@@ -238,7 +238,6 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 									enDescription: rows[i].En_Description,
 									arName: rows[i].AR_Name,
 									arDescription: rows[i].Ar_Description,
-									thumbnail: rows[i].Thumbnail,
 									address: rows[i].Address,
 									stars: rows[i].Stars,
 									budgetCategoryId: rows[i].Budget_Category_Id,
@@ -278,7 +277,35 @@ var getAllByCity = function(lang, cityId, onSuccess, onFailure) {
 	});
 };
 
+var toggleActivation = function(id, active, onSuccess, onFailure) {
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+		} else {
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
+				} else {
+					connection.query('UPDATE Hotels SET Active = ? WHERE Id = ?', [active, id],
+						function(err, result) {
+							if (err) {
+								console.log('An error occurred while trying to activate/deactivate hotel: ' + id);
+								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+							} else {
+								connection.commit(); connection.end(); onSuccess();
+							}
+					});
+				}
+			});
+		}
+	});
+}
+
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAllByCity = getAllByCity;
+exports.toggleActivation = toggleActivation;

@@ -38,7 +38,7 @@ var start = function() {
 			extended: true,
 		})
 	);
-	app.use(bodyParser.json()); // for parsing application/json
+	app.use(bodyParser.json({limit: '50mb'})); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
 	var router = express.Router();
@@ -57,6 +57,7 @@ var start = function() {
 	router.get('/country/:id', countriesInterface.getById);
 	router.put('/country', auth.isAuthenticated, countriesInterface.create);
 	router.post('/country', auth.isAuthenticated, countriesInterface.update);
+	router.post('/country/:id/:active', auth.isAuthenticated, countriesInterface.toggleActivation);
 
 	//		cities
 	router.get('/cities/:countryId', citiesInterface.getAllCitiesByCountry);
@@ -65,18 +66,21 @@ var start = function() {
 	router.get('/city/:id', citiesInterface.getById);
 	router.put('/city', auth.isAuthenticated, citiesInterface.create);
 	router.post('/city', auth.isAuthenticated, citiesInterface.update);
+	router.post('/city/:id/:active', auth.isAuthenticated, citiesInterface.toggleActivation);
 
 	//		hotels
 	router.get('/hotels/:cityId', hotelsInterface.getAllByCity);
 	router.get('/hotel/:id', hotelsInterface.getById);
 	router.put('/hotel', auth.isAuthenticated, hotelsInterface.create);
 	router.post('/hotel', auth.isAuthenticated, hotelsInterface.update);
+	router.post('/hotel/:id/:active', auth.isAuthenticated, hotelsInterface.toggleActivation);
 
 	//		attractions
 	router.get('/attractions/:cityId', attractionsInterface.getAllAttractionsByCity);
 	router.get('/attraction/:id', attractionsInterface.getById);
-	router.put('/attractsion', auth.isAuthenticated, attractionsInterface.create);
+	router.put('/attraction', auth.isAuthenticated, attractionsInterface.create);
 	router.post('/attraction', auth.isAuthenticated, attractionsInterface.update);
+	router.post('/attraction/:id/:active', auth.isAuthenticated, attractionsInterface.toggleActivation);
 
 	//		itineraries
 	router.get('/itineraries', itinerariesInterface.getAll);

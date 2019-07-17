@@ -4,8 +4,24 @@
  */
 
 var dao = require('../dataaccess/hws_countries_dao.js');
+var cloudStorageAdapter = require('../business/google_storage_adapter');
 
 exports.getById = dao.getById;
-exports.create = dao.create;
-exports.update = dao.update;
+exports.create = function(country, onSuccess, onFailure) {
+    // save the data to the database first, then save the thumbnail to the cloud storage
+    dao.create(country, function(country) {
+        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', function() {
+            onSuccess(country);
+        }, onFailure);
+    }, onFailure);
+};
+exports.update = function(country, onSuccess, onFailure) {
+    // save the data to the database first, then save the thumbnail to the cloud storage
+    dao.update(country, function(country) {
+        cloudStorageAdapter.upload(country.ISOCode, country.thumbnail, 'countries', function() {
+            onSuccess(country);
+        }, onFailure);
+    }, onFailure);
+};
 exports.getAll = dao.getAll;
+exports.toggleActivation = dao.toggleActivation;

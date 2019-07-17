@@ -1,8 +1,8 @@
 steps:
-- name: gcr.io/cloud-builders/gcloud
-  args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
-  dir: requests
-  id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
+# - name: gcr.io/cloud-builders/gcloud
+#   args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
+#   dir: requests
+#   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/npm
   args: ['install-test', '--dev', '--unsafe-perm']
   dir: requests

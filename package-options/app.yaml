@@ -23,6 +23,9 @@ resources:
   disk_size_gb: 10
 env_variables:
   FLIGHTS_ADAPTER_ENDPOINT: https://tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com/flights/1.0.0/flights
+  MASTER_DATA_ENDPOINT: https://tripdizer-master-data-dot-tripdizer-dev.appspot.com/master-data
+  MEDIA_STORAGE_BASE_URL: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com'
+
 endpoints_api_service:
   # The following values are to be replaced by information from the output of
   # 'gcloud endpoints services deploy openapi-appengine.yaml' command.

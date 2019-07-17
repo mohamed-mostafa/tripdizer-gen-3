@@ -11,6 +11,10 @@
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+			Data entry is not complete! There should be at least <b>1 active city</b> for the selected country
+		</div>
 		<div class="overlay" ng-show="loading == true">
 			<i class="fa fa-refresh fa-spin"></i>
 		</div>
@@ -23,7 +27,6 @@
 						<th>Ar Name</th>
 						<th>En Description</th>
 						<th>Ar Description</th>
-						<th>Thumbnail</th>
 						<th>Latitude</th>
 						<th>Longitude</th>
 						<th>Visit Order</th>
@@ -38,11 +41,12 @@
 						<td>{{ city.arName }}</td>
 						<td>{{ city.enDescription }}</td>
 						<td>{{ city.arDescription }}</td>
-						<td>{{ city.thumbnail }}</td>
 						<td>{{ city.lat }}</td>
 						<td>{{ city.lng }}</td>
 						<td>{{ city.visitOrder }}</td>
-						<td>{{ city.active }}</td>
+						<td><a ng-show="city.active == 1" href="#" ng-click="deactivate(city.id)">Deactivate</a>
+							<a ng-show="city.active == 0" href="#" ng-click="activate(city.id)">Activate</a>
+						</td>
 						<td>
 							<i class="fa fa-edit cursor" ng-click="openEditDialog(city.id)"> Edit</i>
 						</td>
@@ -94,6 +98,9 @@
 						<h4>Saving failed!</h4>
 						<p>{{ serverErrorMessage }}</p>
 					</div>
+					<label class="control-label text-red" for="dailySpendingValidationMsg" ng-show="dailySpendingMissing==true">
+						<i class="fa fa-times-circle-o"></i>Daily Spendings are not complete</label
+					>
 					<form role="form" id="newCityForm">
 						<div class="box-body">
 							<div class="overlay" ng-show="saving == true">
@@ -172,7 +179,7 @@
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="iataCode" ng-show="iataCodeMissing==true">
-												<i class="fa fa-times-circle-o"></i>Iata Code is missing</label
+												<i class="fa fa-times-circle-o"></i>Iata Code is missing or is not a 3-letters text</label
 											>
 											<label for="iataCode" ng-show="iataCodeMissing==false">Iata Code</label>
 											<input
@@ -180,7 +187,7 @@
 												class="form-control"
 												id="iataCode"
 												ng-model="newCity.iataCode"
-												placeholder="Iata Code"
+												placeholder="Iata Code - 3 letters code, MUST BE A VALID CODE"
 												required
 											/>
 										</div>
@@ -188,8 +195,8 @@
 											<label class="control-label text-red" for="country" ng-show="countryIdMissing==true">
 												<i class="fa fa-times-circle-o"></i>Country is missing</label
 											>
-											<label for="country" ng-show="countryIdMissing==false">countryId</label>
-											<select disabled class="form-control" id="country" ng-model="newCity.countryId">
+											<label for="country" ng-show="countryIdMissing==false">Country</label>
+											<select class="form-control" id="country" ng-model="newCity.countryId">
 												<option
 													ng-repeat="country in countries"
 													ng-value="country.id"
@@ -199,59 +206,48 @@
 												>
 											</select>
 										</div>
-										<div class="form-group" ng-show="saving==false">
-											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
-												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
-											>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="thumbnail"
-												ng-model="newCity.thumbnail"
-												placeholder="Enter thumbnail"
-												required
-											/>
-										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lat" ng-show="latMissing==true">
-												<i class="fa fa-times-circle-o"></i>Latitude is missing</label
+												<i class="fa fa-times-circle-o"></i>Latitude is missing or is not a number</label
 											>
 											<label for="lat" ng-show="latMissing==false">Latitude</label>
 											<input
-												type="text"
+												type="number"
 												required
 												class="form-control"
 												id="lat"
 												ng-model="newCity.lat"
-												placeholder="Enter latitude"
+												placeholder="Enter latitude (eg: 123.123456)"
 												required
+												min="0.0"
+												max="999.999999"
 											/>
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lng" ng-show="lngMissing==true">
-												<i class="fa fa-times-circle-o"></i>Longitude is missing</label
+												<i class="fa fa-times-circle-o"></i>Longitude is missing or is not a number</label
 											>
 											<label for="lng" ng-show="lngMissing==false">Longitude</label>
 											<input
-												type="text"
+												type="number"
 												required
 												class="form-control"
 												id="lng"
 												ng-model="newCity.lng"
-												placeholder="Enter longitude"
+												placeholder="Enter longitude (eg: 123.123456)"
 												required
+												min="0.0"
+												max="999.999999"
 											/>
 										</div>
 
-										<div class="form-group-6" ng-show="saving==false">
+										<div class="form-group" ng-show="saving==false">
 											<label class="control-label text-red" for="visitOrder" ng-show="visitOrderMissing==true">
-												<i class="fa fa-times-circle-o"></i>Visit order is missing</label
+												<i class="fa fa-times-circle-o"></i>Visit order is missing or is not a number</label
 											>
 											<label for="visitOrder" ng-show="visitOrderMissing==false">Visit order</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												id="visitOrder"
 												ng-model="newCity.visitOrder"
@@ -259,13 +255,39 @@
 												required
 											/>
 										</div>
-										<!-- <div class="form-group-6" ng-show="saving==false">
-											<label class="control-label text-red" for="active" ng-show="activeMissing==true">
-												<i class="fa fa-times-circle-o"></i>Active is missing</label
+										<div class="form-group-6" ng-show="saving==false">
+											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
+												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
 											>
-											<label for="active" ng-show="activeMissing==false">Active</label>
-											<input type="text" class="form-control" id="active" ng-model="newCity.active" required />
-										</div> -->
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 500 X 500 pixels)</label>
+											<!-- <input
+												type="url"
+												required
+												class="form-control"
+												id="thumbnail"
+												ng-model="newCity.thumbnail"
+												placeholder="Enter thumbnail"
+												required
+											/> -->
+											<style>
+												input[type="file"] {
+													display: none;
+												}
+												.custom-file-upload {
+													border: 1px solid #ccc;
+													display: inline-block;
+													padding: 6px 12px;
+													cursor: pointer;
+												}
+											</style>
+											<label for="file-upload" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Choose Image
+											</label>
+											<input id="file-upload" type="file" fileread="newCity.thumbnail" />
+										</div>
+										<div class="form-group-6" ng-show="saving==false">
+											<img alt="No image available!" src="{{newCity.thumbnail}}" style="width: 100px; height: 100px;"/>
+										</div>
 									</div>
 									<!-- /.tab-pane -->
 									<div class="tab-pane" id="dailySpending">

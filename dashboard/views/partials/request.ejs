@@ -12,7 +12,10 @@
                     <a href="#travelerTab" data-toggle="tab">Traveler</a>
                 </li>
                 <li>
-                    <a href="#datesTab" data-toggle="tab">Dates & Destinations</a>
+                    <a href="#datesTab" data-toggle="tab">Dates</a>
+                </li>
+                <li>
+                    <a href="#destinationsTab" data-toggle="tab">Destinations</a>
                 </li>
                 <li>
                     <a href="#purposeTab" data-toggle="tab">Purpose</a>
@@ -26,8 +29,17 @@
                 <li>
                     <a href="#detailsTab" data-toggle="tab">Assistance</a>
                 </li>
-                <li ng-if="!isCreate">
+                <!-- <li ng-if="!isCreate">
                     <a href="#revenueTab" data-toggle="tab">Financial</a>
+                </li> -->
+                <li ng-if="currentOrder.transportationOffers.choices">
+                    <a href="#flightsTab" data-toggle="tab">Transportaion</a>
+                </li>
+                <li ng-if="currentOrder.accomodationOffers.choices">
+                    <a href="#accomodationTab" data-toggle="tab">Accomodation</a>
+                </li>
+                <li ng-if="currentOrder.attractions.choices">
+                    <a href="#attractionsTab" data-toggle="tab">Attractions</a>
                 </li>
                 <li ng-if="!isCreate && currentOrder.destination">
                     <a href="#generatePackageTab" data-toggle="tab">Package</a>
@@ -137,7 +149,43 @@
                 <!-- /.tab-pane -->
 
                 <div class="tab-pane" id="datesTab">
-                    <div ng-if="currentOrder.destination">
+                    
+                    <div class="form-control-6">
+                        <label for="departureDate">Departure Date</label>
+                        <input type="date" class="form-control" id="departureDate" format="yyyy-MM-dd"
+                            ng-model="currentOrder.departureDate">
+                    </div>
+                    <div class="form-control-6">
+                        <label for="returnDate">Return Date</label>
+                        <input type="date" class="form-control" id="returnDate" format="yyyy-MM-dd"
+                            ng-model="currentOrder.returnDate">
+                    </div>
+                    <div class="form-control-6">
+                        <label for="flexibleDates">Flexible Dates</label>
+                        <select class="form-control" id="flexibleDates" ng-model="currentOrder.isFlexibleDates">
+                            <option value="1" ng-selected="currentOrder.isFlexibleDates === 1">True</option>
+                            <option value="0" ng-selected="currentOrder.isFlexibleDates !== 1">False</option>
+                        </select>
+                    </div>
+                    
+                </div><!-- /.tab-pane -->
+                <div class="tab-pane" id="destinationsTab">
+                    <div class="form-control-6">
+                        <label for="travelingFrom">Traveling From</label>
+                        <select class="form-control" id="travelingFrom" ng-model="currentOrder.travelingFrom">
+                            <option>Cairo</option>
+                            <option>Alexandria</option>
+                            <option>Hurghada</option>
+                            <option>Sharm El-Sheikh</option>
+                        </select>
+                    </div>
+                    <div ng-if="currentOrder.cities.choices">
+                        <label for="cities">Travelling to (cities)</label>
+                        <div ng-repeat="city in currentOrder.cities.choices">
+                            <input type="checkbox" checked disabled>{{city.name}}</input>
+                        </div>
+                    </div>
+                    <div ng-if="currentOrder.destination && !currentOrder.cities.choices">
                         <label for="destination">Destination</label>
                         <select class="form-control" id="destination" ng-model="currentOrder.destination">
                             <option ng-repeat="itinerary in itineraries" ng-value="itinerary.id"
@@ -150,7 +198,7 @@
                                 ng-model="currentOrder.otherCountry">
                         </div>
                     </div>
-                    <div ng-if="!currentOrder.destination">
+                    <div ng-if="!currentOrder.destination && !currentOrder.cities.choices">
                         <label for="firstCountry">First Country</label>
                         <select class="form-control" id="firstCountry" ng-model="currentOrder.firstCountry">
                             <option ng-repeat="country in countries" ng-value="country.id"
@@ -178,7 +226,7 @@
                             </select>
                         </div>
                     </div>
-                    <div ng-if="!isCreate">
+                    <div ng-if="!isCreate && currentOrder.destination && !currentOrder.cities.choices">
                         <label for="actualDestination">Actual Destination</label>
                         <select class="form-control" id="actualDestination" ng-model="currentOrder.actualDestination">
                             <option value="">None</option>
@@ -192,33 +240,7 @@
                                 ng-model="currentOrder.otherActualDestination">
                         </div>
                     </div>
-                    <div class="form-control-6">
-                        <label for="departureDate">Departure Date</label>
-                        <input type="date" class="form-control" id="departureDate" format="yyyy-MM-dd"
-                            ng-model="currentOrder.departureDate">
-                    </div>
-                    <div class="form-control-6">
-                        <label for="returnDate">Return Date</label>
-                        <input type="date" class="form-control" id="returnDate" format="yyyy-MM-dd"
-                            ng-model="currentOrder.returnDate">
-                    </div>
-                    <div class="form-control-6">
-                        <label for="flexibleDates">Flexible Dates</label>
-                        <select class="form-control" id="flexibleDates" ng-model="currentOrder.isFlexibleDates">
-                            <option value="1" ng-selected="currentOrder.isFlexibleDates === 1">True</option>
-                            <option value="0" ng-selected="currentOrder.isFlexibleDates !== 1">False</option>
-                        </select>
-                    </div>
-                    <div class="form-control-6">
-                        <label for="travelingFrom">Traveling From</label>
-                        <select class="form-control" id="travelingFrom" ng-model="currentOrder.travelingFrom">
-                            <option>Cairo</option>
-                            <option>Alexandria</option>
-                            <option>Hurghada</option>
-                            <option>Sharm El-Sheikh</option>
-                        </select>
-                    </div>
-                </div><!-- /.tab-pane -->
+                </div>
                 <div class="tab-pane" id="purposeTab">
                     <div>
                         <label for="purpose">Travel Purpose</label>
@@ -248,7 +270,6 @@
                             ng-model="currentOrder.infantsNumber">
                     </div>
                 </div>
-
                 <!-- /.tab-pane --><div class="tab-pane" id="budgetTab">
                     <div>
                         <div>
@@ -269,7 +290,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="interestsTab">
                     <div ng-if="isCreate">
@@ -302,7 +322,6 @@
                     <div>
                     </div>
                 </div>
-
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="detailsTab">
                     <div class="form-control-6">
@@ -323,7 +342,7 @@
                 </div>
 
                 <!-- /.tab-pane -->
-                <div ng-if="!isCreate" class="tab-pane" id="revenueTab">
+                <!-- <div ng-if="!isCreate" class="tab-pane" id="revenueTab">
                     <div class="form-control-6">
                         <label for="profit">Revenue</label>
                         <input type="number" min="0.00" step="1" class="form-control" id="revenue"
@@ -334,8 +353,72 @@
                         <input type="number" min="0.00" step="1" class="form-control" id="profit"
                             ng-model="currentOrder.profit">
                     </div>
-                </div>
+                </div> -->
 
+                <div class="tab-pane" id="flightsTab">
+                    <div ng-repeat="flightOffer in currentOrder.transportationOffers.choices"
+                        ng-show="currentOrder.flightOffers.choices.length != 0">
+                        <h4><img src="{{flightOffer.carrier.squareLogo}}" width="30px" height="30px"/> {{flightOffer.segments[0].origin}} to {{flightOffer.segments[flightOffer.segments.length - 1].destination}} on {{flightOffer.carrier.name}} </h4>
+                        <div>
+                            <div class="form-control-6">
+                                <p><b>Departure: </b>{{flightOffer.segments[0].departure | date:'dd MMM yyyy - hh:mm'}}</p>
+                            </div>
+                            <div class="form-control-6">
+                                <p><b>Arrival: </b>{{flightOffer.segments[flightOffer.segments.length - 1].return | date:'dd MMM yyyy - hh:mm'}}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-control-6">
+                                <p><b>Price: </b>{{flightOffer.price}} {{flightOffer.currency}}</p>
+                            </div>
+                            <div class="form-control-6">
+                                <p><b>Stops: </b>{{flightOffer.segments.length == 1 ? 'direct' : flightOffer.segments.length - 1 }} </p>
+                            </div>
+                        </div>
+                        <div ng-repeat="segment in flightOffer.segments" ng-hide="flightOffer.segments.length == 1">
+                            <p>{{segment.origin}}: {{segment.departure | date:'dd MMM yyyy - hh:mm'}} | {{segment.destination }}: {{segment.return | date:'dd MMM yyyy - hh:mm'}} | {{segment.durationInWords}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="accomodationTab">
+                        <div ng-repeat="hotel in currentOrder.accomodationOffers.choices"
+                            ng-show="currentOrder.accomodationOffers.choices.length != 0">
+                            <h4>{{hotel.city}} ({{hotel.numberOfNights}} nights)</h4>
+                            <div>
+                                <div class="form-control-6">
+                                    <p><b>Hotel: </b>{{hotel.name}}</p>
+                                </div>
+                                <div class="form-control-6">
+                                    <p><b>Stars: </b>{{hotel.stars }}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-control-6">
+                                    <p><b>Checkin: </b>{{hotel.checkin | date:'dd MMM yyyy -hh:mm'}}</p>
+                                </div>
+                                <div class="form-control-6">
+                                    <p><b>Checkout: </b>{{hotel.checkout | date:'dd MMM yyyy'}}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-control-6">
+                                    <p><b>Night Rate: </b>{{hotel.rate}} {{hotel.currency}}</p>
+                                </div>
+                                <div class="form-control-6">
+                                    <p><b>Total: </b>{{hotel.price }} {{hotel.currency}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="attractionsTab">
+                        <div ng-repeat="item in currentOrder.attractions.choices"
+                            ng-show="currentOrder.attractions.choices.length != 0">
+                            <h4>{{item.city.name}}</h4>
+                            <div ng-repeat="attraction in item.attractions">
+                                <input type="checkbox" disabled checked>{{attraction.name}}</input>
+                            </div>      
+                        </div>
+                    </div>
                 <!-- /.tab-pane -->
                 <div ng-if="!isCreate" class="tab-pane" id="generatePackageTab">
                     <!-- <input type="text" class="form-control" id="packageName" ng-model="currentOrder.packageName" ng-change="currentOrder.generatedFile = null">

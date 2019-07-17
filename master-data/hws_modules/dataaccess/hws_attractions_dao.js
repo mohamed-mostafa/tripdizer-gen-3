@@ -37,9 +37,9 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								arDescription: rows[0].AR_Description,
 								enCategory: rows[0].EN_Category,
 								arCategory: rows[0].AR_Category,
-								thumbnail: rows[0].thumbnail,
 								priority: rows[0].Priority,
-								cityId: rows[0].City_Id
+								cityId: rows[0].City_Id,
+								active: rows[0].Active
 							};
 
 							if (lang) {
@@ -83,15 +83,14 @@ var create = function(attraction, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Attractions (EN_Name, EN_Description, AR_Name, AR_Description, EN_Category, AR_Category, Thumbnail, Priority, City_Id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Attractions (EN_Name, EN_Description, AR_Name, AR_Description, EN_Category, AR_Category, Priority, City_Id) values (?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							attraction.enName,
 							attraction.enDescription,
 							attraction.arName,
 							attraction.arDescription,
 							attraction.enCategory,
-							attratcion.arCategory,
-							attraction.thumbnail,
+							attraction.arCategory,
 							attraction.priority,
 							attraction.cityId
 						],
@@ -144,7 +143,7 @@ var update = function(attraction, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Attractions SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, EN_Category = ?, AR_Category = ?, Thumbnail = ?, Priority = ? WHERE Id = ?',
+						'UPDATE Attractions SET City_Id = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, EN_Category = ?, AR_Category = ?, Priority = ? WHERE Id = ?',
 						[
 							attraction.cityId,
 							attraction.enName,
@@ -153,7 +152,6 @@ var update = function(attraction, onSuccess, onFailure) {
 							attraction.arDescription,
 							attraction.enCategory,
 							attraction.arCategory,
-							attraction.thumbnail,
 							attraction.priority,
 							attraction.id,
 						],
@@ -180,6 +178,33 @@ var update = function(attraction, onSuccess, onFailure) {
 		}
 	});
 };
+
+var toggleActivation = function(id, active, onSuccess, onFailure) {
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+		} else {
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
+				} else {
+					connection.query('UPDATE Attractions SET Active = ? WHERE Id = ?', [active, id],
+						function(err, result) {
+							if (err) {
+								console.log('An error occurred while trying to activate/deactivate attraction: ' + id);
+								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+							} else {
+								connection.commit(); connection.end(); onSuccess();
+							}
+					});
+				}
+			});
+		}
+	});
+}
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
@@ -218,9 +243,9 @@ var getAll = function(lang, onSuccess, onFailure) {
 								arDescription: rows[i].AR_Description,
 								enCategory: rows[i].EN_Category,
 								arCategory: rows[i].AR_Category,
-								thumbnail: rows[i].Thumbnail,
 								priority: rows[i].Priority,
-								cityIata: rows[i].Iata_Code
+								cityIata: rows[i].Iata_Code,
+								active: rows[i].Active
 							};
 							if (lang) {
 								attraction.name = attraction[lang.toLowerCase() + 'Name'];
@@ -244,3 +269,4 @@ exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
+exports.toggleActivation = toggleActivation;

@@ -6,7 +6,7 @@
 const { google } = require('googleapis');
 const { JWT } = require('google-auth-library');
 
-const key = require('../../tripdizer-service-account-key.json');
+const key = require('../../tripdizer-service-account-key.json'); // this is the one that has been whitelisted at gsuite for google contacts
 const scopes = 'https://www.googleapis.com/auth/contacts';
 const jwt = new google.auth.JWT(
 	key.client_email,

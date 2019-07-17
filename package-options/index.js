@@ -4,10 +4,14 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
-var app = require('connect')();
+var express = require('express');
+var app = express();
+var cors = require('cors');
+
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = process.env.PORT || 8084;
+
 
 // swaggerRouter configuration
 var options = {
@@ -15,6 +19,9 @@ var options = {
   controllers: path.join(__dirname, './controllers'),
   useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
 };
+
+// enable CORS
+app.use(cors());
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
@@ -36,7 +43,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   app.use(middleware.swaggerUi());
 
   // Start the server
-  http.createServer(app).listen(serverPort, function () {
+  app.listen(serverPort, function () {
     console.log('%s: "package-options" Node server started on  %d (http://localhost:%d)', Date(Date.now()), serverPort, serverPort);
     console.log('package-options Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });

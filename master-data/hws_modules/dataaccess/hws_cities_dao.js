@@ -40,7 +40,6 @@ var getById = function(id, lang, onSuccess, onFailure) {
 								enDescription: rows[0].EN_Description,
 								arName: rows[0].AR_Name,
 								arDescription: rows[0].AR_Description,
-								thumbnail: rows[0].Thumbnail,
 								lat: rows[0].Latitude,
 								lng: rows[0].Longitude,
 								visitOrder: rows[0].Visit_Order,
@@ -90,7 +89,7 @@ var create = function(city, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Thumbnail, Latitude, Longitude, Visit_Order) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Cities (Country_Id, Iata_Code, EN_Name, EN_Description, AR_Name, AR_Description, Latitude, Longitude, Visit_Order) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							city.countryId,
 							city.iataCode,
@@ -98,7 +97,6 @@ var create = function(city, onSuccess, onFailure) {
 							city.enDescription,
 							city.arName,
 							city.arDescription,
-							city.thumbnail,
 							city.lat,
 							city.lng,
 							city.visitOrder,
@@ -182,7 +180,7 @@ var update = function(city, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Cities SET Country_Id = ?, Iata_Code = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Thumbnail = ?, Latitude = ?, Longitude = ?, Visit_Order = ?, Active = ? WHERE Id = ?',
+						'UPDATE Cities SET Country_Id = ?, Iata_Code = ?, EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Latitude = ?, Longitude = ?, Visit_Order = ? WHERE Id = ?',
 						[
 							city.countryId,
 							city.iataCode,
@@ -190,11 +188,9 @@ var update = function(city, onSuccess, onFailure) {
 							city.enDescription,
 							city.arName,
 							city.arDescription,
-							city.thumbnail,
 							city.lat,
 							city.lng,
 							city.visitOrder,
-							city.active,
 							city.id,
 						],
 						function(err, result) {
@@ -295,8 +291,7 @@ var getAll = function(lang, onSuccess, onFailure) {
 									arDescription: rows[i].AR_Description,
 									countryIsoCode: rows[i].Country_ISO_Code,
 									countryEnName: rows[i].Country_EN_Name,
-									countryArName: rows[i].Country_EN_Name,
-									thumbnail: rows[i].Thumbnail,
+									countryArName: rows[i].Country_AR_Name,
 									lat: rows[i].Latitude,
 									lng: rows[i].Longitude,
 									visitOrder: rows[i].Visit_Order,
@@ -360,7 +355,6 @@ var getAllCitiesInIternaries = function(lang, onSuccess, onFailure) {
 								enDescription: rows[i].EN_Description,
 								arName: rows[i].AR_Name,
 								arDescription: rows[i].AR_Description,
-								thumbnail: rows[i].Thumbnail,
 								lat: rows[i].Latitude,
 								lng: rows[i].Longitude,
 								visitOrder: rows[i].Visit_Order,
@@ -383,8 +377,36 @@ var getAllCitiesInIternaries = function(lang, onSuccess, onFailure) {
 	});
 };
 
+var toggleActivation = function(id, active, onSuccess, onFailure) {
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+		} else {
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					connection.end(); console.log('An error occurred while trying to begin a database transaction');
+					console.log(err); onFailure(err);
+				} else {
+					connection.query('UPDATE hws.Cities SET Active = ? WHERE Id = ?', [active, id],
+						function(err, result) {
+							if (err) {
+								console.log('An error occurred while trying to activate/deactivate city: ' + id);
+								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+							} else {
+								connection.commit(); connection.end(); onSuccess();
+							}
+					});
+				}
+			});
+		}
+	});
+}
+
 exports.getById = getById;
 exports.create = create;
 exports.update = update;
 exports.getAll = getAll;
 exports.getAllCitiesInIternaries = getAllCitiesInIternaries;
+exports.toggleActivation = toggleActivation;
