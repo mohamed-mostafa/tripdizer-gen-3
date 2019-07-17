@@ -38,7 +38,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                         countryIsoCode: hotelCity.countryIsoCode,
                         coordinates: hotelCity.lng + ", " + hotelCity.lat,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + hotelCity.iataCode + ".png",
-                        // interests: [] // FIX THIS
+                        interests: hotelCity.interests.map(interest => interest.name)
                     },
                     hotels: [],
                 }

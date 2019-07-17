@@ -102,7 +102,7 @@
 									id="enName"
 									ng-model="newCountry.enName"
 									placeholder="Enter name in English"
-									required
+									required maxlength="50"
 								/>
 							</div>
 							<div class="form-group-9" ng-show="saving==false">
@@ -117,7 +117,7 @@
 									id="enDescription"
 									ng-model="newCountry.enDescription"
 									placeholder="Enter description in English"
-									required
+									required maxlength="500"
 								/>
 							</div>
 							<div class="form-group-3" ng-show="saving==false">
@@ -132,7 +132,7 @@
 									id="arName"
 									ng-model="newCountry.arName"
 									placeholder="Enter name in Arabic"
-									required
+									required maxlength="50"
 								/>
 							</div>
 							<div class="form-group-9" ng-show="saving==false">
@@ -147,7 +147,7 @@
 									id="arDescription"
 									ng-model="newCountry.arDescription"
 									placeholder="Enter description in Arabic"
-									required
+									required maxlength="500"
 								/>
 							</div>
 							<div class="form-group" ng-show="saving==false">
@@ -160,7 +160,7 @@
 									id="introduction"
 									ng-model="newCountry.introduction"
 									placeholder="Enter introduction"
-									rows="2"
+									rows="2" maxlength="500"
 								></textarea>
 							</div>
 							<div class="form-group" ng-show="saving==false">
@@ -174,7 +174,7 @@
 									id="includes"
 									ng-model="newCountry.includes"
 									placeholder="Enter includes"
-									rows="2"
+									rows="2" maxlength="500"
 								></textarea>
 							</div>
 							<div class="form-group" ng-show="saving==false">
@@ -188,7 +188,7 @@
 									id="excludes"
 									ng-model="newCountry.excludes"
 									placeholder="Enter excludes"
-									rows="2"
+									rows="2" maxlength="500"
 								></textarea>
 							</div>
 							<div class="form-group form-group-4" ng-show="saving==false">
@@ -213,7 +213,7 @@
 									id="visaRequirements"
 									ng-model="newCountry.visaRequirements"
 									placeholder="Enter visa requirements"
-									rows="2"
+									rows="2" maxlength="2048"
 								></textarea>
 							</div>
 							<div class="form-group" ng-show="saving==false">
@@ -227,14 +227,14 @@
 									id="ISOCode"
 									ng-model="newCountry.ISOCode"
 									placeholder="Enter ISO Code"
-									required
+									required maxlength="3"
 								/>
 							</div>
 							<div class="form-group-6" ng-show="saving==false">
 								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
 								>
-								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 4/3 aspect-ratio PNG photo, around 800 X 600 pixels)</label>
+								<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 3/2 aspect-ratio PNG photo, around 800 X 600 pixels)</label>
 								<!-- <input
 									type="text"
 									required

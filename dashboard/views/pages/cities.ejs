@@ -98,8 +98,11 @@
 						<h4>Saving failed!</h4>
 						<p>{{ serverErrorMessage }}</p>
 					</div>
-					<label class="control-label text-red" for="dailySpendingValidationMsg" ng-show="dailySpendingMissing==true">
+					<label class="control-label text-red" ng-show="dailySpendingMissing==true">
 						<i class="fa fa-times-circle-o"></i>Daily Spendings are not complete</label
+					>
+					<label class="control-label text-red" ng-show="interestsMissing==true">
+						<i class="fa fa-times-circle-o"></i>At least one item is needed in the Things to do</label
 					>
 					<form role="form" id="newCityForm">
 						<div class="box-body">
@@ -113,6 +116,9 @@
 									</li>
 									<li>
 										<a href="#dailySpending" data-toggle="tab">Daily Spending</a>
+									</li>
+									<li>
+										<a href="#thingsToDoTab" data-toggle="tab">Things to do</a>
 									</li>
 								</ul>
 								<div class="tab-content">
@@ -129,7 +135,7 @@
 												id="enName"
 												ng-model="newCity.enName"
 												placeholder="Enter name in English"
-												required
+												required maxlength="50"
 											/>
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
@@ -144,7 +150,7 @@
 												id="enDescription"
 												ng-model="newCity.enDescription"
 												placeholder="Enter description in English"
-												required
+												required maxlength="1024"
 											/>
 										</div>
 										<div class="form-group-3" ng-show="saving==false">
@@ -159,7 +165,7 @@
 												id="arName"
 												ng-model="newCity.arName"
 												placeholder="Enter name in Arabic"
-												required
+												required maxlength="50"
 											/>
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
@@ -174,7 +180,7 @@
 												id="arDescription"
 												ng-model="newCity.arDescription"
 												placeholder="Enter description in Arabic"
-												required
+												required maxlength="1023"
 											/>
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
@@ -188,7 +194,7 @@
 												id="iataCode"
 												ng-model="newCity.iataCode"
 												placeholder="Iata Code - 3 letters code, MUST BE A VALID CODE"
-												required
+												required maxlength="3"
 											/>
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
@@ -259,7 +265,7 @@
 											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
 											>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 500 X 500 pixels)</label>
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 3/2 aspect-ratio PNG photo, 300 X 200 pixles)</label>
 											<!-- <input
 												type="url"
 												required
@@ -299,6 +305,7 @@
 										>
 											<label for="{{ budgetCategory.id }}">{{ budgetCategory.en_name }}</label>
 											<input
+												type="number"
 												class="form-control"
 												id="{{ budgetCategory.id }}"
 												ng-model="newCity.dailySpending[budgetCategory.id]"
@@ -306,6 +313,29 @@
 												required
 											/>
 										</div>
+										<!-- /.form group -->
+									</div>
+									<div class="tab-pane" id="thingsToDoTab">
+										<p ng-repeat="interest in interests" ng-if="interest.id !== 0" class="interest" id="{{interest.id}}">
+											<label style="width: 100px;" for="{{ interest.Id }}">{{ interest.en_name }}</label>
+											<input id="{{interest.id}}" type="checkbox" ng-change="sync(bool, interest)" ng-model="bool" ng-checked="isChecked(interest.id)"/>
+										</p>
+										<!-- <div
+											class="form-group"
+											ng-if="interest.id !== 0"
+											ng-repeat="interest in interests"
+											ng-show="saving==false"
+										>
+											<label for="{{ interest.Id }}">{{ interest.en_name }}</label>
+											<input
+												type="checkbox"
+												class="form-control"
+												id="{{ budgetCategory.Id }}"
+												ng-model="newCity.interests[interest.Id]"
+												placeholder="Enter Daily Spending for {{ interest.en_name }}"
+												required
+											/>
+										</div> -->
 										<!-- /.form group -->
 									</div>
 								</div>

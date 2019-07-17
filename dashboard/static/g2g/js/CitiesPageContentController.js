@@ -17,7 +17,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.serverError = false;
 		$scope.serverErrorMessage = '';
 		// form fields
-		$scope.newCity = { countryId: $scope.selectedCountry };
+		$scope.newCity = { countryId: $scope.selectedCountry, interests: [] };
 		$scope.editMode = false;
 
 		$scope.loading = false;
@@ -45,6 +45,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			$scope.lngMissing = false;
 			$scope.visitOrderMissing = false;
 			$scope.activeMissing = false;
+			$scope.interestsMissing = false;
 			$scope.serverError = false;
 			$scope.dailySpendingMissing = false;
 			$scope.serverErrorMessage = '';
@@ -92,6 +93,9 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			} else {
 				$scope.dailySpendingMissing = true;
 			}
+			if ($scope.newCity.interests == null || $scope.newCity.interests.length == 0) {
+				$scope.interestsMissing = true;
+			}
 			return (
 				$scope.enNameMissing !== true &&
 				$scope.arNameMissing !== true &&
@@ -101,6 +105,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				$scope.lngMissing !== true &&
 				$scope.countryIdMissing !== true &&
 				$scope.dailySpendingMissing !== true &&
+				$scope.interestsMissing !== true &&
 				$scope.thumbnailMissing !== true
 			);
 		};
@@ -148,7 +153,6 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 						$('#addCityModal').modal('hide');
 					})
 					.error(function(err) {
-						$scope.newCity = {};
 						$scope.editMode = false;
 						$scope.saving = false;
 						$scope.serverError = true;
@@ -202,7 +206,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.openAddDialog = function(id) {
 			$scope.editMode = false;
 			$scope.resetValidationFlags();
-			$scope.newCity = { countryId: $scope.selectedCountry };
+			$scope.newCity = { countryId: $scope.selectedCountry, interests: [] };
 			$('#addCityModal').modal('show');
 		};
 		$scope.buildTable = function() {
@@ -240,6 +244,30 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 			BudgetCategoriesService.getAll().then(function(budgetCategories) {
 				$scope.budgetCategories = budgetCategories;
 			});
+		};
+
+		$scope.isChecked = function(id){
+			var match = false;
+			for(var i=0 ; i < $scope.newCity.interests.length; i++) {
+			  if($scope.newCity.interests[i].id == id){
+				match = true;
+			  }
+			}
+			return match;
+		};
+	  
+		$scope.sync = function(bool, item){
+		  if(bool){
+			// add item
+			$scope.newCity.interests.push(item);
+		  } else {
+			// remove item
+			for(var i=0 ; i < $scope.newCity.interests.length; i++) {
+			  if($scope.newCity.interests[i].id == item.id){
+				$scope.newCity.interests.splice(i,1);
+			  }
+			}      
+		  }
 		};
 
 		$scope.initialize();
