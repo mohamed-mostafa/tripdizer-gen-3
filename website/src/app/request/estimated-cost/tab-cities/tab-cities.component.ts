@@ -1,3 +1,4 @@
+import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CitiesService } from './cities.service';
@@ -13,9 +14,8 @@ export class TabCitiesComponent {
 	selectedCities: Array<CityDTO> = [];
 	nightsArray: Array<number> = [];
 
-	constructor(service: CitiesService) {
-		this.cities = service.getCities();
-		console.log(this.cities);
+	constructor(citiesService: CitiesService, private service: EstimatedCostService) {
+		this.cities = citiesService.getCities();
 	}
 
 	updateSelectedCities(city, e) {
@@ -29,17 +29,21 @@ export class TabCitiesComponent {
 				}
 			}
 		}
-		console.log(this.selectedCities);
 	}
 
 	calculateCitiesNights(nights, cities) {
 		const floorDivision = Math.floor(nights / cities);
 		const modulus = nights % cities;
 		for (let z = 0; z < cities; z++) { this.nightsArray[z] = floorDivision; }
-		return this.nightsArray[0] + modulus;
+		this.nightsArray[0] = this.nightsArray[0] + modulus;
 	}
 
 	next(): void {
 
+		// calculate nights in every city
+
+		// set number of nights for every city in selectedCities array
+
+		this.service.setSelectedCities(this.selectedCities);
 	}
 }

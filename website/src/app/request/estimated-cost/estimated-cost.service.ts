@@ -12,6 +12,7 @@ export class EstimatedCostService {
 	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 
 	private selectedFlightOffers: Array<FlightOffer>;
+	private selectedCities: Array<CityDTO>;
 
 	constructor(private http: HttpClient, private requestService: RequestService) {}
 
@@ -19,27 +20,34 @@ export class EstimatedCostService {
 		return this.requestService.getProperty('countries');
 	}
 
+	setSelectedCities(selectedCities: Array<CityDTO>): void {
+		this.selectedCities = selectedCities;
+		this.requestService.setProperty('selectedCities', selectedCities);
+	}
+
 	getSelectedCities(): Array<CityDTO> {
-		return [
-			{
-				countryIso: 'NED',
-				cityIata: 'AMS',
-				numberOfNights: 3,
-				countryDisplayName: 'Holland',
-				name: 'Amsterdam',
-				iataCode: 'AMS',
-				thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/AMS.png'
-			},
-			{
-				countryIso: 'FRA',
-				cityIata: 'PAR',
-				numberOfNights: 7,
-				countryDisplayName: 'France',
-				name: 'Paris',
-				iataCode: 'PAR',
-				thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/PAR.png'
-			},
-		];
+
+		return this.selectedCities;
+		// return [
+		// 	{
+		// 		countryIso: 'NED',
+		// 		cityIata: 'AMS',
+		// 		numberOfNights: 3,
+		// 		countryDisplayName: 'Holland',
+		// 		name: 'Amsterdam',
+		// 		iataCode: 'AMS',
+		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/AMS.png'
+		// 	},
+		// 	{
+		// 		countryIso: 'FRA',
+		// 		cityIata: 'PAR',
+		// 		numberOfNights: 7,
+		// 		countryDisplayName: 'France',
+		// 		name: 'Paris',
+		// 		iataCode: 'PAR',
+		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/PAR.png'
+		// 	},
+		// ];
 	}
 
 	getFlights(): Observable<Array<Flight>> {

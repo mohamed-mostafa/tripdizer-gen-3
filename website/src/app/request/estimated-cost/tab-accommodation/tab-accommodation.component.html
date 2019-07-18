@@ -4,59 +4,61 @@
 			{{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
 		</h4>
 
-		<div class="row mt-2">
-			<div class="col">
-				<h3 class="destination-name font-italic">Rome</h3>
+		<div *ngFor="let accommodation of (accommodations | async)">
+			<div class="row mt-2">
+				<div class="col">
+					<h3 class="destination-name font-italic">{{accommodation.city.name}}</h3>
+				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of (hotels | async)">
-				<div class="hotel-item p-3">
-					<div class="item-img-container">
-						<img [src]="hotel.image" alt="" />
-					</div>
-
-					<div class="mt-2">
-						<div class="row">
-							<div class="col-7">
-								<p class="dark-grey hotel-name mb-1">
-									<span class="font-weight-bold">{{ hotel.name }}</span>
-								</p>
-							</div>
-							<div class="col-5 rating">
-								<p class="mb-0">Rate</p>
-								<p class="mb-0 rating-stars">
-									<span class="mr-1" *ngIf="hotel.rate >= 1"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 2"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 3"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 4"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate == 5"><i class="fa fa-star"></i></span>
-								</p>
-							</div>
+	
+			<div class="row">
+				<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of accommodation.hotels">
+					<div class="hotel-item p-3">
+						<div class="item-img-container">
+							<img [src]="hotel.thumbnail" alt="" />
 						</div>
-						<div>
-							<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
-						</div>
-
-						<div class="row">
-							<div class="col-8 col-md-12">
-								<p class="grey item-text ">{{ hotel.description }}</p>
+	
+						<div class="mt-2">
+							<div class="row">
+								<div class="col-7">
+									<p class="dark-grey hotel-name mb-1">
+										<span class="font-weight-bold">{{ hotel.name }}</span>
+									</p>
+								</div>
+								<div class="col-5 rating">
+									<p class="mb-0">Rate</p>
+									<p class="mb-0 rating-stars">
+										<span class="mr-1" *ngIf="hotel.rate >= 1"><i class="fa fa-star"></i></span>
+										<span class="mr-1" *ngIf="hotel.rate >= 2"><i class="fa fa-star"></i></span>
+										<span class="mr-1" *ngIf="hotel.rate >= 3"><i class="fa fa-star"></i></span>
+										<span class="mr-1" *ngIf="hotel.rate >= 4"><i class="fa fa-star"></i></span>
+										<span class="mr-1" *ngIf="hotel.rate == 5"><i class="fa fa-star"></i></span>
+									</p>
+								</div>
 							</div>
-							<div class="col-4 col-md-12">
-								<div class="row">
-									<div class="col-12 col-md-6">
-										<h6 class="font-weight-bold price-title">
-											{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-										</h6>
-										<p class="item-text price-text">{{ hotel.price }} LE</p>
-									</div>
-									<div class="col-12 col-md-6 justify-content-end">
-										<a
-											class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-											role="button"
-											>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
-										>
+							<div>
+								<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
+							</div>
+	
+							<div class="row">
+								<div class="col-8 col-md-12">
+									<p class="grey item-text ">{{ hotel.description }}</p>
+								</div>
+								<div class="col-4 col-md-12">
+									<div class="row">
+										<div class="col-12 col-md-6">
+											<h6 class="font-weight-bold price-title">
+												{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
+											</h6>
+											<p class="item-text price-text">{{ hotel.price }} LE</p>
+										</div>
+										<div class="col-12 col-md-6 justify-content-end">
+											<a
+												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
+												role="button"
+												>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
+											>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -66,193 +68,8 @@
 			</div>
 		</div>
 
-		<div class="row mt-2">
-			<div class="col">
-				<hr class="d-block d-md-none" />
-				<h3 class="destination-name font-italic additional-destination p-1 p-md-0">Verona</h3>
-			</div>
-		</div>
+		
 
-		<div class="row mt-2">
-			<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of (hotels | async)">
-				<div class="hotel-item p-3">
-					<div class="item-img-container">
-						<img [src]="hotel.image" alt="" />
-					</div>
-
-					<div class="mt-2">
-						<div class="row">
-							<div class="col-7">
-								<p class="dark-grey hotel-name mb-1">
-									<span class="font-weight-bold">{{ hotel.name }}</span>
-								</p>
-							</div>
-							<div class="col-5 rating">
-								<p class="mb-0">Rate</p>
-								<p class="mb-0 rating-stars">
-									<span class="mr-1" *ngIf="hotel.rate >= 1"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 2"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 3"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 4"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate == 5"><i class="fa fa-star"></i></span>
-								</p>
-							</div>
-						</div>
-						<div>
-							<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
-						</div>
-
-						<div class="row">
-							<div class="col-8 col-md-12">
-								<p class="grey item-text ">{{ hotel.description }}</p>
-							</div>
-							<div class="col-4 col-md-12">
-								<div class="row">
-									<div class="col-12 col-md-6">
-										<h6 class="font-weight-bold price-title">
-											{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-										</h6>
-										<p class="item-text price-text">{{ hotel.price }} LE</p>
-									</div>
-									<div class="col-12 col-md-6 justify-content-end">
-										<a
-											class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-											role="button"
-											>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
-										>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mt-2">
-			<div class="col">
-				<hr class="d-block d-md-none" />
-				<h3 class="destination-name font-italic additional-destination p-1 p-md-0">Venice</h3>
-			</div>
-		</div>
-
-		<div class="row mt-2">
-			<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of (hotels | async)">
-				<div class="hotel-item p-3">
-					<div class="item-img-container">
-						<img [src]="hotel.image" alt="" />
-					</div>
-
-					<div class="mt-2">
-						<div class="row">
-							<div class="col-7">
-								<p class="dark-grey hotel-name mb-1">
-									<span class="font-weight-bold">{{ hotel.name }}</span>
-								</p>
-							</div>
-							<div class="col-5 rating">
-								<p class="mb-0">Rate</p>
-								<p class="mb-0 rating-stars">
-									<span class="mr-1" *ngIf="hotel.rate >= 1"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 2"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 3"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 4"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate == 5"><i class="fa fa-star"></i></span>
-								</p>
-							</div>
-						</div>
-						<div>
-							<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
-						</div>
-
-						<div class="row">
-							<div class="col-8 col-md-12">
-								<p class="grey item-text ">{{ hotel.description }}</p>
-							</div>
-							<div class="col-4 col-md-12">
-								<div class="row">
-									<div class="col-12 col-md-6">
-										<h6 class="font-weight-bold price-title">
-											{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-										</h6>
-										<p class="item-text price-text">{{ hotel.price }} LE</p>
-									</div>
-									<div class="col-12 col-md-6 justify-content-end">
-										<a
-											class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-											role="button"
-											>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
-										>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mt-2">
-			<div class="col">
-				<hr class="d-block d-md-none" />
-				<h3 class="destination-name font-italic additional-destination p-1 p-md-0">Florence</h3>
-			</div>
-		</div>
-
-		<div class="row mt-2">
-			<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of (hotels | async)">
-				<div class="hotel-item p-3">
-					<div class="item-img-container">
-						<img [src]="hotel.image" alt="" />
-					</div>
-
-					<div class="mt-2">
-						<div class="row">
-							<div class="col-7">
-								<p class="dark-grey hotel-name mb-1">
-									<span class="font-weight-bold">{{ hotel.name }}</span>
-								</p>
-							</div>
-							<div class="col-5 rating">
-								<p class="mb-0">Rate</p>
-								<p class="mb-0 rating-stars">
-									<span class="mr-1" *ngIf="hotel.rate >= 1"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 2"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 3"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate >= 4"><i class="fa fa-star"></i></span>
-									<span class="mr-1" *ngIf="hotel.rate == 5"><i class="fa fa-star"></i></span>
-								</p>
-							</div>
-						</div>
-						<div>
-							<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
-						</div>
-
-						<div class="row">
-							<div class="col-8 col-md-12">
-								<p class="grey item-text ">{{ hotel.description }}</p>
-							</div>
-							<div class="col-4 col-md-12">
-								<div class="row">
-									<div class="col-12 col-md-6">
-										<h6 class="font-weight-bold price-title">
-											{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-										</h6>
-										<p class="item-text price-text">{{ hotel.price }} LE</p>
-									</div>
-									<div class="col-12 col-md-6 justify-content-end">
-										<a
-											class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-											role="button"
-											>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
-										>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 	</div>
 </div>

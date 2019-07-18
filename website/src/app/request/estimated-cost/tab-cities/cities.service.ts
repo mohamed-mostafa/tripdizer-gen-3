@@ -10,6 +10,6 @@ export class CitiesService {
 	constructor(private http: HttpClient) { }
 
 	getCities(): Observable<Array<CityDTO>> {
-		return this.http.post<Array<any>>(`${this.endPoint}/search`, { 'countries': [ 'NLD', 'ITA', 'FRA' ] });
+		return this.http.post<Array<CityDTO>>(`${this.endPoint}/search`, { 'countries': [ 'NLD', 'ITA', 'FRA' ] });
 	}
 }
