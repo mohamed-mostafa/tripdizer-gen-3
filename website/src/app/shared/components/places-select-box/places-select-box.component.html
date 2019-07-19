@@ -1,14 +1,14 @@
 <mat-form-field [ngClass]="classes">
 	<mat-chip-list #chipList>
-		<mat-chip *ngFor="let place of selectedPlaces" [removable]="true" (removed)="remove(place[property])">
+		<mat-chip *ngFor="let place of _selectedPlaces" [removable]="true" (removed)="remove(place[property])">
 			{{ place.name }}
 			<i matChipRemove class="far fa-times-circle h-auto w-auto"></i>
 		</mat-chip>
 		<input
-			*ngIf="selectedPlaces.length < 3"
+			*ngIf="_selectedPlaces.length < 3"
 			#placeInput
 			[formControl]="placeCtrl"
-			[placeholder]="!selectedPlaces.length ? placeHolder : ''"
+			[placeholder]="!_selectedPlaces.length ? placeHolder : ''"
 			[matAutocomplete]="matAutocomplete"
 			[matChipInputFor]="chipList"
 			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"

@@ -16,7 +16,7 @@ export class PlacesSelectBoxComponent {
 	placeCtrl = new FormControl();
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
-	selectedPlaces: Array<Place> = [];
+	_selectedPlaces: Array<Place> = [];
 	_places: Array<Place>;
 
 	@Output() placesChanged = new EventEmitter<Array<Place>>();
@@ -28,18 +28,23 @@ export class PlacesSelectBoxComponent {
 		this._places = places || [];
 		this.placeCtrl.setValue(null);
 	}
+	@Input() set selectedPlaces(places: Array<Place>) {
+		if (places) {
+			this._selectedPlaces = places;
+		}
+	}
 
 	get places(): Array<Place> {
-		if (this.selectedPlaces.length === 3) {
+		if (this._selectedPlaces.length === 3) {
 			return [];
 		}
 
-		if (!this.selectedPlaces.length) {
+		if (!this._selectedPlaces.length) {
 			return this._places;
 		}
 
 		return this._places.filter(
-			place => this.selectedPlaces.findIndex(p => p[this.property] === place[this.property]) < 0
+			place => this._selectedPlaces.findIndex(p => p[this.property] === place[this.property]) < 0
 		);
 	}
 
@@ -57,17 +62,17 @@ export class PlacesSelectBoxComponent {
 		const place = this._places.find(p => p[this.property] === event.option.value);
 
 		if (place) {
-			this.selectedPlaces.push(place);
+			this._selectedPlaces.push(place);
 			this.placeCtrl.setValue(null);
-			this.placesChanged.next(this.selectedPlaces);
+			this.placesChanged.next(this._selectedPlaces);
 		}
 	}
 
 	remove(property: string): void {
-		const index = this.selectedPlaces.findIndex(p => p[this.property] === property);
+		const index = this._selectedPlaces.findIndex(p => p[this.property] === property);
 
 		if (index >= 0) {
-			this.selectedPlaces.splice(index, 1);
+			this._selectedPlaces.splice(index, 1);
 			this.placeCtrl.setValue(null);
 		}
 	}
