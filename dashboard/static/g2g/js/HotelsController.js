@@ -6,7 +6,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 	'CitiesService',
 	'CountriesService',
 	'BudgetCategoriesService',
-	function($rootScope, $scope, $http, HotelsService, CitiesService, CountriesService, BudgetCategoriesService) {
+	function ($rootScope, $scope, $http, HotelsService, CitiesService, CountriesService, BudgetCategoriesService) {
 		// fields
 		$scope.hotels = [];
 		$scope.cities = [];
@@ -24,11 +24,12 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.editMode = false;
 
 		$scope.loading = false;
+		$scope.hotelsLoading = false;
 		$scope.saving = false;
 		$scope.currentId = 0;
 
 		// functions
-		$scope.validateDataEntry = function() {
+		$scope.validateDataEntry = function () {
 			var superEconomyHotels = 0, economyHotels = 0, splurgeHotels = 0, midRangeHotels = 0;
 			var activeHotels = $scope.hotels.filter(hotel => hotel.active == 1);
 			activeHotels.forEach(hotel => {
@@ -43,7 +44,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.dataEntryValid = true;
 			}
 		}
-		$scope.resetValidationFlags = function() {
+		$scope.resetValidationFlags = function () {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
 			$scope.enDescriptionMissing = false;
@@ -58,7 +59,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			$scope.ratesIncomplete = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newHotelIsValid = function(validateThumbnail) {
+		$scope.newHotelIsValid = function (validateThumbnail) {
 			$scope.resetValidationFlags();
 			if ($scope.newHotel.enName == null || $scope.newHotel.enName == '') {
 				$scope.enNameMissing = true;
@@ -75,7 +76,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 			if ($scope.newHotel.cityId == null || $scope.newHotel.cityId == '') {
 				$scope.cityIdMissing = true;
 			}
-			if (validateThumbnail&& ($scope.newHotel.thumbnail == null || $scope.newHotel.thumbnail == '')) {
+			if (validateThumbnail && ($scope.newHotel.thumbnail == null || $scope.newHotel.thumbnail == '')) {
 				$scope.thumbnailMissing = true;
 			}
 			if ($scope.newHotel.budgetCategoryId == null || $scope.newHotel.budgetCategoryId == '') {
@@ -103,7 +104,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.addressMissing != true
 			);
 		};
-		$scope.validateRates = function(rates) {
+		$scope.validateRates = function (rates) {
 			if (rates == null) {
 				return false;
 			}
@@ -117,13 +118,13 @@ g2gControlCenterApplication.controller('HotelsController', [
 			}
 			return true;
 		}
-		$scope.addHotel = function(close) {
+		$scope.addHotel = function (close) {
 			debugger;
 			if ($scope.newHotelIsValid(true)) {
 				$scope.saving = true;
 				$http
 					.put($rootScope.masterDataServerUrl + '/hotel', { hotel: $scope.newHotel })
-					.success(function(response) {
+					.success(function (response) {
 						$scope.saving = false;
 						response.active = false;
 						$scope.hotels.push(response);
@@ -132,14 +133,14 @@ g2gControlCenterApplication.controller('HotelsController', [
 							$('#addHotelModal').modal('hide');
 						}
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.saving = false;
 						$scope.serverError = true;
 						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
-		$scope.editHotel = function(id) {
+		$scope.editHotel = function (id) {
 			$scope.resetValidationFlags();
 			if ($scope.newHotelIsValid(false)) {
 				$scope.saving = true;
@@ -148,7 +149,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 				}
 				$http
 					.post($rootScope.masterDataServerUrl + '/hotel', { hotel: $scope.newHotel })
-					.success(function(response) {
+					.success(function (response) {
 						for (var i = 0; i < $scope.hotels.length; i++) {
 							if ($scope.hotels[i].id == $scope.newHotel.id) {
 								$scope.hotels[i] = $scope.newHotel;
@@ -160,7 +161,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 						$scope.editMode = false;
 						$('#addHotelModal').modal('hide');
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.newHotel = {};
 						$scope.editMode = false;
 						$scope.saving = false;
@@ -169,10 +170,10 @@ g2gControlCenterApplication.controller('HotelsController', [
 					});
 			}
 		};
-		$scope.activate = function(id) {
+		$scope.activate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/activate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.hotels.length; i++) {
 						if ($scope.hotels[i].id == id) {
 							$scope.hotels[i].active = 1;
@@ -181,14 +182,14 @@ g2gControlCenterApplication.controller('HotelsController', [
 					alert("Hotel is now visible on the website");
 					$scope.validateDataEntry();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Activation Failed: " + err.toString());
 				});
 		};
-		$scope.deactivate = function(id) {
+		$scope.deactivate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/hotel/' + id + '/deactivate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.hotels.length; i++) {
 						if ($scope.hotels[i].id == id) {
 							$scope.hotels[i].active = 0;
@@ -197,11 +198,11 @@ g2gControlCenterApplication.controller('HotelsController', [
 					alert("Hotel is now hidden from the website");
 					$scope.validateDataEntry();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Deactivation Failed: " + err.toString());
 				});
 		};
-		$scope.openEditDialog = function(id) {
+		$scope.openEditDialog = function (id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.hotels.length; i++) {
 				if ($scope.hotels[i].id == id) {
@@ -211,14 +212,14 @@ g2gControlCenterApplication.controller('HotelsController', [
 			}
 			$('#addHotelModal').modal('show');
 		};
-		$scope.openAddDialog = function(id) {
+		$scope.openAddDialog = function (id) {
 			$scope.editMode = false;
 			$scope.newHotel = { cityId: $scope.selectedCity };
 			$('#addHotelModal').modal('show');
 		};
-		$scope.buildTable = function() {
+		$scope.buildTable = function () {
 			// initialize the table
-			$(function() {
+			$(function () {
 				$('#hotelsTable').dataTable({
 					bPaginate: true,
 					bLengthChange: false,
@@ -230,30 +231,38 @@ g2gControlCenterApplication.controller('HotelsController', [
 			});
 		};
 
-		$scope.$watch('selectedCity', function(val) {
-			HotelsService.getAllByCity($scope.selectedCity).then(function(hotels) {
+		$scope.$watch('selectedCity', function (val) {
+			$scope.hotelsLoading = true;
+			$scope.hotels = [];
+			HotelsService.getAllByCity($scope.selectedCity).then(function (hotels) {
 				if (hotels) $scope.hotels = hotels;
 				$scope.validateDataEntry();
+				$scope.hotelsLoading = false;
 			});
 		});
 
-		$scope.$watch('selectedCountry', function(val) {
+		$scope.$watch('selectedCountry', function (val) {
 			$scope.selectedCity = null;
-			CitiesService.getAllByCountry(val).then(function(cities) {
+			$scope.hotelsLoading = true;
+			$scope.hotels = [];
+			CitiesService.getAllByCountry(val).then(function (cities) {
 				if (cities) $scope.cities = cities;
 				if (cities.length) $scope.selectedCity = cities[0].id;
 				else $scope.selectedCity = null;
+				$scope.hotelsLoading = false;
 			});
 		});
 
-		$scope.initialize = function() {
-			CountriesService.getAll().then(function(countries) {
+		$scope.initialize = function () {
+			$scope.hotelsLoading = true;
+			CountriesService.getAll().then(function (countries) {
 				$scope.countries = countries;
 				if (countries.length) $scope.selectedCountry = countries[0].id;
 				else $scope.selectedCountry = null;
+				$scope.hotelsLoading = false;
 			});
 
-			BudgetCategoriesService.getAll().then(function(budgetCategories) {
+			BudgetCategoriesService.getAll().then(function (budgetCategories) {
 				$scope.budgetCategories = budgetCategories;
 			});
 		};

@@ -3,7 +3,7 @@
  */
 var g2gControlCenterApplication = angular
 	.module('G2GControlCenterApplication', ['textAngular', 'ui.bootstrap'])
-	.run(function($rootScope) {
+	.run(function ($rootScope) {
 		$rootScope.serverURL = globalVariables.serverURL;
 		$rootScope.requestsServerUrl = globalVariables.serverURL + '/requests';
 		$rootScope.masterDataServerUrl = globalVariables.serverURL + '/master-data';
@@ -11,7 +11,7 @@ var g2gControlCenterApplication = angular
 	})
 	.config([
 		'$locationProvider',
-		function($locationProvider) {
+		function ($locationProvider) {
 			$locationProvider.html5Mode(false);
 			//    $locationProvider.html5Mode(true);
 		},
@@ -19,11 +19,11 @@ var g2gControlCenterApplication = angular
 	.config([
 		'$httpProvider',
 		'$windowProvider',
-		function($httpProvider, $windowProvider) {
+		function ($httpProvider, $windowProvider) {
 			var $window = $windowProvider.$get();
-			$httpProvider.interceptors.push(function($q) {
+			$httpProvider.interceptors.push(function ($q) {
 				return {
-					request: function(config) {
+					request: function (config) {
 						config.headers = config.headers || {};
 						const JWToken = globalVariables.curentGlobalToken;
 						if (JWToken) {
@@ -31,7 +31,7 @@ var g2gControlCenterApplication = angular
 						}
 						return config;
 					},
-					responseError: function(response) {
+					responseError: function (response) {
 						if (response.status === 401) {
 							// Unauthorized
 							$window.location.href = '/admin/login';
@@ -51,9 +51,19 @@ var g2gControlCenterApplication = angular
 				element.bind("change", function (changeEvent) {
 					var reader = new FileReader();
 					reader.onload = function (loadEvent) {
-						scope.$apply(function () {
-							scope.fileread = loadEvent.target.result;
-						});
+						var img = new Image;
+						img.onload = function () {
+							scope.$apply(function () {
+								//TODO: Add your validation here
+								if (img.width != attributes['validwidth'] || img.height != attributes['validheight']) {
+									scope.fileread = null;
+									alert('Invalid Image Dimensions. Should be ' + attributes['validwidth'] + 'px X ' + attributes['validheight'] + 'px');
+								} else {
+									scope.fileread = loadEvent.target.result;
+								}
+							});
+						};
+						img.src = reader.result; // is the data URL because called with readAsDataURL
 					}
 					reader.readAsDataURL(changeEvent.target.files[0]);
 				});
@@ -92,22 +102,22 @@ var g2gControlCenterApplication = angular
 	// 		};
 	// 	},
 	// ])
-	.directive('format', function(dateFilter) {
+	.directive('format', function (dateFilter) {
 		return {
 			require: 'ngModel',
-			link: function(scope, elm, attrs, ctrl) {
+			link: function (scope, elm, attrs, ctrl) {
 				var dateFormat = attrs['format'] || 'yyyy-MM-dd';
-				ctrl.$formatters.unshift(function(modelValue) {
+				ctrl.$formatters.unshift(function (modelValue) {
 					return dateFilter(modelValue, dateFormat);
 				});
 			},
 		};
 	})
-	.directive('prefix', function() {
+	.directive('prefix', function () {
 		return {
 			restrict: 'A',
 			require: 'ngModel',
-			link: function(scope, elm, attrs, ctrl) {
+			link: function (scope, elm, attrs, ctrl) {
 				const prefix = attrs['prefix'] || '';
 				const ensurePrefix = value => {
 					if (value && value.indexOf(prefix) !== 0) {
@@ -138,7 +148,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'countries' + "?includeInactive=true").then(function(response) {
+				return $http.get(prefix + 'countries' + "?includeInactive=true").then(function (response) {
 					return response.data;
 				});
 			}
@@ -156,18 +166,18 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'cities' + "?includeInactive=true").then(function(response) {
+				return $http.get(prefix + 'cities' + "?includeInactive=true").then(function (response) {
 					return response.data;
 				});
 			}
 
 			function getAllByCountry(countryId) {
 				if (countryId) {
-					return $http.get(prefix + 'cities/' + countryId + "?includeInactive=true").then(function(response) {
+					return $http.get(prefix + 'cities/' + countryId + "?includeInactive=true").then(function (response) {
 						return response.data;
 					});
 				} else {
-					return new Promise(function(resolve) {
+					return new Promise(function (resolve) {
 						resolve([]);
 					});
 				}
@@ -186,11 +196,11 @@ var g2gControlCenterApplication = angular
 
 			function getAllByCity(cityId) {
 				if (cityId) {
-					return $http.get(prefix + 'hotels/' + cityId+ "?includeInactive=true").then(function(response) {
+					return $http.get(prefix + 'hotels/' + cityId + "?includeInactive=true").then(function (response) {
 						return response.data;
 					});
 				} else {
-					return new Promise(function(resolve) {
+					return new Promise(function (resolve) {
 						resolve([]);
 					});
 				}
@@ -209,11 +219,11 @@ var g2gControlCenterApplication = angular
 
 			function getAllByCity(cityId) {
 				if (cityId) {
-					return $http.get(prefix + 'attractions/' + cityId + "?includeInactive=true").then(function(response) {
+					return $http.get(prefix + 'attractions/' + cityId + "?includeInactive=true").then(function (response) {
 						return response.data;
 					});
 				} else {
-					return new Promise(function(resolve) {
+					return new Promise(function (resolve) {
 						resolve([]);
 					});
 				}
@@ -231,7 +241,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'purposes').then(function(response) {
+				return $http.get(prefix + 'purposes').then(function (response) {
 					return response.data;
 				});
 			}
@@ -248,7 +258,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'budget-categories').then(function(response) {
+				return $http.get(prefix + 'budget-categories').then(function (response) {
 					return response.data;
 				});
 			}
@@ -265,7 +275,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'interests').then(function(response) {
+				return $http.get(prefix + 'interests').then(function (response) {
 					return response.data;
 				});
 			}
@@ -282,7 +292,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'itineraries').then(function(response) {
+				return $http.get(prefix + 'itineraries').then(function (response) {
 					return response.data;
 				});
 			}
@@ -299,7 +309,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll(lang) {
-				return $http.get(prefix + 'videos' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+				return $http.get(prefix + 'videos' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -316,7 +326,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'phones', {}).then(function(response) {
+				return $http.get(prefix + 'phones', {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -333,7 +343,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll(lang) {
-				return $http.get(prefix + 'groupTrips' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+				return $http.get(prefix + 'groupTrips' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -350,7 +360,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll(lang) {
-				return $http.get(prefix + 'professions' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+				return $http.get(prefix + 'professions' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -367,7 +377,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll(lang) {
-				return $http.get(prefix + 'referral-types' + (lang ? '?lang=' + lang : ''), {}).then(function(response) {
+				return $http.get(prefix + 'referral-types' + (lang ? '?lang=' + lang : ''), {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -384,7 +394,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'statuses', {}).then(function(response) {
+				return $http.get(prefix + 'statuses', {}).then(function (response) {
 					return response.data;
 				});
 			}
@@ -401,7 +411,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return new Promise(function(resolve) {
+				return new Promise(function (resolve) {
 					resolve([
 						{ id: 1, enName: 'Website', isHiddenOnDashboard: true },
 						{ id: 2, enName: 'Facebook' },

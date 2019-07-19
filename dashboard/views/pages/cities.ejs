@@ -5,13 +5,13 @@
 		</h3>
 		<select ng-model="selectedCountry">
 			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
-				{{ country.enName }}</option
-			>
+				{{ country.enName }}</option>
 		</select>
+		<i class="fa fa-refresh fa-spin" ng-show="citiesLoading == true"></i>
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false && citiesLoading == false">
 			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
 			Data entry is not complete! There should be at least <b>1 active city</b> for the selected country
 		</div>
@@ -55,13 +55,8 @@
 				<tfooter>
 					<tr>
 						<td colspan="12">
-							<button
-								type="button"
-								class="btn btn-primary pull-right"
-								data-toggle="modal"
-								data-target="addCityModal"
-								ng-click="openAddDialog()"
-							>
+							<button type="button" class="btn btn-primary pull-right" data-toggle="modal"
+								data-target="addCityModal" ng-click="openAddDialog()">
 								Add City
 							</button>
 						</td>
@@ -77,14 +72,8 @@
 <div class="row">
 	<!-- MODALS -->
 
-	<div
-		class="modal fade"
-		id="addCityModal"
-		tabindex="-1"
-		role="dialog"
-		aria-labelledby="myModalLabel"
-		aria-hidden="true"
-	>
+	<div class="modal fade" id="addCityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -99,11 +88,9 @@
 						<p>{{ serverErrorMessage }}</p>
 					</div>
 					<label class="control-label text-red" ng-show="dailySpendingMissing==true">
-						<i class="fa fa-times-circle-o"></i>Daily Spendings are not complete</label
-					>
+						<i class="fa fa-times-circle-o"></i>Daily Spendings are not complete</label>
 					<label class="control-label text-red" ng-show="interestsMissing==true">
-						<i class="fa fa-times-circle-o"></i>At least one item is needed in the Things to do</label
-					>
+						<i class="fa fa-times-circle-o"></i>At least one item is needed in the Things to do</label>
 					<form role="form" id="newCityForm">
 						<div class="box-body">
 							<div class="overlay" ng-show="saving == true">
@@ -124,148 +111,103 @@
 								<div class="tab-content">
 									<div class="tab-pane active" id="basicTab">
 										<div class="form-group-3" ng-show="saving==false">
-											<label class="control-label text-red" for="enName" ng-show="enNameMissing==true">
-												<i class="fa fa-times-circle-o"></i>English Name is missing</label
-											>
+											<label class="control-label text-red" for="enName"
+												ng-show="enNameMissing==true">
+												<i class="fa fa-times-circle-o"></i>English Name is missing</label>
 											<label for="enName" ng-show="enNameMissing==false">En Name</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="enName"
-												ng-model="newCity.enName"
-												placeholder="Enter name in English"
-												required maxlength="50"
-											/>
+											<input type="text" required class="form-control" id="enName"
+												ng-model="newCity.enName" placeholder="Enter name in English" required
+												maxlength="50" />
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
-											<label class="control-label text-red" for="enDescription" ng-show="enDescriptionMissing==true">
-												<i class="fa fa-times-circle-o"></i>English Description is missing</label
-											>
-											<label for="enDescription" ng-show="enDescriptionMissing==false">En Desc</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="enDescription"
+											<label class="control-label text-red" for="enDescription"
+												ng-show="enDescriptionMissing==true">
+												<i class="fa fa-times-circle-o"></i>English Description is
+												missing</label>
+											<label for="enDescription" ng-show="enDescriptionMissing==false">En
+												Desc</label>
+											<input type="text" required class="form-control" id="enDescription"
 												ng-model="newCity.enDescription"
-												placeholder="Enter description in English"
-												required maxlength="1024"
-											/>
+												placeholder="Enter description in English" required maxlength="1024" />
 										</div>
 										<div class="form-group-3" ng-show="saving==false">
-											<label class="control-label text-red" for="arName" ng-show="arNameMissing==true">
-												<i class="fa fa-times-circle-o"></i>Arabic Name is missing</label
-											>
+											<label class="control-label text-red" for="arName"
+												ng-show="arNameMissing==true">
+												<i class="fa fa-times-circle-o"></i>Arabic Name is missing</label>
 											<label for="arName" ng-show="arNameMissing==false">Ar Name</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="arName"
-												ng-model="newCity.arName"
-												placeholder="Enter name in Arabic"
-												required maxlength="50"
-											/>
+											<input type="text" required class="form-control" id="arName"
+												ng-model="newCity.arName" placeholder="Enter name in Arabic" required
+												maxlength="50" />
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
-											<label class="control-label text-red" for="arDescription" ng-show="arDescriptionMissing==true">
-												<i class="fa fa-times-circle-o"></i>Arabic Description is missing</label
-											>
-											<label for="arDescription" ng-show="arDescriptionMissing==false">Ar Desc</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="arDescription"
+											<label class="control-label text-red" for="arDescription"
+												ng-show="arDescriptionMissing==true">
+												<i class="fa fa-times-circle-o"></i>Arabic Description is
+												missing</label>
+											<label for="arDescription" ng-show="arDescriptionMissing==false">Ar
+												Desc</label>
+											<input type="text" required class="form-control" id="arDescription"
 												ng-model="newCity.arDescription"
-												placeholder="Enter description in Arabic"
-												required maxlength="1023"
-											/>
+												placeholder="Enter description in Arabic" required maxlength="1023" />
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
-											<label class="control-label text-red" for="iataCode" ng-show="iataCodeMissing==true">
-												<i class="fa fa-times-circle-o"></i>Iata Code is missing or is not a 3-letters text</label
-											>
+											<label class="control-label text-red" for="iataCode"
+												ng-show="iataCodeMissing==true">
+												<i class="fa fa-times-circle-o"></i>Iata Code is missing or is not a
+												3-letters text</label>
 											<label for="iataCode" ng-show="iataCodeMissing==false">Iata Code</label>
-											<input
-												type="text"
-												class="form-control"
-												id="iataCode"
+											<input type="text" class="form-control" id="iataCode"
 												ng-model="newCity.iataCode"
-												placeholder="Iata Code - 3 letters code, MUST BE A VALID CODE"
-												required maxlength="3"
-											/>
+												placeholder="Iata Code - 3 letters code, MUST BE A VALID CODE" required
+												maxlength="3" />
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
-											<label class="control-label text-red" for="country" ng-show="countryIdMissing==true">
-												<i class="fa fa-times-circle-o"></i>Country is missing</label
-											>
+											<label class="control-label text-red" for="country"
+												ng-show="countryIdMissing==true">
+												<i class="fa fa-times-circle-o"></i>Country is missing</label>
 											<label for="country" ng-show="countryIdMissing==false">Country</label>
 											<select class="form-control" id="country" ng-model="newCity.countryId">
-												<option
-													ng-repeat="country in countries"
-													ng-value="country.id"
-													ng-selected="newCity.countryId == country.id"
-												>
-													{{ country.enName }}</option
-												>
+												<option ng-repeat="country in countries" ng-value="country.id"
+													ng-selected="newCity.countryId == country.id">
+													{{ country.enName }}</option>
 											</select>
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lat" ng-show="latMissing==true">
-												<i class="fa fa-times-circle-o"></i>Latitude is missing or is not a number</label
-											>
+												<i class="fa fa-times-circle-o"></i>Latitude is missing or is not a
+												number</label>
 											<label for="lat" ng-show="latMissing==false">Latitude</label>
-											<input
-												type="number"
-												required
-												class="form-control"
-												id="lat"
-												ng-model="newCity.lat"
-												placeholder="Enter latitude (eg: 123.123456)"
-												required
-												min="0.0"
-												max="999.999999"
-											/>
+											<input type="number" required class="form-control" id="lat"
+												ng-model="newCity.lat" placeholder="Enter latitude (eg: 123.123456)"
+												required min="0.0" max="999.999999" />
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lng" ng-show="lngMissing==true">
-												<i class="fa fa-times-circle-o"></i>Longitude is missing or is not a number</label
-											>
+												<i class="fa fa-times-circle-o"></i>Longitude is missing or is not a
+												number</label>
 											<label for="lng" ng-show="lngMissing==false">Longitude</label>
-											<input
-												type="number"
-												required
-												class="form-control"
-												id="lng"
-												ng-model="newCity.lng"
-												placeholder="Enter longitude (eg: 123.123456)"
-												required
-												min="0.0"
-												max="999.999999"
-											/>
+											<input type="number" required class="form-control" id="lng"
+												ng-model="newCity.lng" placeholder="Enter longitude (eg: 123.123456)"
+												required min="0.0" max="999.999999" />
 										</div>
 
 										<div class="form-group" ng-show="saving==false">
-											<label class="control-label text-red" for="visitOrder" ng-show="visitOrderMissing==true">
-												<i class="fa fa-times-circle-o"></i>Visit order is missing or is not a number</label
-											>
-											<label for="visitOrder" ng-show="visitOrderMissing==false">Visit order</label>
-											<input
-												type="number"
-												class="form-control"
-												id="visitOrder"
-												ng-model="newCity.visitOrder"
-												placeholder="Enter visit order"
-												required
-											/>
+											<label class="control-label text-red" for="visitOrder"
+												ng-show="visitOrderMissing==true">
+												<i class="fa fa-times-circle-o"></i>Visit order is missing or is not a
+												number</label>
+											<label for="visitOrder" ng-show="visitOrderMissing==false">Visit
+												order</label>
+											<input type="number" class="form-control" id="visitOrder"
+												ng-model="newCity.visitOrder" placeholder="Enter visit order"
+												required />
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
-											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
-												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label
-											>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (rectangle 3/2 aspect-ratio PNG photo, 300 X 200 pixles)</label>
+										<div class="form-group-3" ng-show="saving==false">
+											<label class="control-label text-red" for="thumbnail"
+												ng-show="thumbnailMissing==true">
+												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (PNG
+												photo, 300 X 200 pixles)</label>
 											<!-- <input
 												type="url"
 												required
@@ -279,6 +221,7 @@
 												input[type="file"] {
 													display: none;
 												}
+
 												.custom-file-upload {
 													border: 1px solid #ccc;
 													display: inline-block;
@@ -289,36 +232,33 @@
 											<label for="file-upload" class="custom-file-upload">
 												<i class="fa fa-cloud-upload"></i> Choose Image
 											</label>
-											<input id="file-upload" type="file" fileread="newCity.thumbnail" />
+											<input id="file-upload" validwidth="150" validheight='100' type="file"
+												fileread="newCity.thumbnail" />
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
-											<img alt="No image available!" src="{{newCity.thumbnail}}" style="width: 100px; height: 100px;"/>
+										<div class="form-group-9" ng-show="saving==false">
+											<img alt="No image available!" src="{{newCity.thumbnail}}"
+												style="width: 300px; height: 200px;" />
 										</div>
 									</div>
 									<!-- /.tab-pane -->
 									<div class="tab-pane" id="dailySpending">
-										<div
-											class="form-group"
-											ng-if="budgetCategory.id !== 1"
-											ng-repeat="budgetCategory in budgetCategories"
-											ng-show="saving==false"
-										>
+										<div class="form-group" ng-if="budgetCategory.id !== 1"
+											ng-repeat="budgetCategory in budgetCategories" ng-show="saving==false">
 											<label for="{{ budgetCategory.id }}">{{ budgetCategory.en_name }}</label>
-											<input
-												type="number"
-												class="form-control"
-												id="{{ budgetCategory.id }}"
+											<input type="number" class="form-control" id="{{ budgetCategory.id }}"
 												ng-model="newCity.dailySpending[budgetCategory.id]"
 												placeholder="Enter Daily Spending for {{ budgetCategory.en_name }}"
-												required
-											/>
+												required />
 										</div>
 										<!-- /.form group -->
 									</div>
 									<div class="tab-pane" id="thingsToDoTab">
-										<p ng-repeat="interest in interests" ng-if="interest.id !== 0" class="interest" id="{{interest.id}}">
-											<label style="width: 100px;" for="{{ interest.Id }}">{{ interest.en_name }}</label>
-											<input id="{{interest.id}}" type="checkbox" ng-change="sync(bool, interest)" ng-model="bool" ng-checked="isChecked(interest.id)"/>
+										<p ng-repeat="interest in interests" ng-if="interest.id !== 0" class="interest"
+											id="{{interest.id}}">
+											<label style="width: 100px;"
+												for="{{ interest.Id }}">{{ interest.en_name }}</label>
+											<input id="{{interest.id}}" type="checkbox" ng-change="sync(bool, interest)"
+												ng-model="bool" ng-checked="isChecked(interest.id)" />
 										</p>
 										<!-- <div
 											class="form-group"
@@ -354,7 +294,8 @@
 					<button type="button" class="btn btn-primary" ng-click="addCity(false)" ng-show="editMode==false">
 						Save and add another
 					</button>
-					<button type="button" class="btn btn-primary" ng-click="editCity()" ng-show="editMode==true">Save</button>
+					<button type="button" class="btn btn-primary" ng-click="editCity()"
+						ng-show="editMode==true">Save</button>
 				</div>
 			</div>
 		</div>

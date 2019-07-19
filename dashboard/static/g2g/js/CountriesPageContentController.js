@@ -8,7 +8,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 	'$http',
 	'CountriesService',
 	'InterestsService',
-	function($rootScope, $scope, $http, CountriesService, InterestsService) {
+	function ($rootScope, $scope, $http, CountriesService, InterestsService) {
 		// fields
 		$scope.countries = [];
 
@@ -26,7 +26,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		$scope.currentId = 0;
 
 		// functions
-		$scope.resetValidationFlags = function() {
+		$scope.resetValidationFlags = function () {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
 			$scope.enDescriptionMissing = false;
@@ -41,7 +41,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newCountryIsValid = function(validateThumbnail) {
+		$scope.newCountryIsValid = function (validateThumbnail) {
 			$scope.resetValidationFlags();
 			if ($scope.newCountry.enName == null || $scope.newCountry.enName == '') {
 				$scope.enNameMissing = true;
@@ -67,7 +67,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.excludes == null || $scope.newCountry.excludes == '') {
 				$scope.excludesMissing = true;
 			}
-			if ($scope.newCountry.visaType == null || $scope.newCountry.visaType == '') {
+			if ($scope.newCountry.visaType === null || $scope.newCountry.visaType === '') {
 				$scope.visaTypeMissing = true;
 			}
 			if ($scope.newCountry.visaRequirements == null || $scope.newCountry.visaRequirements == '') {
@@ -90,12 +90,12 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				$scope.ISOCodeMissing !== true
 			);
 		};
-		$scope.addCountry = function(close) {
+		$scope.addCountry = function (close) {
 			if ($scope.newCountryIsValid(true)) {
 				$scope.saving = true;
 				$http
 					.put($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
-					.success(function(response) {
+					.success(function (response) {
 						$scope.saving = false;
 						response.active = false;
 						$scope.countries.push(response);
@@ -103,14 +103,14 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 							$('#addCountryModal').modal('hide');
 						}
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.saving = false;
 						$scope.serverError = true;
 						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
-		$scope.editCountry = function(id) {
+		$scope.editCountry = function (id) {
 			$scope.resetValidationFlags();
 			if ($scope.newCountryIsValid(false)) {
 				$scope.saving = true;
@@ -119,7 +119,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				}
 				$http
 					.post($rootScope.masterDataServerUrl + '/country', { country: $scope.newCountry })
-					.success(function(response) {
+					.success(function (response) {
 						for (var i = 0; i < $scope.countries.length; i++) {
 							if ($scope.countries[i].id == $scope.newCountry.id) {
 								$scope.countries[i] = $scope.newCountry;
@@ -131,7 +131,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 						$scope.editMode = false;
 						$('#addCountryModal').modal('hide');
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.newCountry = {};
 						$scope.editMode = false;
 						$scope.saving = false;
@@ -140,10 +140,10 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 					});
 			}
 		};
-		$scope.activate = function(id) {
+		$scope.activate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/country/' + id + '/activate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.countries.length; i++) {
 						if ($scope.countries[i].id == id) {
 							$scope.countries[i].active = 1;
@@ -151,14 +151,14 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 					}
 					alert("Country is now visible on the website");
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Activation Failed: " + err.toString());
 				});
 		};
-		$scope.deactivate = function(id) {
+		$scope.deactivate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/country/' + id + '/deactivate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.countries.length; i++) {
 						if ($scope.countries[i].id == id) {
 							$scope.countries[i].active = 0;
@@ -166,11 +166,11 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 					}
 					alert("Country is now hidden from the website");
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Deactivation Failed: " + err.toString());
 				});
 		};
-		$scope.openEditDialog = function(id) {
+		$scope.openEditDialog = function (id) {
 			$scope.editMode = true;
 			for (var i = 0; i < $scope.countries.length; i++) {
 				if ($scope.countries[i].id == id) {
@@ -180,14 +180,14 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			}
 			$('#addCountryModal').modal('show');
 		};
-		$scope.openAddDialog = function(id) {
+		$scope.openAddDialog = function (id) {
 			$scope.editMode = false;
 			$scope.newCountry = {};
 			$('#addCountryModal').modal('show');
 		};
-		$scope.buildTable = function() {
+		$scope.buildTable = function () {
 			// initialize the table
-			$(function() {
+			$(function () {
 				$('#countriesTable').dataTable({
 					bPaginate: true,
 					bLengthChange: false,
@@ -198,12 +198,12 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				});
 			});
 		};
-		$scope.initialize = function() {
-			CountriesService.getAll().then(function(countries) {
+		$scope.initialize = function () {
+			CountriesService.getAll().then(function (countries) {
 				$scope.countries = countries;
 			});
 
-			InterestsService.getAll().then(function(interests) {
+			InterestsService.getAll().then(function (interests) {
 				$scope.interests = interests;
 			});
 		};
