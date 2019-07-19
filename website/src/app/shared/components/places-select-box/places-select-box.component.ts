@@ -22,6 +22,7 @@ export class PlacesSelectBoxComponent {
 	@Output() placesChanged = new EventEmitter<Array<Place>>();
 
 	@Input() placeHolder;
+	@Input() classes = '';
 	@Input() property = 'id';
 	@Input() set places(places: Array<Place>) {
 		this._places = places || [];

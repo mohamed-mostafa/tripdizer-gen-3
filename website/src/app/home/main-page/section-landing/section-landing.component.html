@@ -5,6 +5,7 @@
 		<span class="text-white landing-question">{{ 'home.landing.landing_question' | translate }}</span>
 		<div class="m-auto mt-1 countries-select-box">
 			<c-shared-places-select-box
+				classes="w-100 p-2 bg-white border-blue"
 				[places]="countries | async"
 				(placesChanged)="countriesChanged($event)"
 			></c-shared-places-select-box>
