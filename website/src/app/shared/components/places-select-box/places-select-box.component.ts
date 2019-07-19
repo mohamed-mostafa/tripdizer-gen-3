@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -13,7 +13,6 @@ import { Place } from '../../models/place.model';
 	styleUrls: ['./places-select-box.component.scss'],
 })
 export class PlacesSelectBoxComponent {
-	placeCtrl = new FormControl();
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
 	_selectedPlaces: Array<Place> = [];
@@ -21,12 +20,14 @@ export class PlacesSelectBoxComponent {
 
 	@Output() placesChanged = new EventEmitter<Array<Place>>();
 
+	@Input() formGroup = new FormGroup({ placeCtrl: new FormControl() });
+	@Input() controlName = 'placeCtrl';
 	@Input() placeHolder;
 	@Input() classes = '';
 	@Input() property = 'id';
 	@Input() set places(places: Array<Place>) {
 		this._places = places || [];
-		this.placeCtrl.setValue(null);
+		this.formGroup.get(this.controlName).setValue(null);
 	}
 	@Input() set selectedPlaces(places: Array<Place>) {
 		if (places) {
@@ -52,7 +53,7 @@ export class PlacesSelectBoxComponent {
 		translate
 			.get('home.landing.destination_place_holder')
 			.subscribe(placeHolder => (this.placeHolder = !this.placeHolder ? placeHolder : this.placeHolder));
-		this.filteredPlaces = this.placeCtrl.valueChanges.pipe(
+		this.filteredPlaces = this.formGroup.get(this.controlName).valueChanges.pipe(
 			startWith(null),
 			map((placeName: string | null) => (placeName ? this._filter(placeName) : this.places.slice()))
 		);
@@ -63,7 +64,7 @@ export class PlacesSelectBoxComponent {
 
 		if (place) {
 			this._selectedPlaces.push(place);
-			this.placeCtrl.setValue(null);
+			this.formGroup.get(this.controlName).setValue(null);
 			this.placesChanged.next(this._selectedPlaces);
 		}
 	}
@@ -73,7 +74,7 @@ export class PlacesSelectBoxComponent {
 
 		if (index >= 0) {
 			this._selectedPlaces.splice(index, 1);
-			this.placeCtrl.setValue(null);
+			this.formGroup.get(this.controlName).setValue(null);
 		}
 	}
 
