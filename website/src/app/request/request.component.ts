@@ -12,7 +12,8 @@ export class RequestComponent implements OnDestroy {
 	constructor(private requestService: RequestService, private activatedRoute: ActivatedRoute) {
 		this.activatedRoute.queryParams.subscribe(params => {
 			if (params['countries']) {
-				this.requestService.setProperty('countries', params['countries']);
+				const countries = Array.isArray(params['countries']) ? params['countries'] : [params['countries']];
+				this.requestService.setProperty('countries', countries);
 			}
 		});
 	}
