@@ -7,7 +7,7 @@
 			<c-shared-places-select-box
 				classes="w-100 p-2 bg-white border-blue"
 				[places]="countries | async"
-				(placesChanged)="countriesChanged($event)"
+				[selectedPlaces]="selectedCountries"
 			></c-shared-places-select-box>
 		</div>
 		<div class="mt-3">

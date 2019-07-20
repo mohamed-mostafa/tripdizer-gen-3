@@ -11,31 +11,27 @@ import { SectionLandingService } from './section-landing.service';
 	styleUrls: ['./section-landing.component.scss'],
 })
 export class SectionLandingComponent {
-	_selectedCountries: Array<Country> = [];
+	selectedCountries: Array<Country> = [];
 
 	countries: Observable<Array<Country>>;
 
-	get selectedCountries(): Array<string> {
-		return this._selectedCountries.map(c => c.ISOCode);
+	get selectedCountriesISO(): Array<string> {
+		return this.selectedCountries.map(c => c.ISOCode);
 	}
 
 	constructor(private router: Router, private trackingService: TrackingService, service: SectionLandingService) {
 		this.countries = service.getCountries();
 	}
 
-	countriesChanged(countries: Array<Country>): void {
-		this._selectedCountries = countries;
-	}
-
 	havePlan() {
 		this.trackingService.track('Submit - Yes, I have a plan');
 
-		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountries } });
+		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO } });
 	}
 
 	surpriseMe() {
 		this.trackingService.track('Submit - NO, Surprise me');
 
-		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountries, surprise: true } });
+		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO, surprise: true } });
 	}
 }
