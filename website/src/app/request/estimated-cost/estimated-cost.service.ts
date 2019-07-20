@@ -10,11 +10,26 @@ import { Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
 	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
+	private countryCities = 'package-options/1.0.0/countryCities';
+
+	private departureDate = this.requestService.getProperty('departureDate') as Moment;
+	private returnDate = this.requestService.getProperty('returnDate') as Moment;
+
+	private budgetCategory = this.requestService.getProperty('budgetCategory');
 
 	private selectedFlightOffers: Array<FlightOffer>;
 	private selectedCities: Array<CityDTO>;
 
-	constructor(private http: HttpClient, private requestService: RequestService) {}
+	constructor(private http: HttpClient, private requestService: RequestService) { }
+
+	getCities(): Observable<Array<CityDTO>> {
+		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, { 'countries': [ 'NLD', 'ITA', 'FRA' ] });
+		// return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, this.getSelectedCountriesISO());
+	}
+
+	getNumberOfNights(): number {
+		return this.returnDate.diff(this.departureDate, 'days');
+	}
 
 	getSelectedCountriesISO(): Array<string> {
 		return this.requestService.getProperty('countries');

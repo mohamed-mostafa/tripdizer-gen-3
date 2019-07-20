@@ -5,9 +5,9 @@
 				<h4 class="list-title grey font-italic">
 					{{ 'request.estimated_cost.tab_cities.view_choose' | translate }}
 				</h4>
-		
-				<div class="row city-item my-4 selected-city" *ngFor="let city of (cities | async)" 
-				[class.selected-city]="city.select">
+
+				<div class="row city-item my-4 selected-city" *ngFor="let city of (cities | async)"
+					[class.selected-city]="city.select">
 					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
 						<div class="item-img-container p-2 p-md-0">
 							<img [src]="city.thumbnail" alt="" />
@@ -21,32 +21,31 @@
 						<p class="grey item-text font-italic">{{ city.description.substring(0, 200) }} ...</p>
 						<div class="row">
 							<div class="col-md-8">
-								<!-- <h6 class="font-weight-bold activities-title mt-2 mt-md-0">
-									{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }} {{ city.country }}
-								</h6> -->
-								<!-- <p class="grey item-text font-italic activities-text">
-									<span *ngFor="let activity of city.activities; let i = index"
-										>{{ activity }} <span *ngIf="i < city.activities.length - 1">- </span></span
-									>
-									<img
+								<h6 class="font-weight-bold activities-title mt-2 mt-md-0">
+									{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }}
+									{{ city.countryDisplayName }}
+								</h6>
+								<p class="grey item-text font-italic activities-text">
+									<span *ngFor="let interest of city.interests; let i = index">{{ interest }} <span
+											*ngIf="i < city.interests.length - 1">- </span></span>
+									<!-- <img
 										*ngFor="let icon of city.icons"
 										[src]="icon.link"
 										class="custom-icon d-none d-md-inline-block"
 										width="16px"
 										height="16px"
 										[alt]="icon.alt"
-									/>
-								</p> -->
+									/>  -->
+								</p>
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
-								<mat-checkbox 
-								(change)="city.select = !city.select"
-								(change)="updateSelectedCities(city, $event)"></mat-checkbox>
+								<mat-checkbox (change)="city.select = !city.select"
+									(change)="updateSelectedCities(city, $event)"></mat-checkbox>
 							</div>
 						</div>
 					</div>
 				</div>
-		
+
 				<div class="row">
 					<div class="col-12">
 						<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
@@ -63,6 +62,6 @@
 				<img src="../../../assets/img/map.png" alt="" />
 			</div>
 		</div>
-		
+
 	</div>
 </div>

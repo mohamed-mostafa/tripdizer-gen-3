@@ -1,9 +1,22 @@
+import { CityDTO } from './../tab-cities/city-dto.model';
+
+export class Accommodation {
+	city: CityDTO;
+	hotels: Array<Hotel>;
+}
+
 export class Hotel {
-	city: string;
 	name: string;
-	rate: number;
-	address: string;
+	displaName: string;
 	description: string;
-	image: string;
+	city: string;
+	thumbnail: string;
+	address: string;
+	stars: number;
+	checkin: string;
+	checkout: string;
+	numberOfNights: number;
+	rate: number;
 	price: number;
+	currency: string;
 }

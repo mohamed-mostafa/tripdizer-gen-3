@@ -1,7 +1,6 @@
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CitiesService } from './cities.service';
 import { CityDTO } from './city-dto.model';
 
 @Component({
@@ -12,14 +11,12 @@ import { CityDTO } from './city-dto.model';
 export class TabCitiesComponent {
 	cities: Observable<Array<CityDTO>>;
 	selectedCities: Array<CityDTO> = [];
-	nightsArray: Array<number> = [];
 
-	constructor(citiesService: CitiesService, private service: EstimatedCostService) {
-		this.cities = citiesService.getCities();
+	constructor(private service: EstimatedCostService) {
+		this.cities = service.getCities();
 	}
 
 	updateSelectedCities(city, e) {
-
 		if (e.checked === true) {
 			this.selectedCities.push(city);
 		} else if (e.checked === false) {
@@ -31,19 +28,19 @@ export class TabCitiesComponent {
 		}
 	}
 
-	calculateCitiesNights(nights, cities) {
-		const floorDivision = Math.floor(nights / cities);
-		const modulus = nights % cities;
-		for (let z = 0; z < cities; z++) { this.nightsArray[z] = floorDivision; }
-		this.nightsArray[0] = this.nightsArray[0] + modulus;
+	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {
+		const numberOfNights = this.service.getNumberOfNights();
+		const citiesLength = cities.length;
+
+		const floorDivision = Math.floor(numberOfNights / citiesLength);
+		const modulus = numberOfNights % citiesLength;
+		return cities.map((city: CityDTO, index) => ({
+			...city,
+			numberOfNights: index === 0 ? floorDivision + modulus : floorDivision
+		}));
 	}
 
 	next(): void {
-
-		// calculate nights in every city
-
-		// set number of nights for every city in selectedCities array
-
-		this.service.setSelectedCities(this.selectedCities);
+		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 	}
 }
