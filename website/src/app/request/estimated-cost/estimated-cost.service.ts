@@ -55,7 +55,7 @@ export class EstimatedCostService {
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
 			departure: (this.requestService.getProperty('departureDate') as Moment).format('YYYY-MM-DD'),
-			citiesSequence: this.getSelectedCities(),
+			citiesSequence: this.getSelectedCities().map(city => ({ countryIso: city.countryIsoCode, cityIata: city.iataCode, numberOfNights: city.numberOfNights })),
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
