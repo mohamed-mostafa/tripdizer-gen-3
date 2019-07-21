@@ -1,3 +1,4 @@
+import { EstimatedCostService } from './estimated-cost.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../request.service';
@@ -10,9 +11,14 @@ import { EstimatedCostResponse } from './estimated-cost.model';
 })
 export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
-	selectedTab = 0;
+	selectedTab: number;
 
-	constructor(route: ActivatedRoute, private router: Router, private requestService: RequestService) {
+	constructor(
+		route: ActivatedRoute,
+		private router: Router,
+		private requestService: RequestService,
+		private service: EstimatedCostService
+	) {
 		// requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {
 		// 	if (response) {
 		// 		this.estimatedCost = response;
@@ -22,5 +28,10 @@ export class EstimatedCostComponent {
 		// 		});
 		// 	}
 		// });
+		service.currentTabIndex.subscribe(n => this.selectedTab = n);
+	}
+
+	tabChange(e) {
+		this.service.setCurrentTabIndex(e);
 	}
 }

@@ -1,7 +1,9 @@
+import { Accommodation, AccommodationRequest } from './tab-accommodation/accommodation.model';
+import { CitiesRequest } from './tab-cities/city.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { CityDTO } from './tab-cities/city-dto.model';
@@ -11,6 +13,7 @@ import { Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
 export class EstimatedCostService {
 	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 	private countryCities = 'package-options/1.0.0/countryCities';
+	private accommodations = 'package-options/1.0.0/accomodationOffers';
 
 	private departureDate = this.requestService.getProperty('departureDate') as Moment;
 	private returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -20,11 +23,18 @@ export class EstimatedCostService {
 	private selectedFlightOffers: Array<FlightOffer>;
 	private selectedCities: Array<CityDTO>;
 
-	constructor(private http: HttpClient, private requestService: RequestService) { }
+	private currentTabIndexSubject: BehaviorSubject<number>;
+	public currentTabIndex: Observable<number>;
+	private currentTabNumber: number;
+
+	constructor(private http: HttpClient, private requestService: RequestService) {
+		this.currentTabIndexSubject = new BehaviorSubject<number>(this.currentTabNumber);
+		this.currentTabIndex = this.currentTabIndexSubject.asObservable();
+	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, { 'countries': [ 'NLD', 'ITA', 'FRA' ] });
-		// return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, this.getSelectedCountriesISO());
+		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountriesISO() };
+		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest);
 	}
 
 	getNumberOfNights(): number {
@@ -41,35 +51,14 @@ export class EstimatedCostService {
 	}
 
 	getSelectedCities(): Array<CityDTO> {
-
 		return this.selectedCities;
-		// return [
-		// 	{
-		// 		countryIso: 'NED',
-		// 		cityIata: 'AMS',
-		// 		numberOfNights: 3,
-		// 		countryDisplayName: 'Holland',
-		// 		name: 'Amsterdam',
-		// 		iataCode: 'AMS',
-		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/AMS.png'
-		// 	},
-		// 	{
-		// 		countryIso: 'FRA',
-		// 		cityIata: 'PAR',
-		// 		numberOfNights: 7,
-		// 		countryDisplayName: 'France',
-		// 		name: 'Paris',
-		// 		iataCode: 'PAR',
-		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/PAR.png'
-		// 	},
-		// ];
 	}
 
 	getFlights(): Observable<Array<Flight>> {
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
 			departure: (this.requestService.getProperty('departureDate') as Moment).format('YYYY-MM-DD'),
-			citiesSequence: this.getSelectedCities(),
+			citiesSequence: this.getSelectedCities().map(city => ({ countryIso: city.countryIsoCode, cityIata: city.iataCode, numberOfNights: city.numberOfNights })),
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
@@ -80,7 +69,28 @@ export class EstimatedCostService {
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.selectedFlightOffers = flightOffers;
-
 		this.requestService.setProperty('flightOffers', flightOffers);
+	}
+
+	setCurrentTabIndex(index) {
+		this.currentTabNumber = index;
+		this.currentTabIndexSubject.next(this.currentTabNumber);
+	}
+
+	getAccommodation(): Observable<Array<Accommodation>> {
+		const cities: Array<{ cityIata: string, numberOfNights: number }> = [];
+		for (let x = 0; x < this.selectedCities.length; x++) {
+			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		}
+		const accommodationRequest: AccommodationRequest = {
+			arrival: this.departureDate.format('YYYY-MM-DD'),
+			budgetCategory: /*this.budgetCategory*/ 'SUPER ECONOMY',
+			cities: cities
+		};
+		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest);
+	}
+
+	setSelectedAccommodation() {
+
 	}
 }

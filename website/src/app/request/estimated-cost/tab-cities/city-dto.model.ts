@@ -8,7 +8,7 @@ export class CityDTO {
 	icons?: { link: string; alt: string }[];
 	/* TODO: END To be removed */
 
-	countryIso: string;
+	countryIsoCode: string;
 	cityIata: string;
 	numberOfNights?: number;
 	countryDisplayName: string;

@@ -1,6 +1,7 @@
+import { Accommodation } from './accommodation.model';
+import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HotelsService } from './accommodations.service';
 
 @Component({
 	selector: 'c-estimated-cost-accommodation',
@@ -9,10 +10,9 @@ import { HotelsService } from './accommodations.service';
 })
 export class TabAccommodationComponent {
 
-	accommodations: Observable<Array<any>>;
+	accommodations: Observable<Array<Accommodation>>;
 
-	constructor(service: HotelsService) {
-		this.accommodations = service.getHotels();
-		console.log(this.accommodations);
+	constructor(service: EstimatedCostService) {
+		this.accommodations = service.getAccommodation();
 	}
 }
