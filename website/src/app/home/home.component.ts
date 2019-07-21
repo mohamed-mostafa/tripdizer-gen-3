@@ -49,8 +49,12 @@ export class HomeComponent implements OnDestroy {
 	}
 
 	resizeFirstElement() {
-		const firstElement = document.getElementsByTagName('section')[0];
-		firstElement.style.height = document.body.clientHeight - this.navBarHeight + 'px';
+		setTimeout(() => {
+			const firstElement = document.getElementsByTagName('section')[0];
+			if (firstElement) {
+				firstElement.style.height = document.body.clientHeight - this.navBarHeight + 'px';
+			}
+		}, 0);
 	}
 
 	openDialog(): void {
