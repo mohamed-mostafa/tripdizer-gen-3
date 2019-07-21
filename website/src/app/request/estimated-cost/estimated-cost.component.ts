@@ -10,6 +10,7 @@ import { EstimatedCostResponse } from './estimated-cost.model';
 })
 export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
+	selectedTab = 0;
 
 	constructor(route: ActivatedRoute, private router: Router, private requestService: RequestService) {
 		// requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {

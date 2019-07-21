@@ -78,10 +78,10 @@ export class TravelInfoComponent implements OnInit {
 				this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
 			}
 		});
-		requestService.getDestinations().subscribe(destinations => {
-			this.destinations = destinations.filter(dest => dest.id !== -1);
-			this.preSelectedDestination();
-		});
+		// requestService.getDestinations().subscribe(destinations => {
+		// 	this.destinations = destinations.filter(dest => dest.id !== -1);
+		// 	this.preSelectedDestination();
+		// });
 		route.params.subscribe(params => {
 			if (params.destinationName) {
 				this.preSelectedDestinationName = params.destinationName;
