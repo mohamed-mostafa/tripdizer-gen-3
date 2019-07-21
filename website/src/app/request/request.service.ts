@@ -203,7 +203,9 @@ export class RequestService {
 		}
 	}
 
-	getProperty(key: string): any {
+	getProperty(key: string): any;
+	getProperty<T>(key: string): T;
+	getProperty<T>(key: string): T {
 		return this.requestData[key];
 	}
 
