@@ -4,7 +4,7 @@
 
 		
 
-		<mat-tab-group mat-align-tabs="center" [selectedIndex]="selectedTab">
+		<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)" [selectedIndex]="selectedTab">
 			<mat-tab>
 				<ng-template mat-tab-label>
 					<div class="tab-icon">
@@ -30,7 +30,7 @@
 				<div class="row mx-0">
 					<div class="col-12">
 						<div class="p-2 p-md-0 mt-3 mt-md-0">
-							<c-estimated-cost-flights></c-estimated-cost-flights>
+							<c-estimated-cost-flights *ngIf="selectedTab === 1"></c-estimated-cost-flights>
 						</div>
 					</div>
 				</div>
@@ -45,7 +45,7 @@
 				<div class="row mx-0">
 					<div class="col-12">
 						<div class="p-2 p-md-0 mt-3 mt-md-0">
-							<c-estimated-cost-accommodation></c-estimated-cost-accommodation>
+							<c-estimated-cost-accommodation *ngIf="selectedTab === 2"></c-estimated-cost-accommodation>
 						</div>
 					</div>
 				</div>

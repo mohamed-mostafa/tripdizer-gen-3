@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { CityDTO } from './tab-cities/city-dto.model';
@@ -20,7 +20,14 @@ export class EstimatedCostService {
 	private selectedFlightOffers: Array<FlightOffer>;
 	private selectedCities: Array<CityDTO>;
 
-	constructor(private http: HttpClient, private requestService: RequestService) { }
+	private currentTabIndexSubject: BehaviorSubject<number>;
+	public currentTabIndex: Observable<number>;
+	private currentTabNumber: number;
+
+	constructor(private http: HttpClient, private requestService: RequestService) {
+		this.currentTabIndexSubject = new BehaviorSubject<number>(this.currentTabNumber);
+		this.currentTabIndex = this.currentTabIndexSubject.asObservable();
+	}
 
 	getCities(): Observable<Array<CityDTO>> {
 		console.log();
@@ -38,7 +45,6 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
-		console.log(selectedCities);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
@@ -60,7 +66,11 @@ export class EstimatedCostService {
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.selectedFlightOffers = flightOffers;
-
 		this.requestService.setProperty('flightOffers', flightOffers);
+	}
+
+	setCurrentTabIndex(index) {
+		this.currentTabNumber = index;
+		this.currentTabIndexSubject.next(this.currentTabNumber);
 	}
 }

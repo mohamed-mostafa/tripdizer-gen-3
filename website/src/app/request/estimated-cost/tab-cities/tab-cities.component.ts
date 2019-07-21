@@ -43,5 +43,6 @@ export class TabCitiesComponent {
 
 	next(): void {
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
+		this.service.setCurrentTabIndex(1);
 	}
 }
