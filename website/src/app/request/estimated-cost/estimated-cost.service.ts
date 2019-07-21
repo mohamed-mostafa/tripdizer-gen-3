@@ -23,8 +23,8 @@ export class EstimatedCostService {
 	constructor(private http: HttpClient, private requestService: RequestService) { }
 
 	getCities(): Observable<Array<CityDTO>> {
-		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, { 'countries': [ 'NLD', 'ITA', 'FRA' ] });
-		// return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, this.getSelectedCountriesISO());
+		console.log();
+		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, { 'countries': this.getSelectedCountriesISO() });
 	}
 
 	getNumberOfNights(): number {
@@ -38,31 +38,11 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
+		console.log(selectedCities);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
-
 		return this.selectedCities;
-		// return [
-		// 	{
-		// 		countryIso: 'NED',
-		// 		cityIata: 'AMS',
-		// 		numberOfNights: 3,
-		// 		countryDisplayName: 'Holland',
-		// 		name: 'Amsterdam',
-		// 		iataCode: 'AMS',
-		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/AMS.png'
-		// 	},
-		// 	{
-		// 		countryIso: 'FRA',
-		// 		cityIata: 'PAR',
-		// 		numberOfNights: 7,
-		// 		countryDisplayName: 'France',
-		// 		name: 'Paris',
-		// 		iataCode: 'PAR',
-		// 		thumbnail: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/PAR.png'
-		// 	},
-		// ];
 	}
 
 	getFlights(): Observable<Array<Flight>> {
