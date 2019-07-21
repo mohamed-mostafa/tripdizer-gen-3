@@ -23,6 +23,7 @@ export class PlacesSelectBoxComponent {
 	@Input() formGroup = new FormGroup({ placeCtrl: new FormControl() });
 	@Input() controlName = 'placeCtrl';
 	@Input() placeHolder;
+	@Input() hidePlaceHolderConditionally = false;
 	@Input() classes = '';
 	@Input() property = 'id';
 	@Input() set places(places: Array<Place>) {
