@@ -1,7 +1,8 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -36,6 +37,8 @@ export class PlacesSelectBoxComponent {
 		}
 	}
 
+	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
+
 	get places(): Array<Place> {
 		if (this._selectedPlaces.length === 3) {
 			return [];
@@ -60,13 +63,23 @@ export class PlacesSelectBoxComponent {
 		);
 	}
 
-	add(event: MatAutocompleteSelectedEvent): void {
+	addFromInput(event: MatChipInputEvent): void {
+		if (event.input) {
+			event.input.value = '';
+		}
+
+		this.formGroup.get(this.controlName).setValue(null);
+		this.placeInput.nativeElement.blur();
+	}
+
+	addFromAutocomplete(event: MatAutocompleteSelectedEvent): void {
 		const place = this._places.find(p => p[this.property] === event.option.value);
 
 		if (place) {
 			this._selectedPlaces.push(place);
 			this.formGroup.get(this.controlName).setValue(null);
 			this.placesChanged.next(this._selectedPlaces);
+			this.placeInput.nativeElement.blur();
 		}
 	}
 

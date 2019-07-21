@@ -15,10 +15,10 @@
 				[matAutocomplete]="matAutocomplete"
 				[matChipInputFor]="chipList"
 				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-				(matChipInputTokenEnd)="!matAutocomplete.isOpen ? (placeInput.value = '') : false"
+				(matChipInputTokenEnd)="!matAutocomplete.isOpen ? addFromInput($event) : false"
 			/>
 		</mat-chip-list>
-		<mat-autocomplete #matAutocomplete (optionSelected)="add($event)">
+		<mat-autocomplete #matAutocomplete (optionSelected)="addFromAutocomplete($event)">
 			<mat-option *ngFor="let place of (filteredPlaces | async)" [value]="place[property]">{{ place.name }}</mat-option>
 		</mat-autocomplete>
 	</mat-form-field>
