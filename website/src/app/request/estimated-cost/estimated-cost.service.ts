@@ -1,3 +1,5 @@
+import { Accommodation, AccommodationRequest } from './tab-accommodation/accommodation.model';
+import { CitiesRequest } from './tab-cities/city.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
@@ -11,6 +13,7 @@ import { Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
 export class EstimatedCostService {
 	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 	private countryCities = 'package-options/1.0.0/countryCities';
+	private accommodations = 'package-options/1.0.0/accomodationOffers';
 
 	private departureDate = this.requestService.getProperty('departureDate') as Moment;
 	private returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -30,8 +33,8 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		console.log();
-		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, { 'countries': this.getSelectedCountriesISO() });
+		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountriesISO() };
+		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest);
 	}
 
 	getNumberOfNights(): number {
@@ -72,5 +75,22 @@ export class EstimatedCostService {
 	setCurrentTabIndex(index) {
 		this.currentTabNumber = index;
 		this.currentTabIndexSubject.next(this.currentTabNumber);
+	}
+
+	getAccommodation(): Observable<Array<Accommodation>> {
+		const cities: Array<{ cityIata: string, numberOfNights: number }> = [];
+		for (let x = 0; x < this.selectedCities.length; x++) {
+			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		}
+		const accommodationRequest: AccommodationRequest = {
+			arrival: this.departureDate.format('YYYY-MM-DD'),
+			budgetCategory: /*this.budgetCategory*/ 'SUPER ECONOMY',
+			cities: cities
+		};
+		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest);
+	}
+
+	setSelectedAccommodation() {
+
 	}
 }

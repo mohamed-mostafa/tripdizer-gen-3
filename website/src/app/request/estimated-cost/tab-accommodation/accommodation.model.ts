@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { CityDTO } from './../tab-cities/city-dto.model';
 
 export class Accommodation {
@@ -19,4 +20,10 @@ export class Hotel {
 	rate: number;
 	price: number;
 	currency: string;
+}
+
+export class AccommodationRequest {
+	arrival: string;
+	budgetCategory: string;
+	cities: Array<{ cityIata: string, numberOfNights: number }>;
 }
