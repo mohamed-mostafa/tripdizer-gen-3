@@ -59,7 +59,7 @@ export class Request extends CommonFunctions {
 	private _travelHistory: TravelHistory;
 
 	get countries(): Array<string> {
-		return this._countriesISO;
+		return this._countriesISO || [];
 	}
 	set countries(value: Array<string>) {
 		this._countriesISO = value;
@@ -269,7 +269,7 @@ export class Request extends CommonFunctions {
 					}
 					if (
 						!(
-							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
 							this._departureDate &&
@@ -296,7 +296,7 @@ export class Request extends CommonFunctions {
 					}
 					if (
 						!(
-							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
 							this._departureDate &&
@@ -635,8 +635,9 @@ export class Request extends CommonFunctions {
 		});
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
+		// here cities
 		this._countriesISO = [];
-		// here accommodation & cities
+		// here accommodation
 		this._preferences = [];
 		this._traveler = {
 			name: null,

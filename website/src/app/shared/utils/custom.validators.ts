@@ -86,4 +86,9 @@ export class CustomValidators {
 			return { notEmpty: errorMessage || true };
 		};
 	}
+	static conditionallyRequired(param: () => boolean, errorMessage?: string): ValidatorFn {
+		return (): { [key: string]: boolean } | null => {
+			return Boolean(param()) ? null : { required: true };
+		};
+	}
 }
