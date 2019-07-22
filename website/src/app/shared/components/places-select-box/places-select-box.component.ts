@@ -79,6 +79,7 @@ export class PlacesSelectBoxComponent {
 			this._selectedPlaces.push(place);
 			this.formGroup.get(this.controlName).setValue(null);
 			this.placesChanged.next(this._selectedPlaces);
+			this.placeInput.nativeElement.value = '';
 			this.placeInput.nativeElement.blur();
 		}
 	}
