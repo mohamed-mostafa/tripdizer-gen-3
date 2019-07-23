@@ -1,8 +1,10 @@
-<div class="row tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
+<div class="row estimated-cost tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
+	<div class="col-12 p-0">
+		<c-estimated-cost-header></c-estimated-cost-header>
+	</div>
+
 	<div class="col-12">
 		<hr class="d-none d-md-block" />
-
-		
 
 		<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)" [selectedIndex]="selectedTab">
 			<mat-tab>

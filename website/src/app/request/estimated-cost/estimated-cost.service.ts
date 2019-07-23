@@ -33,6 +33,14 @@ export class EstimatedCostService {
 		this.currentTabIndex = this.currentTabIndexSubject.asObservable();
 	}
 
+	getDepartureDate(): Moment {
+		return this.departureDate;
+	}
+
+	getReturnDate(): Moment {
+		return this.returnDate;
+	}
+
 	getCities(): Observable<Array<CityDTO>> {
 		this.setIsLoading(true);
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountriesISO() };

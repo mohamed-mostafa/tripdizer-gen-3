@@ -11,6 +11,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { EstimatedCostHeaderComponent } from './estimated-cost/header/header.component';
+import { TabAccommodationComponent } from './estimated-cost/tab-accommodation/tab-accommodation.component';
 import { TabCitiesComponent } from './estimated-cost/tab-cities/tab-cities.component';
 import { FlightOptionsComponent } from './estimated-cost/tab-flights/flight-row/flight-options/flight-options.component';
 import { FlightRowComponent } from './estimated-cost/tab-flights/flight-row/flight-row.component';
@@ -20,7 +22,6 @@ import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
-import { TabAccommodationComponent } from './estimated-cost/tab-accommodation/tab-accommodation.component';
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
@@ -49,6 +50,7 @@ import { SummaryComponent } from './summary/summary.component';
 		TabCitiesComponent,
 		TabFlightsComponent,
 		TabAccommodationComponent,
+		EstimatedCostHeaderComponent,
 		FlightRowComponent,
 		FlightOptionsComponent,
 		SummaryComponent,
