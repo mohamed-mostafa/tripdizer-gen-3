@@ -153,7 +153,11 @@
 			"daily_spending": "Daily Spending",
 			"per_person": "per person",
 			"hint2": "International + Domestic flights",
-			"hint3": "Just an indicator for daily spendings per person, not included in the package cost",
+			"hint3": "Just an indicator for daily spending per person, not included in the package cost",
+			"header": {
+				"number_of_days": "{{numberOfNights}} Day{{withS}} in",
+				"dates": "From {{departureDate}} To {{returnDate}}"
+			},
 			"tab_cities": {
 				"title": "Cities",
 				"view_choose": "View and choose your cities",

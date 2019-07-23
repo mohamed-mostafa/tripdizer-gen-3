@@ -154,6 +154,10 @@
 			"per_person": "للشخص",
 			"hint2": "طيران دولي + داخلي",
 			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري",
+			"header": {
+				"number_of_days": "{{numberOfNights}} ايام في",
+				"dates": "من {{departureDate}} الى {{returnDate}}"
+			},
 			"tab_cities": {
 				"title": "المدن",
 				"view_choose": "عرض واختيار المدن",

@@ -1,9 +1,17 @@
 <div id="estimated-cost-header" class="header">
 	<div class="center font-weight-bold text-center text-white">
-		<div *ngIf="numberOfNights" class="m-0 h3 days">{{ numberOfNights }} Days in</div>
+		<div *ngIf="numberOfNights" class="m-0 h3 days">
+			{{
+				'request.estimated_cost.header.number_of_days'
+					| translate: { numberOfNights: numberOfNights, withS: numberOfNights > 1 ? 's' : '' }
+			}}
+		</div>
 		<div *ngIf="selectedCountriesName" class="m-0 country">{{ selectedCountriesName }}</div>
 		<div *ngIf="departureDate && returnDate" class="m-0 dates">
-			From {{ departureDate | date: 'd / M / y' }} To {{ returnDate | date: 'd / M / y' }}
+			{{
+				'request.estimated_cost.header.dates'
+					| translate: { departureDate: departureDate | date: 'd / M / y', returnDate: returnDate | date: 'd / M / y' }
+			}}
 		</div>
 	</div>
 </div>
