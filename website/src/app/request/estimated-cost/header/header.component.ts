@@ -15,7 +15,10 @@ export class EstimatedCostHeaderComponent implements AfterViewInit {
 
 	constructor(service: EstimatedCostService) {
 		this.numberOfNights = service.getNumberOfNights();
-		this.selectedCountriesName = service.getSelectedCountriesISO().join(' - ');
+		this.selectedCountriesName = service
+			.getSelectedCountries()
+			.map(c => c.name)
+			.join(' - ');
 		this.departureDate = service.getDepartureDate();
 		this.returnDate = service.getReturnDate();
 	}

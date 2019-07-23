@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Country } from 'src/app/shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { Accommodation, AccommodationRequest } from './tab-accommodation/accommodation.model';
@@ -43,7 +44,7 @@ export class EstimatedCostService {
 
 	getCities(): Observable<Array<CityDTO>> {
 		this.setIsLoading(true);
-		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountriesISO() };
+		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 			tap(() => {
 				this.setIsLoading(false);
@@ -55,8 +56,8 @@ export class EstimatedCostService {
 		return this.returnDate.diff(this.departureDate, 'days');
 	}
 
-	getSelectedCountriesISO(): Array<string> {
-		return this.requestService.getProperty('countries');
+	getSelectedCountries(): Array<Country> {
+		return this.requestService.getProperty<Array<Country>>('countries');
 	}
 
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
