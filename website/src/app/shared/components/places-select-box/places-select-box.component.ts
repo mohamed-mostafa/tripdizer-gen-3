@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -13,7 +13,7 @@ import { Place } from '../../models/place.model';
 	templateUrl: './places-select-box.component.html',
 	styleUrls: ['./places-select-box.component.scss'],
 })
-export class PlacesSelectBoxComponent {
+export class PlacesSelectBoxComponent implements OnInit {
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
 	_selectedPlaces: Array<Place> = [];
@@ -21,8 +21,8 @@ export class PlacesSelectBoxComponent {
 
 	@Output() placesChanged = new EventEmitter<Array<Place>>();
 
-	@Input() formGroup = new FormGroup({ placeCtrl: new FormControl() });
 	@Input() controlName = 'placeCtrl';
+	@Input() formGroup = new FormGroup({ placeCtrl: new FormControl() });
 	@Input() placeHolder;
 	@Input() hidePlaceHolderConditionally = false;
 	@Input() classes = '';
@@ -57,6 +57,9 @@ export class PlacesSelectBoxComponent {
 		translate
 			.get('home.landing.destination_place_holder')
 			.subscribe(placeHolder => (this.placeHolder = !this.placeHolder ? placeHolder : this.placeHolder));
+	}
+
+	ngOnInit() {
 		this.filteredPlaces = this.formGroup.get(this.controlName).valueChanges.pipe(
 			startWith(null),
 			map((placeName: string | null) => (placeName ? this._filter(placeName) : this.places.slice()))
