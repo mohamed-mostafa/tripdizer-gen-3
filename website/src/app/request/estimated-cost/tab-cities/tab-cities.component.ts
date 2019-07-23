@@ -31,6 +31,7 @@ export class TabCitiesComponent {
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {
 		const numberOfNights = this.service.getNumberOfNights();
+		console.log('numberOfNights', numberOfNights);
 		const citiesLength = cities.length;
 
 		const floorDivision = Math.floor(numberOfNights / citiesLength);
@@ -44,5 +45,6 @@ export class TabCitiesComponent {
 	next(): void {
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
+		console.log(this.selectedCities);
 	}
 }
