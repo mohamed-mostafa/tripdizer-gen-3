@@ -7,10 +7,10 @@
 			}}
 		</div>
 		<div *ngIf="selectedCountriesName" class="m-0 text-uppercase country">{{ selectedCountriesName }}</div>
-		<div *ngIf="departureDate && returnDate" class="m-0 text-capitalize dates">
+		<div *ngIf="departureDate && returnDate" class="m-0 font-italic text-capitalize dates">
 			{{
 				'request.estimated_cost.header.dates'
-					| translate: { departureDate: departureDate | date: 'd / M / y', returnDate: returnDate | date: 'd / M / y' }
+					| translate: { departureDate: departureDate | date: 'd-M-y', returnDate: returnDate | date: 'd-M-y' }
 			}}
 		</div>
 	</div>
