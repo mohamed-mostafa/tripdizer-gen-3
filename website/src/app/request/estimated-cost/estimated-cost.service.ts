@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Country } from 'src/app/shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { Accommodation, AccommodationRequest } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
-import { Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
+import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
@@ -66,20 +66,28 @@ export class EstimatedCostService {
 
 	getFlights(): Observable<Array<Flight>> {
 		this.setIsLoading(true);
+		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+			countryIso: city.countryIsoCode,
+			cityIata: city.iataCode,
+			numberOfNights: city.numberOfNights,
+		}));
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-			departure: (this.requestService.getProperty('departureDate') as Moment).format('YYYY-MM-DD'),
-			citiesSequence: this.getSelectedCities().map(city => ({
-				countryIso: city.countryIsoCode,
-				cityIata: city.iataCode,
-				numberOfNights: city.numberOfNights,
-			})),
+			departure: this.departureDate.format('YYYY-MM-DD'),
+			citiesSequence: citiesSequence,
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 
 		return this.http.post<Array<Flight>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
+			map(flights =>
+				flights.map(flight => {
+					const city = citiesSequence.find(cs => cs.cityIata === flight.origin.iataCode);
+					flight.numberOfNights = city ? city.numberOfNights : null;
+					return flight;
+				})
+			),
 			tap(() => {
 				this.setIsLoading(false);
 			})

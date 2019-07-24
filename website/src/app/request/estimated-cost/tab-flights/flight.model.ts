@@ -6,6 +6,7 @@ export class Flight {
 	destination: City;
 	departure: string;
 	flightOffers: Array<FlightOffer>;
+	numberOfNights?: number;
 }
 
 export class FlightOffer {

@@ -10,7 +10,13 @@
 	</div>
 	<div class="city-name ml-5 ml-lg-6 text-capitalize">
 		<span>{{ flight.origin.name }}</span>
-		<span> : 4 Nights</span>
+		<span *ngIf="flight.numberOfNights">
+			:
+			{{
+				'request.estimated_cost.tab_flights.nights'
+					| translate: { numberOfNights: flight.numberOfNights, withS: flight.numberOfNights > 1 ? 's' : '' }
+			}}
+		</span>
 	</div>
 </div>
 
@@ -33,7 +39,11 @@
 		<div class="wo-text bg-dark"></div>
 	</div>
 	<div class="city-name ml-5 ml-lg-6 text-capitalize font-italic">
-		<span *ngIf="isFirst">Start : {{ flight.origin.name }}</span>
-		<span *ngIf="isLast">End : {{ flight.destination.name }}</span>
+		<span *ngIf="isFirst">
+			{{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flight.origin.name }}
+		</span>
+		<span *ngIf="isLast">
+			{{ 'request.estimated_cost.tab_flights.end' | translate }} : {{ flight.destination.name }}
+		</span>
 	</div>
 </ng-template>
