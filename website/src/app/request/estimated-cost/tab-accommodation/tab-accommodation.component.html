@@ -53,10 +53,20 @@
 											<p class="item-text price-text">{{ hotel.price }} LE</p>
 										</div>
 										<div class="col-12 col-md-6 justify-content-end">
-											<a
+											<button *ngIf="!hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
 												role="button"
-												>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</a
+												(click)="hotel.select = !hotel.select"
+												(click)="selectHotel(hotel, accommodation.hotels)"
+												[disabled]="hotel.disabled"
+												>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</button
+											>
+											<button *ngIf="hotel.select"
+												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
+												role="button"
+												(click)="hotel.select = !hotel.select"
+												(click)="unSelectHotel(hotel.id, accommodation.hotels)"
+												>{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}</button
 											>
 										</div>
 									</div>

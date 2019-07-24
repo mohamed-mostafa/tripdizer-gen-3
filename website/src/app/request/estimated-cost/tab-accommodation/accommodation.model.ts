@@ -7,6 +7,7 @@ export class Accommodation {
 }
 
 export class Hotel {
+	id: number;
 	name: string;
 	displaName: string;
 	description: string;

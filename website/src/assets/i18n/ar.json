@@ -177,6 +177,7 @@
 				"title": "الفنادق",
 				"choose_hotel": "عرض واختيار الفنادق",
 				"select": "اختيار",
+				"selected": "تم اختياره",
 				"total_price": "إجمالى السعر"
 			},
 			"summary": {
