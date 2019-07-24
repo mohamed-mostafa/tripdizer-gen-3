@@ -18,9 +18,16 @@ export class TabFlightsComponent {
 
 	constructor(private service: EstimatedCostService) {
 		service.getFlights().subscribe(flights => {
-			this.flights = flights.map((flight, index) => ({
+			this.flights = flights.map((flight, flightIndex) => ({
 				...flight,
-				flightOffers: flight.flightOffers.map(fo => ({ ...fo, flightIndex: index })),
+				flightOffers: flight.flightOffers.map((fo, flightOfferIndex) => ({
+					...fo,
+					flightIndex,
+					flightOfferIndex,
+					departure: [...fo.segments].pop(),
+					arrival: [...fo.segments].shift(),
+					numberOfStops: fo.segments.length - 1,
+				})),
 			}));
 			this.flightPaths = flights
 				.filter(flight => flight.origin && flight.origin.latitude && flight.origin.longitude)

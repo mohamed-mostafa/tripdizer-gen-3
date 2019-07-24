@@ -168,13 +168,20 @@
 			"tab_flights": {
 				"title": "الطيران",
 				"view_edit": "عرض / تعديل المسار",
+				"change_flight": "تغيير الطيران",
 				"change_city": "تغيير المدينة",
 				"reorder_route": "ترتيب المسار",
 				"total_cost": "السعر الاجمالي",
 				"next_label": "التالي",
 				"start": "البداية",
 				"end": "النهاية",
-				"nights": "{{numberOfNights}} ايام"
+				"nights": "{{numberOfNights}} ايام",
+				"stops": "{{numberOfStops}} وقفة",
+				"departure": "المغادرة",
+				"duration": "المدة",
+				"arrival": "الوصول",
+				"select": "اختر",
+				"selected": "مختار"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

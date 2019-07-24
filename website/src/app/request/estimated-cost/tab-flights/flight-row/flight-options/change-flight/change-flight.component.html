@@ -1,0 +1,51 @@
+<a href="javascript:void(0)" mat-button [matMenuTriggerFor]="flightOffer">
+	{{ 'request.estimated_cost.tab_flights.change_flight' | translate }}
+</a>
+<mat-menu #flightOffer="matMenu">
+	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
+		<div class="col text-center align-self-center">
+			<!-- <input type="radio" name="flight-offer" [value]="selectedOffer.flightOfferIndex === offer.flightOfferIndex" /> -->
+			<img class="w-100" [src]="offer.carrier.wideLogo" />
+		</div>
+		<div class="col text-center align-self-center">
+			<table class="table table-borderless table-sm trip-info">
+				<thead class="text-blue head">
+					<th>{{ 'request.estimated_cost.tab_flights.departure' | translate }}</th>
+					<th>{{ 'request.estimated_cost.tab_flights.duration' | translate }}</th>
+					<th>{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</th>
+				</thead>
+				<tr class="body">
+					<th>
+						<span class="time">{{ offer?.departure.departure | date: 'HH:MM' }}</span>
+						<br />
+						<span class="iata">{{ offer?.departure.origin }}</span>
+					</th>
+					<th class="duration">
+						<span class="duration-word">{{ offer?.totalDurationInWords }}</span>
+						<hr />
+						<span class="stops">
+							{{
+								'request.estimated_cost.tab_flights.stops'
+									| translate: { numberOfStops: offer?.numberOfStops, withS: offer?.numberOfStops > 1 ? 's' : '' }
+							}}
+						</span>
+					</th>
+					<th>
+						<span class="time">{{ offer?.departure.return | date: 'HH:MM' }}</span>
+						<br />
+						<span class="iata">{{ offer?.departure.destination }}</span>
+					</th>
+				</tr>
+			</table>
+		</div>
+		<div class="col text-center align-self-center">
+			<div>{{ offer.price | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</div>
+			<button *ngIf="selectedOffer.flightOfferIndex !== offer.flightOfferIndex" class="btn btn-sm btn-blue">
+				{{ 'request.estimated_cost.tab_flights.select' | translate }}
+			</button>
+			<button *ngIf="selectedOffer.flightOfferIndex === offer.flightOfferIndex" class="btn btn-sm btn-outline-blue">
+				{{ 'request.estimated_cost.tab_flights.selected' | translate }}
+			</button>
+		</div>
+	</div>
+</mat-menu>

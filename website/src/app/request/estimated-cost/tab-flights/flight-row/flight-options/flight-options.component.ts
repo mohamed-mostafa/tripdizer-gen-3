@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Flight, FlightOffer } from '../../flight.model';
 
 @Component({
@@ -6,26 +6,15 @@ import { Flight, FlightOffer } from '../../flight.model';
 	templateUrl: './flight-options.component.html',
 	styleUrls: ['./flight-options.component.scss'],
 })
-export class FlightOptionsComponent implements OnInit {
+export class FlightOptionsComponent {
 	@Input() flight: Flight;
 
 	@Output() offerChanged = new EventEmitter<FlightOffer>();
 
 	selectedOffer: FlightOffer;
 
-	ngOnInit() {
-		this.selectedOffer = this.getFirstFlightOfferIfExists();
-		this.offerChanged.emit(this.selectedOffer);
-	}
-
-	getFirstFlightOfferIfExists(): FlightOffer {
-		if (!this.flight || !this.flight.flightOffers || !this.flight.flightOffers.length) {
-			return;
-		}
-		return this.flight.flightOffers[0];
-	}
-
-	selectedOfferChanged(): void {
-		this.offerChanged.emit(this.selectedOffer);
+	selectedOfferChanged(flightOffer: FlightOffer): void {
+		this.selectedOffer = flightOffer;
+		this.offerChanged.emit(flightOffer);
 	}
 }

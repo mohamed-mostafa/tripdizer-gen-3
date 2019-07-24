@@ -168,13 +168,20 @@
 			"tab_flights": {
 				"title": "Flights",
 				"view_edit": "View / edit route",
+				"change_flight": "Change Flight",
 				"change_city": "Change City",
 				"reorder_route": "Reorder Route",
 				"total_cost": "Total Cost",
 				"next_label": "Continue",
 				"start": "Start",
 				"end": "End",
-				"nights": "{{numberOfNights}} Day{{withS}}"
+				"nights": "{{numberOfNights}} Day{{withS}}",
+				"stops": "{{numberOfStops}} Stop{{withS}}",
+				"departure": "Departure",
+				"duration": "Duration",
+				"arrival": "Arrival",
+				"select": "Select",
+				"selected": "Selected"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

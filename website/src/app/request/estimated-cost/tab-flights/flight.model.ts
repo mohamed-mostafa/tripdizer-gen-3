@@ -19,6 +19,10 @@ export class FlightOffer {
 	segments: Array<Segment>;
 	carrier: Carrier;
 	flightIndex?: number;
+	flightOfferIndex?: number;
+	departure?: Segment;
+	arrival?: Segment;
+	numberOfStops?: number;
 }
 
 export class Segment {
