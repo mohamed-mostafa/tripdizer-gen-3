@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
@@ -24,14 +24,9 @@ export class EstimatedCostService {
 	private selectedFlightOffers: Array<FlightOffer>;
 	private selectedCities: Array<CityDTO>;
 
-	private currentTabIndexSubject: BehaviorSubject<number>;
-	public currentTabIndex: Observable<number>;
-	private currentTabNumber: number;
+	currentTabIndex = new Subject<number>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) {
-		this.currentTabIndexSubject = new BehaviorSubject<number>(this.currentTabNumber);
-		this.currentTabIndex = this.currentTabIndexSubject.asObservable();
-	}
+	constructor(private http: HttpClient, private requestService: RequestService) {}
 
 	getCities(): Observable<Array<CityDTO>> {
 		this.setIsLoading(true);
@@ -88,8 +83,7 @@ export class EstimatedCostService {
 	}
 
 	setCurrentTabIndex(index) {
-		this.currentTabNumber = index;
-		this.currentTabIndexSubject.next(this.currentTabNumber);
+		this.currentTabIndex.next(index);
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
