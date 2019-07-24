@@ -38,7 +38,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                         countryIsoCode: hotelCity.countryIsoCode,
                         coordinates: hotelCity.lng + ", " + hotelCity.lat,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + hotelCity.iataCode + ".png",
-                        // interests: [] // FIX THIS
+                        interests: hotelCity.interests.map(interest => interest.name)
                     },
                     hotels: [],
                 }
@@ -46,6 +46,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 var cityHotelsList = await getHotelsOfCity(cityIata);
                 cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase()).forEach(hotel => {
                     var newHotel = {
+                        id: hotel.id,
                         name: hotel.enName,
                         displaName: language == 'ar' ? hotel.arName : hotel.enName,
                         description: language == 'ar' ? hotel.arDescription : hotel.enDescription,

@@ -34,7 +34,7 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
                         countryIsoCode: city.countryIsoCode,
                         coordinates: city.lng + ", " + city.lat,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
-                        // interests: [] // FIX THIS
+                        interests: city.interests.map(interest => interest.name)
                     },
                     attractions: []
                 }

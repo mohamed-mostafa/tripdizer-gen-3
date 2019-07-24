@@ -19,7 +19,8 @@
 		"nodemailer-smtp-transport": "1.0.2",
 		"promise": "8.0.1",
 		"request": "^2.88.0",
-		"@google-cloud/firestore": "^2.2.3"
+		"@google-cloud/firestore": "^2.2.3",
+		"@google-cloud/trace-agent": "^4.1.0"
 	},
 	"devDependencies": {
 		"chai": "^4.2.0",

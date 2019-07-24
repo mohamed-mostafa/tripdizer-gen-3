@@ -5,21 +5,22 @@
 		</h3>
 		<select ng-model="selectedCountry">
 			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
-				{{ country.enName }}</option
-			>
+				{{ country.enName }}</option>
 		</select>
 
 		<select ng-model="selectedCity">
 			<option ng-repeat="city in cities" ng-value="city.id" ng-selected="city.id == selectedCity">
-				{{ city.enName }}</option
-			>
+				{{ city.enName }}</option>
 		</select>
+		<i class="fa fa-refresh fa-spin" ng-show="hotelsLoading == true"></i>
+
 	</div>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<div class="alert alert-warning" ng-show="dataEntryValid == false">
+		<div class="alert alert-warning" ng-show="dataEntryValid == false && hotelsLoading == false">
 			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
-			Data entry is not complete! There should be at least <b>3 active hotels per budget category</b> for the selected city
+			Data entry is not complete! There should be at least <b>3 active hotels per budget category</b> for the
+			selected city
 		</div>
 		<div class="overlay" ng-show="loading == true">
 			<i class="fa fa-refresh fa-spin"></i>
@@ -59,13 +60,8 @@
 				<tfooter>
 					<tr>
 						<td colspan="12">
-							<button
-								type="button"
-								class="btn btn-primary pull-right"
-								data-toggle="modal"
-								data-target="addHotelModal"
-								ng-click="openAddDialog()"
-							>
+							<button type="button" class="btn btn-primary pull-right" data-toggle="modal"
+								data-target="addHotelModal" ng-click="openAddDialog()">
 								Add Hotel
 							</button>
 						</td>
@@ -81,14 +77,8 @@
 <div class="row">
 	<!-- MODALS -->
 
-	<div
-		class="modal fade"
-		id="addHotelModal"
-		tabindex="-1"
-		role="dialog"
-		aria-labelledby="myModalLabel"
-		aria-hidden="true"
-	>
+	<div class="modal fade" id="addHotelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -125,108 +115,95 @@
 								<div class="tab-content">
 									<div class="tab-pane active" id="basicTab">
 										<div class="form-group-3" ng-show="saving==false">
-											<label class="control-label text-red" for="enName" ng-show="enNameMissing==true">
+											<label class="control-label text-red" for="enName"
+												ng-show="enNameMissing==true">
 												<i class="fa fa-times-circle-o"></i>English Name is missing</label>
 											<label for="enName" ng-show="enNameMissing==false">En Name</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="enName"
-												ng-model="newHotel.enName"
-												placeholder="Enter name in English"
-												required/>
+											<input type="text" required class="form-control" id="enName"
+												ng-model="newHotel.enName" placeholder="Enter name in English" required
+												maxlength="99" />
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
-											<label class="control-label text-red" for="enDescription" ng-show="enDescriptionMissing==true">
-												<i class="fa fa-times-circle-o"></i>English Description is missing</label>
-											<label for="enDescription" ng-show="enDescriptionMissing==false">En Desc</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="enDescription"
+											<label class="control-label text-red" for="enDescription"
+												ng-show="enDescriptionMissing==true">
+												<i class="fa fa-times-circle-o"></i>English Description is
+												missing</label>
+											<label for="enDescription" ng-show="enDescriptionMissing==false">En
+												Desc</label>
+											<input type="text" required class="form-control" id="enDescription"
 												ng-model="newHotel.enDescription"
-												placeholder="Enter description in English"
-												required/>
+												placeholder="Enter description in English" required maxlength="255" />
 										</div>
 										<div class="form-group-3" ng-show="saving==false">
-											<label class="control-label text-red" for="arName" ng-show="arNameMissing==true">
+											<label class="control-label text-red" for="arName"
+												ng-show="arNameMissing==true">
 												<i class="fa fa-times-circle-o"></i>Arabic Name is missing</label>
 											<label for="arName" ng-show="arNameMissing==false">Ar Name</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="arName"
-												ng-model="newHotel.arName"
-												placeholder="Enter name in Arabic"
-												required/>
+											<input type="text" required class="form-control" id="arName"
+												ng-model="newHotel.arName" placeholder="Enter name in Arabic" required
+												maxlength="99" />
 										</div>
 										<div class="form-group-9" ng-show="saving==false">
-											<label class="control-label text-red" for="arDescription" ng-show="arDescriptionMissing==true">
-												<i class="fa fa-times-circle-o"></i>Arabic Description is missing</label>
-											<label for="arDescription" ng-show="arDescriptionMissing==false">Ar Desc</label>
-											<input
-												type="text"
-												required
-												class="form-control"
-												id="arDescription"
+											<label class="control-label text-red" for="arDescription"
+												ng-show="arDescriptionMissing==true">
+												<i class="fa fa-times-circle-o"></i>Arabic Description is
+												missing</label>
+											<label for="arDescription" ng-show="arDescriptionMissing==false">Ar
+												Desc</label>
+											<input type="text" required class="form-control" id="arDescription"
 												ng-model="newHotel.arDescription"
-												placeholder="Enter description in Arabic"
-												required/>
+												placeholder="Enter description in Arabic" required maxlength="255" />
 										</div>
 										<div class="form-group-4" ng-show="saving==false">
-											<label class="control-label text-red" for="city" ng-show="cityIdMissing==true">
+											<label class="control-label text-red" for="city"
+												ng-show="cityIdMissing==true">
 												<i class="fa fa-times-circle-o"></i>City is missing</label>
 											<label for="city" ng-show="cityIdMissing==false">City</label>
 											<select class="form-control" id="city" ng-model="newHotel.cityId">
-												<option ng-repeat="city in cities" ng-value="city.id" ng-selected="newHotel.cityId == city.id">
+												<option ng-repeat="city in cities" ng-value="city.id"
+													ng-selected="newHotel.cityId == city.id">
 													{{ city.enName }}</option>
 											</select>
 										</div>
 										<div class="form-group-4" ng-show="saving==false">
-											<label class="control-label text-red" for="budgetCategory" ng-show="budgetCategoryMissing==true">
+											<label class="control-label text-red" for="budgetCategory"
+												ng-show="budgetCategoryMissing==true">
 												<i class="fa fa-times-circle-o"></i>Budget Category is missing</label>
-											<label for="budgetCategory" ng-show="budgetCategoryMissing==false">Budget Category</label>
-											<select class="form-control" id="budgetCategory" ng-model="newHotel.budgetCategoryId">
-												<option
-													ng-repeat="budgetCategory in budgetCategories"
+											<label for="budgetCategory" ng-show="budgetCategoryMissing==false">Budget
+												Category</label>
+											<select class="form-control" id="budgetCategory"
+												ng-model="newHotel.budgetCategoryId">
+												<option ng-repeat="budgetCategory in budgetCategories"
 													ng-value="budgetCategory.id"
 													ng-selected="newHotel.budgetCategoryId == budgetCategory.id">
 													{{ budgetCategory.en_name }}</option>
 											</select>
 										</div>
 										<div class="form-group-4" ng-show="saving==false">
-											<label class="control-label text-red" for="stars" ng-show="starsMissing==true">
-												<i class="fa fa-times-circle-o"></i>Stars is missing or has an incorrect value</label>
+											<label class="control-label text-red" for="stars"
+												ng-show="starsMissing==true">
+												<i class="fa fa-times-circle-o"></i>Stars is missing or has an incorrect
+												value</label>
 											<label for="stars" ng-show="starsMissing==false">Stars</label>
-											<input
-												type="number"
-												class="form-control"
-												id="stars"
-												ng-model="newHotel.stars"
-												placeholder="Enter stars (1, 2, 3, 4 or 5)"
-												required
-												min="1"
-												max="5"/>
+											<input type="number" class="form-control" id="stars"
+												ng-model="newHotel.stars" placeholder="Enter stars (1, 2, 3, 4 or 5)"
+												required min="1" max="5" />
 										</div>
 										<div class="form-group" ng-show="saving==false">
-											<label class="control-label text-red" for="stars" ng-show="addressMissing==true">
+											<label class="control-label text-red" for="stars"
+												ng-show="addressMissing==true">
 												<i class="fa fa-times-circle-o"></i>Address is missing</label>
 											<label for="stars" ng-show="starsMissing==false">Address</label>
-											<input
-												type="text"
-												class="form-control"
-												id="address"
-												ng-model="newHotel.address"
-												placeholder="Enter Address"
-												required/>
+											<input type="text" class="form-control" id="address"
+												ng-model="newHotel.address" placeholder="Enter Address" required
+												maxlength="255" />
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
-											<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
+										<div class="form-group-3" ng-show="saving==false">
+											<label class="control-label text-red" for="thumbnail"
+												ng-show="thumbnailMissing==true">
 												<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
-											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (square PNG photo, maximum 100 X 100 pixels)</label>
+											<label for="thumbnail" ng-show="thumbnailMissing==false">Thumbnail (PNG
+												photo, 300 X 200 pixles)</label>
 											<!-- <input
 												type="url"
 												required
@@ -235,74 +212,89 @@
 												ng-model="newHotel.file.name"
 												placeholder="Enter thumbnail"
 												required disabled/> -->
-												<style>
-													input[type="file"] {
-														display: none;
-													}
-													.custom-file-upload {
-														border: 1px solid #ccc;
-														display: inline-block;
-														padding: 6px 12px;
-														cursor: pointer;
-													}
-												</style>
-												<label for="file-upload" class="custom-file-upload">
-													<i class="fa fa-cloud-upload"></i> Choose Image
-												</label>
-												<input id="file-upload" type="file" fileread="newHotel.thumbnail" />
+											<style>
+												input[type="file"] {
+													display: none;
+												}
+
+												.custom-file-upload {
+													border: 1px solid #ccc;
+													display: inline-block;
+													padding: 6px 12px;
+													cursor: pointer;
+												}
+											</style>
+											<label for="file-upload" class="custom-file-upload">
+												<i class="fa fa-cloud-upload"></i> Choose Image
+											</label>
+											<input id="file-upload" validheight="200" validwidth="300" type="file"
+												fileread="newHotel.thumbnail" />
 										</div>
-										<div class="form-group-6" ng-show="saving==false">
-											<img alt="No image available!" src="{{newHotel.thumbnail}}" style="width: 100px; height: 100px;"/>
+										<div class="form-group-9" ng-show="saving==false">
+											<img alt="No image available!" src="{{newHotel.thumbnail}}"
+												style="width: 150px; height: 100px;" />
 										</div>
 									</div>
 									<div class="tab-pane" id="ratesTab">
 										<div class="form-control-3">
 											<label>Jan:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.JAN" required>
+											<input class="form-control" type="number" ng-model="newHotel.rates.JAN"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Feb:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.FEB" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.FEB"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Mar:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.MAR" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.MAR"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Apr:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.APR" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.APR"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>May:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.MAY" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.MAY"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Jun:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.JUN" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.JUN"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Jul:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.JUL" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.JUL"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Aug:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.AUG" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.AUG"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Sept:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.SEP" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.SEP"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Oct:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.OCT" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.OCT"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Nov:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.NOV" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.NOV"
+												required>
 										</div>
 										<div class="form-control-3">
 											<label>Dec:</label>
-											<input class="form-control" type="number" ng-model="newHotel.rates.DEC" required >
+											<input class="form-control" type="number" ng-model="newHotel.rates.DEC"
+												required>
 										</div>
 									</div>
 								</div>
@@ -318,7 +310,8 @@
 					<button type="button" class="btn btn-primary" ng-click="addHotel(false)" ng-show="editMode==false">
 						Save and add another
 					</button>
-					<button type="button" class="btn btn-primary" ng-click="editHotel()" ng-show="editMode==true">Save</button>
+					<button type="button" class="btn btn-primary" ng-click="editHotel()"
+						ng-show="editMode==true">Save</button>
 				</div>
 			</div>
 		</div>

@@ -296,6 +296,8 @@ definitions:
   hotel:
     type: "object"
     properties:
+      id:
+        type: "number"
       name:
         type: "string"
         example: "Hilton Capetown Hotel"
