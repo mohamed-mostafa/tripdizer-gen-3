@@ -187,6 +187,7 @@
 				"title": "Accommodations",
 				"choose_hotel": "View and choose your hotels",
 				"select": "Select",
+				"selected": "Selected",
 				"total_price": "Total price"
 			},
 			"summary": {
