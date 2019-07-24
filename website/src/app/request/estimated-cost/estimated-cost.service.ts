@@ -66,11 +66,15 @@ export class EstimatedCostService {
 
 	getFlights(): Observable<Array<Flight>> {
 		this.setIsLoading(true);
-		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
-			countryIso: city.countryIsoCode,
-			cityIata: city.iataCode,
-			numberOfNights: city.numberOfNights,
-		}));
+		const citiesSequence: Array<CitySequence> = [
+			{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
+			{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
+		];
+		// const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+		// 	countryIso: city.countryIsoCode,
+		// 	cityIata: city.iataCode,
+		// 	numberOfNights: city.numberOfNights,
+		// }));
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
 			departure: this.departureDate.format('YYYY-MM-DD'),
