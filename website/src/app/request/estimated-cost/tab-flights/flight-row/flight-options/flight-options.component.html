@@ -3,7 +3,7 @@
 		<img class="w-100 h-100" *ngIf="selectedOffer?.carrier.squareLogo" [src]="selectedOffer?.carrier.squareLogo" />
 	</div>
 
-	<div class="col-4">{{ selectedOffer?.carrier.name }}: {{ selectedOffer?.totalDurationInWords }}</div>
+	<div class="col-4 text-nowrap">{{ selectedOffer?.carrier.name }}: {{ selectedOffer?.totalDurationInWords }}</div>
 
 	<div class="col-3">
 		<div class="col-3 option-btn text-nowrap">
