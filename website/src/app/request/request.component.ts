@@ -10,8 +10,8 @@ import { RequestService } from './request.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class RequestComponent implements OnDestroy {
-	countries: Array<Country>;
-	selectedCountriesIso: Array<string>;
+	countries: Array<Country> = [];
+	selectedCountriesIso: Array<string> = [];
 	constructor(private requestService: RequestService, private activatedRoute: ActivatedRoute) {
 		requestService.getCountries().subscribe(countries => {
 			this.countries = countries;
