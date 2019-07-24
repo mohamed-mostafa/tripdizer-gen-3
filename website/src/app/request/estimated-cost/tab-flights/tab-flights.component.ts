@@ -13,7 +13,7 @@ export class TabFlightsComponent {
 	selectedFlightOffers = {};
 
 	get totalCost(): number {
-		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + this.selectedFlightOffers[cv].price, 0);
+		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
 	}
 
 	constructor(private service: EstimatedCostService) {
