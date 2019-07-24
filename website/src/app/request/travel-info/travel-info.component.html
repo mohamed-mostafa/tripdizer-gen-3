@@ -13,12 +13,12 @@
 			}}</mat-option>
 		</mat-select>
 	</mat-form-field>
-	<div *ngIf="isHavePlan && countries" class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+	<div *ngIf="isHavePlan && (countries | async)" class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">
 		<c-shared-places-select-box
 			classes="form-control-lg"
 			[formGroup]="formGroup"
 			controlName="destination"
-			[places]="countries"
+			[places]="countries | async"
 			[selectedPlaces]="selectedCountries"
 		></c-shared-places-select-box>
 	</div>

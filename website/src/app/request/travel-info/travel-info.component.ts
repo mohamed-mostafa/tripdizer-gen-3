@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService as SocialAuthService } from 'angularx-social-login';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { LoginDialogComponent } from '../../shared/components/login-dialog/login-dialog.component';
 import { Country } from '../../shared/models/country.model';
@@ -31,7 +32,7 @@ export class TravelInfoComponent implements OnInit {
 		returnDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		isFlexibleDates: new FormControl(),
 	};
-	countries: Array<Country>;
+	countries: Observable<Array<Country>>;
 	selectedCountries: Array<Country> = [];
 	minDate = new Date();
 	dialogLabels: {
@@ -81,10 +82,10 @@ export class TravelInfoComponent implements OnInit {
 				this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
 			}
 		});
-		requestService.getCountries().subscribe(countries => {
-			this.countries = countries;
-			this.setPreSelectedCountries();
-		});
+		this.countries = requestService.getCountries();
+		setTimeout(() => {
+			this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
+		}, 0);
 	}
 
 	ngOnInit() {
@@ -105,22 +106,11 @@ export class TravelInfoComponent implements OnInit {
 	save(): void {
 		for (const controlName in this.formGroup.controls) {
 			if (this.formGroup.controls.hasOwnProperty(controlName)) {
-				// 				if (controlName === 'destination') {
-				// let tempDestination:Destination;
-				// 					const destinationId = this.formGroup.controls[controlName].value;
-				// 					if (destinationId === -1) {
-				// 						tempDestination = this.otherDestination;
-				// 					} else {
-				// 						 tempDestination = this.destinations.filter(
-				// 							destination => destination.id === this.formGroup.controls[controlName].value
-				// 						);
-				// 					}
-				// 					this.requestService.setProperty(controlName, tempDestination);
-				// 				} else {
-				if (controlName !== 'destination') {
+				if (controlName === 'destination') {
+					this.requestService.setProperty('destination', this.formGroup.controls[controlName].value);
+				} else {
 					this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
 				}
-				// }
 			}
 		}
 		this.trackingService.track('Submit - Travel Info', {
@@ -129,16 +119,6 @@ export class TravelInfoComponent implements OnInit {
 			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
 			isFlexibleDates: this.formGroup.get('isFlexibleDates').value,
 		});
-	}
-
-	setPreSelectedCountries(): void {
-		this.selectedCountries = this.requestService
-			.getProperty<Array<string>>('countries')
-			.map(sd => {
-				const selectedCountry = this.countries.find(d => d.ISOCode === sd);
-				return Boolean(selectedCountry) ? selectedCountry : null;
-			})
-			.filter(sd => Boolean(sd));
 	}
 
 	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;

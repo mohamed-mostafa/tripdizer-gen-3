@@ -1,6 +1,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { Country } from '../shared/models/country.model';
 import { Gender } from '../shared/models/gender.enum';
 import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
@@ -33,7 +34,7 @@ export class Request extends CommonFunctions {
 		ticket?: string;
 	} = {};
 	private _touchedSteps: Array<number>;
-	private _countriesISO: Array<string>;
+	private _countries: Array<Country>;
 	private _travelingFrom: TravelingFrom;
 	private _departureDate: moment.Moment;
 	private _returnDate: moment.Moment;
@@ -58,11 +59,11 @@ export class Request extends CommonFunctions {
 	private _referralType: number;
 	private _travelHistory: TravelHistory;
 
-	get countries(): Array<string> {
-		return this._countriesISO || [];
+	get countries(): Array<Country> {
+		return this._countries || [];
 	}
-	set countries(value: Array<string>) {
-		this._countriesISO = value;
+	set countries(value: Array<Country>) {
+		this._countries = value;
 	}
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
@@ -636,7 +637,7 @@ export class Request extends CommonFunctions {
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
 		// here cities
-		this._countriesISO = [];
+		this._countries = [];
 		// here accommodation
 		this._preferences = [];
 		this._traveler = {
