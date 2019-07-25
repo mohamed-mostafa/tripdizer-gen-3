@@ -1,5 +1,6 @@
 <c-request-form-layout [isButtonsHidden]="true">
-	<div class="row estimated-cost tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
+	<div class="row estimated-cost tabs-section" [class.text-right]="('dir' | translate) === 'rtl'"
+		[hidden]="selectedTab === 4">
 		<div class="col-12 p-0 mt-n2 mt-sm-n3">
 			<c-estimated-cost-header></c-estimated-cost-header>
 		</div>
@@ -7,7 +8,8 @@
 		<div class="col-12">
 			<hr class="d-none d-md-block" />
 
-			<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)" [selectedIndex]="selectedTab">
+			<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)"
+				[selectedIndex]="selectedTab">
 				<mat-tab>
 					<ng-template mat-tab-label>
 						<div class="tab-icon">
@@ -48,12 +50,18 @@
 					<div class="row mx-0">
 						<div class="col-12">
 							<div class="p-2 p-md-0 mt-3 mt-md-0">
-								<c-estimated-cost-accommodation *ngIf="selectedTab === 2"></c-estimated-cost-accommodation>
+								<c-estimated-cost-accommodation *ngIf="selectedTab === 2">
+								</c-estimated-cost-accommodation>
 							</div>
 						</div>
 					</div>
 				</mat-tab>
 			</mat-tab-group>
 		</div>
+	</div>
+	<div class="col-12" *ngIf="selectedTab === 4">
+		<hr class="d-none d-md-block" />
+		<c-app-summary>
+		</c-app-summary>
 	</div>
 </c-request-form-layout>

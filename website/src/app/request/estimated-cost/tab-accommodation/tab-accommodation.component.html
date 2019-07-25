@@ -10,14 +10,14 @@
 					<h3 class="destination-name font-italic">{{accommodation.city.name}}</h3>
 				</div>
 			</div>
-	
+
 			<div class="row">
 				<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of accommodation.hotels">
 					<div class="hotel-item p-3">
 						<div class="item-img-container">
 							<img [src]="hotel.thumbnail" alt="" />
 						</div>
-	
+
 						<div class="mt-2">
 							<div class="row">
 								<div class="col-7">
@@ -39,10 +39,11 @@
 							<div class="hotel-address">
 								<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
 							</div>
-	
+
 							<div class="row">
 								<div class="col-8 col-md-12">
-									<p class="grey item-text hotel-description">{{ hotel.description.substring(0, 150) }}...</p>
+									<p class="grey item-text hotel-description">
+										{{ hotel.description.substring(0, 150) }}...</p>
 								</div>
 								<div class="col-4 col-md-12">
 									<div class="row">
@@ -55,19 +56,13 @@
 										<div class="col-12 col-md-6 justify-content-end">
 											<button *ngIf="!hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button"
-												(click)="hotel.select = !hotel.select"
+												role="button" (click)="hotel.select = !hotel.select"
 												(click)="selectHotel(hotel, accommodation.hotels)"
-												[disabled]="hotel.disabled"
-												>{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</button
-											>
+												[disabled]="hotel.disabled">{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</button>
 											<button *ngIf="hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button"
-												(click)="hotel.select = !hotel.select"
-												(click)="unSelectHotel(hotel.id, accommodation.hotels)"
-												>{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}</button
-											>
+												role="button" (click)="hotel.select = !hotel.select"
+												(click)="unSelectHotel(hotel.id, accommodation.hotels)">{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}</button>
 										</div>
 									</div>
 								</div>
@@ -76,10 +71,18 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-12">
+					<button (click)="next()" [disabled]="false"
+						class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+						{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
+					</button>
+				</div>
+			</div>
 		</div>
 
-		
 
-		
+
+
 	</div>
 </div>

@@ -5,14 +5,16 @@
 		</h4>
 
 		<div class="row mt-3 mx-0">
-			<div class="col-12 station-item" *ngFor="let station of (stations | async)">
+			<div class="col-12 station-item" *ngFor="let station of stations">
 				<div class="row">
 					<div class="col-12 top-box p-2">
 						<div class="row">
 							<div class="col-2 col-md-1 nights-count">
 								<div class="row">
-									<div class="col-12 text-center font-weight-bold nights-count-number">{{ station.nights_count }}</div>
-									<div class="col-12 text-center nights-label font-weight-bold font-italic">Nights</div>
+									<div class="col-12 text-center font-weight-bold nights-count-number">
+										{{ station.nights_count }}</div>
+									<div class="col-12 text-center nights-label font-weight-bold font-italic">Nights
+									</div>
 								</div>
 							</div>
 							<div class="col-4 col-md-2">
@@ -24,16 +26,19 @@
 							<div class="col-5 col-md-6 align-self-center">
 								<div class="row">
 									<div class="col-12 col-md-6 smaller-text">
-										{{ station.travel_time }} <span class="d-none d-md-inline-block">Depart </span> from
+										{{ station.travel_time }} <span class="d-none d-md-inline-block">Depart </span>
+										from
 										{{ station.depart_from }}
 									</div>
 									<div class="col-12 col-md-6 smaller-text">
-										{{ station.arrive_time }} <span class="d-none d-md-inline-block">arrival </span> to
+										{{ station.arrive_time }} <span class="d-none d-md-inline-block">arrival </span>
+										to
 										{{ station.arrive_to }}
 									</div>
 								</div>
 							</div>
-							<div class="col-3 align-self-center d-none d-md-block">Duration: {{ station.duration }}</div>
+							<div class="col-3 align-self-center d-none d-md-block">Duration: {{ station.duration }}
+							</div>
 						</div>
 					</div>
 					<div class="col-12 p-2 p-md-3">
@@ -49,16 +54,22 @@
 								<div class="row">
 									<div class="col-8 col-md-6">
 										<h6 class="font-weight-bold">{{ station.hotel }}</h6>
-										<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ station.hotel_address }}</p>
+										<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ station.hotel_address }}
+										</p>
 									</div>
 									<div class="col-4 col-md-6">
 										<p class="mb-0">Rate</p>
 										<p class="mb-0 rating-stars">
-											<span class="mr-1" *ngIf="station.hotel_rate >= 1"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 2"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 3"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 4"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 1"><i
+													class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 2"><i
+													class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 3"><i
+													class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 4"><i
+													class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i
+													class="fa fa-star"></i></span>
 										</p>
 									</div>
 								</div>
@@ -78,6 +89,20 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<button (click)="prev()" [disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+					{{ 'request.estimated_cost.summary.modify' | translate }}
+				</button>
+			</div>
+			<div class="col-6">
+				<button (click)="next()" [disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+					{{ 'request.form_layout.next_label' | translate }}
+				</button>
 			</div>
 		</div>
 	</div>

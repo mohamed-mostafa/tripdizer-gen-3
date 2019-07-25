@@ -193,7 +193,8 @@
 			"summary": {
 				"view_details": "View details for your trip",
 				"accommodation": "Accommodation",
-				"activities": "Activities"
+				"activities": "Activities",
+				"modify": "Modify your itinerary"
 			}
 		},
 		"form_layout": {
@@ -274,9 +275,18 @@
 				},
 				"actions": {
 					"position": "translate(850 690)",
-					"view_package": { "icon": 0, "button": 25 },
-					"download_package": { "icon": 170, "button": 195 },
-					"send_package": { "icon": 375, "button": 400 }
+					"view_package": {
+						"icon": 0,
+						"button": 25
+					},
+					"download_package": {
+						"icon": 170,
+						"button": 195
+					},
+					"send_package": {
+						"icon": 375,
+						"button": 400
+					}
 				}
 			},
 			"sm_sizes": {
@@ -293,9 +303,18 @@
 				},
 				"actions": {
 					"position": "translate(100 755)",
-					"view_package": { "icon": 0, "button": 15 },
-					"download_package": { "icon": 95, "button": 110 },
-					"send_package": { "icon": 215, "button": 230 }
+					"view_package": {
+						"icon": 0,
+						"button": 15
+					},
+					"download_package": {
+						"icon": 95,
+						"button": 110
+					},
+					"send_package": {
+						"icon": 215,
+						"button": 230
+					}
 				}
 			},
 			"lg_text": {

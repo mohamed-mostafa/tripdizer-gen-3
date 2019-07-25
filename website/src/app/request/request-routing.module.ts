@@ -19,7 +19,6 @@ import { TravelAssistanceComponent } from './travel-assistance/travel-assistance
 import { TravelInfoComponent } from './travel-info/travel-info.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
-import { SummaryComponent } from './summary/summary.component';
 
 const routes: Routes = [
 	{
@@ -42,7 +41,6 @@ const routes: Routes = [
 			{ path: 'travel-assistance', component: TravelAssistanceComponent },
 			{ path: 'information', component: InformationComponent },
 			{ path: 'ticket', component: TicketComponent },
-			{ path: 'summary', component: SummaryComponent },
 		],
 	},
 ];
@@ -67,4 +65,4 @@ export const COMPONENTS = [
 	exports: [RouterModule],
 	imports: [RouterModule.forChild(routes)],
 })
-export class RequestRoutingModule {}
+export class RequestRoutingModule { }

@@ -13,7 +13,7 @@ export class TabAccommodationComponent {
 	accommodations: Observable<Array<Accommodation>>;
 	selectedHotels: Array<Hotel> = [];
 
-	constructor(service: EstimatedCostService) {
+	constructor(private service: EstimatedCostService) {
 		this.accommodations = service.getAccommodation();
 	}
 
@@ -40,5 +40,9 @@ export class TabAccommodationComponent {
 			}
 		}
 		console.log(this.selectedHotels);
+	}
+
+	next() {
+		this.service.setCurrentTabIndex(4);
 	}
 }

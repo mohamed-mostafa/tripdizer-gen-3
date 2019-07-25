@@ -193,7 +193,8 @@
 			"summary": {
 				"view_details": "إظهار تفاصيل الرحلة",
 				"accommodation": "الإقامة",
-				"activities": "الأنشطة"
+				"activities": "الأنشطة",
+				"modify": "تعديل"
 			}
 		},
 		"form_layout": {
@@ -274,9 +275,18 @@
 				},
 				"actions": {
 					"position": "translate(325 690)",
-					"view_package": { "icon": 290, "button": 265 },
-					"download_package": { "icon": 155, "button": 130 },
-					"send_package": { "icon": 25, "button": 0 }
+					"view_package": {
+						"icon": 290,
+						"button": 265
+					},
+					"download_package": {
+						"icon": 155,
+						"button": 130
+					},
+					"send_package": {
+						"icon": 25,
+						"button": 0
+					}
 				}
 			},
 			"sm_sizes": {
@@ -293,9 +303,18 @@
 				},
 				"actions": {
 					"position": "translate(395 755)",
-					"view_package": { "icon": 0, "button": -15 },
-					"download_package": { "icon": -85, "button": -100 },
-					"send_package": { "icon": -170, "button": -185 }
+					"view_package": {
+						"icon": 0,
+						"button": -15
+					},
+					"download_package": {
+						"icon": -85,
+						"button": -100
+					},
+					"send_package": {
+						"icon": -170,
+						"button": -185
+					}
 				}
 			},
 			"lg_text": {
