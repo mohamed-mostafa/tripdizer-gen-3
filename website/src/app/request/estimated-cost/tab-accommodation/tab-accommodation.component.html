@@ -22,7 +22,7 @@
 							<div class="row">
 								<div class="col-7">
 									<p class="dark-grey hotel-name mb-1">
-										<span class="font-weight-bold">{{ hotel.name.substring(0, 20) }}...</span>
+										<span class="font-weight-bold">{{ hotel.name.substring(0, 20) }}<span *ngIf="hotel.name.length > 20">...</span></span>
 									</p>
 								</div>
 								<div class="col-5 rating">
@@ -43,7 +43,7 @@
 							<div class="row">
 								<div class="col-8 col-md-12">
 									<p class="grey item-text hotel-description">
-										{{ hotel.description.substring(0, 150) }}...</p>
+										{{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span></p>
 								</div>
 								<div class="col-4 col-md-12">
 									<div class="row">
