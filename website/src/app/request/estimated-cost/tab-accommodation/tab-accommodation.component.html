@@ -7,7 +7,7 @@
 		<div *ngFor="let accommodation of (accommodations | async)">
 			<div class="row mt-2">
 				<div class="col">
-					<h3 class="destination-name font-italic">{{accommodation.city.name}}</h3>
+					<h3 class="destination-name font-italic">{{ accommodation.city.name }}</h3>
 				</div>
 			</div>
 
@@ -22,7 +22,9 @@
 							<div class="row">
 								<div class="col-7">
 									<p class="dark-grey hotel-name mb-1">
-										<span class="font-weight-bold">{{ hotel.name.substring(0, 20) }}<span *ngIf="hotel.name.length > 20">...</span></span>
+										<span class="font-weight-bold"
+											>{{ hotel.name.substring(0, 20) }}<span *ngIf="hotel.name.length > 20">...</span></span
+										>
 									</p>
 								</div>
 								<div class="col-5 rating">
@@ -43,7 +45,8 @@
 							<div class="row">
 								<div class="col-8 col-md-12">
 									<p class="grey item-text hotel-description">
-										{{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span></p>
+										{{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span>
+									</p>
 								</div>
 								<div class="col-4 col-md-12">
 									<div class="row">
@@ -54,15 +57,25 @@
 											<p class="item-text price-text">{{ hotel.price }} LE</p>
 										</div>
 										<div class="col-12 col-md-6 justify-content-end">
-											<button *ngIf="!hotel.select"
+											<button
+												*ngIf="!hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button" (click)="hotel.select = !hotel.select"
+												role="button"
+												(click)="hotel.select = !hotel.select"
 												(click)="selectHotel(hotel, accommodation.hotels)"
-												[disabled]="hotel.disabled">{{ 'request.estimated_cost.tab_accommodations.select' | translate }}</button>
-											<button *ngIf="hotel.select"
+												[disabled]="hotel.disabled"
+											>
+												{{ 'request.estimated_cost.tab_accommodations.select' | translate }}
+											</button>
+											<button
+												*ngIf="hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button" (click)="hotel.select = !hotel.select"
-												(click)="unSelectHotel(hotel.id, accommodation.hotels)">{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}</button>
+												role="button"
+												(click)="hotel.select = !hotel.select"
+												(click)="unSelectHotel(hotel.id, accommodation.hotels)"
+											>
+												{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}
+											</button>
 										</div>
 									</div>
 								</div>
@@ -71,18 +84,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-12">
-					<button (click)="next()" [disabled]="false"
-						class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-						{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
-					</button>
-				</div>
-			</div>
 		</div>
 
-
-
-
+		<div class="row mt-3">
+			<div class="col-12">
+				<button
+					(click)="next()"
+					[disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2"
+				>
+					{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
