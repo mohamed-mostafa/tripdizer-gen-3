@@ -8,8 +8,9 @@
 
 				<div
 					class="row city-item my-4 selected-city"
-					*ngFor="let city of (cities | async)"
+					*ngFor="let city of newCities"
 					[class.selected-city]="city.select"
+					(click)="updateSelectedCities(city)"
 				>
 					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
 						<div class="item-img-container p-2 p-md-0">
@@ -46,9 +47,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
-								<mat-checkbox
-									(change)="city.select = !city.select"
-									(change)="updateSelectedCities(city, $event)"
+								<mat-checkbox [checked]="city.select"
 								></mat-checkbox>
 							</div>
 						</div>

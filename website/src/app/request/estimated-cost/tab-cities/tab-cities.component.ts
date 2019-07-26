@@ -2,6 +2,7 @@ import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CityDTO } from './city-dto.model';
+import { map } from 'rxjs/operators';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
@@ -11,19 +12,38 @@ import { CityDTO } from './city-dto.model';
 export class TabCitiesComponent {
 	cities: Observable<Array<CityDTO>>;
 	selectedCities: Array<CityDTO> = [];
+	newCities: Array<CityDTO> = [];
 
 	constructor(private service: EstimatedCostService) {
 		this.cities = service.getCities();
-		console.log(this.cities);
+
+		this.cities.subscribe(res => {
+			const items = res;
+			for (let b = 0; b < items.length; b++) {
+				items[b].select = true;
+				this.selectedCities.push(items[b]);
+				this.newCities.push(items[b]);
+			}
+		});
 	}
 
-	updateSelectedCities(city, e) {
-		if (e.checked === true) {
+	updateSelectedCities(city) {
+		if (city.select === true) {
+			for (let r = 0; r < this.selectedCities.length; r++) {
+				if (this.selectedCities[r].iataCode === city.iataCode) {
+					this.selectedCities.splice(r, 1);
+				}
+			}
+			for (let d = 0; d < this.newCities.length; d++) {
+				if (this.newCities[d].iataCode === city.iataCode) {
+					this.newCities[d].select = false;
+				}
+			}
+		} else if (city.select === false) {
 			this.selectedCities.push(city);
-		} else if (e.checked === false) {
-			for (let x = 0; x < this.selectedCities.length; x++) {
-				if (this.selectedCities[x].iataCode === city.iataCode) {
-					this.selectedCities.splice(x, 1);
+			for (let x = 0; x < this.newCities.length; x++) {
+				if (this.newCities[x].iataCode === city.iataCode) {
+					this.newCities[x].select = true;
 				}
 			}
 		}
@@ -31,7 +51,6 @@ export class TabCitiesComponent {
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {
 		const numberOfNights = this.service.getNumberOfNights();
-		console.log('numberOfNights', numberOfNights);
 		const citiesLength = cities.length;
 
 		const floorDivision = Math.floor(numberOfNights / citiesLength);
