@@ -10,12 +10,14 @@ import { Accommodation, AccommodationRequest } from './tab-accommodation/accommo
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
+import { CityAttractions, AttractionsRequest } from './summary/attraction.model';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
 	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 	private countryCities = 'package-options/1.0.0/countryCities';
 	private accommodations = 'package-options/1.0.0/accomodationOffers';
+	private attractionsEndPoint = 'package-options/1.0.0/cityAttractions'
 
 	private departureDate = this.requestService.getProperty('departureDate') as Moment;
 	private returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -27,7 +29,8 @@ export class EstimatedCostService {
 
 	currentTabIndex = new Subject<number>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) {}
+
+	constructor(private http: HttpClient, private requestService: RequestService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -66,15 +69,15 @@ export class EstimatedCostService {
 
 	getFlights(): Observable<Array<Flight>> {
 		this.setIsLoading(true);
-		const citiesSequence: Array<CitySequence> = [
-			{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
-			{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
-		];
-		// const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
-		// 	countryIso: city.countryIsoCode,
-		// 	cityIata: city.iataCode,
-		// 	numberOfNights: city.numberOfNights,
-		// }));
+		// const citiesSequence: Array<CitySequence> = [
+		// 	{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
+		// 	{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
+		// ];
+		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+			countryIso: city.countryIsoCode,
+			cityIata: city.iataCode,
+			numberOfNights: city.numberOfNights,
+		}));
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
 			departure: this.departureDate.format('YYYY-MM-DD'),
@@ -125,9 +128,31 @@ export class EstimatedCostService {
 		);
 	}
 
-	setSelectedAccommodation() {}
+	setSelectedAccommodation() { }
 
 	setIsLoading(isLoading: boolean) {
 		this.requestService.isLoading.next(isLoading);
 	}
+
+	getAttractions(): Observable<Array<CityAttractions>> {
+		this.setIsLoading(true);
+		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
+		for (let x = 0; x < this.selectedCities.length; x++) {
+			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		}
+		const attractionsRequest: AttractionsRequest = {
+			cities: cities
+		};
+		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
+			tap(() => {
+				this.setIsLoading(false);
+			})
+		);
+	}
+
+	getSelectedFlightOffers(): Array<FlightOffer> {
+		return this.selectedFlightOffers;
+	}
+
+
 }

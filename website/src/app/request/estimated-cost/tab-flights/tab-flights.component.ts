@@ -43,6 +43,7 @@ export class TabFlightsComponent {
 		});
 
 		this.service.setSelectedFlightOffers(selectedOffers);
+		this.service.setCurrentTabIndex(2);
 	}
 
 	offerChanged(flightOffer: FlightOffer): void {

@@ -1,109 +1,67 @@
-<div class="row estimated-cost tabs-section" [class.text-right]="('dir' | translate) === 'rtl'">
-	<div class="col-12 p-0">
-		<c-estimated-cost-header></c-estimated-cost-header>
-	</div>
+<c-request-form-layout [isButtonsHidden]="true">
+	<div class="row estimated-cost tabs-section" [class.text-right]="('dir' | translate) === 'rtl'"
+		[hidden]="selectedTab === 4">
+		<div class="col-12 p-0 mt-n2 mt-sm-n3">
+			<c-estimated-cost-header></c-estimated-cost-header>
+		</div>
 
-	<div class="col-12">
+		<div class="col-12">
+			<hr class="d-none d-md-block" />
+
+			<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)"
+				[selectedIndex]="selectedTab">
+				<mat-tab>
+					<ng-template mat-tab-label>
+						<div class="tab-icon">
+							<i class="fa fa-university mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
+							{{ 'request.estimated_cost.tab_cities.title' | translate }}
+						</div>
+					</ng-template>
+					<div class="row mx-0">
+						<div class="col-12">
+							<div class="m-2 p-md-0 mt-3 mt-md-0">
+								<c-estimated-cost-cities></c-estimated-cost-cities>
+							</div>
+						</div>
+					</div>
+				</mat-tab>
+				<mat-tab>
+					<ng-template mat-tab-label>
+						<div class="tab-icon">
+							<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
+							{{ 'request.estimated_cost.tab_flights.title' | translate }}
+						</div>
+					</ng-template>
+					<div class="row mx-0">
+						<div class="col-12">
+							<div class="p-2 p-md-0 mt-3 mt-md-0">
+								<c-estimated-cost-flights *ngIf="selectedTab === 1"></c-estimated-cost-flights>
+							</div>
+						</div>
+					</div>
+				</mat-tab>
+				<mat-tab>
+					<ng-template mat-tab-label>
+						<div class="tab-icon">
+							<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
+							{{ 'request.estimated_cost.tab_accommodations.title' | translate }}
+						</div>
+					</ng-template>
+					<div class="row mx-0">
+						<div class="col-12">
+							<div class="p-2 p-md-0 mt-3 mt-md-0">
+								<c-estimated-cost-accommodation *ngIf="selectedTab === 2">
+								</c-estimated-cost-accommodation>
+							</div>
+						</div>
+					</div>
+				</mat-tab>
+			</mat-tab-group>
+		</div>
+	</div>
+	<div class="col-12" *ngIf="selectedTab === 4">
 		<hr class="d-none d-md-block" />
-
-		<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)" [selectedIndex]="selectedTab">
-			<mat-tab>
-				<ng-template mat-tab-label>
-					<div class="tab-icon">
-						<i class="fa fa-university mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
-						{{ 'request.estimated_cost.tab_cities.title' | translate }}
-					</div>
-				</ng-template>
-				<div class="row mx-0">
-					<div class="col-12">
-						<div class="m-2 p-md-0 mt-3 mt-md-0">
-							<c-estimated-cost-cities></c-estimated-cost-cities>
-						</div>
-					</div>
-				</div>
-			</mat-tab>
-			<mat-tab>
-				<ng-template mat-tab-label>
-					<div class="tab-icon">
-						<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
-						{{ 'request.estimated_cost.tab_flights.title' | translate }}
-					</div>
-				</ng-template>
-				<div class="row mx-0">
-					<div class="col-12">
-						<div class="p-2 p-md-0 mt-3 mt-md-0">
-							<c-estimated-cost-flights *ngIf="selectedTab === 1"></c-estimated-cost-flights>
-						</div>
-					</div>
-				</div>
-			</mat-tab>
-			<mat-tab>
-				<ng-template mat-tab-label>
-					<div class="tab-icon">
-						<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
-						{{ 'request.estimated_cost.tab_accommodations.title' | translate }}
-					</div>
-				</ng-template>
-				<div class="row mx-0">
-					<div class="col-12">
-						<div class="p-2 p-md-0 mt-3 mt-md-0">
-							<c-estimated-cost-accommodation *ngIf="selectedTab === 2"></c-estimated-cost-accommodation>
-						</div>
-					</div>
-				</div>
-			</mat-tab>
-		</mat-tab-group>
+		<c-app-summary>
+		</c-app-summary>
 	</div>
-</div>
-
-<!-- <c-request-form-layout [isNextDisabled]="estimatedCost ? false : true">
-	<div class="row" [class.text-right]="('dir' | translate) === 'rtl'">
-		<div class="col-12 mb-1 p-0 total-budget">
-			{{ estimatedCost?.totalBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
-		</div>
-		<div class="col-12 p-2 hint-0">
-			{{
-				'request.estimated_cost.hint0'
-					| translate
-						: {
-								numberOfTravelers: estimatedCost?.numberOfTravelers,
-								withS: estimatedCost?.numberOfTravelers > 1 ? 's' : ''
-						  }
-			}}
-		</div>
-		<div class="col-12 p-2 hint-1">{{ 'request.estimated_cost.hint1' | translate }}</div>
-		<ul class="col-12 py-1 py-sm-2 py-md-3 py-lg-4 detailed-budget">
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-plane"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>*{{ 'request.estimated_cost.flights' | translate }}:
-					{{ estimatedCost?.flightsBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-home"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>{{ 'request.estimated_cost.accommodation' | translate }}:
-					{{ estimatedCost?.accommodationBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row" *ngIf="estimatedCost?.ferriesBudget">
-				<i class="col-1 p-0 text-center fas fa-ship"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>{{ 'request.estimated_cost.ferries' | translate }}:
-					{{ estimatedCost?.ferriesBudget | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span
-				>
-			</li>
-			<li class="row">
-				<i class="col-1 p-0 text-center fas fa-dollar-sign"></i>
-				<span class="col-11 pl-2 pl-md-0 details-info"
-					>**{{ 'request.estimated_cost.daily_spending' | translate }}:
-					{{ estimatedCost?.dailySpending | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
-					{{ 'request.estimated_cost.per_person' | translate }}</span
-				>
-			</li>
-		</ul>
-		<div class="col-12 font-italic hint-2">* {{ 'request.estimated_cost.hint2' | translate }}</div>
-		<div class="col-12 font-italic hint-3">** {{ 'request.estimated_cost.hint3' | translate }}</div>
-	</div>
-</c-request-form-layout> -->
+</c-request-form-layout>

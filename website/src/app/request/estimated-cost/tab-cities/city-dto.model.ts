@@ -10,6 +10,7 @@ export class CityDTO {
 
 	countryIsoCode: string;
 	cityIata: string;
+	displayName: string;
 	numberOfNights?: number;
 	countryDisplayName: string;
 	thumbnail: string;

@@ -26,8 +26,8 @@ export class FlightOffer {
 }
 
 export class Segment {
-	origin: City;
-	destination: City;
+	origin: string;
+	destination: string;
 	departure: string;
 	return: string;
 	durationInWords: string;
