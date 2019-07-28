@@ -23,7 +23,9 @@
 							><br class="d-none d-md-inline-block" />
 							<span class="town-name-sm d-inline-block ml-2 ml-md-0">{{ city.countryDisplayName }}</span>
 						</p>
-						<p class="grey item-text font-italic">{{ city.description.substring(0, 200) }} <span *ngIf="city.description.length > 200">...</span></p>
+						<p class="grey item-text font-italic">
+							{{ city.description.substring(0, 200) }} <span *ngIf="city.description.length > 200">...</span>
+						</p>
 						<div class="row">
 							<div class="col-md-8">
 								<div *ngIf="city.interests.length > 0">
@@ -47,7 +49,10 @@
 								</div>
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
-								<mat-checkbox [checked]="city.select"
+								<mat-checkbox
+									[checked]="city.select"
+									[disableRipple]="true"
+									(click)="$event.preventDefault()"
 								></mat-checkbox>
 							</div>
 						</div>
@@ -56,7 +61,11 @@
 
 				<div class="row">
 					<div class="col-12">
-						<button (click)="next()" [disabled]="selectedCities.length < 1" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+						<button
+							(click)="next()"
+							[disabled]="selectedCities.length < 1"
+							class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2"
+						>
 							{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
 						</button>
 					</div>
