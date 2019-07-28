@@ -41,6 +41,7 @@ export class EstimatedCostHeaderComponent implements AfterViewInit {
 
 		header.style.marginTop = `-${navHeight}`;
 		header.style.minHeight = navHeight;
-		headerChild.style.marginTop = `calc((${navHeight} - 16px) / 2)`;
+		const headerMarginBottom = window.getComputedStyle(header).marginBottom;
+		headerChild.style.marginTop = `calc((${navHeight} - ${headerMarginBottom}) / 2)`;
 	}
 }
