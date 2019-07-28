@@ -4,7 +4,7 @@
 			{{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
 		</h4>
 
-		<div *ngFor="let accommodation of (accommodations | async)">
+		<div *ngFor="let accommodation of newAccommodation">
 			<div class="row mt-2">
 				<div class="col">
 					<h3 class="destination-name font-italic">{{ accommodation.city.name }}</h3>
@@ -73,6 +73,7 @@
 												role="button"
 												(click)="hotel.select = !hotel.select"
 												(click)="unSelectHotel(hotel.id, accommodation.hotels)"
+												[disabled]="hotel.select"
 											>
 												{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}
 											</button>

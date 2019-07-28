@@ -12,9 +12,23 @@ export class TabAccommodationComponent {
 
 	accommodations: Observable<Array<Accommodation>>;
 	selectedHotels: Array<Hotel> = [];
+	newAccommodation: Array<Accommodation> = [];
 
 	constructor(private service: EstimatedCostService) {
 		this.accommodations = service.getAccommodation();
+
+		this.accommodations.subscribe(res => {
+			const items = res;
+			console.log(items);
+			for (let b = 0; b < items.length; b++) {
+				items[b].hotels[0].select = true;
+				this.newAccommodation.push(items[b]);
+				this.selectedHotels.push(items[b].hotels[0]);
+				// items[b].select = true;
+				// this.selectedCities.push(items[b]);
+				// this.newCities.push(items[b]);
+			}
+		});
 	}
 
 	selectHotel(hotel, hotels) {

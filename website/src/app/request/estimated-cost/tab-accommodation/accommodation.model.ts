@@ -21,6 +21,7 @@ export class Hotel {
 	rate: number;
 	price: number;
 	currency: string;
+	select?: boolean;
 }
 
 export class AccommodationRequest {
