@@ -33,6 +33,11 @@ body {
 			border-radius: 10em;
 		}
 	}
+	&.text-ellipsis {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
 }
 
 /* END Extend Bootstrap */
@@ -63,5 +68,3 @@ body {
 		height: 100px;
 	}
 }
-
-
