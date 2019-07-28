@@ -17,6 +17,7 @@ export class TabFlightsComponent {
 	}
 
 	constructor(private service: EstimatedCostService) {
+		service.setFlightsTabAsVisited();
 		service.getFlights().subscribe(flights => {
 			this.flights = flights.map((flight, flightIndex) => ({
 				...flight,

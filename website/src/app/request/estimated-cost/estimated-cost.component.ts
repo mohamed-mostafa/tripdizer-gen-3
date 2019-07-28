@@ -1,8 +1,9 @@
-import { EstimatedCostService } from './estimated-cost.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { RequestService } from '../request.service';
 import { EstimatedCostResponse } from './estimated-cost.model';
+import { EstimatedCostService } from './estimated-cost.service';
 
 @Component({
 	selector: 'c-request-estimated-cost',
@@ -12,23 +13,11 @@ import { EstimatedCostResponse } from './estimated-cost.model';
 export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
+	isFlightsTabVisited: Observable<boolean>;
 
-	constructor(
-		route: ActivatedRoute,
-		private router: Router,
-		private requestService: RequestService,
-		private service: EstimatedCostService
-	) {
-		// requestService.getEstimatedCost().subscribe((response: EstimatedCostResponse | null) => {
-		// 	if (response) {
-		// 		this.estimatedCost = response;
-		// 	} else {
-		// 		this.router.navigate(['../', this.requestService.getPrevInvalidStepForEstimateCalc(route.routeConfig.path)], {
-		// 			relativeTo: route,
-		// 		});
-		// 	}
-		// });
-		service.currentTabIndex.subscribe(n => this.selectedTab = n);
+	constructor(route: ActivatedRoute, private service: EstimatedCostService) {
+		service.currentTabIndex.subscribe(n => (this.selectedTab = n));
+		this.isFlightsTabVisited = service.isFlightsTabVisited;
 	}
 
 	tabChange(e) {

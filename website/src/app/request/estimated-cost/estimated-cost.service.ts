@@ -14,24 +14,27 @@ import { CityAttractions, AttractionsRequest } from './summary/attraction.model'
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
-	private transportationEndPoint = 'package-options/1.0.0/transportationOffers';
-	private countryCities = 'package-options/1.0.0/countryCities';
-	private accommodations = 'package-options/1.0.0/accomodationOffers';
-	private attractionsEndPoint = 'package-options/1.0.0/cityAttractions'
+	transportationEndPoint = 'package-options/1.0.0/transportationOffers';
+	countryCities = 'package-options/1.0.0/countryCities';
+	accommodations = 'package-options/1.0.0/accomodationOffers';
+	attractionsEndPoint = 'package-options/1.0.0/cityAttractions';
 
-	private departureDate = this.requestService.getProperty('departureDate') as Moment;
-	private returnDate = this.requestService.getProperty('returnDate') as Moment;
+	departureDate = this.requestService.getProperty('departureDate') as Moment;
+	returnDate = this.requestService.getProperty('returnDate') as Moment;
 
-	private budgetCategory = this.requestService.getProperty('budgetCategory');
+	budgetCategory = this.requestService.getProperty('budgetCategory');
 
-	private selectedFlightOffers: Array<FlightOffer>;
-	private selectedCities: Array<CityDTO>;
-	private selectedHotels: Array<Hotel>;
+	selectedFlightOffers: Array<FlightOffer>;
+	selectedCities: Array<CityDTO>;
+	selectedHotels: Array<Hotel>;
+
+	isFlightsTabVisited = new Subject<boolean>();
 
 	currentTabIndex = new Subject<number>();
 
-
-	constructor(private http: HttpClient, private requestService: RequestService) { }
+	constructor(private http: HttpClient, private requestService: RequestService) {
+		this.isFlightsTabVisited.next(false);
+	}
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -62,10 +65,15 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
+		this.isFlightsTabVisited.next(false);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
 		return this.selectedCities;
+	}
+
+	setFlightsTabAsVisited(): void {
+		this.isFlightsTabVisited.next(true);
 	}
 
 	getFlights(): Observable<Array<Flight>> {
@@ -143,9 +151,7 @@ export class EstimatedCostService {
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
 		}
-		const attractionsRequest: AttractionsRequest = {
-			cities: cities
-		};
+		const attractionsRequest: AttractionsRequest = { cities: cities };
 		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
 			tap(() => {
 				this.setIsLoading(false);
@@ -156,6 +162,4 @@ export class EstimatedCostService {
 	getSelectedFlightOffers(): Array<FlightOffer> {
 		return this.selectedFlightOffers;
 	}
-
-
 }
