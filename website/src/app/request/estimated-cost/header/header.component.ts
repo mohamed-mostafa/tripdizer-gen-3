@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, Input } from '@angular/core';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { Moment } from 'moment';
 import { EstimatedCostService } from '../estimated-cost.service';
 
@@ -10,15 +10,15 @@ import { EstimatedCostService } from '../estimated-cost.service';
 export class EstimatedCostHeaderComponent implements AfterViewInit {
 	numberOfNights = 0;
 	selectedCountriesName: string;
+	selectedCountryImage: string;
 	departureDate: Moment;
 	returnDate: Moment;
 
 	constructor(service: EstimatedCostService) {
 		this.numberOfNights = service.getNumberOfNights();
-		this.selectedCountriesName = service
-			.getSelectedCountries()
-			.map(c => c.name)
-			.join(' - ');
+		const selectedCountries = service.getSelectedCountries();
+		this.selectedCountriesName = selectedCountries.map(c => c.name).join(' - ');
+		this.selectedCountryImage = selectedCountries.shift().thumbnail;
 		this.departureDate = service.getDepartureDate();
 		this.returnDate = service.getReturnDate();
 	}

@@ -6,7 +6,8 @@ export class Place {
 	enDescription?: string;
 	arName?: string;
 	arDescription?: string;
-	image: string;
+	image?: string;
+	thumbnail?: string;
 	temperatureLo?: number;
 	temperatureHi?: number;
 	latitude?: number;
