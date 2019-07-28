@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { Country } from 'src/app/shared/models/country.model';
+import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
-import { Accommodation, AccommodationRequest } from './tab-accommodation/accommodation.model';
+import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
@@ -26,6 +26,7 @@ export class EstimatedCostService {
 
 	private selectedFlightOffers: Array<FlightOffer>;
 	private selectedCities: Array<CityDTO>;
+	private selectedHotels: Array<Hotel>;
 
 	currentTabIndex = new Subject<number>();
 
@@ -128,7 +129,9 @@ export class EstimatedCostService {
 		);
 	}
 
-	setSelectedAccommodation() { }
+	setSelectedHotels(selectedHotels) {
+		this.selectedHotels = selectedHotels;
+	}
 
 	setIsLoading(isLoading: boolean) {
 		this.requestService.isLoading.next(isLoading);

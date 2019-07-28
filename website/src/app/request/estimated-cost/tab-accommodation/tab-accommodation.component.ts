@@ -49,6 +49,7 @@ export class TabAccommodationComponent {
 	}
 
 	next() {
+		this.service.setSelectedHotels(this.selectedHotels);
 		this.service.setCurrentTabIndex(4);
 	}
 }
