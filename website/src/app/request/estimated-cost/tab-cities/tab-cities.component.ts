@@ -13,11 +13,13 @@ export class TabCitiesComponent {
 
 	constructor(private service: EstimatedCostService) {
 		service.getCities().subscribe(
-			cities =>
-				(this.cities = cities.map(city => ({
-					...city,
-					select: true,
-				})))
+			res => {
+				for (let b = 0; b < res.length; b++) {
+					res[b].select = true;
+					this.selectedCities.push(res[b]);
+					this.cities.push(res[b]);
+				}
+			}
 		);
 	}
 
