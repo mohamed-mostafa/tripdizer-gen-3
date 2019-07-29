@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
 
@@ -13,17 +12,13 @@ export class TabCitiesComponent {
 	selectedCities: Array<CityDTO> = [];
 
 	constructor(private service: EstimatedCostService) {
-		service
-			.getCities()
-			.pipe(
-				map(cities =>
-					cities.map(city => ({
-						...city,
-						select: true,
-					}))
-				)
-			)
-			.subscribe(cities => (this.cities = cities));
+		service.getCities().subscribe(
+			cities =>
+				(this.cities = cities.map(city => ({
+					...city,
+					select: true,
+				})))
+		);
 	}
 
 	updateSelectedCities(city) {

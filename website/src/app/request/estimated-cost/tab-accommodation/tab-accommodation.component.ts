@@ -10,19 +10,16 @@ import { Observable } from 'rxjs';
 })
 export class TabAccommodationComponent {
 
-	accommodations: Observable<Array<Accommodation>>;
+	accommodations: Array<Accommodation>;
 	selectedHotels: Array<Hotel> = [];
-	newAccommodation: Array<Accommodation> = [];
 	totalCost = 0;
 
 	constructor(private service: EstimatedCostService) {
-		this.accommodations = service.getAccommodation();
-
-		this.accommodations.subscribe(res => {
+		service.getAccommodation().subscribe(res => {
 			const items = res;
 			for (let b = 0; b < items.length; b++) {
 				items[b].hotels[0].select = true;
-				this.newAccommodation.push(items[b]);
+				this.accommodations.push(items[b]);
 				this.selectedHotels.push(items[b].hotels[0]);
 				this.totalCost = this.totalCost + items[b].hotels[0].price;
 			}
@@ -30,13 +27,13 @@ export class TabAccommodationComponent {
 	}
 
 	selectHotel(hotel) {
-		for (let c = 0; c < this.newAccommodation.length; c++) {
-			if (this.newAccommodation[c].city.name === hotel.city) {
-				for (let d = 0; d < this.newAccommodation[c].hotels.length; d++) {
-					if (this.newAccommodation[c].hotels[d].id === hotel.id) {
-						this.newAccommodation[c].hotels[d].select = true;
+		for (let c = 0; c < this.accommodations.length; c++) {
+			if (this.accommodations[c].city.name === hotel.city) {
+				for (let d = 0; d < this.accommodations[c].hotels.length; d++) {
+					if (this.accommodations[c].hotels[d].id === hotel.id) {
+						this.accommodations[c].hotels[d].select = true;
 					} else {
-						this.newAccommodation[c].hotels[d].select = false;
+						this.accommodations[c].hotels[d].select = false;
 					}
 				}
 			}
