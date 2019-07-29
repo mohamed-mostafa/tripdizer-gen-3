@@ -13,6 +13,7 @@ export class TabAccommodationComponent {
 	accommodations: Observable<Array<Accommodation>>;
 	selectedHotels: Array<Hotel> = [];
 	newAccommodation: Array<Accommodation> = [];
+	totalCost = 0;
 
 	constructor(private service: EstimatedCostService) {
 		this.accommodations = service.getAccommodation();
@@ -23,6 +24,7 @@ export class TabAccommodationComponent {
 				items[b].hotels[0].select = true;
 				this.newAccommodation.push(items[b]);
 				this.selectedHotels.push(items[b].hotels[0]);
+				this.totalCost = this.totalCost + items[b].hotels[0].price;
 			}
 		});
 	}
@@ -41,11 +43,13 @@ export class TabAccommodationComponent {
 		}
 		for (let e = 0; e < this.selectedHotels.length; e++) {
 			if (this.selectedHotels[e].city === hotel.city) {
+				this.totalCost = this.totalCost - this.selectedHotels[e].price;
 				this.selectedHotels.splice(e, 1);
 				break;
 			}
 		}
 		this.selectedHotels.push(hotel);
+		this.totalCost = this.totalCost + hotel.price;
 	}
 
 	next() {

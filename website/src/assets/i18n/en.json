@@ -171,7 +171,7 @@
 				"change_flight": "Change Flight",
 				"change_city": "Change City",
 				"reorder_route": "Reorder Route",
-				"total_cost": "Total Cost",
+				"total_cost": "Total Flights Cost",
 				"next_label": "Continue",
 				"start": "Start",
 				"end": "End",
@@ -188,7 +188,8 @@
 				"choose_hotel": "View and choose your hotels",
 				"select": "Select",
 				"selected": "Selected",
-				"total_price": "Total price"
+				"total_price": "Total price",
+				"total_cost": "Total Hotels Cost"
 			},
 			"summary": {
 				"view_details": "View details for your trip",

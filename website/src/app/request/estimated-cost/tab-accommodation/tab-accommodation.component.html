@@ -43,20 +43,20 @@
 							</div>
 
 							<div class="row">
-								<div class="col-8 col-md-12">
+								<div class="col-12">
 									<p class="grey item-text hotel-description">
 										{{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span>
 									</p>
 								</div>
-								<div class="col-4 col-md-12">
+								<div class="col-12">
 									<div class="row">
-										<div class="col-12 col-md-6">
+										<div class="col-6">
 											<h6 class="font-weight-bold price-title">
 												{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
 											</h6>
 											<p class="item-text price-text">{{ hotel.price }} LE</p>
 										</div>
-										<div class="col-12 col-md-6 justify-content-end">
+										<div class="col-6 justify-content-end">
 											<button
 												*ngIf="!hotel.select"
 												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
@@ -84,8 +84,18 @@
 			</div>
 		</div>
 
-		<div class="row mt-3">
+		<div class="row my-2 my-sm-3 my-md-4 my-lg-5">
 			<div class="col-12">
+				<div class="bg-blue text-white text-center p-1 total-cost-box">
+					<span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
+					<br />
+					<span>{{ totalCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row mt-3">
+			<div class="col-12 text-center">
 				<button
 					(click)="next()"
 					[disabled]="false"
