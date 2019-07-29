@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService as SocialAuthService } from 'angularx-social-login';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { DialogComponent } from '../../shared/components/dialog/dialog.component';
-import { LoginDialogComponent } from '../../shared/components/login-dialog/login-dialog.component';
 import { Country } from '../../shared/models/country.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
@@ -21,7 +18,7 @@ import { TravelingFrom } from '../traveling-from/traveling-from.model';
 	templateUrl: './travel-info.component.html',
 	styleUrls: ['./travel-info.component.scss'],
 })
-export class TravelInfoComponent implements OnInit {
+export class TravelInfoComponent {
 	formGroup: FormGroup;
 	controls: any = {
 		travelingFrom: new FormControl('', [Validators.required]),
@@ -42,14 +39,11 @@ export class TravelInfoComponent implements OnInit {
 		buttonsLabel: { ok: string; cancel: string };
 	};
 	isHavePlan: boolean;
-	firstTimeLogin = true;
 
 	constructor(
-		route: ActivatedRoute,
 		private requestService: RequestService,
 		private trackingService: TrackingService,
 		private dialog: MatDialog,
-		private socialAuthService: SocialAuthService,
 		translate: TranslateService
 	) {
 		let compareDatesValidationMsg: string;
@@ -86,21 +80,6 @@ export class TravelInfoComponent implements OnInit {
 		setTimeout(() => {
 			this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
 		}, 0);
-	}
-
-	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => {
-			if (user) {
-				this.requestService.setProperty('socialSigning', true);
-				this.requestService.setProperty('travelerName', user.name);
-				this.requestService.setProperty('travelerEmail', user.email);
-			} else {
-				if (this.firstTimeLogin) {
-					this.openLoginDialog();
-				}
-			}
-			this.firstTimeLogin = false;
-		});
 	}
 
 	save(): void {
@@ -163,13 +142,6 @@ export class TravelInfoComponent implements OnInit {
 					destinationName: destination.name,
 				});
 			}
-		});
-	}
-
-	openLoginDialog(): void {
-		this.dialog.open(LoginDialogComponent, {
-			autoFocus: true,
-			maxWidth: 400,
 		});
 	}
 }
