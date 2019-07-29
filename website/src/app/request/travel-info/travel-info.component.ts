@@ -79,6 +79,7 @@ export class TravelInfoComponent {
 		this.countries = requestService.getCountries();
 		setTimeout(() => {
 			this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
+			this.formGroup.get('destination').reset();
 		}, 0);
 	}
 

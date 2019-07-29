@@ -16,7 +16,7 @@ export class EstimatedCostHeaderComponent implements AfterViewInit {
 
 	constructor(service: EstimatedCostService) {
 		this.numberOfNights = service.getNumberOfNights();
-		const selectedCountries = service.getSelectedCountries();
+		const selectedCountries = [...service.getSelectedCountries()];
 		this.selectedCountriesName = selectedCountries.map(c => c.name).join(' - ');
 		this.selectedCountryImage = selectedCountries.shift().thumbnail;
 		this.departureDate = service.getDepartureDate();
