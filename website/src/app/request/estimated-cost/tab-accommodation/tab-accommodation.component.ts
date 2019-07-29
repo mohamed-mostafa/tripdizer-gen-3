@@ -1,7 +1,6 @@
 import { Accommodation, Hotel } from './accommodation.model';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'c-estimated-cost-accommodation',

@@ -64,9 +64,6 @@ export class SummaryComponent {
 		});
 	}
 
-	// constructor(service: SummaryService) {
-	// 	this.stations = service.getStations();
-	// }
 
 	prev() {
 		this.service.setCurrentTabIndex(0);
