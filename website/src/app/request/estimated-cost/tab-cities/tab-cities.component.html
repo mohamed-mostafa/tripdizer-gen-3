@@ -8,7 +8,7 @@
 
 				<div
 					class="row city-item my-4 selected-city"
-					*ngFor="let city of newCities"
+					*ngFor="let city of cities"
 					[class.selected-city]="city.select"
 					(click)="updateSelectedCities(city)"
 				>

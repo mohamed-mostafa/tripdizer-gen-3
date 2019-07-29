@@ -1,8 +1,7 @@
-import { EstimatedCostService } from './../estimated-cost.service';
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CityDTO } from './city-dto.model';
 import { map } from 'rxjs/operators';
+import { EstimatedCostService } from './../estimated-cost.service';
+import { CityDTO } from './city-dto.model';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
@@ -10,21 +9,21 @@ import { map } from 'rxjs/operators';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
-	cities: Observable<Array<CityDTO>>;
+	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
-	newCities: Array<CityDTO> = [];
 
 	constructor(private service: EstimatedCostService) {
-		this.cities = service.getCities();
-
-		this.cities.subscribe(res => {
-			const items = res;
-			for (let b = 0; b < items.length; b++) {
-				items[b].select = true;
-				this.selectedCities.push(items[b]);
-				this.newCities.push(items[b]);
-			}
-		});
+		service
+			.getCities()
+			.pipe(
+				map(cities =>
+					cities.map(city => ({
+						...city,
+						select: true,
+					}))
+				)
+			)
+			.subscribe(cities => (this.cities = cities));
 	}
 
 	updateSelectedCities(city) {
@@ -34,16 +33,16 @@ export class TabCitiesComponent {
 					this.selectedCities.splice(r, 1);
 				}
 			}
-			for (let d = 0; d < this.newCities.length; d++) {
-				if (this.newCities[d].iataCode === city.iataCode) {
-					this.newCities[d].select = false;
+			for (let d = 0; d < this.cities.length; d++) {
+				if (this.cities[d].iataCode === city.iataCode) {
+					this.cities[d].select = false;
 				}
 			}
 		} else if (city.select === false) {
 			this.selectedCities.push(city);
-			for (let x = 0; x < this.newCities.length; x++) {
-				if (this.newCities[x].iataCode === city.iataCode) {
-					this.newCities[x].select = true;
+			for (let x = 0; x < this.cities.length; x++) {
+				if (this.cities[x].iataCode === city.iataCode) {
+					this.cities[x].select = true;
 				}
 			}
 		}
@@ -57,7 +56,7 @@ export class TabCitiesComponent {
 		const modulus = numberOfNights % citiesLength;
 		return cities.map((city: CityDTO, index) => ({
 			...city,
-			numberOfNights: index === 0 ? floorDivision + modulus : floorDivision
+			numberOfNights: index === 0 ? floorDivision + modulus : floorDivision,
 		}));
 	}
 
