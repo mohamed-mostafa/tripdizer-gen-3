@@ -29,7 +29,7 @@ export class EstimatedCostService {
 	selectedFlightOffers: Array<FlightOffer>;
 	selectedCities: Array<CityDTO>;
 	selectedHotels: Array<Hotel>;
-	summaryStations: Array<Station>;
+	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions>;
 
 	isFlightsTabVisited = new Subject<boolean>();
