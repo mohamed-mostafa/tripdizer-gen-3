@@ -10,7 +10,7 @@ export class Ticket extends RequestResponse {
 			...requestResponse,
 			travelingFrom: request.travelingFrom.iataCode,
 			preferenceNames: request.preferenceNames,
-			destinationName: request.destination ? request.destination.ISOCode : request.selectedCities[0].iataCode,
+			destinationName: request.destination && request.destination.ISOCode ? request.destination.ISOCode : request.selectedCities[0].iataCode,
 		};
 	}
 }
