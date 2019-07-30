@@ -297,6 +297,8 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 	getRequestById(
 		requestId,
 		async function (request) {
+			console.log("Request about to create package for: ");
+			console.log(request);
 			const departureDate = new Date(request.departureDate);
 			const returnDate = new Date(request.returnDate);
 			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
