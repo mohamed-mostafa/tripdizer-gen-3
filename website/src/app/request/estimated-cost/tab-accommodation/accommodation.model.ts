@@ -28,4 +28,7 @@ export class AccommodationRequest {
 	arrival: string;
 	budgetCategory: string;
 	cities: Array<{ cityIata: string, numberOfNights: number }>;
+	numberOfAdults: number;
+	numberOfChildren: number;
+	numberOfInfants: number;
 }
