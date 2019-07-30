@@ -17,7 +17,8 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
         var citiesNumberOfNightPairs = accomomdationSearchRequest.cities;
         var selectedBudgetCategory = accomomdationSearchRequest.budgetCategory;
         let arrivalMoment = new moment(accomomdationSearchRequest.arrival); // start moment
-
+        var totalTripNumberOfNights = 0;
+        totalTripNumberOfNights = citiesNumberOfNightPairs.reduce((prev, cityNumberOfNghtsPair) => parseInt(prev.numberOfNights) + parseInt(cityNumberOfNghtsPair.numberOfNights));
         var accomodationOffers = [];
         for (var i = 0; i < citiesNumberOfNightPairs.length; i++) {
             var cityIata = citiesNumberOfNightPairs[i].cityIata;
@@ -46,7 +47,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 var cityHotelsList = await getHotelsOfCity(cityIata);
                 if (selectedBudgetCategory.toLowerCase() == 'own budget' || selectedBudgetCategory == 1) {
                     cityHotelsList
-                        .map(hotel => ({
+                        .map(hotel => ({ // build hotels list
                             id: hotel.id,
                             name: hotel.enName,
                             displaName: language == 'ar' ? hotel.arName : hotel.enName,
@@ -62,16 +63,15 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                             price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights, (hotel.budgetCategoryName.toLowerCase() == 'super economy' || hotel.budgetCategoryId == 2) ? true : false, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants), // FIX THIS
                             currency: "EGP",
                         }))
-                        .map(hotel => (
-                            {
-                                ...hotel,
-                                desiredCostPerPersonDifference: findDesiredCostPerPersonDifference(hotel.price, accomomdationSearchRequest.desiredCostPerPerson, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants)
-                            }))
-                        .forEach(hotel => {
+                        .map(hotel => ({ // calculate the difference between the hotels cost and the desired cost, per person, taking city/hotel contribution in total accommodation cost into account
+                            ...hotel,
+                            desiredCostPerPersonDifference: findDesiredCostPerPersonDifference(hotel.price, accomomdationSearchRequest.desiredCostPerPerson || 0, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants, citiesNumberOfNightPairs[i].numberOfNights, totalTripNumberOfNights)
+                        }))
+                        .forEach(hotel => { // add them to returned offers
                             newAccomodationOffer.hotels.push(hotel);
                         });
                     // sort hotels in each offer by desired cost per person difference
-                    newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
+                    newAccomodationOffer.hotels.sort((a, b) => a.desiredCostPerPersonDifference > b.desiredCostPerPersonDifference ? 1 : -1);
                 } else {
                     cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase() || hotel.budgetCategoryId == selectedBudgetCategory).forEach(hotel => {
                         var newHotel = {
@@ -179,8 +179,12 @@ function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights, isHos
     return totalPrice;
 }
 
-function findDesiredCostPerPersonDifference(hotelTotalPrice, desiredCostPerPerson, numberOfAdults, numberOfChildren, numberOfInfants) {
+function findDesiredCostPerPersonDifference(hotelTotalPrice, desiredCostPerPerson, numberOfAdults, numberOfChildren, numberOfInfants, numberOfNightsInHotel, totalTripNumberOfNights) {
     var numberOfPayingTravelers = numberOfAdults + numberOfChildren;
-    hotelPricePerPerson = hotelTotalPrice / numberOfPayingTravelers;
-    return Math.abs(hotelPricePerPerson - desiredCostPerPerson);
+    var hotelTotalPricePerPerson = hotelTotalPrice / numberOfPayingTravelers;
+    
+    var hotelContributionInTotalCostPercent = numberOfNightsInHotel / totalTripNumberOfNights;
+    desiredCostPerPersonForHotel = desiredCostPerPerson * hotelContributionInTotalCostPercent;
+    
+    return Math.abs(hotelTotalPricePerPerson - desiredCostPerPersonForHotel);
 }

@@ -544,6 +544,9 @@ definitions:
       numberOfInfants:
         type: "number"
         default: 0
+      desiredCostPerPerson:
+        type: "number"
+        default: 0
   attractionsOfferOptionssearch_cities:
     required:
     - "cityIata"
