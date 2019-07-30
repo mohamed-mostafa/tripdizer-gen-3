@@ -85,22 +85,23 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, { choices: request.flightOffers });
 			citiesDao.save(request.id, { choices: request.selectedCities });
 			attractionsDao.save(request.id, { choices: request.selectedAttractions });
-			getPackage(
-				request.id,
-				null,
-				data => {
-					request.packageUrl = data.pdfUrl;
-					request.packageDownloadUrl = data.pdfDownloadUrl;
-					onSuccess(request);
-				},
-				data => {
-					if (data && data.pdfUrl) {
-						request.packageUrl = data.pdfUrl;
-						request.packageDownloadUrl = data.pdfDownloadUrl;
-					}
-					onSuccess(request);
-				}
-			);
+			// getPackage(
+			// 	request.id,
+			// 	null,
+			// 	data => {
+			// 		request.packageUrl = data.pdfUrl;
+			// 		request.packageDownloadUrl = data.pdfDownloadUrl;
+			// 		onSuccess(request);
+			// 	},
+			// 	data => {
+			// 		if (data && data.pdfUrl) {
+			// 			request.packageUrl = data.pdfUrl;
+			// 			request.packageDownloadUrl = data.pdfDownloadUrl;
+			// 		}
+			// 		onSuccess(request);
+			// 	}
+			// );
+			onSuccess(request);
 
 			if (request.traveler.name === 'Essawy') {
 				requestsDao.modifyRequestStatusById(request.id, 11, () => { }, () => { });
