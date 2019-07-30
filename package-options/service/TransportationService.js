@@ -71,6 +71,7 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
                     reject(err);
                 } else {
                     let legFlightOffers = body; // offers coming form flights adapter
+                    legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
                     if (isInternationalLeg) {
                         let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
                         transportationLeg.flightOffers = filteredLegFlightOffers;
@@ -88,6 +89,9 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
     });
 }
 
+function applyFlightOffersCleansing(legFlightOffers, legSearchRequest) {
+    return legFlightOffers.filter(legFlightOffer => legFlightOffer.flightLegs[0].origin == legSearchRequest.origin && legFlightOffer.flightLegs[0].destination == legSearchRequest.destination);
+}
 
 function filterInternationalOffers(flightOffers) {
     // offers are already sorted by price since we're using low fare search from amadeus
