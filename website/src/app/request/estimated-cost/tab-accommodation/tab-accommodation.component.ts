@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 })
 export class TabAccommodationComponent {
 
-	accommodations: Array<Accommodation>;
+	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
 

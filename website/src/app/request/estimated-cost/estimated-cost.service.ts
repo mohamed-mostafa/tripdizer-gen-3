@@ -168,17 +168,19 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
+		this.summaryStations = [];
 		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
+			const selectedHotels: Array<Hotel> = this.selectedHotels;
 			// then construct the corresponding 'stations' objects
 
 			cityAttractionsList.forEach((cityAttraction) => {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				const stationFlightOffer = selectedFlightOffers
 					.find(flightOffer => flightOffer.segments[flightOffer.segments.length - 1].destination === cityAttraction.city.iataCode);
-				// let stationHotel = ...;
+				let stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
 				if (stationCity && stationFlightOffer) {
 					const station: Station = {
 						// city
@@ -201,9 +203,9 @@ export class EstimatedCostService {
 						travel_time: moment(stationFlightOffer.segments[0].departure).format('hh:mm'),
 						arrive_time: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('hh:mm'),
 
-						hotel: '',
-						hotel_rate: 0,
-						hotel_address: '',
+						hotel: stationHotel.name,
+						hotel_rate: stationHotel.stars,
+						hotel_address: stationHotel.address,
 						activities: cityAttraction.attractions.map(attraction => ({
 							night: [attraction.category]
 						}))
