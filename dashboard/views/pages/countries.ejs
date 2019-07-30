@@ -166,8 +166,9 @@
 							<div class="form-group-3" ng-show="saving==false">
 								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
-								<label for="thumbnail">Thumbnail (PNG photo, 800 X 600
-									pixels)</label>
+								<label for="thumbnail">Thumbnail (PNG photo, 1200 X 800
+									pixels - On the website, on most screen sizes, only upper half of the image will be
+									visible)</label>
 								<!-- <input
 									type="text"
 									required
@@ -192,7 +193,7 @@
 								<label for="file-upload" class="custom-file-upload">
 									<i class="fa fa-cloud-upload"></i> Choose Image
 								</label>
-								<input id="file-upload" validwidth="800" validheight="600" type="file"
+								<input id="file-upload" validwidth="1200" validheight="800" type="file"
 									fileread="newCountry.thumbnail" />
 							</div>
 							<div class="form-group-9" ng-show="saving==false">

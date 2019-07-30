@@ -535,6 +535,15 @@ definitions:
         type: "string"
         example: "ECONOMY"
         description: "the client's chosen budget category"
+      numberOfAdults:
+        type: "number"
+        default: 1
+      numberOfChildren:
+        type: "number"
+        default: 0
+      numberOfInfants:
+        type: "number"
+        default: 0
   attractionsOfferOptionssearch_cities:
     required:
     - "cityIata"

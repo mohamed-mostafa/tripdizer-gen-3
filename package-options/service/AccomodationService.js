@@ -44,7 +44,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 }
 
                 var cityHotelsList = await getHotelsOfCity(cityIata);
-                cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase()).forEach(hotel => {
+                cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase() || hotel.budgetCategoryId == selectedBudgetCategory).forEach(hotel => {
                     var newHotel = {
                         id: hotel.id,
                         name: hotel.enName,
@@ -58,7 +58,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                         checkout: cityDeparture.toISOString(),
                         numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
                         rate: findRate(cityArrival, cityDeparture, hotel.rates),
-                        price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights), // FIX THIS
+                        price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights, (hotel.budgetCategoryName.toLowerCase() == 'super economy' || hotel.budgetCategoryId == 2) ? true : false, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants), // FIX THIS
                         currency: "EGP",
                     }
                     newAccomodationOffer.hotels.push(newHotel);
@@ -116,7 +116,7 @@ function getCityByIata(cityIata) {
 };
 
 function findRate(cityArrival, cityDeparture, rates) {
-    var arrivalMonth = cityArrival.format('MMM').toUpperCase(); // short name of the mongh
+    var arrivalMonth = cityArrival.format('MMM').toUpperCase(); // short name of the month
     var departureMonth = cityDeparture.format('MMM').toUpperCase(); // short name of the month
 
     var rateOfArrivalMonth = rates[arrivalMonth];
@@ -124,8 +124,28 @@ function findRate(cityArrival, cityDeparture, rates) {
     return (rateOfArrivalMonth + rateOfDepartureMonth) / 2
 }
 
-function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights) {
+function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights, isHostel, numberOfAdults = 1, numberOfChildren = 0, numberOfInfants = 0) {
     var nightRate = findRate(cityArrival, cityDeparture, rates);
-    var totalPrice = nightRate * numberOfNights;
+    var numberOfPayingTravelers = numberOfAdults + numberOfChildren;
+    var totalPrice = nightRate;
+
+    if (isHostel == true) {
+        totalPrice = nightRate * numberOfNights * numberOfPayingTravelers;
+    } else {
+        var regularRooms = Math.floor(numberOfPayingTravelers / 2);
+        var trippleRooms = numberOfPayingTravelers % 2;
+        if (trippleRooms == 0) {
+            // regular rooms is 2, 4, 6, ... etc
+            totalPrice = nightRate * regularRooms * numberOfNights;
+        } else {
+            if (regularRooms == 0) {
+                // number of adults = 1
+                totalPrice = nightRate * numberOfNights;
+            } else {
+                // number of adults = 3, 5, ... etc
+                totalPrice = nightRate * (regularRooms - 1) * numberOfNights + nightRate * 1.35 * trippleRooms * numberOfNights;
+            }
+        }
+    }
     return totalPrice;
 }
