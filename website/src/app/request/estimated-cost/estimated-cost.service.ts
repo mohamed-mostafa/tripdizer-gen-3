@@ -147,6 +147,7 @@ export class EstimatedCostService {
 	}
 
 	setSelectedHotels(selectedHotels) {
+		this.requestService.setProperty('selectedHotels', selectedHotels);
 		this.selectedHotels = selectedHotels;
 	}
 
@@ -173,8 +174,9 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
-	this.getAttractions().subscribe(cityAttractionsList => {
+		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
+			this.requestService.setProperty('selectedAttractions', cityAttractionsList);
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
 			const selectedHotels: Array<Hotel> = this.selectedHotels;

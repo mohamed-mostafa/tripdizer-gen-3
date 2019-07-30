@@ -7,6 +7,9 @@ import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
+import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
+import { Attraction } from './estimated-cost/summary/attraction.model';
+import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.enum';
@@ -50,6 +53,9 @@ export class Request extends CommonFunctions {
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
 	private _flightOffers: Array<FlightOffer>;
+	private _selectedCities: Array<CityDTO>;
+	private _selectedHotels: Array<Hotel>;
+	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
 	private _tourGuideNeeded: boolean;
@@ -161,6 +167,24 @@ export class Request extends CommonFunctions {
 	}
 	set flightOffers(value: Array<FlightOffer>) {
 		this._flightOffers = value;
+	}
+	get selectedHotels(): Array<Hotel> {
+		return this._selectedHotels;
+	}
+	set selectedHotels(value: Array<Hotel>) {
+		this._selectedHotels = value;
+	}
+	get selectedAttractions(): Array<Attraction> {
+		return this._selectedAttractions;
+	}
+	set selectedAttractions(value: Array<Attraction>) {
+		this._selectedAttractions = value;
+	}
+	get selectedCities(): Array<CityDTO> {
+		return this._selectedCities;
+	}
+	set selectedCities(value: Array<CityDTO>) {
+		this._selectedCities = value;
 	}
 	get destination(): Destination {
 		return this._destination;
