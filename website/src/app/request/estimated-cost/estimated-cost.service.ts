@@ -133,8 +133,11 @@ export class EstimatedCostService {
 		}
 		const accommodationRequest: AccommodationRequest = {
 			arrival: this.departureDate.format('YYYY-MM-DD'),
-			budgetCategory: /*this.budgetCategory*/ 'SUPER ECONOMY',
+			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
 			cities: cities,
+			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
@@ -170,7 +173,7 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
-	this.getAttractions().subscribe(cityAttractionsList => {
+		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
