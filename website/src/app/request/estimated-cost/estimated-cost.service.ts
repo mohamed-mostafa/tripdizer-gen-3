@@ -68,6 +68,7 @@ export class EstimatedCostService {
 
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
+		console.log(this.selectedCities);
 		this.requestService.setProperty('selectedCities', selectedCities);
 		this.isFlightsTabVisited.next(false);
 	}
@@ -105,6 +106,7 @@ export class EstimatedCostService {
 				flights.map(flight => {
 					const city = citiesSequence.find(cs => cs.cityIata === flight.origin.iataCode);
 					flight.numberOfNights = city ? city.numberOfNights : null;
+					console.log(flights);
 					return flight;
 				})
 			),
@@ -168,8 +170,7 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
-		this.summaryStations = [];
-		this.getAttractions().subscribe(cityAttractionsList => {
+	this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
