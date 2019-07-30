@@ -20,7 +20,7 @@ const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://st
 var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
-		status: request.isFromWebsite ? 3 : request.status,
+		status: request.isFromWebsite ? 1 : request.status,
 		travelingFrom: request.travelingFrom || request.leavingCountry || request.leaving_country,
 		departureDate: request.departureDate || request.departure_date,
 		returnDate: request.returnDate || request.return_date,
@@ -85,23 +85,23 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, { choices: request.flightOffers });
 			citiesDao.save(request.id, { choices: request.selectedCities });
 			attractionsDao.save(request.id, { choices: request.selectedAttractions });
-			// getPackage(
-			// 	request.id,
-			// 	null,
-			// 	data => {
-			// 		request.packageUrl = data.pdfUrl;
-			// 		request.packageDownloadUrl = data.pdfDownloadUrl;
-			// 		onSuccess(request);
-			// 	},
-			// 	data => {
-			// 		if (data && data.pdfUrl) {
-			// 			request.packageUrl = data.pdfUrl;
-			// 			request.packageDownloadUrl = data.pdfDownloadUrl;
-			// 		}
-			// 		onSuccess(request);
-			// 	}
-			// );
-			onSuccess(request);
+			getPackage(
+				request.id,
+				null,
+				data => {
+					request.packageUrl = data.pdfUrl;
+					request.packageDownloadUrl = data.pdfDownloadUrl;
+					onSuccess(request);
+				},
+				data => {
+					if (data && data.pdfUrl) {
+						request.packageUrl = data.pdfUrl;
+						request.packageDownloadUrl = data.pdfDownloadUrl;
+					}
+					onSuccess(request);
+				}
+			);
+			// onSuccess(request);
 
 			if (request.traveler.name === 'Essawy') {
 				requestsDao.modifyRequestStatusById(request.id, 11, () => { }, () => { });
@@ -424,7 +424,9 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 						);
 					}
 				);
-			} else if (request.flightOffers.choices && request.selectedHotels.choices && request.selectedCities.choices) {
+			} else if (request.flightOffers && request.selectedHotels && request.selectedCities && request.selectedAttractions) {
+				console.log("Starting to generate package for request");
+				console.log(JSON.stringify(request));
 				var detailsOfFirstCountry = await getPackageDetailsOfCountry(request.selectedCities.choices[0].countryIsoCode);
 				request = {
 					id: request.id,
@@ -452,6 +454,8 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 						}))
 					},
 				};
+				console.log("Request to be sent to google docs: ");
+				console.log(JSON.stringify(request));
 				packageHttp(
 					'post',
 					'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
@@ -502,6 +506,7 @@ var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
 	var cost = 0;
 	cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	console.log("Itinerary cost: " + cost);
 	return cost;
 }
 
@@ -513,6 +518,8 @@ var getPackageDetailsOfCountry = function (isoCode) {
 				if (error || response.statusCode != 200) {
 					reject(error || response.statusMessage);
 				} else {
+					console.log("package detalis for country: ");
+					console.log(JSON.stringify(country));
 					resolve({
 						introduction: country.introduction,
 						includes: country.includes,
