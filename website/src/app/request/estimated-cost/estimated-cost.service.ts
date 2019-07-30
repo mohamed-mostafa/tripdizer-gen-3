@@ -2,6 +2,7 @@ import { Station } from './summary/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
+import * as moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
@@ -28,6 +29,8 @@ export class EstimatedCostService {
 	selectedFlightOffers: Array<FlightOffer>;
 	selectedCities: Array<CityDTO>;
 	selectedHotels: Array<Hotel>;
+	summaryStations: Array<Station>;
+	cityAttractionsList: Array<CityAttractions>;
 
 	isFlightsTabVisited = new Subject<boolean>();
 
@@ -165,32 +168,51 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
-		this.setIsLoading(true);
-		setTimeout(() => { this.setIsLoading(false); }, 2000);
-		return [
-			{
-				name: 'Rome',
-				nights_count: 2,
-				from: '22-6',
-				to: '24-6',
-				travel_time: '9:00 am',
-				arrive_time: '4:00 pm',
-				depart_from: 'Cairo',
-				arrive_to: 'Rome',
-				duration: '3​h 30​min',
-				image: '../../../assets/img/landmark.jpg',
-				title: 'Rome - Eternal city',
-				description: "Rome’s great gladiatorial arena is the most thrilling of the city's ancient sights. Inaugurated in AD 80, the 50,000, seat Colosseum, also known as the Flavian Amphitheatre, was originally clad in travertine and covered by a huge canvas awning. Inside, tiered seating encircled the arena, itself built over an underground complex where",
-				hotel: 'Hotel Raphael & Relais',
-				hotel_rate: 4,
-				hotel_address: 'Largo Febo 2, Navona, 00186, Rome, Italy',
-				activities: [
-					{ night: ['Ride & Sail - Bus and Boat 24h hop on hop off', 'Last Minutes Vatican Museums'] },
-					{ night: ['Ride & Sail - Bus and Boat 24h hop on hop off', 'Last Minutes Vatican Museums '] }
-				],
-				next_name: 'Venice'
+		this.getAttractions().subscribe(cityAttractionsList => {
+			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
+			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
+			const selectedCities: Array<CityDTO> = this.getSelectedCities();
+			// then construct the corresponding 'stations' objects
 
-			},
-		];
+			cityAttractionsList.forEach((cityAttraction) => {
+				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
+				const stationFlightOffer = selectedFlightOffers
+					.find(flightOffer => flightOffer.segments[flightOffer.segments.length - 1].destination === cityAttraction.city.iataCode);
+				// let stationHotel = ...;
+				if (stationCity && stationFlightOffer) {
+					const station: Station = {
+						// city
+						image: stationCity.thumbnail,
+						name: stationCity.displayName,
+						title: stationCity.displayName,
+						description: stationCity.description,
+
+						// cities
+						depart_from: stationFlightOffer.segments[0].origin,
+						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destination,
+
+						// dates & duration of stay
+						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM/YYYY'),
+						to: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM/YYYY'),
+						nights_count: stationCity.numberOfNights,
+
+						// flights details
+						duration: stationFlightOffer.totalDurationInWords,
+						travel_time: moment(stationFlightOffer.segments[0].departure).format('hh:mm'),
+						arrive_time: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('hh:mm'),
+
+						hotel: '',
+						hotel_rate: 0,
+						hotel_address: '',
+						activities: cityAttraction.attractions.map(attraction => ({
+							night: [attraction.category]
+						}))
+					};
+
+					this.summaryStations.push(station);
+				}
+			});
+		});
+		return this.summaryStations;
 	}
 }
