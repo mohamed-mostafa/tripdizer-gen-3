@@ -538,9 +538,9 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return null;
 					}
-					if (this._estimatedCost == null) {
-						return null;
-					}
+					// if (this._estimatedCost == null) {
+					// 	return null;
+					// }
 					return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
@@ -548,9 +548,9 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return false;
 					}
-					if (!this._estimatedCost) {
-						return false;
-					}
+					// if (!this._estimatedCost) {
+					// 	return false;
+					// }
 					return true;
 				},
 			},

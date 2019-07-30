@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { RequestService } from '../request.service';
 import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
 
@@ -15,7 +13,7 @@ export class EstimatedCostComponent {
 	selectedTab: number;
 	isFlightsTabVisited: Observable<boolean>;
 
-	constructor(route: ActivatedRoute, private service: EstimatedCostService) {
+	constructor( private service: EstimatedCostService) {
 		service.currentTabIndex.subscribe(n => (this.selectedTab = n));
 		this.isFlightsTabVisited = service.isFlightsTabVisited;
 	}
