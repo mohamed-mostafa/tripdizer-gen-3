@@ -81,10 +81,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		request,
 		function (request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
-			accomodationDao.save(request.id, { choices: request.accomodationOffers });
-			transportationDao.save(request.id, { choices: request.transportationOffers });
-			citiesDao.save(request.id, { choices: request.cities });
-			attractionsDao.save(request.id, { choices: request.attractions });
+			accomodationDao.save(request.id, { choices: request.selectedHotels });
+			transportationDao.save(request.id, { choices: request.flightOffers });
+			citiesDao.save(request.id, { choices: request.selectedCities });
+			attractionsDao.save(request.id, { choices: request.selectedAttractions });
 			getPackage(
 				request.id,
 				null,
@@ -423,18 +423,18 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 						);
 					}
 				);
-			} else if (request.transportationOffers.choices && request.accomodationOffers.choices && request.cities.choices) {
-				var detailsOfFirstCountry = await getPackageDetailsOfCountry(request.cities.choices[0].countryIsoCode);
+			} else if (request.flightOffers.choices && request.selectedHotels.choices && request.selectedCities.choices) {
+				var detailsOfFirstCountry = await getPackageDetailsOfCountry(request.selectedCities.choices[0].countryIsoCode);
 				request = {
 					id: request.id,
 					travelerName: request.traveler.name ? request.traveler.name : '',
-					estimatedCost: getItineraryCostFromRequest(request.transportationOffers.choices, request.accomodationOffers.choices),
+					estimatedCost: getItineraryCostFromRequest(request.flightOffers.choices, request.selectedHotels.choices),
 					numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
 					itinerary: {
-						name: request.cities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
-						... detailsOfFirstCountry,
-						image1: (await isValidImage(MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png")) ? MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png" : 'https://i.imgur.com/LsHCFiD.jpg',
-						flights: request.transportationOffers.choices.map(offer => ({
+						name: request.selectedCities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
+						...detailsOfFirstCountry,
+						image1: (await isValidImage(MEDIA_STORAGE_BASE_URL + "/" + request.selectedCities.choices[0].countryIsoCode + ".png")) ? MEDIA_STORAGE_BASE_URL + "/" + request.selectedCities.choices[0].countryIsoCode + ".png" : 'https://i.imgur.com/LsHCFiD.jpg',
+						flights: request.flightOffers.choices.map(offer => ({
 							date: offer.segments ? new Date(offer.segments[0].departure).toDateString() : '',
 							departingFrom: offer.segments ? offer.segments[0].origin : '',
 							arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destination : '',
@@ -442,7 +442,7 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 							arrivalTime: offer.segments ? new Date(offer.segments[offer.segments.length - 1].return).toTimeString() : '',
 							layOver: offer.segments.length == 0 ? 'N' : 'Y',
 						})),
-						hotels: request.accomodationOffers.choices.map(offer => ({
+						hotels: request.selectedHotels.choices.map(offer => ({
 							cityName: offer.cityName ? offer.cityName : (offer.cityIata ? offer.cityIata : ''),
 							checkIn: offer.checkin ? new Date(offer.checkin).toDateString() : '',
 							checkOut: offer.checkout ? new Date(offer.checkout).toDateString() : '',
@@ -497,14 +497,14 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
 		}
 	);
 };
-var getItineraryCostFromRequest = function(transportationOffers, accomodationOffers) {
+var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
 	var cost = 0;
-	cost += transportationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	return cost;
 }
 
-var getPackageDetailsOfCountry = function(isoCode) {
+var getPackageDetailsOfCountry = function (isoCode) {
 	return new Promise((resolve, reject) => {
 
 		httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/country/" + isoCode, json: true },
@@ -655,19 +655,19 @@ function getRequestById(requestId, onSuccess, onFailure) {
 		try {
 			var accomodationOffers = await accomodationDao.get(requestId);
 			if (accomodationOffers.exists)
-				request.accomodationOffers = accomodationOffers.data();
+				request.selectedHotels = accomodationOffers.data();
 
-			var transportationOffers = await transportationDao.get(requestId);
-			if (transportationOffers.exists)
-				request.transportationOffers = transportationOffers.data();
+			var flightOffers = await transportationDao.get(requestId);
+			if (flightOffers.exists)
+				request.flightOffers = flightOffers.data();
 
 			var cities = await citiesDao.get(requestId);
 			if (cities.exists)
-				request.cities = cities.data();;
+				request.selectedCities = cities.data();;
 
 			var attractions = await attractionsDao.get(requestId);
 			if (attractions.exists)
-				request.attractions = attractions.data();;
+				request.selectedAttractions = attractions.data();;
 
 			onSuccess(request);
 		} catch (err) {
