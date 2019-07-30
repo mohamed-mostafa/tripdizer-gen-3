@@ -173,7 +173,7 @@ export class EstimatedCostService {
 	}
 
 	getSummaryStations(): Array<Station> {
-		this.getAttractions().subscribe(cityAttractionsList => {
+	this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
