@@ -55,9 +55,9 @@ var g2gControlCenterApplication = angular
 						img.onload = function () {
 							scope.$apply(function () {
 								//TODO: Add your validation here
-								if (img.width != attributes['validwidth'] || img.height != attributes['validheight']) {
+								if (img.width != parseInt(attributes['validwidth']) || img.height != parseInt(attributes['validheight'])) {
 									scope.fileread = null;
-									alert('Invalid Image Dimensions. Should be ' + attributes['validwidth'] + 'px X ' + attributes['validheight'] + 'px');
+									alert(img.width + 'px X ' + img.height + 'px are invalid image dimensions. Should be ' + attributes['validwidth'] + 'px X ' + attributes['validheight'] + 'px');
 								} else {
 									scope.fileread = loadEvent.target.result;
 								}
