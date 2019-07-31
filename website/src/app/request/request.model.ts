@@ -1,17 +1,22 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { Country } from '../shared/models/country.model';
+import { Gender } from '../shared/models/gender.enum';
 import { CommonFunctions } from '../shared/utils';
 import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
-import { Gender } from './gender.enum';
+import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
+import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
+import { Attraction } from './estimated-cost/summary/attraction.model';
+import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { Preference } from './preferences/preference.model';
 import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
-import { TravelingFrom } from './traveling-from/traveling-from.model';
 import { TravelHistory } from './travel-history.enum';
+import { TravelingFrom } from './traveling-from/traveling-from.model';
 
 export class Request extends CommonFunctions {
 	private _requestType: RequestType;
@@ -32,6 +37,7 @@ export class Request extends CommonFunctions {
 		ticket?: string;
 	} = {};
 	private _touchedSteps: Array<number>;
+	private _countries: Array<Country>;
 	private _travelingFrom: TravelingFrom;
 	private _departureDate: moment.Moment;
 	private _returnDate: moment.Moment;
@@ -46,6 +52,10 @@ export class Request extends CommonFunctions {
 	private _purposeName: string;
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
+	private _flightOffers: Array<FlightOffer>;
+	private _selectedCities: Array<CityDTO>;
+	private _selectedHotels: Array<Hotel>;
+	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
 	private _tourGuideNeeded: boolean;
@@ -55,6 +65,12 @@ export class Request extends CommonFunctions {
 	private _referralType: number;
 	private _travelHistory: TravelHistory;
 
+	get countries(): Array<Country> {
+		return this._countries || [];
+	}
+	set countries(value: Array<Country>) {
+		this._countries = value;
+	}
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
 	}
@@ -145,6 +161,30 @@ export class Request extends CommonFunctions {
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
 		this._destination = value;
+	}
+	get flightOffers(): Array<FlightOffer> {
+		return this._flightOffers;
+	}
+	set flightOffers(value: Array<FlightOffer>) {
+		this._flightOffers = value;
+	}
+	get selectedHotels(): Array<Hotel> {
+		return this._selectedHotels;
+	}
+	set selectedHotels(value: Array<Hotel>) {
+		this._selectedHotels = value;
+	}
+	get selectedAttractions(): Array<Attraction> {
+		return this._selectedAttractions;
+	}
+	set selectedAttractions(value: Array<Attraction>) {
+		this._selectedAttractions = value;
+	}
+	get selectedCities(): Array<CityDTO> {
+		return this._selectedCities;
+	}
+	set selectedCities(value: Array<CityDTO>) {
+		this._selectedCities = value;
 	}
 	get destination(): Destination {
 		return this._destination;
@@ -254,7 +294,7 @@ export class Request extends CommonFunctions {
 					}
 					if (
 						!(
-							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
 							this._departureDate &&
@@ -281,7 +321,7 @@ export class Request extends CommonFunctions {
 					}
 					if (
 						!(
-							(this._requestType === RequestType.SurpriseMe || this._destination) &&
+							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
 							this._departureDate &&
@@ -522,9 +562,9 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return null;
 					}
-					if (this._estimatedCost == null) {
-						return null;
-					}
+					// if (this._estimatedCost == null) {
+					// 	return null;
+					// }
 					return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
@@ -532,9 +572,9 @@ export class Request extends CommonFunctions {
 					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return false;
 					}
-					if (!this._estimatedCost) {
-						return false;
-					}
+					// if (!this._estimatedCost) {
+					// 	return false;
+					// }
 					return true;
 				},
 			},
@@ -620,6 +660,9 @@ export class Request extends CommonFunctions {
 		});
 		this._requestType = RequestType.HavePlan;
 		this._touchedSteps = [];
+		// here cities
+		this._countries = [];
+		// here accommodation
 		this._preferences = [];
 		this._traveler = {
 			name: null,
@@ -661,9 +704,9 @@ export class Request extends CommonFunctions {
 			purpose: 4,
 			budget: 5,
 			travelers: 6,
-			preferences: this.getOrderByRequestType(9, 7),
+			preferences: this.getOrderByRequestType(8, 7),
 			destinations: this.getOrderByRequestType(7, 8),
-			estimatedCost: this.getOrderByRequestType(8, 9),
+			estimatedCost: this.getOrderByRequestType(9, 9),
 			travelAssistance: 10,
 			information: 11,
 			ticket: 99,

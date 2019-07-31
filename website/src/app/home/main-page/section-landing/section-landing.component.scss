@@ -23,6 +23,30 @@
 		}
 	}
 
+	.countries-select-box {
+		width: 100%;
+		max-width: 25rem;
+		/deep/.mat-form-field {
+			border: 1px solid;
+			border-radius: 100px;
+
+			.mat-form-field-wrapper {
+				padding: 0;
+				line-height: 30px;
+
+				.mat-form-field-infix {
+					padding: 0;
+					border: 0;
+
+					.mat-form-field-label {
+						font-size: 10px;
+						border: 0;
+					}
+				}
+			}
+		}
+	}
+
 	.scroll-down {
 		font-size: 0.62rem;
 		letter-spacing: 0.5rem;
@@ -37,8 +61,4 @@
 			text-decoration: none;
 		}
 	}
-}
-
-.greenbtn {
-	background-color: mediumseagreen;
 }

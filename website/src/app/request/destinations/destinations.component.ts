@@ -34,7 +34,7 @@ export class DestinationsComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.selectedDestination = requestService.getProperty('destination');
-		requestService.getDestinations().subscribe((response: Array<Destination>) => (this.destinations = response));
+		requestService.getCountries().subscribe((response: Array<Destination>) => (this.destinations = response));
 		translate.get('request.destinations.dialog').subscribe(labels => (this.dialogLabels = labels));
 	}
 
@@ -93,7 +93,7 @@ export class DestinationsComponent {
 					id: -1,
 					name: inputs[0].value,
 					description: null,
-					iataCode: inputs[0].value,
+					ISOCode: inputs[0].value,
 					image: null,
 					visaTypeName: null,
 				};

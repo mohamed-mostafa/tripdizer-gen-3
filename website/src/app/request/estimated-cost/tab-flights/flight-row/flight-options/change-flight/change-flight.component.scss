@@ -1,0 +1,55 @@
+/deep/.mat-menu-panel {
+	max-width: initial !important;
+
+	.mat-menu-content {
+		padding: 0 !important;
+
+		.mat-menu-item {
+			display: flex;
+			border: 1px solid;
+			margin: 0.6rem !important;
+			border-radius: 0.5rem;
+			height: auto;
+			line-height: 2rem;
+			padding: 0;
+			> div {
+				padding: 0.5rem 2rem;
+
+				&:not(:last-child) {
+					border-right: 1px solid gray;
+				}
+			}
+		}
+	}
+}
+
+.trip-info {
+	.head {
+		font-size: 0.6rem;
+		font-weight: lighter;
+	}
+	.body {
+		line-height: 1.2rem;
+		.time {
+			font-weight: 100;
+		}
+		.iata {
+			font-weight: 100;
+			font-size: 0.6rem;
+		}
+		.duration {
+			line-height: 0.8rem;
+
+			hr {
+				margin: 0.1rem -0.8rem;
+				width: 4rem;
+			}
+
+			.duration-word,
+			.stops {
+				font-weight: 100;
+				font-size: 0.5rem;
+			}
+		}
+	}
+}

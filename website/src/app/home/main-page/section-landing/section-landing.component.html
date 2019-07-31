@@ -3,22 +3,24 @@
 
 	<div class="col-12 text-center">
 		<span class="text-white landing-question">{{ 'home.landing.landing_question' | translate }}</span>
+		<div class="m-auto mt-1 countries-select-box">
+			<c-shared-places-select-box
+				classes="w-100 p-2 bg-white border-blue"
+				[places]="countries | async"
+				[selectedPlaces]="selectedCountries"
+				hidePlaceHolderConditionally="true"
+			></c-shared-places-select-box>
+		</div>
 		<div class="mt-3">
 			<a
-				class="btn greenbtn custom-bs btn-rounded btn-outline-light mx-2 mt-1"
+				class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1 text-uppercase"
 				(click)="havePlan()"
-				[routerLink]="['request']"
 				role="button"
 				>{{ 'home.landing.have_plan' | translate }}</a
 			>
-			<a
-				class="btn custom-bs btn-rounded btn-light mx-2 mt-1"
-				(click)="surpriseMe()"
-				[routerLink]="['request']"
-				[queryParams]="{ surprise: true }"
-				role="button"
-				>{{ 'home.landing.surprise_me' | translate }}</a
-			>
+			<a class="btn custom-bs btn-rounded btn-light mx-2 mt-1 text-uppercase" (click)="surpriseMe()" role="button">{{
+				'home.landing.surprise_me' | translate
+			}}</a>
 		</div>
 	</div>
 

@@ -6,25 +6,22 @@
 			formControlName="travelingFrom"
 			[placeholder]="'request.travel_info.traveling_from' | translate"
 			[compareWith]="compareObjects"
-			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			class="text-yellow text-uppercase font-weight-bold"
 		>
 			<mat-option *ngFor="let airport of ('request.travel_info.airports' | translate)" [value]="airport">{{
 				airport.name
 			}}</mat-option>
 		</mat-select>
 	</mat-form-field>
-	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4" *ngIf="isHavePlan">
-		<mat-hint>{{ formGroup.controls['destination'].errors | errorMessage }}</mat-hint>
-		<mat-error>{{ formGroup.controls['destination'].errors | errorMessage }}</mat-error>
-		<mat-select
-			formControlName="destination"
-			[placeholder]="'request.travel_info.traveling_to' | translate"
-			[compareWith]="compareObjects"
-			class="custom-bs text-yellow text-uppercase font-weight-bold"
-		>
-			<mat-option *ngFor="let destination of destinations" [value]="destination">{{ destination.name }}</mat-option>
-		</mat-select>
-	</mat-form-field>
+	<div *ngIf="isHavePlan && (countries | async)" class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+		<c-shared-places-select-box
+			classes="form-control-lg"
+			[formGroup]="formGroup"
+			controlName="destination"
+			[places]="countries | async"
+			[selectedPlaces]="selectedCountries"
+		></c-shared-places-select-box>
+	</div>
 	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
 		<mat-hint>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-hint>
 		<mat-error>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-error>
@@ -33,7 +30,7 @@
 			[min]="minDate"
 			[matDatepicker]="departureDatePicker"
 			id="departure-date"
-			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			class="text-yellow text-uppercase font-weight-bold"
 			[placeholder]="'request.travel_info.departure' | translate"
 			(click)="departureDatePicker.open()"
 			(focus)="departureDatePicker.open()"
@@ -49,7 +46,7 @@
 			[min]="minDate"
 			[matDatepicker]="returnDatePicker"
 			id="return-date"
-			class="custom-bs text-yellow text-uppercase font-weight-bold"
+			class="text-yellow text-uppercase font-weight-bold"
 			[placeholder]="'request.travel_info.return' | translate"
 			(click)="returnDatePicker.open()"
 			(focus)="returnDatePicker.open()"

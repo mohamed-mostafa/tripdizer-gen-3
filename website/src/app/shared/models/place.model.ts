@@ -1,0 +1,15 @@
+export class Place {
+	id: number;
+	name: string;
+	description: string;
+	enName?: string;
+	enDescription?: string;
+	arName?: string;
+	arDescription?: string;
+	image?: string;
+	thumbnail?: string;
+	temperatureLo?: number;
+	temperatureHi?: number;
+	latitude?: number;
+	longitude?: number;
+}

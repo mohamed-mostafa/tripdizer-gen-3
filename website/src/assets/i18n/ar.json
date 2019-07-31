@@ -45,8 +45,9 @@
 	"home": {
 		"landing": {
 			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-			"landing_question": "هل تعرف وجهتك؟",
-			"have_plan": "نعم ... لدى خطة",
+			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
+			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
+			"have_plan": "ابدأ التخطيط",
 			"surprise_me": "لا ... ساعدنى",
 			"scroll_down": "انتقل لـلأســــفــــــــــــــــــل"
 		},
@@ -152,7 +153,50 @@
 			"daily_spending": "المصاريف اليومية",
 			"per_person": "للشخص",
 			"hint2": "طيران دولي + داخلي",
-			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري"
+			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري",
+			"header": {
+				"number_of_days": "{{numberOfNights}} ايام في",
+				"dates": "من {{departureDate}} الى {{returnDate}}"
+			},
+			"tab_cities": {
+				"title": "المدن",
+				"view_choose": "عرض واختيار المدن",
+				"things_to_do": "أنشطة يمكن القيام بها فى",
+				"view_map": "عرض الخريطة",
+				"next_label": "التالي"
+			},
+			"tab_flights": {
+				"title": "الطيران",
+				"view_edit": "عرض / تعديل المسار",
+				"change_flight": "تغيير الطيران",
+				"change_city": "تغيير المدينة",
+				"reorder_route": "ترتيب المسار",
+				"total_cost": "السعر الاجمالي للطيران",
+				"next_label": "التالي",
+				"start": "البداية",
+				"end": "النهاية",
+				"nights": "{{numberOfNights}} ايام",
+				"stops": "{{numberOfStops}} وقفة",
+				"departure": "المغادرة",
+				"duration": "المدة",
+				"arrival": "الوصول",
+				"select": "اختر",
+				"selected": "مختار"
+			},
+			"tab_accommodations": {
+				"title": "الفنادق",
+				"choose_hotel": "عرض واختيار الفنادق",
+				"select": "اختيار",
+				"selected": "تم اختياره",
+				"total_price": "إجمالى السعر",
+				"total_cost": "اجمالى سعر الفنادق"
+			},
+			"summary": {
+				"view_details": "إظهار تفاصيل الرحلة",
+				"accommodation": "الإقامة",
+				"activities": "الأنشطة",
+				"modify": "تعديل"
+			}
 		},
 		"form_layout": {
 			"next_label": "التالي",
@@ -232,9 +276,18 @@
 				},
 				"actions": {
 					"position": "translate(325 690)",
-					"view_package": { "icon": 290, "button": 265 },
-					"download_package": { "icon": 155, "button": 130 },
-					"send_package": { "icon": 25, "button": 0 }
+					"view_package": {
+						"icon": 290,
+						"button": 265
+					},
+					"download_package": {
+						"icon": 155,
+						"button": 130
+					},
+					"send_package": {
+						"icon": 25,
+						"button": 0
+					}
 				}
 			},
 			"sm_sizes": {
@@ -251,9 +304,18 @@
 				},
 				"actions": {
 					"position": "translate(395 755)",
-					"view_package": { "icon": 0, "button": -15 },
-					"download_package": { "icon": -85, "button": -100 },
-					"send_package": { "icon": -170, "button": -185 }
+					"view_package": {
+						"icon": 0,
+						"button": -15
+					},
+					"download_package": {
+						"icon": -85,
+						"button": -100
+					},
+					"send_package": {
+						"icon": -170,
+						"button": -185
+					}
 				}
 			},
 			"lg_text": {

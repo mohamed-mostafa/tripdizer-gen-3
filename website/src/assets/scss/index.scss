@@ -1,6 +1,13 @@
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 /* Commented because of the opened issue: https://github.com/angular/angular-cli/issues/10855
 @import url('https://fonts.googleapis.com/css?family=Qwigley|Montserrat|Material+Icons|Roboto|Space+Mono');
 */
+
+@import './custom-bootstrap.scss';
+@import './custom-ng-material.scss';
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../../../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import '../../../node_modules/owl.carousel/dist/assets/owl.carousel.css';
+@import '../../../node_modules/owl.carousel/dist/assets/owl.theme.default.css';
 @import './fonts.scss';
 @import './rtl.scss';

@@ -65,4 +65,4 @@ export const COMPONENTS = [
 	exports: [RouterModule],
 	imports: [RouterModule.forChild(routes)],
 })
-export class RequestRoutingModule {}
+export class RequestRoutingModule { }

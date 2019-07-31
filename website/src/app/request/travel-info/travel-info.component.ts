@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService as SocialAuthService } from 'angularx-social-login';
 import * as moment from 'moment';
-import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
-import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/login-dialog.component';
+import { Observable } from 'rxjs';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { Country } from '../../shared/models/country.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
 import { Destination } from '../destinations/destination.model';
@@ -19,17 +18,19 @@ import { TravelingFrom } from '../traveling-from/traveling-from.model';
 	templateUrl: './travel-info.component.html',
 	styleUrls: ['./travel-info.component.scss'],
 })
-export class TravelInfoComponent implements OnInit {
+export class TravelInfoComponent {
 	formGroup: FormGroup;
 	controls: any = {
 		travelingFrom: new FormControl('', [Validators.required]),
-		destination: new FormControl('', [Validators.required]),
+		destination: new FormControl('', [
+			CustomValidators.conditionallyRequired(() => Boolean(this.selectedCountries && this.selectedCountries.length)),
+		]),
 		departureDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		returnDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		isFlexibleDates: new FormControl(),
 	};
-	destinations: Array<Destination>;
-	preSelectedDestinationName: string;
+	countries: Observable<Array<Country>>;
+	selectedCountries: Array<Country> = [];
 	minDate = new Date();
 	dialogLabels: {
 		title: string;
@@ -38,14 +39,11 @@ export class TravelInfoComponent implements OnInit {
 		buttonsLabel: { ok: string; cancel: string };
 	};
 	isHavePlan: boolean;
-	firstTimeLogin = true;
 
 	constructor(
-		route: ActivatedRoute,
 		private requestService: RequestService,
 		private trackingService: TrackingService,
 		private dialog: MatDialog,
-		private socialAuthService: SocialAuthService,
 		translate: TranslateService
 	) {
 		let compareDatesValidationMsg: string;
@@ -56,16 +54,16 @@ export class TravelInfoComponent implements OnInit {
 		this.formGroup = new FormGroup(
 			{},
 			{
-				validators: CustomValidators.dateGreaterThan('departureDate', 'returnDate', compareDatesValidationMsg),
+				validators: [CustomValidators.dateGreaterThan('departureDate', 'returnDate', compareDatesValidationMsg)],
 			}
 		);
 		this.isHavePlan = this.requestService.getRequestType() === RequestType.HavePlan;
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
-				if (!(!this.isHavePlan && controlName === 'destination')) {
+				if (controlName !== 'destination') {
 					(this.controls[controlName] as FormControl).setValue(this.requestService.getProperty(controlName));
-					this.formGroup.addControl(controlName, this.controls[controlName]);
 				}
+				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
 		// this.formGroup.controls['destination'].valueChanges.subscribe(destinationId => {
@@ -78,50 +76,21 @@ export class TravelInfoComponent implements OnInit {
 				this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
 			}
 		});
-		requestService.getDestinations().subscribe(destinations => {
-			this.destinations = destinations.filter(dest => dest.id !== -1);
-			this.preSelectedDestination();
-		});
-		route.params.subscribe(params => {
-			if (params.destinationName) {
-				this.preSelectedDestinationName = params.destinationName;
-				this.preSelectedDestination();
-			}
-		});
-	}
-
-	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => {
-			if (user) {
-				this.requestService.setProperty('socialSigning', true);
-				this.requestService.setProperty('travelerName', user.name);
-				this.requestService.setProperty('travelerEmail', user.email);
-			} else {
-				if (this.firstTimeLogin) {
-					this.openLoginDialog();
-				}
-			}
-			this.firstTimeLogin = false;
-		});
+		this.countries = requestService.getCountries();
+		setTimeout(() => {
+			this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
+			this.formGroup.get('destination').reset();
+		}, 0);
 	}
 
 	save(): void {
 		for (const controlName in this.formGroup.controls) {
 			if (this.formGroup.controls.hasOwnProperty(controlName)) {
-				// 				if (controlName === 'destination') {
-				// let tempDestination:Destination;
-				// 					const destinationId = this.formGroup.controls[controlName].value;
-				// 					if (destinationId === -1) {
-				// 						tempDestination = this.otherDestination;
-				// 					} else {
-				// 						 tempDestination = this.destinations.filter(
-				// 							destination => destination.id === this.formGroup.controls[controlName].value
-				// 						);
-				// 					}
-				// 					this.requestService.setProperty(controlName, tempDestination);
-				// 				} else {
-				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
-				// }
+				if (controlName === 'destination') {
+					this.requestService.setProperty('destination', this.formGroup.controls[controlName].value);
+				} else {
+					this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
+				}
 			}
 		}
 		this.trackingService.track('Submit - Travel Info', {
@@ -132,18 +101,6 @@ export class TravelInfoComponent implements OnInit {
 		});
 	}
 
-	preSelectedDestination(): void {
-		if (this.preSelectedDestinationName) {
-			if (Array.isArray(this.destinations) && this.destinations.length) {
-				const selectedDestination = this.destinations.find(
-					d => d.enName && d.enName.toLowerCase() === this.preSelectedDestinationName.toLowerCase()
-				);
-				if (selectedDestination) {
-					this.formGroup.get('destination').setValue(selectedDestination);
-				}
-			}
-		}
-	}
 	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 
 	openDialog(): void {
@@ -176,7 +133,7 @@ export class TravelInfoComponent implements OnInit {
 					id: -1,
 					name: inputs[0].value,
 					description: null,
-					iataCode: inputs[0].value,
+					ISOCode: inputs[0].value,
 					image: null,
 					visaTypeName: null,
 				};
@@ -186,13 +143,6 @@ export class TravelInfoComponent implements OnInit {
 					destinationName: destination.name,
 				});
 			}
-		});
-	}
-
-	openLoginDialog(): void {
-		this.dialog.open(LoginDialogComponent, {
-			autoFocus: true,
-			maxWidth: 400,
 		});
 	}
 }

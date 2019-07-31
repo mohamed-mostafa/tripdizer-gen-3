@@ -1,0 +1,44 @@
+<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5">
+	<div class="col-12 col-lg-8">
+		<h5 class="font-italic text-secondary view-edit">
+			{{ 'request.estimated_cost.tab_flights.view_edit' | translate }}
+		</h5>
+
+		<div class="routes position-relative">
+			<div *ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
+				<c-estimated-cost-flight-row
+					[flight]="flight"
+					[index]="index"
+					[isEven]="isEven"
+					[isFirst]="isFirst"
+					[isLast]="isLast"
+					(offerChanged)="offerChanged($event)"
+				></c-estimated-cost-flight-row>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 col-lg-4">
+		<div *ngIf="flightPaths?.length" class="row d-none d-lg-block">
+			<div class="col-12">
+				<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
+			</div>
+		</div>
+		<div class="row my-2 my-sm-3 my-md-4 my-lg-5">
+			<div class="col-12">
+				<div class="float-right bg-blue text-white text-center px-5 py-2">
+					<span>{{ 'request.estimated_cost.tab_flights.total_cost' | translate }}</span>
+					<br />
+					<span>{{ totalCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+					{{ 'request.estimated_cost.tab_flights.next_label' | translate }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -33,14 +33,38 @@ body {
 			border-radius: 10em;
 		}
 	}
-
-	&.text-yellow {
-		color: $color-yellow;
-	}
-
-	&.text-blue {
-		color: $color-blue;
+	&.text-ellipsis {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 }
 
 /* END Extend Bootstrap */
+
+/* should be in global style to work */
+.tabs-section .mat-tab-header {
+	border-bottom-style: none !important;
+}
+
+.tabs-section .mat-tab-labels .mat-tab-label {
+	border: 1px solid #dee2e6;
+	background-color: #fff;
+	opacity: 1;
+}
+
+.tabs-section .mat-tab-group {
+	margin-top: -40px;
+}
+
+.tabs-section .mat-ink-bar {
+	height: 4px;
+	background-color: #2989ff !important;
+}
+
+@media (max-width: 767px) {
+	.tabs-section .mat-tab-labels .mat-tab-label {
+		border: 0;
+		height: 100px;
+	}
+}

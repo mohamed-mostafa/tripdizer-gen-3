@@ -7,11 +7,10 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Country } from '../shared/models/country.model';
 import { DropDownItem } from '../shared/models/drop-down-item.model';
 import { TrackingService } from '../shared/services/tracking.service';
-/* Models */
 import { BudgetCategory } from './budget/budget-category.model';
-import { Destination } from './destinations/destination.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
 import { LUTPreference, Preference } from './preferences/preference.model';
 import { LUTPurpose, Purpose } from './purpose/purpose.model';
@@ -33,7 +32,7 @@ export class RequestService {
 	private LUTEndPoint = 'master-data';
 	private requestData;
 	private Lookups: {
-		destinations: Array<Destination>;
+		countries: Array<Country>;
 		budgetCategories: Array<BudgetCategory>;
 		purposes: Array<Purpose>;
 		preferences: Array<Preference>;
@@ -204,23 +203,25 @@ export class RequestService {
 		}
 	}
 
-	getProperty(key: string): any {
+	getProperty(key: string): any;
+	getProperty<T>(key: string): T;
+	getProperty<T>(key: string): T {
 		return this.requestData[key];
 	}
 
-	getDestinations(): Observable<Array<Destination>> {
+	getCountries(): Observable<Array<Country>> {
 		this.isLoading.next(true);
-		let observable: Observable<Array<Destination>>;
-		if (this.Lookups.destinations) {
-			observable = of(this.Lookups.destinations);
+		let observable: Observable<Array<Country>>;
+		if (this.Lookups.countries) {
+			observable = of(this.Lookups.countries);
 		} else {
-			observable = this.http.get<Array<Destination>>(`${this.LUTEndPoint}/itineraries`);
+			observable = this.http.get<Array<Country>>(`${this.LUTEndPoint}/countries`);
 		}
 		return observable.pipe(
-			map(destinations => {
-				this.Lookups.destinations = destinations;
+			map(countries => {
+				this.Lookups.countries = countries;
 				this.isLoading.next(false);
-				return this.Lookups.destinations;
+				return this.Lookups.countries.filter(country => country.id !== -1);
 			})
 		);
 	}

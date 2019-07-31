@@ -1,0 +1,25 @@
+<div class="row m-0">
+	<div class="flight-img">
+		<img class="w-100 h-100" *ngIf="selectedOffer?.carrier.squareLogo" [src]="selectedOffer?.carrier.squareLogo" />
+	</div>
+
+	<div class="col-4 custom-bs text-ellipsis">
+		{{ selectedOffer?.carrier.name }}: {{ selectedOffer?.totalDurationInWords }}
+	</div>
+
+	<div class="col-3">
+		<div class="col-3 option-btn text-nowrap">
+			<c-estimated-cost-change-flight
+				[flight]="flight"
+				(offerChanged)="selectedOfferChanged($event)"
+			></c-estimated-cost-change-flight>
+		</div>
+	</div>
+
+	<!-- <div class="col-3 option-btn text-nowrap">
+		<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.change_city' | translate }}</a>
+	</div>
+	<div class="col-3 option-btn text-nowrap">
+		<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.reorder_route' | translate }}</a>
+	</div> -->
+</div>

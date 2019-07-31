@@ -24,14 +24,7 @@
 						"polyfills": "src/polyfills.ts",
 						"tsConfig": "src/tsconfig.app.json",
 						"assets": ["src/favicon.ico", "src/assets"],
-						"styles": [
-							"./node_modules/bootstrap/dist/css/bootstrap.min.css",
-							"./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-							"./node_modules/owl.carousel/dist/assets/owl.carousel.css",
-							"./node_modules/owl.carousel/dist/assets/owl.theme.default.css",
-							"src/assets/scss/index.scss",
-							"src/styles.scss"
-						],
+						"styles": ["src/assets/scss/index.scss", "src/styles.scss"],
 						"scripts": [
 							"./node_modules/jquery/dist/jquery.min.js",
 							"./node_modules/popper.js/dist/umd/popper.min.js",

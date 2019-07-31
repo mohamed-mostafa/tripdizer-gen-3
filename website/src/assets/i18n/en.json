@@ -45,8 +45,9 @@
 	"home": {
 		"landing": {
 			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-			"landing_question": "Do you know where to travel?",
-			"have_plan": "Yes, I have a plan",
+			"landing_question": "The new way to plan your next trip",
+			"destination_place_holder": "Enter Destination ( italy, spain, france... )",
+			"have_plan": "Start my plan",
 			"surprise_me": "No, Surprise me",
 			"scroll_down": "ScrollDown"
 		},
@@ -152,7 +153,50 @@
 			"daily_spending": "Daily Spending",
 			"per_person": "per person",
 			"hint2": "International + Domestic flights",
-			"hint3": "Just an indicator for daily spendings per person, not included in the package cost"
+			"hint3": "Just an indicator for daily spending per person, not included in the package cost",
+			"header": {
+				"number_of_days": "{{numberOfNights}} Day{{withS}} in",
+				"dates": "From {{departureDate}} To {{returnDate}}"
+			},
+			"tab_cities": {
+				"title": "Cities",
+				"view_choose": "View and choose your cities",
+				"things_to_do": "Things to do in",
+				"view_map": "View map",
+				"next_label": "Continue"
+			},
+			"tab_flights": {
+				"title": "Flights",
+				"view_edit": "View / edit route",
+				"change_flight": "Change Flight",
+				"change_city": "Change City",
+				"reorder_route": "Reorder Route",
+				"total_cost": "Total Flights Cost",
+				"next_label": "Continue",
+				"start": "Start",
+				"end": "End",
+				"nights": "{{numberOfNights}} Day{{withS}}",
+				"stops": "{{numberOfStops}} Stop{{withS}}",
+				"departure": "Departure",
+				"duration": "Duration",
+				"arrival": "Arrival",
+				"select": "Select",
+				"selected": "Selected"
+			},
+			"tab_accommodations": {
+				"title": "Accommodations",
+				"choose_hotel": "View and choose your hotels",
+				"select": "Select",
+				"selected": "Selected",
+				"total_price": "Total price",
+				"total_cost": "Total Hotels Cost"
+			},
+			"summary": {
+				"view_details": "View details for your trip",
+				"accommodation": "Accommodation",
+				"activities": "Activities",
+				"modify": "Modify your itinerary"
+			}
 		},
 		"form_layout": {
 			"next_label": "Continue",
@@ -232,9 +276,18 @@
 				},
 				"actions": {
 					"position": "translate(850 690)",
-					"view_package": { "icon": 0, "button": 25 },
-					"download_package": { "icon": 170, "button": 195 },
-					"send_package": { "icon": 375, "button": 400 }
+					"view_package": {
+						"icon": 0,
+						"button": 25
+					},
+					"download_package": {
+						"icon": 170,
+						"button": 195
+					},
+					"send_package": {
+						"icon": 375,
+						"button": 400
+					}
 				}
 			},
 			"sm_sizes": {
@@ -251,9 +304,18 @@
 				},
 				"actions": {
 					"position": "translate(100 755)",
-					"view_package": { "icon": 0, "button": 15 },
-					"download_package": { "icon": 95, "button": 110 },
-					"send_package": { "icon": 215, "button": 230 }
+					"view_package": {
+						"icon": 0,
+						"button": 15
+					},
+					"download_package": {
+						"icon": 95,
+						"button": 110
+					},
+					"send_package": {
+						"icon": 215,
+						"button": 230
+					}
 				}
 			},
 			"lg_text": {

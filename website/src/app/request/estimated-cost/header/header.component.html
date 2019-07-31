@@ -1,0 +1,17 @@
+<div id="estimated-cost-header" class="header" [style.background-image]="'url(' + selectedCountryImage + ')'">
+	<div class="center font-weight-bold text-center text-white">
+		<div *ngIf="numberOfNights" class="m-0 text-capitalize days">
+			{{
+				'request.estimated_cost.header.number_of_days'
+					| translate: { numberOfNights: numberOfNights, withS: numberOfNights > 1 ? 's' : '' }
+			}}
+		</div>
+		<div *ngIf="selectedCountriesName" class="m-0 text-uppercase text-nowrap country">{{ selectedCountriesName }}</div>
+		<div *ngIf="departureDate && returnDate" class="m-0 font-italic text-capitalize dates">
+			{{
+				'request.estimated_cost.header.dates'
+					| translate: { departureDate: departureDate | date: 'd-M-y', returnDate: returnDate | date: 'd-M-y' }
+			}}
+		</div>
+	</div>
+</div>

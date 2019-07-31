@@ -1,0 +1,49 @@
+<div *ngIf="isFirst">
+	<ng-container *ngTemplateOutlet="startAndEndSection"></ng-container>
+</div>
+
+<div *ngIf="!isFirst">
+	<div class="bullet position-relative float-left text-white text-center">
+		<div class="w-text" [ngClass]="isEven ? 'bg-secondary' : 'bg-primary'">
+			{{ index }}
+		</div>
+	</div>
+	<div class="city-name ml-5 ml-lg-6 text-capitalize">
+		<span>{{ flight.origin.name }}</span>
+		<span *ngIf="flight.numberOfNights">
+			:
+			{{
+				'request.estimated_cost.tab_flights.nights'
+					| translate: { numberOfNights: flight.numberOfNights, withS: flight.numberOfNights > 1 ? 's' : '' }
+			}}
+		</span>
+	</div>
+</div>
+
+<div class="my-3">
+	<i class="fa fa-plane icon position-relative float-left text-center text-secondary bg-white"></i>
+	<div class="ml-5 ml-lg-6">
+		<c-estimated-cost-flight-row-options
+			[flight]="flight"
+			(offerChanged)="selectedOfferChanged($event)"
+		></c-estimated-cost-flight-row-options>
+	</div>
+</div>
+
+<div *ngIf="isLast">
+	<ng-container *ngTemplateOutlet="startAndEndSection"></ng-container>
+</div>
+
+<ng-template #startAndEndSection>
+	<div class="bullet position-relative float-left text-white text-center">
+		<div class="wo-text bg-dark"></div>
+	</div>
+	<div class="city-name ml-5 ml-lg-6 text-capitalize font-italic">
+		<span *ngIf="isFirst">
+			{{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flight.origin.name }}
+		</span>
+		<span *ngIf="isLast">
+			{{ 'request.estimated_cost.tab_flights.end' | translate }} : {{ flight.destination.name }}
+		</span>
+	</div>
+</ng-template>

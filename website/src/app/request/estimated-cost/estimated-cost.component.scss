@@ -1,3 +1,8 @@
+/deep/ #body-container {
+	// TODO:Fix other tabs
+	height: 100%;
+}
+
 .total-budget {
 	font-size: 2.75rem;
 	font-weight: 700;
@@ -189,5 +194,20 @@
 		.fas {
 			font-size: 2em;
 		}
+	}
+}
+
+.tab-icon .fa {
+	color: #2989ff;
+	font-size: 20px;
+}
+.tab-text {
+	color: #000;
+	font-weight: bold;
+}
+
+@media (max-width: 767px) {
+	.tab-icon .fa {
+		font-size: 46px;
 	}
 }

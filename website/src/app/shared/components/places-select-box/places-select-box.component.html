@@ -1,0 +1,25 @@
+<form [formGroup]="formGroup">
+	<mat-form-field [ngClass]="classes">
+		<mat-hint>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-hint>
+		<mat-error>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-error>
+		<mat-chip-list #chipList>
+			<mat-chip *ngFor="let place of _selectedPlaces" [removable]="true" (removed)="remove(place[property])">
+				{{ place.name }}
+				<i matChipRemove class="far fa-times-circle h-auto w-auto"></i>
+			</mat-chip>
+			<input
+				#placeInput
+				[hidden]="_selectedPlaces.length >= 3"
+				[formControlName]="controlName"
+				[placeholder]="!_selectedPlaces.length || !hidePlaceHolderConditionally ? placeHolder : ''"
+				[matAutocomplete]="matAutocomplete"
+				[matChipInputFor]="chipList"
+				[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+				(matChipInputTokenEnd)="!matAutocomplete.isOpen ? addFromInput($event) : false"
+			/>
+		</mat-chip-list>
+		<mat-autocomplete #matAutocomplete (optionSelected)="addFromAutocomplete($event)">
+			<mat-option *ngFor="let place of (filteredPlaces | async)" [value]="place[property]">{{ place.name }}</mat-option>
+		</mat-autocomplete>
+	</mat-form-field>
+</form>

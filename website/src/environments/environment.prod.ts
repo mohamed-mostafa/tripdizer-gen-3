@@ -10,5 +10,6 @@ export const environment = {
 	google: {
 		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-1',
+		apiKey: null,
 	},
 };
