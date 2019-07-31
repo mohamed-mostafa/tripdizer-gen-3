@@ -209,5 +209,10 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		};
 
 		$scope.initialize();
+		$('#addCountryModal').on('hidden.bs.modal', function () {
+			CountriesService.getAll().then(function (countries) {
+				$scope.countries = countries;
+			});
+		})
 	},
 ]);

@@ -5,7 +5,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 	'AttractionsService',
 	'CitiesService',
 	'CountriesService',
-	function($rootScope, $scope, $http, AttractionsService, CitiesService, CountriesService) {
+	function ($rootScope, $scope, $http, AttractionsService, CitiesService, CountriesService) {
 		// fields
 		$scope.attractions = [];
 		$scope.cities = [];
@@ -27,7 +27,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.currentId = 0;
 
 		// functions
-		$scope.validateDataEntry = function() {
+		$scope.validateDataEntry = function () {
 			var activeAttractionsInCity = $scope.attractions.filter(attraction => attraction.active == 1);
 			if (activeAttractionsInCity.length < 3) {
 				$scope.dataEntryValid = false;
@@ -35,7 +35,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 				$scope.dataEntryValid = true;
 			}
 		}
-		$scope.resetValidationFlags = function() {
+		$scope.resetValidationFlags = function () {
 			$scope.enNameMissing = false;
 			$scope.arNameMissing = false;
 			$scope.enDescriptionMissing = false;
@@ -48,7 +48,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
-		$scope.newAttractionIsValid = function() {
+		$scope.newAttractionIsValid = function () {
 			$scope.resetValidationFlags();
 			if ($scope.newAttraction.enName == null || $scope.newAttraction.enName == '') {
 				$scope.enNameMissing = true;
@@ -89,12 +89,12 @@ g2gControlCenterApplication.controller('AttractionsController', [
 				$scope.priorityMissing !== true
 			);
 		};
-		$scope.addAttraction = function(close) {
+		$scope.addAttraction = function (close) {
 			if ($scope.newAttractionIsValid()) {
 				$scope.saving = true;
 				$http
 					.put($rootScope.masterDataServerUrl + '/attraction', { attraction: $scope.newAttraction })
-					.success(function(response) {
+					.success(function (response) {
 						$scope.saving = false;
 						response.active = false;
 						$scope.attractions.push(response);
@@ -103,20 +103,20 @@ g2gControlCenterApplication.controller('AttractionsController', [
 							$('#addAttractionModal').modal('hide');
 						}
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.saving = false;
 						$scope.serverError = true;
 						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
 		};
-		$scope.editAttraction = function(id) {
+		$scope.editAttraction = function (id) {
 			$scope.resetValidationFlags();
 			if ($scope.newAttractionIsValid()) {
 				$scope.saving = true;
 				$http
 					.post($rootScope.masterDataServerUrl + '/attraction', { attraction: $scope.newAttraction })
-					.success(function(response) {
+					.success(function (response) {
 						for (var i = 0; i < $scope.attractions.length; i++) {
 							if ($scope.attractions[i].id == $scope.newAttraction.id) {
 								$scope.attractions[i] = $scope.newAttraction;
@@ -127,7 +127,7 @@ g2gControlCenterApplication.controller('AttractionsController', [
 						$scope.editMode = false;
 						$('#addAttractionModal').modal('hide');
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.newAttraction = {};
 						$scope.editMode = false;
 						$scope.saving = false;
@@ -136,10 +136,10 @@ g2gControlCenterApplication.controller('AttractionsController', [
 					});
 			}
 		};
-		$scope.activate = function(id) {
+		$scope.activate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/attraction/' + id + '/activate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.attractions.length; i++) {
 						if ($scope.attractions[i].id == id) {
 							$scope.attractions[i].active = 1;
@@ -148,14 +148,14 @@ g2gControlCenterApplication.controller('AttractionsController', [
 					alert("Attraction is now visible on the website");
 					$scope.validateDataEntry();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Activation Failed: " + err.toString());
 				});
 		};
-		$scope.deactivate = function(id) {
+		$scope.deactivate = function (id) {
 			$http
 				.post($rootScope.masterDataServerUrl + '/attraction/' + id + '/deactivate')
-				.success(function() {
+				.success(function () {
 					for (var i = 0; i < $scope.attractions.length; i++) {
 						if ($scope.attractions[i].id == id) {
 							$scope.attractions[i].active = 0;
@@ -164,11 +164,11 @@ g2gControlCenterApplication.controller('AttractionsController', [
 					alert("Attraction is now hidden from the website");
 					$scope.validateDataEntry();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					alert("Deactivation Failed: " + err.toString());
 				});
 		};
-		$scope.openEditDialog = function(id) {
+		$scope.openEditDialog = function (id) {
 			$scope.editMode = true;
 			$scope.resetValidationFlags();
 			for (var i = 0; i < $scope.attractions.length; i++) {
@@ -178,15 +178,15 @@ g2gControlCenterApplication.controller('AttractionsController', [
 			}
 			$('#addAttractionModal').modal('show');
 		};
-		$scope.openAddDialog = function(id) {
+		$scope.openAddDialog = function (id) {
 			$scope.editMode = false;
 			$scope.resetValidationFlags();
 			$scope.newAttraction = { cityId: $scope.selectedCity };
 			$('#addAttractionModal').modal('show');
 		};
-		$scope.buildTable = function() {
+		$scope.buildTable = function () {
 			// initialize the table
-			$(function() {
+			$(function () {
 				$('#attractionsTable').dataTable({
 					bPaginate: true,
 					bLengthChange: false,
@@ -198,24 +198,28 @@ g2gControlCenterApplication.controller('AttractionsController', [
 			});
 		};
 
-		$scope.$watch('selectedCity', function(val) {
-			AttractionsService.getAllByCity($scope.selectedCity).then(function(attractions) {
+		$scope.$watch('selectedCity', function (val) {
+			$scope.reloadAttractions();
+		});
+
+		$scope.reloadAttractions = function () {
+			AttractionsService.getAllByCity($scope.selectedCity).then(function (attractions) {
 				if (attractions) $scope.attractions = attractions;
 				$scope.validateDataEntry();
 			});
-		});
+		}
 
-		$scope.$watch('selectedCountry', function(val) {
+		$scope.$watch('selectedCountry', function (val) {
 			$scope.selectedCity = null;
-			CitiesService.getAllByCountry(val).then(function(cities) {
+			CitiesService.getAllByCountry(val).then(function (cities) {
 				if (cities) $scope.cities = cities;
 				if (cities.length) $scope.selectedCity = cities[0].id;
 				else $scope.selectedCity = null;
 			});
 		});
 
-		$scope.initialize = function() {
-			CountriesService.getAll().then(function(countries) {
+		$scope.initialize = function () {
+			CountriesService.getAll().then(function (countries) {
 				$scope.countries = countries;
 				if (countries.length) $scope.selectedCountry = countries[0].id;
 				else $scope.selectedCountry = null;
@@ -224,5 +228,9 @@ g2gControlCenterApplication.controller('AttractionsController', [
 
 		$scope.initialize();
 		$scope.resetValidationFlags();
+
+		$('#addAttractionModal').on('hidden.bs.modal', function () {
+			$scope.reloadAttractions();
+		})
 	},
 ]);
