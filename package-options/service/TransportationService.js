@@ -57,7 +57,7 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
         try {
             let originCity = await getCityByIata(origin);
             let destinationCity = await getCityByIata(destination);
-            let transportationLeg = { origin: originCity, destination: destinationCity, departure: departure.toISOString() };
+            let transportationLeg = { origin: originCity, destination: destinationCity, departure: departure.toISOString(), flightOffers: [] };
             let legSearchRequest = {
                 departure: transportationLeg.departure,
                 origin: transportationLeg.origin.iataCode,
@@ -67,18 +67,26 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
                 numberOfInfants: numberOfInfants
             }
             request.get({ url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, json: true }, function (err, httpResponse, body) {
-                if (err) {
-                    reject(err);
+                if (err || httpResponse.statusCode != 200) {
+                    // reject(err || httpResponse.statusMessage);
+                    console.error("Failed to retrieve offers for leg: " + transportationLeg);
+                    console.error(err || httpResponse.statusMessage);
+                    resolve(transportationLeg);
                 } else {
                     let legFlightOffers = body; // offers coming form flights adapter
-                    legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
-                    if (isInternationalLeg) {
-                        let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
-                        transportationLeg.flightOffers = filteredLegFlightOffers;
-                        resolve(transportationLeg);
+                    if (legFlightOffers) {
+                        legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
+                        if (isInternationalLeg) {
+                            let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
+                            transportationLeg.flightOffers = filteredLegFlightOffers;
+                            resolve(transportationLeg);
+                        } else {
+                            let filteredLegFlightOffers = filterInternalOffers(legFlightOffers);
+                            transportationLeg.flightOffers = filteredLegFlightOffers;
+                            resolve(transportationLeg);
+                        }
                     } else {
-                        let filteredLegFlightOffers = filterInternalOffers(legFlightOffers);
-                        transportationLeg.flightOffers = filteredLegFlightOffers;
+                        console.warn("No flight offers found for leg: " + legSearchRequest);
                         resolve(transportationLeg);
                     }
                 }
