@@ -75,7 +75,7 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
                 } else {
                     let legFlightOffers = body; // offers coming form flights adapter
                     if (legFlightOffers) {
-                        legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
+                        // legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
                         if (isInternationalLeg) {
                             let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
                             transportationLeg.flightOffers = filteredLegFlightOffers;
@@ -165,9 +165,12 @@ function filterInternalOffers(flightOffers) {
 }
 
 function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
+    // at the moment, we only support one-way flights, so we always use flightLegs[0]
     let newOffer = {
         price: flightOffer.price,
         currency: flightOffer.currency,
+        originCityIata: flightOffer.originCityIata,
+        destinationCityIata: flightOffer.destinationCityIata,
         totalDurationInWords: flightOffer.flightLegs[0].totalDurationInWords,
         transitDurationInWords: flightOffer.flightLegs[0].transitDurationInWords,
         totalDurationInMinutes: flightOffer.flightLegs[0].totalDurationInMinutes,
