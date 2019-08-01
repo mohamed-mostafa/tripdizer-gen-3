@@ -121,6 +121,10 @@ export class EstimatedCostService {
 		this.requestService.setProperty('flightOffers', flightOffers);
 	}
 
+	getFlightsTotalCost(): number {
+		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
+	}
+
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
 	}
@@ -131,6 +135,16 @@ export class EstimatedCostService {
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
 		}
+
+		this.budgetCategory = this.requestService.getProperty('budgetCategory');
+		let accommodationDesiredCostPerPerson = 0;
+		if (this.budgetCategory == 1) { // ownBudget
+			let flightCost = this.getFlightsTotalCost();
+			let numberOfPayingCustomers = this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
+			let flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
+			let totalDesiredCostPerPerson = this.requestService.getProperty('budget');
+			accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
+		}
 		const accommodationRequest: AccommodationRequest = {
 			arrival: this.departureDate.format('YYYY-MM-DD'),
 			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
@@ -138,6 +152,7 @@ export class EstimatedCostService {
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			desiredCostPerPerson: accommodationDesiredCostPerPerson
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {

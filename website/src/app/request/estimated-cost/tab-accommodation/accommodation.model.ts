@@ -31,4 +31,5 @@ export class AccommodationRequest {
 	numberOfAdults: number;
 	numberOfChildren: number;
 	numberOfInfants: number;
+	desiredCostPerPerson: number;
 }
