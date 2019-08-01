@@ -215,8 +215,8 @@ export class EstimatedCostService {
 						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destination,
 
 						// dates & duration of stay
-						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM/YYYY'),
-						to: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM/YYYY'),
+						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM'),
+						to: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM'),
 						nights_count: stationCity.numberOfNights,
 
 						// flights details

@@ -46,7 +46,7 @@
 							<div class="col-12 col-md-3 station-img"><img [src]="station.image" alt="" /></div>
 							<div class="col-12 col-md-9 mt-2 mt-md-0">
 								<h6 class="font-weight-bold">{{ station.title }}</h6>
-								<p class="smaller-text">{{ station.description }}</p>
+								<p class="smaller-text">{{ station.description.substring(0, 300) }}<span *ngIf="station.description.length > 300">...</span></p>
 								<hr class="d-block d-md-none" />
 								<h5 class="font-weight-bold blue-title text-uppercase">
 									{{ 'request.estimated_cost.summary.accommodation' | translate }}
