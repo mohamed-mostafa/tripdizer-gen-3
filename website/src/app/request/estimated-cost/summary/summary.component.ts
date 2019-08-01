@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from '../../request.service';
-// import * as moment from 'moment';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { Station } from './station.model';
-// import { CityDTO } from '../tab-cities/city-dto.model';
-// import { FlightOffer } from '../tab-flights/flight.model';
 
 @Component({
 	selector: 'c-app-summary',

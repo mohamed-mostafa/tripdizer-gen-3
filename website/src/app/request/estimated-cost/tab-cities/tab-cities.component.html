@@ -76,7 +76,11 @@
 				<h6 class="font-weight-bold font-italic view-map">
 					{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
 				</h6>
-				<img src="../../../assets/img/map.png" alt="" />
+				<div *ngIf="flightPaths?.length" class="row d-none d-lg-block">
+					<div class="col-12">
+						<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

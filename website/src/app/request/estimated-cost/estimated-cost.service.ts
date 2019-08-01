@@ -138,7 +138,7 @@ export class EstimatedCostService {
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
 		let accommodationDesiredCostPerPerson = 0;
-		if (this.budgetCategory == 1) { // ownBudget
+		if (this.budgetCategory === 1) { // ownBudget
 			let flightCost = this.getFlightsTotalCost();
 			let numberOfPayingCustomers = this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
 			let flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
