@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Country } from 'src/app/shared/models/country.model';
+import { LookupsService } from 'src/app/shared/services/lookups.service';
 import { TrackingService } from 'src/app/shared/services/tracking.service';
-import { SectionLandingService } from './section-landing.service';
 
 @Component({
 	selector: 'c-home-section-landing',
@@ -19,8 +19,8 @@ export class SectionLandingComponent {
 		return this.selectedCountries.map(c => c.ISOCode);
 	}
 
-	constructor(private router: Router, private trackingService: TrackingService, service: SectionLandingService) {
-		this.countries = service.getCountries();
+	constructor(private router: Router, private trackingService: TrackingService, lutService: LookupsService) {
+		this.countries = lutService.getValidCountries();
 	}
 
 	havePlan() {
