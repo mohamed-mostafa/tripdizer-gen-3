@@ -202,31 +202,33 @@ export class EstimatedCostService {
 				const stationFlightOffer = selectedFlightOffers
 					.find(flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode);
 				let stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
-				if (stationCity && stationFlightOffer) {
+				if (stationCity) {
 					const station: Station = {
 						// city
 						image: stationCity.thumbnail,
 						name: stationCity.displayName,
 						title: stationCity.displayName,
 						description: stationCity.description,
-
-						// cities
-						depart_from: stationFlightOffer.segments[0].originDetails,
-						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails,
-
-						// dates & duration of stay
-						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM'),
-						to: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM'),
 						nights_count: stationCity.numberOfNights,
 
-						// flights details
-						duration: stationFlightOffer.totalDurationInWords,
-						travel_time: moment(stationFlightOffer.segments[0].departure).format('hh:mm'),
-						arrive_time: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('hh:mm'),
+						// airports
+						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : "origin",
+						arrive_to: stationFlightOffer ? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : "destination",
 
-						hotel: stationHotel.name,
-						hotel_rate: stationHotel.stars,
-						hotel_address: stationHotel.address,
+						// dates & duration of stay
+						// from: moment(stationHotel.checkin).format('DD/MM'),
+						// to: moment(stationHotel.checkout).format('DD/MM'),
+						from: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM') : "Unknown",
+						to: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM') : "unknown",
+
+						// flights details
+						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : "Unknown",
+						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('hh:mm') : "Unknown time",
+						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('hh:mm') : "unknown time",
+
+						hotel: stationHotel ? stationHotel.name : "None Selected",
+						hotel_rate: stationHotel ? stationHotel.stars : 0,
+						hotel_address: stationHotel ? stationHotel.address : "No Hotel Selected",
 						activities: cityAttraction.attractions.map(attraction => ({
 							night: [attraction.category]
 						}))

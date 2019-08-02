@@ -25,8 +25,8 @@ export class TabFlightsComponent {
 					...fo,
 					flightIndex,
 					flightOfferIndex,
-					departure: [...fo.segments].pop(),
-					arrival: [...fo.segments].shift(),
+					departure: [...fo.segments].shift(),
+					arrival: [...fo.segments].pop(),
 					numberOfStops: fo.segments.length - 1,
 				})),
 			}));
