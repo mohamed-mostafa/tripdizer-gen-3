@@ -27,8 +27,8 @@ var register = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /group-trips/{Id}');
-		console.log(error);
+		console.error('An error occurred in /group-trips/{Id}');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -56,8 +56,8 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /group-trips/{Id}');
-		console.log(error);
+		console.error('An error occurred in /group-trips/{Id}');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -85,8 +85,8 @@ var toggle = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /group-trips');
-		console.log(error);
+		console.error('An error occurred in /group-trips');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -121,8 +121,8 @@ var create = function(req, res) {
 		});
 		form.parse(req);
 	} catch (error) {
-		console.log('An error occurred in /group-trips');
-		console.log(error);
+		console.error('An error occurred in /group-trips');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -157,8 +157,8 @@ var update = function(req, res) {
 		});
 		form.parse(req);
 	} catch (error) {
-		console.log('An error occurred in /group-trips');
-		console.log(error);
+		console.error('An error occurred in /group-trips');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -181,8 +181,8 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /group-trips');
-		console.log(error);
+		console.error('An error occurred in /group-trips');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -205,8 +205,8 @@ var getAllCurrentTrips = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /group-trips');
-		console.log(error);
+		console.error('An error occurred in /group-trips');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");

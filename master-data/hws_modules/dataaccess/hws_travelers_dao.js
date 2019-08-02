@@ -9,16 +9,16 @@ var getTravelerByEmailAddress = function(emailAddress, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
 			connection.query('SELECT t.* FROM traveler t WHERE t.email_address = ?', [emailAddress], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
-					console.log('An error occurred while trying to find a traveler with email ' + emailAddress);
-					console.log(err);
+					console.error('An error occurred while trying to find a traveler with email ' + emailAddress);
+					console.error(err);
 					connection.end();
 					onFailure(err);
 				} else {
@@ -47,8 +47,8 @@ var createNewTraveler = function(traveler, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the traveler and his addresses
@@ -57,8 +57,8 @@ var createNewTraveler = function(traveler, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -70,8 +70,8 @@ var createNewTraveler = function(traveler, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new traveler: ' + traveler.name);
-								console.log(err);
+								console.error('An error occurred while trying to create the new traveler: ' + traveler.name);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {

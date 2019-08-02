@@ -9,8 +9,8 @@ var getVideos = function(lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -19,8 +19,8 @@ var getVideos = function(lang, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all videos');
-					console.log(err);
+					console.error('An error occurred while list all videos');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -56,8 +56,8 @@ var create = function(video, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the video and his addresses
@@ -66,8 +66,8 @@ var create = function(video, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -79,8 +79,8 @@ var create = function(video, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new video: ' + video.en_name);
-								console.log(err);
+								console.error('An error occurred while trying to create the new video: ' + video.en_name);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -108,8 +108,8 @@ var update = function(video, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the video and his addresses
@@ -118,8 +118,8 @@ var update = function(video, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -129,8 +129,8 @@ var update = function(video, onSuccess, onFailure) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing video: ' + video.en_name);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing video: ' + video.en_name);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -154,8 +154,8 @@ var createPhone = function(phoneNumber) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the video and his addresses
@@ -164,8 +164,8 @@ var createPhone = function(phoneNumber) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query('INSERT INTO Phones (Phone_Number) values (?)', [phoneNumber], function(err, result) {
@@ -174,8 +174,8 @@ var createPhone = function(phoneNumber) {
 							// if the first insert statement fails
 							// end the connection
 							connection.end();
-							console.log('An error occurred while trying to create the new phone number: ' + phoneNumber);
-							console.log(err);
+							console.error('An error occurred while trying to create the new phone number: ' + phoneNumber);
+							console.error(err);
 						} else {
 							// end the connection
 							connection.commit();
@@ -196,8 +196,8 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the video and his addresses
@@ -206,8 +206,8 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query('UPDATE Phones SET Status = ? WHERE Id = ?', [phone.Status, phone.Id], function(
@@ -217,8 +217,8 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) {
 							// if the first insert statement fails
-							console.log('An error occurred while trying to update the existing phone: ' + phone.Phone_Number);
-							console.log(err);
+							console.error('An error occurred while trying to update the existing phone: ' + phone.Phone_Number);
+							console.error(err);
 							connection.rollback(); // rollback the transaction
 							// end the connection
 							connection.end();
@@ -241,8 +241,8 @@ var getPhones = function(onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -251,8 +251,8 @@ var getPhones = function(onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all phones');
-					console.log(err);
+					console.error('An error occurred while list all phones');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown

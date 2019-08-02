@@ -20,8 +20,8 @@ var placeWebsiteRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /website/place');
-		console.log(error);
+		console.error('An error occurred in /website/place');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -48,8 +48,8 @@ var placeDashboardRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /dashboard/place');
-		console.log(error);
+		console.error('An error occurred in /dashboard/place');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -66,15 +66,15 @@ var getRequestById = function(req, res) {
 				res.json(request);
 			},
 			function(error) {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /');
-		console.log(error);
+		console.error('An error occurred in /');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -101,8 +101,8 @@ var getRequestSummaries = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /status');
-		console.log(error);
+		console.error('An error occurred in /status');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -127,8 +127,8 @@ var getRequestSummariesCount = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /status/' + statuses + '/count');
-		console.log(error);
+		console.error('An error occurred in /status/' + statuses + '/count');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -151,8 +151,8 @@ var sendMailsToRequestTraveler = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /statuses/send-mails');
-		console.log(error);
+		console.error('An error occurred in /statuses/send-mails');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -177,8 +177,8 @@ var changeRequestStatus = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /status');
-		console.log(error);
+		console.error('An error occurred in /status');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -203,8 +203,8 @@ var markRequestBeingPrepared = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /ststus/beingprepared');
-		console.log(error);
+		console.error('An error occurred in /ststus/beingprepared');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -227,8 +227,8 @@ var markRequestDelivered = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /ststus/delivered');
-		console.log(error);
+		console.error('An error occurred in /ststus/delivered');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -251,8 +251,8 @@ var markRequestPlaced = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /status/placed');
-		console.log(error);
+		console.error('An error occurred in /status/placed');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -277,8 +277,8 @@ var assignRequestToUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /assign');
-		console.log(error);
+		console.error('An error occurred in /assign');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -301,8 +301,8 @@ var updateRequest = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /');
-		console.log(error);
+		console.error('An error occurred in /');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -330,8 +330,8 @@ var budgetCalculation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /budgetCalculation');
-		console.log(error);
+		console.error('An error occurred in /budgetCalculation');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -359,8 +359,8 @@ var recommendation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /recommendation');
-		console.log(error);
+		console.error('An error occurred in /recommendation');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -388,8 +388,8 @@ var toggleOptions = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /toggleOptions');
-		console.log(error);
+		console.error('An error occurred in /toggleOptions');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -407,15 +407,15 @@ var getPackage = function(req, res) {
 				res.send(packageUrl);
 			},
 			function(error) {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /');
-		console.log(error);
+		console.error('An error occurred in /');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -432,15 +432,15 @@ var sendPackageByMail = function(req, res) {
 				res.send(response);
 			},
 			function(error) {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /');
-		console.log(error);
+		console.error('An error occurred in /');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -457,15 +457,15 @@ var validatePromoCode = function(req, res) {
 				res.send(isValid);
 			},
 			function(error) {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /promo-code-validity');
-		console.log(error);
+		console.error('An error occurred in /promo-code-validity');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -480,15 +480,15 @@ var getTravelerEmails = function(req, res) {
 				res.send(emails);
 			},
 			function(error) {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /emails');
-		console.log(error);
+		console.error('An error occurred in /emails');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");

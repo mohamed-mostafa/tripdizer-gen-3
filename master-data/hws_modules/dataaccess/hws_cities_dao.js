@@ -9,8 +9,8 @@ var getById = function (id, lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -22,8 +22,8 @@ var getById = function (id, lang, onSuccess, onFailure) {
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while trying to find a city with id ' + id);
-						console.log(err);
+						console.error('An error occurred while trying to find a city with id ' + id);
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -57,7 +57,7 @@ var getById = function (id, lang, onSuccess, onFailure) {
 								city.interests = await getInterestsByCityId(city.id, lang);
 							} catch (err) {
 								console.log("Failed to load interests of city: " + city.id);
-								console.log(err);
+								console.error(err);
 								city.interests = [];
 							}
 							// end the connection
@@ -80,8 +80,8 @@ var getInterestsByCityId = function (cityId, lang) {
 		var connection = daoUtilities.createConnection();
 		connection.connect(function (err) {
 			if (err) {
-				console.log('An error occurred while trying to open a database connection');
-				console.log(err);
+				console.error('An error occurred while trying to open a database connection');
+				console.error(err);
 				reject(err);
 			} else {
 				// execute the query
@@ -93,8 +93,8 @@ var getInterestsByCityId = function (cityId, lang) {
 						if (err) {
 							// end the connection
 							connection.end();
-							console.log('An error occurred while trying to find interests for a city with id ' + cityId);
-							console.log(err);
+							console.error('An error occurred while trying to find interests for a city with id ' + cityId);
+							console.error(err);
 							reject(err);
 						} else {
 							// no error is thrown
@@ -120,8 +120,8 @@ var create = function (city, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the city and his addresses
@@ -130,8 +130,8 @@ var create = function (city, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -153,8 +153,8 @@ var create = function (city, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new city: ' + city.enName);
-								console.log(err);
+								console.error('An error occurred while trying to create the new city: ' + city.enName);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -174,8 +174,8 @@ var create = function (city, onSuccess, onFailure) {
 									});
 									connection.query(insertDailySpendingQuery, [], async function (err, result) {
 										if (err) {
-											console.log('An error occurred while trying to update the existing city: ' + city.enName);
-											console.log(err); connection.rollback(); // rollback the transaction
+											console.error('An error occurred while trying to update the existing city: ' + city.enName);
+											console.error(err); connection.rollback(); // rollback the transaction
 											connection.end();
 											onFailure(err);
 										} else {
@@ -216,8 +216,8 @@ var replaceCityInterests = function(connection, cityId, interests) {
 			statement,
 			function (err, result) {
 				if (err) {
-					connection.end(); console.log('An error occurred while trying to create the interest/replace for the city: ' + cityId);
-					console.log(err); connection.rollback(); // rollback the transaction
+					connection.end(); console.error('An error occurred while trying to create the interest/replace for the city: ' + cityId);
+					console.error(err); connection.rollback(); // rollback the transaction
 					reject(err);
 				} else {
 					resolve();
@@ -234,8 +234,8 @@ var update = function (city, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the city and his addresses
@@ -244,8 +244,8 @@ var update = function (city, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -266,8 +266,8 @@ var update = function (city, onSuccess, onFailure) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing city: ' + city.enName);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing city: ' + city.enName);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -292,8 +292,8 @@ var update = function (city, onSuccess, onFailure) {
 										// if an error is thrown, end the connection and throw an error
 										if (err) {
 											// if the first insert statement fails
-											console.log('An error occurred while trying to update the existing city: ' + city.enName);
-											console.log(err);
+											console.error('An error occurred while trying to update the existing city: ' + city.enName);
+											console.error(err);
 											connection.rollback(); // rollback the transaction
 											// end the connection
 											connection.end();
@@ -334,8 +334,8 @@ var getAll = function (lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -347,8 +347,8 @@ var getAll = function (lang, onSuccess, onFailure) {
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while list all cities');
-						console.log(err);
+						console.error('An error occurred while list all cities');
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -385,7 +385,7 @@ var getAll = function (lang, onSuccess, onFailure) {
 									city.interests = await getInterestsByCityId(city.id, lang);
 								} catch (err) {
 									console.log("Failed to load interests of city: " + city.id);
-									console.log(err);
+									console.error(err);
 									city.interests = [];
 								}
 								cities.push(city);
@@ -409,8 +409,8 @@ var getAllCitiesInIternaries = function (lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -422,8 +422,8 @@ var getAllCitiesInIternaries = function (lang, onSuccess, onFailure) {
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while list all cities in iternaries');
-						console.log(err);
+						console.error('An error occurred while list all cities in iternaries');
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -451,7 +451,7 @@ var getAllCitiesInIternaries = function (lang, onSuccess, onFailure) {
 								city.interests = await getInterestsByCityId(city.id, lang);
 							} catch (err) {
 								console.log("Failed to load interests of city: " + city.id);
-								console.log(err);
+								console.error(err);
 								city.interests = [];
 							}
 							cities.push(city);
@@ -471,19 +471,19 @@ var toggleActivation = function (id, active, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+			console.error('An error occurred while trying to open a database connection'); console.error(err); onFailure(err);
 		} else {
 			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
-					connection.end(); console.log('An error occurred while trying to begin a database transaction');
-					console.log(err); onFailure(err);
+					connection.end(); console.error('An error occurred while trying to begin a database transaction');
+					console.error(err); onFailure(err);
 				} else {
 					connection.query('UPDATE hws.Cities SET Active = ? WHERE Id = ?', [active, id],
 						function (err, result) {
 							if (err) {
-								console.log('An error occurred while trying to activate/deactivate city: ' + id);
-								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+								console.error('An error occurred while trying to activate/deactivate city: ' + id);
+								console.error(err); connection.rollback(); connection.end(); onFailure(err);
 							} else {
 								connection.commit(); connection.end(); onSuccess();
 							}

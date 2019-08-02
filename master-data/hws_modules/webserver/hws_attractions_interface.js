@@ -22,8 +22,8 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attraction');
-		console.log(error);
+		console.error('An error occurred in /attraction');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -49,8 +49,8 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attraction');
-		console.log(error);
+		console.error('An error occurred in /attraction');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -73,8 +73,8 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attraction');
-		console.log(error);
+		console.error('An error occurred in /attraction');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -101,8 +101,8 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attractions');
-		console.log(error);
+		console.error('An error occurred in /attractions');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -134,8 +134,8 @@ var getAllAttractionsByCity = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attractions/city-id');
-		console.log(error);
+		console.error('An error occurred in /attractions/city-id');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -162,8 +162,8 @@ var toggleActivation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /attraction');
-		console.log(error);
+		console.error('An error occurred in /attraction');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");

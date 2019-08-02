@@ -26,8 +26,8 @@ var loginUser = function(req, res) {
 			encrypted == null ? true : encrypted
 		);
 	} catch (error) {
-		console.log('An error occurred in /users/login');
-		console.log(error);
+		console.error('An error occurred in /users/login');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -53,8 +53,8 @@ var updateUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /user');
-		console.log(error);
+		console.error('An error occurred in /user');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -77,8 +77,8 @@ var createUser = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /users');
-		console.log(error);
+		console.error('An error occurred in /users');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -99,8 +99,8 @@ var getAllUsers = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /users');
-		console.log(error);
+		console.error('An error occurred in /users');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -121,8 +121,8 @@ var getAllUsersToAssign = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /users/to-assign');
-		console.log(error);
+		console.error('An error occurred in /users/to-assign');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -143,8 +143,8 @@ var getAllActiveUsers = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /users/active');
-		console.log(error);
+		console.error('An error occurred in /users/active');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");

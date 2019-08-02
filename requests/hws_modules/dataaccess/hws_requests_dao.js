@@ -9,8 +9,8 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the request
@@ -19,8 +19,8 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
@@ -69,8 +69,8 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to create the new request: ' + JSON.stringify(request));
-								console.log(err);
+								console.error('An error occurred while trying to create the new request: ' + JSON.stringify(request));
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -107,7 +107,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 												'An error occurred while trying to create the interests of the requesta: ' +
 													JSON.stringify(request)
 											);
-											console.log(err);
+											console.error(err);
 											connection.rollback();
 											// end the connection
 											connection.end();
@@ -142,8 +142,8 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			var limit = isNaN(size) ? 10 : size * 1;
@@ -154,8 +154,8 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 			connection.query(query, [statuses, statuses, offset, limit], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
-					console.log('An error occurred while trying to find requests with statuses ' + statuses);
-					console.log(err);
+					console.error('An error occurred while trying to find requests with statuses ' + statuses);
+					console.error(err);
 					connection.end();
 					onFailure(err);
 				} else {
@@ -253,8 +253,8 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			var query = '';
@@ -293,8 +293,8 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
-						console.log('An error occurred while trying to count order summaries with statuses ' + statuses);
-						console.log(err);
+						console.error('An error occurred while trying to count order summaries with statuses ' + statuses);
+						console.error(err);
 						connection.end();
 						onFailure(err);
 					} else {
@@ -313,8 +313,8 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -324,8 +324,8 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 				function(err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
-						console.log('An error occurred while trying to find a request with id ' + requestId);
-						console.log(err);
+						console.error('An error occurred while trying to find a request with id ' + requestId);
+						console.error(err);
 						connection.end();
 						onFailure(err);
 					} else {
@@ -456,8 +456,8 @@ var updateRequest = function(request, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
@@ -503,8 +503,8 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();
 					if (err) {
-						console.log('An error occurred while trying to set a comment to a request with id ' + request.id);
-						console.log(err);
+						console.error('An error occurred while trying to set a comment to a request with id ' + request.id);
+						console.error(err);
 						connection.rollback();
 						connection.end();
 						onFailure(err);
@@ -527,8 +527,8 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -539,8 +539,8 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 				// if an error is thrown, end the connection and throw an error
 				//				connection.end();
 				if (err) {
-					console.log('An error occurred while trying to update a request with id ' + orderId);
-					console.log(err);
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
 					connection.rollback();
 					connection.end();
 					onFailure(err);
@@ -562,8 +562,8 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -574,8 +574,8 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();
 					if (err) {
-						console.log('An error occurred while trying to update a request with id ' + requestId);
-						console.log(err);
+						console.error('An error occurred while trying to update a request with id ' + requestId);
+						console.error(err);
 						connection.rollback();
 						connection.end();
 						onFailure(err);
@@ -598,8 +598,8 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -609,8 +609,8 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 				// if an error is thrown, end the connection and throw an error
 				//				connection.end();
 				if (err) {
-					console.log('An error occurred while trying to assign a user to a request with id ' + requestId);
-					console.log(err);
+					console.error('An error occurred while trying to assign a user to a request with id ' + requestId);
+					console.error(err);
 					connection.rollback();
 					connection.end();
 					onFailure(err);
@@ -630,8 +630,8 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
@@ -640,8 +640,8 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					var attachmentFileNames = [];
@@ -657,8 +657,8 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to add new mail history ' + object.email);
-								console.log(err);
+								console.error('An error occurred while trying to add new mail history ' + object.email);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -681,8 +681,8 @@ var getRequestCounts = function(onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
@@ -691,8 +691,8 @@ var getRequestCounts = function(onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -703,8 +703,8 @@ var getRequestCounts = function(onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to get request counts');
-								console.log(err);
+								console.error('An error occurred while trying to get request counts');
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -727,8 +727,8 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
@@ -737,8 +737,8 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -750,8 +750,8 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to toggle ' + option);
-								console.log(err);
+								console.error('An error occurred while trying to toggle ' + option);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -774,8 +774,8 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
@@ -784,8 +784,8 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -796,8 +796,8 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to get request counts by promo code');
-								console.log(err);
+								console.error('An error occurred while trying to get request counts by promo code');
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -821,8 +821,8 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
@@ -831,8 +831,8 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -843,8 +843,8 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to get request counts by promo code');
-								console.log(err);
+								console.error('An error occurred while trying to get request counts by promo code');
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {

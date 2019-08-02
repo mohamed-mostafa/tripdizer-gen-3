@@ -6,8 +6,8 @@
 const mysql = require('mysql');
 
 const options = {
-	user: process.env.MYSQL_USER || 'root',
-	password: process.env.MYSQL_PASSWORD || 'root',
+	user: process.env.MYSQL_USER || 'application',
+	password: process.env.MYSQL_PASSWORD || 'tripdizer',
 	database: 'hws',
 	multipleStatements: true,
 };

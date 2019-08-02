@@ -9,7 +9,7 @@ exports.save = async function(requestId, attractions) {
     await document.set(attractions);
   } catch (err) {
     console.log("Failed to save attractions for request " + requestId);
-    console.log(err);
+    console.error(err);
   }  
 }
 

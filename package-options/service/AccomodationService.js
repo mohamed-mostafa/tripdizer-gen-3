@@ -101,7 +101,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 }
                 accomodationOffers.push(newAccomodationOffer);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 reject(error);
             }
             arrivalMoment = cityDeparture; // move the arrival moment to the next city
@@ -176,15 +176,17 @@ function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights, isHos
             }
         }
     }
+    // add profit margin
+    totalPrice = totalPrice * 1.1;
     return totalPrice;
 }
 
 function findDesiredCostPerPersonDifference(hotelTotalPrice, desiredCostPerPerson, numberOfAdults, numberOfChildren, numberOfInfants, numberOfNightsInHotel, totalTripNumberOfNights) {
     var numberOfPayingTravelers = numberOfAdults + numberOfChildren;
     var hotelTotalPricePerPerson = hotelTotalPrice / numberOfPayingTravelers;
-    
+
     var hotelContributionInTotalCostPercent = numberOfNightsInHotel / totalTripNumberOfNights;
     desiredCostPerPersonForHotel = desiredCostPerPerson * hotelContributionInTotalCostPercent;
-    
+
     return Math.abs(hotelTotalPricePerPerson - desiredCostPerPersonForHotel);
 }
