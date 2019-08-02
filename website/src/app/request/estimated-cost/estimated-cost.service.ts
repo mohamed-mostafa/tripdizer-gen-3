@@ -200,7 +200,7 @@ export class EstimatedCostService {
 			cityAttractionsList.forEach((cityAttraction) => {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				const stationFlightOffer = selectedFlightOffers
-					.find(flightOffer => flightOffer.segments[flightOffer.segments.length - 1].destination === cityAttraction.city.iataCode);
+					.find(flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode);
 				let stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
 				if (stationCity && stationFlightOffer) {
 					const station: Station = {
@@ -211,8 +211,8 @@ export class EstimatedCostService {
 						description: stationCity.description,
 
 						// cities
-						depart_from: stationFlightOffer.segments[0].origin,
-						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destination,
+						depart_from: stationFlightOffer.segments[0].originDetails,
+						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails,
 
 						// dates & duration of stay
 						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM'),

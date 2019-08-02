@@ -12,6 +12,9 @@ export class Flight {
 export class FlightOffer {
 	price: number;
 	currency: string;
+	originCityIata: string;
+	destinationCityIata: string;
+	isOneWay: boolean;
 	totalDurationInWords: string;
 	transitDurationInWords: string;
 	totalDurationInMinutes: number;
@@ -28,6 +31,8 @@ export class FlightOffer {
 export class Segment {
 	origin: string;
 	destination: string;
+	originDetails: string; // will usually be airport name
+	destinationDetails: string; // will usually be airport name
 	departure: string;
 	return: string;
 	durationInWords: string;
