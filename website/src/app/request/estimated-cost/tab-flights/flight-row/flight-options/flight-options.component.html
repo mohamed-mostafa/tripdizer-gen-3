@@ -1,25 +1,26 @@
 <div class="row m-0">
-	<div class="flight-img">
+	<div class="m-1 flight-img">
 		<img class="w-100 h-100" *ngIf="selectedOffer?.carrier.squareLogo" [src]="selectedOffer?.carrier.squareLogo" />
 	</div>
 
-	<div class="col-4 custom-bs text-ellipsis">
+	<div class="m-1 custom-bs text-ellipsis">
 		{{ selectedOffer?.carrier.name }}: {{ selectedOffer?.totalDurationInWords }}
 	</div>
 
-	<div class="col-3">
-		<div class="col-3 option-btn text-nowrap">
-			<c-estimated-cost-change-flight
-				[flight]="flight"
-				(offerChanged)="selectedOfferChanged($event)"
-			></c-estimated-cost-change-flight>
+	<div class="m-1">
+		<div class="row">
+			<div class="col-4 option-btn text-nowrap">
+				<c-estimated-cost-change-flight
+					[flight]="flight"
+					(offerChanged)="selectedOfferChanged($event)"
+				></c-estimated-cost-change-flight>
+			</div>
+			<!-- <div class="col-4 option-btn text-nowrap">
+				<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.change_city' | translate }}</a>
+			</div>
+			<div class="col-4 option-btn text-nowrap">
+				<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.reorder_route' | translate }}</a>
+			</div> -->
 		</div>
 	</div>
-
-	<!-- <div class="col-3 option-btn text-nowrap">
-		<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.change_city' | translate }}</a>
-	</div>
-	<div class="col-3 option-btn text-nowrap">
-		<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.reorder_route' | translate }}</a>
-	</div> -->
 </div>
