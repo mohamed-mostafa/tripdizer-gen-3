@@ -111,7 +111,8 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 			}
 			resolve(flightOffers);
 		}).catch(responseError => {
-			console.log(responseError);
+			console.error("The following error occurred while calling amadeus with request: " + amadeusRequest);
+			console.error(responseError);
 			reject(responseError);
 		})
 	});
@@ -131,9 +132,11 @@ var faultTolerantAmadeusFlighLowFareSearch = function (amadeusRequest) {
 				resolve(response);
 			} catch (err) {
 				if (err.response.statusCode == 429) { // only retry in the case of TOO MANY REQUESTS error
-					console.log(err.response.statusCode + " - Retrying ...");
+					console.warn(err.response.statusCode + " - response coming from amadeus - Retrying ...");
 				} else {
-					console.log(err.response.statusCode + " - Aborting");
+					console.error(err.response.statusCode + " response coming from amadeus - Aborting");
+					console.error("The following error occurred while calling amadeus with request: " + amadeusRequest);
+					console.error(err);
 					reject(err);
 				}
 			}
