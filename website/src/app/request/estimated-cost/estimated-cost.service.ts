@@ -192,17 +192,21 @@ export class EstimatedCostService {
 		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			this.requestService.setProperty('selectedAttractions', cityAttractionsList);
+
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
 			const selectedHotels: Array<Hotel> = this.selectedHotels;
+
 			// then construct the corresponding 'stations' objects
+			this.summaryStations.splice(0, this.summaryStations.length);
+			const tripStartDate = moment(this.requestService.getProperty('departureDate'));
 
 			cityAttractionsList.forEach(cityAttraction => {
+
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
-				const stationFlightOffer = selectedFlightOffers.find(
-					flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode
-				);
+				const stationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode);
 				const stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
+
 				if (stationCity) {
 					const station: Station = {
 						// city
@@ -211,35 +215,25 @@ export class EstimatedCostService {
 						title: stationCity.displayName,
 						description: stationCity.description,
 						nights_count: stationCity.numberOfNights,
+						// dates 
+						from: moment(tripStartDate).format('DD/MM'),
+						to: moment(tripStartDate).add('days', stationCity.numberOfNights).format('DD/MM'),
 
-						// airports
+						// flights
+						flightDataExists: stationFlightOffer ? true : false,
 						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
-						arrive_to: stationFlightOffer
-							? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails
-							: 'destination',
-
-						// dates & duration of stay
-						// from: moment(stationHotel.checkin).format('DD/MM'),
-						// to: moment(stationHotel.checkout).format('DD/MM'),
-						from: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM') : 'Unknown',
-						to: stationFlightOffer
-							? moment(stationFlightOffer.segments[0].departure)
-									.add('days', stationCity.numberOfNights)
-									.format('DD/MM')
-							: 'unknown',
-
-						// flights details
+						arrive_to: stationFlightOffer ? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : 'destination',
 						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
-						travel_time: stationFlightOffer
-							? moment(stationFlightOffer.segments[0].departure).format('hh:mm')
-							: 'Unknown time',
-						arrive_time: stationFlightOffer
-							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('hh:mm')
-							: 'unknown time',
+						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('hh:mm') : 'Unknown time',
+						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('hh:mm') : 'unknown time',
 
+						// accommodation
+						accommodationDataExists: stationHotel ? true : false,
 						hotel: stationHotel ? stationHotel.name : 'None Selected',
 						hotel_rate: stationHotel ? stationHotel.stars : 0,
 						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
+
+						// activities
 						activities: cityAttraction.attractions.map(attraction => ({
 							night: [attraction.category],
 						})),
@@ -247,6 +241,8 @@ export class EstimatedCostService {
 
 					this.summaryStations.push(station);
 				}
+				// jump to next date
+				tripStartDate.add('days', stationCity.numberOfNights);
 			});
 		});
 		return this.summaryStations;

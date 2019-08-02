@@ -24,7 +24,7 @@
 								</div>
 							</div>
 							<div class="col-5 col-md-6 align-self-center">
-								<div class="row">
+								<div class="row" *ngIf="station.flightDataExists == true">
 									<div class="col-12 col-md-6 smaller-text">
 										{{ station.travel_time }} <span class="d-none d-md-inline-block">Depart </span>
 										from
@@ -36,8 +36,14 @@
 										{{ station.arrive_to }}
 									</div>
 								</div>
+								<div class="row" *ngIf="station.flightDataExists == false">
+									<div class="col-12 col-md-6 smaller-text">
+										No flights chosen
+									</div>
+								</div>
 							</div>
-							<div class="col-3 align-self-center d-none d-md-block">Duration: {{ station.duration }}
+							<div *ngIf="station.flightDataExists == true"
+								class="col-3 align-self-center d-none d-md-block">Duration: {{ station.duration }}
 							</div>
 						</div>
 					</div>
@@ -46,12 +52,13 @@
 							<div class="col-12 col-md-3 station-img"><img [src]="station.image" alt="" /></div>
 							<div class="col-12 col-md-9 mt-2 mt-md-0">
 								<h6 class="font-weight-bold">{{ station.title }}</h6>
-								<p class="smaller-text">{{ station.description.substring(0, 300) }}<span *ngIf="station.description.length > 300">...</span></p>
+								<p class="smaller-text">{{ station.description.substring(0, 300) }}<span
+										*ngIf="station.description.length > 300">...</span></p>
 								<hr class="d-block d-md-none" />
 								<h5 class="font-weight-bold blue-title text-uppercase">
 									{{ 'request.estimated_cost.summary.accommodation' | translate }}
 								</h5>
-								<div class="row">
+								<div class="row" *ngIf="station.accommodationDataExists == true">
 									<div class="col-8 col-md-6">
 										<h6 class="font-weight-bold">{{ station.hotel }}</h6>
 										<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ station.hotel_address }}
@@ -71,6 +78,11 @@
 											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i
 													class="fa fa-star"></i></span>
 										</p>
+									</div>
+								</div>
+								<div class="row" *ngIf="station.accommodationDataExists == false">
+									<div class="col-12">
+										<h6 class="font-weight-bold">No accommodation chosen</h6>
 									</div>
 								</div>
 								<hr class="d-block d-md-none" />
