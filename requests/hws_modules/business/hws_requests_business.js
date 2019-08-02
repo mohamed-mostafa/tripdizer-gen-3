@@ -107,7 +107,7 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 						console.log("Package creation failed. Reason: " + data + ", Responding to caller anyway");
 					}
 					onSuccess(request);
-				}, request.flightOffers, request.selectedCities, request.selectedHotels, request.selectedAttractions
+				}, { choices: request.flightOffers }, { choices: request.selectedCities }, { choices: request.selectedHotels }, { choices: request.selectedAttractions }
 			);
 			// onSuccess(request);
 
