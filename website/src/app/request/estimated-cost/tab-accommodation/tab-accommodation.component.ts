@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
-
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
@@ -16,17 +15,12 @@ export class TabAccommodationComponent {
 	constructor(private service: EstimatedCostService) {
 		service.getAccommodation().subscribe(res => {
 			const items = res;
-			console.log(res);
 			for (let b = 0; b < items.length; b++) {
 				items[b].hotels[0].select = true;
 				this.accommodations.push(items[b]);
 				this.selectedHotels.push(items[b].hotels[0]);
 				this.totalCost = this.totalCost + items[b].hotels[0].price;
-				console.log(this.accommodations);
-				console.log(this.selectedHotels);
-				console.log(this.totalCost);
 			}
-
 		});
 	}
 
