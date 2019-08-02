@@ -7,13 +7,14 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { BudgetCategory } from '../shared/models/budget-category.model';
 import { Country } from '../shared/models/country.model';
 import { DropDownItem } from '../shared/models/drop-down-item.model';
+import { Preference } from '../shared/models/preference.model';
+import { Purpose } from '../shared/models/purpose.model';
+import { LookupsService } from '../shared/services/lookups.service';
 import { TrackingService } from '../shared/services/tracking.service';
-import { BudgetCategory } from './budget/budget-category.model';
 import { EstimatedCostRequest, EstimatedCostResponse } from './estimated-cost/estimated-cost.model';
-import { LUTPreference, Preference } from './preferences/preference.model';
-import { LUTPurpose, Purpose } from './purpose/purpose.model';
 import {
 	RecommendedDestinationsRequest,
 	RecommendedDestinationsResponse,
@@ -24,21 +25,11 @@ import { Request } from './request.model';
 import { Step } from './step.model';
 import { Ticket } from './ticket/ticket.model';
 
-@Injectable({
-	providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class RequestService {
 	private endPoint = 'requests';
 	private LUTEndPoint = 'master-data';
 	private requestData;
-	private Lookups: {
-		countries: Array<Country>;
-		budgetCategories: Array<BudgetCategory>;
-		purposes: Array<Purpose>;
-		preferences: Array<Preference>;
-		referralTypes: Array<DropDownItem>;
-		professions: Array<DropDownItem>;
-	} = {} as any;
 	private travelersRadioButtonsStart = {};
 
 	isLoading = new Subject<boolean>();
@@ -52,9 +43,11 @@ export class RequestService {
 		private router: Router,
 		private currencyPipe: CurrencyPipe,
 		private translate: TranslateService,
-		private trackingService: TrackingService
+		private trackingService: TrackingService,
+		private lutService: LookupsService
 	) {
 		this.initRequest();
+		this.isLoading = this.lutService.isLoading;
 	}
 
 	private initRequest(): void {
@@ -97,8 +90,8 @@ export class RequestService {
 			value: requestType,
 			navBar: this.requestData.navBar,
 		});
-		this.Lookups.purposes = null;
-		this.Lookups.preferences = null;
+		this.lutService.removeCachedPurposes();
+		this.lutService.removeCachedPreferences();
 		return true;
 	}
 
@@ -210,20 +203,7 @@ export class RequestService {
 	}
 
 	getCountries(): Observable<Array<Country>> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<Country>>;
-		if (this.Lookups.countries) {
-			observable = of(this.Lookups.countries);
-		} else {
-			observable = this.http.get<Array<Country>>(`${this.LUTEndPoint}/countries`);
-		}
-		return observable.pipe(
-			map(countries => {
-				this.Lookups.countries = countries;
-				this.isLoading.next(false);
-				return this.Lookups.countries.filter(country => country.id !== -1);
-			})
-		);
+		return this.lutService.getValidCountries();
 	}
 
 	setTravelersRadioButtonsStart(controlName: string, increase: boolean, decrease: boolean): void {
@@ -246,41 +226,15 @@ export class RequestService {
 	}
 
 	getBudgetCategories(): Observable<Array<BudgetCategory>> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<BudgetCategory>>;
-		if (this.Lookups.budgetCategories) {
-			observable = of(this.Lookups.budgetCategories);
-		} else {
-			observable = this.http.get<Array<BudgetCategory>>(`${this.LUTEndPoint}/budget-categories`);
-		}
-		return observable.pipe(
-			map(budgetCategories => {
-				this.Lookups.budgetCategories = budgetCategories;
-				this.isLoading.next(false);
-				return this.Lookups.budgetCategories;
-			})
-		);
+		return this.lutService.getBudgetCategories();
 	}
 
 	getPurposes(): Observable<Array<Purpose>> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<Purpose>>;
-		if (this.Lookups.purposes) {
-			observable = of(this.Lookups.purposes);
+		if (this.getRequestType() === RequestType.SurpriseMe) {
+			return this.lutService.getPurposesWithoutOther();
 		} else {
-			observable = this.http.get<Array<Purpose>>(`${this.LUTEndPoint}/purposes`);
+			return this.lutService.getPurposes();
 		}
-		return observable.pipe(
-			map(purposes => {
-				if (this.getRequestType() === RequestType.SurpriseMe) {
-					this.Lookups.purposes = purposes.filter(p => p.id !== LUTPurpose.Other);
-				} else {
-					this.Lookups.purposes = purposes;
-				}
-				this.isLoading.next(false);
-				return this.Lookups.purposes;
-			})
-		);
 	}
 
 	addPreference(preference: Preference): void {
@@ -310,24 +264,11 @@ export class RequestService {
 	}
 
 	getPreferences(): Observable<Array<Preference>> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<Preference>>;
-		if (this.Lookups.preferences) {
-			observable = of(this.Lookups.preferences);
+		if (this.getRequestType() === RequestType.SurpriseMe) {
+			return this.lutService.getPreferencesWithoutOther();
 		} else {
-			observable = this.http.get<Array<Preference>>(`${this.LUTEndPoint}/interests`);
+			return this.lutService.getPreferences();
 		}
-		return observable.pipe(
-			map(preferences => {
-				if (this.getRequestType() === RequestType.SurpriseMe) {
-					this.Lookups.preferences = preferences.filter(p => p.id !== LUTPreference.Other);
-				} else {
-					this.Lookups.preferences = preferences;
-				}
-				this.isLoading.next(false);
-				return this.Lookups.preferences;
-			})
-		);
 	}
 
 	isValidForRecommendedDestinations(): boolean {
@@ -391,37 +332,11 @@ export class RequestService {
 	}
 
 	getProfessions(): Observable<Array<DropDownItem> | null> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<DropDownItem>>;
-		if (this.Lookups.professions) {
-			observable = of(this.Lookups.professions);
-		} else {
-			observable = this.http.get<Array<DropDownItem>>(`${this.LUTEndPoint}/professions`);
-		}
-		return observable.pipe(
-			map(professions => {
-				this.Lookups.professions = professions;
-				this.isLoading.next(false);
-				return this.Lookups.professions;
-			})
-		);
+		return this.lutService.getProfessions();
 	}
 
 	getReferralTypes(): Observable<Array<DropDownItem> | null> {
-		this.isLoading.next(true);
-		let observable: Observable<Array<DropDownItem>>;
-		if (this.Lookups.referralTypes) {
-			observable = of(this.Lookups.referralTypes);
-		} else {
-			observable = this.http.get<Array<DropDownItem>>(`${this.LUTEndPoint}/referral-types`);
-		}
-		return observable.pipe(
-			map(referralTypes => {
-				this.Lookups.referralTypes = referralTypes;
-				this.isLoading.next(false);
-				return this.Lookups.referralTypes;
-			})
-		);
+		return this.lutService.getReferralTypes();
 	}
 
 	isValid(): boolean {
