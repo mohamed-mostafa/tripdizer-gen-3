@@ -3,6 +3,8 @@ export const environment = {
 	apiUrl: 'https://services.tripdizer.com/',
 	mixpanelToken: 'caf7404381b0d9a563c861d3566c35ed',
 	experimentKey: 'Reduce Friction',
+	saveRequestState: false,
+	showSigningPopup: true,
 	facebook: {
 		appID: '1597597783733890',
 		pixelID: '198150784300872',

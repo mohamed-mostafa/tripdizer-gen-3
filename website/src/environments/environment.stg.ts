@@ -3,6 +3,8 @@ export const environment = {
 	apiUrl: 'https://staging-services.tripdizer.com/',
 	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
 	experimentKey: 'Reduce Friction',
+	saveRequestState: false,
+	showSigningPopup: true,
 	facebook: {
 		appID: '1597597783733890',
 		pixelID: null,

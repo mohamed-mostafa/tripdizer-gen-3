@@ -7,6 +7,8 @@ export const environment = {
 	apiUrl: 'https://development-services.tripdizer.com/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
+	saveRequestState: true,
+	showSigningPopup: false,
 	facebook: {
 		appID: '1597597783733890',
 		pixelID: null,

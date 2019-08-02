@@ -36,7 +36,6 @@ export class RequestService {
 	requestDataChanged = new Subject<{ key: string; value: any; request: Request }>();
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
-	isDevelopment = !environment.production;
 
 	constructor(
 		private http: HttpClient,
@@ -73,7 +72,7 @@ export class RequestService {
 	}
 
 	resetRequestState(): void {
-		if (!this.isDevelopment) {
+		if (!environment.saveRequestState) {
 			localStorage.removeItem('request');
 			this.initRequest();
 		}
@@ -191,7 +190,7 @@ export class RequestService {
 			value: this.requestData.validSteps.find(s => s.key === key),
 			navBar: this.requestData.navBar,
 		});
-		if (this.isDevelopment) {
+		if (environment.saveRequestState) {
 			this.saveRequestState();
 		}
 	}
