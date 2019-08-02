@@ -95,7 +95,8 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 									departure: segment.flightSegment.departure.at,
 									"return": segment.flightSegment.arrival.at,
 									durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
-									durationInMinutes: segmentDurationInMillis / (1000 * 60)
+									durationInMinutes: segmentDurationInMillis / (1000 * 60),
+									aircraftCode: segment.flightSegment.aircraft.code
 								}
 								flightLeg.segments.push(flightLegSegment);
 							});
@@ -104,7 +105,7 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 						flightOffers.push(flightOffer);
 					});
 				});
-				flightOffers.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+				flightOffers = flightOffers.sort((a, b) => parseFloat(a.price) - parseFloat(b.price)).filter(flightOffer => flightOffer.flightLegs && flightOffer.flightLegs.length > 0 && flightOffer.flightLegs[0].segments[0].aircraftCode != "TRN");
 			} catch (err) {
 				reject(err);
 			}
