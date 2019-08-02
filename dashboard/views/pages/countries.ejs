@@ -23,7 +23,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="country in countries">
+					<tr ng-repeat="country in countries" ng-class="{'bg-red': !country.ISOCode}">
 						<td>
 							<a ng-click="openEditDialog(country.id)" href="#">{{ country.enName }}</a>
 						</td>
