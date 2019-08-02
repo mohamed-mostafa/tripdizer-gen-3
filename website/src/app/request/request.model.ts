@@ -1,14 +1,14 @@
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { LUTBudgetCategory } from '../shared/models/budget-category.model';
 import { Country } from '../shared/models/country.model';
 import { Gender } from '../shared/models/gender.enum';
+import { Preference } from '../shared/models/preference.model';
+import { LUTPurpose } from '../shared/models/purpose.model';
 import { CommonFunctions } from '../shared/utils';
-import { LUTBudgetCategory } from './budget/budget-category.model';
 import { Destination } from './destinations/destination.model';
 import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
-import { Preference } from './preferences/preference.model';
-import { LUTPurpose } from './purpose/purpose.model';
 import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';

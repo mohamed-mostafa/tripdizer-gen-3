@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { LUTBudgetCategory } from '../budget/budget-category.model';
+import { LUTBudgetCategory } from '../../shared/models/budget-category.model';
 import { Request } from '../request.model';
 
 export class EstimatedCostRequest {

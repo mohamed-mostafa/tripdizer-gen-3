@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { LUTPreference, Preference } from '../../shared/models/preference.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-import { LUTPreference, Preference } from './preference.model';
 
 @Component({
 	selector: 'c-request-preferences',

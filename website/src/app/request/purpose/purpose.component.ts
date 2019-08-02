@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LUTPurpose, Purpose } from '../../shared/models/purpose.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-import { LUTPurpose, Purpose } from './purpose.model';
 
 @Component({
 	selector: 'c-request-purpose',
