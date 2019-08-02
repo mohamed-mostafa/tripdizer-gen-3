@@ -5,6 +5,7 @@
 		padding: 0 !important;
 
 		.mat-menu-item {
+			max-width: 30rem;
 			display: flex;
 			border: 1px solid;
 			margin: 0.6rem !important;
@@ -12,13 +13,6 @@
 			height: auto;
 			line-height: 2rem;
 			padding: 0;
-			> div {
-				padding: 0.5rem 2rem;
-
-				&:not(:last-child) {
-					border-right: 1px solid gray;
-				}
-			}
 		}
 	}
 }
@@ -32,17 +26,17 @@
 		line-height: 1.2rem;
 		.time {
 			font-weight: 100;
+			white-space: normal;
 		}
 		.iata {
 			font-weight: 100;
 			font-size: 0.6rem;
 		}
-		.duration {
+		&.duration {
 			line-height: 0.8rem;
 
 			hr {
-				margin: 0.1rem -0.8rem;
-				width: 4rem;
+				margin: 0.1rem -1rem;
 			}
 
 			.duration-word,
