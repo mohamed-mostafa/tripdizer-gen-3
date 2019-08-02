@@ -175,6 +175,7 @@
 				"next_label": "التالي",
 				"start": "البداية",
 				"end": "النهاية",
+				"no_flights": "الطيران غير متوفر لهذه الرحلة",
 				"nights": "{{numberOfNights}} ايام",
 				"stops": "{{numberOfStops}} وقفة",
 				"departure": "المغادرة",

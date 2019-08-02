@@ -15,6 +15,10 @@ export class FlightRowComponent {
 
 	@Output() offerChanged = new EventEmitter<FlightOffer>();
 
+	get isAnyFlightOfferExists(): boolean {
+		return Boolean(this.flight) && Boolean(this.flight.flightOffers.length);
+	}
+
 	selectedOfferChanged(flightOffer: FlightOffer): void {
 		this.offerChanged.emit(flightOffer);
 	}

@@ -175,6 +175,7 @@
 				"next_label": "Continue",
 				"start": "Start",
 				"end": "End",
+				"no_flights": "No flights available for this trip",
 				"nights": "{{numberOfNights}} Day{{withS}}",
 				"stops": "{{numberOfStops}} Stop{{withS}}",
 				"departure": "Departure",
