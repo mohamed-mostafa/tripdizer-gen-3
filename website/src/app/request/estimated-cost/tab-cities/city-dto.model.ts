@@ -18,4 +18,5 @@ export class CityDTO {
 	name: string;
 	interests: Array<String>;
 	select?: boolean;
+	coordinates: string;
 }
