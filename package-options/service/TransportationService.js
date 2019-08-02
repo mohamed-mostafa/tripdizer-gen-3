@@ -7,6 +7,9 @@ const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localho
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const FLIGHT_COST_THRESHOLD = 15000;
+const FLIGHT_PROFIT_BELOW_THRESHOLD = 300;
+const FLIGHT_PROFIT_ABOVE_THRESHOLD = 500;
 /**
  * retrieve options of transportation between cities and countries for a package
  * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client.
@@ -167,7 +170,8 @@ function filterInternalOffers(flightOffers) {
 function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
     // at the moment, we only support one-way flights, so we always use flightLegs[0]
     let newOffer = {
-        price: flightOffer.price,
+        // add profit margin
+        price: flightOffer.price <= FLIGHT_COST_THRESHOLD ? parseInt(flightOffer.price) + FLIGHT_PROFIT_BELOW_THRESHOLD : parseInt(flightOffer.price) + FLIGHT_PROFIT_ABOVE_THRESHOLD,
         currency: flightOffer.currency,
         originCityIata: flightOffer.originCityIata,
         destinationCityIata: flightOffer.destinationCityIata,
