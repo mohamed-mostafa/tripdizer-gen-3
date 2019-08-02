@@ -33,7 +33,6 @@ export class TabFlightsComponent {
 			this.flightPaths = flights
 				.filter(flight => flight.origin && flight.origin.latitude && flight.origin.longitude)
 				.map(flight => ({ lat: flight.origin.latitude, lng: flight.origin.longitude }));
-			console.log(this.flightPaths);
 		});
 	}
 
