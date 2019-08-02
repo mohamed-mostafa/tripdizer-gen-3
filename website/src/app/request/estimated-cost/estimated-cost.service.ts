@@ -1,18 +1,18 @@
-import { Station } from './summary/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
+import { AttractionsRequest, CityAttractions } from './summary/attraction.model';
+import { Station } from './summary/station.model';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
-import { CityAttractions, AttractionsRequest } from './summary/attraction.model';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
@@ -119,6 +119,10 @@ export class EstimatedCostService {
 		this.requestService.setProperty('flightOffers', flightOffers);
 	}
 
+	getFlightsTotalCost(): number {
+		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
+	}
+
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
 	}
@@ -129,6 +133,18 @@ export class EstimatedCostService {
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
 		}
+
+		this.budgetCategory = this.requestService.getProperty('budgetCategory');
+		let accommodationDesiredCostPerPerson = 0;
+		if (this.budgetCategory === 1) {
+			// ownBudget
+			const flightCost = this.getFlightsTotalCost();
+			const numberOfPayingCustomers =
+				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
+			const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
+			const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
+			accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
+		}
 		const accommodationRequest: AccommodationRequest = {
 			arrival: this.departureDate.format('YYYY-MM-DD'),
 			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
@@ -136,6 +152,7 @@ export class EstimatedCostService {
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
@@ -145,6 +162,7 @@ export class EstimatedCostService {
 	}
 
 	setSelectedHotels(selectedHotels) {
+		this.requestService.setProperty('selectedHotels', selectedHotels);
 		this.selectedHotels = selectedHotels;
 	}
 
@@ -173,6 +191,7 @@ export class EstimatedCostService {
 	getSummaryStations(): Array<Station> {
 		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
+			this.requestService.setProperty('selectedAttractions', cityAttractionsList);
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
 			const selectedHotels: Array<Hotel> = this.selectedHotels;
@@ -181,39 +200,46 @@ export class EstimatedCostService {
 			cityAttractionsList.forEach(cityAttraction => {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				const stationFlightOffer = selectedFlightOffers.find(
-					flightOffer =>
-						flightOffer.segments[flightOffer.segments.length - 1].destination === cityAttraction.city.iataCode
+					flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode
 				);
 				const stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
-				if (stationCity && stationFlightOffer) {
+				if (stationCity) {
 					const station: Station = {
 						// city
 						image: stationCity.thumbnail,
 						name: stationCity.displayName,
 						title: stationCity.displayName,
 						description: stationCity.description,
-
-						// cities
-						depart_from: stationFlightOffer.segments[0].origin,
-						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destination,
-
-						// dates & duration of stay
-						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM/YYYY'),
-						to: moment(stationFlightOffer.segments[0].departure)
-							.add('days', stationCity.numberOfNights)
-							.format('DD/MM/YYYY'),
 						nights_count: stationCity.numberOfNights,
 
-						// flights details
-						duration: stationFlightOffer.totalDurationInWords,
-						travel_time: moment(stationFlightOffer.segments[0].departure).format('hh:mm'),
-						arrive_time: moment(stationFlightOffer.segments[0].departure)
-							.add('days', stationCity.numberOfNights)
-							.format('hh:mm'),
+						// airports
+						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
+						arrive_to: stationFlightOffer
+							? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails
+							: 'destination',
 
-						hotel: stationHotel.name,
-						hotel_rate: stationHotel.stars,
-						hotel_address: stationHotel.address,
+						// dates & duration of stay
+						// from: moment(stationHotel.checkin).format('DD/MM'),
+						// to: moment(stationHotel.checkout).format('DD/MM'),
+						from: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM') : 'Unknown',
+						to: stationFlightOffer
+							? moment(stationFlightOffer.segments[0].departure)
+									.add('days', stationCity.numberOfNights)
+									.format('DD/MM')
+							: 'unknown',
+
+						// flights details
+						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
+						travel_time: stationFlightOffer
+							? moment(stationFlightOffer.segments[0].departure).format('hh:mm')
+							: 'Unknown time',
+						arrive_time: stationFlightOffer
+							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('hh:mm')
+							: 'unknown time',
+
+						hotel: stationHotel ? stationHotel.name : 'None Selected',
+						hotel_rate: stationHotel ? stationHotel.stars : 0,
+						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
 						activities: cityAttraction.attractions.map(attraction => ({
 							night: [attraction.category],
 						})),

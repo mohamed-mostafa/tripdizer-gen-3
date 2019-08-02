@@ -2,7 +2,8 @@
 	{{ 'request.estimated_cost.tab_flights.change_flight' | translate }}
 </a>
 <mat-menu #flightOffer="matMenu">
-	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
+	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)"
+		class="row m-0 border-blue">
 		<div class="col text-center align-self-center">
 			<!-- <input type="radio" name="flight-offer" [value]="selectedOffer.flightOfferIndex === offer.flightOfferIndex" /> -->
 			<img class="w-100" [src]="offer.carrier.wideLogo" />
@@ -16,9 +17,9 @@
 				</thead>
 				<tr class="body">
 					<th>
-						<span class="time">{{ offer?.departure.departure | date: 'HH:MM' }}</span>
+						<span class="time">{{ offer?.departure.departure | date: 'dd/MM HH:mm' }}</span>
 						<br />
-						<span class="iata">{{ offer?.departure.origin }}</span>
+						<span class="iata">{{ offer?.departure.originDetails }}</span>
 					</th>
 					<th class="duration">
 						<span class="duration-word">{{ offer?.totalDurationInWords }}</span>
@@ -31,9 +32,9 @@
 						</span>
 					</th>
 					<th>
-						<span class="time">{{ offer?.departure.return | date: 'HH:MM' }}</span>
+						<span class="time">{{ offer?.arrival.return | date: 'dd/MM HH:mm' }}</span>
 						<br />
-						<span class="iata">{{ offer?.departure.destination }}</span>
+						<span class="iata">{{ offer?.arrival.destinationDetails }}</span>
 					</th>
 				</tr>
 			</table>
@@ -43,7 +44,8 @@
 			<button *ngIf="selectedOffer.flightOfferIndex !== offer.flightOfferIndex" class="btn btn-sm btn-blue">
 				{{ 'request.estimated_cost.tab_flights.select' | translate }}
 			</button>
-			<button *ngIf="selectedOffer.flightOfferIndex === offer.flightOfferIndex" class="btn btn-sm btn-outline-blue">
+			<button *ngIf="selectedOffer.flightOfferIndex === offer.flightOfferIndex"
+				class="btn btn-sm btn-outline-blue">
 				{{ 'request.estimated_cost.tab_flights.selected' | translate }}
 			</button>
 		</div>

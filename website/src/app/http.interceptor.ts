@@ -17,6 +17,7 @@ export class JWTokenInterceptor implements HttpInterceptor {
 			return next.handle(request.clone({ headers }));
 		} else {
 			// Clone the request to add baseUri.
+			console.log(request);
 			request = request.clone({
 				url: `${this.baseUri}${request.url}`,
 				setParams: { lang: this.translate.currentLang },

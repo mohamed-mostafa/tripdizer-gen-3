@@ -10,6 +10,7 @@ import { CityDTO } from './city-dto.model';
 export class TabCitiesComponent {
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
+	cityPaths: Array<{ lat: number; lng: number }> = [];
 
 	constructor(private service: EstimatedCostService) {
 		service.getCities().subscribe(
@@ -18,6 +19,8 @@ export class TabCitiesComponent {
 					res[b].select = true;
 					this.selectedCities.push(res[b]);
 					this.cities.push(res[b]);
+					const coordinates = res[b].coordinates.split(', ');
+					this.cityPaths.push({lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10)});
 				}
 			}
 		);
@@ -35,11 +38,19 @@ export class TabCitiesComponent {
 					this.cities[d].select = false;
 				}
 			}
+			for (let m = 0; m < this.cityPaths.length; m++) {
+				const coordinates = city.coordinates.split(', ');
+				if (parseInt(coordinates[0], 10) === this.cityPaths[m].lat && parseInt(coordinates[1], 10) === this.cityPaths[m].lng) {
+					this.cityPaths.splice(m, 1);
+				}
+			}
 		} else if (city.select === false) {
 			this.selectedCities.push(city);
 			for (let x = 0; x < this.cities.length; x++) {
 				if (this.cities[x].iataCode === city.iataCode) {
 					this.cities[x].select = true;
+					const coordinates = city.coordinates.split(', ');
+					this.cityPaths.push({lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10)});
 				}
 			}
 		}

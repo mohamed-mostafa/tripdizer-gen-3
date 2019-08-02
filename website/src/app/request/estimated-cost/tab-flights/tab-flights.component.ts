@@ -25,14 +25,15 @@ export class TabFlightsComponent {
 					...fo,
 					flightIndex,
 					flightOfferIndex,
-					departure: [...fo.segments].pop(),
-					arrival: [...fo.segments].shift(),
+					departure: [...fo.segments].shift(),
+					arrival: [...fo.segments].pop(),
 					numberOfStops: fo.segments.length - 1,
 				})),
 			}));
 			this.flightPaths = flights
 				.filter(flight => flight.origin && flight.origin.latitude && flight.origin.longitude)
 				.map(flight => ({ lat: flight.origin.latitude, lng: flight.origin.longitude }));
+			console.log(this.flightPaths);
 		});
 	}
 
