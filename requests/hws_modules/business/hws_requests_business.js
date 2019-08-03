@@ -12,6 +12,7 @@ var emailBusiness = require('../adapters/hws_email_adapter.js');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
 const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
@@ -452,17 +453,17 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 							...detailsOfFirstCountry,
 							image1: (await isValidImage(MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png")) ? MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png" : 'https://i.imgur.com/LsHCFiD.jpg',
 							flights: flightOffers.choices.map(offer => ({
-								date: offer.segments ? new Date(offer.segments[0].departure).toDateString() : '',
-								departingFrom: offer.segments ? offer.segments[0].origin : '',
-								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destination : '',
-								departureTime: offer.segments ? new Date(offer.segments[0].departure).toTimeString() : '',
-								arrivalTime: offer.segments ? new Date(offer.segments[offer.segments.length - 1].return).toTimeString() : '',
-								layOver: offer.segments.length == 0 ? 'N' : 'Y',
+								date: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM/YYYY') : '',
+								departingFrom: offer.segments ? offer.segments[0].originDetails : '',
+								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destinationDetails : '',
+								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM hh:mm') : '',
+								arrivalTime: offer.segments ? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM hh:mm') : '',
+								layOver: offer.transitDurationInMinutes == 0 ? 'Direct' : offer.transitDurationInWords,
 							})),
 							hotels: selectedHotels.choices.map(offer => ({
-								cityName: offer.cityName ? offer.cityName : (offer.cityIata ? offer.cityIata : ''),
-								checkIn: offer.checkin ? new Date(offer.checkin).toDateString() : '',
-								checkOut: offer.checkout ? new Date(offer.checkout).toDateString() : '',
+								cityName: offer.city ? offer.city : '',
+								checkIn: offer.checkin ? new moment(offer.checkin).format('DD/MM') : '',
+								checkOut: offer.checkout ? new moment(offer.checkout).format('DD/MM') : '',
 								nights: offer.numberOfNights ? offer.numberOfNights : '',
 								name: offer.name ? offer.name : '',
 							}))
