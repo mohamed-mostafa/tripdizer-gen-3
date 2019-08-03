@@ -230,6 +230,15 @@ definitions:
       currency:
         type: "string"
         example: "EGP"
+      originCityIata:
+        type: "string"
+        example: "CAI"
+      destinationCityIata: 
+        type: "string"
+        example: "AMS"
+      isOneWay:
+          type: "boolean"
+          example: "true"
       segments:
         type: "array"
         description: "represents one segment in a flight leg. if there's only one,\
@@ -278,6 +287,12 @@ definitions:
       destination:
         type: "string"
         example: "AMS"
+      originDetails:
+        type: "string"
+        example: "Cairo International Airport"
+      destinationDetails:
+        type: "string"
+        example: "Schiphol Airport"
       durationInWords:
         type: "string"
         example: "0D6H30M"
@@ -535,6 +550,18 @@ definitions:
         type: "string"
         example: "ECONOMY"
         description: "the client's chosen budget category"
+      numberOfAdults:
+        type: "number"
+        default: 1
+      numberOfChildren:
+        type: "number"
+        default: 0
+      numberOfInfants:
+        type: "number"
+        default: 0
+      desiredCostPerPerson:
+        type: "number"
+        default: 0
   attractionsOfferOptionssearch_cities:
     required:
     - "cityIata"

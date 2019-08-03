@@ -9,8 +9,8 @@ var getById = function(id, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -19,8 +19,8 @@ var getById = function(id, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to find a status type with id ' + id);
-					console.log(err);
+					console.error('An error occurred while trying to find a status type with id ' + id);
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -61,8 +61,8 @@ var create = function(status, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the status and his addresses
@@ -71,8 +71,8 @@ var create = function(status, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -94,8 +94,8 @@ var create = function(status, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new status: ' + status.title);
-								console.log(err);
+								console.error('An error occurred while trying to create the new status: ' + status.title);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -123,8 +123,8 @@ var update = function(status, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the status and his addresses
@@ -133,8 +133,8 @@ var update = function(status, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -155,8 +155,8 @@ var update = function(status, onSuccess, onFailure) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing status: ' + status.id);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing status: ' + status.id);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -180,8 +180,8 @@ var deleteFunc = function(id, migrateToId, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -193,8 +193,8 @@ var deleteFunc = function(id, migrateToId, onSuccess, onFailure) {
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while trying to find a status type with id ' + id);
-						console.log(err);
+						console.error('An error occurred while trying to find a status type with id ' + id);
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -228,8 +228,8 @@ var getAll = function(onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -238,8 +238,8 @@ var getAll = function(onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all statuses');
-					console.log(err);
+					console.error('An error occurred while list all statuses');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown

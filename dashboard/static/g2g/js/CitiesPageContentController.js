@@ -225,6 +225,10 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		};
 
 		$scope.$watch('selectedCountry', function (val) {
+			$scope.reloadCities(val);
+		});
+
+		$scope.reloadCities = function (val) {
 			$scope.citiesLoading = true;
 			$scope.cities = [];
 			CitiesService.getAllByCountry(val).then(function (cities) {
@@ -232,7 +236,7 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				$scope.validateDataEntry();
 				$scope.citiesLoading = false;
 			});
-		});
+		}
 
 		$scope.initialize = function () {
 			$scope.citiesLoading = true;
@@ -277,5 +281,8 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		};
 
 		$scope.initialize();
+		$('#addCityModal').on('hidden.bs.modal', function () {
+			$scope.reloadCities($scope.selectedCountry);
+		})
 	},
 ]);

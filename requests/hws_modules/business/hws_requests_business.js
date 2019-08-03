@@ -12,6 +12,7 @@ var emailBusiness = require('../adapters/hws_email_adapter.js');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
 const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
@@ -20,7 +21,7 @@ const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://st
 var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
-		status: request.isFromWebsite ? 3 : request.status,
+		status: request.isFromWebsite ? 1 : request.status,
 		travelingFrom: request.travelingFrom || request.leavingCountry || request.leaving_country,
 		departureDate: request.departureDate || request.departure_date,
 		returnDate: request.returnDate || request.return_date,
@@ -81,27 +82,37 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		request,
 		function (request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
-			accomodationDao.save(request.id, { choices: request.accomodationOffers });
-			transportationDao.save(request.id, { choices: request.transportationOffers });
-			citiesDao.save(request.id, { choices: request.cities });
-			attractionsDao.save(request.id, { choices: request.attractions });
+			var requestSelectedHotels = { choices: request.selectedHotels };
+			var requestSelectedCities = { choices: request.selectedCities };
+			var requestSelectedAttractions = { choices: request.selectedAttractions };
+			var requestFlightOffers = { choices: request.flightOffers };
+			accomodationDao.save(request.id, requestSelectedHotels);
+			transportationDao.save(request.id, requestFlightOffers);
+			citiesDao.save(request.id, requestSelectedCities);
+			attractionsDao.save(request.id, requestSelectedAttractions);
 			getPackage(
 				request.id,
 				null,
 				data => {
+					console.log("Package creation succedded. Now responding to caller");
 					request.packageUrl = data.pdfUrl;
 					request.packageDownloadUrl = data.pdfDownloadUrl;
 					onSuccess(request);
 				},
 				data => {
 					if (data && data.pdfUrl) {
+						console.log("Package creation partially succedded. Now responding to caller");
 						request.packageUrl = data.pdfUrl;
 						request.packageDownloadUrl = data.pdfDownloadUrl;
+					} else {
+						console.error("Package creation failed. Reason: " + data + ", Responding to caller anyway");
 					}
 					onSuccess(request);
-				}
+				}, { choices: request.flightOffers }, { choices: request.selectedCities }, { choices: request.selectedHotels }, { choices: request.selectedAttractions }
 			);
+			// onSuccess(request);
 
+			// the following happens asynchronously
 			if (request.traveler.name === 'Essawy') {
 				requestsDao.modifyRequestStatusById(request.id, 11, () => { }, () => { });
 			} else {
@@ -129,15 +140,15 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		},
 		function (err) {
 			// respond to caller
-			console.log('An error occurred while saving a new request');
-			console.log(err);
+			console.error('An error occurred while saving a new request');
+			console.error(err);
 			onFailure(err);
 			// });
 			// }
 		},
 		function (err) {
-			console.log('An error occurred while checking if traveler exists before');
-			console.log(err);
+			console.error('An error occurred while checking if traveler exists before');
+			console.error(err);
 			onFailure(err);
 		}
 	);
@@ -152,8 +163,8 @@ var updateRequest = function (request, onSuccess, onFailure) {
 			onSuccess(request);
 		},
 		function (err) {
-			console.log('An error occurred while getting request package');
-			console.log(err);
+			console.error('An error occurred while getting request package');
+			console.error(err);
 			onFailure(err);
 		}
 	);
@@ -197,8 +208,8 @@ var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
 				sendMails(emails, email, onSuccess);
 			},
 			function (err) {
-				console.log('An error occurred while getting travelers');
-				console.log(err);
+				console.error('An error occurred while getting travelers');
+				console.error(err);
 				onFailure(err);
 			}
 		);
@@ -287,224 +298,241 @@ var sendDailyReportOfRequestsCount = function () {
 			);
 		},
 		function () {
-			console.log('An error occurred while getting request counts');
+			console.error('An error occurred while getting request counts');
 		}
 	);
 };
 
-var getPackage = function (requestId, accessToken, onSuccess, onFailure) {
+var getPackage = function (requestId, accessToken, onSuccess, onFailure, requestFlightOffers, requestSelectedCities, requestSelectedHotels, requestSelectedAttractions) {
 	getRequestById(
 		requestId,
 		async function (request) {
-			const departureDate = new Date(request.departureDate);
-			const returnDate = new Date(request.returnDate);
-			const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
-			if (request.itineraryId && request.itineraryId !== -1) {
-				httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: { authorization: accessToken } },
-					async function (error, response, itinerary) {
-						if (error || response.statusCode != 200) {
-							console.log('An error occurred while getting itinerary from master-data to generate request package');
-							console.log(error || response.statusMessage);
-							onFailure(error || response.statusMessage);
-						}
-						else if (itinerary.flights.length > 0) {
-							itinerary.flights = itinerary.flights.sort((a, b) => a.type - b.type);
-							itinerary.flights[0].date = departureDate.toLocaleDateString();
-							for (let i = itinerary.flights.length - 1; i >= 0; i--)
-								if (itinerary.flights[i].return)
-									itinerary.flights.push({
-										type: itinerary.flights[i].type,
-										arriving_to: itinerary.flights[i].departing_from,
-										departing_from: itinerary.flights[i].arriving_to,
-										departure_time: itinerary.flights[i].return_departure_time,
-										arrival_time: itinerary.flights[i].return_arrival_time,
-										lay_over: itinerary.flights[i].return_lay_over,
-										Iternary_id: itinerary.flights[i].Iternary_id,
-									});
-						}
-						itinerary.cities = itinerary.cities.sort((a, b) => a.order - b.order);
-						for (let i = 0; i < itinerary.cities.length; ++i) {
-							itinerary.cities[i].numberOfDays = Math.round((tripDays * itinerary.cities[i].days) / 100);
-							itinerary.cities[i].startDate =
-								i === 0
-									? departureDate
-									: new Date(
-										new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
-									);
-							itinerary.cities[i].endDate = new Date(
-								new Date(itinerary.cities[i].startDate).setDate(
-									itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
-								)
-							);
-							if (itinerary.flights[i + 1])
-								itinerary.flights[i + 1].date = itinerary.cities[i].endDate.toLocaleDateString();
-						}
-						if (itinerary.cities.length)
-							itinerary.cities[itinerary.cities.length - 1].numberOfDays +=
-								tripDays - itinerary.cities.reduce((ac, cv) => ac + cv.numberOfDays, 0);
-						itinerary.hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
-						for (let i = 0; i < itinerary.hotels.length; ++i) {
-							const city = itinerary.cities.find(c => c.id == itinerary.hotels[i].City_Id);
-							if (city) {
-								itinerary.hotels[i].order = city.order;
-								itinerary.hotels[i].checkIn = city.startDate.toLocaleDateString();
-								itinerary.hotels[i].checkOut = city.endDate.toLocaleDateString();
-								itinerary.hotels[i].nights = city.numberOfDays;
+			try {
+				var flightOffers = request.flightOffers != null ? request.flightOffers : requestFlightOffers;
+				var selectedCities = request.selectedCities != null ? request.selectedCities : requestSelectedCities;
+				var selectedHotels = request.selectedHotels != null ? request.selectedHotels : requestSelectedHotels;
+				var selectedAttractions = request.selectedAttractions != null ? request.selectedAttractions : requestSelectedAttractions;
+				const departureDate = new Date(request.departureDate);
+				const returnDate = new Date(request.returnDate);
+				const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
+				if (request.itineraryId && request.itineraryId !== -1) {
+					httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: { authorization: accessToken } },
+						async function (error, response, itinerary) {
+							if (error || response.statusCode != 200) {
+								console.error('An error occurred while getting itinerary from master-data to generate request package');
+								console.log(error || response.statusMessage);
+								onFailure(error || response.statusMessage);
 							}
-						}
-						request = {
-							id: request.id,
-							travelerName: request.traveler.name ? request.traveler.name : '',
-							estimatedCost: request.estimatedCost ? currencyFormat(request.estimatedCost) : currencyFormat(0),
-							numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
-							itinerary: {
-								name: itinerary.en_name ? itinerary.en_name : '',
-								introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',
-								includes: itinerary.includes ? itinerary.includes : '',
-								excludes: itinerary.excludes ? itinerary.excludes : '',
-								visaRequirements: itinerary.visaRequirements ? itinerary.visaRequirements : '',
-								image1:
-									itinerary.image1 && (await isValidImage(itinerary.image1))
-										? itinerary.image1
-										: 'https://i.imgur.com/LsHCFiD.jpg',
-								flights: itinerary.flights.map(rf => ({
-									date: rf.date ? rf.date : '',
-									departingFrom: rf.departing_from ? rf.departing_from : '',
-									arrivingTo: rf.arriving_to ? rf.arriving_to : '',
-									departureTime: rf.departure_time ? rf.departure_time : '',
-									arrivalTime: rf.arrival_time ? rf.arrival_time : '',
-									layOver: rf.lay_over ? rf.lay_over : '',
-								})),
-								hotels: itinerary.hotels
-									.sort((a, b) => a.order - b.order)
-									.map(rh => ({
-										cityName: rh.City_Name ? rh.City_Name : '',
-										checkIn: rh.checkIn ? rh.checkIn : '',
-										checkOut: rh.checkOut ? rh.checkOut : '',
-										nights: rh.nights ? rh.nights : '',
-										name: rh.EN_Name ? rh.EN_Name : '',
-									})),
-							},
-						};
-						packageHttp(
-							'post',
-							'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
-							JSON.stringify(request),
-							function (doc) {
-								packageHttp(
-									'get',
-									`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
-									doc.docId
-									}`,
-									null,
-									function (package) {
-										requestsDao.modifyRequestPackageInfo(
-											request.id,
-											package.docId,
-											package.pdfId,
-											() => {
-												onSuccess(package);
-											},
-											() => {
-												onSuccess(package);
-											}
+							else if (itinerary.flights.length > 0) {
+								itinerary.flights = itinerary.flights.sort((a, b) => a.type - b.type);
+								itinerary.flights[0].date = departureDate.toLocaleDateString();
+								for (let i = itinerary.flights.length - 1; i >= 0; i--)
+									if (itinerary.flights[i].return)
+										itinerary.flights.push({
+											type: itinerary.flights[i].type,
+											arriving_to: itinerary.flights[i].departing_from,
+											departing_from: itinerary.flights[i].arriving_to,
+											departure_time: itinerary.flights[i].return_departure_time,
+											arrival_time: itinerary.flights[i].return_arrival_time,
+											lay_over: itinerary.flights[i].return_lay_over,
+											Iternary_id: itinerary.flights[i].Iternary_id,
+										});
+							}
+							itinerary.cities = itinerary.cities.sort((a, b) => a.order - b.order);
+							for (let i = 0; i < itinerary.cities.length; ++i) {
+								itinerary.cities[i].numberOfDays = Math.round((tripDays * itinerary.cities[i].days) / 100);
+								itinerary.cities[i].startDate =
+									i === 0
+										? departureDate
+										: new Date(
+											new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
 										);
-									},
-									e => {
-										console.log('An error occurred while getting request package pdf: ' + e);
-										onSuccess(doc);
-									}
+								itinerary.cities[i].endDate = new Date(
+									new Date(itinerary.cities[i].startDate).setDate(
+										itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
+									)
 								);
-							},
-							e => {
-								console.log('An error occurred while getting request package document: ' + e);
-								onFailure(e);
+								if (itinerary.flights[i + 1])
+									itinerary.flights[i + 1].date = itinerary.cities[i].endDate.toLocaleDateString();
 							}
-						);
-					}
-				);
-			} else if (request.transportationOffers.choices && request.accomodationOffers.choices && request.cities.choices) {
-				var detailsOfFirstCountry = await getPackageDetailsOfCountry(request.cities.choices[0].countryIsoCode);
-				request = {
-					id: request.id,
-					travelerName: request.traveler.name ? request.traveler.name : '',
-					estimatedCost: getItineraryCostFromRequest(request.transportationOffers.choices, request.accomodationOffers.choices),
-					numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
-					itinerary: {
-						name: request.cities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
-						... detailsOfFirstCountry,
-						image1: (await isValidImage(MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png")) ? MEDIA_STORAGE_BASE_URL+"/"+request.cities.choices[0].countryIsoCode+".png" : 'https://i.imgur.com/LsHCFiD.jpg',
-						flights: request.transportationOffers.choices.map(offer => ({
-							date: offer.segments ? new Date(offer.segments[0].departure).toDateString() : '',
-							departingFrom: offer.segments ? offer.segments[0].origin : '',
-							arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destination : '',
-							departureTime: offer.segments ? new Date(offer.segments[0].departure).toTimeString() : '',
-							arrivalTime: offer.segments ? new Date(offer.segments[offer.segments.length - 1].return).toTimeString() : '',
-							layOver: offer.segments.length == 0 ? 'N' : 'Y',
-						})),
-						hotels: request.accomodationOffers.choices.map(offer => ({
-							cityName: offer.cityName ? offer.cityName : (offer.cityIata ? offer.cityIata : ''),
-							checkIn: offer.checkin ? new Date(offer.checkin).toDateString() : '',
-							checkOut: offer.checkout ? new Date(offer.checkout).toDateString() : '',
-							nights: offer.numberOfNights ? offer.numberOfNights : '',
-							name: offer.name ? offer.name : '',
-						}))
-					},
-				};
-				packageHttp(
-					'post',
-					'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
-					JSON.stringify(request),
-					function (doc) {
-						packageHttp(
-							'get',
-							`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
-							doc.docId
-							}`,
-							null,
-							function (package) {
-								requestsDao.modifyRequestPackageInfo(
-									request.id,
-									package.docId,
-									package.pdfId,
-									() => {
-										onSuccess(package);
-									},
-									() => {
-										onSuccess(package);
-									}
-								);
-							},
-							e => {
-								console.log('An error occurred while getting request package pdf: ' + e);
-								onSuccess(doc);
+							if (itinerary.cities.length)
+								itinerary.cities[itinerary.cities.length - 1].numberOfDays +=
+									tripDays - itinerary.cities.reduce((ac, cv) => ac + cv.numberOfDays, 0);
+							itinerary.hotels = itinerary.hotels.filter(h => h.budget_category_id === request.budgetCategory);
+							for (let i = 0; i < itinerary.hotels.length; ++i) {
+								const city = itinerary.cities.find(c => c.id == itinerary.hotels[i].City_Id);
+								if (city) {
+									itinerary.hotels[i].order = city.order;
+									itinerary.hotels[i].checkIn = city.startDate.toLocaleDateString();
+									itinerary.hotels[i].checkOut = city.endDate.toLocaleDateString();
+									itinerary.hotels[i].nights = city.numberOfDays;
+								}
 							}
-						);
-					},
-					e => {
-						console.log('An error occurred while getting request package document: ' + e);
-						onFailure(e);
-					}
-				);
-			} else {
-				onFailure("Itinerary Id doesn't exists!.");
+							request = {
+								id: request.id,
+								travelerName: request.traveler.name ? request.traveler.name : '',
+								estimatedCost: request.estimatedCost ? currencyFormat(request.estimatedCost) : currencyFormat(0),
+								numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
+								itinerary: {
+									name: itinerary.en_name ? itinerary.en_name : '',
+									introduction: itinerary.introduction ? itinerary.introduction : 'Introduction',
+									includes: itinerary.includes ? itinerary.includes : '',
+									excludes: itinerary.excludes ? itinerary.excludes : '',
+									visaRequirements: itinerary.visaRequirements ? itinerary.visaRequirements : '',
+									image1:
+										itinerary.image1 && (await isValidImage(itinerary.image1))
+											? itinerary.image1
+											: 'https://i.imgur.com/LsHCFiD.jpg',
+									flights: itinerary.flights.map(rf => ({
+										date: rf.date ? rf.date : '',
+										departingFrom: rf.departing_from ? rf.departing_from : '',
+										arrivingTo: rf.arriving_to ? rf.arriving_to : '',
+										departureTime: rf.departure_time ? rf.departure_time : '',
+										arrivalTime: rf.arrival_time ? rf.arrival_time : '',
+										layOver: rf.lay_over ? rf.lay_over : '',
+									})),
+									hotels: itinerary.hotels
+										.sort((a, b) => a.order - b.order)
+										.map(rh => ({
+											cityName: rh.City_Name ? rh.City_Name : '',
+											checkIn: rh.checkIn ? rh.checkIn : '',
+											checkOut: rh.checkOut ? rh.checkOut : '',
+											nights: rh.nights ? rh.nights : '',
+											name: rh.EN_Name ? rh.EN_Name : '',
+										})),
+								},
+							};
+							packageHttp(
+								'post',
+								'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+								JSON.stringify(request),
+								function (doc) {
+									packageHttp(
+										'get',
+										`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
+										doc.docId
+										}`,
+										null,
+										function (package) {
+											requestsDao.modifyRequestPackageInfo(
+												request.id,
+												package.docId,
+												package.pdfId,
+												() => {
+													onSuccess(package);
+												},
+												() => {
+													onSuccess(package);
+												}
+											);
+										},
+										e => {
+											console.error('An error occurred while getting request package pdf: ' + e);
+											onSuccess(doc);
+										}
+									);
+								},
+								e => {
+									console.error('An error occurred while getting request package document: ' + e);
+									onFailure(e);
+								}
+							);
+						}
+					);
+				} else if (flightOffers && selectedHotels && selectedCities && selectedAttractions) {
+					console.log("Starting to generate package for request:");
+					console.log(JSON.stringify(request));
+					var detailsOfFirstCountry = await getPackageDetailsOfCountry(selectedCities.choices[0].countryIsoCode);
+					request = {
+						id: request.id,
+						travelerName: request.traveler.name ? request.traveler.name : '',
+						estimatedCost: getItineraryCostFromRequest(flightOffers.choices, selectedHotels.choices),
+						numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
+						itinerary: {
+							name: selectedCities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
+							...detailsOfFirstCountry,
+							image1: (await isValidImage(MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png")) ? MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png" : 'https://i.imgur.com/LsHCFiD.jpg',
+							flights: flightOffers.choices.map(offer => ({
+								date: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM/YYYY') : '',
+								departingFrom: offer.segments ? offer.segments[0].originDetails : '',
+								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destinationDetails : '',
+								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM hh:mm') : '',
+								arrivalTime: offer.segments ? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM hh:mm') : '',
+								layOver: offer.transitDurationInMinutes == 0 ? 'Direct' : offer.transitDurationInWords,
+							})),
+							hotels: selectedHotels.choices.map(offer => ({
+								cityName: offer.city ? offer.city : '',
+								checkIn: offer.checkin ? new moment(offer.checkin).format('DD/MM') : '',
+								checkOut: offer.checkout ? new moment(offer.checkout).format('DD/MM') : '',
+								nights: offer.numberOfNights ? offer.numberOfNights : '',
+								name: offer.name ? offer.name : '',
+							}))
+						},
+					};
+					console.log("Request going to google docs:");
+					console.log(JSON.stringify(request));
+					packageHttp(
+						'post',
+						'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+						JSON.stringify(request),
+						function (doc) {
+							console.log("File created. Id: " + doc.docId + ", Now generating the PDF");
+							packageHttp(
+								'get',
+								`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
+								doc.docId
+								}`,
+								null,
+								function (package) {
+									console.log("PDF Created. Id: " + package.pdfId + ", Now saving doc and pdf ids to the request")
+									requestsDao.modifyRequestPackageInfo(
+										request.id,
+										package.docId,
+										package.pdfId,
+										() => {
+											onSuccess(package);
+										},
+										() => {
+											onSuccess(package);
+										}
+									);
+								},
+								e => {
+									console.error('An error occurred while getting request package pdf: ' + e);
+									onSuccess(doc);
+								}
+							);
+						},
+						e => {
+							console.error('An error occurred while getting request package document: ' + e);
+							onFailure(e);
+						}
+					);
+				} else {
+					onFailure("Itinerary Id doesn't exists!, or selected flights/accomodation/cities/attractions don't exist");
+				}
+			} catch (err) {
+				console.error("An error occured while building the package");
+				console.error(err);
+				onFailure(err);
 			}
 		},
 		function (err) {
-			console.log('An error occurred while getting request package');
-			console.log(err);
+			console.error('An error occurred while getting request package');
+			console.error(err);
 			onFailure(err);
 		}
 	);
 };
-var getItineraryCostFromRequest = function(transportationOffers, accomodationOffers) {
+var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
 	var cost = 0;
-	cost += transportationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
-	cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
+	console.log("Itinerary cost: " + cost);
 	return cost;
 }
 
-var getPackageDetailsOfCountry = function(isoCode) {
+var getPackageDetailsOfCountry = function (isoCode) {
 	return new Promise((resolve, reject) => {
 
 		httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/country/" + isoCode, json: true },
@@ -558,8 +586,8 @@ var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 			onSuccess({ success: true });
 		},
 		function (err) {
-			console.log('An error occurred while getting request package');
-			console.log(err);
+			console.error('An error occurred while getting request package');
+			console.error(err);
 			onFailure({ ...err, success: false });
 		}
 	);
@@ -655,29 +683,29 @@ function getRequestById(requestId, onSuccess, onFailure) {
 		try {
 			var accomodationOffers = await accomodationDao.get(requestId);
 			if (accomodationOffers.exists)
-				request.accomodationOffers = accomodationOffers.data();
+				request.selectedHotels = accomodationOffers.data();
 
-			var transportationOffers = await transportationDao.get(requestId);
-			if (transportationOffers.exists)
-				request.transportationOffers = transportationOffers.data();
+			var flightOffers = await transportationDao.get(requestId);
+			if (flightOffers.exists)
+				request.flightOffers = flightOffers.data();
 
 			var cities = await citiesDao.get(requestId);
 			if (cities.exists)
-				request.cities = cities.data();;
+				request.selectedCities = cities.data();;
 
 			var attractions = await attractionsDao.get(requestId);
 			if (attractions.exists)
-				request.attractions = attractions.data();;
+				request.selectedAttractions = attractions.data();;
 
 			onSuccess(request);
 		} catch (err) {
 			console.log("Failed to retrieve data for request by id: " + requestId);
-			console.log(err);
+			console.error(err);
 			onFailure(err);
 		}
 	}, function (err) {
 		console.log("Failed to retrieve a request by Id: " + requestId);
-		console.log(err);
+		console.error(err);
 		onFailure(err);
 	})
 }

@@ -9,8 +9,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -19,8 +19,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to find a interest with id ' + id);
-					console.log(err);
+					console.error('An error occurred while trying to find a interest with id ' + id);
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -58,8 +58,8 @@ var create = function(interest, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the interest and his addresses
@@ -68,8 +68,8 @@ var create = function(interest, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -81,8 +81,8 @@ var create = function(interest, onSuccess, onFailure) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new interest: ' + interest.en_name);
-								console.log(err);
+								console.error('An error occurred while trying to create the new interest: ' + interest.en_name);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -110,8 +110,8 @@ var update = function(interest, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the interest and his addresses
@@ -120,8 +120,8 @@ var update = function(interest, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -131,8 +131,8 @@ var update = function(interest, onSuccess, onFailure) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing interest: ' + interest.en_name);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing interest: ' + interest.en_name);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -158,8 +158,8 @@ var getAll = function(lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -168,8 +168,8 @@ var getAll = function(lang, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all interests');
-					console.log(err);
+					console.error('An error occurred while list all interests');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown

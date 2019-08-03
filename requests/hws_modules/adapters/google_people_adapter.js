@@ -20,7 +20,7 @@ var authorizeAndCreateNewContact = function(emailAddress, name, phone, requestId
 	jwt.authorize((err, response) => {
 		if (err) {
 			console.log('Authentication to google apis failed');
-			console.log(err);
+			console.error(err);
 		} else {
 			createNewContact(jwt, emailAddress, name, phone, requestId);
 		}

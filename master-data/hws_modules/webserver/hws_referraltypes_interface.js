@@ -21,8 +21,8 @@ var getById = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /referral-type');
-		console.log(error);
+		console.error('An error occurred in /referral-type');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -48,8 +48,8 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /referral-type');
-		console.log(error);
+		console.error('An error occurred in /referral-type');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -72,8 +72,8 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /referral-type');
-		console.log(error);
+		console.error('An error occurred in /referral-type');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -96,8 +96,8 @@ var getAll = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /referral-types');
-		console.log(error);
+		console.error('An error occurred in /referral-types');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");

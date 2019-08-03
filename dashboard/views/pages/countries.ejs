@@ -140,7 +140,8 @@
 									<i class="fa fa-times-circle-o"></i>Visa type is missing</label>
 								<label for="visaType" ng-show="visaTypeMissing==false">Visa type</label>
 								<select class="form-control" ng-model="newCountry.visaType">
-									<option value="0" ng-selected="true">No visa required</option>
+									<option value="-1" ng-selected="true">Choose One</option>
+									<option value="0">No visa required</option>
 									<option value="1">Online visa</option>
 									<option value="2">Visa required</option>
 								</select>
@@ -166,8 +167,9 @@
 							<div class="form-group-3" ng-show="saving==false">
 								<label class="control-label text-red" for="thumbnail" ng-show="thumbnailMissing==true">
 									<i class="fa fa-times-circle-o"></i>Thumbnail is missing</label>
-								<label for="thumbnail">Thumbnail (PNG photo, 800 X 600
-									pixels)</label>
+								<label for="thumbnail">Thumbnail (PNG photo, 1200 X 800
+									pixels - On the website, on most screen sizes, only upper half of the image will be
+									visible)</label>
 								<!-- <input
 									type="text"
 									required
@@ -192,7 +194,7 @@
 								<label for="file-upload" class="custom-file-upload">
 									<i class="fa fa-cloud-upload"></i> Choose Image
 								</label>
-								<input id="file-upload" validwidth="800" validheight="600" type="file"
+								<input id="file-upload" validwidth="1200" validheight="800" type="file"
 									fileread="newCountry.thumbnail" />
 							</div>
 							<div class="form-group-9" ng-show="saving==false">
@@ -209,10 +211,10 @@
 					<button type="button" class="btn btn-primary" ng-click="addCountry(true)" ng-show="editMode==false">
 						Save and close
 					</button>
-					<button type="button" class="btn btn-primary" ng-click="addCountry(false)"
+					<!-- <button type="button" class="btn btn-primary" ng-click="addCountry(false)"
 						ng-show="editMode==false">
 						Save and add another
-					</button>
+					</button> -->
 					<button type="button" class="btn btn-primary" ng-click="editCountry()"
 						ng-show="editMode==true">Save</button>
 				</div>

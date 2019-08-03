@@ -9,8 +9,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -19,8 +19,8 @@ var getById = function(id, lang, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to find a budget category with id ' + id);
-					console.log(err);
+					console.error('An error occurred while trying to find a budget category with id ' + id);
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -59,8 +59,8 @@ var create = function(budgetCategory, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the budget category and his addresses
@@ -69,8 +69,8 @@ var create = function(budgetCategory, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -90,7 +90,7 @@ var create = function(budgetCategory, onSuccess, onFailure) {
 								console.log(
 									'An error occurred while trying to create the new budget category: ' + budgetCategory.en_name
 								);
-								console.log(err);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -118,8 +118,8 @@ var update = function(budgetCategory, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the budget category and his addresses
@@ -128,8 +128,8 @@ var update = function(budgetCategory, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -148,7 +148,7 @@ var update = function(budgetCategory, onSuccess, onFailure) {
 								console.log(
 									'An error occurred while trying to update the existing budgetCategory: ' + budgetCategory.en_name
 								);
-								console.log(err);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -174,8 +174,8 @@ var getAll = function(lang, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
@@ -184,8 +184,8 @@ var getAll = function(lang, onSuccess, onFailure) {
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all budget categories');
-					console.log(err);
+					console.error('An error occurred while list all budget categories');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown

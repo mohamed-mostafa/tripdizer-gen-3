@@ -9,7 +9,7 @@ exports.save = async function(requestId, accomodationOffers) {
     await document.set(accomodationOffers); 
   } catch (err) {
     console.log("Failed to save accomodation offers for request " + requestId);
-    console.log(err);
+    console.error(err);
   } 
 }
 
