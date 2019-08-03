@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
 
@@ -11,16 +12,28 @@ export class TabCitiesComponent {
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
 	cityPaths: Array<{ lat: number; lng: number }> = [];
-
-	constructor(private service: EstimatedCostService) {
+	snackBar: MatSnackBar;
+	constructor(private service: EstimatedCostService, snackBar: MatSnackBar) {
+		this.snackBar = snackBar;
 		service.getCities().subscribe(
 			res => {
+				let numberOfNights = this.service.getNumberOfNights();
+				let maxNumberOfCities = Math.ceil(numberOfNights / 2);
+				let numberOfSelectedCities = 0;
+				if (maxNumberOfCities < res.length) {
+					numberOfSelectedCities = maxNumberOfCities;
+				} else {
+					numberOfSelectedCities = res.length;
+				}
 				for (let b = 0; b < res.length; b++) {
-					res[b].select = true;
-					this.selectedCities.push(res[b]);
 					this.cities.push(res[b]);
-					const coordinates = res[b].coordinates.split(', ');
-					this.cityPaths.push({lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10)});
+					res[b].select = false;
+					if (b + 1 <= numberOfSelectedCities) {
+						res[b].select = true;
+						this.selectedCities.push(res[b]);
+						const coordinates = res[b].coordinates.split(', ');
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+					}
 				}
 			}
 		);
@@ -45,12 +58,23 @@ export class TabCitiesComponent {
 				}
 			}
 		} else if (city.select === false) {
-			this.selectedCities.push(city);
-			for (let x = 0; x < this.cities.length; x++) {
-				if (this.cities[x].iataCode === city.iataCode) {
-					this.cities[x].select = true;
-					const coordinates = city.coordinates.split(', ');
-					this.cityPaths.push({lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10)});
+			// check if no more cities should be selected
+			let numberOfNights = this.service.getNumberOfNights();
+			let maxNumberOfCities = Math.ceil(numberOfNights / 2);
+			debugger;
+			if (this.selectedCities.length >= maxNumberOfCities) {
+				// prevent more selections
+				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
+					duration: 3000
+				});
+			} else {
+				this.selectedCities.push(city);
+				for (let x = 0; x < this.cities.length; x++) {
+					if (this.cities[x].iataCode === city.iataCode) {
+						this.cities[x].select = true;
+						const coordinates = city.coordinates.split(', ');
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+					}
 				}
 			}
 		}

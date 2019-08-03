@@ -59,6 +59,8 @@ export class EstimatedCostService {
 	}
 
 	getNumberOfNights(): number {
+		this.departureDate = this.requestService.getProperty('departureDate') as Moment;
+		this.returnDate = this.requestService.getProperty('returnDate') as Moment;
 		return this.returnDate.diff(this.departureDate, 'days');
 	}
 
