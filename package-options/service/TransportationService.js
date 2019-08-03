@@ -105,11 +105,14 @@ function applyFlightOffersCleansing(legFlightOffers, legSearchRequest) {
 }
 
 function filterInternationalOffers(flightOffers) {
+    let filteredflightOffers = [];
     // offers are already sorted by price since we're using low fare search from amadeus
     if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
-        return flightOffers;
+        flightOffers.forEach(flightOffer => {
+            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer));
+        });
+        return filteredflightOffers;
     }
-    let filteredflightOffers = [];
     for (let i = 0; i < flightOffers.length; i++) {
         let currentOffer = flightOffers[i];
         // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
@@ -137,11 +140,14 @@ function filterInternationalOffers(flightOffers) {
 }
 
 function filterInternalOffers(flightOffers) {
+    let filteredflightOffers = [];
     // offers are already sorted by price since we're using low fare search from amadeus
     if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
-        return flightOffers;
+        flightOffers.forEach(flightOffer => {
+            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer));
+        });
+        return filteredflightOffers;
     }
-    let filteredflightOffers = [];
     for (let i = 0; i < flightOffers.length; i++) {
         let currentOffer = flightOffers[i];
         // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
