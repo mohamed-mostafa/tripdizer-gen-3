@@ -33,8 +33,15 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
             for (let i = 0; i < transportationSearchRequest.citiesSequence.length - 1; i++) {
                 let legOrigin = transportationSearchRequest.citiesSequence[i].cityIata;
                 let legDestination = transportationSearchRequest.citiesSequence[i + 1].cityIata;
+
+
+                let originCountry = transportationSearchRequest.citiesSequence[i].countryIso;
+                let destinationCountry = transportationSearchRequest.citiesSequence[i + 1].countryIso;
+                let isCrossCountry = originCountry === destinationCountry;
+
                 departureMoment = departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, 'Days');
-                let transportationLeg = await createFlightLegBetweenOriginAndDestination(legOrigin, legDestination, departureMoment, transportationSearchRequest.numberOfAdults, transportationSearchRequest.numberOfChildren, transportationSearchRequest.numberOfInfants, false);
+
+                let transportationLeg = await createFlightLegBetweenOriginAndDestination(legOrigin, legDestination, departureMoment, transportationSearchRequest.numberOfAdults, transportationSearchRequest.numberOfChildren, transportationSearchRequest.numberOfInfants, isCrossCountry);
                 transportationLegs.push(transportationLeg);
             }
 
