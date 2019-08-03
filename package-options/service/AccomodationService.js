@@ -99,6 +99,8 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 if (newAccomodationOffer.hotels.length > MAX_NUMBER_OF_HOTELS_PER_CITY) {
                     newAccomodationOffer.hotels = newAccomodationOffer.hotels.slice(0, MAX_NUMBER_OF_HOTELS_PER_CITY);
                 }
+                // sort again by price because in case of own budget they're sorted by difference from desired cost and not by price
+                newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
                 accomodationOffers.push(newAccomodationOffer);
             } catch (error) {
                 console.error(error);
@@ -177,7 +179,7 @@ function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights, isHos
         }
     }
     // add profit margin
-    totalPrice = totalPrice * 1.1;
+    totalPrice = parseInt(totalPrice * 1.1);
     return totalPrice;
 }
 
