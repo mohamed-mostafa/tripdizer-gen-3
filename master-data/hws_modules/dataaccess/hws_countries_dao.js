@@ -1,25 +1,25 @@
 var daoUtilities = require('./hws_dao_utilities.js');
 
-var getById = function(id, lang, onSuccess, onFailure) {
+var getById = function (id, lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
 			connection.query(
 				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id WHERE C.Id = ? OR ISO_Code = ?',
 				[id, id],
-				function(err, rows) {
+				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while trying to find a country with id ' + id);
-						console.log(err);
+						console.error('An error occurred while trying to find a country with id ' + id);
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -63,23 +63,23 @@ var getById = function(id, lang, onSuccess, onFailure) {
 	});
 };
 
-var create = function(country, onSuccess, onFailure) {
+var create = function (country, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the country and his addresses
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -96,14 +96,14 @@ var create = function(country, onSuccess, onFailure) {
 							country.visaRequirements,
 							country.ISOCode,
 						],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new country: ' + country.enName);
-								console.log(err);
+								console.error('An error occurred while trying to create the new country: ' + country.enName);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -126,23 +126,23 @@ var create = function(country, onSuccess, onFailure) {
 
 //calls the onSuccess with a country object if successful
 //calls the onFailure with an err object in case of technical error
-var update = function(country, onSuccess, onFailure) {
+var update = function (country, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the country and his addresses
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
@@ -160,12 +160,12 @@ var update = function(country, onSuccess, onFailure) {
 							country.ISOCode,
 							country.id,
 						],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing country: ' + country.enName);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing country: ' + country.enName);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -186,26 +186,26 @@ var update = function(country, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAll = function(lang, onSuccess, onFailure) {
+var getAll = function (lang, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
 			connection.query(
 				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id',
 				[],
-				function(err, rows) {
+				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
 						// end the connection
 						connection.end();
-						console.log('An error occurred while list all countries');
-						console.log(err);
+						console.error('An error occurred while list all countries');
+						console.error(err);
 						onFailure(err);
 					} else {
 						// no error is thrown
@@ -245,27 +245,27 @@ var getAll = function(lang, onSuccess, onFailure) {
 	});
 };
 
-var toggleActivation = function(id, active, onSuccess, onFailure) {
+var toggleActivation = function (id, active, onSuccess, onFailure) {
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection'); console.log(err); onFailure(err);
+			console.error('An error occurred while trying to open a database connection'); console.error(err); onFailure(err);
 		} else {
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
-					connection.end(); console.log('An error occurred while trying to begin a database transaction');
-					console.log(err); onFailure(err);
+					connection.end(); console.error('An error occurred while trying to begin a database transaction');
+					console.error(err); onFailure(err);
 				} else {
 					connection.query('UPDATE hws.Countries SET Active = ? WHERE Id = ?', [active, id],
-						function(err, result) {
+						function (err, result) {
 							if (err) {
-								console.log('An error occurred while trying to activate/deactivate country: ' + id);
-								console.log(err); connection.rollback(); connection.end(); onFailure(err);
+								console.error('An error occurred while trying to activate/deactivate country: ' + id);
+								console.error(err); connection.rollback(); connection.end(); onFailure(err);
 							} else {
 								connection.commit(); connection.end(); onSuccess();
 							}
-					});
+						});
 				}
 			});
 		}

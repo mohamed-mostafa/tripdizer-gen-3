@@ -67,7 +67,7 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.excludes == null || $scope.newCountry.excludes == '') {
 				$scope.excludesMissing = true;
 			}
-			if ($scope.newCountry.visaType === null || $scope.newCountry.visaType === '') {
+			if ($scope.newCountry.visaType === null || $scope.newCountry.visaType == undefined || $scope.newCountry.visaType === '' || $scope.newCountry.visaType === -1) {
 				$scope.visaTypeMissing = true;
 			}
 			if ($scope.newCountry.visaRequirements == null || $scope.newCountry.visaRequirements == '') {
@@ -209,5 +209,10 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		};
 
 		$scope.initialize();
+		$('#addCountryModal').on('hidden.bs.modal', function () {
+			CountriesService.getAll().then(function (countries) {
+				$scope.countries = countries;
+			});
+		})
 	},
 ]);

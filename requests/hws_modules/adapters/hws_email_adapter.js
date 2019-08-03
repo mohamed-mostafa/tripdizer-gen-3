@@ -33,7 +33,7 @@ var sendEmail = function(to, from, subject, body, attachments) {
 			},
 			function(error, info) {
 				if (error) {
-					console.log(error);
+					console.error(error);
 					reject({ email: to, done: false, message: error });
 				} else {
 					hwsRequestsDao.addNewMailHistory(

@@ -32,13 +32,13 @@
                 <!-- <li ng-if="!isCreate">
                     <a href="#revenueTab" data-toggle="tab">Financial</a>
                 </li> -->
-                <li ng-if="currentOrder.transportationOffers.choices">
-                    <a href="#flightsTab" data-toggle="tab">Transportaion</a>
+                <li ng-if="currentOrder.flightOffers.choices">
+                    <a href="#flightsTab" data-toggle="tab">Transportation</a>
                 </li>
-                <li ng-if="currentOrder.accomodationOffers.choices">
+                <li ng-if="currentOrder.selectedHotels.choices">
                     <a href="#accomodationTab" data-toggle="tab">Accomodation</a>
                 </li>
-                <li ng-if="currentOrder.attractions.choices">
+                <li ng-if="currentOrder.selectedAttractions.choices">
                     <a href="#attractionsTab" data-toggle="tab">Attractions</a>
                 </li>
                 <li ng-if="!isCreate && currentOrder.destination">
@@ -50,49 +50,51 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="requestTab">
-                        <div ng-if="!isCreate" class="form-control-6">
-                            <label for="id">ID</label>
-                            <input type="text" disabled class="form-control" id="id" ng-model="currentOrder.id">
-                        </div>
-                        <div ng-class="{ 'form-control-6' : !isCreate }">
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status" ng-model="currentOrder.status">
-                                <option ng-repeat="status in statuses" ng-value="status.id"
-                                    ng-selected="status.id == currentOrder.status">
-                                    {{status.title}}</option>
-                            </select>
-                        </div>
-                        <div ng-if="!isCreate" class="form-control-6">
-                            <label for="placed">Placed</label>
-                            <input type="date" disabled class="form-control" id="placed" format="yyyy-MM-dd"
-                                ng-model="currentOrder.date">
-                        </div>
-                        <div ng-if="!isCreate" class="form-control-6">
-                            <label for="promoCode">Promo Code</label>
-                            <input type="text" disabled class="form-control" id="promoCode"
-                                ng-model="currentOrder.promoCode">
-                        </div>
-                        <div ng-if="!isCreate" class="form-control-6">
-                            <label for="userFullName">Assigned User</label>
-                            <input type="text" disabled class="form-control" id="userFullName"
-                                ng-model="currentOrder.userFullName"></input>
-                        </div>
-                        <div ng-if="!isCreate" class="form-control-6">
-                            <label for="score">Score</label>
-                            <input type="text" disabled class="form-control" id="score"
-                                ng-model="currentOrder.score"></input>
-                        </div>
-                        <div>
-                            <label for="channel">Channel</label>
-                            <select  class="form-control" id="channel" ng-model="currentOrder.channel">
-                                <option ng-repeat="channel in channels" ng-if="!channel.isHiddenOnDashboard" ng-value="channel.id" ng-selected="channel.id == currentOrder.channel">
-                                    {{channel.enName}}</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="specialRequests">Comments</label>
-                            <textarea class="form-control" id="specialRequests" ng-model="currentOrder.specialRequests"></textarea>
-                        </div>
+                    <div ng-if="!isCreate" class="form-control-6">
+                        <label for="id">ID</label>
+                        <input type="text" disabled class="form-control" id="id" ng-model="currentOrder.id">
+                    </div>
+                    <div ng-class="{ 'form-control-6' : !isCreate }">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" ng-model="currentOrder.status">
+                            <option ng-repeat="status in statuses" ng-value="status.id"
+                                ng-selected="status.id == currentOrder.status">
+                                {{status.title}}</option>
+                        </select>
+                    </div>
+                    <div ng-if="!isCreate" class="form-control-6">
+                        <label for="placed">Placed</label>
+                        <input type="date" disabled class="form-control" id="placed" format="yyyy-MM-dd"
+                            ng-model="currentOrder.date">
+                    </div>
+                    <div ng-if="!isCreate" class="form-control-6">
+                        <label for="promoCode">Promo Code</label>
+                        <input type="text" disabled class="form-control" id="promoCode"
+                            ng-model="currentOrder.promoCode">
+                    </div>
+                    <div ng-if="!isCreate" class="form-control-6">
+                        <label for="userFullName">Assigned User</label>
+                        <input type="text" disabled class="form-control" id="userFullName"
+                            ng-model="currentOrder.userFullName"></input>
+                    </div>
+                    <div ng-if="!isCreate" class="form-control-6">
+                        <label for="score">Score</label>
+                        <input type="text" disabled class="form-control" id="score"
+                            ng-model="currentOrder.score"></input>
+                    </div>
+                    <div>
+                        <label for="channel">Channel</label>
+                        <select class="form-control" id="channel" ng-model="currentOrder.channel">
+                            <option ng-repeat="channel in channels" ng-if="!channel.isHiddenOnDashboard"
+                                ng-value="channel.id" ng-selected="channel.id == currentOrder.channel">
+                                {{channel.enName}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="specialRequests">Comments</label>
+                        <textarea class="form-control" id="specialRequests"
+                            ng-model="currentOrder.specialRequests"></textarea>
+                    </div>
                 </div>
 
                 <!-- /.tab-pane -->
@@ -149,7 +151,7 @@
                 <!-- /.tab-pane -->
 
                 <div class="tab-pane" id="datesTab">
-                    
+
                     <div class="form-control-6">
                         <label for="departureDate">Departure Date</label>
                         <input type="date" class="form-control" id="departureDate" format="yyyy-MM-dd"
@@ -167,7 +169,7 @@
                             <option value="0" ng-selected="currentOrder.isFlexibleDates !== 1">False</option>
                         </select>
                     </div>
-                    
+
                 </div><!-- /.tab-pane -->
                 <div class="tab-pane" id="destinationsTab">
                     <div class="form-control-6">
@@ -179,13 +181,13 @@
                             <option>Sharm El-Sheikh</option>
                         </select>
                     </div>
-                    <div ng-if="currentOrder.cities.choices">
+                    <div ng-if="currentOrder.selectedCities.choices">
                         <label for="cities">Travelling to (cities)</label>
-                        <div ng-repeat="city in currentOrder.cities.choices">
+                        <div ng-repeat="city in currentOrder.selectedCities.choices">
                             <input type="checkbox" checked disabled>{{city.name}}</input>
                         </div>
                     </div>
-                    <div ng-if="currentOrder.destination && !currentOrder.cities.choices">
+                    <div ng-if="currentOrder.destination && !currentOrder.selectedCities.choices">
                         <label for="destination">Destination</label>
                         <select class="form-control" id="destination" ng-model="currentOrder.destination">
                             <option ng-repeat="itinerary in itineraries" ng-value="itinerary.id"
@@ -198,7 +200,7 @@
                                 ng-model="currentOrder.otherCountry">
                         </div>
                     </div>
-                    <div ng-if="!currentOrder.destination && !currentOrder.cities.choices">
+                    <div ng-if="!currentOrder.destination && !currentOrder.selectedCites.choices">
                         <label for="firstCountry">First Country</label>
                         <select class="form-control" id="firstCountry" ng-model="currentOrder.firstCountry">
                             <option ng-repeat="country in countries" ng-value="country.id"
@@ -270,7 +272,8 @@
                             ng-model="currentOrder.infantsNumber">
                     </div>
                 </div>
-                <!-- /.tab-pane --><div class="tab-pane" id="budgetTab">
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="budgetTab">
                     <div>
                         <div>
                             <label for="budgetCategory">Budget Category</label>
@@ -356,15 +359,21 @@
                 </div> -->
 
                 <div class="tab-pane" id="flightsTab">
-                    <div ng-repeat="flightOffer in currentOrder.transportationOffers.choices"
+                    <div ng-repeat="flightOffer in currentOrder.flightOffers.choices"
                         ng-show="currentOrder.flightOffers.choices.length != 0">
-                        <h4><img src="{{flightOffer.carrier.squareLogo}}" width="30px" height="30px"/> {{flightOffer.segments[0].origin}} to {{flightOffer.segments[flightOffer.segments.length - 1].destination}} on {{flightOffer.carrier.name}} </h4>
+                        <h4><img src="{{flightOffer.carrier.squareLogo}}" width="30px" height="30px" />
+                            {{flightOffer.segments[0].origin}} to
+                            {{flightOffer.segments[flightOffer.segments.length - 1].destination}} on
+                            {{flightOffer.carrier.name}} </h4>
                         <div>
                             <div class="form-control-6">
-                                <p><b>Departure: </b>{{flightOffer.segments[0].departure | date:'dd MMM yyyy - hh:mm'}}</p>
+                                <p><b>Departure: </b>{{flightOffer.segments[0].departure | date:'dd MMM yyyy - hh:mm'}}
+                                </p>
                             </div>
                             <div class="form-control-6">
-                                <p><b>Arrival: </b>{{flightOffer.segments[flightOffer.segments.length - 1].return | date:'dd MMM yyyy - hh:mm'}}</p>
+                                <p><b>Arrival:
+                                    </b>{{flightOffer.segments[flightOffer.segments.length - 1].return | date:'dd MMM yyyy - hh:mm'}}
+                                </p>
                             </div>
                         </div>
                         <div>
@@ -372,53 +381,57 @@
                                 <p><b>Price: </b>{{flightOffer.price}} {{flightOffer.currency}}</p>
                             </div>
                             <div class="form-control-6">
-                                <p><b>Stops: </b>{{flightOffer.segments.length == 1 ? 'direct' : flightOffer.segments.length - 1 }} </p>
+                                <p><b>Stops:
+                                    </b>{{flightOffer.segments.length == 1 ? 'direct' : flightOffer.segments.length - 1 }}
+                                </p>
                             </div>
                         </div>
                         <div ng-repeat="segment in flightOffer.segments" ng-hide="flightOffer.segments.length == 1">
-                            <p>{{segment.origin}}: {{segment.departure | date:'dd MMM yyyy - hh:mm'}} | {{segment.destination }}: {{segment.return | date:'dd MMM yyyy - hh:mm'}} | {{segment.durationInWords}}</p>
+                            <p>{{segment.origin}}: {{segment.departure | date:'dd MMM yyyy - hh:mm'}} |
+                                {{segment.destination }}: {{segment.return | date:'dd MMM yyyy - hh:mm'}} |
+                                {{segment.durationInWords}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="accomodationTab">
-                        <div ng-repeat="hotel in currentOrder.accomodationOffers.choices"
-                            ng-show="currentOrder.accomodationOffers.choices.length != 0">
-                            <h4>{{hotel.city}} ({{hotel.numberOfNights}} nights)</h4>
-                            <div>
-                                <div class="form-control-6">
-                                    <p><b>Hotel: </b>{{hotel.name}}</p>
-                                </div>
-                                <div class="form-control-6">
-                                    <p><b>Stars: </b>{{hotel.stars }}</p>
-                                </div>
+                    <div ng-repeat="hotel in currentOrder.selectedHotels.choices"
+                        ng-show="currentOrder.selectedHotels.choices.length != 0">
+                        <h4>{{hotel.city}} ({{hotel.numberOfNights}} nights)</h4>
+                        <div>
+                            <div class="form-control-6">
+                                <p><b>Hotel: </b>{{hotel.name}}</p>
                             </div>
-                            <div>
-                                <div class="form-control-6">
-                                    <p><b>Checkin: </b>{{hotel.checkin | date:'dd MMM yyyy -hh:mm'}}</p>
-                                </div>
-                                <div class="form-control-6">
-                                    <p><b>Checkout: </b>{{hotel.checkout | date:'dd MMM yyyy'}}</p>
-                                </div>
+                            <div class="form-control-6">
+                                <p><b>Stars: </b>{{hotel.stars }}</p>
                             </div>
-                            <div>
-                                <div class="form-control-6">
-                                    <p><b>Night Rate: </b>{{hotel.rate}} {{hotel.currency}}</p>
-                                </div>
-                                <div class="form-control-6">
-                                    <p><b>Total: </b>{{hotel.price }} {{hotel.currency}}</p>
-                                </div>
+                        </div>
+                        <div>
+                            <div class="form-control-6">
+                                <p><b>Checkin: </b>{{hotel.checkin | date:'dd MMM yyyy -hh:mm'}}</p>
+                            </div>
+                            <div class="form-control-6">
+                                <p><b>Checkout: </b>{{hotel.checkout | date:'dd MMM yyyy'}}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-control-6">
+                                <p><b>Night Rate: </b>{{hotel.rate}} {{hotel.currency}}</p>
+                            </div>
+                            <div class="form-control-6">
+                                <p><b>Total: </b>{{hotel.price }} {{hotel.currency}}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="attractionsTab">
-                        <div ng-repeat="item in currentOrder.attractions.choices"
-                            ng-show="currentOrder.attractions.choices.length != 0">
-                            <h4>{{item.city.name}}</h4>
-                            <div ng-repeat="attraction in item.attractions">
-                                <input type="checkbox" disabled checked>{{attraction.name}}</input>
-                            </div>      
+                </div>
+                <div class="tab-pane" id="attractionsTab">
+                    <div ng-repeat="item in currentOrder.selectedAttractions.choices"
+                        ng-show="currentOrder.selectedAttractions.choices.length != 0">
+                        <h4>{{item.city.name}}</h4>
+                        <div ng-repeat="attraction in item.attractions">
+                            <input type="checkbox" disabled checked>{{attraction.name}}</input>
                         </div>
                     </div>
+                </div>
                 <!-- /.tab-pane -->
                 <div ng-if="!isCreate" class="tab-pane" id="generatePackageTab">
                     <!-- <input type="text" class="form-control" id="packageName" ng-model="currentOrder.packageName" ng-change="currentOrder.generatedFile = null">

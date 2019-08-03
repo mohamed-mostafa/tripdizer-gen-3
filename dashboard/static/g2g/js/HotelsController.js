@@ -232,6 +232,10 @@ g2gControlCenterApplication.controller('HotelsController', [
 		};
 
 		$scope.$watch('selectedCity', function (val) {
+			$scope.reloadHotels();
+		});
+
+		$scope.reloadHotels = function () {
 			$scope.hotelsLoading = true;
 			$scope.hotels = [];
 			HotelsService.getAllByCity($scope.selectedCity).then(function (hotels) {
@@ -239,7 +243,7 @@ g2gControlCenterApplication.controller('HotelsController', [
 				$scope.validateDataEntry();
 				$scope.hotelsLoading = false;
 			});
-		});
+		}
 
 		$scope.$watch('selectedCountry', function (val) {
 			$scope.selectedCity = null;
@@ -268,5 +272,9 @@ g2gControlCenterApplication.controller('HotelsController', [
 		};
 
 		$scope.initialize();
+
+		$('#addHotelModal').on('hidden.bs.modal', function () {
+			$scope.reloadHotels();
+		})
 	},
 ]);

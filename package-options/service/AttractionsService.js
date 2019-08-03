@@ -10,8 +10,8 @@ const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://st
  * attractionsSearchRequest AttractionsSearchRequest the client's choosen cities IATA codes
  * returns attractionOffers
  **/
-exports.searchAttractions = function(language,attractionsSearchRequest) {
-    return new Promise(async function(resolve, reject) {
+exports.searchAttractions = function (language, attractionsSearchRequest) {
+    return new Promise(async function (resolve, reject) {
         var citiesNumberOfNightPairs = attractionsSearchRequest.cities;
         var interests = attractionsSearchRequest.interests; // to be used later to filter the attractions
 
@@ -49,52 +49,52 @@ exports.searchAttractions = function(language,attractionsSearchRequest) {
                     var newAttraction = {
                         name: language == 'ar' ? attraction.arName : attraction.enName,
                         description: language == 'ar' ? attraction.arDescription : attraction.enDescription,
-                        category: language == 'ar' ? attraction.arCategory: attraction.enCategory
+                        category: language == 'ar' ? attraction.arCategory : attraction.enCategory
                         // thumbnail: attraction.thumbnail
                     }
                     newAttractionOffer.attractions.push(newAttraction);
                 });
                 attractionOffers.push(newAttractionOffer);
-                
+
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 reject(error);
             }
         }
-        resolve(attractionOffers);        
-      })
-    };
+        resolve(attractionOffers);
+    })
+};
 
 function getAttractionsOfCity(cityIata) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var cityAttractionsUrl = MASTER_DATA_ENDPOINT + "/attractions/" + cityIata;
 
-        httpRequest.get({url: cityAttractionsUrl, json: true}, function(error, response, attractions) {
-                if (error) {
-                    reject(error);
-                } else if (response.statusCode != 200) {
-                    reject(response.statusMessage);
-                } else {
-                    resolve(attractions);
-                }
+        httpRequest.get({ url: cityAttractionsUrl, json: true }, function (error, response, attractions) {
+            if (error) {
+                reject(error);
+            } else if (response.statusCode != 200) {
+                reject(response.statusMessage);
+            } else {
+                resolve(attractions);
             }
+        }
         );
     })
 };
 
 function getCityByIata(cityIata) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
-        httpRequest.get({url: cityUrl, json: true}, function(error, response, city) {
-                if (error) {
-                    reject(error);
-                } else if (response.statusCode != 200) {
-                    reject(response.statusMessage);
-                } else {
-                    resolve(city);
-                }
+        httpRequest.get({ url: cityUrl, json: true }, function (error, response, city) {
+            if (error) {
+                reject(error);
+            } else if (response.statusCode != 200) {
+                reject(response.statusMessage);
+            } else {
+                resolve(city);
             }
+        }
         );
     })
 };

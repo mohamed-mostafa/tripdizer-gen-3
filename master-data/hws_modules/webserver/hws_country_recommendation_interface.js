@@ -21,8 +21,8 @@ var recommendation = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /itinerary/recommendation');
-		console.log(error);
+		console.error('An error occurred in /itinerary/recommendation');
+		console.error(error);
 		res
 			.status(500)
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");

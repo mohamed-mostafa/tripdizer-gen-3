@@ -6,23 +6,23 @@ var daoUtilities = require('./hws_dao_utilities.js');
 
 //calls the onSuccess with a user object or null
 //calls the onFailure with an err object in case of technical error
-var getUserByUsername = function(username, onSuccess, onFailure) {
+var getUserByUsername = function (username, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user WHERE username = ?', [username], function(err, rows) {
+			connection.query('SELECT * FROM user WHERE username = ?', [username], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to find a user with username ' + username);
-					console.log(err);
+					console.error('An error occurred while trying to find a user with username ' + username);
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -53,23 +53,23 @@ var getUserByUsername = function(username, onSuccess, onFailure) {
 	});
 };
 
-var getUserById = function(id, onSuccess, onFailure) {
+var getUserById = function (id, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user WHERE id = ?', [id], function(err, rows) {
+			connection.query('SELECT * FROM user WHERE id = ?', [id], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to find a user with id ' + id);
-					console.log(err);
+					console.error('An error occurred while trying to find a user with id ' + id);
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
@@ -98,36 +98,36 @@ var getUserById = function(id, onSuccess, onFailure) {
 	});
 };
 
-var createNewUser = function(user, onSuccess, onFailure) {
+var createNewUser = function (user, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the user and his addresses
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
 						'INSERT INTO user (username, password, full_name, phone, active) values (?, ?, ?, ?, ?)',
 						[user.username, user.password, user.fullName, user.phone, 1],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
 								// end the connection
 								connection.end();
-								console.log('An error occurred while trying to create the new user: ' + user.username);
-								console.log(err);
+								console.error('An error occurred while trying to create the new user: ' + user.username);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								onFailure(err);
 							} else {
@@ -150,34 +150,34 @@ var createNewUser = function(user, onSuccess, onFailure) {
 
 //calls the onSuccess with a user object if successful
 //calls the onFailure with an err object in case of technical error
-var updateExistingUser = function(user, onSuccess, onFailure) {
+var updateExistingUser = function (user, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the user and his addresses
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while trying to begin a database transaction');
-					console.log(err);
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
 					onFailure(err);
 				} else {
 					connection.query(
 						'UPDATE user SET password = ?, full_name= ?, phone= ?, active= ? WHERE id=?',
 						[user.password, user.fullName, user.phone, user.active, user.id],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
-								console.log('An error occurred while trying to update the existing user: ' + user.username);
-								console.log(err);
+								console.error('An error occurred while trying to update the existing user: ' + user.username);
+								console.error(err);
 								connection.rollback(); // rollback the transaction
 								// end the connection
 								connection.end();
@@ -198,23 +198,23 @@ var updateExistingUser = function(user, onSuccess, onFailure) {
 
 //calls the onSuccess with a list of delivery persons or an empty list
 //calls the onFailure with an err object in case of technical error
-var getAllUsers = function(isFull, onSuccess, onFailure) {
+var getAllUsers = function (isFull, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
-			console.log('An error occurred while trying to open a database connection');
-			console.log(err);
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM user', [], function(err, rows) {
+			connection.query('SELECT * FROM user', [], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.log('An error occurred while list all users');
-					console.log(err);
+					console.error('An error occurred while list all users');
+					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown

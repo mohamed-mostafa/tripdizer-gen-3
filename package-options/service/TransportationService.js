@@ -7,6 +7,9 @@ const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localho
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
 const WIDE_LOGOS_ROOT = "https://www.skyscanner.net/images/airlines/small/";
 const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const FLIGHT_COST_THRESHOLD = 15000;
+const FLIGHT_PROFIT_BELOW_THRESHOLD = 300;
+const FLIGHT_PROFIT_ABOVE_THRESHOLD = 500;
 /**
  * retrieve options of transportation between cities and countries for a package
  * Retrieve the recommended transportation options (flights or others) for a package, between the cities choosen by the client.
@@ -57,7 +60,7 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
         try {
             let originCity = await getCityByIata(origin);
             let destinationCity = await getCityByIata(destination);
-            let transportationLeg = { origin: originCity, destination: destinationCity, departure: departure.toISOString() };
+            let transportationLeg = { origin: originCity, destination: destinationCity, departure: departure.toISOString(), flightOffers: [] };
             let legSearchRequest = {
                 departure: transportationLeg.departure,
                 origin: transportationLeg.origin.iataCode,
@@ -67,17 +70,26 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
                 numberOfInfants: numberOfInfants
             }
             request.get({ url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, json: true }, function (err, httpResponse, body) {
-                if (err) {
-                    reject(err);
+                if (err || httpResponse.statusCode != 200) {
+                    // reject(err || httpResponse.statusMessage);
+                    console.error("Failed to retrieve offers for leg: " + transportationLeg);
+                    console.error(err || httpResponse.statusMessage);
+                    resolve(transportationLeg);
                 } else {
                     let legFlightOffers = body; // offers coming form flights adapter
-                    if (isInternationalLeg) {
-                        let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
-                        transportationLeg.flightOffers = filteredLegFlightOffers;
-                        resolve(transportationLeg);
+                    if (legFlightOffers) {
+                        // legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
+                        if (isInternationalLeg) {
+                            let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
+                            transportationLeg.flightOffers = filteredLegFlightOffers;
+                            resolve(transportationLeg);
+                        } else {
+                            let filteredLegFlightOffers = filterInternalOffers(legFlightOffers);
+                            transportationLeg.flightOffers = filteredLegFlightOffers;
+                            resolve(transportationLeg);
+                        }
                     } else {
-                        let filteredLegFlightOffers = filterInternalOffers(legFlightOffers);
-                        transportationLeg.flightOffers = filteredLegFlightOffers;
+                        console.warn("No flight offers found for leg: " + legSearchRequest);
                         resolve(transportationLeg);
                     }
                 }
@@ -88,6 +100,9 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
     });
 }
 
+function applyFlightOffersCleansing(legFlightOffers, legSearchRequest) {
+    return legFlightOffers.filter(legFlightOffer => legFlightOffer.flightLegs[0].origin == legSearchRequest.origin && legFlightOffer.flightLegs[0].destination == legSearchRequest.destination);
+}
 
 function filterInternationalOffers(flightOffers) {
     // offers are already sorted by price since we're using low fare search from amadeus
@@ -153,9 +168,13 @@ function filterInternalOffers(flightOffers) {
 }
 
 function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
+    // at the moment, we only support one-way flights, so we always use flightLegs[0]
     let newOffer = {
-        price: flightOffer.price,
+        // add profit margin
+        price: flightOffer.price <= FLIGHT_COST_THRESHOLD ? parseInt(flightOffer.price) + FLIGHT_PROFIT_BELOW_THRESHOLD : parseInt(flightOffer.price) + FLIGHT_PROFIT_ABOVE_THRESHOLD,
         currency: flightOffer.currency,
+        originCityIata: flightOffer.originCityIata,
+        destinationCityIata: flightOffer.destinationCityIata,
         totalDurationInWords: flightOffer.flightLegs[0].totalDurationInWords,
         transitDurationInWords: flightOffer.flightLegs[0].transitDurationInWords,
         totalDurationInMinutes: flightOffer.flightLegs[0].totalDurationInMinutes,

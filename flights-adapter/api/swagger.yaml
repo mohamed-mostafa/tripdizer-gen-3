@@ -90,6 +90,15 @@ definitions:
       currency:
         type: "string"
         example: "EGP"
+      originCityIata:
+        type: "string"
+        example: "CAI"
+      destinationCityIata: 
+        type: "string"
+        example: "AMS"
+      isOneWay:
+          type: "boolean"
+          example: "true"
     description: "represents an offer to the client"
   flightLeg:
     type: "object"
@@ -140,6 +149,12 @@ definitions:
       destination:
         type: "string"
         example: "AMS"
+      originDetails:
+        type: "string"
+        example: "Cairo International Airport"
+      destinationDetails:
+        type: "string"
+        example: "Schiphol Airport"
       durationInWords:
         type: "string"
         example: "0D6H30M"

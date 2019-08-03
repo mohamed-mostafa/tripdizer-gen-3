@@ -78,7 +78,7 @@ var register = function(requestData, onSuccess, onFailure) {
 					onFailure
 				);
 			} else {
-				console.log('An error occurred while trying to find a group trip with id ' + requestData.groupTripId);
+				console.error('An error occurred while trying to find a group trip with id ' + requestData.groupTripId);
 				onFailure('An error occurred while trying to find a group trip with id ' + requestData.groupTripId);
 			}
 		},

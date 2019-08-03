@@ -16,8 +16,8 @@ var getVideos = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /public/videos');
-		console.log(error);
+		console.error('An error occurred in /public/videos');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -40,8 +40,8 @@ var create = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /video');
-		console.log(error);
+		console.error('An error occurred in /video');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -67,8 +67,8 @@ var update = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /video');
-		console.log(error);
+		console.error('An error occurred in /video');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -83,8 +83,8 @@ var createPhone = function(req, res) {
 			res.end();
 		});
 	} catch (error) {
-		console.log('An error occurred in /phone');
-		console.log(error);
+		console.error('An error occurred in /phone');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -99,8 +99,8 @@ var updatePhone = function(req, res) {
 			res.send(updatedPhone);
 		});
 	} catch (error) {
-		console.log('An error occurred in /phone');
-		console.log(error);
+		console.error('An error occurred in /phone');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
@@ -121,8 +121,8 @@ var getPhones = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.log('An error occurred in /public/phones');
-		console.log(error);
+		console.error('An error occurred in /public/phones');
+		console.error(error);
 		res
 			.status(500)
 			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");

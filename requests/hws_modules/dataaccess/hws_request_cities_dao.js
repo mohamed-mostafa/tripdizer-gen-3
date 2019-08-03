@@ -9,7 +9,7 @@ exports.save = async function(requestId, cities) {
     await document.set(cities);  
   } catch (err) {
     console.log("Failed to save cities for request " + requestId);
-    console.log(err);
+    console.error(err);
   }
 }
 

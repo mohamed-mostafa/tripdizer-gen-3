@@ -17,7 +17,7 @@ module.exports = {
             file.save(buf, {contentType: "auto"}, function(err) {
                 strImage = null;
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     onFailure(err)
                 } else {
                     onSuccess();

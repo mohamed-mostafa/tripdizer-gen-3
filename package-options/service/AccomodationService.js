@@ -17,7 +17,8 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
         var citiesNumberOfNightPairs = accomomdationSearchRequest.cities;
         var selectedBudgetCategory = accomomdationSearchRequest.budgetCategory;
         let arrivalMoment = new moment(accomomdationSearchRequest.arrival); // start moment
-
+        var totalTripNumberOfNights = 0;
+        totalTripNumberOfNights = citiesNumberOfNightPairs.reduce((prev, cityNumberOfNghtsPair) => parseInt(prev.numberOfNights) + parseInt(cityNumberOfNghtsPair.numberOfNights));
         var accomodationOffers = [];
         for (var i = 0; i < citiesNumberOfNightPairs.length; i++) {
             var cityIata = citiesNumberOfNightPairs[i].cityIata;
@@ -44,35 +45,65 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                 }
 
                 var cityHotelsList = await getHotelsOfCity(cityIata);
-                cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase()).forEach(hotel => {
-                    var newHotel = {
-                        id: hotel.id,
-                        name: hotel.enName,
-                        displaName: language == 'ar' ? hotel.arName : hotel.enName,
-                        description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
-                        city: hotelCity.enName,
-                        thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
-                        address: hotel.address,
-                        stars: hotel.stars,
-                        checkin: cityArrival.toISOString(),
-                        checkout: cityDeparture.toISOString(),
-                        numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
-                        rate: findRate(cityArrival, cityDeparture, hotel.rates),
-                        price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights), // FIX THIS
-                        currency: "EGP",
-                    }
-                    newAccomodationOffer.hotels.push(newHotel);
-
-                });
-                // sort hotels in each offer by price
-                newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
+                if (selectedBudgetCategory.toLowerCase() == 'own budget' || selectedBudgetCategory == 1) {
+                    cityHotelsList
+                        .map(hotel => ({ // build hotels list
+                            id: hotel.id,
+                            name: hotel.enName,
+                            displaName: language == 'ar' ? hotel.arName : hotel.enName,
+                            description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
+                            city: hotelCity.enName,
+                            thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
+                            address: hotel.address,
+                            stars: hotel.stars,
+                            checkin: cityArrival.toISOString(),
+                            checkout: cityDeparture.toISOString(),
+                            numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
+                            rate: findRate(cityArrival, cityDeparture, hotel.rates),
+                            price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights, (hotel.budgetCategoryName.toLowerCase() == 'super economy' || hotel.budgetCategoryId == 2) ? true : false, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants), // FIX THIS
+                            currency: "EGP",
+                        }))
+                        .map(hotel => ({ // calculate the difference between the hotels cost and the desired cost, per person, taking city/hotel contribution in total accommodation cost into account
+                            ...hotel,
+                            desiredCostPerPersonDifference: findDesiredCostPerPersonDifference(hotel.price, accomomdationSearchRequest.desiredCostPerPerson || 0, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants, citiesNumberOfNightPairs[i].numberOfNights, totalTripNumberOfNights)
+                        }))
+                        .forEach(hotel => { // add them to returned offers
+                            newAccomodationOffer.hotels.push(hotel);
+                        });
+                    // sort hotels in each offer by desired cost per person difference
+                    newAccomodationOffer.hotels.sort((a, b) => a.desiredCostPerPersonDifference > b.desiredCostPerPersonDifference ? 1 : -1);
+                } else {
+                    cityHotelsList.filter(hotel => hotel.budgetCategoryName.toLowerCase() == selectedBudgetCategory.toLowerCase() || hotel.budgetCategoryId == selectedBudgetCategory).forEach(hotel => {
+                        var newHotel = {
+                            id: hotel.id,
+                            name: hotel.enName,
+                            displaName: language == 'ar' ? hotel.arName : hotel.enName,
+                            description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
+                            city: hotelCity.enName,
+                            thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
+                            address: hotel.address,
+                            stars: hotel.stars,
+                            checkin: cityArrival.toISOString(),
+                            checkout: cityDeparture.toISOString(),
+                            numberOfNights: citiesNumberOfNightPairs[i].numberOfNights,
+                            rate: findRate(cityArrival, cityDeparture, hotel.rates),
+                            price: findTotalPrice(cityArrival, cityDeparture, hotel.rates, citiesNumberOfNightPairs[i].numberOfNights, (hotel.budgetCategoryName.toLowerCase() == 'super economy' || hotel.budgetCategoryId == 2) ? true : false, accomomdationSearchRequest.numberOfAdults, accomomdationSearchRequest.numberOfChildren, accomomdationSearchRequest.numberOfInfants), // FIX THIS
+                            currency: "EGP",
+                        }
+                        newAccomodationOffer.hotels.push(newHotel);
+                    });
+                    // sort hotels in each offer by price
+                    newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
+                }
                 // limit number of hotels in each offer
                 if (newAccomodationOffer.hotels.length > MAX_NUMBER_OF_HOTELS_PER_CITY) {
                     newAccomodationOffer.hotels = newAccomodationOffer.hotels.slice(0, MAX_NUMBER_OF_HOTELS_PER_CITY);
                 }
+                // sort again by price because in case of own budget they're sorted by difference from desired cost and not by price
+                newAccomodationOffer.hotels.sort((a, b) => a.price > b.price ? 1 : -1);
                 accomodationOffers.push(newAccomodationOffer);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 reject(error);
             }
             arrivalMoment = cityDeparture; // move the arrival moment to the next city
@@ -116,7 +147,7 @@ function getCityByIata(cityIata) {
 };
 
 function findRate(cityArrival, cityDeparture, rates) {
-    var arrivalMonth = cityArrival.format('MMM').toUpperCase(); // short name of the mongh
+    var arrivalMonth = cityArrival.format('MMM').toUpperCase(); // short name of the month
     var departureMonth = cityDeparture.format('MMM').toUpperCase(); // short name of the month
 
     var rateOfArrivalMonth = rates[arrivalMonth];
@@ -124,8 +155,40 @@ function findRate(cityArrival, cityDeparture, rates) {
     return (rateOfArrivalMonth + rateOfDepartureMonth) / 2
 }
 
-function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights) {
+function findTotalPrice(cityArrival, cityDeparture, rates, numberOfNights, isHostel, numberOfAdults = 1, numberOfChildren = 0, numberOfInfants = 0) {
     var nightRate = findRate(cityArrival, cityDeparture, rates);
-    var totalPrice = nightRate * numberOfNights;
+    var numberOfPayingTravelers = numberOfAdults + numberOfChildren;
+    var totalPrice = nightRate;
+
+    if (isHostel == true) {
+        totalPrice = nightRate * numberOfNights * numberOfPayingTravelers;
+    } else {
+        var regularRooms = Math.floor(numberOfPayingTravelers / 2);
+        var trippleRooms = numberOfPayingTravelers % 2;
+        if (trippleRooms == 0) {
+            // regular rooms is 2, 4, 6, ... etc
+            totalPrice = nightRate * regularRooms * numberOfNights;
+        } else {
+            if (regularRooms == 0) {
+                // number of adults = 1
+                totalPrice = nightRate * numberOfNights;
+            } else {
+                // number of adults = 3, 5, ... etc
+                totalPrice = nightRate * (regularRooms - 1) * numberOfNights + nightRate * 1.35 * trippleRooms * numberOfNights;
+            }
+        }
+    }
+    // add profit margin
+    totalPrice = parseInt(totalPrice * 1.1);
     return totalPrice;
+}
+
+function findDesiredCostPerPersonDifference(hotelTotalPrice, desiredCostPerPerson, numberOfAdults, numberOfChildren, numberOfInfants, numberOfNightsInHotel, totalTripNumberOfNights) {
+    var numberOfPayingTravelers = numberOfAdults + numberOfChildren;
+    var hotelTotalPricePerPerson = hotelTotalPrice / numberOfPayingTravelers;
+
+    var hotelContributionInTotalCostPercent = numberOfNightsInHotel / totalTripNumberOfNights;
+    desiredCostPerPersonForHotel = desiredCostPerPerson * hotelContributionInTotalCostPercent;
+
+    return Math.abs(hotelTotalPricePerPerson - desiredCostPerPersonForHotel);
 }

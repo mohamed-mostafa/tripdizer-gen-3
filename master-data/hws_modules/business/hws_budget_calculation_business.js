@@ -2,7 +2,7 @@ var budgetCategoriesDao = require('../dataaccess/hws_budgetcategories_dao.js');
 var itinerariesDao = require('../dataaccess/hws_itineraries_dao.js');
 var DateDiff = require('date-diff');
 
-var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
+var budgetCalculation = function (request, onSuccess, onFailure, onUserError) {
 	var monthMap = {
 		1: 'JAN',
 		2: 'FEB',
@@ -31,7 +31,7 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 		itinerariesDao.getById(
 			request.destination,
 			null,
-			async function(itinerary) {
+			async function (itinerary) {
 				if (itinerary) {
 					var diff = new DateDiff(new Date(request.returnDate), new Date(request.departureDate));
 					const rData = {
@@ -139,9 +139,9 @@ var budgetCalculation = function(request, onSuccess, onFailure, onUserError) {
 					onFailure("Itinerary Id doesn't exists!.");
 				}
 			},
-			function(err) {
-				console.log('An error occurred while getting itinerary');
-				console.log(err);
+			function (err) {
+				console.error('An error occurred while getting itinerary');
+				console.error(err);
 				onFailure(err);
 			}
 		);
@@ -164,7 +164,7 @@ var calculateAccomodationAvgBudgetByBudgetCategory = (
 	// take the average of the hotels of the same category
 	return hotels.length > 0 ? budget / hotels.length : 0;
 };
-var calculateAccomodationBudgetByRoom = function(costOfAllNights, numbrtOfTravelers) {
+var calculateAccomodationBudgetByRoom = function (costOfAllNights, numbrtOfTravelers) {
 	var regularRooms = Math.floor(numbrtOfTravelers / 2);
 	var extraRooms = numbrtOfTravelers % 2;
 
