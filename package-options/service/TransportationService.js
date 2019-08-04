@@ -70,8 +70,8 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
             let transportationLeg = { origin: originCity, destination: destinationCity, departure: departure.toISOString(), flightOffers: [] };
             let legSearchRequest = {
                 departure: transportationLeg.departure,
-                origin: transportationLeg.origin.iataCode,
-                destination: transportationLeg.destination.iataCode,
+                origin: transportationLeg.origin.iataCode.substr(0, 3),
+                destination: transportationLeg.destination.iataCode.substr(0, 3),
                 numberOfAdults: numberOfAdults,
                 numberOfChildren: numberOfChildren,
                 numberOfInfants: numberOfInfants

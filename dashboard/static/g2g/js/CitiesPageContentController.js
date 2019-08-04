@@ -113,6 +113,8 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.addCity = function (close) {
 			if ($scope.newCityIsValid(true)) {
 				$scope.saving = true;
+				$scope.newCity.iataCode = $scope.newCity.zone == null || $scope.newCity.zone == '' || $scope.newCity.zone == undefined ? $scope.newCity.iataCode : $scope.newCity.iataCode + $scope.newCity.zone;
+				delete $scope.newCity.zone;
 				$http
 					.put($rootScope.masterDataServerUrl + '/city', { city: $scope.newCity })
 					.success(function (response) {
@@ -139,6 +141,8 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				if ($scope.newCity.thumbnail.includes($rootScope.mediaBaseUrl)) {
 					delete $scope.newCity.thumbnail;
 				}
+				$scope.newCity.iataCode = $scope.newCity.zone == null || $scope.newCity.zone == '' || $scope.newCity.zone == undefined ? $scope.newCity.iataCode : $scope.newCity.iataCode + $scope.newCity.zone;
+				delete $scope.newCity.zone;
 				$http
 					.post($rootScope.masterDataServerUrl + '/city', { city: $scope.newCity })
 					.success(function (response) {
@@ -200,6 +204,8 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 				if ($scope.cities[i].id == id) {
 					$scope.newCity = $scope.cities[i];
 					$scope.newCity.thumbnail = $rootScope.mediaBaseUrl + "/cities/" + $scope.newCity.iataCode + ".png";
+					$scope.newCity.zone = $scope.newCity.iataCode.substr(3, 1);
+					$scope.newCity.iataCode = $scope.newCity.iataCode.substr(0, 3);
 				}
 			}
 			$('#addCityModal').modal('show');
