@@ -37,7 +37,7 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
 
                 let originCountry = transportationSearchRequest.citiesSequence[i].countryIso;
                 let destinationCountry = transportationSearchRequest.citiesSequence[i + 1].countryIso;
-                let isCrossCountry = originCountry === destinationCountry;
+                let isCrossCountry = originCountry != destinationCountry;
 
                 departureMoment = departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, 'Days');
 
