@@ -308,10 +308,11 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 		requestId,
 		async function (request) {
 			try {
-				var flightOffers = request.flightOffers != null ? request.flightOffers : requestFlightOffers;
-				var selectedCities = request.selectedCities != null ? request.selectedCities : requestSelectedCities;
-				var selectedHotels = request.selectedHotels != null ? request.selectedHotels : requestSelectedHotels;
-				var selectedAttractions = request.selectedAttractions != null ? request.selectedAttractions : requestSelectedAttractions;
+				// if flights/accommodations/attractions/cities are passed to getPackage, ignore the ones with the request
+				var flightOffers = requestFlightOffers != null ? requestFlightOffers : request.flightOffers;
+				var selectedCities = requestSelectedCities != null ? requestSelectedCities : request.selectedCities;
+				var selectedHotels = requestSelectedHotels != null ? requestSelectedHotels : request.selectedHotels;
+				var selectedAttractions = requestSelectedAttractions != null ? requestSelectedAttractions : request.selectedAttractions;
 				const departureDate = new Date(request.departureDate);
 				const returnDate = new Date(request.returnDate);
 				const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
