@@ -12,7 +12,12 @@
 			</div>
 
 			<div class="row">
-				<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of accommodation.hotels" (click)="selectHotel(hotel)" [class.can-select]="!hotel.select">
+				<div
+					class="col-sm-12 col-md-6 col-lg-4 mb-2"
+					*ngFor="let hotel of accommodation.hotels"
+					(click)="selectHotel(hotel)"
+					[class.can-select]="!hotel.select"
+				>
 					<div class="hotel-item p-3" [class.selected-hotel]="hotel.select">
 						<div class="item-img-container">
 							<img [src]="hotel.thumbnail" alt="" />
@@ -57,7 +62,8 @@
 											<p class="item-text price-text">{{ hotel.price }} LE</p>
 										</div>
 										<div class="col-6 justify-content-end">
-											<mat-checkbox class="float-right mr-1"
+											<mat-checkbox
+												class="float-right mr-1"
 												[checked]="hotel.select"
 												[disableRipple]="true"
 												(click)="$event.preventDefault()"
@@ -101,12 +107,20 @@
 
 		<div class="row mt-3">
 			<div class="col-12 text-center">
+				<a
+					href="javascript:void(0)"
+					(click)="back()"
+					class="back-btn position-relative"
+					[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'"
+					>{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a
+				>
+
 				<button
 					(click)="next()"
 					[disabled]="false"
 					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2"
 				>
-					{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
+					{{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
 				</button>
 			</div>
 		</div>

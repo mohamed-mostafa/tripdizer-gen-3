@@ -163,7 +163,8 @@
 				"view_choose": "عرض واختيار المدن",
 				"things_to_do": "أنشطة يمكن القيام بها فى",
 				"view_map": "عرض الخريطة",
-				"next_label": "التالي"
+				"next_label": "التالي",
+				"back_label": "رجوع"
 			},
 			"tab_flights": {
 				"title": "الطيران",
@@ -173,6 +174,7 @@
 				"reorder_route": "ترتيب المسار",
 				"total_cost": "السعر الاجمالي للطيران",
 				"next_label": "التالي",
+				"back_label": "رجوع",
 				"start": "البداية",
 				"end": "النهاية",
 				"no_flights": "الطيران غير متوفر لهذه الرحلة",
@@ -190,6 +192,8 @@
 				"select": "اختيار",
 				"selected": "تم اختياره",
 				"total_price": "إجمالى السعر",
+				"next_label": "التالي",
+				"back_label": "رجوع",
 				"total_cost": "اجمالى سعر الفنادق"
 			},
 			"summary": {

@@ -12,9 +12,13 @@ export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	isFlightsTabVisited: Observable<boolean>;
+	currentTab: number;
 
-	constructor( private service: EstimatedCostService) {
-		service.currentTabIndex.subscribe(n => (this.selectedTab = n));
+	constructor(private service: EstimatedCostService) {
+		service.currentTabIndex.subscribe(n => {
+			this.selectedTab = n;
+			console.log(this.selectedTab);
+		});
 		this.isFlightsTabVisited = service.isFlightsTabVisited;
 	}
 

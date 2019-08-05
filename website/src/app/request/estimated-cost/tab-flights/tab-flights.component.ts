@@ -47,6 +47,10 @@ export class TabFlightsComponent {
 		this.service.setCurrentTabIndex(2);
 	}
 
+	back(): void {
+		this.service.setCurrentTabIndex(0);
+	}
+
 	offerChanged(flightOffer: FlightOffer): void {
 		if (flightOffer) {
 			this.selectedFlightOffers[flightOffer.flightIndex] = flightOffer;

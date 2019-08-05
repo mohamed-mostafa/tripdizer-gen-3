@@ -1,7 +1,9 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
+import { RequestService } from '../../request.service';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
@@ -9,11 +11,22 @@ import { CityDTO } from './city-dto.model';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
+
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
 	cityPaths: Array<{ lat: number; lng: number }> = [];
 	snackBar: MatSnackBar;
-	constructor(private service: EstimatedCostService, snackBar: MatSnackBar) {
+	currentStepPath: string;
+
+	constructor(
+		private service: EstimatedCostService,
+		snackBar: MatSnackBar,
+		private requestService: RequestService,
+		private route: ActivatedRoute,
+		private router: Router,
+	) {
+		this.currentStepPath = this.route.routeConfig.path;
+		this.service.setCurrentTabIndex(0);
 		this.snackBar = snackBar;
 		service.getCities().subscribe(
 			res => {
@@ -95,5 +108,9 @@ export class TabCitiesComponent {
 	next(): void {
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
+	}
+
+	goBack(): void {
+		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 }

@@ -27,7 +27,7 @@
 						</div>
 					</div>
 				</mat-tab>
-				<mat-tab>
+				<mat-tab [disabled]="selectedTab < 1">
 					<ng-template mat-tab-label>
 						<div class="tab-icon">
 							<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 				</mat-tab>
-				<mat-tab>
+				<mat-tab [disabled]="selectedTab < 2">
 					<ng-template mat-tab-label>
 						<div class="tab-icon">
 							<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>

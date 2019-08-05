@@ -55,4 +55,8 @@ export class TabAccommodationComponent {
 		this.service.setSelectedHotels(this.selectedHotels);
 		this.service.setCurrentTabIndex(4);
 	}
+
+	back(): void {
+		this.service.setCurrentTabIndex(1);
+	}
 }
