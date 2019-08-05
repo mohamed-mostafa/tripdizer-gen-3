@@ -410,7 +410,7 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 								function (doc) {
 									packageHttp(
 										'get',
-										`https://script.google.com/a/tripdizer.com/macros/s/AKfycbygOPzO0yHS2VIKjuBJKQJnx2wD3lIBRmSemQgiUNU/exec?docId=${
+										'https://script.google.com/a/tripdizer.com/macros/s/AKfycbygOPzO0yHS2VIKjuBJKQJnx2wD3lIBRmSemQgiUNU/exec?docId=${
 										doc.docId
 										}`,
 										null,
