@@ -405,12 +405,12 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 							};
 							packageHttp(
 								'post',
-								'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+								'https://script.google.com/a/tripdizer.com/macros/s/AKfycbygOPzO0yHS2VIKjuBJKQJnx2wD3lIBRmSemQgiUNU/exec',
 								JSON.stringify(request),
 								function (doc) {
 									packageHttp(
 										'get',
-										`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
+										`https://script.google.com/a/tripdizer.com/macros/s/AKfycbygOPzO0yHS2VIKjuBJKQJnx2wD3lIBRmSemQgiUNU/exec?docId=${
 										doc.docId
 										}`,
 										null,
