@@ -11,7 +11,7 @@ import { LUTPurpose, Purpose } from '../models/purpose.model';
 @Injectable({ providedIn: 'root' })
 export class LookupsService {
 	private endPoint = 'master-data';
-	isLoading = new Subject<boolean>();
+	isLoading = new Subject<{ show: boolean, message: string }>();
 	private Lookups: {
 		budgetCategories: Array<BudgetCategory>;
 		countries: Array<Country>;
@@ -21,10 +21,10 @@ export class LookupsService {
 		purposes: Array<Purpose>;
 	} = {} as any;
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
 	private getLookup<T>(endPoint: string, propName: string): Observable<Array<T>> {
-		this.isLoading.next(true);
+		this.isLoading.next({ show: true, message: "" });
 		let observable: Observable<Array<T>>;
 		if (this.Lookups[propName]) {
 			observable = of(this.Lookups[propName]);
@@ -34,7 +34,7 @@ export class LookupsService {
 		return observable.pipe(
 			tap(arr => {
 				this.Lookups[propName] = arr;
-				this.isLoading.next(false);
+				this.isLoading.next({ show: false, message: "" });
 			})
 		);
 	}

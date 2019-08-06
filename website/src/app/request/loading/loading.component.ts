@@ -10,8 +10,8 @@ import { RequestService } from '../request.service';
 })
 export class RequestLoadingComponent {
 	isLoading;
-
+	message: string;
 	constructor(requestService: RequestService) {
-		requestService.isLoading.subscribe(isLoading => (this.isLoading = isLoading));
+		requestService.isLoading.subscribe(input => { this.isLoading = input.show; this.message = input.message });
 	}
 }

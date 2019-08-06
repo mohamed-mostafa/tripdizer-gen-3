@@ -49,11 +49,11 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "Locating the best cities that match your interests");
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -83,7 +83,7 @@ export class EstimatedCostService {
 	}
 
 	getFlights(): Observable<Array<Flight>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "Finding the best flight deals ...");
 		// const citiesSequence: Array<CitySequence> = [
 		// 	{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
 		// 	{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
@@ -111,7 +111,7 @@ export class EstimatedCostService {
 				})
 			),
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -130,7 +130,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "Finding the best hotels ...");
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
@@ -158,7 +158,7 @@ export class EstimatedCostService {
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -168,12 +168,12 @@ export class EstimatedCostService {
 		this.selectedHotels = selectedHotels;
 	}
 
-	setIsLoading(isLoading: boolean) {
-		this.requestService.isLoading.next(isLoading);
+	setIsLoading(isLoading: boolean, message: string) {
+		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "");
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
@@ -181,7 +181,7 @@ export class EstimatedCostService {
 		const attractionsRequest: AttractionsRequest = { cities: cities };
 		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
