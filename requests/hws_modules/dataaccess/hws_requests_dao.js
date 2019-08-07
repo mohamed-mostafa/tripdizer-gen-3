@@ -4,17 +4,17 @@
 
 var daoUtilities = require('./hws_dao_utilities.js');
 
-var createNewRequest = function(request, onSuccess, onFailure) {
+var createNewRequest = function (request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the request
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -65,7 +65,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.score,
 							request.channel,
 						],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
@@ -99,13 +99,13 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 											connection.escape(request.preferences[i].percentage) +
 											')';
 									}
-									connection.query(batchInsertStatement, function(err, result) {
+									connection.query(batchInsertStatement, function (err, result) {
 										// if an error is thrown, end the connection and throw an error
 										if (err) {
 											// if the 2nd insert statement fails
 											console.log(
 												'An error occurred while trying to create the interests of the requesta: ' +
-													JSON.stringify(request)
+												JSON.stringify(request)
 											);
 											console.error(err);
 											connection.rollback();
@@ -137,10 +137,10 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 	});
 };
 
-var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFailure) {
+var getRequestSummariesByStatus = function (statuses, page, size, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -150,8 +150,8 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 			var offset = ((isNaN(page) ? 1 : page) - 1) * limit;
 			// execute the query
 			var query =
-				'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?) AND Archived = 0;SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) AND Archived = 0 ORDER BY Score DESC, Date DESC, Id DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY tr.Score DESC, tr.Date DESC, tr.Id DESC, ti.Interest_Id';
-			connection.query(query, [statuses, statuses, offset, limit], function(err, rows) {
+				'SELECT COUNT(*) AS Total_Rows FROM traveler_request WHERE Status in (?) AND Archived = 0;SELECT tr.*, ti.Interest_Id, ti.Percentage AS Interset_Percentage, u.full_name FROM (SELECT * FROM traveler_request WHERE Status in (?) AND Archived = 0 ORDER BY Date DESC, Id DESC LIMIT ?, ?) tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id LEFT OUTER JOIN `Traveler_Interests` ti ON tr.Id = ti.Request_Id ORDER BY tr.Date DESC, tr.Id DESC, ti.Interest_Id';
+			connection.query(query, [statuses, statuses, offset, limit], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					console.error('An error occurred while trying to find requests with statuses ' + statuses);
@@ -216,7 +216,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[i].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
 									rows[i].Pdf_Id
-								}&export=download`,
+									}&export=download`,
 								interests: [],
 							};
 							var interest = {
@@ -248,10 +248,10 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 	});
 };
 
-var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onFailure) {
+var getRequestSummariesCountByStatus = function (statuses, filter, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -288,9 +288,9 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 			// execute the query
 			connection.query(
 				'SELECT count(id) as count, sum(revenue) as revenue, sum(profit) as profit, sum(Number_Of_Adults + Number_Of_Kids + Number_Of_Infants) as numberOfTravelers FROM traveler_request WHERE status IN (?) AND Archived = 0' +
-					query,
+				query,
 				[statuses],
-				function(err, rows) {
+				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
 						console.error('An error occurred while trying to count order summaries with statuses ' + statuses);
@@ -308,10 +308,10 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 	});
 };
 
-var getRequestById = function(requestId, onSuccess, onFailure) {
+var getRequestById = function (requestId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -321,7 +321,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 			connection.query(
 				'SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.id = ? AND tr.Archived = 0',
 				[requestId],
-				function(err, rows) {
+				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					if (err) {
 						console.error('An error occurred while trying to find a request with id ' + requestId);
@@ -382,7 +382,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
 									rows[0].Pdf_Id
-								}&export=download`,
+									}&export=download`,
 								interests: [],
 								mailsHistory: [],
 							};
@@ -390,7 +390,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 							connection.query(
 								'SELECT * FROM Traveler_Interests WHERE Request_Id = ? ORDER BY Interest_Id',
 								[requestId],
-								function(itemsErr, itemsRows) {
+								function (itemsErr, itemsRows) {
 									// if an error is thrown, end the connection and throw an error
 									if (itemsErr) {
 										console.log(
@@ -411,12 +411,12 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 										connection.query(
 											'SELECT * FROM traveler_mail_history WHERE Email = ?',
 											[request.traveler.emailAddress],
-											function(mailsErr, mailsRows) {
+											function (mailsErr, mailsRows) {
 												// if an error is thrown, end the connection and throw an error
 												if (itemsErr) {
 													console.log(
 														'An error occurred while trying to find the question answers of request with id ' +
-															requestId
+														requestId
 													);
 													console.log(mailsErr);
 													connection.end();
@@ -451,10 +451,10 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var updateRequest = function(request, onSuccess, onFailure) {
+var updateRequest = function (request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -499,7 +499,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.channel,
 					request.id,
 				],
-				function(err, rows) {
+				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();
 					if (err) {
@@ -522,17 +522,17 @@ var updateRequest = function(request, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
+var modifyRequestStatusById = function (orderId, status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('UPDATE `traveler_request` SET `Status` = ? WHERE `Id` = ?', [status, orderId], function(
+			connection.query('UPDATE `traveler_request` SET `Status` = ? WHERE `Id` = ?', [status, orderId], function (
 				err,
 				rows
 			) {
@@ -557,10 +557,10 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
+var modifyRequestPackageInfo = function (requestId, docId, pdfId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -570,7 +570,7 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 			connection.query(
 				'UPDATE `traveler_request` SET `Doc_Id` = ?, `Pdf_Id` = ? WHERE `Id` = ?',
 				[docId, pdfId, requestId],
-				function(err) {
+				function (err) {
 					// if an error is thrown, end the connection and throw an error
 					//				connection.end();
 					if (err) {
@@ -593,10 +593,10 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
+var assignRequestToUser = function (requestId, userId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
@@ -605,7 +605,7 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 			// execute the query
 			var statement =
 				'UPDATE traveler_request SET Assigned_User = ' + userId + ' WHERE traveler_request.id = ' + requestId;
-			connection.query(statement, [], function(err, rows) {
+			connection.query(statement, [], function (err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				//				connection.end();
 				if (err) {
@@ -625,17 +625,17 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	});
 };
 
-var addNewMailHistory = function(object, onSuccess, onFailure) {
+var addNewMailHistory = function (object, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -645,13 +645,13 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					var attachmentFileNames = [];
-					object.attachments.forEach(function(attachment) {
+					object.attachments.forEach(function (attachment) {
 						attachmentFileNames.push(attachment.filename || attachment);
 					});
 					connection.query(
 						'INSERT INTO traveler_mail_history (Email, Subject, Attachments) values (?, ?, ?)',
 						[object.email, object.subject, JSON.stringify(attachmentFileNames)],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
@@ -676,17 +676,17 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCounts = function(onSuccess, onFailure) {
+var getRequestCounts = function (onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -697,7 +697,7 @@ var getRequestCounts = function(onSuccess, onFailure) {
 				} else {
 					connection.query(
 						'SELECT `s`.`Title` AS `Status`, COUNT(*) AS `Count`, SUM(`tr`.`Number_Of_Adults` + `tr`.`Number_Of_Kids` + `tr`.`Number_Of_Infants`) AS `Total_Travellers`, SUM(`tr`.`Number_Of_Adults`) AS `Adults`, SUM(`tr`.`Number_Of_Kids`) AS `Kids`, SUM(`tr`.`Number_Of_Infants`) AS `Infants` FROM `traveler_request` `tr` JOIN `statuses` `s` ON `tr`.`Status` = `s`.`Id` WHERE `tr`.`Archived` = 0 GROUP BY `tr`.`Status`',
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
@@ -722,17 +722,17 @@ var getRequestCounts = function(onSuccess, onFailure) {
 	});
 };
 
-var toggleOptions = function(requestId, option, onSuccess, onFailure) {
+var toggleOptions = function (requestId, option, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -744,7 +744,7 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 					connection.query(
 						'UPDATE `traveler_request` SET `' + option + '` = `' + option + '` ^ 1 WHERE `Id` = ?',
 						[requestId],
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
@@ -769,17 +769,17 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
+var getRequestCountsByPromoCode = function (promoCode, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -790,7 +790,7 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 				} else {
 					connection.query(
 						"select count(*) AS count from traveler_request where Promo_Code = '" + promoCode + "'",
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
@@ -816,17 +816,17 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
-var getTravelerEmails = function(onSuccess, onFailure) {
+var getTravelerEmails = function (onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
+	connection.connect(function (err) {
 		if (err) {
 			console.error('An error occurred while trying to open a database connection');
 			console.error(err);
 			onFailure(err);
 		} else {
 			// begin a transaction to insert the mail history
-			connection.beginTransaction(function(err) {
+			connection.beginTransaction(function (err) {
 				// execute the query
 				if (err) {
 					// end the connection
@@ -837,7 +837,7 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 				} else {
 					connection.query(
 						'SET SESSION GROUP_CONCAT_MAX_LEN = 1000000000000000000;SELECT DISTINCT GROUP_CONCAT(`Traveler_Email_Address`) AS `emails` FROM `traveler_request`',
-						function(err, result) {
+						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
 							if (err) {
 								// if the first insert statement fails
