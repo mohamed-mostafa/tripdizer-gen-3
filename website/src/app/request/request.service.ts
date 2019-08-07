@@ -37,11 +37,6 @@ export class RequestService {
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
 
-	// needReloadCitiesTab: Subject<Object> = new ReplaySubject<Object>(true);
-
-	// needReloadCitiesTab = new BehaviorSubject<boolean>(true);
-	// needReloadFlightsTab = new BehaviorSubject<boolean>(true);
-	// needReloadAccommodationTab = new BehaviorSubject<boolean>(true);
 	isCitiesTabVisited = new BehaviorSubject<boolean>(false);
 	isFlightsTabVisited = new BehaviorSubject<boolean>(false);
 	isAccommodationTabVisited = new BehaviorSubject<boolean>(false);

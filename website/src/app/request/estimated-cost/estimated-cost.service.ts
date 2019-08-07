@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
@@ -31,8 +31,6 @@ export class EstimatedCostService {
 	selectedHotels: Array<Hotel>;
 	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions>;
-
-	// isFlightsTabVisited = new Subject<boolean>();
 
 	currentTabIndex = new Subject<number>();
 
@@ -69,7 +67,6 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
-		// this.isFlightsTabVisited.next(false);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
