@@ -60,15 +60,20 @@
 				</div>
 			</div>
 			<div class="col-lg-4 map-section pl-lg-6">
-				<!-- <hr class="d-lg-none" />
-				<h6 class="font-weight-bold font-italic view-map">
-					{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
-				</h6>
-				<div *ngIf="cityPaths?.length" class="row d-none d-lg-block">
+
+				<div class="row mb-4">
 					<div class="col-12">
-						<c-shared-google-map [paths]="cityPaths"></c-shared-google-map>
+						<hr class="d-lg-none" />
+						<h6 class="font-weight-bold font-italic view-map">
+							{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
+						</h6>
+						<div *ngIf="cityPaths?.length" class="row d-none d-lg-block">
+							<div class="col-12">
+								<c-shared-google-map [paths]="cityPaths"></c-shared-google-map>
+							</div>
+						</div>
 					</div>
-				</div> -->
+				</div>
 
 				<div class="row">
 					<div class="col-12">

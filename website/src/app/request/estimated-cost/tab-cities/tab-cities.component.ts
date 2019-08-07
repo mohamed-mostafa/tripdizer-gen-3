@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,29 +28,30 @@ export class TabCitiesComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.service.setCurrentTabIndex(0);
+		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
-		service.getCities().subscribe(
-			res => {
-				let numberOfNights = this.service.getNumberOfNights();
-				let maxNumberOfCities = Math.ceil(numberOfNights / 2);
-				let numberOfSelectedCities = 0;
-				if (maxNumberOfCities < res.length) {
-					numberOfSelectedCities = maxNumberOfCities;
-				} else {
-					numberOfSelectedCities = res.length;
-				}
-				for (let b = 0; b < res.length; b++) {
-					this.cities.push(res[b]);
-					res[b].select = false;
-					if (b + 1 <= numberOfSelectedCities) {
-						res[b].select = true;
-						this.selectedCities.push(res[b]);
-						const coordinates = res[b].coordinates.split(', ');
-						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+			service.getCities().subscribe(
+				res => {
+					const numberOfNights = this.service.getNumberOfNights();
+					const maxNumberOfCities = Math.ceil(numberOfNights / 2);
+					let numberOfSelectedCities = 0;
+					if (maxNumberOfCities < res.length) {
+						numberOfSelectedCities = maxNumberOfCities;
+					} else {
+						numberOfSelectedCities = res.length;
+					}
+					for (let b = 0; b < res.length; b++) {
+						this.cities.push(res[b]);
+						res[b].select = false;
+						if (b + 1 <= numberOfSelectedCities) {
+							res[b].select = true;
+							this.selectedCities.push(res[b]);
+							const coordinates = res[b].coordinates.split(', ');
+							this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+						}
 					}
 				}
-			}
-		);
+			);
 	}
 
 	updateSelectedCities(city) {
@@ -72,9 +74,8 @@ export class TabCitiesComponent {
 			}
 		} else if (city.select === false) {
 			// check if no more cities should be selected
-			let numberOfNights = this.service.getNumberOfNights();
-			let maxNumberOfCities = Math.ceil(numberOfNights / 2);
-			debugger;
+			const numberOfNights = this.service.getNumberOfNights();
+			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
 			if (this.selectedCities.length >= maxNumberOfCities) {
 				// prevent more selections
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
@@ -91,6 +92,9 @@ export class TabCitiesComponent {
 				}
 			}
 		}
+
+		this.requestService.setIsFlightsTabVisited(false);
+		this.requestService.setIsAccommodationTabVisited(false);
 	}
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {

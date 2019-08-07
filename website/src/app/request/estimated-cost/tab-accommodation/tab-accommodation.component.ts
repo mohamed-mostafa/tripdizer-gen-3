@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
+import { RequestService } from '../../request.service';
 
 @Component({
 	selector: 'c-estimated-cost-accommodation',
@@ -12,7 +13,8 @@ export class TabAccommodationComponent {
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
 
-	constructor(private service: EstimatedCostService) {
+	constructor(private service: EstimatedCostService, requestService: RequestService) {
+		requestService.setIsAccommodationTabVisited(true);
 		service.getAccommodation().subscribe(res => {
 			const items = res;
 			for (let b = 0; b < items.length; b++) {

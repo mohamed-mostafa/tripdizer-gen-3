@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
@@ -32,13 +32,11 @@ export class EstimatedCostService {
 	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions>;
 
-	isFlightsTabVisited = new Subject<boolean>();
+	// isFlightsTabVisited = new Subject<boolean>();
 
 	currentTabIndex = new Subject<number>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) {
-		this.isFlightsTabVisited.next(false);
-	}
+	constructor(private http: HttpClient, private requestService: RequestService) {}
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -71,23 +69,15 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
-		this.isFlightsTabVisited.next(false);
+		// this.isFlightsTabVisited.next(false);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
 		return this.selectedCities;
 	}
 
-	setFlightsTabAsVisited(): void {
-		this.isFlightsTabVisited.next(true);
-	}
-
 	getFlights(): Observable<Array<Flight>> {
 		this.setIsLoading(true);
-		// const citiesSequence: Array<CitySequence> = [
-		// 	{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
-		// 	{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
-		// ];
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
+import { RequestService } from '../request.service';
 
 @Component({
 	selector: 'c-request-estimated-cost',
@@ -11,18 +12,25 @@ import { EstimatedCostService } from './estimated-cost.service';
 export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
+	isCitiesTabVisited: Observable<boolean>;
 	isFlightsTabVisited: Observable<boolean>;
-	currentTab: number;
+	isAccommodationTabVisited: Observable<boolean>;
+	currentTabIndex: Observable<boolean>;
 
-	constructor(private service: EstimatedCostService) {
+	constructor(private service: EstimatedCostService, requestService: RequestService) {
+		this.selectedTab = 0;
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
-			console.log(this.selectedTab);
+			// console.log(this.selectedTab);
 		});
-		this.isFlightsTabVisited = service.isFlightsTabVisited;
+
+		this.isCitiesTabVisited = requestService.isCitiesTabVisited;
+		this.isFlightsTabVisited = requestService.isFlightsTabVisited;
+		this.isAccommodationTabVisited = requestService.isAccommodationTabVisited;
 	}
 
 	tabChange(e) {
 		this.service.setCurrentTabIndex(e);
+		console.log(e);
 	}
 }
