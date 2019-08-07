@@ -23,7 +23,7 @@ export class TravelInfoComponent {
 	controls: any = {
 		travelingFrom: new FormControl('', [Validators.required]),
 		destination: new FormControl('', [
-			CustomValidators.conditionallyRequired(() => Boolean(this.selectedCountries && this.selectedCountries.length)),
+			CustomValidators.conditionallyRequired(() => Boolean(this.isHavePlan || (this.selectedCountries && this.selectedCountries.length))),
 		]),
 		departureDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		returnDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),

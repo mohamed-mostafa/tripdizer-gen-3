@@ -237,7 +237,6 @@ export class EstimatedCostService {
 			});
 
 			// add an extra station, which is the origin step (e.g. return to cairo)
-			debugger;
 			if (this.summaryStations.length > 0) {
 				const lastStationAirport = this.requestService.getProperty("travelingFrom");
 				const lastStationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode);
