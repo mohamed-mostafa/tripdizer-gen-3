@@ -360,7 +360,7 @@ export class RequestService {
 	}
 
 	submitRequest(): Observable<Ticket | null> {
-		this.isLoading.next({ show: true, message: "" });
+		this.isLoading.next({ show: true, message: "Submitting your request ..." });
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
 			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request: request }).pipe(
