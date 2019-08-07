@@ -539,7 +539,7 @@ export class Request extends CommonFunctions {
 					if (!this._destination) {
 						return null;
 					}
-					return this.destination.name;
+					return this._requestType === RequestType.SurpriseMe ? this.destination.name : "";
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
 				isValid: (): boolean => {
@@ -557,7 +557,7 @@ export class Request extends CommonFunctions {
 				title: this._localeLabels.estimated_cost,
 				path: 'estimated-cost',
 				order: this.getStepOrder('estimatedCost'),
-				isDisabled: this.destination && this.destination.id === -1,
+				isDisabled: (this.destination && this.destination.id === -1) || this._requestType === RequestType.SurpriseMe,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('estimatedCost')) === -1) {
 						return null;

@@ -28,6 +28,7 @@ export class LookupsService {
 		let observable: Observable<Array<T>>;
 		if (this.Lookups[propName]) {
 			observable = of(this.Lookups[propName]);
+			this.isLoading.next({ show: false, message: "" });
 		} else {
 			observable = this.http.get<Array<T>>(`${this.endPoint}/${endPoint}`);
 		}
