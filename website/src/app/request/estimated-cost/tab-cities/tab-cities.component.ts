@@ -30,28 +30,31 @@ export class TabCitiesComponent {
 		this.service.setCurrentTabIndex(0);
 		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
-			service.getCities().subscribe(
-				res => {
-					const numberOfNights = this.service.getNumberOfNights();
-					const maxNumberOfCities = Math.ceil(numberOfNights / 2);
-					let numberOfSelectedCities = 0;
-					if (maxNumberOfCities < res.length) {
-						numberOfSelectedCities = maxNumberOfCities;
-					} else {
-						numberOfSelectedCities = res.length;
-					}
-					for (let b = 0; b < res.length; b++) {
-						this.cities.push(res[b]);
-						res[b].select = false;
-						if (b + 1 <= numberOfSelectedCities) {
-							res[b].select = true;
-							this.selectedCities.push(res[b]);
-							const coordinates = res[b].coordinates.split(', ');
-							this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
-						}
+		service.getCities().subscribe(
+			res => {
+				const numberOfNights = this.service.getNumberOfNights();
+				const maxNumberOfCities = Math.ceil(numberOfNights / 2);
+				let numberOfSelectedCities = 0;
+				if (maxNumberOfCities < res.length) {
+					numberOfSelectedCities = maxNumberOfCities;
+				} else {
+					numberOfSelectedCities = res.length;
+				}
+				for (let b = 0; b < res.length; b++) {
+					this.cities.push(res[b]);
+					res[b].select = false;
+					if (b + 1 <= numberOfSelectedCities) {
+						res[b].select = true;
+						this.selectedCities.push(res[b]);
+						const coordinates = res[b].coordinates.split(', ');
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
 					}
 				}
-			);
+
+				this.requestService.setIsFlightsTabVisited(false);
+				this.requestService.setIsAccommodationTabVisited(false);
+			}
+		);
 	}
 
 	updateSelectedCities(city) {
