@@ -32,13 +32,9 @@ export class EstimatedCostService {
 	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions>;
 
-	isFlightsTabVisited = new Subject<boolean>();
-
 	currentTabIndex = new Subject<number>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) {
-		this.isFlightsTabVisited.next(false);
-	}
+	constructor(private http: HttpClient, private requestService: RequestService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -71,15 +67,10 @@ export class EstimatedCostService {
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
 		this.requestService.setProperty('selectedCities', selectedCities);
-		this.isFlightsTabVisited.next(false);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
 		return this.selectedCities;
-	}
-
-	setFlightsTabAsVisited(): void {
-		this.isFlightsTabVisited.next(true);
 	}
 
 	getFlights(): Observable<Array<Flight>> {

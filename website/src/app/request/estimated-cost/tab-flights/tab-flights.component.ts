@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { Flight, FlightOffer } from './flight.model';
+import { RequestService } from '../../request.service';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -16,8 +17,8 @@ export class TabFlightsComponent {
 		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
 	}
 
-	constructor(private service: EstimatedCostService) {
-		service.setFlightsTabAsVisited();
+	constructor(private service: EstimatedCostService, requestService: RequestService) {
+		requestService.setIsFlightsTabVisited(true);
 		service.getFlights().subscribe(flights => {
 			this.flights = flights.map((flight, flightIndex) => ({
 				...flight,
@@ -33,6 +34,7 @@ export class TabFlightsComponent {
 			this.flightPaths = flights
 				.filter(flight => flight.origin && flight.origin.latitude && flight.origin.longitude)
 				.map(flight => ({ lat: flight.origin.latitude, lng: flight.origin.longitude }));
+
 		});
 	}
 
@@ -45,6 +47,10 @@ export class TabFlightsComponent {
 
 		this.service.setSelectedFlightOffers(selectedOffers);
 		this.service.setCurrentTabIndex(2);
+	}
+
+	back(): void {
+		this.service.setCurrentTabIndex(0);
 	}
 
 	offerChanged(flightOffer: FlightOffer): void {

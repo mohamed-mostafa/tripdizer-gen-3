@@ -24,6 +24,7 @@ export class RequestComponent implements OnInit, OnDestroy {
 		private socialAuthService: SocialAuthService,
 		private dialog: MatDialog
 	) {
+
 		requestService.getCountries().subscribe(countries => {
 			this.countries = countries;
 			this.setPreSelectedCountries();

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BudgetCategory } from '../shared/models/budget-category.model';
@@ -37,6 +37,10 @@ export class RequestService {
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
 
+	isCitiesTabVisited = new BehaviorSubject<boolean>(false);
+	isFlightsTabVisited = new BehaviorSubject<boolean>(false);
+	isAccommodationTabVisited = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private http: HttpClient,
 		private router: Router,
@@ -45,6 +49,7 @@ export class RequestService {
 		private trackingService: TrackingService,
 		private lutService: LookupsService
 	) {
+
 		this.initRequest();
 		this.isLoading = this.lutService.isLoading;
 	}
@@ -69,6 +74,18 @@ export class RequestService {
 
 	private refineStepPath(path: string): string {
 		return path.split('/')[0];
+	}
+
+	setIsCitiesTabVisited(value: boolean): void {
+		this.isCitiesTabVisited.next(value);
+	}
+
+	setIsFlightsTabVisited(value: boolean): void {
+		this.isFlightsTabVisited.next(value);
+	}
+
+	setIsAccommodationTabVisited(value: boolean): void {
+		this.isAccommodationTabVisited.next(value);
 	}
 
 	resetRequestState(): void {
