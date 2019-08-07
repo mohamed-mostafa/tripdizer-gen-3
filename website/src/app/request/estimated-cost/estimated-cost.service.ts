@@ -75,10 +75,6 @@ export class EstimatedCostService {
 
 	getFlights(): Observable<Array<Flight>> {
 		this.setIsLoading(true, "Finding the best flight deals ...");
-		// const citiesSequence: Array<CitySequence> = [
-		// 	{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
-		// 	{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
-		// ];
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -217,8 +213,8 @@ export class EstimatedCostService {
 						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
 						arrive_to: stationFlightOffer ? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : 'destination',
 						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
-						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('hh:mm') : 'Unknown time',
-						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('hh:mm') : 'unknown time',
+						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM HH:mm') : 'Unknown time',
+						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
@@ -230,6 +226,8 @@ export class EstimatedCostService {
 						activities: cityAttraction.attractions.map(attraction => ({
 							night: [attraction.category],
 						})),
+
+						isReturnStation: false
 					};
 
 					this.summaryStations.push(station);
@@ -237,6 +235,44 @@ export class EstimatedCostService {
 				// jump to next date
 				tripStartDate.add('days', stationCity.numberOfNights);
 			});
+
+			// add an extra station, which is the origin step (e.g. return to cairo)
+			debugger;
+			if (this.summaryStations.length > 0) {
+				const lastStationAirport = this.requestService.getProperty("travelingFrom");
+				const lastStationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode);
+				const lastStation: Station = {
+					// city
+					image: "",
+					name: lastStationAirport.name,
+					title: lastStationAirport.name,
+					description: "",
+					nights_count: 0,
+					// flights
+					flightDataExists: lastStationFlightOffer ? true : false,
+					depart_from: lastStationFlightOffer ? lastStationFlightOffer.segments[0].originDetails : 'origin',
+					arrive_to: lastStationFlightOffer ? lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].destinationDetails : 'destination',
+					duration: lastStationFlightOffer ? lastStationFlightOffer.totalDurationInWords : 'Unknown',
+					travel_time: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[0].departure).format('DD/MM HH:mm') : 'Unknown time',
+					arrive_time: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
+
+					// dates
+					from: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM') : '',
+					to: null,
+
+					// accommodation
+					accommodationDataExists: false,
+					hotel: "",
+					hotel_rate: 0,
+					hotel_address: "",
+
+					// activities
+					activities: [],
+
+					isReturnStation: true
+				}
+				this.summaryStations.push(lastStation);
+			}
 		});
 		return this.summaryStations;
 	}

@@ -10,7 +10,7 @@
 					<div class="col-12 top-box p-2">
 						<div class="row">
 							<div class="col-2 col-md-1 nights-count">
-								<div class="row">
+								<div class="row" [hidden]="station.nights_count <= 0">
 									<div class="col-12 text-center font-weight-bold nights-count-number">
 										{{ station.nights_count }}</div>
 									<div class="col-12 text-center nights-label font-weight-bold font-italic">Nights
@@ -20,7 +20,10 @@
 							<div class="col-4 col-md-2">
 								<div class="row">
 									<div class="col-12 font-weight-bold station-name">{{ station.name }}</div>
-									<div class="col-12 smaller-text">{{ station.from }} to {{ station.to }}</div>
+									<div class="col-12 smaller-text" [hidden]="station.isReturnStation">
+										{{ station.from }} to {{ station.to }}</div>
+									<div class="col-12 smaller-text" [hidden]="!station.isReturnStation">
+										{{ station.from }}</div>
 								</div>
 							</div>
 							<div class="col-5 col-md-6 align-self-center">
@@ -47,7 +50,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 p-2 p-md-3">
+					<div class="col-12 p-2 p-md-3" [hidden]="station.isReturnStation == true">
 						<div class="row">
 							<div class="col-12 col-md-3 station-img"><img [src]="station.image" alt="" /></div>
 							<div class="col-12 col-md-9 mt-2 mt-md-0">
@@ -55,10 +58,11 @@
 								<p class="smaller-text">{{ station.description.substring(0, 300) }}<span
 										*ngIf="station.description.length > 300">...</span></p>
 								<hr class="d-block d-md-none" />
-								<h5 class="font-weight-bold blue-title text-uppercase">
+								<h5 class="font-weight-bold blue-title text-uppercase"
+									[hidden]="station.accommodationDataExists == false">
 									{{ 'request.estimated_cost.summary.accommodation' | translate }}
 								</h5>
-								<div class="row" *ngIf="station.accommodationDataExists == true">
+								<div class=" row" *ngIf="station.accommodationDataExists == true">
 									<div class="col-8 col-md-6">
 										<h6 class="font-weight-bold">{{ station.hotel }}</h6>
 										<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ station.hotel_address }}
@@ -81,12 +85,13 @@
 									</div>
 								</div>
 								<div class="row" *ngIf="station.accommodationDataExists == false">
-									<div class="col-12">
+									<div class=" col-12">
 										<h6 class="font-weight-bold">No accommodation chosen</h6>
 									</div>
 								</div>
 								<hr class="d-block d-md-none" />
-								<h5 class="font-weight-bold blue-title text-uppercase">
+								<h5 class="font-weight-bold blue-title text-uppercase"
+									*ngIf="station.activities.length > 0">
 									{{ 'request.estimated_cost.summary.activities' | translate }}
 								</h5>
 								<div class="row">
