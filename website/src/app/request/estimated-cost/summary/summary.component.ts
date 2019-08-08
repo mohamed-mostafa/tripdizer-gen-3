@@ -12,6 +12,7 @@ import { Station } from './station.model';
 export class SummaryComponent {
 	currentStepPath: string;
 	stations: Array<Station> = [];
+	totalCost: number;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -21,6 +22,7 @@ export class SummaryComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.stations = service.getSummaryStations();
+		this.totalCost = service.summaryTotalCost;
 	}
 
 	prev() {

@@ -155,6 +155,14 @@ export class EstimatedCostService {
 		this.selectedHotels = selectedHotels;
 	}
 
+	getHotelsTotalCost() {
+		let totalCost = 0;
+		for (let t = 0; t < this.selectedHotels.length; t++) {
+			totalCost = this.selectedHotels[t].price + totalCost;
+		}
+		return totalCost;
+	}
+
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
@@ -194,7 +202,7 @@ export class EstimatedCostService {
 
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				const stationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode);
-				const stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
+				const stationHotel = selectedHotels.find(hotel => hotel.city === cityAttraction.city.name);
 
 				if (stationCity) {
 					const station: Station = {
@@ -241,12 +249,14 @@ export class EstimatedCostService {
 				const lastStationAirport = this.requestService.getProperty("travelingFrom");
 				const lastStationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode);
 				const lastStation: Station = {
+
 					// city
 					image: "",
 					name: lastStationAirport.name,
 					title: lastStationAirport.name,
 					description: "",
 					nights_count: 0,
+
 					// flights
 					flightDataExists: lastStationFlightOffer ? true : false,
 					depart_from: lastStationFlightOffer ? lastStationFlightOffer.segments[0].originDetails : 'origin',
@@ -269,10 +279,16 @@ export class EstimatedCostService {
 					activities: [],
 
 					isReturnStation: true
-				}
+				};
 				this.summaryStations.push(lastStation);
 			}
 		});
 		return this.summaryStations;
+	}
+
+	public get summaryTotalCost() {
+		const flightsTotalCost = this.getFlightsTotalCost();
+		this.getHotelsTotalCost();
+		return flightsTotalCost + this.getHotelsTotalCost();
 	}
 }

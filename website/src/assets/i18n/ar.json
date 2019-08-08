@@ -200,7 +200,8 @@
 				"view_details": "إظهار تفاصيل الرحلة",
 				"accommodation": "الإقامة",
 				"activities": "الأنشطة",
-				"modify": "تعديل"
+				"modify": "تعديل",
+				"total_cost": "اجمالى تكلفة الرحلة"
 			}
 		},
 		"form_layout": {
