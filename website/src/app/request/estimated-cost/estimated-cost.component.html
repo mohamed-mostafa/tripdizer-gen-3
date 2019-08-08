@@ -22,12 +22,12 @@
 					<div class="row mx-0">
 						<div class="col-12">
 							<div class="m-2 p-md-0 mt-3 mt-md-0">
-								<c-estimated-cost-cities></c-estimated-cost-cities>
+								<c-estimated-cost-cities *ngIf="selectedTab === 0 || (isCitiesTabVisited | async)"></c-estimated-cost-cities>
 							</div>
 						</div>
 					</div>
 				</mat-tab>
-				<mat-tab>
+				<mat-tab [disabled]="selectedTab < 1">
 					<ng-template mat-tab-label>
 						<div class="tab-icon">
 							<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 				</mat-tab>
-				<mat-tab>
+				<mat-tab [disabled]="selectedTab < 2">
 					<ng-template mat-tab-label>
 						<div class="tab-icon">
 							<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
@@ -54,7 +54,7 @@
 					<div class="row mx-0">
 						<div class="col-12">
 							<div class="p-2 p-md-0 mt-3 mt-md-0">
-								<c-estimated-cost-accommodation *ngIf="selectedTab === 2"></c-estimated-cost-accommodation>
+								<c-estimated-cost-accommodation *ngIf="selectedTab === 2 || (isAccommodationTabVisited | async)"></c-estimated-cost-accommodation>
 							</div>
 						</div>
 					</div>

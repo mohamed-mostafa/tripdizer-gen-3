@@ -16,4 +16,7 @@ export class Station {
 	hotel_address: string;
 	activities: any;
 	next_name?: string;
+	flightDataExists: boolean;
+	accommodationDataExists: boolean;
+	isReturnStation: boolean;
 }

@@ -1,6 +1,10 @@
+import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
+import { RequestService } from '../../request.service';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
@@ -8,17 +12,47 @@ import { CityDTO } from './city-dto.model';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
+
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
+	cityPaths: Array<{ lat: number; lng: number }> = [];
+	snackBar: MatSnackBar;
+	currentStepPath: string;
 
-	constructor(private service: EstimatedCostService) {
+	constructor(
+		private service: EstimatedCostService,
+		snackBar: MatSnackBar,
+		private requestService: RequestService,
+		private route: ActivatedRoute,
+		private router: Router,
+	) {
+		this.currentStepPath = this.route.routeConfig.path;
+		this.service.setCurrentTabIndex(0);
+		requestService.setIsCitiesTabVisited(true);
+		this.snackBar = snackBar;
 		service.getCities().subscribe(
 			res => {
-				for (let b = 0; b < res.length; b++) {
-					res[b].select = true;
-					this.selectedCities.push(res[b]);
-					this.cities.push(res[b]);
+				const numberOfNights = this.service.getNumberOfNights();
+				const maxNumberOfCities = Math.ceil(numberOfNights / 2);
+				let numberOfSelectedCities = 0;
+				if (maxNumberOfCities < res.length) {
+					numberOfSelectedCities = maxNumberOfCities;
+				} else {
+					numberOfSelectedCities = res.length;
 				}
+				for (let b = 0; b < res.length; b++) {
+					this.cities.push(res[b]);
+					res[b].select = false;
+					if (b + 1 <= numberOfSelectedCities) {
+						res[b].select = true;
+						this.selectedCities.push(res[b]);
+						const coordinates = res[b].coordinates.split(', ');
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+					}
+				}
+
+				this.requestService.setIsFlightsTabVisited(false);
+				this.requestService.setIsAccommodationTabVisited(false);
 			}
 		);
 	}
@@ -35,14 +69,35 @@ export class TabCitiesComponent {
 					this.cities[d].select = false;
 				}
 			}
+			for (let m = 0; m < this.cityPaths.length; m++) {
+				const coordinates = city.coordinates.split(', ');
+				if (parseInt(coordinates[0], 10) === this.cityPaths[m].lat && parseInt(coordinates[1], 10) === this.cityPaths[m].lng) {
+					this.cityPaths.splice(m, 1);
+				}
+			}
 		} else if (city.select === false) {
-			this.selectedCities.push(city);
-			for (let x = 0; x < this.cities.length; x++) {
-				if (this.cities[x].iataCode === city.iataCode) {
-					this.cities[x].select = true;
+			// check if no more cities should be selected
+			const numberOfNights = this.service.getNumberOfNights();
+			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
+			if (this.selectedCities.length >= maxNumberOfCities) {
+				// prevent more selections
+				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
+					duration: 3000
+				});
+			} else {
+				this.selectedCities.push(city);
+				for (let x = 0; x < this.cities.length; x++) {
+					if (this.cities[x].iataCode === city.iataCode) {
+						this.cities[x].select = true;
+						const coordinates = city.coordinates.split(', ');
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+					}
 				}
 			}
 		}
+
+		this.requestService.setIsFlightsTabVisited(false);
+		this.requestService.setIsAccommodationTabVisited(false);
 	}
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {
@@ -60,5 +115,9 @@ export class TabCitiesComponent {
 	next(): void {
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
+	}
+
+	goBack(): void {
+		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 }

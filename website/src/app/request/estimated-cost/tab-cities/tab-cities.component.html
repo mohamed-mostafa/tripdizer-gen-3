@@ -58,9 +58,32 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="col-lg-4 map-section pl-lg-6">
+
+				<div class="row mb-4">
+					<div class="col-12">
+						<hr class="d-lg-none" />
+						<h6 class="font-weight-bold font-italic view-map">
+							{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
+						</h6>
+						<div *ngIf="cityPaths?.length" class="row d-none d-lg-block">
+							<div class="col-12">
+								<c-shared-google-map [paths]="cityPaths"></c-shared-google-map>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<div class="row">
 					<div class="col-12">
+						<a
+							href="javascript:void(0)"
+							(click)="goBack()"
+							class="back-btn position-relative"
+							[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'"
+							>{{ 'request.estimated_cost.tab_cities.back_label' | translate }}</a
+						>
 						<button
 							(click)="next()"
 							[disabled]="selectedCities.length < 1"
@@ -70,13 +93,6 @@
 						</button>
 					</div>
 				</div>
-			</div>
-			<div class="col-lg-4 map-section pl-lg-6">
-				<hr class="d-lg-none" />
-				<h6 class="font-weight-bold font-italic view-map">
-					{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
-				</h6>
-				<img src="../../../assets/img/map.png" alt="" />
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,7 @@ import {
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material'
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
@@ -42,6 +43,7 @@ import { SocialAuthServiceConfig } from './social-auth-service.config';
 		CoreModule,
 		MatMomentDateModule,
 		MatSliderModule,
+		MatSnackBarModule,
 		SocialLoginModule,
 	],
 	providers: [

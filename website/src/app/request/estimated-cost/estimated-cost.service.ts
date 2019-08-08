@@ -1,18 +1,18 @@
-import { Station } from './summary/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
+import { AttractionsRequest, CityAttractions } from './summary/attraction.model';
+import { Station } from './summary/station.model';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
-import { CityAttractions, AttractionsRequest } from './summary/attraction.model';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
@@ -32,13 +32,9 @@ export class EstimatedCostService {
 	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions>;
 
-	isFlightsTabVisited = new Subject<boolean>();
-
 	currentTabIndex = new Subject<number>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) {
-		this.isFlightsTabVisited.next(false);
-	}
+	constructor(private http: HttpClient, private requestService: RequestService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -49,16 +45,18 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "Locating the best cities that match your interests");
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
 
 	getNumberOfNights(): number {
+		this.departureDate = this.requestService.getProperty('departureDate') as Moment;
+		this.returnDate = this.requestService.getProperty('returnDate') as Moment;
 		return this.returnDate.diff(this.departureDate, 'days');
 	}
 
@@ -68,25 +66,15 @@ export class EstimatedCostService {
 
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
 		this.selectedCities = selectedCities;
-		console.log(this.selectedCities);
 		this.requestService.setProperty('selectedCities', selectedCities);
-		this.isFlightsTabVisited.next(false);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
 		return this.selectedCities;
 	}
 
-	setFlightsTabAsVisited(): void {
-		this.isFlightsTabVisited.next(true);
-	}
-
 	getFlights(): Observable<Array<Flight>> {
-		this.setIsLoading(true);
-		// const citiesSequence: Array<CitySequence> = [
-		// 	{ countryIso: 'KSA', cityIata: 'RUH', numberOfNights: 5 },
-		// 	{ countryIso: 'FRA', cityIata: 'PAR', numberOfNights: 6 },
-		// ];
+		this.setIsLoading(true, "Finding the best flight deals ...");
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -106,12 +94,11 @@ export class EstimatedCostService {
 				flights.map(flight => {
 					const city = citiesSequence.find(cs => cs.cityIata === flight.origin.iataCode);
 					flight.numberOfNights = city ? city.numberOfNights : null;
-					console.log(flights);
 					return flight;
 				})
 			),
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -121,15 +108,31 @@ export class EstimatedCostService {
 		this.requestService.setProperty('flightOffers', flightOffers);
 	}
 
+	getFlightsTotalCost(): number {
+		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
+	}
+
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "Finding the best hotels ...");
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		}
+
+		this.budgetCategory = this.requestService.getProperty('budgetCategory');
+		let accommodationDesiredCostPerPerson = 0;
+		if (this.budgetCategory === 1) {
+			// ownBudget
+			const flightCost = this.getFlightsTotalCost();
+			const numberOfPayingCustomers =
+				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
+			const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
+			const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
+			accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
 		}
 		const accommodationRequest: AccommodationRequest = {
 			arrival: this.departureDate.format('YYYY-MM-DD'),
@@ -138,10 +141,11 @@ export class EstimatedCostService {
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -151,12 +155,12 @@ export class EstimatedCostService {
 		this.selectedHotels = selectedHotels;
 	}
 
-	setIsLoading(isLoading: boolean) {
-		this.requestService.isLoading.next(isLoading);
+	setIsLoading(isLoading: boolean, message: string) {
+		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
-		this.setIsLoading(true);
+		this.setIsLoading(true, "");
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
@@ -164,7 +168,7 @@ export class EstimatedCostService {
 		const attractionsRequest: AttractionsRequest = { cities: cities };
 		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false);
+				this.setIsLoading(false, "");
 			})
 		);
 	}
@@ -177,49 +181,97 @@ export class EstimatedCostService {
 		this.getAttractions().subscribe(cityAttractionsList => {
 			this.cityAttractionsList = cityAttractionsList; // keep the attractions we received from the backend
 			this.requestService.setProperty('selectedAttractions', cityAttractionsList);
+
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
 			const selectedHotels: Array<Hotel> = this.selectedHotels;
-			// then construct the corresponding 'stations' objects
 
-			cityAttractionsList.forEach((cityAttraction) => {
+			// then construct the corresponding 'stations' objects
+			this.summaryStations.splice(0, this.summaryStations.length);
+			const tripStartDate = moment(this.requestService.getProperty('departureDate'));
+
+			cityAttractionsList.forEach(cityAttraction => {
+
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
-				const stationFlightOffer = selectedFlightOffers
-					.find(flightOffer => flightOffer.segments[flightOffer.segments.length - 1].destination === cityAttraction.city.iataCode);
-				let stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
-				if (stationCity && stationFlightOffer) {
+				const stationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode);
+				const stationHotel = selectedHotels.find(hotel => hotel.city == cityAttraction.city.name);
+
+				if (stationCity) {
 					const station: Station = {
 						// city
 						image: stationCity.thumbnail,
 						name: stationCity.displayName,
 						title: stationCity.displayName,
 						description: stationCity.description,
-
-						// cities
-						depart_from: stationFlightOffer.segments[0].origin,
-						arrive_to: stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destination,
-
-						// dates & duration of stay
-						from: moment(stationFlightOffer.segments[0].departure).format('DD/MM/YYYY'),
-						to: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('DD/MM/YYYY'),
 						nights_count: stationCity.numberOfNights,
+						// dates 
+						from: moment(tripStartDate).format('DD/MM'),
+						to: moment(tripStartDate).add('days', stationCity.numberOfNights).format('DD/MM'),
 
-						// flights details
-						duration: stationFlightOffer.totalDurationInWords,
-						travel_time: moment(stationFlightOffer.segments[0].departure).format('hh:mm'),
-						arrive_time: moment(stationFlightOffer.segments[0].departure).add('days', stationCity.numberOfNights).format('hh:mm'),
+						// flights
+						flightDataExists: stationFlightOffer ? true : false,
+						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
+						arrive_to: stationFlightOffer ? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : 'destination',
+						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
+						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM HH:mm') : 'Unknown time',
+						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
 
-						hotel: stationHotel.name,
-						hotel_rate: stationHotel.stars,
-						hotel_address: stationHotel.address,
+						// accommodation
+						accommodationDataExists: stationHotel ? true : false,
+						hotel: stationHotel ? stationHotel.name : 'None Selected',
+						hotel_rate: stationHotel ? stationHotel.stars : 0,
+						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
+
+						// activities
 						activities: cityAttraction.attractions.map(attraction => ({
-							night: [attraction.category]
-						}))
+							night: [attraction.category],
+						})),
+
+						isReturnStation: false
 					};
 
 					this.summaryStations.push(station);
 				}
+				// jump to next date
+				tripStartDate.add('days', stationCity.numberOfNights);
 			});
+
+			// add an extra station, which is the origin step (e.g. return to cairo)
+			if (this.summaryStations.length > 0) {
+				const lastStationAirport = this.requestService.getProperty("travelingFrom");
+				const lastStationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode);
+				const lastStation: Station = {
+					// city
+					image: "",
+					name: lastStationAirport.name,
+					title: lastStationAirport.name,
+					description: "",
+					nights_count: 0,
+					// flights
+					flightDataExists: lastStationFlightOffer ? true : false,
+					depart_from: lastStationFlightOffer ? lastStationFlightOffer.segments[0].originDetails : 'origin',
+					arrive_to: lastStationFlightOffer ? lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].destinationDetails : 'destination',
+					duration: lastStationFlightOffer ? lastStationFlightOffer.totalDurationInWords : 'Unknown',
+					travel_time: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[0].departure).format('DD/MM HH:mm') : 'Unknown time',
+					arrive_time: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
+
+					// dates
+					from: lastStationFlightOffer ? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM') : '',
+					to: null,
+
+					// accommodation
+					accommodationDataExists: false,
+					hotel: "",
+					hotel_rate: 0,
+					hotel_address: "",
+
+					// activities
+					activities: [],
+
+					isReturnStation: true
+				}
+				this.summaryStations.push(lastStation);
+			}
 		});
 		return this.summaryStations;
 	}

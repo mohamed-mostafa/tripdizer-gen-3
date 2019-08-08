@@ -24,9 +24,11 @@
 	<i class="fa fa-plane icon position-relative float-left text-center text-secondary bg-white"></i>
 	<div class="ml-5 ml-lg-6">
 		<c-estimated-cost-flight-row-options
+			*ngIf="isAnyFlightOfferExists; else noFlightOffers"
 			[flight]="flight"
 			(offerChanged)="selectedOfferChanged($event)"
 		></c-estimated-cost-flight-row-options>
+		<ng-template #noFlightOffers>{{ 'request.estimated_cost.tab_flights.no_flights' | translate }} </ng-template>
 	</div>
 </div>
 

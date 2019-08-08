@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BudgetCategory, LUTBudgetCategory } from '../../shared/models/budget-category.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { RequestService } from '../request.service';
-import { BudgetCategory, LUTBudgetCategory } from './budget-category.model';
 
 @Component({
 	selector: 'c-request-budget',

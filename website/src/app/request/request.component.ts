@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService as SocialAuthService } from 'angularx-social-login';
+import { environment } from '../../environments/environment';
 import { LoginDialogComponent } from '../shared/components/login-dialog/login-dialog.component';
 import { Country } from '../shared/models/country.model';
 import { RequestService } from './request.service';
@@ -23,6 +24,7 @@ export class RequestComponent implements OnInit, OnDestroy {
 		private socialAuthService: SocialAuthService,
 		private dialog: MatDialog
 	) {
+
 		requestService.getCountries().subscribe(countries => {
 			this.countries = countries;
 			this.setPreSelectedCountries();
@@ -43,7 +45,7 @@ export class RequestComponent implements OnInit, OnDestroy {
 				this.requestService.setProperty('travelerName', user.name);
 				this.requestService.setProperty('travelerEmail', user.email);
 			} else {
-				if (this.firstTimeLogin) {
+				if (environment.showSigningPopup && this.firstTimeLogin) {
 					this.openLoginDialog();
 				}
 			}
