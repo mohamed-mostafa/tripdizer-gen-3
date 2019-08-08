@@ -200,7 +200,7 @@
                                 ng-model="currentOrder.otherCountry">
                         </div>
                     </div>
-                    <div ng-if="!currentOrder.destination && !currentOrder.selectedCites.choices">
+                    <!-- <div ng-if="!currentOrder.destination && !currentOrder.selectedCites.choices">
                         <label for="firstCountry">First Country</label>
                         <select class="form-control" id="firstCountry" ng-model="currentOrder.firstCountry">
                             <option ng-repeat="country in countries" ng-value="country.id"
@@ -227,7 +227,7 @@
                                 </option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div ng-if="!isCreate && currentOrder.destination && !currentOrder.cities.choices">
                         <label for="actualDestination">Actual Destination</label>
                         <select class="form-control" id="actualDestination" ng-model="currentOrder.actualDestination">
