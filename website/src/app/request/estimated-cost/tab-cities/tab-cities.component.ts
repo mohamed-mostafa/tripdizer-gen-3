@@ -85,10 +85,13 @@ export class TabCitiesComponent {
 					duration: 3000
 				});
 			} else {
-				this.selectedCities.push(city);
+				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
+				this.selectedCities.splice(0, this.selectedCities.length);// clear list
 				for (let x = 0; x < this.cities.length; x++) {
+					if (this.cities[x].select) this.selectedCities.push(this.cities[x]); // add all selected cities again
 					if (this.cities[x].iataCode === city.iataCode) {
 						this.cities[x].select = true;
+						this.selectedCities.push(this.cities[x]); // add this newly selected city
 						const coordinates = city.coordinates.split(', ');
 						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
 					}
