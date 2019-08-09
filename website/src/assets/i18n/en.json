@@ -200,7 +200,8 @@
 				"view_details": "View details for your trip",
 				"accommodation": "Accommodation",
 				"activities": "Activities",
-				"modify": "Modify your itinerary"
+				"modify": "Modify your itinerary",
+				"total_cost": "Total Summary Cost"
 			}
 		},
 		"form_layout": {
