@@ -121,7 +121,11 @@ export class RequestService {
 
 	redirectIfShouldBeRedirected(stepPath: string): void {
 		stepPath = this.refineStepPath(stepPath);
+		console.log("stepPath");
+		console.log(stepPath);
 		const prevInvalidStep = this.getPrevInvalidStep(stepPath);
+		console.log("prevInvalidStep");
+		console.log(prevInvalidStep);
 		if (prevInvalidStep !== stepPath) {
 			this.router.navigate(['../request/', prevInvalidStep]);
 		}
@@ -183,10 +187,21 @@ export class RequestService {
 
 	getPrevInvalidStep(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
+		console.log("stepPath");
+		console.log(stepPath);
+
+		console.log("this.requestData.validSteps");
+		console.log(this.requestData.validSteps);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)
 				.sort((a, b) => a.order - b.order);
+
+		console.log("currentStep");
+		console.log(currentStep);
+
+		console.log("prevSteps");
+		console.log(prevSteps);
 		for (let i = 0; i < prevSteps.length; ++i) {
 			if (!prevSteps[i].isValid()) {
 				return prevSteps[i].path;

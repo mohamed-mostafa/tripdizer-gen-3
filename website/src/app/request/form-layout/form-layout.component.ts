@@ -30,6 +30,8 @@ export class RequestFormLayoutComponent {
 		requestService: RequestService
 	) {
 		const currentStepPath = route.routeConfig.path;
+		console.log("currentStepPath");
+		console.log(currentStepPath);
 		requestService.redirectIfShouldBeRedirected(currentStepPath);
 		translate.get('request.form_layout').subscribe(labels => {
 			this.nextLabel = labels.next_label;
