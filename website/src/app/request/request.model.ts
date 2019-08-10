@@ -289,28 +289,16 @@ export class Request extends CommonFunctions {
 				requiredForEstimateCalc: true,
 				requiredForRecommendation: true,
 				value: ((): string => {
-					console.log("travelInfo-value-this._touchedSteps");
-					console.log(this._touchedSteps);
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
 						return null;
 					}
-					console.log("travelInfo-value-this._requestType");
-					console.log(this._requestType);
-					console.log("travelInfo-value-this._countries");
-					console.log(this._countries);
-					console.log("travelInfo-value-this._travelingFrom");
-					console.log(this._travelingFrom);
-					console.log("travelInfo-value-this._departureDate");
-					console.log(this._departureDate);
-					console.log("travelInfo-value-this._returnDate");
-					console.log(this._returnDate);
 					if (
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
-							this._departureDate &&
-							this._returnDate
+							this._travelingFrom.name// &&
+							// this._departureDate &&
+							// this._returnDate
 						)
 					) {
 						return null;
@@ -328,28 +316,16 @@ export class Request extends CommonFunctions {
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('travelInfo'),
 				isValid: (): boolean => {
-					console.log("travelInfo-isValid-this._touchedSteps");
-					console.log(this._touchedSteps);
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
 						return false;
 					}
-					console.log("travelInfo-isValid-this._requestType");
-					console.log(this._requestType);
-					console.log("travelInfo-isValid-this._countries");
-					console.log(this._countries);
-					console.log("travelInfo-isValid-this._travelingFrom");
-					console.log(this._travelingFrom);
-					console.log("travelInfo-isValid-this._departureDate");
-					console.log(this._departureDate);
-					console.log("travelInfo-isValid-this._returnDate");
-					console.log(this._returnDate);
 					if (
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
-							this._departureDate &&
-							this._returnDate
+							this._travelingFrom.name //&&
+							// this._departureDate &&
+							// this._returnDate
 						)
 					) {
 						return false;
