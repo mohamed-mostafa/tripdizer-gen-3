@@ -121,23 +121,15 @@ export class RequestService {
 
 	redirectIfShouldBeRedirected(stepPath: string): void {
 		stepPath = this.refineStepPath(stepPath);
-		console.log("stepPath");
-		console.log(stepPath);
 		const prevInvalidStep = this.getPrevInvalidStep(stepPath);
-		console.log("prevInvalidStep");
-		console.log(prevInvalidStep);
 		if (prevInvalidStep !== stepPath) {
 			this.router.navigate(['../request/', prevInvalidStep]);
 		}
 	}
 
 	stepVisited(stepPath: string): void {
-		console.log("stepVisited-stepPath");
-		console.log(stepPath);
 		stepPath = this.refineStepPath(stepPath);
 		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
-		console.log("stepVisited-step");
-		console.log(step);
 		if (step) {
 			this.requestData.touchStep(step.order);
 		}
@@ -191,21 +183,10 @@ export class RequestService {
 
 	getPrevInvalidStep(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		console.log("stepPath");
-		console.log(stepPath);
-
-		console.log("this.requestData.validSteps");
-		console.log(this.requestData.validSteps);
 		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
 			prevSteps = this.requestData.validSteps
 				.filter(s => s.order < currentStep.order)
 				.sort((a, b) => a.order - b.order);
-
-		console.log("currentStep");
-		console.log(currentStep);
-
-		console.log("prevSteps");
-		console.log(prevSteps);
 		for (let i = 0; i < prevSteps.length; ++i) {
 			if (!prevSteps[i].isValid()) {
 				return prevSteps[i].path;
