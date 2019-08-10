@@ -132,8 +132,12 @@ export class RequestService {
 	}
 
 	stepVisited(stepPath: string): void {
+		console.log("stepVisited-stepPath");
+		console.log(stepPath);
 		stepPath = this.refineStepPath(stepPath);
 		const step: Step = this.requestData.validSteps.find(s => s.path === stepPath);
+		console.log("stepVisited-step");
+		console.log(step);
 		if (step) {
 			this.requestData.touchStep(step.order);
 		}
