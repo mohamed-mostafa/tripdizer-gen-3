@@ -297,8 +297,8 @@ export class Request extends CommonFunctions {
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
-							this.departureDate &&
-							this.returnDate
+							this._departureDate &&
+							this._returnDate
 						)
 					) {
 						return null;
@@ -317,6 +317,7 @@ export class Request extends CommonFunctions {
 				isClickable: (): boolean => this.isNavBarItemClickable('travelInfo'),
 				isValid: (): boolean => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('travelInfo')) === -1) {
+						debugger;
 						return false;
 					}
 					if (
@@ -324,10 +325,11 @@ export class Request extends CommonFunctions {
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
 							this._travelingFrom.name &&
-							this.departureDate &&
-							this.returnDate
+							this._departureDate &&
+							this._returnDate
 						)
 					) {
+						debugger;
 						return false;
 					}
 					return true;
