@@ -17,7 +17,7 @@ export class EstimatedCostComponent {
 	isAccommodationTabVisited: Observable<boolean>;
 	currentTabIndex: Observable<boolean>;
 
-	constructor(private service: EstimatedCostService, requestService: RequestService) {
+	constructor(private service: EstimatedCostService, private requestService: RequestService) {
 		this.selectedTab = 0;
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
