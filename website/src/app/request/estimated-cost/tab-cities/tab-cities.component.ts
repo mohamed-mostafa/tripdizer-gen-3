@@ -18,7 +18,7 @@ export class TabCitiesComponent {
 	cityPaths: Array<{ lat: number; lng: number }> = [];
 	snackBar: MatSnackBar;
 	currentStepPath: string;
-
+	isLoading: Boolean;
 	constructor(
 		private service: EstimatedCostService,
 		snackBar: MatSnackBar,
@@ -30,6 +30,7 @@ export class TabCitiesComponent {
 		this.service.setCurrentTabIndex(0);
 		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
+		this.requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
 		service.getCities().subscribe(
 			res => {
 				const numberOfNights = this.service.getNumberOfNights();

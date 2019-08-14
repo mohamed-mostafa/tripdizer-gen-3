@@ -90,8 +90,8 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 								var flightLegSegment = {
 									origin: segment.flightSegment.departure.iataCode,
 									destination: segment.flightSegment.arrival.iataCode,
-									originDetails: locationsMap[segment.flightSegment.departure.iataCode] == null ? null : locationsMap[segment.flightSegment.departure.iataCode].detailedName + " " + locationsMap[segment.flightSegment.departure.iataCode].subType,
-									destinationDetails: locationsMap[segment.flightSegment.arrival.iataCode] == null ? null : locationsMap[segment.flightSegment.arrival.iataCode].detailedName + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType,
+									originDetails: locationsMap[segment.flightSegment.departure.iataCode] == null ? null : locationsMap[segment.flightSegment.departure.iataCode].detailedName.toLowerCase() == "airport" ? segment.flightSegment.departure.iataCode + " " + locationsMap[segment.flightSegment.departure.iataCode].subType : locationsMap[segment.flightSegment.departure.iataCode].detailedName + " " + locationsMap[segment.flightSegment.departure.iataCode].subType,
+									destinationDetails: locationsMap[segment.flightSegment.arrival.iataCode] == null ? null : locationsMap[segment.flightSegment.arrival.iataCode].detailedName.toLowerCase() == "airport" ? segment.flightSegment.arrival.iataCode + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType : locationsMap[segment.flightSegment.arrival.iataCode].detailedName + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType,
 									departure: segment.flightSegment.departure.at,
 									"return": segment.flightSegment.arrival.at,
 									durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
