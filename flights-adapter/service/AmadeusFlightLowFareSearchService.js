@@ -20,7 +20,7 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
 var amadeus = new Amadeus({
 	clientId: process.env.AMADEUS_CLIENT_ID || 'wAY7xjRJMPEbbv5LRFPX2AfGlTJzNHGm', // 'CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU',
 	clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'JKuIvbgbK9AZeLCk',// 'DTwStDfZ4W7VJNeC',
-	hostname: 'test'
+	hostname: process.env.AMADEUS_CLIENT_ENVIRONMENT || 'test'
 });
 
 /**
