@@ -22,9 +22,9 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  AMADEUS_CLIENT_IP: "wAY7xjRJMPEbbv5LRFPX2AfGlTJzNHGm"
-  AMADEUS_CLIENT_SECRET: "JKuIvbgbK9AZeLCk"
-  AMADEUS_CLIENT_ENVIRONMENT: "test"
+  AMADEUS_CLIENT_IP: "CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU"
+  AMADEUS_CLIENT_SECRET: "DTwStDfZ4W7VJNeC"
+  AMADEUS_CLIENT_ENVIRONMENT: "production"
 endpoints_api_service:
   # The following values are to be replaced by information from the output of
   # 'gcloud endpoints services deploy openapi-appengine.yaml' command.
