@@ -3,8 +3,8 @@
 </a>
 <mat-menu #flightOffer="matMenu">
 	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
-		<div class="col-3 d-none d-sm-block text-center align-self-center">
-			<img class="w-100" [src]="offer.carrier.wideLogo" />
+		<div class="col-12 col-md-3">
+			<img [src]="offer.carrier.wideLogo" />
 		</div>
 		<div class="col-12 col-sm-6 col-md text-center align-self-center">
 			<div class="row trip-info">
