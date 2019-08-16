@@ -16,13 +16,13 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
 	}
 })
 
-
-var amadeus = new Amadeus({
+var amadeusConfig = {
 	clientId: process.env.AMADEUS_CLIENT_ID || 'wAY7xjRJMPEbbv5LRFPX2AfGlTJzNHGm', // 'CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU',
 	clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'JKuIvbgbK9AZeLCk',// 'DTwStDfZ4W7VJNeC',
 	hostname: process.env.AMADEUS_CLIENT_ENVIRONMENT || 'test'
-});
-
+};
+var amadeus = new Amadeus(amadeusConfig);
+console.log("Starting amadeus with configuration: " + JSON.stringify(amadeusConfig));
 /**
  * searches flights from origin to destination on specific dates for number of travelers
  * By passing in the appropriate options, you can search for flights
