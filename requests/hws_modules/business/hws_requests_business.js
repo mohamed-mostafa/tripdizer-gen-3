@@ -457,8 +457,8 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 								date: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM/YYYY') : '',
 								departingFrom: offer.segments ? offer.segments[0].originDetails : '',
 								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destinationDetails : '',
-								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM hh:mm') : '',
-								arrivalTime: offer.segments ? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM hh:mm') : '',
+								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM HH:mm') : '',
+								arrivalTime: offer.segments ? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM HH:mm') : '',
 								layOver: offer.transitDurationInMinutes == 0 ? 'Direct' : offer.transitDurationInWords,
 							})),
 							hotels: selectedHotels.choices.map(offer => ({
