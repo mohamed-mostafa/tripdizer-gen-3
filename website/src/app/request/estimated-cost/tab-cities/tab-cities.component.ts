@@ -48,7 +48,7 @@ export class TabCitiesComponent {
 						res[b].select = true;
 						this.selectedCities.push(res[b]);
 						const coordinates = res[b].coordinates.split(', ');
-						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
 				}
 
