@@ -16,7 +16,7 @@ export class EstimatedCostComponent implements OnDestroy {
 	isFlightsTabVisited: Observable<boolean>;
 	isAccommodationTabVisited: Observable<boolean>;
 	currentTabIndex: Observable<boolean>;
-
+	isLoading: Boolean;
 	constructor(private service: EstimatedCostService, private requestService: RequestService) {
 		this.selectedTab = 0;
 		service.currentTabIndex.subscribe(n => {
@@ -26,6 +26,7 @@ export class EstimatedCostComponent implements OnDestroy {
 		this.isCitiesTabVisited = requestService.isCitiesTabVisited;
 		this.isFlightsTabVisited = requestService.isFlightsTabVisited;
 		this.isAccommodationTabVisited = requestService.isAccommodationTabVisited;
+		this.requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
 	}
 
 	tabChange(e) {

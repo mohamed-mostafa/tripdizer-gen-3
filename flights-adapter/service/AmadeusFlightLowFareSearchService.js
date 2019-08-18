@@ -16,13 +16,13 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
 	}
 })
 
-
-var amadeus = new Amadeus({
-	clientId: process.env.AMADEUS_CLIENT_ID || 'CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU',
-	clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'DTwStDfZ4W7VJNeC',
-	hostname: 'production'
-});
-
+var amadeusConfig = {
+	clientId: process.env.AMADEUS_CLIENT_ID || 'wAY7xjRJMPEbbv5LRFPX2AfGlTJzNHGm', // 'CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU',
+	clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'JKuIvbgbK9AZeLCk',// 'DTwStDfZ4W7VJNeC',
+	hostname: process.env.AMADEUS_CLIENT_ENVIRONMENT || 'test'
+};
+var amadeus = new Amadeus(amadeusConfig);
+console.log("Starting amadeus with configuration: " + JSON.stringify(amadeusConfig));
 /**
  * searches flights from origin to destination on specific dates for number of travelers
  * By passing in the appropriate options, you can search for flights
@@ -90,8 +90,8 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 								var flightLegSegment = {
 									origin: segment.flightSegment.departure.iataCode,
 									destination: segment.flightSegment.arrival.iataCode,
-									originDetails: locationsMap[segment.flightSegment.departure.iataCode] == null ? null : locationsMap[segment.flightSegment.departure.iataCode].detailedName + " " + locationsMap[segment.flightSegment.departure.iataCode].subType,
-									destinationDetails: locationsMap[segment.flightSegment.arrival.iataCode] == null ? null : locationsMap[segment.flightSegment.arrival.iataCode].detailedName + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType,
+									originDetails: locationsMap[segment.flightSegment.departure.iataCode] == null ? null : locationsMap[segment.flightSegment.departure.iataCode].detailedName.toLowerCase() == "airport" ? segment.flightSegment.departure.iataCode + " " + locationsMap[segment.flightSegment.departure.iataCode].subType : locationsMap[segment.flightSegment.departure.iataCode].detailedName + " " + locationsMap[segment.flightSegment.departure.iataCode].subType,
+									destinationDetails: locationsMap[segment.flightSegment.arrival.iataCode] == null ? null : locationsMap[segment.flightSegment.arrival.iataCode].detailedName.toLowerCase() == "airport" ? segment.flightSegment.arrival.iataCode + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType : locationsMap[segment.flightSegment.arrival.iataCode].detailedName + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType,
 									departure: segment.flightSegment.departure.at,
 									"return": segment.flightSegment.arrival.at,
 									durationInWords: shortEnglishHumanizer(segmentDurationInMillis),

@@ -114,26 +114,26 @@
 				font-size="16">
 				<a [attr.xlink:href]="ticket?.packageUrl" target="_blank">
 					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.button' | translate" class="fill-blue"
+					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"
 						[innerHTML]="'request.ticket.view_package' | translate"></text>
 				</a>
 				<a [attr.xlink:href]="ticket?.packageDownloadUrl" target="_blank" download>
 					<text [attr.x]="'request.ticket.lg_sizes.actions.download_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1c1;
 					</text>
 					<text [attr.x]="'request.ticket.lg_sizes.actions.download_package.button' | translate"
-						class="fill-blue" [innerHTML]="'request.ticket.download_package' | translate"></text>
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"  [innerHTML]="'request.ticket.download_package' | translate"></text>
 				</a>
 				<a *ngIf="!isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
 					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate" class="fill-blue"
+					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" 
 						[innerHTML]="'request.ticket.send_package' | translate"></text>
 				</a>
 				<a *ngIf="isSentByMail" xlink:href="javascript:void(0)">
@@ -272,26 +272,26 @@
 				font-size="9">
 				<a [attr.xlink:href]="ticket?.packageUrl" target="_blank">
 					<text [attr.x]="'request.ticket.sm_sizes.actions.view_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.view_package.button' | translate" class="fill-blue"
+					<text [attr.x]="'request.ticket.sm_sizes.actions.view_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"
 						[innerHTML]="'request.ticket.view_package' | translate"></text>
 				</a>
 				<a [attr.xlink:href]="ticket?.packageDownloadUrl" target="_blank" download>
 					<text [attr.x]="'request.ticket.sm_sizes.actions.download_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1c1;
 					</text>
 					<text [attr.x]="'request.ticket.sm_sizes.actions.download_package.button' | translate"
-						class="fill-blue" [innerHTML]="'request.ticket.download_package' | translate"></text>
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa" [innerHTML]="'request.ticket.download_package' | translate"></text>
 				</a>
 				<a *ngIf="!isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
 					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.icon' | translate"
-						class="fill-blue fa">
+					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate" class="fill-blue"
+					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa"
 						[innerHTML]="'request.ticket.send_package' | translate"></text>
 				</a>
 				<a *ngIf="isSentByMail" xlink:href="javascript:void(0)">

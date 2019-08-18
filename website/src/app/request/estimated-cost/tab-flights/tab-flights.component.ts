@@ -12,13 +12,14 @@ export class TabFlightsComponent {
 	flights: Array<Flight>;
 	flightPaths: Array<{ lat: number; lng: number }>;
 	selectedFlightOffers = {};
-
+	isLoading: Boolean;
 	get totalCost(): number {
 		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
 	}
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsFlightsTabVisited(true);
+		requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
 		service.getFlights().subscribe(flights => {
 			this.flights = flights.map((flight, flightIndex) => ({
 				...flight,

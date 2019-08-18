@@ -1,6 +1,7 @@
 <div class="row m-0">
 	<div class="m-1 flight-img">
-		<img class="w-100 h-100" *ngIf="selectedOffer?.carrier.squareLogo" [src]="selectedOffer?.carrier.squareLogo" />
+		<img class="w-100 h-100" *ngIf="selectedOffer?.carrier.squareLogo" [src]="selectedOffer?.carrier.squareLogo"
+			alt="{{selectedOffer?.carrier.name}}" />
 	</div>
 
 	<div class="m-1 custom-bs text-ellipsis">
@@ -10,10 +11,8 @@
 	<div class="m-1">
 		<div class="row">
 			<div class="col-4 option-btn text-nowrap">
-				<c-estimated-cost-change-flight
-					[flight]="flight"
-					(offerChanged)="selectedOfferChanged($event)"
-				></c-estimated-cost-change-flight>
+				<c-estimated-cost-change-flight [flight]="flight" (offerChanged)="selectedOfferChanged($event)">
+				</c-estimated-cost-change-flight>
 			</div>
 			<!-- <div class="col-4 option-btn text-nowrap">
 				<a href="javascript:void(0)">{{ 'request.estimated_cost.tab_flights.change_city' | translate }}</a>

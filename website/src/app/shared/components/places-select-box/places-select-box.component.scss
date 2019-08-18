@@ -1,5 +1,20 @@
 /deep/input.mat-chip-input {
-	width: 1% !important;
 	flex: 1 0 1% !important;
 	height: 32px;
+}
+
+/deep/.mat-chip-list-wrapper {
+	max-width: 26.5rem;
+	flex-direction: column !important;
+	height: 40px;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 3px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: gray;
+	}
 }
