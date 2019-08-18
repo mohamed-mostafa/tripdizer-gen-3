@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
@@ -9,7 +9,7 @@ import { RequestService } from '../request.service';
 	templateUrl: './estimated-cost.component.html',
 	styleUrls: ['./estimated-cost.component.scss'],
 })
-export class EstimatedCostComponent {
+export class EstimatedCostComponent implements OnDestroy {
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	isCitiesTabVisited: Observable<boolean>;
@@ -30,5 +30,9 @@ export class EstimatedCostComponent {
 
 	tabChange(e) {
 		this.service.setCurrentTabIndex(e);
+	}
+
+	ngOnDestroy() {
+		console.log('component destroyed');
 	}
 }
