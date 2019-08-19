@@ -1,21 +1,30 @@
-/deep/.mat-menu-panel {
-    max-width: initial !important;
-    max-height: none !important;
-    height: 100% !important;
-    overflow-y: hidden !important;
+/deep/ .cdk-overlay-pane {
+	.mat-menu-panel {
+		max-width: initial !important;
 
-	.mat-menu-content {
-		padding: 0 !important;
+		.mat-menu-content {
+			padding: 0 !important;
 
-		.mat-menu-item {
-			max-width: 30rem;
-			display: flex;
-			border: 1px solid;
-			margin: 0.6rem !important;
-			border-radius: 0.5rem;
-			height: auto;
-			line-height: 2rem;
-			padding: 0;
+			.mat-menu-item {
+				max-width: 30rem;
+				display: flex;
+				border: 1px solid;
+				margin: 0.6rem !important;
+				border-radius: 0.5rem;
+				height: auto;
+				line-height: 2rem;
+				padding: 0;
+			}
+		}
+	}
+
+	@media (max-width: 470px) {
+		bottom: 0 !important;
+		left: 0 !important;
+		top: 0 !important;
+		right: 0 !important;
+		.mat-menu-panel {
+			max-height: initial !important;
 		}
 	}
 }
