@@ -27,4 +27,14 @@ export class ChangeFlightComponent implements OnInit {
 		this.selectedOffer = offer;
 		this.offerChanged.emit(offer);
 	}
+
+	menuClosed(): void {
+		document.body.style.overflow = 'initial';
+	}
+
+	menuOpened(): void {
+		if (document.body.clientWidth < 470) {
+			document.body.style.overflow = 'hidden';
+		}
+	}
 }
