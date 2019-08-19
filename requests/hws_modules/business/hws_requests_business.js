@@ -565,7 +565,7 @@ var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 			emailBody +=
 				'<p>Please click on the <a href="{packageUrl}">link</a> to get redirected to your primary package.</p>';
 			emailBody +=
-				'<p>Please note that this is just a primarily package, one of our representatives will get in with you touch within 48 hours after submitting your request.</p>';
+				'<p>Please note that this is just a primarily package, one of our representatives will get in touch with you within 48 hours after submitting your request.</p>';
 			emailBody += "<p style='font-weight: bolder;'>Regards,</p>";
 			emailBody += "<p style='font-weight: bold;'>Tripdizer Booking Team</p>";
 			emailBody +=
