@@ -12,6 +12,12 @@ export class RequestLoadingComponent {
 	isLoading;
 	message: string;
 	constructor(requestService: RequestService) {
-		requestService.isLoading.subscribe(input => { this.isLoading = input.show; this.message = input.message });
+		requestService.isLoading.subscribe(input => {
+			if (!this.isLoading) {
+				// Only set the new message if the loading is not already displayed, otherwise don't change the message
+				this.message = input.message
+			}
+			this.isLoading = input.show;
+		});
 	}
 }
