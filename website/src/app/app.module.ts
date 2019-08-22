@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { CurrencyPipe } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -44,6 +45,7 @@ import { SocialAuthServiceConfig } from './social-auth-service.config';
 		MatMomentDateModule,
 		MatSliderModule,
 		MatSnackBarModule,
+		MatDialogModule,
 		SocialLoginModule,
 	],
 	providers: [

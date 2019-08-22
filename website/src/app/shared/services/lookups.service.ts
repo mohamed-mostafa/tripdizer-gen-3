@@ -24,18 +24,18 @@ export class LookupsService {
 	constructor(private http: HttpClient) { }
 
 	private getLookup<T>(endPoint: string, propName: string): Observable<Array<T>> {
-		this.isLoading.next({ show: true, message: "" });
+		this.isLoading.next({ show: true, message: '' });
 		let observable: Observable<Array<T>>;
 		if (this.Lookups[propName]) {
 			observable = of(this.Lookups[propName]);
-			this.isLoading.next({ show: false, message: "" });
+			this.isLoading.next({ show: false, message: '' });
 		} else {
 			observable = this.http.get<Array<T>>(`${this.endPoint}/${endPoint}`);
 		}
 		return observable.pipe(
 			tap(arr => {
 				this.Lookups[propName] = arr;
-				this.isLoading.next({ show: false, message: "" });
+				this.isLoading.next({ show: false, message: '' });
 			})
 		);
 	}
