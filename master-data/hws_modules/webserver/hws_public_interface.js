@@ -107,7 +107,7 @@ var updateCountryRequest = function(req, res) {
 	}
 };
 
-var getCountryRequest = function(req, res) {
+var getCountryRequests = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		business.getCountryRequests(
@@ -133,6 +133,6 @@ exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
 
-exports.getCountryRequest = getCountryRequest;
+exports.getCountryRequests = getCountryRequests;
 exports.createCountryRequest = createCountryRequest;
 exports.updateCountryRequest = updateCountryRequest;
