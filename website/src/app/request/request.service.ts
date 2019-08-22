@@ -292,7 +292,7 @@ export class RequestService {
 	}
 
 	getRecommendedDestinations(): Observable<Array<RecommendedDestinationsResponse> | null> {
-		this.isLoading.next({ show: true, message: "" });
+		this.isLoading.next({ show: true, message: '' });
 		if (this.isValidForRecommendedDestinations()) {
 			const recommendedDestinationsRequest = RecommendedDestinationsRequest.getRecommendedDestinationsRequestFromRequest(
 				this.requestData
@@ -303,12 +303,12 @@ export class RequestService {
 				})
 				.pipe(
 					map(recommendedDestinations => {
-						this.isLoading.next({ show: false, message: "" });
+						this.isLoading.next({ show: false, message: '' });
 						return recommendedDestinations;
 					})
 				);
 		}
-		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: "" })));
+		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
 
 	isValidForEstimatedCost(): boolean {
@@ -316,7 +316,7 @@ export class RequestService {
 	}
 
 	getEstimatedCost(): Observable<EstimatedCostResponse | null> {
-		this.isLoading.next({ show: true, message: "" });
+		this.isLoading.next({ show: true, message: '' });
 		if (this.isValidForEstimatedCost()) {
 			const estimatedCostRequest = EstimatedCostRequest.getEstimatedCostRequestFromRequest(this.requestData);
 			return this.http
@@ -326,12 +326,12 @@ export class RequestService {
 				.pipe(
 					map((estimatedCostResponse: EstimatedCostResponse) => {
 						this.setProperty('estimatedCost', estimatedCostResponse.totalBudget);
-						this.isLoading.next({ show: false, message: "" });
+						this.isLoading.next({ show: false, message: '' });
 						return estimatedCostResponse;
 					})
 				);
 		}
-		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: "" })));
+		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
 
 	validatePromoCode(promoCode: string): Observable<boolean> {
@@ -360,7 +360,7 @@ export class RequestService {
 	}
 
 	submitRequest(): Observable<Ticket | null> {
-		this.isLoading.next({ show: true, message: "Submitting your request ..." });
+		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
 			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request: request }).pipe(
@@ -369,19 +369,19 @@ export class RequestService {
 					this.lastRequestId = ticket.id;
 					this.trackingService.track('Submit Request', { requestId: ticket.id });
 					this.resetRequestState();
-					this.isLoading.next({ show: false, message: "" });
+					this.isLoading.next({ show: false, message: '' });
 					return ticket;
 				})
 			);
 		}
-		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: "" })));
+		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
 
 	sendPackageByMail(): void {
-		this.isLoading.next({ show: true, message: "" });
+		this.isLoading.next({ show: true, message: '' });
 		this.http
 			.post<Boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
-			.pipe(finalize(() => this.isLoading.next({ show: false, message: "" })))
+			.pipe(finalize(() => this.isLoading.next({ show: false, message: '' })))
 			.subscribe(() => { });
 	}
 }

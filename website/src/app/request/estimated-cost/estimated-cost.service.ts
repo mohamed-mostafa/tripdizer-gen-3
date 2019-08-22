@@ -33,6 +33,7 @@ export class EstimatedCostService {
 	cityAttractionsList: Array<CityAttractions>;
 
 	currentTabIndex = new Subject<number>();
+	finishGetAttractions = new Subject<boolean>();
 
 	constructor(private http: HttpClient, private requestService: RequestService) { }
 
@@ -45,11 +46,13 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		this.setIsLoading(true, "Locating the best cities that match your interests");
+		// this.setIsLoading(true, 'Locating the best cities that match your interests');
+		this.requestService.isLoading.next({ show: true, message: 'Locating the best cities that match your interests' });
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false, "");
+				this.setIsLoading(false, '');
+				this.requestService.isLoading.next({ show: false, message: '' });
 			})
 		);
 	}
@@ -74,7 +77,7 @@ export class EstimatedCostService {
 	}
 
 	getFlights(): Observable<Array<Flight>> {
-		this.setIsLoading(true, "Finding the best flight deals ...");
+		this.setIsLoading(true, 'Finding the best flight deals ...');
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -98,7 +101,7 @@ export class EstimatedCostService {
 				})
 			),
 			tap(() => {
-				this.setIsLoading(false, "");
+				this.setIsLoading(false, '');
 			})
 		);
 	}
@@ -117,7 +120,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(true, "Finding the best hotels ...");
+		this.setIsLoading(true, 'Finding the best hotels ...');
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
@@ -145,7 +148,7 @@ export class EstimatedCostService {
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false, "");
+				this.setIsLoading(false, '');
 			})
 		);
 	}
@@ -168,7 +171,7 @@ export class EstimatedCostService {
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
-		this.setIsLoading(true, "");
+		this.setIsLoading(true, '');
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
@@ -176,7 +179,8 @@ export class EstimatedCostService {
 		const attractionsRequest: AttractionsRequest = { cities: cities };
 		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
 			tap(() => {
-				this.setIsLoading(false, "");
+				this.setIsLoading(false, '');
+				this.finishGetAttractions.next(true);
 			})
 		);
 	}
@@ -219,10 +223,12 @@ export class EstimatedCostService {
 						// flights
 						flightDataExists: stationFlightOffer ? true : false,
 						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
-						arrive_to: stationFlightOffer ? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : 'destination',
+						arrive_to: stationFlightOffer ?
+							stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails : 'destination',
 						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
 						travel_time: stationFlightOffer ? moment(stationFlightOffer.segments[0].departure).format('DD/MM HH:mm') : 'Unknown time',
-						arrive_time: stationFlightOffer ? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
+						arrive_time: stationFlightOffer ?
+							moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm') : 'unknown time',
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
@@ -246,15 +252,15 @@ export class EstimatedCostService {
 
 			// add an extra station, which is the origin step (e.g. return to cairo)
 			if (this.summaryStations.length > 0) {
-				const lastStationAirport = this.requestService.getProperty("travelingFrom");
+				const lastStationAirport = this.requestService.getProperty('travelingFrom');
 				const lastStationFlightOffer = selectedFlightOffers.find(flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode);
 				const lastStation: Station = {
 
 					// city
-					image: "",
+					image: '',
 					name: lastStationAirport.name,
 					title: lastStationAirport.name,
-					description: "",
+					description: '',
 					nights_count: 0,
 
 					// flights
@@ -271,9 +277,9 @@ export class EstimatedCostService {
 
 					// accommodation
 					accommodationDataExists: false,
-					hotel: "",
+					hotel: '',
 					hotel_rate: 0,
-					hotel_address: "",
+					hotel_address: '',
 
 					// activities
 					activities: [],

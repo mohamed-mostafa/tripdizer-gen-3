@@ -58,6 +58,6 @@ import { SummaryComponent } from './estimated-cost/summary/summary.component';
 		ChangeFlightComponent,
 		TabAccommodationComponent,
 		SummaryComponent,
-	],
+	]
 })
 export class RequestModule { }
