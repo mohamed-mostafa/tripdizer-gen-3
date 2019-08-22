@@ -138,18 +138,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 		return this.places.filter(p => p.name.toLowerCase().indexOf(filterValue) === 0);
 	}
 
-	// openDialog(): void {
-	// 	const dialogRef = this.dialog.open(SuggestCountryModalComponent, {
-	// 		width: '450px',
-	// 		data: 'hi'
-	// 	});
-
-	// 	dialogRef.afterClosed().subscribe(result => {
-	// 		console.log('The dialog was closed', result);
-
-	// 	});
-	// }
-
 	openDialog(): void {
 		const dialogRef = this.dialog.open(DialogComponent, {
 			autoFocus: true,
@@ -192,7 +180,29 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
-				this.homeService.saveSuggestedCountry(inputs);
+
+				inputs.forEach(input => {
+					if (input.id === 'fullName') {
+						inputs['name'] = input.value;
+					}
+
+					if (input.id === 'phoneNumber') {
+						inputs['phone'] = input.value;
+					}
+
+					if (input.id === 'emailAddress') {
+						inputs['email'] = input.value;
+					}
+
+					if (input.id === 'suggestedCountry') {
+						inputs['country'] = input.value;
+					}
+
+				});
+
+				inputs.splice(0, 4);
+
+				this.homeService.saveCountryRequest(inputs);
 				console.log(inputs);
 			}
 		});

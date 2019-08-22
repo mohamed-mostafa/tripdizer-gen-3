@@ -220,13 +220,13 @@ var start = () => {
 		});
 	});
 
-	app.get('/admin/phones', auth.isAuthenticated, (req, res) => {
+	app.get('/admin/country-requests', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,
-			title: 'Phones',
-			controller: 'Phones',
+			title: 'Country requests',
+			controller: 'CountryRequests',
 		};
-		res.render('pages/phones', {
+		res.render('pages/country-requests', {
 			user: req.user,
 		});
 	});

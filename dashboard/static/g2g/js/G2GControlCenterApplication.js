@@ -315,10 +315,10 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
-	.factory('PhonesService', [
+	.factory('CountryRequestsService', [
 		'$rootScope',
 		'$http',
-		function PhonesService($rootScope, $http) {
+		function CountryRequestsService($rootScope, $http) {
 			var prefix = $rootScope.masterDataServerUrl + '/public/';
 
 			return {
@@ -326,7 +326,7 @@ var g2gControlCenterApplication = angular
 			};
 
 			function getAll() {
-				return $http.get(prefix + 'phones', {}).then(function (response) {
+				return $http.get(prefix + 'country-requests', {}).then(function (response) {
 					return response.data;
 				});
 			}

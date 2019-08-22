@@ -2,20 +2,22 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RequestService } from '../request/request.service';
 
+export interface CountryRequest {
+	name: string;
+	country: string;
+	phone: string;
+	email: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class HomeService {
 	private endPoint = 'master-data/public';
-	private temporaryJsonBinEndPoint = 'https://api.jsonbin.io/b';
 
 	constructor(private http: HttpClient, private requestService: RequestService) { }
 
-	savePhoneNumber(phoneNumber: number): void {
-		this.http.post<void>(`${this.endPoint}/phone`, { phoneNumber }).subscribe(() => { });
-	}
-
-	saveSuggestedCountry(data: any): void {
+	saveCountryRequest(countryRequest: CountryRequest): void {
 		this.setIsLoading(true, 'Submitting data ...');
-		this.http.post<void>(`${this.temporaryJsonBinEndPoint}`, { data }).subscribe(res => {
+		this.http.post<void>(`${this.endPoint}/country-request`, { countryRequest }).subscribe(res => {
 			this.setIsLoading(false, '');
 			console.log(res);
 		});

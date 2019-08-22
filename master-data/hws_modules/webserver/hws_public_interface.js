@@ -75,15 +75,15 @@ var update = function(req, res) {
 	}
 };
 
-var createPhone = function(req, res) {
+var createCountryRequest = function(req, res) {
 	try {
 		// call the business function and give it a callback function
-		var phoneNumber = req.body.phoneNumber;
-		business.createPhone(phoneNumber, function() {
+		var countryRequest = req.body.countryRequest;
+		business.createCountryRequest(countryRequest, function() {
 			res.end();
 		});
 	} catch (error) {
-		console.error('An error occurred in /phone');
+		console.error('An error occurred in /country-request');
 		console.error(error);
 		res
 			.status(500)
@@ -91,15 +91,15 @@ var createPhone = function(req, res) {
 	}
 };
 
-var updatePhone = function(req, res) {
+var updateCountryRequest = function(req, res) {
 	try {
 		// call the business function and give it a callback function
-		var phone = req.body.phone;
-		business.updatePhone(phone, function(updatedPhone) {
-			res.send(updatedPhone);
+		var countryRequest = req.body.countryRequest;
+		business.updateCountryRequest(countryRequest, function(updatedCountryRequest) {
+			res.send(updatedCountryRequest);
 		});
 	} catch (error) {
-		console.error('An error occurred in /phone');
+		console.error('An error occurred in /country-request');
 		console.error(error);
 		res
 			.status(500)
@@ -107,12 +107,12 @@ var updatePhone = function(req, res) {
 	}
 };
 
-var getPhones = function(req, res) {
+var getCountryRequest = function(req, res) {
 	try {
 		// call the business function and give it a callback function
-		business.getPhones(
-			function(phones) {
-				res.json(phones);
+		business.getCountryRequests(
+			function(countryRequests) {
+				res.json(countryRequests);
 			},
 			function(error) {
 				res
@@ -121,7 +121,7 @@ var getPhones = function(req, res) {
 			}
 		);
 	} catch (error) {
-		console.error('An error occurred in /public/phones');
+		console.error('An error occurred in /public/country-requests');
 		console.error(error);
 		res
 			.status(500)
@@ -132,6 +132,7 @@ var getPhones = function(req, res) {
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
-exports.getPhones = getPhones;
-exports.createPhone = createPhone;
-exports.updatePhone = updatePhone;
+
+exports.getCountryRequest = getCountryRequest;
+exports.createCountryRequest = createCountryRequest;
+exports.updateCountryRequest = updateCountryRequest;
