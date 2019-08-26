@@ -49,7 +49,7 @@ export class TabCitiesComponent {
 						res[b].select = true;
 						this.selectedCities.push(res[b]);
 						const coordinates = res[b].coordinates.split(', ');
-						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
 				}
 
@@ -73,14 +73,14 @@ export class TabCitiesComponent {
 			}
 			for (let m = 0; m < this.cityPaths.length; m++) {
 				const coordinates = city.coordinates.split(', ');
-				if (parseInt(coordinates[0], 10) === this.cityPaths[m].lat && parseInt(coordinates[1], 10) === this.cityPaths[m].lng) {
+				if (Number(coordinates[0]) === this.cityPaths[m].lat && Number(coordinates[1]) === this.cityPaths[m].lng) {
 					this.cityPaths.splice(m, 1);
 				}
 			}
 		} else if (city.select === false) {
 			// check if no more cities should be selected
 			const numberOfNights = this.service.getNumberOfNights();
-			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
+			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
 			if (this.selectedCities.length >= maxNumberOfCities) {
 				// prevent more selections
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
@@ -96,7 +96,7 @@ export class TabCitiesComponent {
 						this.cities[x].select = true;
 						this.selectedCities.push(this.cities[x]); // add this newly selected city
 						const coordinates = city.coordinates.split(', ');
-						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
+						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
 				}
 			}
