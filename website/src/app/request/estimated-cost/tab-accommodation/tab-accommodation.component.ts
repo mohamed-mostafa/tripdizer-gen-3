@@ -12,11 +12,12 @@ export class TabAccommodationComponent {
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
-	isLoading: Boolean;
+	loadedData: boolean;
+
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsAccommodationTabVisited(true);
-		requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
 		service.getAccommodation().subscribe(res => {
+			this.loadedData = true;
 			const items = res;
 			for (let b = 0; b < items.length; b++) {
 				if (items[b].hotels.length > 0) {

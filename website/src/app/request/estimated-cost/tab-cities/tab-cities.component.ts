@@ -18,7 +18,8 @@ export class TabCitiesComponent {
 	cityPaths: Array<{ lat: number; lng: number }> = [];
 	snackBar: MatSnackBar;
 	currentStepPath: string;
-	isLoading: Boolean;
+	loadedData: boolean;
+
 	constructor(
 		private service: EstimatedCostService,
 		snackBar: MatSnackBar,
@@ -30,9 +31,9 @@ export class TabCitiesComponent {
 		this.service.setCurrentTabIndex(0);
 		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
-		this.requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
 		service.getCities().subscribe(
 			res => {
+				this.loadedData = true;
 				const numberOfNights = this.service.getNumberOfNights();
 				const maxNumberOfCities = Math.ceil(numberOfNights / 2);
 				let numberOfSelectedCities = 0;
@@ -48,7 +49,7 @@ export class TabCitiesComponent {
 						res[b].select = true;
 						this.selectedCities.push(res[b]);
 						const coordinates = res[b].coordinates.split(', ');
-						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
+						this.cityPaths.push({ lat: parseInt(coordinates[0], 10), lng: parseInt(coordinates[1], 10) });
 					}
 				}
 
@@ -87,9 +88,10 @@ export class TabCitiesComponent {
 				});
 			} else {
 				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
-				this.selectedCities.splice(0, this.selectedCities.length);// clear list
+				this.selectedCities.splice(0, this.selectedCities.length); // clear list
+				this.cityPaths.splice(0, this.cityPaths.length);
 				for (let x = 0; x < this.cities.length; x++) {
-					if (this.cities[x].select) this.selectedCities.push(this.cities[x]); // add all selected cities again
+					if (this.cities[x].select) { this.selectedCities.push(this.cities[x]); } // add all selected cities again
 					if (this.cities[x].iataCode === city.iataCode) {
 						this.cities[x].select = true;
 						this.selectedCities.push(this.cities[x]); // add this newly selected city

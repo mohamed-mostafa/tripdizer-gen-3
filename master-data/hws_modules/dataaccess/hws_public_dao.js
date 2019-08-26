@@ -149,8 +149,8 @@ var update = function(video, onSuccess, onFailure) {
 	});
 };
 
-var createPhone = function(phoneNumber) {
-	// get a connection and open it
+var createCountryRequest = function(countryRequest) {
+    // get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
@@ -168,13 +168,13 @@ var createPhone = function(phoneNumber) {
 					console.error(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO Phones (Phone_Number) values (?)', [phoneNumber], function(err, result) {
+					connection.query('INSERT INTO New_Country_Requests (COUNTRY, NAME, Phone_Number, EMAIL) values (?, ?, ?, ?)', [countryRequest.country, countryRequest.name, countryRequest.phone, countryRequest.email], function(err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) {
 							// if the first insert statement fails
 							// end the connection
 							connection.end();
-							console.error('An error occurred while trying to create the new phone number: ' + phoneNumber);
+							console.error('An error occurred while trying to create the new country request: ' + countryRequest);
 							console.error(err);
 						} else {
 							// end the connection
@@ -191,7 +191,7 @@ var createPhone = function(phoneNumber) {
 
 //calls the onSuccess with a video object if successful
 //calls the onFailure with an err object in case of technical error
-var updatePhone = function(phone, onSuccess, onFailure) {
+var updateCountryRequest = function(countryRequest, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -210,14 +210,14 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 					console.error(err);
 					onFailure(err);
 				} else {
-					connection.query('UPDATE Phones SET Status = ? WHERE Id = ?', [phone.Status, phone.Id], function(
+					connection.query('UPDATE New_Country_Requests SET Status = ? WHERE Id = ?', [countryRequest.Status, countryRequest.Id], function(
 						err,
 						result
 					) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) {
 							// if the first insert statement fails
-							console.error('An error occurred while trying to update the existing phone: ' + phone.Phone_Number);
+							console.error('An error occurred while trying to update the existing country request: ' + countryRequest);
 							console.error(err);
 							connection.rollback(); // rollback the transaction
 							// end the connection
@@ -227,7 +227,7 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 							connection.commit();
 							connection.end();
 							// call the callback function provided by the caller, and give it the response
-							onSuccess(phone);
+							onSuccess(countryRequest);
 						}
 					});
 				}
@@ -236,7 +236,7 @@ var updatePhone = function(phone, onSuccess, onFailure) {
 	});
 };
 
-var getPhones = function(onSuccess, onFailure) {
+var getCountryRequests = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -246,27 +246,27 @@ var getPhones = function(onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM Phones', [], function(err, rows) {
+			connection.query('SELECT * FROM New_Country_Requests', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection
 					connection.end();
-					console.error('An error occurred while list all phones');
+					console.error('An error occurred while list all country requests');
 					console.error(err);
 					onFailure(err);
 				} else {
 					// no error is thrown
-					var phones = [];
+					var countryRequests = [];
 					// populate the attributes
 					for (var i = 0; i < rows.length; i++) {
-						var phone = rows[i];
+						var countryRequest = rows[i];
 
-						phones.push(phone);
+						countryRequests.push(countryRequest);
 					}
 					// end the connection
 					connection.end();
 					// call the callback function provided by the caller, and give it the response
-					onSuccess(phones);
+					onSuccess(countryRequests);
 				}
 			});
 		}
@@ -276,6 +276,7 @@ var getPhones = function(onSuccess, onFailure) {
 exports.create = create;
 exports.update = update;
 exports.getVideos = getVideos;
-exports.getPhones = getPhones;
-exports.createPhone = createPhone;
-exports.updatePhone = updatePhone;
+
+exports.getCountryRequests = getCountryRequests;
+exports.createCountryRequest = createCountryRequest;
+exports.updateCountryRequest = updateCountryRequest;

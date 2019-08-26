@@ -1,3 +1,7 @@
+import { HomeService } from './../../../home/home.service';
+import { CustomValidators } from './../../utils/custom.validators';
+import { DialogComponent } from './../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -7,15 +11,26 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Place } from '../../models/place.model';
-
+import { Validators } from '@angular/forms';
+import { RequestService } from '../../../request/request.service';
 @Component({
 	selector: 'c-shared-places-select-box',
 	templateUrl: './places-select-box.component.html',
 	styleUrls: ['./places-select-box.component.scss'],
 })
 export class PlacesSelectBoxComponent implements OnInit {
+
+	dialogLabels: {
+		title: string;
+		description: string;
+		inputs: { input0: string, input1: string, input2: string, input3: string, };
+		buttonsLabel: { ok: string; cancel: string };
+	};
+
+
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
+	// filteredPlaces: BehaviorSubject<Array<Place>>;
 	_selectedPlaces: Array<Place> = [];
 	_places: Array<Place>;
 
@@ -28,6 +43,9 @@ export class PlacesSelectBoxComponent implements OnInit {
 	@Input() classes = '';
 	@Input() property = 'id';
 	@Input() set places(places: Array<Place>) {
+		if (places) {
+			places.push({ arName: 'أخرى', enName: 'Others', id: 0, name: 'Others', description: '' });
+		}
 		this._places = places || [];
 		this.formGroup.get(this.controlName).setValue(null);
 	}
@@ -35,11 +53,21 @@ export class PlacesSelectBoxComponent implements OnInit {
 		if (places) {
 			this._selectedPlaces = places;
 		}
+
+		console.log(this._places);
+		console.log(this.places);
 	}
 
 	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
 
 	get places(): Array<Place> {
+
+		this._selectedPlaces.forEach(place => {
+			if (place.id === 0) {
+				this._places.splice(this._places.indexOf(place), 1);
+			}
+		});
+
 		if (this._selectedPlaces.length === 3) {
 			return [];
 		}
@@ -53,7 +81,13 @@ export class PlacesSelectBoxComponent implements OnInit {
 		);
 	}
 
-	constructor(translate: TranslateService) {
+	constructor(
+		translate: TranslateService,
+		public dialog: MatDialog,
+		private homeService: HomeService,
+		private requestService: RequestService
+	) {
+		translate.get('home.suggest_country_dialog').subscribe(labels => (this.dialogLabels = labels));
 		translate
 			.get('home.landing.destination_place_holder')
 			.subscribe(placeHolder => (this.placeHolder = !this.placeHolder ? placeHolder : this.placeHolder));
@@ -79,11 +113,16 @@ export class PlacesSelectBoxComponent implements OnInit {
 		const place = this._places.find(p => p[this.property] === event.option.value);
 
 		if (place) {
-			this._selectedPlaces.push(place);
-			this.formGroup.get(this.controlName).setValue(null);
-			this.placesChanged.next(this._selectedPlaces);
-			this.placeInput.nativeElement.value = '';
-			this.placeInput.nativeElement.blur();
+			if (place.id !== 0) {
+				this._selectedPlaces.push(place);
+				this.formGroup.get(this.controlName).setValue(null);
+				this.placesChanged.next(this._selectedPlaces);
+				this.placeInput.nativeElement.value = '';
+				this.placeInput.nativeElement.blur();
+			} else {
+				console.log('open modal');
+				this.openDialog();
+			}
 		}
 	}
 
@@ -98,7 +137,90 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 	private _filter(value: string): Array<Place> {
 		const filterValue = value.toString().toLowerCase();
-
 		return this.places.filter(p => p.name.toLowerCase().indexOf(filterValue) === 0);
 	}
+
+	openDialog(): void {
+		const dialogRef = this.dialog.open(DialogComponent, {
+			autoFocus: true,
+			maxWidth: 400,
+			data: {
+				title: this.dialogLabels ? this.dialogLabels.title : '',
+				description: this.dialogLabels ? this.dialogLabels.description : '',
+				inputs: [
+					{
+						id: 'fullName',
+						value: null,
+						placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
+						validatorOrOpts: [Validators.required],
+					},
+					{
+						id: 'phoneNumber',
+						value: null,
+						placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input1 : '',
+						validatorOrOpts: [Validators.required, CustomValidators.numericOnly()],
+					},
+					{
+						id: 'emailAddress',
+						value: null,
+						placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input2 : '',
+						validatorOrOpts: [Validators.required],
+					},
+					{
+						id: 'suggestedCountry',
+						value: null,
+						placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input3 : '',
+						validatorOrOpts: [Validators.required],
+					},
+				],
+				buttonsLabel: {
+					ok: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.ok : '',
+					cancel: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.cancel : '',
+				},
+			},
+		});
+
+		dialogRef.afterClosed().subscribe(inputs => {
+			if (inputs && inputs[0]) {
+
+				const countryRequest: any = {};
+
+				inputs.forEach(input => {
+					if (input.id === 'fullName') {
+						countryRequest.name = input.value;
+					}
+
+					if (input.id === 'phoneNumber') {
+						countryRequest.phone = input.value;
+					}
+
+					if (input.id === 'emailAddress') {
+						countryRequest.email = input.value;
+					}
+
+					if (input.id === 'suggestedCountry') {
+						countryRequest.country = input.value;
+					}
+
+				});
+
+				console.log(countryRequest);
+
+
+				this.setIsLoading(true, 'Submitting data ...');
+				this.homeService.saveCountryRequest(countryRequest).subscribe(res => {
+					console.log(res);
+					console.log('api result');
+					this.setIsLoading(false, '');
+				});
+			}
+		});
+	}
+
+
+	setIsLoading(isLoading: boolean, message: string) {
+		this.requestService.isLoading.next({ show: isLoading, message: message });
+	}
+
+
 }

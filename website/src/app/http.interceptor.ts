@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, throwError } from 'rxjs';
@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 export class JWTokenInterceptor implements HttpInterceptor {
 	private baseUri = environment.apiUrl;
 
-	constructor(private translate: TranslateService) {}
+	constructor(private translate: TranslateService) { }
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		if (request.headers.has('localUrl')) {
@@ -22,6 +22,7 @@ export class JWTokenInterceptor implements HttpInterceptor {
 				setParams: { lang: this.translate.currentLang },
 			});
 
+            console.log(request);
 			// if (localStorage.getItem('token') ? true : false) {
 			//     request = request.clone({ headers: request.headers.set('Authorization', localStorage.getItem('token')) });
 			// }

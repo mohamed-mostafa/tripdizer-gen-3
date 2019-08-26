@@ -134,9 +134,9 @@ var start = function() {
 	router.put('/public/video', auth.isAuthenticated, publicInterface.update);
 
 	// Website
-	router.get('/public/phones', publicInterface.getPhones);
-	router.post('/public/phone', publicInterface.createPhone);
-	router.put('/public/phone', publicInterface.updatePhone);
+	router.get('/public/country-requests', publicInterface.getCountryRequests);
+	router.post('/public/country-request', publicInterface.createCountryRequest);
+	router.put('/public/country-request', publicInterface.updateCountryRequest);
 
 	// routing - end
 	app.use('/master-data', router);

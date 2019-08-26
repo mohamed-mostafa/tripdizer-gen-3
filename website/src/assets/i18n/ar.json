@@ -1,383 +1,397 @@
 ﻿{
-	"dir": "rtl",
-	"currency": {
-		"EGP": "ج.م."
-	},
-	"core": {
-		"nav_bar": {
-			"blog": "المدونة",
-			"our_team": "فريقنا"
-		},
-		"user_profile": {
-			"sign_out": "تسجيل الخروج",
-			"sign_in": "تسجيل الدخول"
-		},
-		"footer": {
-			"logo": "../../../assets/img/logo-250x131.svg",
-			"slogan": "نعدك بتوفير وقتك و ميزانيتك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
-			"location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
-			"plan_trip": "خطط لرحلتك"
-		}
-	},
-	"shared": {
-		"error_messages": {
-			"required": "مطلوب",
-			"validDate": "يوم/شهر/سنة",
-			"matDatepickerParse": "التاريخ غير صحيح",
-			"compareDates": "التواريخ غير صحيحة",
-			"email": "البريد الإلكتروني غير صحيح",
-			"numericOnly": "أرقام فقط",
-			"equalTo": "غير متطابقين",
-			"copyPaste": "رجاء عدم النسخ",
-			"notEmpty": "القيمة غير صحيحة",
-			"invalidPromoCode": "البروموكود غير فعال"
-		},
-		"login_dialog": {
-			"sign_out": "تسجيل الخروج",
-			"sign_in": "تسجيل الدخول",
-			"sign_in_google": "تسجيل الدخول بواسطة Google",
-			"sign_in_facebook": "تسجيل الدخول بواسطة Facebook",
-			"or": "أو",
-			"continue_without_login": "اكمل بدون تسجيل الدخول",
-			"improve_experience": "لتجربة أفضل"
-		}
-	},
-	"home": {
-		"landing": {
-			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
-			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
-			"have_plan": "ابدأ التخطيط",
-			"surprise_me": "لا ... ساعدنى",
-			"scroll_down": "انتقل لـلأســــفــــــــــــــــــل"
-		},
-		"testimonials": {
-			"featured_in": "التغطية الإعلامية"
-		},
-		"videos": {
-			"watch_videos": "شاهد فيديوهاتنا علي"
-		},
-		"why_us": {
-			"tailor_made": {
-				"label": "رحلات مفصلة لك خصيصاً",
-				"description": "نرتب لك رحلة مفصلة وفقاّ لإحتياجاتك وإهتماماتك"
-			},
-			"enhanced_travel_experience": {
-				"label": "تجربة سفر إستثنائية",
-				"description": "نهتم بجودة رحلتك ونرتب لك حجز الطيران، الإقامة، و المزارات. كل ما عليك هو الإسترخاء، ترتيب حقائبك و الإستمتاع برحلتك"
-			},
-			"hassle_free": {
-				"label": "رحلة خالية من المتاعب",
-				"description": "من خلال الحجز معنا، لن تضطر لقضاء أسابيع فى ترتيب رحلتك. نجهز لك برنامج سياحي تفصيلي يناسب اهتماماتك"
-			}
-		},
-		"dialog": {
-			"title": "اتريد المساعدة",
-			"description": "اترك رقم هاتفك وسيقوم أحد وكلاءنا بالاتصال بك.",
-			"inputs": {
-				"input0": "رقم الهاتف"
-			},
-			"buttonsLabel": {
-				"ok": "حسناً",
-				"cancel": "لا شكراً"
-			}
-		}
-	},
-	"request": {
-		"travel_info": {
-			"traveling_to": "مسافر الى",
-			"traveling_from": "مسافر من",
-			"airports": [
-				{
-					"iataCode": "CAI",
-					"name": "القاهرة"
-				},
-				{
-					"iataCode": "HBE",
-					"name": "الإسكندرية"
-				},
-				{
-					"iataCode": "HRG",
-					"name": "الغردقة"
-				},
-				{
-					"iataCode": "SSH",
-					"name": "شرم الشيخ"
-				}
-			],
-			"departure": "مغادرة",
-			"return": "وصول",
-			"flexible": "تواريخ سفرى مرنة (+/- 3 أيام)",
-			"compare_dates": "تاريخ العودة يجب ان يكون بعد السفر",
-			"dialog": {
-				"title": "وجهة أخرى",
-				"description": "إلى اين تريد السفر؟",
-				"inputs": {
-					"input0": "حدد وجهتك"
-				},
-				"buttonsLabel": {
-					"ok": "متابعة",
-					"cancel": "إلغاء"
-				}
-			}
-		},
-		"budget": {
-			"budget": "الميزانية للفرد الواحد",
-			"choice": "أو اختر واحدة من الفئات المحددة مسبقًا"
-		},
-		"departure_return": {
-			"departure": "مغادرة",
-			"return": "وصول",
-			"flexible": "تواريخ سفرى مرنة (+/- 3 أيام)",
-			"compare_dates": "تاريخ العودة يجب ان يكون بعد السفر"
-		},
-		"destinations": {
-			"dialog": {
-				"title": "وجهة أخرى",
-				"description": "إلى اين تريد السفر؟",
-				"inputs": {
-					"input0": "حدد وجهتك"
-				},
-				"buttonsLabel": {
-					"ok": "متابعة",
-					"cancel": "إلغاء"
-				}
-			}
-		},
-		"estimated_cost": {
-			"hint0": "السعر الإجمالي لـ {{numberOfTravelers}} أشخاص",
-			"hint1": "هذة التكلفة تقديرية و قد تتغير وقت إتمام الحجز",
-			"flights": "الطيران",
-			"accommodation": "الإقامة",
-			"ferries": "العبّارات",
-			"daily_spending": "المصاريف اليومية",
-			"per_person": "للشخص",
-			"hint2": "طيران دولي + داخلي",
-			"hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري",
-			"header": {
-				"number_of_days": "{{numberOfNights}} ايام في",
-				"dates": "من {{departureDate}} الى {{returnDate}}"
-			},
-			"tab_cities": {
-				"title": "المدن",
-				"view_choose": "عرض واختيار المدن",
-				"things_to_do": "أنشطة يمكن القيام بها فى",
-				"view_map": "عرض الخريطة",
-				"next_label": "التالي",
-				"back_label": "رجوع"
-			},
-			"tab_flights": {
-				"title": "الطيران",
-				"view_edit": "عرض / تعديل المسار",
-				"change_flight": "تغيير الطيران",
-				"change_city": "تغيير المدينة",
-				"reorder_route": "ترتيب المسار",
-				"total_cost": "السعر الاجمالي للطيران",
-				"next_label": "التالي",
-				"back_label": "رجوع",
-				"start": "البداية",
-				"end": "النهاية",
-				"no_flights": "الطيران غير متوفر لهذه الرحلة",
-				"nights": "{{numberOfNights}} ايام",
-				"stops": "{{numberOfStops}} وقفة",
-				"departure": "المغادرة",
-				"duration": "المدة",
-				"arrival": "الوصول",
-				"select": "اختر",
-				"selected": "مختار"
-			},
-			"tab_accommodations": {
-				"title": "الفنادق",
-				"choose_hotel": "عرض واختيار الفنادق",
-				"select": "اختيار",
-				"selected": "تم اختياره",
-				"total_price": "إجمالى السعر",
-				"next_label": "التالي",
-				"back_label": "رجوع",
-				"total_cost": "اجمالى سعر الفنادق"
-			},
-			"summary": {
-				"view_details": "إظهار تفاصيل الرحلة",
-				"accommodation": "الإقامة",
-				"activities": "الأنشطة",
-				"modify": "تعديل",
-				"total_cost": "اجمالى التكلفة"
-			}
-		},
-		"form_layout": {
-			"next_label": "التالي",
-			"back_label": "السابق"
-		},
-		"information": {
-			"next_label": "إرسال",
-			"name": "الأسم",
-			"mobile": "رقم الموبايل",
-			"email": "البريد الإلكتروني",
-			"confirm_email": "تأكيد البريد الإلكتروني",
-			"gender": "النوع",
-			"male": "ذكر",
-			"female": "انثى",
-			"birthday": "تاريخ الميلاد",
-			"profession": "المهنة",
-			"referral": "كيف عرفت عنا؟",
-			"travel_history": "تاريخ السفر",
-			"traveled_before": "سافرت من قبل",
-			"never_traveled": "لم تسافر",
-			"equal_to": "البريد الإلكتروني غير متطابق"
-		},
-		"nav_bar": {
-			"travel_info": "معلومات الرحلة",
-			"traveling_from": "مسافر من",
-			"traveling_to": "مسافر إلي",
-			"departure_return": "ذهاب وعودة",
-			"travelers": {
-				"title": "المسافرين",
-				"value": "{{adultsNumber}} بالغين"
-			},
-			"budget": "الميزانية",
-			"purpose": "غرض السفر",
-			"preferences": "الإهتمامات",
-			"destinations": "الوجهات",
-			"estimated_cost": "التكلفة",
-			"travel_assistance": {
-				"title": "المساعدة",
-				"visaAssistance": "التأشيرة",
-				"tourGuide": "مرشد سياحي"
-			},
-			"information": {
-				"title": "خطوة أخيرة",
-				"value": "معلومات"
-			},
-			"ticket": ""
-		},
-		"preferences": {
-			"other": "اخرى"
-		},
-		"purpose": {
-			"other": "اخرى"
-		},
-		"recommended_destinations": {
-			"rank": "نسبة الملائمة",
-			"highest": "الأكثر ملاءمة",
-			"lowest": "الأقل ملاءمة"
-		},
-		"ticket": {
-			"request_number": "رقم الطلب",
-			"adults": "{{adultsNumber}} بالغين",
-			"lg_sizes": {
-				"left_part": "M0,425V25A25,25,0,0,0,25,0H925a25,25,0,0,0,25,25v400A25,25,0,0,0,925,450H25A25,25,0,0,0,0,425Z",
-				"right_part": "M175,425V25A25,25,0,0,0,200,0h200a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
-				"right_part_transform": "matrix(1, 0, 0, 1, 925, 150)",
-				"splitter": "translate(1150 250)",
-				"request": {
-					"position": "translate(970 238)",
-					"left_details": "translate(385 {{calc}})",
-					"right_details": {
-						"position": "translate(0 20)",
-						"ticket_id": "-30",
-						"icon": "translate(-400 0)",
-						"from": "-20",
-						"to": "-420"
-					}
-				},
-				"actions": {
-					"position": "translate(325 690)",
-					"view_package": {
-						"icon": 290,
-						"button": 265
-					},
-					"download_package": {
-						"icon": 155,
-						"button": 130
-					},
-					"send_package": {
-						"icon": 25,
-						"button": 0
-					}
-				}
-			},
-			"sm_sizes": {
-				"position": "translate(257 128)",
-				"top_details": {
-					"number": "120",
-					"sign": "-"
-				},
-				"bottom_details": {
-					"position": "translate(120 0)",
-					"ticket_id": "-15",
-					"icon": "translate(-150 80)",
-					"description": "translate(120 295)"
-				},
-				"actions": {
-					"position": "translate(395 755)",
-					"view_package": {
-						"icon": 0,
-						"button": -15
-					},
-					"download_package": {
-						"icon": -85,
-						"button": -100
-					},
-					"send_package": {
-						"icon": -170,
-						"button": -185
-					}
-				}
-			},
-			"lg_text": {
-				"line1": "انت علي بعد خطوات قليلة من رحلة احلامك",
-				"line2": "ألق نظرة علي برنامج رحلتك و سوف يتصل بك",
-				"line3": "احد مستشارينا في اسرع وقت"
-			},
-			"sm_text": {
-				"line1": "انت علي بعد خطوات قليلة من رحلة احلامك",
-				"line2": "ألق نظرة علي برنامج رحلتك",
-				"line3": "و سوف يتصل بك احد مستشارينا",
-				"line4": "في اسرع وقت"
-			},
-			"view_package": "عرض الصفقة",
-			"download_package": "تحميل الصفقة",
-			"send_package": "ارسال الى البريد",
-			"dialog": {
-				"description": "تم ارسال الصفقة",
-				"buttonsLabel": {
-					"cancel": "حسناً"
-				}
-			}
-		},
-		"travel_assistance": {
-			"visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",
-			"tour_guide": "أحتاج مرشد سياحي",
-			"promo_code": "الرمز الترويجي",
-			"hint": "ادخل الرمز الترويجي",
-			"apply": "تطبيق",
-			"special_request": "طلبات خري"
-		},
-		"travelers": {
-			"adults": "بالغين",
-			"kids": "اطفال",
-			"infants": "رضع"
-		},
-		"traveling_from": {
-			"traveling_from": "مسافر من",
-			"airports": [
-				{
-					"iataCode": "CAI",
-					"name": "القاهرة"
-				},
-				{
-					"iataCode": "HBE",
-					"name": "الإسكندرية"
-				},
-				{
-					"iataCode": "HRG",
-					"name": "الغردقة"
-				},
-				{
-					"iataCode": "SSH",
-					"name": "شرم الشيخ"
-				}
-			]
-		}
-	}
+  "dir": "rtl",
+  "currency": {
+    "EGP": "ج.م."
+  },
+  "core": {
+    "nav_bar": {
+      "blog": "المدونة",
+      "our_team": "فريقنا"
+    },
+    "user_profile": {
+      "sign_out": "تسجيل الخروج",
+      "sign_in": "تسجيل الدخول"
+    },
+    "footer": {
+      "logo": "../../../assets/img/logo-250x131.svg",
+      "slogan": "نعدك بتوفير وقتك و ميزانيتك أثناء ترتيب رحلة مفصلة لك تتجاوز كل توقعاتك",
+      "location": "10 زكريا رزق - الزمالك - القاهرة - مصر",
+      "plan_trip": "خطط لرحلتك"
+    }
+  },
+  "shared": {
+    "error_messages": {
+      "required": "مطلوب",
+      "validDate": "يوم/شهر/سنة",
+      "matDatepickerParse": "التاريخ غير صحيح",
+      "compareDates": "التواريخ غير صحيحة",
+      "email": "البريد الإلكتروني غير صحيح",
+      "numericOnly": "أرقام فقط",
+      "equalTo": "غير متطابقين",
+      "copyPaste": "رجاء عدم النسخ",
+      "notEmpty": "القيمة غير صحيحة",
+      "invalidPromoCode": "البروموكود غير فعال"
+    },
+    "login_dialog": {
+      "sign_out": "تسجيل الخروج",
+      "sign_in": "تسجيل الدخول",
+      "sign_in_google": "تسجيل الدخول بواسطة Google",
+      "sign_in_facebook": "تسجيل الدخول بواسطة Facebook",
+      "or": "أو",
+      "continue_without_login": "اكمل بدون تسجيل الدخول",
+      "improve_experience": "لتجربة أفضل"
+    }
+  },
+  "home": {
+    "landing": {
+      "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+      "landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
+      "destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
+      "have_plan": "ابدأ التخطيط",
+      "surprise_me": "لا ... ساعدنى",
+      "scroll_down": "انتقل لـلأســــفــــــــــــــــــل"
+    },
+    "testimonials": {
+      "featured_in": "التغطية الإعلامية"
+    },
+    "videos": {
+      "watch_videos": "شاهد فيديوهاتنا علي"
+    },
+    "why_us": {
+      "tailor_made": {
+        "label": "رحلات مفصلة لك خصيصاً",
+        "description": "نرتب لك رحلة مفصلة وفقاّ لإحتياجاتك وإهتماماتك"
+      },
+      "enhanced_travel_experience": {
+        "label": "تجربة سفر إستثنائية",
+        "description": "نهتم بجودة رحلتك ونرتب لك حجز الطيران، الإقامة، و المزارات. كل ما عليك هو الإسترخاء، ترتيب حقائبك و الإستمتاع برحلتك"
+      },
+      "hassle_free": {
+        "label": "رحلة خالية من المتاعب",
+        "description": "من خلال الحجز معنا، لن تضطر لقضاء أسابيع فى ترتيب رحلتك. نجهز لك برنامج سياحي تفصيلي يناسب اهتماماتك"
+      }
+    },
+    "dialog": {
+      "title": "اتريد المساعدة",
+      "description": "اترك رقم هاتفك وسيقوم أحد وكلاءنا بالاتصال بك.",
+      "inputs": {
+        "input0": "رقم الهاتف"
+      },
+      "buttonsLabel": {
+        "ok": "حسناً",
+        "cancel": "لا شكراً"
+      }
+    },
+    "suggest_country_dialog": {
+      "title": "اقترح إضافة دولة",
+      "description": "أضف بياناتك واسم الدولة المقترح اضافتها.",
+      "inputs": {
+        "input0": "الإسم",
+        "input1": "رقم الموبايل",
+        "input2": "البريد الالكترونى",
+        "input3": "الدولة المقترحة"
+      },
+      "buttonsLabel": {
+        "ok": "إرسال",
+        "cancel": "تراجع"
+      }
+    }
+  },
+  "request": {
+    "travel_info": {
+      "traveling_to": "مسافر الى",
+      "traveling_from": "مسافر من",
+      "airports": [
+        {
+          "iataCode": "CAI",
+          "name": "القاهرة"
+        },
+        {
+          "iataCode": "HBE",
+          "name": "الإسكندرية"
+        },
+        {
+          "iataCode": "HRG",
+          "name": "الغردقة"
+        },
+        {
+          "iataCode": "SSH",
+          "name": "شرم الشيخ"
+        }
+      ],
+      "departure": "مغادرة",
+      "return": "وصول",
+      "flexible": "تواريخ سفرى مرنة (+/- 3 أيام)",
+      "compare_dates": "تاريخ العودة يجب ان يكون بعد السفر",
+      "dialog": {
+        "title": "وجهة أخرى",
+        "description": "إلى اين تريد السفر؟",
+        "inputs": {
+          "input0": "حدد وجهتك"
+        },
+        "buttonsLabel": {
+          "ok": "متابعة",
+          "cancel": "إلغاء"
+        }
+      }
+    },
+    "budget": {
+      "budget": "الميزانية للفرد الواحد",
+      "choice": "أو اختر واحدة من الفئات المحددة مسبقًا"
+    },
+    "departure_return": {
+      "departure": "مغادرة",
+      "return": "وصول",
+      "flexible": "تواريخ سفرى مرنة (+/- 3 أيام)",
+      "compare_dates": "تاريخ العودة يجب ان يكون بعد السفر"
+    },
+    "destinations": {
+      "dialog": {
+        "title": "وجهة أخرى",
+        "description": "إلى اين تريد السفر؟",
+        "inputs": {
+          "input0": "حدد وجهتك"
+        },
+        "buttonsLabel": {
+          "ok": "متابعة",
+          "cancel": "إلغاء"
+        }
+      }
+    },
+    "estimated_cost": {
+      "hint0": "السعر الإجمالي لـ {{numberOfTravelers}} أشخاص",
+      "hint1": "هذة التكلفة تقديرية و قد تتغير وقت إتمام الحجز",
+      "flights": "الطيران",
+      "accommodation": "الإقامة",
+      "ferries": "العبّارات",
+      "daily_spending": "المصاريف اليومية",
+      "per_person": "للشخص",
+      "hint2": "طيران دولي + داخلي",
+      "hint3": "مجرد مؤشر للإنفاق اليومي للفرد، غير مدرج في السعر التقديري",
+      "header": {
+        "number_of_days": "{{numberOfNights}} ايام في",
+        "dates": "من {{departureDate}} الى {{returnDate}}"
+      },
+      "tab_cities": {
+        "title": "المدن",
+        "view_choose": "عرض واختيار المدن",
+        "things_to_do": "أنشطة يمكن القيام بها فى",
+        "view_map": "عرض الخريطة",
+        "next_label": "التالي",
+        "back_label": "رجوع"
+      },
+      "tab_flights": {
+        "title": "الطيران",
+        "view_edit": "عرض / تعديل المسار",
+        "change_flight": "تغيير الطيران",
+        "change_city": "تغيير المدينة",
+        "reorder_route": "ترتيب المسار",
+        "total_cost": "السعر الاجمالي للطيران",
+        "next_label": "التالي",
+        "back_label": "رجوع",
+        "start": "البداية",
+        "end": "النهاية",
+        "no_flights": "الطيران غير متوفر لهذه الرحلة",
+        "nights": "{{numberOfNights}} ايام",
+        "stops": "{{numberOfStops}} وقفة",
+        "departure": "المغادرة",
+        "duration": "المدة",
+        "arrival": "الوصول",
+        "select": "اختر",
+        "selected": "مختار"
+      },
+      "tab_accommodations": {
+        "title": "الفنادق",
+        "choose_hotel": "عرض واختيار الفنادق",
+        "select": "اختيار",
+        "selected": "تم اختياره",
+        "total_price": "إجمالى السعر",
+        "next_label": "التالي",
+        "back_label": "رجوع",
+        "total_cost": "اجمالى سعر الفنادق"
+      },
+      "summary": {
+        "view_details": "إظهار تفاصيل الرحلة",
+        "accommodation": "الإقامة",
+        "activities": "الأنشطة",
+        "modify": "تعديل",
+        "total_cost": "اجمالى التكلفة"
+      }
+    },
+    "form_layout": {
+      "next_label": "التالي",
+      "back_label": "السابق"
+    },
+    "information": {
+      "next_label": "إرسال",
+      "name": "الأسم",
+      "mobile": "رقم الموبايل",
+      "email": "البريد الإلكتروني",
+      "confirm_email": "تأكيد البريد الإلكتروني",
+      "gender": "النوع",
+      "male": "ذكر",
+      "female": "انثى",
+      "birthday": "تاريخ الميلاد",
+      "profession": "المهنة",
+      "referral": "كيف عرفت عنا؟",
+      "travel_history": "تاريخ السفر",
+      "traveled_before": "سافرت من قبل",
+      "never_traveled": "لم تسافر",
+      "equal_to": "البريد الإلكتروني غير متطابق"
+    },
+    "nav_bar": {
+      "travel_info": "معلومات الرحلة",
+      "traveling_from": "مسافر من",
+      "traveling_to": "مسافر إلي",
+      "departure_return": "ذهاب وعودة",
+      "travelers": {
+        "title": "المسافرين",
+        "value": "{{adultsNumber}} بالغين"
+      },
+      "budget": "الميزانية",
+      "purpose": "غرض السفر",
+      "preferences": "الإهتمامات",
+      "destinations": "الوجهات",
+      "estimated_cost": "خط سير الرحلة",
+      "travel_assistance": {
+        "title": "المساعدة",
+        "visaAssistance": "التأشيرة",
+        "tourGuide": "مرشد سياحي"
+      },
+      "information": {
+        "title": "خطوة أخيرة",
+        "value": "معلومات"
+      },
+      "ticket": ""
+    },
+    "preferences": {
+      "other": "اخرى"
+    },
+    "purpose": {
+      "other": "اخرى"
+    },
+    "recommended_destinations": {
+      "rank": "نسبة الملائمة",
+      "highest": "الأكثر ملاءمة",
+      "lowest": "الأقل ملاءمة"
+    },
+    "ticket": {
+      "request_number": "رقم الطلب",
+      "adults": "{{adultsNumber}} بالغين",
+      "lg_sizes": {
+        "left_part": "M0,425V25A25,25,0,0,0,25,0H925a25,25,0,0,0,25,25v400A25,25,0,0,0,925,450H25A25,25,0,0,0,0,425Z",
+        "right_part": "M175,425V25A25,25,0,0,0,200,0h200a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
+        "right_part_transform": "matrix(1, 0, 0, 1, 925, 150)",
+        "splitter": "translate(1150 250)",
+        "request": {
+          "position": "translate(970 238)",
+          "left_details": "translate(385 {{calc}})",
+          "right_details": {
+            "position": "translate(0 20)",
+            "ticket_id": "-30",
+            "icon": "translate(-400 0)",
+            "from": "-20",
+            "to": "-420"
+          }
+        },
+        "actions": {
+          "position": "translate(325 690)",
+          "view_package": {
+            "icon": 290,
+            "button": 265
+          },
+          "download_package": {
+            "icon": 155,
+            "button": 130
+          },
+          "send_package": {
+            "icon": 25,
+            "button": 0
+          }
+        }
+      },
+      "sm_sizes": {
+        "position": "translate(257 128)",
+        "top_details": {
+          "number": "120",
+          "sign": "-"
+        },
+        "bottom_details": {
+          "position": "translate(120 0)",
+          "ticket_id": "-15",
+          "icon": "translate(-150 80)",
+          "description": "translate(120 295)"
+        },
+        "actions": {
+          "position": "translate(395 755)",
+          "view_package": {
+            "icon": 0,
+            "button": -15
+          },
+          "download_package": {
+            "icon": -85,
+            "button": -100
+          },
+          "send_package": {
+            "icon": -170,
+            "button": -185
+          }
+        }
+      },
+      "lg_text": {
+        "line1": "انت علي بعد خطوات قليلة من رحلة احلامك",
+        "line2": "ألق نظرة علي برنامج رحلتك و سوف يتصل بك",
+        "line3": "احد مستشارينا في اسرع وقت"
+      },
+      "sm_text": {
+        "line1": "انت علي بعد خطوات قليلة من رحلة احلامك",
+        "line2": "ألق نظرة علي برنامج رحلتك",
+        "line3": "و سوف يتصل بك احد مستشارينا",
+        "line4": "في اسرع وقت"
+      },
+      "view_package": "عرض الصفقة",
+      "download_package": "تحميل الصفقة",
+      "send_package": "ارسال الى البريد",
+      "dialog": {
+        "description": "تم ارسال الصفقة",
+        "buttonsLabel": {
+          "cancel": "حسناً"
+        }
+      }
+    },
+    "travel_assistance": {
+      "visa_assistance": "أحتاج مساعدة في الحصول علي التأشيرات",
+      "tour_guide": "أحتاج مرشد سياحي",
+      "promo_code": "الرمز الترويجي",
+      "hint": "ادخل الرمز الترويجي",
+      "apply": "تطبيق",
+      "special_request": "طلبات خري"
+    },
+    "travelers": {
+      "adults": "بالغين",
+      "kids": "اطفال",
+      "infants": "رضع"
+    },
+    "traveling_from": {
+      "traveling_from": "مسافر من",
+      "airports": [
+        {
+          "iataCode": "CAI",
+          "name": "القاهرة"
+        },
+        {
+          "iataCode": "HBE",
+          "name": "الإسكندرية"
+        },
+        {
+          "iataCode": "HRG",
+          "name": "الغردقة"
+        },
+        {
+          "iataCode": "SSH",
+          "name": "شرم الشيخ"
+        }
+      ]
+    }
+  }
 }

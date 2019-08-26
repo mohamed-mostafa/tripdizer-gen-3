@@ -1,4 +1,4 @@
-const {Storage} = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage');
 const gcs = new Storage({
     projectId: process.env.PROJECT_NAME || 'tripdizer-dev',
     keyFilename: './tripdizer-service-account.json'
@@ -10,11 +10,11 @@ module.exports = {
             onSuccess();
         } else {
             const bucket = gcs.bucket(process.env.MEDIA_BUCKET_NAME || 'tripdizer-dev.appspot.com');
-            const file = bucket.file(folder + "/" + fileName+".png");
+            const file = bucket.file(folder + "/" + fileName + ".png");
             var strImage = fileContent.replace(/^data:image\/[a-z]+;base64,/, "");
             fileContent = null;
             var buf = Buffer.from(strImage, 'base64'); // Ta-da
-            file.save(buf, {contentType: "auto"}, function(err) {
+            file.save(buf, { contentType: "auto" }, function (err) {
                 strImage = null;
                 if (err) {
                     console.error(err);

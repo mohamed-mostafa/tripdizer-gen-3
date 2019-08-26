@@ -13,17 +13,20 @@ export class SummaryComponent {
 	currentStepPath: string;
 	stations: Array<Station> = [];
 	totalCost: number;
-	isLoading: Boolean;
+	loadedData: boolean;
+
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
 		private service: EstimatedCostService,
 		private requestService: RequestService
 	) {
-		requestService.isLoading.subscribe(isLoadingObject => { debugger; this.isLoading = isLoadingObject.show });
 		this.currentStepPath = this.route.routeConfig.path;
 		this.stations = service.getSummaryStations();
 		this.totalCost = service.summaryTotalCost;
+		service.finishGetAttractions.subscribe(x => {
+			this.loadedData = x;
+		});
 	}
 
 	prev() {
