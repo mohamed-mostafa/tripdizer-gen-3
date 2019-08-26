@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Place } from '../../models/place.model';
 import { Validators } from '@angular/forms';
+import { RequestService } from '../../../request/request.service';
 @Component({
 	selector: 'c-shared-places-select-box',
 	templateUrl: './places-select-box.component.html',
@@ -83,7 +84,8 @@ export class PlacesSelectBoxComponent implements OnInit {
 	constructor(
 		translate: TranslateService,
 		public dialog: MatDialog,
-		private homeService: HomeService
+		private homeService: HomeService,
+		private requestService: RequestService
 	) {
 		translate.get('home.suggest_country_dialog').subscribe(labels => (this.dialogLabels = labels));
 		translate
@@ -181,31 +183,43 @@ export class PlacesSelectBoxComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
 
+				const countryRequest: any = {};
+
 				inputs.forEach(input => {
 					if (input.id === 'fullName') {
-						inputs['name'] = input.value;
+						countryRequest.name = input.value;
 					}
 
 					if (input.id === 'phoneNumber') {
-						inputs['phone'] = input.value;
+						countryRequest.phone = input.value;
 					}
 
 					if (input.id === 'emailAddress') {
-						inputs['email'] = input.value;
+						countryRequest.email = input.value;
 					}
 
 					if (input.id === 'suggestedCountry') {
-						inputs['country'] = input.value;
+						countryRequest.country = input.value;
 					}
 
 				});
 
-				inputs.splice(0, 4);
+				console.log(countryRequest);
 
-				this.homeService.saveCountryRequest(inputs);
-				console.log(inputs);
+
+				this.setIsLoading(true, 'Submitting data ...');
+				this.homeService.saveCountryRequest(countryRequest).subscribe(res => {
+					console.log(res);
+					console.log('api result');
+					this.setIsLoading(false, '');
+				});
 			}
 		});
+	}
+
+
+	setIsLoading(isLoading: boolean, message: string) {
+		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
 
 

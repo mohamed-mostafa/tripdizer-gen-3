@@ -7,3 +7,4 @@ bat/
 node_modules/
 development/
 services/db_scripts/
+dashboard/auth.js

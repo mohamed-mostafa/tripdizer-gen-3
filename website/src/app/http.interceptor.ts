@@ -22,6 +22,7 @@ export class JWTokenInterceptor implements HttpInterceptor {
 				setParams: { lang: this.translate.currentLang },
 			});
 
+            console.log(request);
 			// if (localStorage.getItem('token') ? true : false) {
 			//     request = request.clone({ headers: request.headers.set('Authorization', localStorage.getItem('token')) });
 			// }

@@ -150,7 +150,7 @@ var update = function(video, onSuccess, onFailure) {
 };
 
 var createCountryRequest = function(countryRequest) {
-	// get a connection and open it
+    // get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
 		if (err) {
@@ -168,7 +168,7 @@ var createCountryRequest = function(countryRequest) {
 					console.error(err);
 					onFailure(err);
 				} else {
-					connection.query('INSERT INTO New_Country_Requests (COUNTRY, NAME, Phone_Number, EMAIL) values (?)', [countryRequest.country, countryRequest.name, countryRequest.phone, countryRequest.email], function(err, result) {
+					connection.query('INSERT INTO New_Country_Requests (COUNTRY, NAME, Phone_Number, EMAIL) values (?, ?, ?, ?)', [countryRequest.country, countryRequest.name, countryRequest.phone, countryRequest.email], function(err, result) {
 						// if an error is thrown, end the connection and throw an error
 						if (err) {
 							// if the first insert statement fails

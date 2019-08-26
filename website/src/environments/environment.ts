@@ -4,7 +4,8 @@
 
 export const environment = {
 	production: false,
-	apiUrl: 'https://development-services.tripdizer.com/',
+    apiUrl: 'https://development-services.tripdizer.com/',
+    // apiUrl: 'http://localhost:8083/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	saveRequestState: true,

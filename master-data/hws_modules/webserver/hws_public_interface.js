@@ -78,9 +78,9 @@ var update = function(req, res) {
 var createCountryRequest = function(req, res) {
 	try {
 		// call the business function and give it a callback function
-		var countryRequest = req.body.countryRequest;
+		var countryRequest = req.body;
 		business.createCountryRequest(countryRequest, function() {
-			res.end();
+            res.send(countryRequest);
 		});
 	} catch (error) {
 		console.error('An error occurred in /country-request');
