@@ -26,9 +26,9 @@ exports.searchCities = function (language, citiesSearchRequest) {
                         country: city.countryName,
                         countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
                         countryIsoCode: city.countryIsoCode,
-                        coordinates: city.lng + ", " + city.lat,
+                        coordinates: city.lat + ", " + city.lng,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
-                        interests: city.interests.map(interest => interest.name) 
+                        interests: city.interests.map(interest => interest.name)
                     }
                     citiesList.push(newCity);
                 });

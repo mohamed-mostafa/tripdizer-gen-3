@@ -101,7 +101,8 @@
     "travel_info": {
       "traveling_to": "مسافر الى",
       "traveling_from": "مسافر من",
-      "airports": [{
+      "airports": [
+        {
           "iataCode": "CAI",
           "name": "القاهرة"
         },
@@ -251,7 +252,7 @@
       "purpose": "غرض السفر",
       "preferences": "الإهتمامات",
       "destinations": "الوجهات",
-      "estimated_cost": "التكلفة",
+      "estimated_cost": "خط سير الرحلة",
       "travel_assistance": {
         "title": "المساعدة",
         "visaAssistance": "التأشيرة",
@@ -373,7 +374,8 @@
     },
     "traveling_from": {
       "traveling_from": "مسافر من",
-      "airports": [{
+      "airports": [
+        {
           "iataCode": "CAI",
           "name": "القاهرة"
         },

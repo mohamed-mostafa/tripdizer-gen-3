@@ -89,6 +89,7 @@ export class TabCitiesComponent {
 			} else {
 				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
 				this.selectedCities.splice(0, this.selectedCities.length); // clear list
+				this.cityPaths.splice(0, this.cityPaths.length);
 				for (let x = 0; x < this.cities.length; x++) {
 					if (this.cities[x].select) { this.selectedCities.push(this.cities[x]); } // add all selected cities again
 					if (this.cities[x].iataCode === city.iataCode) {

@@ -7,18 +7,18 @@ var dao = require('../dataaccess/hws_hotels_dao.js');
 var cloudStorageAdapter = require('../business/google_storage_adapter');
 
 exports.getById = dao.getById;
-exports.create = function(hotel, onSuccess, onFailure) {
+exports.create = function (hotel, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
-    dao.create(hotel, function(hotel) {
-        cloudStorageAdapter.upload(hotel.id, hotel.thumbnail, 'hotels', function() {
+    dao.create(hotel, function (hotel) {
+        cloudStorageAdapter.upload(hotel.id, hotel.thumbnail, 'hotels', function () {
             onSuccess(hotel);
         }, onFailure);
     }, onFailure);
 };
-exports.update = function(hotel, onSuccess, onFailure) {
+exports.update = function (hotel, onSuccess, onFailure) {
     // save the data to the database first, then save the thumbnail to the cloud storage
-    dao.update(hotel, function(hotel) {
-        cloudStorageAdapter.upload(hotel.id, hotel.thumbnail, 'hotels', function() {
+    dao.update(hotel, function (hotel) {
+        cloudStorageAdapter.upload(hotel.enName.toLowerCase(), hotel.thumbnail, 'hotels', function () {
             onSuccess(hotel);
         }, onFailure);
     }, onFailure);

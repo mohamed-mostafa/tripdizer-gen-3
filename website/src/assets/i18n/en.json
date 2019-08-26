@@ -106,7 +106,8 @@
     "travel_info": {
       "traveling_to": "Traveling To",
       "traveling_from": "Traveling From",
-      "airports": [{
+      "airports": [
+        {
           "iataCode": "CAI",
           "name": "Cairo"
         },
@@ -256,7 +257,7 @@
       "purpose": "Purpose",
       "preferences": "Preferences",
       "destinations": "Destinations",
-      "estimated_cost": "Estimated Cost",
+      "estimated_cost": "Itinerary",
       "travel_assistance": {
         "title": "Travel Assistance",
         "visaAssistance": "Visa",
@@ -378,7 +379,8 @@
     },
     "traveling_from": {
       "traveling_from": "Traveling From",
-      "airports": [{
+      "airports": [
+        {
           "iataCode": "CAI",
           "name": "Cairo"
         },

@@ -80,7 +80,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
                             displaName: language == 'ar' ? hotel.arName : hotel.enName,
                             description: language == 'ar' ? hotel.arDescription : hotel.enDescription,
                             city: hotelCity.enName,
-                            thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.id + ".png",
+                            thumbnail: MEDIA_STORAGE_BASE_URL + "/hotels/" + hotel.enName.toLowerCase() + ".png",
                             address: hotel.address,
                             stars: hotel.stars,
                             checkin: cityArrival.toISOString(),
