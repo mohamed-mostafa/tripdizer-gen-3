@@ -474,13 +474,13 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 					console.log(JSON.stringify(request));
 					packageHttp(
 						'post',
-						'https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec',
+						'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 						JSON.stringify(request),
 						function (doc) {
 							console.log("File created. Id: " + doc.docId + ", Now generating the PDF");
 							packageHttp(
 								'get',
-								`https://script.google.com/a/tripdizer.com/macros/s/AKfycbxu2ZUmMCLa3xr4AzynM7zAQswyJmaIikMkT0psVA/exec?docId=${
+								`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
 								doc.docId
 								}`,
 								null,
