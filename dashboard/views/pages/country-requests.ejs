@@ -30,7 +30,7 @@
                         <td>{{ request.Phone_Number }}</td>
                         <td>{{ request.EMAIL }}</td>
                         <td>{{ request.Date | date: 'dd/MM/yyyy' }}</td>
-						<td><textarea name="request_country_status" id="request_country_status" class="form-control" rows="2" ng-model="request_country_status.Status" ng-blur="saveCountryRequestStatus(request.Id)"></textarea></td>
+						<td><textarea name="request_country_status" id="request_country_status" class="form-control" rows="2" ng-model="request.Status" ng-blur="saveCountryRequestStatus(request.Id)"></textarea></td>
 					</tr>
 				</tbody>
 

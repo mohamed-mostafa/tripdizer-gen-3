@@ -20,6 +20,8 @@ import { RequestService } from '../../../request/request.service';
 })
 export class PlacesSelectBoxComponent implements OnInit {
 
+	othersName: string;
+
 	dialogLabels: {
 		title: string;
 		description: string;
@@ -44,7 +46,13 @@ export class PlacesSelectBoxComponent implements OnInit {
 	@Input() property = 'id';
 	@Input() set places(places: Array<Place>) {
 		if (places) {
-			places.push({ arName: 'أخرى', enName: 'Others', id: 0, name: 'Others', description: '' });
+			if (this.translate.currentLang === 'en') {
+				this.othersName = 'Others';
+			} else if (this.translate.currentLang === 'ar') {
+				this.othersName = 'أخرى';
+			}
+			places.push({ arName: 'أخرى', enName: 'Others', id: 0, name: this.othersName, description: '' });
+			console.log(places);
 		}
 		this._places = places || [];
 		this.formGroup.get(this.controlName).setValue(null);
@@ -82,15 +90,18 @@ export class PlacesSelectBoxComponent implements OnInit {
 	}
 
 	constructor(
-		translate: TranslateService,
+		public translate: TranslateService,
 		public dialog: MatDialog,
 		private homeService: HomeService,
 		private requestService: RequestService
 	) {
-		translate.get('home.suggest_country_dialog').subscribe(labels => (this.dialogLabels = labels));
-		translate
-			.get('home.landing.destination_place_holder')
-			.subscribe(placeHolder => (this.placeHolder = !this.placeHolder ? placeHolder : this.placeHolder));
+
+		this.setLanguage();
+
+		this.translate.onLangChange.subscribe(() => {
+			this.setLanguage();
+		});
+
 	}
 
 	ngOnInit() {
@@ -98,6 +109,16 @@ export class PlacesSelectBoxComponent implements OnInit {
 			startWith(null),
 			map((placeName: string | null) => (placeName ? this._filter(placeName) : this.places.slice()))
 		);
+	}
+
+	setLanguage() {
+		this.translate.get('home.suggest_country_dialog').subscribe(labels => {
+			console.log(labels);
+			this.dialogLabels = labels;
+		});
+		this.translate
+			.get('home.landing.destination_place_holder')
+			.subscribe(placeHolder => (this.placeHolder = !this.placeHolder ? placeHolder : this.placeHolder));
 	}
 
 	addFromInput(event: MatChipInputEvent): void {
