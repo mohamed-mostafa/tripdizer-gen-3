@@ -10,6 +10,7 @@ g2gControlCenterApplication.controller('CountryRequestsController', [
 
         $scope.initialize = function () {
             CountryRequestsService.getAll().then(function (CountryRequests) {
+                console.log(CountryRequests);
                 $scope.CountryRequests = CountryRequests;
             });
         };

@@ -88,8 +88,8 @@
       }
     },
     "suggest_country_dialog": {
-      "title": "Suggest country adding",
-      "description": "Add country name & your contact data.",
+      "title": "we’re sorry, couldn’t find your desired destination",
+      "description": "Kindly add suggested country & your contact data, so we can notify you as soon as we add it to our countries list",
       "inputs": {
         "input0": "Full name",
         "input1": "Phone number",
