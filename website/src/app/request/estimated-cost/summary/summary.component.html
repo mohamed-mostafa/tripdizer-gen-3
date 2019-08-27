@@ -114,25 +114,27 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-4">
-				<button (click)="prev()" [disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-					{{ 'request.estimated_cost.summary.modify' | translate }}
-				</button>
-			</div>
-			<div class="col-4 text-center">
-				<button (click)="goToNextStep()" [disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-					{{ 'request.form_layout.next_label' | translate }}
-				</button>
-			</div>
-			<div class="col-4">
-				<div class="float-right bg-blue text-white text-center px-5 py-2">
+		<div class="row py-2">
+			<div class="col-12">
+				<div class="bg-blue text-white text-center px-5 py-2 float-right">
 					<span>{{ 'request.estimated_cost.summary.total_cost' | translate }}</span>
 					<br />
 					<span>{{ totalCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
 				</div>
+			</div>
+		</div>
+		<div class="row py-2">
+			<div class="col-6">
+				<button (click)="prev()" [disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
+					{{ 'request.estimated_cost.summary.modify' | translate }}
+				</button>
+			</div>
+			<div class="col-6 text-center">
+				<button (click)="goToNextStep()" [disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2 float-right">
+					{{ 'request.form_layout.next_label' | translate }}
+				</button>
 			</div>
 		</div>
 	</div>
