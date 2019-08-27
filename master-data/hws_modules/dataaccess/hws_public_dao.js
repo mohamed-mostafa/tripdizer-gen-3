@@ -246,7 +246,7 @@ var getCountryRequests = function(onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query('SELECT * FROM New_Country_Requests', [], function(err, rows) {
+			connection.query('SELECT * FROM New_Country_Requests ORDER BY Id DESC', [], function(err, rows) {
 				// if an error is thrown, end the connection and throw an error
 				if (err) {
 					// end the connection

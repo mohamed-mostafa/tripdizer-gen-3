@@ -4,7 +4,7 @@
 // we are using named strategies since we have one for login and one for signup
 // by default, if there was no name, it would just be called 'local'
 
-const serverURL = process.env.SERVICES_URL || 'http://localhost:8080'; // remote test backend server
+const serverURL = process.env.SERVICES_URL || 'http://localhost:8083'; // remote test backend server
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
