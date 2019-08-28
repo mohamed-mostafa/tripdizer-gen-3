@@ -65,9 +65,6 @@ g2gControlCenterApplication.controller('AttractionsController', [
 			if ($scope.newAttraction.cityId == null || $scope.newAttraction.cityId == '') {
 				$scope.cityIdMissing = true;
 			}
-			if ($scope.newAttraction.thumbnail == null || $scope.newAttraction.thumbnail == '') {
-				$scope.thumbnailMissing = true;
-			}
 			if ($scope.newAttraction.enCategory == null || $scope.newAttraction.enCategory == '') {
 				$scope.enCategoryMissing = true;
 			}
@@ -85,7 +82,6 @@ g2gControlCenterApplication.controller('AttractionsController', [
 				$scope.cityIdMissing !== true &&
 				$scope.enCategoryMissing !== true &&
 				$scope.arCategoryMissing !== true &&
-				$scope.thumbnailMissing !== true &&
 				$scope.priorityMissing !== true
 			);
 		};
