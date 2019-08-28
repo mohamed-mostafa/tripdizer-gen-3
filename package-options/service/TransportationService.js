@@ -85,13 +85,12 @@ function createFlightLegBetweenOriginAndDestination(origin, destination, departu
                 } else {
                     let legFlightOffers = body; // offers coming form flights adapter
                     if (legFlightOffers) {
-                        // legFlightOffers = applyFlightOffersCleansing(legFlightOffers, legSearchRequest); // sometimes the response contains flghts to nearest cities, and sometimes even contains trains !!!
                         if (isInternationalLeg) {
-                            let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers);
+                            let filteredLegFlightOffers = filterInternationalOffers(legFlightOffers, transportationLeg.origin.iataCode, transportationLeg.destination.iataCode);
                             transportationLeg.flightOffers = filteredLegFlightOffers;
                             resolve(transportationLeg);
                         } else {
-                            let filteredLegFlightOffers = filterInternalOffers(legFlightOffers);
+                            let filteredLegFlightOffers = filterInternalOffers(legFlightOffers, transportationLeg.origin.iataCode, transportationLeg.destination.iataCode);
                             transportationLeg.flightOffers = filteredLegFlightOffers;
                             resolve(transportationLeg);
                         }
@@ -111,12 +110,12 @@ function applyFlightOffersCleansing(legFlightOffers, legSearchRequest) {
     return legFlightOffers.filter(legFlightOffer => legFlightOffer.flightLegs[0].origin == legSearchRequest.origin && legFlightOffer.flightLegs[0].destination == legSearchRequest.destination);
 }
 
-function filterInternationalOffers(flightOffers) {
+function filterInternationalOffers(flightOffers, originIata, destinationIata) {
     let filteredflightOffers = [];
     // offers are already sorted by price since we're using low fare search from amadeus
     if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
         flightOffers.forEach(flightOffer => {
-            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer));
+            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer, originIata, destinationIata));
         });
         return filteredflightOffers;
     }
@@ -134,7 +133,7 @@ function filterInternationalOffers(flightOffers) {
         if (!airlineFound) {
             if (currentOffer.flightLegs[0].transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES) { // also transit has to be less than a limit
                 // create a new offer in package-options format
-                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer);
+                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer, originIata, destinationIata);
                 filteredflightOffers.push(newOffer);
             }
         }
@@ -146,12 +145,12 @@ function filterInternationalOffers(flightOffers) {
     return filteredflightOffers;
 }
 
-function filterInternalOffers(flightOffers) {
+function filterInternalOffers(flightOffers, originIata, destinationIata) {
     let filteredflightOffers = [];
     // offers are already sorted by price since we're using low fare search from amadeus
     if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
         flightOffers.forEach(flightOffer => {
-            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer));
+            filteredflightOffers.push(createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer, originIata, destinationIata));
         });
         return filteredflightOffers;
     }
@@ -169,7 +168,7 @@ function filterInternalOffers(flightOffers) {
         if (!airlineFound) {
             if (currentOffer.flightLegs[0].transitDurationInMinutes == 0) { // Internal flights should be direct
                 // create a new offer in package-options format
-                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer);
+                let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(currentOffer, originIata, destinationIata);
                 filteredflightOffers.push(newOffer);
             }
         }
@@ -180,14 +179,14 @@ function filterInternalOffers(flightOffers) {
     return filteredflightOffers;
 }
 
-function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer) {
+function createPackageOptiosOfferFromFlightsAdapterOffer(flightOffer, originIata, destinationIata) {
     // at the moment, we only support one-way flights, so we always use flightLegs[0]
     let newOffer = {
         // add profit margin
         price: flightOffer.price <= FLIGHT_COST_THRESHOLD ? parseInt(flightOffer.price) + FLIGHT_PROFIT_BELOW_THRESHOLD : parseInt(flightOffer.price) + FLIGHT_PROFIT_ABOVE_THRESHOLD,
         currency: flightOffer.currency,
-        originCityIata: flightOffer.originCityIata,
-        destinationCityIata: flightOffer.destinationCityIata,
+        originCityIata: originIata,
+        destinationCityIata: destinationIata,
         totalDurationInWords: flightOffer.flightLegs[0].totalDurationInWords,
         transitDurationInWords: flightOffer.flightLegs[0].transitDurationInWords,
         totalDurationInMinutes: flightOffer.flightLegs[0].totalDurationInMinutes,
