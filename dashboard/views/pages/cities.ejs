@@ -5,7 +5,7 @@
 		</h3>
 		<select ng-model="selectedCountry">
 			<option ng-repeat="country in countries" ng-value="country.id" ng-selected="country.id == selectedCountry">
-				{{ country.enName }}</option>
+				{{ country.enName }} {{country.active == true ?  '' : '(inactive)'}}</option>
 		</select>
 		<i class="fa fa-refresh fa-spin" ng-show="citiesLoading == true"></i>
 	</div>
