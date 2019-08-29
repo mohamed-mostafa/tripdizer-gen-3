@@ -1,4 +1,4 @@
-<div id="request-nav-bar-container" class="request-nav-bar">
+<div id="request-nav-bar-container" class="request-nav-bar" [class.kufi]="('dir' | translate) === 'rtl'">
 	<div class="nav-brand" [routerLink]="['/']"></div>
 	<div class="nav-links p-0 d-flex">
 		<div
@@ -11,9 +11,9 @@
 			(click)="onClick(navLink)"
 		>
 			<div class="col-12 px-2 px-md-3 title">{{ navLink.title }}</div>
-			<div class="col-12 px-2 px-md-3 value" [title]="navLink.value">{{ navLink.value }}</div>
+			<div class="col-12 px-2 px-md-3 value" [title]="navLink.value" [class.naskh]="('dir' | translate) === 'rtl'">{{ navLink.value }}</div>
 		</div>
-		<div class="nav-link"><c-core-user-profile></c-core-user-profile></div>
+		<div class="nav-link" [style.text-align]="('dir' | translate) === 'rtl' ? 'right' : 'left'"><c-core-user-profile></c-core-user-profile></div>
 	</div>
 	<!-- <a class="px-3 px-lg-4 px-lg-5 nav-login-link" href="#">Login <i class="fas fa-lock"></i></a> -->
 </div>
