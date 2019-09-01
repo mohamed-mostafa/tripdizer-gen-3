@@ -215,7 +215,8 @@ function getCityByIata(cityIata, language) {
             } else {
                 resolve({
                     iataCode: city != null ? city.iataCode : cityIata,
-                    name: city != null ? (language == 'ar' ? city.arName : city.enName) : null,
+                    name: city != null ? city.enName : null,
+                    arName: city != null ? city.arName : null,
                     latitude: city != null ? city.lat : null,
                     longitude: city != null ? city.lng : null,
                 });

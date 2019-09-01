@@ -20,15 +20,16 @@ exports.searchCities = function (language, citiesSearchRequest) {
                 countryCitiesList.forEach(city => {
                     var newCity = {
                         name: city.enName,
-                        displayName: language == 'ar' ? city.arName : city.enName,
-                        description: language == 'ar' ? city.arDescription : city.enDescription,
+                        arName: city.arName,
+                        description: city.enDescription,
+                        arDescription: city.arDescription,
                         iataCode: city.iataCode,
-                        country: city.countryName,
-                        countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
+                        country: city.countryEnName,
+                        countryarName: city.countryArName,
                         countryIsoCode: city.countryIsoCode,
                         coordinates: city.lat + ", " + city.lng,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
-                        interests: city.interests.map(interest => interest.name)
+                        interests: city.interests.map(interest => ({ name: interest.name, arName: interest.arName }))
                     }
                     citiesList.push(newCity);
                 });

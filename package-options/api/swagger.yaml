@@ -145,10 +145,10 @@ definitions:
         type: "string"
         example: "Cairo"
         description: "The english name of the city"
-      displayName:
+      arName:
         type: "string"
         example: "ألقاهرة"
-        description: "The localized name of the city, based on the language input"
+        description: "The localized name of the city"
       iataCode:
         type: "string"
         example: "CAI"
@@ -157,10 +157,10 @@ definitions:
         type: "string"
         example: "Egypt"
         description: "The english name of the country"
-      countryDisplayName:
+      countryArName:
         type: "string"
         example: "مصر"
-        description: "The localized name of the country, based on the language input"
+        description: "The localized name of the country"
       countryIsoCode:
         type: "string"
         example: "EGY"
@@ -203,6 +203,9 @@ definitions:
           name:
             type: "string"
             example: "Amsterdam"
+          arName:
+            type: "string"
+            example: "امستردام"
           iataCode:
             type: "string"
             example: "AMS"
@@ -316,12 +319,15 @@ definitions:
       name:
         type: "string"
         example: "Hilton Capetown Hotel"
-      displaName:
+      arName:
         type: "string"
         example: "هيلتون كيب تاون"
       description:
         type: "string"
         example: "One of the best hotels in Cape Town"
+      arDescription:
+        type: "string"
+        example: "احد افضل فنادق كيب تاون"
       thumbnail:
         type: "string"
         format: "url"
@@ -329,6 +335,9 @@ definitions:
       address:
         type: "string"
         example: "10 Sukhumvit Str."
+      arAddress:
+        type: "string"
+        example: "10 شارع الشانزيليزية"
       stars:
         type: "number"
         example: 5
@@ -369,9 +378,15 @@ definitions:
       name:
         type: "string"
         example: "Spend a day in the waterboom park"
+      arName:
+        type: "string"
+        example: "اقض يوما في حديقة الالعاب المائية"
       description:
         type: "string"
         example: "One of the best water activities in Bali"
+      arDescription:
+        type: "string"
+        example: "احد افضل انشطة بالي"
       thumbnail:
         type: "string"
         format: "url"
@@ -379,6 +394,9 @@ definitions:
       category:
         type: "string"
         example: "Water activity"
+      arCategory:
+        type: "string"
+        example: "العاب مائية"
   citiesList:
     type: "array"
     items:
@@ -401,7 +419,7 @@ definitions:
         type: "string"
         example: "Shopping"
         description: "The english name of the interest"
-      displayName:
+      arName:
         type: "string"
         example: "التسوق"
         description: "The localized name of the interest, based on the language input"
