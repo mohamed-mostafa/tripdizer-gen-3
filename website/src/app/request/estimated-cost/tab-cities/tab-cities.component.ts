@@ -33,6 +33,7 @@ export class TabCitiesComponent {
 		this.snackBar = snackBar;
 		service.getCities().subscribe(
 			res => {
+                console.log(res);
 				this.loadedData = true;
 				const numberOfNights = this.service.getNumberOfNights();
 				const maxNumberOfCities = Math.ceil(numberOfNights / 1);

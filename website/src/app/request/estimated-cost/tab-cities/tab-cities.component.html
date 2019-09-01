@@ -2,7 +2,7 @@
 	<div class="col-lg-11">
 		<div class="row cities-tab py-2 py-md-4">
 			<div class="col-lg-8 cities-list">
-				<h4 class="list-title grey font-italic">
+				<h4 class="list-title grey font-italic kufi">
 					{{ 'request.estimated_cost.tab_cities.view_choose' | translate }}
 				</h4>
 
@@ -25,7 +25,7 @@
 						<div class="row">
 							<div class="col-md-8">
 								<div *ngIf="city.interests.length > 0">
-									<h6 class="font-weight-bold activities-title mt-2 mt-md-0">
+									<h6 class="font-weight-bold activities-title mt-2 mt-md-0 naskh">
 										{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }}
 										{{ city.countryDisplayName }}
 									</h6>
@@ -56,7 +56,7 @@
 				<div class="row mb-4">
 					<div class="col-12">
 						<hr class="d-lg-none" />
-						<h6 class="font-weight-bold font-italic view-map">
+						<h6 class="font-weight-bold font-italic view-map kufi">
 							{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
 						</h6>
 						<div *ngIf="cityPaths?.length" class="row d-lg-block">
@@ -69,8 +69,8 @@
 
 				<div class="row">
 					<div class="col-12">
-						<a href="javascript:void(0)" (click)="goBack()" class="back-btn position-relative"
-							[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_cities.back_label' | translate }}</a>
+						<a href="javascript:void(0)" (click)="goBack()" class="back-btn position-relative naskh"
+							[ngClass]="('dir' | translate) === 'ltr' ? 'ml-4 ml-lg-5 mr-2' : 'mr-4 mr-lg-5 ml-2'">{{ 'request.estimated_cost.tab_cities.back_label' | translate }}</a>
 						<button (click)="next()" [disabled]="selectedCities.length < 1"
 							class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
 							{{ 'request.estimated_cost.tab_cities.next_label' | translate }}

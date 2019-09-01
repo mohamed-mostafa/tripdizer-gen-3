@@ -1119,8 +1119,8 @@ $color-blue: #2989ff;
 .mat-radio-group-label {
 	color: $color-blue;
 	font-weight: 700;
-	text-transform: uppercase;
-	font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    // font-size: .9rem !important;
 }
 
 .mat-checkbox {

@@ -1,37 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 
-@font-face {
-  font-family: 'naskh';
-  font-style: normal;
-  font-weight: 400;
-  src: url(assets/fonts/NotoNaskhArabic-Regular.eot);
-  src: url(assets/fonts/NotoNaskhArabic-Regular.eot?#iefix) format('embedded-opentype'), url(assets/fonts/NotoNaskhArabic-Regular.woff2) format('woff2'), url(assets/fonts/NotoNaskhArabic-Regular.woff) format('woff'), url(assets/fonts/NotoNaskhArabic-Regular.ttf) format('truetype')
-}
-
-@font-face {
-  font-family: 'naskh';
-  font-style: normal;
-  font-weight: 700;
-  src: url(assets/fonts/NotoNaskhArabic-Bold.eot);
-  src: url(assets/fonts/NotoNaskhArabic-Bold.eot?#iefix) format('embedded-opentype'), url(assets/fonts/NotoNaskhArabic-Bold.woff2) format('woff2'), url(assets/fonts/NotoNaskhArabic-Bold.woff) format('woff'), url(assets/fonts/NotoNaskhArabic-Bold.ttf) format('truetype')
-}
-
-@font-face {
-  font-family: 'kufi';
-  font-style: normal;
-  font-weight: 400;
-  src: url(assets/fonts/NotoKufiArabic-Regular.eot);
-  src: url(assets/fonts/NotoKufiArabic-Regular.eot?#iefix) format('embedded-opentype'), url(assets/fonts/NotoKufiArabic-Regular.woff2) format('woff2'), url(assets/fonts/NotoKufiArabic-Regular.woff) format('woff'), url(assets/fonts/NotoKufiArabic-Regular.ttf) format('truetype')
-}
-
-@font-face {
-  font-family: 'kufi';
-  font-style: normal;
-  font-weight: 700;
-  src: url(assets/fonts/NotoKufiArabic-Bold.eot);
-  src: url(assets/fonts/NotoKufiArabic-Bold.eot?#iefix) format('embedded-opentype'), url(assets/fonts/NotoKufiArabic-Bold.woff2) format('woff2'), url(assets/fonts/NotoKufiArabic-Bold.woff) format('woff'), url(assets/fonts/NotoKufiArabic-Bold.ttf) format('truetype')
-}
-
 $kufi: 'kufi',
 "Open Sans",
 sans-serif;
@@ -121,5 +89,15 @@ body {
 }
 
 .custom-bs.btn.btn-rounded {
-    font-family: $kufi;
+  font-family: $kufi;
+}
+
+.mat-option {
+  font-family: $naskh;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label,
+.mat-form-field-label,
+.mat-radio-group-label {
+  font-family: $naskh;
 }
