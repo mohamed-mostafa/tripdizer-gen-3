@@ -7,11 +7,11 @@ $naskh: 'naskh',
 "Open Sans",
 serif;
 
-.kufi {
+.title-font {
   font-family: $kufi !important
 }
 
-.naskh {
+body {
   font-family: $naskh !important;
 }
 
@@ -90,14 +90,4 @@ body {
 
 .custom-bs.btn.btn-rounded {
   font-family: $kufi;
-}
-
-.mat-option {
-  font-family: $naskh;
-}
-
-.mat-form-field-appearance-legacy .mat-form-field-label,
-.mat-form-field-label,
-.mat-radio-group-label {
-  font-family: $naskh;
 }
