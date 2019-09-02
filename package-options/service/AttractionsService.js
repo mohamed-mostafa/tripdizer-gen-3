@@ -27,10 +27,10 @@ exports.searchAttractions = function (language, attractionsSearchRequest) {
                     city: {
                         // here goes the city
                         name: city.enName,
-                        arName: city.arName,
+                        displayName: language == 'ar' ? city.arName : city.enName,
                         iataCode: city.iataCode,
                         country: city.countryEnName,
-                        countryArName: city.countryArName,
+                        countryDisplayName: language == 'ar' ? city.countryArName : city.countryEnName,
                         countryIsoCode: city.countryIsoCode,
                         coordinates: city.lng + ", " + city.lat,
                         thumbnail: MEDIA_STORAGE_BASE_URL + "/cities/" + city.iataCode + ".png",
@@ -47,12 +47,9 @@ exports.searchAttractions = function (language, attractionsSearchRequest) {
                 }
                 cityAttractionsList.forEach(attraction => {
                     var newAttraction = {
-                        name: attraction.enName,
-                        arName: attraction.arName,
-                        description: attraction.enDescription,
-                        arDescription: attraction.arDescription,
-                        category: attraction.enCategory,
-                        arCategory: attraction.arCategory
+                        name: language == 'ar' ? attraction.arName : attraction.enName,
+                        description: language == 'ar' ? attraction.arDescription : attraction.enDescription,
+                        category: language == 'ar' ? attraction.arCategory : attraction.enCategory
                         // thumbnail: attraction.thumbnail
                     }
                     newAttractionOffer.attractions.push(newAttraction);

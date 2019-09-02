@@ -102,8 +102,7 @@ var getInterestsByCityId = function (cityId, lang) {
 							for (var i = 0; i < rows.length; i++) {
 								interests.push({
 									id: rows[i].Id,
-									name: rows[i].EN_Name,
-									arName: rows[i].AR_Name
+									name: lang == 'ar' ? rows[i].AR_Name : rows[i].EN_Name,
 								});
 							}
 							connection.end();
@@ -185,7 +184,7 @@ var create = function (city, onSuccess, onFailure) {
 												connection.commit();
 												connection.end();
 												onSuccess(city);
-											} catch (err) {
+											} catch(err) {
 												connection.rollback(); // rollback the transaction
 												connection.end();
 												onFailure(err);
@@ -207,11 +206,11 @@ var create = function (city, onSuccess, onFailure) {
 	});
 };
 
-var replaceCityInterests = function (connection, cityId, interests) {
+var replaceCityInterests = function(connection, cityId, interests) {
 	return new Promise((resolve, reject) => {
 		var statement = 'DELETE FROM City_Interests WHERE City_Id = ' + cityId + "; ";
 		for (var idx = 0; idx < interests.length; idx++) {
-			statement += 'INSERT INTO City_Interests (City_Id, Interest_Id) values (' + cityId + ", " + interests[idx].id + "); "
+			statement += 'INSERT INTO City_Interests (City_Id, Interest_Id) values (' + cityId + ", " + interests[idx].id + "); " 
 		}
 		connection.query(
 			statement,
@@ -306,7 +305,7 @@ var update = function (city, onSuccess, onFailure) {
 												connection.end();
 												// call the callback function provided by the caller, and give it the response
 												onSuccess(city);
-											} catch (err) {
+											} catch(err) {
 												connection.rollback(); // rollback the transaction
 												connection.end();
 												onFailure(err);
