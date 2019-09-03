@@ -7,12 +7,13 @@ import { Country } from '../models/country.model';
 import { DropDownItem } from '../models/drop-down-item.model';
 import { LUTPreference, Preference } from '../models/preference.model';
 import { LUTPurpose, Purpose } from '../models/purpose.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class LookupsService {
 	private endPoint = 'master-data';
-	isLoading = new Subject<{ show: boolean, message: string }>();
-	private Lookups: {
+	isLoading = new Subject<{ show: boolean; message: string }>();
+	private lookups: {
 		budgetCategories: Array<BudgetCategory>;
 		countries: Array<Country>;
 		referralTypes: Array<DropDownItem>;
@@ -21,20 +22,22 @@ export class LookupsService {
 		purposes: Array<Purpose>;
 	} = {} as any;
 
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient, translate: TranslateService) {
+		translate.onLangChange.subscribe(() => (this.lookups = {} as any));
+	}
 
 	private getLookup<T>(endPoint: string, propName: string): Observable<Array<T>> {
 		this.isLoading.next({ show: true, message: '' });
 		let observable: Observable<Array<T>>;
-		if (this.Lookups[propName]) {
-			observable = of(this.Lookups[propName]);
+		if (this.lookups[propName]) {
+			observable = of(this.lookups[propName]);
 			this.isLoading.next({ show: false, message: '' });
 		} else {
 			observable = this.http.get<Array<T>>(`${this.endPoint}/${endPoint}`);
 		}
 		return observable.pipe(
 			tap(arr => {
-				this.Lookups[propName] = arr;
+				this.lookups[propName] = arr;
 				this.isLoading.next({ show: false, message: '' });
 			})
 		);
@@ -69,7 +72,7 @@ export class LookupsService {
 	}
 
 	removeCachedPreferences(): void {
-		this.Lookups.preferences = null;
+		this.lookups.preferences = null;
 	}
 
 	getProfessions(): Observable<Array<DropDownItem> | null> {
@@ -85,6 +88,6 @@ export class LookupsService {
 	}
 
 	removeCachedPurposes(): void {
-		this.Lookups.purposes = null;
+		this.lookups.purposes = null;
 	}
 }
