@@ -36,7 +36,7 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
       );
 
       try {
-        var hotelCity = await getCityByIata(cityIata);
+        var hotelCity = await getCityByIata(cityIata, language);
         if (!hotelCity) continue;
         var newAccomodationOffer = {
           city: {
@@ -58,7 +58,7 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
           hotels: []
         };
 
-        var cityHotelsList = await getHotelsOfCity(cityIata);
+        var cityHotelsList = await getHotelsOfCity(cityIata, language);
         if (
           selectedBudgetCategory.toLowerCase() == "own budget" ||
           selectedBudgetCategory == 1
@@ -191,43 +191,41 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
   });
 };
 
-function getHotelsOfCity(cityIata) {
+function getHotelsOfCity(cityIata, language) {
   return new Promise(function(resolve, reject) {
     var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/hotels/" + cityIata;
 
-    httpRequest.get({ url: cityHotelsUrl, json: true }, function(
-      error,
-      response,
-      hotels
-    ) {
-      if (error) {
-        reject(error);
-      } else if (response.statusCode != 200) {
-        reject(response.statusMessage);
-      } else {
-        resolve(hotels);
+    httpRequest.get(
+      { url: cityHotelsUrl, json: true, qs: { lang: language } },
+      function(error, response, hotels) {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else {
+          resolve(hotels);
+        }
       }
-    });
+    );
   });
 }
 
-function getCityByIata(cityIata) {
+function getCityByIata(cityIata, language) {
   return new Promise(function(resolve, reject) {
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
-    httpRequest.get({ url: cityUrl, json: true }, function(
-      error,
-      response,
-      city
-    ) {
-      if (error) {
-        reject(error);
-      } else if (response.statusCode != 200) {
-        reject(response.statusMessage);
-      } else {
-        resolve(city);
+    httpRequest.get(
+      { url: cityUrl, json: true, qs: { lang: language } },
+      function(error, response, city) {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else {
+          resolve(city);
+        }
       }
-    });
+    );
   });
 }
 

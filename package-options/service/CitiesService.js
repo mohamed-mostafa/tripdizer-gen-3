@@ -19,7 +19,10 @@ exports.searchCities = function(language, citiesSearchRequest) {
     for (var i = 0; i < countriesList.length; i++) {
       var countryIsoCode = countriesList[i];
       try {
-        var countryCitiesList = await getCitiesOfCountry(countryIsoCode);
+        var countryCitiesList = await getCitiesOfCountry(
+          countryIsoCode,
+          language
+        );
         countryCitiesList.forEach(city => {
           var newCity = {
             name: city.enName,
@@ -46,21 +49,20 @@ exports.searchCities = function(language, citiesSearchRequest) {
   });
 };
 
-function getCitiesOfCountry(countryIsoCode) {
+function getCitiesOfCountry(countryIsoCode, language) {
   return new Promise(function(resolve, reject) {
     var countryCitiesUrl = MASTER_DATA_ENDPOINT + "/cities/" + countryIsoCode;
-    httpRequest.get({ url: countryCitiesUrl, json: true }, function(
-      error,
-      response,
-      cities
-    ) {
-      if (error) {
-        reject(error);
-      } else if (response.statusCode != 200) {
-        reject(response.statusMessage);
-      } else {
-        resolve(cities);
+    httpRequest.get(
+      { url: countryCitiesUrl, json: true, qs: { lang: language } },
+      function(error, response, cities) {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else {
+          resolve(cities);
+        }
       }
-    });
+    );
   });
 }

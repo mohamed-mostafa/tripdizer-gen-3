@@ -38,7 +38,8 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
         transportationSearchRequest.numberOfAdults,
         transportationSearchRequest.numberOfChildren,
         transportationSearchRequest.numberOfInfants,
-        true
+        true,
+        language
       );
       transportationLegs.push(originToFirstCityLeg);
 
@@ -70,7 +71,8 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
           transportationSearchRequest.numberOfAdults,
           transportationSearchRequest.numberOfChildren,
           transportationSearchRequest.numberOfInfants,
-          isCrossCountry
+          isCrossCountry,
+          language
         );
         transportationLegs.push(transportationLeg);
       }
@@ -91,7 +93,8 @@ exports.searchTransportation = function(language, transportationSearchRequest) {
         transportationSearchRequest.numberOfAdults,
         transportationSearchRequest.numberOfChildren,
         transportationSearchRequest.numberOfInfants,
-        true
+        true,
+        language
       );
       transportationLegs.push(lastCityToOriginLeg);
 
@@ -113,12 +116,13 @@ function createFlightLegBetweenOriginAndDestination(
   numberOfAdults,
   numberOfChildren,
   numberOfInfants,
-  isInternationalLeg
+  isInternationalLeg,
+  language
 ) {
   return new Promise(async function(resolve, reject) {
     try {
-      let originCity = await getCityByIata(origin);
-      let destinationCity = await getCityByIata(destination);
+      let originCity = await getCityByIata(origin, language);
+      let destinationCity = await getCityByIata(destination, language);
       let transportationLeg = {
         origin: originCity,
         destination: destinationCity,
@@ -324,7 +328,11 @@ function getCityByIata(cityIata, language) {
   return new Promise(function(resolve, reject) {
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
-    request.get({ url: cityUrl, json: true }, function(error, response, city) {
+    request.get({ url: cityUrl, json: true, qs: { lang: language } }, function(
+      error,
+      response,
+      city
+    ) {
       if (error) {
         reject(error);
       } else if (response.statusCode != 200) {
