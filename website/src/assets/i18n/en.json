@@ -106,8 +106,7 @@
     "travel_info": {
       "traveling_to": "Traveling To",
       "traveling_from": "Traveling From",
-      "airports": [
-        {
+      "airports": [{
           "iataCode": "CAI",
           "name": "Cairo"
         },
@@ -176,6 +175,11 @@
       "header": {
         "number_of_days": "{{numberOfNights}} Day{{withS}} in",
         "dates": "From {{departureDate}} To {{returnDate}}"
+      },
+      "loading_messages": {
+        "cities_tab_message": "Locating the best cities that match your interests",
+        "flights_tab_message": "Finding the best flight deals ...",
+        "accommodation_tab_message": "Finding the best hotels ..."
       },
       "tab_cities": {
         "title": "Cities",
@@ -379,8 +383,7 @@
     },
     "traveling_from": {
       "traveling_from": "Traveling From",
-      "airports": [
-        {
+      "airports": [{
           "iataCode": "CAI",
           "name": "Cairo"
         },

@@ -13,6 +13,7 @@ import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
@@ -35,7 +36,7 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService) { }
+	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -46,8 +47,8 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		// this.setIsLoading(true, 'Locating the best cities that match your interests');
-		this.requestService.isLoading.next({ show: true, message: 'Locating the best cities that match your interests' });
+		this.requestService.isLoading
+			.next({ show: true, message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message') });
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 			tap(() => {
@@ -77,7 +78,7 @@ export class EstimatedCostService {
 	}
 
 	getFlights(): Observable<Array<Flight>> {
-		this.setIsLoading(true, 'Finding the best flight deals ...');
+		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -120,7 +121,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(true, 'Finding the best hotels ...');
+		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message'));
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
 		for (let x = 0; x < this.selectedCities.length; x++) {
 			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });

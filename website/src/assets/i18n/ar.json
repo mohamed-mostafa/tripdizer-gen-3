@@ -40,6 +40,11 @@
       "or": "أو",
       "continue_without_login": "اكمل بدون تسجيل الدخول",
       "improve_experience": "لتجربة أفضل"
+    },
+    "suggest_country_modal": {
+      "submit": "ارسال",
+      "back": "رجوع",
+      "suggest_country_adding": "اقتراح اضافة دولة"
     }
   },
   "home": {
@@ -101,8 +106,7 @@
     "travel_info": {
       "traveling_to": "مسافر الى",
       "traveling_from": "مسافر من",
-      "airports": [
-        {
+      "airports": [{
           "iataCode": "CAI",
           "name": "القاهرة"
         },
@@ -171,6 +175,11 @@
       "header": {
         "number_of_days": "{{numberOfNights}} ايام في",
         "dates": "من {{departureDate}} الى {{returnDate}}"
+      },
+      "loading_messages": {
+        "cities_tab_message": "البحث عن أفضل المدن التى تناسب اهتماماتك ...",
+        "flights_tab_message": "البحث عن أفضل عروض رحلات الطيران ...",
+        "accommodation_tab_message": "البحث عن أفضل الفنادق ..."
       },
       "tab_cities": {
         "title": "المدن",
@@ -374,8 +383,7 @@
     },
     "traveling_from": {
       "traveling_from": "مسافر من",
-      "airports": [
-        {
+      "airports": [{
           "iataCode": "CAI",
           "name": "القاهرة"
         },
