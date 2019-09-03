@@ -19,16 +19,14 @@ import { RequestService } from '../../../request/request.service';
 	styleUrls: ['./places-select-box.component.scss'],
 })
 export class PlacesSelectBoxComponent implements OnInit {
-
 	othersName: string;
 
 	dialogLabels: {
 		title: string;
 		description: string;
-		inputs: { input0: string, input1: string, input2: string, input3: string, };
+		inputs: { input0: string; input1: string; input2: string; input3: string };
 		buttonsLabel: { ok: string; cancel: string };
 	};
-
 
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
@@ -69,7 +67,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
 
 	get places(): Array<Place> {
-
 		this._selectedPlaces.forEach(place => {
 			if (place.id === 0) {
 				this._places.splice(this._places.indexOf(place), 1);
@@ -95,13 +92,13 @@ export class PlacesSelectBoxComponent implements OnInit {
 		private homeService: HomeService,
 		private requestService: RequestService
 	) {
-
 		this.setLanguage();
 
 		this.translate.onLangChange.subscribe(() => {
+			this.placeHolder = null;
+			this._selectedPlaces = [];
 			this.setLanguage();
 		});
-
 	}
 
 	ngOnInit() {
@@ -203,7 +200,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
-
 				const countryRequest: any = {};
 
 				inputs.forEach(input => {
@@ -222,11 +218,9 @@ export class PlacesSelectBoxComponent implements OnInit {
 					if (input.id === 'suggestedCountry') {
 						countryRequest.country = input.value;
 					}
-
 				});
 
 				console.log(countryRequest);
-
 
 				this.setIsLoading(true, 'Submitting data ...');
 				this.homeService.saveCountryRequest(countryRequest).subscribe(res => {
@@ -238,10 +232,7 @@ export class PlacesSelectBoxComponent implements OnInit {
 		});
 	}
 
-
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
-
-
 }
