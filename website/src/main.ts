@@ -4,12 +4,12 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 if (environment.production) {
-	enableProdMode();
+  enableProdMode();
 }
 
 platformBrowserDynamic()
-	.bootstrapModule(AppModule)
-	.catch(err => console.error(err));
+  .bootstrapModule(AppModule)
+  .catch(err => console.error(err));
 
 // Global site tag (gtag.js) - Google Analytics
 document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -21,6 +21,8 @@ document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
   gtag('js', new Date());
 
   gtag('config', '${environment.google.analyticsTrackingID}');
+  gtag('config', '${environment.google.conversionTrackingId}');
+
 </script>`);
 
 // Facebook Pixel Code

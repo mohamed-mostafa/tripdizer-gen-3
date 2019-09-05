@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonFunctions } from 'src/app/shared/utils';
+import { TrackingService } from '../../shared/services/tracking.service';
 
 /* Components */
 import { DialogComponent } from 'src/app/shared/components/dialog/dialog.component';
@@ -32,6 +33,7 @@ export class TicketComponent {
 		route: ActivatedRoute,
 		router: Router,
 		private requestService: RequestService,
+		private trackingService: TrackingService,
 		private dialog: MatDialog,
 		translate: TranslateService
 	) {
@@ -42,6 +44,7 @@ export class TicketComponent {
 		requestService.submitRequest().subscribe((response: Ticket | null) => {
 			if (response) {
 				this.ticket = response;
+				this.trackingService.trackConversion();
 			} else {
 				router.navigate(['../', this.requestService.getPrevInvalidStep(this.currentStepPath)], { relativeTo: route });
 			}

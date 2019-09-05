@@ -11,7 +11,9 @@ export const environment = {
 	},
 	google: {
 		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
-		analyticsTrackingID: 'UA-106443087-1',
+		analyticsTrackingID: 'UA-106443087-4',
+		conversionTrackingId: 'AW-782669344',
+		conversionTrackingTarget: 'AW-782669344/zn7fCL_Pt6kBEKCsmvUC',
 		apiKey: 'AIzaSyCAw8gPVklDhcSGTiV8HdSVFqWK_ysEAyg',
 	},
 };
