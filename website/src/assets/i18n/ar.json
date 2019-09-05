@@ -224,7 +224,17 @@
         "accommodation": "الإقامة",
         "activities": "الأنشطة",
         "modify": "تعديل",
-        "total_cost": "اجمالى التكلفة"
+        "total_cost": "اجمالى التكلفة",
+        "day": "يوم",
+        "no_accommodation": "لم يتم اختيار اى فنادق",
+        "star_rating": "عدد النجوم",
+        "duration": "المدة",
+        "no_flights": "لم يتم اختيار رحلات طيران",
+        "to": "إلى",
+        "from": "من",
+        "arrival": "الوصول",
+        "depart": "المغادرة",
+        "nights": "ليالى"
       }
     },
     "form_layout": {
