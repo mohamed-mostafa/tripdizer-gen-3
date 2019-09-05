@@ -28,4 +28,8 @@ export class TrackingService {
 		gtag('event', id, data);
 		fbq('track', id, data);
 	}
+
+	trackConversion(): void {
+		gtag('event', 'conversion', { 'send_to': environment.google.conversionTrackingTarget });
+	}
 }

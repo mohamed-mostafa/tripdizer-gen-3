@@ -4,8 +4,8 @@
 
 export const environment = {
 	production: false,
-    apiUrl: 'https://development-services.tripdizer.com/',
-    // apiUrl: 'http://localhost:8083/',
+	apiUrl: 'https://development-services.tripdizer.com/',
+	// apiUrl: 'http://localhost:8083/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	saveRequestState: true,
@@ -17,6 +17,8 @@ export const environment = {
 	google: {
 		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-2',
+		conversionTrackingId: '',
+		conversionTrackingTarget: '',
 		apiKey: 'AIzaSyCAw8gPVklDhcSGTiV8HdSVFqWK_ysEAyg',
 	},
 };
