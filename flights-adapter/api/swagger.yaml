@@ -23,6 +23,11 @@ paths:
       description: "By passing in the appropriate options, you can search for flights"
       operationId: "searchFlights"
       parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
       - name: "origin"
         in: "query"
         description: "The IATA code of the origin city or airport"

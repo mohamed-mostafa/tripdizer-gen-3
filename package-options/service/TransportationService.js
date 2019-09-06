@@ -138,8 +138,8 @@ function createFlightLegBetweenOriginAndDestination(
         numberOfInfants: numberOfInfants
       };
       request.get(
-        { url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, json: true },
-        function(err, httpResponse, body) {
+        { url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, headers: { 'language': language }, json: true },
+        function (err, httpResponse, body) {
           if (err || httpResponse.statusCode != 200) {
             // reject(err || httpResponse.statusMessage);
             console.error(
