@@ -1,164 +1,169 @@
 .rtl {
+	.navbar-nav {
+		margin-left: initial !important;
+		margin-right: auto;
+		float: left;
+	}
 
-  .navbar-nav {
-    margin-left: initial !important;
-    margin-right: auto;
-    float: left;
-  }
+	.navbar-brand {
+		margin-right: 0;
+		margin-left: 1rem;
+		text-align: right;
+	}
 
-  .navbar-brand {
-    margin-right: 0;
-    margin-left: 1rem;
-    text-align: right;
-  }
+	.scroll-down {
+		font-size: 1rem !important;
+		letter-spacing: 0 !important;
+	}
 
-  .scroll-down {
-    font-size: 1rem !important;
-    letter-spacing: 0 !important;
-  }
+	.videos-carousel.owl-carousel {
+		.owl-nav {
+			.owl-next {
+				left: 0;
+				right: initial !important;
+			}
 
-  .videos-carousel.owl-carousel {
-    .owl-nav {
-      .owl-next {
-        left: 0;
-        right: initial !important;
-      }
+			.owl-prev {
+				left: initial !important;
+				right: 0;
+			}
+		}
+	}
 
-      .owl-prev {
-        left: initial !important;
-        right: 0;
-      }
-    }
-  }
+	.why-us {
+		.tab-pane {
+			> img {
+				left: 0;
+				right: initial !important;
+			}
+		}
 
-  .why-us {
-    .tab-pane {
-      >img {
-        left: 0;
-        right: initial !important;
-      }
-    }
+		.tab-content:before {
+			content: 'لماذا' !important;
+			right: initial !important;
+			left: 0;
 
-    .tab-content:before {
-      content: 'لماذا' !important;
-      right: initial !important;
-      left: 0;
+			@media (max-width: 768px) {
+				content: 'لماذا نحن؟' !important;
+				margin-left: -110px !important;
+			}
 
-      @media (max-width: 768px) {
-        content: 'لماذا نحن؟' !important;
-        margin-left: -110px !important;
-      }
+			@media (max-width: 576px) {
+				margin-left: -85px !important;
+			}
+		}
 
-      @media (max-width: 576px) {
-        margin-left: -85px !important;
-      }
-    }
+		.why-us-nav:before {
+			content: 'نحن؟' !important;
+			left: initial !important;
+			right: 0;
+		}
+	}
 
-    .why-us-nav:before {
-      content: 'نحن؟' !important;
-      left: initial !important;
-      right: 0;
-    }
-  }
+	.testimonials-carousel {
+		.owl-item {
+			.testimonial-item {
+				.testimonial-info {
+					.testimonial-text {
+						padding-left: initial !important;
+						padding-right: 1em;
 
-  .testimonials-carousel {
-    .owl-item {
-      .testimonial-item {
-        .testimonial-info {
-          .testimonial-text {
-            padding-left: initial !important;
-            padding-right: 1em;
+						&:before,
+						&:after {
+							left: initial !important;
+							left: 0;
+						}
+					}
 
-            &:before,
-            &:after {
-              left: initial !important;
-              left: 0;
-            }
-          }
+					.testimonial-name {
+						text-align: right;
+						left: initial !important;
+						right: 1rem;
+					}
+				}
+			}
+		}
+	}
 
-          .testimonial-name {
-            text-align: right;
-            left: initial !important;
-            right: 1rem;
-          }
-        }
-      }
-    }
-  }
+	.footer {
+		.contact-info,
+		.slogan {
+			text-align: right;
+		}
 
-  .footer {
+		.footer-icons {
+			padding-left: 1rem;
+			padding-right: 0 !important;
+		}
+	}
 
-    .contact-info,
-    .slogan {
-      text-align: right;
-    }
+	.request-nav-bar {
+		.nav-brand,
+		.nav-link {
+			float: right !important;
+		}
+	}
 
-    .footer-icons {
-      padding-left: 1rem;
-      padding-right: 0 !important;
-    }
-  }
+	.mat-checkbox {
+		float: right;
+		text-align: right;
+	}
 
-  .request-nav-bar {
+	.mat-form-field-label,
+	.mat-radio-group-label {
+		border-left: 0 !important;
+		padding-left: 0 !important;
+		border-right: 5px solid;
+		padding-right: 1rem;
+	}
 
-    .nav-brand,
-    .nav-link {
-      float: right !important;
-    }
-  }
+	.mat-radio-group-label-wrapper {
+		text-align: right;
 
-  .mat-checkbox {
-    float: right;
-    text-align: right;
-  }
+		.mat-radio-group-subscript {
+			padding-left: 0 !important;
+			padding-right: 1.3rem;
+		}
+	}
 
-  .mat-form-field-label,
-  .mat-radio-group-label {
-    border-left: 0 !important;
-    padding-left: 0 !important;
-    border-right: 5px solid;
-    padding-right: 1rem;
-  }
+	.mat-form-field-subscript-wrapper {
+		padding-left: 0 !important;
+		padding-right: 1rem;
 
-  .mat-radio-group-label-wrapper {
-    text-align: right;
+		@media (min-width: 992px) {
+			padding-right: 1.1rem;
+		}
+	}
 
-    .mat-radio-group-subscript {
-      padding-left: 0 !important;
-      padding-right: 1.3rem;
-    }
-  }
+	.destination-container {
+		.destination {
+			.destination-info {
+				.dest-data {
+					.dest-data-wrapper {
+						text-align: right;
+					}
+				}
+			}
+		}
+	}
 
-  .mat-form-field-subscript-wrapper {
-    padding-left: 0 !important;
-    padding-right: 1rem;
+	.destination-container {
+		.destination-flag {
+			left: initial !important;
+			right: 0;
+			transform: rotateY(180deg);
 
-    @media (min-width: 992px) {
-      padding-right: 1.1rem;
-    }
-  }
+			.destination-flag-text {
+				transform: rotate3d(0.41, 1, 0, 180deg) translate(15px, 23px);
+			}
+		}
+	}
 
-  .destination-container {
-    .destination {
-      .destination-info {
-        .dest-data {
-          .dest-data-wrapper {
-            text-align: right;
-          }
-        }
-      }
-    }
-  }
-
-  .destination-container {
-    .destination-flag {
-      left: initial !important;
-      right: 0;
-      transform: rotateY(180deg);
-
-      .destination-flag-text {
-        transform: rotate3d(0.41, 1, 0, 180deg) translate(15px, 23px);
-      }
-    }
-  }
+	.routes {
+		$line-width: 2px;
+		$bullet-margin: 2rem;
+		&:before {
+			right: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
+		}
+	}
 }
