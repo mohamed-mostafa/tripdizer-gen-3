@@ -35,7 +35,7 @@ export class Request extends CommonFunctions {
 		travel_assistance?: { title?: string; tourGuide?: string; visaAssistance?: string };
 		information?: { title?: string; value?: string };
 		ticket?: string;
-	} = {};
+	} = { travelers: {}, travel_assistance: {}, information: {} };
 	private _touchedSteps: Array<number>;
 	private _countries: Array<Country>;
 	private _travelingFrom: TravelingFrom;
@@ -539,7 +539,7 @@ export class Request extends CommonFunctions {
 					if (!this._destination) {
 						return null;
 					}
-					return this._requestType === RequestType.SurpriseMe ? this.destination.name : "";
+					return this._requestType === RequestType.SurpriseMe ? this.destination.name : '';
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
 				isValid: (): boolean => {

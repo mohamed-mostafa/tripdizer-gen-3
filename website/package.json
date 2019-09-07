@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"scripts": {
 		"ng": "ng",
-		"start": "ng serve --aot",
+		"start": "ng serve --aot --hmr --open",
 		"build-dev": "ng build --aot --prod --configuration=development",
 		"build-stg": "ng build --aot --prod --configuration=staging",
 		"build-prod": "ng build --aot --prod --configuration=production",
@@ -50,6 +50,7 @@
 		"zone.js": "^0.8.29"
 	},
 	"devDependencies": {
+		"@angularclass/hmr": "^2.1.3",
 		"@types/jasmine": "^2.8.16",
 		"@types/jasminewd2": "~2.0.3",
 		"@types/mixpanel-browser": "^2.23.1",
