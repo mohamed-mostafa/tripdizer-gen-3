@@ -1,4 +1,8 @@
-<div class="row justify-content-center summary-c py-2 py-md-4 pb-4" [class.text-right]="('dir' | translate) === 'rtl'" *ngIf="loadedData">
+<div
+	class="row justify-content-center summary-c py-2 py-md-4 pb-4"
+	[class.text-right]="('dir' | translate) === 'rtl'"
+	*ngIf="loadedData"
+>
 	<div class="col-lg-10 summary-list">
 		<h4 class="list-title font-weight-bold title-font">
 			{{ 'request.estimated_cost.summary.view_details' | translate }}
@@ -15,7 +19,7 @@
 										{{ station.nights_count }}
 									</div>
 									<div class="col-12 text-center nights-label font-weight-bold font-italic">
-                                            {{ 'request.estimated_cost.summary.nights' | translate }}
+										{{ 'request.estimated_cost.summary.nights' | translate }}
 									</div>
 								</div>
 							</div>
@@ -33,12 +37,18 @@
 							<div class="col-5 col-md-6 align-self-center">
 								<div class="row" *ngIf="station.flightDataExists == true">
 									<div class="col-12 col-md-6 smaller-text">
-										{{ station.travel_time }} <span class="d-none d-md-inline-block">{{ 'request.estimated_cost.summary.depart' | translate }} </span>
+										{{ station.travel_time }}
+										<span class="d-none d-md-inline-block"
+											>{{ 'request.estimated_cost.summary.depart' | translate }}
+										</span>
 										{{ 'request.estimated_cost.summary.from' | translate }}
 										{{ station.depart_from }}
 									</div>
 									<div class="col-12 col-md-6 smaller-text">
-										{{ station.arrive_time }} <span class="d-none d-md-inline-block">{{ 'request.estimated_cost.summary.arrival' | translate }} </span>
+										{{ station.arrive_time }}
+										<span class="d-none d-md-inline-block"
+											>{{ 'request.estimated_cost.summary.arrival' | translate }}
+										</span>
 										{{ 'request.estimated_cost.summary.to' | translate }}
 										{{ station.arrive_to }}
 									</div>
@@ -49,8 +59,7 @@
 									</div>
 								</div>
 							</div>
-							<div *ngIf="station.flightDataExists == true"
-								class="col-3 align-self-center d-none d-md-block">
+							<div *ngIf="station.flightDataExists == true" class="col-3 align-self-center d-none d-md-block">
 								{{ 'request.estimated_cost.summary.duration' | translate }}: {{ station.duration }}
 							</div>
 						</div>
@@ -61,49 +70,50 @@
 							<div class="col-12 col-md-9 mt-2 mt-md-0">
 								<h6 class="font-weight-bold">{{ station.title }}</h6>
 								<p class="smaller-text">
-									{{ station.description.substring(0, 300) }}<span
-										*ngIf="station.description.length > 300">...</span>
+									{{ station.description.substring(0, 300) }}<span *ngIf="station.description.length > 300">...</span>
 								</p>
 								<hr class="d-block d-md-none" />
-								<h5 class="font-weight-bold blue-title text-uppercase"
-									[hidden]="station.accommodationDataExists == false">
+								<h5
+									class="font-weight-bold blue-title text-uppercase"
+									[hidden]="station.accommodationDataExists == false"
+								>
 									{{ 'request.estimated_cost.summary.accommodation' | translate }}
 								</h5>
 								<div class=" row" *ngIf="station.accommodationDataExists == true">
 									<div class="col-8 col-md-6">
 										<h6 class="font-weight-bold">{{ station.hotel }}</h6>
-										<p class="mt-1"><i class="fa fa-map-marker mr-1" [class.ml-1]="('dir' | translate) === 'rtl'"></i>{{ station.hotel_address }}
+										<p class="mt-1">
+											<i class="fa fa-map-marker mr-1" [class.ml-1]="('dir' | translate) === 'rtl'"></i
+											>{{ station.hotel_address }}
 										</p>
 									</div>
 									<div class="col-4 col-md-6">
 										<p class="mb-0">{{ 'request.estimated_cost.summary.star_rating' | translate }}</p>
 										<p class="mb-0 rating-stars">
-											<span class="mr-1" *ngIf="station.hotel_rate >= 1"><i
-													class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 2"><i
-													class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 3"><i
-													class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 4"><i
-													class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i
-													class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 1"><i class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 2"><i class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 3"><i class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate >= 4"><i class="fa fa-star"></i></span>
+											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i class="fa fa-star"></i></span>
 										</p>
 									</div>
 								</div>
 								<div class="row" *ngIf="station.accommodationDataExists == false">
 									<div class=" col-12">
-										<h6 class="font-weight-bold">{{ 'request.estimated_cost.summary.no_accommodation' | translate }}</h6>
+										<h6 class="font-weight-bold">
+											{{ 'request.estimated_cost.summary.no_accommodation' | translate }}
+										</h6>
 									</div>
 								</div>
 								<hr class="d-block d-md-none" />
-								<h5 class="font-weight-bold blue-title text-uppercase"
-									*ngIf="station.activities.length > 0">
+								<h5 class="font-weight-bold blue-title text-uppercase" *ngIf="station.activities.length > 0">
 									{{ 'request.estimated_cost.summary.activities' | translate }}
 								</h5>
 								<div class="row">
 									<div class="col-12 col-md-6" *ngFor="let day of station.activities; let i = index">
-										<h6 class="smaller-text font-weight-bold">{{ 'request.estimated_cost.summary.day' | translate }} {{ i + 1 }}</h6>
+										<h6 class="smaller-text font-weight-bold">
+											{{ 'request.estimated_cost.summary.day' | translate }} {{ i + 1 }}
+										</h6>
 										<p class="smaller-text mb-1" *ngFor="let item of day.night">
 											{{ item }}
 										</p>
@@ -120,20 +130,26 @@
 				<div class="bg-blue text-white text-center px-5 py-2 float-right">
 					<span>{{ 'request.estimated_cost.summary.total_cost' | translate }}</span>
 					<br />
-					<span>{{ totalCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
+					<span>{{ totalCost | currency: 'EGP' }}</span>
 				</div>
 			</div>
 		</div>
 		<div class="row py-2">
 			<div class="col-6">
-				<button (click)="prev()" [disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
+				<button
+					(click)="prev()"
+					[disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2"
+				>
 					{{ 'request.estimated_cost.summary.modify' | translate }}
 				</button>
 			</div>
 			<div class="col-6 text-center">
-				<button (click)="goToNextStep()" [disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2 float-right">
+				<button
+					(click)="goToNextStep()"
+					[disabled]="false"
+					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2 float-right"
+				>
 					{{ 'request.form_layout.next_label' | translate }}
 				</button>
 			</div>

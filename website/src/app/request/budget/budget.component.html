@@ -22,7 +22,7 @@
 			[class.text-muted]="!isOwnBudget"
 			[class.text-right]="('dir' | translate) === 'rtl'"
 		>
-			{{ formGroup.controls['budget'].value | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
+			{{ formGroup.controls['budget'].value | currency: 'EGP' }}
 		</div>
 		<div class="col-12 text-center budget-categories">
 			<p>{{ 'request.budget.choice' | translate }}</p>

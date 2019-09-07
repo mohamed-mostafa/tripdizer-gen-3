@@ -465,7 +465,7 @@ export class Request extends CommonFunctions {
 						return null;
 					}
 					return this.budgetCategory === LUTBudgetCategory.OwnBudget
-						? this.currencyPipe.transform(this.budget, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0')
+						? this.currencyPipe.transform(this.budget, 'EGP')
 						: this.budgetCategoryName;
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('budget'),
@@ -539,7 +539,7 @@ export class Request extends CommonFunctions {
 					if (!this._destination) {
 						return null;
 					}
-					return this._requestType === RequestType.SurpriseMe ? this.destination.name : "";
+					return this._requestType === RequestType.SurpriseMe ? this.destination.name : '';
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('destinations'),
 				isValid: (): boolean => {
@@ -565,7 +565,7 @@ export class Request extends CommonFunctions {
 					// if (this._estimatedCost == null) {
 					// 	return null;
 					// }
-					return this.currencyPipe.transform(this.estimatedCost, 'EGP', `${this._localeLabels.currency.EGP} `, '0.0-0');
+					return this.currencyPipe.transform(this.estimatedCost, 'EGP');
 				})(),
 				isClickable: (): boolean => this.isNavBarItemClickable('estimatedCost'),
 				isValid: (): boolean => {
@@ -651,7 +651,6 @@ export class Request extends CommonFunctions {
 
 	constructor(private currencyPipe: CurrencyPipe, private translate: TranslateService) {
 		super();
-		translate.get('currency').subscribe(currency => this.setCurrency(currency));
 		translate.get('request.nav_bar').subscribe(labels => this.setNavBarLabels(labels));
 		translate.get('request.traveling_from.airports').subscribe((airports: Array<TravelingFrom>) => {
 			if (airports.length > 0 && !this._travelingFrom) {
@@ -672,10 +671,6 @@ export class Request extends CommonFunctions {
 			birthday: null,
 			profession: null,
 		};
-	}
-
-	private setCurrency(currency: string): void {
-		this._localeLabels.currency = currency;
 	}
 
 	private setNavBarLabels(labels: Object): void {
