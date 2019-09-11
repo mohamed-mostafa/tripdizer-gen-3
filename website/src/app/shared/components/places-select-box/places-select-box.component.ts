@@ -1,18 +1,17 @@
-import { HomeService } from './../../../home/home.service';
-import { CustomValidators } from './../../utils/custom.validators';
-import { DialogComponent } from './../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Place } from '../../models/place.model';
-import { Validators } from '@angular/forms';
 import { RequestService } from '../../../request/request.service';
+import { Place } from '../../models/place.model';
+import { HomeService } from './../../../home/home.service';
+import { CustomValidators } from './../../utils/custom.validators';
+import { DialogComponent } from './../dialog/dialog.component';
 @Component({
 	selector: 'c-shared-places-select-box',
 	templateUrl: './places-select-box.component.html',
@@ -92,7 +91,7 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 		this.translate.onLangChange.subscribe(() => {
 			this.placeHolder = null;
-			this._selectedPlaces = [];
+			this._selectedPlaces.length = 0;
 			this.setLanguage();
 		});
 	}
