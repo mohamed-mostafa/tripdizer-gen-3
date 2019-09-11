@@ -67,10 +67,11 @@ body {
 			height: 100%;
 		}
 		&[class*='wave']:not(.wave-4) {
+			background-size: cover;
 			height: calc(100% - 250px);
 		}
 		&.wave-4 {
-			height: calc(100% - 430px);
+			height: calc(101% - 430px);
 		}
 	}
 	.boat {
