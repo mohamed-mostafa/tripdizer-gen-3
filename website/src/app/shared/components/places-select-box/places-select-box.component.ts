@@ -50,7 +50,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 				this.othersName = 'أخرى';
 			}
 			places.push({ arName: 'أخرى', enName: 'Others', id: 0, name: this.othersName, description: '' });
-			console.log(places);
 		}
 		this._places = places || [];
 		this.formGroup.get(this.controlName).setValue(null);
@@ -59,9 +58,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 		if (places) {
 			this._selectedPlaces = places;
 		}
-
-		console.log(this._places);
-		console.log(this.places);
 	}
 
 	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
@@ -110,7 +106,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 	setLanguage() {
 		this.translate.get('home.suggest_country_dialog').subscribe(labels => {
-			console.log(labels);
 			this.dialogLabels = labels;
 		});
 		this.translate
@@ -138,7 +133,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 				this.placeInput.nativeElement.value = '';
 				this.placeInput.nativeElement.blur();
 			} else {
-				console.log('open modal');
 				this.openDialog();
 			}
 		}
@@ -220,12 +214,8 @@ export class PlacesSelectBoxComponent implements OnInit {
 					}
 				});
 
-				console.log(countryRequest);
-
 				this.setIsLoading(true, 'Submitting data ...');
 				this.homeService.saveCountryRequest(countryRequest).subscribe(res => {
-					console.log(res);
-					console.log('api result');
 					this.setIsLoading(false, '');
 				});
 			}

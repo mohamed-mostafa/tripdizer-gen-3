@@ -1,15 +1,15 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { RequestService } from '../request.service';
 import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
-import { RequestService } from '../request.service';
 
 @Component({
 	selector: 'c-request-estimated-cost',
 	templateUrl: './estimated-cost.component.html',
 	styleUrls: ['./estimated-cost.component.scss'],
 })
-export class EstimatedCostComponent implements OnDestroy {
+export class EstimatedCostComponent {
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	isCitiesTabVisited: Observable<boolean>;
@@ -26,14 +26,12 @@ export class EstimatedCostComponent implements OnDestroy {
 		this.isCitiesTabVisited = requestService.isCitiesTabVisited;
 		this.isFlightsTabVisited = requestService.isFlightsTabVisited;
 		this.isAccommodationTabVisited = requestService.isAccommodationTabVisited;
-		this.requestService.isLoading.subscribe(isLoadingObject => { this.isLoading = isLoadingObject.show });
+		this.requestService.isLoading.subscribe(isLoadingObject => {
+			this.isLoading = isLoadingObject.show;
+		});
 	}
 
 	tabChange(e) {
 		this.service.setCurrentTabIndex(e);
-	}
-
-	ngOnDestroy() {
-		console.log('component destroyed');
 	}
 }
