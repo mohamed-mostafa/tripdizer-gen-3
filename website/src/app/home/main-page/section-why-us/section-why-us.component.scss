@@ -2,64 +2,32 @@
 	width: 100%;
 
 	& > * {
-		background-color: #2989ff;
-	}
-}
+        background-color: #fff;
+        background-image: url(../../../../assets/img/why-us-bg.png);
+        background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+    }
 
-.why-us {
-	overflow: hidden;
+    .section-title, .sub-title {
+        color: #2680eb;
+    }
 
-	&,
-	.why-us-container {
-		height: 100%;
-	}
+    .item-circle {
+        border: 0.0625rem solid #2486ec;
+        border-radius: 50%;
+        width: 75px;
+        height: 75px;
 
-	.why-us-nav:before,
-	.tab-content:before {
-		position: absolute;
-		font-size: 4rem;
-		font-weight: bolder;
-		text-transform: uppercase;
-		z-index: 1;
-		color: #fff;
-	}
-
-	.tab-content:before {
-		content: 'Why';
-		top: 2rem;
-		right: 0;
-
-		@media (max-width: 768px) {
-			content: 'Why Us?';
-			top: -48px;
-			left: 50%;
-			margin-left: -150px;
-		}
-
-		@media (max-width: 576px) {
-			font-size: 3rem;
-			top: -36px;
-			margin-left: -115px;
-		}
-	}
-
-	.why-us-nav:before {
-		content: 'Us?';
-		top: 6rem;
-		left: 0;
-
-		@media (max-width: 768px) {
-			display: none;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.why-us-nav {
-			height: 30%;
-		}
-
-		.tab-content {
-			height: 70%;
-		}
-	}
+        img {
+            max-width: 30px;
+            padding: 20px 0;
+        }
+    }
+    
+    .underline {
+        background-color: #ffcb2a;
+        width: 3.125rem;
+        height: 0.3125rem;
+    }
 }
