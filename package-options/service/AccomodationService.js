@@ -15,8 +15,8 @@ const MEDIA_STORAGE_BASE_URL =
  * accomomdationSearchRequest AccomomdationSearchRequest
  * returns accomodationOffers
  **/
-exports.searchAccomodations = function(language, accomomdationSearchRequest) {
-  return new Promise(async function(resolve, reject) {
+exports.searchAccomodations = function (language, accomomdationSearchRequest) {
+  return new Promise(async function (resolve, reject) {
     var citiesNumberOfNightPairs = accomomdationSearchRequest.cities;
     var selectedBudgetCategory = accomomdationSearchRequest.budgetCategory;
     let arrivalMoment = new moment(accomomdationSearchRequest.arrival); // start moment
@@ -68,7 +68,7 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
               // build hotels list
               id: hotel.id,
               name: hotel.enName,
-              displaName: language == "ar" ? hotel.arName : hotel.enName,
+              displayName: language == "ar" ? hotel.arName : hotel.enName,
               description:
                 language == "ar" ? hotel.arDescription : hotel.enDescription,
               city: hotelCity.enName,
@@ -123,14 +123,14 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
             .filter(
               hotel =>
                 hotel.budgetCategoryName.toLowerCase() ==
-                  selectedBudgetCategory.toLowerCase() ||
+                selectedBudgetCategory.toLowerCase() ||
                 hotel.budgetCategoryId == selectedBudgetCategory
             )
             .forEach(hotel => {
               var newHotel = {
                 id: hotel.id,
                 name: hotel.enName,
-                displaName: language == "ar" ? hotel.arName : hotel.enName,
+                displayName: language == "ar" ? hotel.arName : hotel.enName,
                 description:
                   language == "ar" ? hotel.arDescription : hotel.enDescription,
                 city: hotelCity.enName,
@@ -192,12 +192,12 @@ exports.searchAccomodations = function(language, accomomdationSearchRequest) {
 };
 
 function getHotelsOfCity(cityIata, language) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var cityHotelsUrl = MASTER_DATA_ENDPOINT + "/hotels/" + cityIata;
 
     httpRequest.get(
       { url: cityHotelsUrl, json: true, qs: { lang: language } },
-      function(error, response, hotels) {
+      function (error, response, hotels) {
         if (error) {
           reject(error);
         } else if (response.statusCode != 200) {
@@ -211,12 +211,12 @@ function getHotelsOfCity(cityIata, language) {
 }
 
 function getCityByIata(cityIata, language) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
     httpRequest.get(
       { url: cityUrl, json: true, qs: { lang: language } },
-      function(error, response, city) {
+      function (error, response, city) {
         if (error) {
           reject(error);
         } else if (response.statusCode != 200) {
