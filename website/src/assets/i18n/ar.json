@@ -214,6 +214,8 @@
 				"selected": "تم اختياره",
 				"total_price": "إجمالى السعر",
 				"next_label": "التالي",
+				"star_rating": "التصنيف",
+				"hostel": "هوستيل",
 				"back_label": "رجوع",
 				"total_cost": "اجمالى سعر الفنادق"
 			},
@@ -225,7 +227,7 @@
 				"total_cost": "اجمالى التكلفة",
 				"day": "يوم",
 				"no_accommodation": "لم يتم اختيار اى فنادق",
-				"star_rating": "عدد النجوم",
+				"star_rating": "التصنيف",
 				"hostel": "هوستيل",
 				"duration": "المدة",
 				"no_flights": "لم يتم اختيار رحلات طيران",
