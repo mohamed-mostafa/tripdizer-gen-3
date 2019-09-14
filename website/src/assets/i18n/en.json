@@ -214,6 +214,8 @@
 				"selected": "Selected",
 				"total_price": "Total price",
 				"total_cost": "Total Hotels Cost",
+				"star_rating": "Rating",
+				"hostel": "Hostel",
 				"next_label": "Continue",
 				"back_label": "Back"
 			},
@@ -225,7 +227,7 @@
 				"total_cost": "Total Itinerary Cost",
 				"day": "Day",
 				"no_accommodation": "No accommodation chosen",
-				"star_rating": "Star Rating",
+				"star_rating": "Rating",
 				"hostel": "Hostel",
 				"duration": "Duration",
 				"no_flights": "No flights chosen",
