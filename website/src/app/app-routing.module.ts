@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-/* Components */
+import { NotFoundComponent } from './core/not-found/not-found.component';
+import { PathResolveService } from './core/not-found/path-resolve.service';
 
 const routes: Routes = [
 	{ path: '', loadChildren: './home/home.module#HomeModule' },
 	{ path: 'request', loadChildren: './request/request.module#RequestModule' },
+	{
+		path: '**',
+		resolve: { path: PathResolveService },
+		component: NotFoundComponent,
+	},
 ];
 
 @NgModule({
 	exports: [RouterModule],
 	imports: [RouterModule.forRoot(routes)],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

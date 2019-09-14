@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({ name: 'errorMessage' })
 export class ErrorMessagePipe implements PipeTransform {
-	errorMessages;
+	errorMessages = {};
 
 	constructor(translate: TranslateService) {
 		translate.get('shared.error_messages').subscribe(errorMessages => (this.errorMessages = errorMessages));

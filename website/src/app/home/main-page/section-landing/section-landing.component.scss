@@ -49,13 +49,8 @@
 
 	.scroll-down {
 		font-size: 0.62rem;
-		letter-spacing: 0.5rem;
 		position: absolute;
 		bottom: 3vh;
-
-		@media (min-width: 250px) {
-			letter-spacing: 1rem;
-		}
 
 		> a {
 			text-decoration: none;

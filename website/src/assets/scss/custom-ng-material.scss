@@ -1117,11 +1117,10 @@ $color-blue: #2989ff;
 .mat-form-field-appearance-legacy .mat-form-field-label,
 .mat-form-field-label,
 .mat-radio-group-label {
-	letter-spacing: 2.5px;
 	color: $color-blue;
 	font-weight: 700;
-	text-transform: uppercase;
-	font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    // font-size: .9rem !important;
 }
 
 .mat-checkbox {

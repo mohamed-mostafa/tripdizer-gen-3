@@ -3,12 +3,15 @@
 </div>
 
 <div *ngIf="!isFirst">
-	<div class="bullet position-relative float-left text-white text-center">
+	<div
+		class="bullet position-relative text-white text-center"
+		[ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'"
+	>
 		<div class="w-text" [ngClass]="isEven ? 'bg-secondary' : 'bg-primary'">
 			{{ index }}
 		</div>
 	</div>
-	<div class="city-name ml-5 ml-lg-6 text-capitalize">
+	<div class="city-name text-capitalize" [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
 		<span>{{ flight.origin.name }}</span>
 		<span *ngIf="flight.numberOfNights">
 			:
@@ -21,8 +24,11 @@
 </div>
 
 <div class="my-3">
-	<i class="fa fa-plane icon position-relative float-left text-center text-secondary bg-white"></i>
-	<div class="ml-5 ml-lg-6">
+	<i
+		class="fa fa-plane icon position-relative text-center text-secondary bg-white"
+		[ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'"
+	></i>
+	<div [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
 		<c-estimated-cost-flight-row-options
 			*ngIf="isAnyFlightOfferExists; else noFlightOffers"
 			[flight]="flight"
@@ -37,10 +43,16 @@
 </div>
 
 <ng-template #startAndEndSection>
-	<div class="bullet position-relative float-left text-white text-center">
+	<div
+		class="bullet position-relative text-white text-center"
+		[ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'"
+	>
 		<div class="wo-text bg-dark"></div>
 	</div>
-	<div class="city-name ml-5 ml-lg-6 text-capitalize font-italic">
+	<div
+		class="city-name text-capitalize font-italic"
+		[ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'"
+	>
 		<span *ngIf="isFirst">
 			{{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flight.origin.name }}
 		</span>

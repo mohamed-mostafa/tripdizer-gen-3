@@ -4,25 +4,13 @@ threadsafe: yes
 # [END runtime]
 
 handlers:
-  - url: /our-team
-    static_files: dist/website/index.html
-    upload: dist/website/index.html
-
-  - url: /request
-    static_files: dist/website/index.html
-    upload: dist/website/index.html
-
-  - url: /request/(.*)
-    static_files: dist/website/index.html
-    upload: dist/website/index.html
-
-  - url: /
-    static_files: dist/website/index.html
-    upload: dist/website/index.html
-
-  - url: /(.+)
+  - url: /(.*\..*)$
     static_files: dist/website/\1
-    upload: dist/website/(.*)
+    upload: dist/website/.*\..*$
+
+  - url: /.*
+    static_files: dist/website/index.html
+    upload: dist/website/index.html
 
 # [keep gcloud from uploading not required files for deployment]
 skip_files:
