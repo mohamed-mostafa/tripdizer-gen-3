@@ -14,7 +14,7 @@
 			<mat-tab-group mat-align-tabs="center" (selectedIndexChange)="tabChange($event)" [selectedIndex]="selectedTab">
 				<mat-tab>
 					<ng-template mat-tab-label>
-						<div class="tab-icon">
+						<div class="tab-icon title-font">
 							<i class="fa fa-university mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 							{{ 'request.estimated_cost.tab_cities.title' | translate }}
 						</div>
@@ -29,7 +29,7 @@
 				</mat-tab>
 				<mat-tab [disabled]="selectedTab < 1">
 					<ng-template mat-tab-label>
-						<div class="tab-icon">
+						<div class="tab-icon title-font">
 							<i class="fa fa-plane mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 							{{ 'request.estimated_cost.tab_flights.title' | translate }}
 						</div>
@@ -46,7 +46,7 @@
 				</mat-tab>
 				<mat-tab [disabled]="selectedTab < 2">
 					<ng-template mat-tab-label>
-						<div class="tab-icon">
+						<div class="tab-icon title-font">
 							<i class="fa fa-building mb-2 mb-md-0 mr-1 d-block d-md-inline-block"></i>
 							{{ 'request.estimated_cost.tab_accommodations.title' | translate }}
 						</div>

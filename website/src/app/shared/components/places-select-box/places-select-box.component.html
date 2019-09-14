@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup">
-	<mat-form-field [ngClass]="classes">
+	<mat-form-field class="mt-3" [ngClass]="classes">
 		<mat-hint>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-hint>
 		<mat-error>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-error>
 		<mat-chip-list #chipList>

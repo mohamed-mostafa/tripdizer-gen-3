@@ -16,6 +16,17 @@ const shortEnglishHumanizer = humanizeDuration.humanizer({
 	}
 })
 
+const shortArabicHumanizer = humanizeDuration.humanizer({
+	language: 'shortAr',
+	languages: {
+		shortAr: {
+			d: () => 'ي',
+			h: () => 'س',
+			m: () => 'د'
+		}
+	}
+})
+
 var amadeusConfig = {
 	clientId: process.env.AMADEUS_CLIENT_ID || 'wAY7xjRJMPEbbv5LRFPX2AfGlTJzNHGm', // 'CuQTXfZihGnlCrPIXKJIgXO21gqi7VHU',
 	clientSecret: process.env.AMADEUS_CLIENT_SECRET || 'JKuIvbgbK9AZeLCk',// 'DTwStDfZ4W7VJNeC',
@@ -37,7 +48,7 @@ console.log("Starting amadeus with configuration: " + JSON.stringify(amadeusConf
  * numberOfInfants BigDecimal  (optional)
  * returns inline_response_200
  **/
-exports.searchFlights = function (origin, destination, departure, numberOfAdults, _return, numberOfChildren, numberOfInfants) {
+exports.searchFlights = function (origin, destination, departure, numberOfAdults, _return, numberOfChildren, numberOfInfants, language) {
 	return new Promise(function (resolve, reject) {
 		var amadeusRequest = {
 			origin: origin,
@@ -74,8 +85,8 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 							var flightLeg = {
 								origin: service.segments[0].flightSegment.departure.iataCode,
 								destination: service.segments[service.segments.length - 1].flightSegment.arrival.iataCode,
-								totalDurationInWords: shortEnglishHumanizer(flightDurationInMillis),
-								transitDurationInWords: shortEnglishHumanizer(transitDurationInMillis),
+								totalDurationInWords: language == 'ar' ? shortArabicHumanizer(flightDurationInMillis) : shortEnglishHumanizer(flightDurationInMillis),
+								transitDurationInWords: language == 'ar' ? shortArabicHumanizer(transitDurationInMillis) : shortEnglishHumanizer(transitDurationInMillis),
 								totalDurationInMinutes: flightDurationInMillis / (1000 * 60),
 								transitDurationInMinutes: transitDurationInMillis / (1000 * 60),
 								segments: []
@@ -94,7 +105,7 @@ exports.searchFlights = function (origin, destination, departure, numberOfAdults
 									destinationDetails: locationsMap[segment.flightSegment.arrival.iataCode] == null ? null : locationsMap[segment.flightSegment.arrival.iataCode].detailedName.toLowerCase() == "airport" ? segment.flightSegment.arrival.iataCode + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType : locationsMap[segment.flightSegment.arrival.iataCode].detailedName + " " + locationsMap[segment.flightSegment.arrival.iataCode].subType,
 									departure: segment.flightSegment.departure.at,
 									"return": segment.flightSegment.arrival.at,
-									durationInWords: shortEnglishHumanizer(segmentDurationInMillis),
+									durationInWords: language == 'ar' ? shortArabicHumanizer(segmentDurationInMillis) : shortEnglishHumanizer(segmentDurationInMillis),
 									durationInMinutes: segmentDurationInMillis / (1000 * 60),
 									aircraftCode: segment.flightSegment.aircraft.code
 								}

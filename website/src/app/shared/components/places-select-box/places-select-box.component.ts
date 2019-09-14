@@ -1,34 +1,31 @@
-import { HomeService } from './../../../home/home.service';
-import { CustomValidators } from './../../utils/custom.validators';
-import { DialogComponent } from './../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Place } from '../../models/place.model';
-import { Validators } from '@angular/forms';
 import { RequestService } from '../../../request/request.service';
+import { Place } from '../../models/place.model';
+import { HomeService } from './../../../home/home.service';
+import { CustomValidators } from './../../utils/custom.validators';
+import { DialogComponent } from './../dialog/dialog.component';
 @Component({
 	selector: 'c-shared-places-select-box',
 	templateUrl: './places-select-box.component.html',
 	styleUrls: ['./places-select-box.component.scss'],
 })
 export class PlacesSelectBoxComponent implements OnInit {
-
 	othersName: string;
 
 	dialogLabels: {
 		title: string;
 		description: string;
-		inputs: { input0: string, input1: string, input2: string, input3: string, };
+		inputs: { input0: string; input1: string; input2: string; input3: string };
 		buttonsLabel: { ok: string; cancel: string };
 	};
-
 
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredPlaces: Observable<Array<Place>>;
@@ -52,7 +49,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 				this.othersName = 'أخرى';
 			}
 			places.push({ arName: 'أخرى', enName: 'Others', id: 0, name: this.othersName, description: '' });
-			console.log(places);
 		}
 		this._places = places || [];
 		this.formGroup.get(this.controlName).setValue(null);
@@ -61,15 +57,11 @@ export class PlacesSelectBoxComponent implements OnInit {
 		if (places) {
 			this._selectedPlaces = places;
 		}
-
-		console.log(this._places);
-		console.log(this.places);
 	}
 
 	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
 
 	get places(): Array<Place> {
-
 		this._selectedPlaces.forEach(place => {
 			if (place.id === 0) {
 				this._places.splice(this._places.indexOf(place), 1);
@@ -95,13 +87,13 @@ export class PlacesSelectBoxComponent implements OnInit {
 		private homeService: HomeService,
 		private requestService: RequestService
 	) {
-
 		this.setLanguage();
 
 		this.translate.onLangChange.subscribe(() => {
+			this.placeHolder = null;
+			this._selectedPlaces.length = 0;
 			this.setLanguage();
 		});
-
 	}
 
 	ngOnInit() {
@@ -113,7 +105,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 	setLanguage() {
 		this.translate.get('home.suggest_country_dialog').subscribe(labels => {
-			console.log(labels);
 			this.dialogLabels = labels;
 		});
 		this.translate
@@ -141,7 +132,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 				this.placeInput.nativeElement.value = '';
 				this.placeInput.nativeElement.blur();
 			} else {
-				console.log('open modal');
 				this.openDialog();
 			}
 		}
@@ -203,7 +193,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(inputs => {
 			if (inputs && inputs[0]) {
-
 				const countryRequest: any = {};
 
 				inputs.forEach(input => {
@@ -222,26 +211,17 @@ export class PlacesSelectBoxComponent implements OnInit {
 					if (input.id === 'suggestedCountry') {
 						countryRequest.country = input.value;
 					}
-
 				});
-
-				console.log(countryRequest);
-
 
 				this.setIsLoading(true, 'Submitting data ...');
 				this.homeService.saveCountryRequest(countryRequest).subscribe(res => {
-					console.log(res);
-					console.log('api result');
 					this.setIsLoading(false, '');
 				});
 			}
 		});
 	}
 
-
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message: message });
 	}
-
-
 }

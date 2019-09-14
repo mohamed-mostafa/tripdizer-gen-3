@@ -19,7 +19,7 @@
 						<div class="dest-desc">{{ destination.description }}</div>
 					</div>
 					<div class="estimated-cost" [class.text-right]="('dir' | translate) === 'rtl'">
-						{{ destination.estimatedCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}
+						{{ destination.estimatedCost | currency: 'EGP' }}
 					</div>
 				</div>
 			</div>

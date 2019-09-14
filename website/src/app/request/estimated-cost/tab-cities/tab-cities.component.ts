@@ -12,7 +12,6 @@ import { RequestService } from '../../request.service';
 	styleUrls: ['./tab-cities.component.scss'],
 })
 export class TabCitiesComponent {
-
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
 	cityPaths: Array<{ lat: number; lng: number }> = [];
@@ -25,38 +24,36 @@ export class TabCitiesComponent {
 		snackBar: MatSnackBar,
 		private requestService: RequestService,
 		private route: ActivatedRoute,
-		private router: Router,
+		private router: Router
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.service.setCurrentTabIndex(0);
 		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
-		service.getCities().subscribe(
-			res => {
-				this.loadedData = true;
-				const numberOfNights = this.service.getNumberOfNights();
-				const maxNumberOfCities = Math.ceil(numberOfNights / 1);
-				let numberOfSelectedCities = 0;
-				if (maxNumberOfCities < res.length) {
-					numberOfSelectedCities = maxNumberOfCities;
-				} else {
-					numberOfSelectedCities = res.length;
-				}
-				for (let b = 0; b < res.length; b++) {
-					this.cities.push(res[b]);
-					res[b].select = false;
-					if (b + 1 <= numberOfSelectedCities) {
-						res[b].select = true;
-						this.selectedCities.push(res[b]);
-						const coordinates = res[b].coordinates.split(', ');
-						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-					}
-				}
-
-				this.requestService.setIsFlightsTabVisited(false);
-				this.requestService.setIsAccommodationTabVisited(false);
+		service.getCities().subscribe(res => {
+			this.loadedData = true;
+			const numberOfNights = this.service.getNumberOfNights();
+			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
+			let numberOfSelectedCities = 0;
+			if (maxNumberOfCities < res.length) {
+				numberOfSelectedCities = maxNumberOfCities;
+			} else {
+				numberOfSelectedCities = res.length;
 			}
-		);
+			for (let b = 0; b < res.length; b++) {
+				this.cities.push(res[b]);
+				res[b].select = false;
+				if (b + 1 <= numberOfSelectedCities) {
+					res[b].select = true;
+					this.selectedCities.push(res[b]);
+					const coordinates = res[b].coordinates.split(', ');
+					this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
+				}
+			}
+
+			this.requestService.setIsFlightsTabVisited(false);
+			this.requestService.setIsAccommodationTabVisited(false);
+		});
 	}
 
 	updateSelectedCities(city) {
@@ -84,13 +81,14 @@ export class TabCitiesComponent {
 			if (this.selectedCities.length >= maxNumberOfCities) {
 				// prevent more selections
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
-					duration: 3000
+					duration: 3000,
 				});
 			} else {
 				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
 				this.selectedCities.splice(0, this.selectedCities.length); // clear list
 				this.cityPaths.splice(0, this.cityPaths.length);
-				for (let x = 0; x < this.cities.length; x++) { // add all selected cities again
+				for (let x = 0; x < this.cities.length; x++) {
+					// add all selected cities again
 					if (this.cities[x].select) {
 						this.selectedCities.push(this.cities[x]);
 						const coordinates = this.cities[x].coordinates.split(', ');

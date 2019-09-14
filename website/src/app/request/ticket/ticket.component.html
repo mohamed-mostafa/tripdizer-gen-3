@@ -1,6 +1,12 @@
 <c-request-form-layout [isButtonsHidden]="true">
-	<svg id="v-ticket" [class.bg-blue]="invalidForSVG" class="col-12 v-ticket d-none d-md-block"
-		xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1300 550">
+	<svg
+		id="v-ticket"
+		[class.bg-blue]="invalidForSVG"
+		class="col-12 v-ticket d-none d-md-block"
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		viewBox="0 0 1300 550"
+	>
 		<style>
 			.svg-fa {
 				font-family: FontAwesome;
@@ -49,39 +55,50 @@
 		</defs>
 		<g transform="translate(-150 -150)">
 			<g filter="url(#left-part)" transform="matrix(1, 0, 0, 1, 150, 150)">
-				<path class="fill-blue" [attr.d]="'request.ticket.lg_sizes.left_part' | translate"
-					transform="translate(50 50)" />
+				<path
+					class="fill-blue"
+					[attr.d]="'request.ticket.lg_sizes.left_part' | translate"
+					transform="translate(50 50)"
+				/>
 			</g>
 			<g filter="url(#right-part)" [attr.transform]="'request.ticket.lg_sizes.right_part_transform' | translate">
-				<path class="fill-blue" [attr.d]="'request.ticket.lg_sizes.right_part' | translate"
-					transform="translate(50 50)" />
+				<path
+					class="fill-blue"
+					[attr.d]="'request.ticket.lg_sizes.right_part' | translate"
+					transform="translate(50 50)"
+				/>
 			</g>
 			<g [attr.transform]="'request.ticket.lg_sizes.splitter' | translate">
 				<line class="splitter l-splitter" y2="350" />
 			</g>
-			<g *ngIf="ticket" class="fill-white"
-				[attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
-				<g font-size="18" [attr.transform]="
+			<g *ngIf="ticket" class="fill-white" [attr.transform]="'request.ticket.lg_sizes.request.position' | translate">
+				<g
+					font-size="18"
+					[attr.transform]="
 						'request.ticket.lg_sizes.request.left_details'
 							| translate: { calc: 35 + (6 - ticket?.preferenceNames.length) * 17.5 }
-					">
+					"
+				>
 					<text y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
 					<text y="35" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
-					<text y="70" [translate]="'request.ticket.adults'"
-						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"></text>
-					<text y="105"
-						[innerHTML]="ticket?.estimatedCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0'"></text>
+					<text
+						y="70"
+						[translate]="'request.ticket.adults'"
+						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"
+					></text>
+					<text y="105" [innerHTML]="ticket?.estimatedCost | currency: 'EGP'"></text>
 					<text [attr.y]="105 + (i + 1) * 35" *ngFor="let preference of ticket?.preferenceNames; index as i">
 						{{ preference }}
 					</text>
 				</g>
-				<g font-size="24"
-					[attr.transform]="'request.ticket.lg_sizes.request.right_details.position' | translate">
+				<g font-size="24" [attr.transform]="'request.ticket.lg_sizes.request.right_details.position' | translate">
 					<text y="30" [innerHTML]="'request.ticket.request_number' | translate"></text>
 					<text y="70">
 						<tspan x="0">#</tspan>
-						<tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.ticket_id' | translate"
-							[innerHTML]="ticket?.id"></tspan>
+						<tspan
+							[attr.x]="'request.ticket.lg_sizes.request.right_details.ticket_id' | translate"
+							[innerHTML]="ticket?.id"
+						></tspan>
 					</text>
 					<g transform="translate(0 148)">
 						<g [attr.transform]="'request.ticket.lg_sizes.request.right_details.icon' | translate">
@@ -89,17 +106,20 @@
 							<circle cx="105" cy="0" r="45" stroke="#fff" stroke-width="1" fill="transparent" />
 							<circle cx="105" cy="0" r="40" class="fill-white" fill-opacity="0.5" />
 							<circle cx="105" cy="0" r="30" class="fill-white" />
-							<text class="svg-fa fill-blue" font-size="32" text-anchor="middle"
-								transform="translate(105 13)">
+							<text class="svg-fa fill-blue" font-size="32" text-anchor="middle" transform="translate(105 13)">
 								&#xf072;
 							</text>
 							<line class="splitter s-splitter" x2="50" transform="translate(160 0)" />
 						</g>
 						<text y="27" font-size="84">
-							<tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.from' | translate"
-								[innerHTML]="ticket?.travelingFrom | slice: 0:3 | uppercase"></tspan>
-							<tspan [attr.x]="'request.ticket.lg_sizes.request.right_details.to' | translate"
-								[innerHTML]="ticket?.destinationName | uppercase"></tspan>
+							<tspan
+								[attr.x]="'request.ticket.lg_sizes.request.right_details.from' | translate"
+								[innerHTML]="ticket?.travelingFrom | slice: 0:3 | uppercase"
+							></tspan>
+							<tspan
+								[attr.x]="'request.ticket.lg_sizes.request.right_details.to' | translate"
+								[innerHTML]="ticket?.destinationName | uppercase"
+							></tspan>
 						</text>
 					</g>
 					<g font-size="19" transform="translate(0 250)">
@@ -109,46 +129,81 @@
 					</g>
 				</g>
 			</g>
-			<g *ngIf="ticket && ticket?.packageUrl"
-				[attr.transform]="'request.ticket.lg_sizes.actions.position' | translate" class="ticket-links"
-				font-size="16">
+			<g
+				*ngIf="ticket && ticket?.packageUrl"
+				[attr.transform]="'request.ticket.lg_sizes.actions.position' | translate"
+				class="ticket-links"
+				font-size="16"
+			>
 				<a [attr.xlink:href]="ticket?.packageUrl" target="_blank">
-					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.view_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.view_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"
-						[innerHTML]="'request.ticket.view_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.view_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						[innerHTML]="'request.ticket.view_package' | translate"
+					></text>
 				</a>
 				<a [attr.xlink:href]="ticket?.packageDownloadUrl" target="_blank" download>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.download_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.download_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.download_package.button' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"  [innerHTML]="'request.ticket.download_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.download_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						[innerHTML]="'request.ticket.download_package' | translate"
+					></text>
 				</a>
 				<a *ngIf="!isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
-					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" 
-						[innerHTML]="'request.ticket.send_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 				<a *ngIf="isSentByMail" xlink:href="javascript:void(0)">
-					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate"
-						class="fill-gray fa">
+					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.icon' | translate" class="fill-gray fa">
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate" class="fill-gray"
-						[innerHTML]="'request.ticket.send_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.lg_sizes.actions.send_package.button' | translate"
+						class="fill-gray"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 			</g>
 		</g>
 	</svg>
-	<svg id="h-ticket" [class.bg-blue]="invalidForSVG" class="h-100 h-ticket d-block d-md-none"
-		xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 400 710">
+	<svg
+		id="h-ticket"
+		[class.bg-blue]="invalidForSVG"
+		class="h-100 h-ticket d-block d-md-none"
+		xmlns="http://www.w3.org/2000/svg"
+		xmlns:xlink="http://www.w3.org/1999/xlink"
+		viewBox="0 0 400 710"
+	>
 		<style>
 			.svg-fa {
 				font-family: FontAwesome;
@@ -202,14 +257,18 @@
 		</defs>
 		<g transform="translate(-50 -50)">
 			<g filter="url(#top-part)" transform="matrix(1, 0, 0, 1, 50, 50)">
-				<path class="fill-blue"
+				<path
+					class="fill-blue"
 					d="M0,175V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v150A25,25,0,0,0,325,200H25A25,25,0,0,0,0,175Z"
-					transform="translate(25 25)" />
+					transform="translate(25 25)"
+				/>
 			</g>
 			<g filter="url(#bottom-part)" transform="matrix(1, 0, 0, 1, 50, 250)">
-				<path class="fill-blue"
+				<path
+					class="fill-blue"
 					d="M0,725V25A25,25,0,0,0,25,0H325a25,25,0,0,0,25,25v410A25,25,0,0,0,325,460H25A25,25,0,0,0,0,435Z"
-					transform="translate(25 25)" />
+					transform="translate(25 25)"
+				/>
 			</g>
 			<g transform="translate(115 275)">
 				<line class="splitter l-splitter" x2="270" />
@@ -218,17 +277,24 @@
 				<g font-size="14">
 					<text x="0" y="0" [innerHTML]="ticket?.departureDate | date: 'd / M / y'"></text>
 					<text x="140" y="0" [innerHTML]="ticket?.returnDate | date: 'd / M / y'"></text>
-					<text x="0" y="35" [translate]="'request.ticket.adults'"
-						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"></text>
-					<text x="140" y="35"
-						[innerHTML]="ticket?.estimatedCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0'"></text>
-					<text [attr.x]="
+					<text
+						x="0"
+						y="35"
+						[translate]="'request.ticket.adults'"
+						[translateParams]="{ adultsNumber: ticket?.adultsNumber }"
+					></text>
+					<text x="140" y="35" [innerHTML]="ticket?.estimatedCost | currency: 'EGP'"></text>
+					<text
+						[attr.x]="
 							calculate(
 								'request.ticket.sm_sizes.top_details.number' | translate,
 								'request.ticket.sm_sizes.top_details.sign' | translate,
 								(i > 2 ? i - 3 : i) * 80
 							)
-						" [attr.y]="70 + (i > 2 ? 35 : 0)" *ngFor="let preference of ticket?.preferenceNames; index as i">
+						"
+						[attr.y]="70 + (i > 2 ? 35 : 0)"
+						*ngFor="let preference of ticket?.preferenceNames; index as i"
+					>
 						{{ preference }}
 					</text>
 				</g>
@@ -237,8 +303,10 @@
 						<text y="0" [innerHTML]="'request.ticket.request_number' | translate"></text>
 						<text y="30">
 							<tspan x="0">#</tspan>
-							<tspan [attr.x]="'request.ticket.sm_sizes.bottom_details.ticket_id' | translate"
-								[innerHTML]="ticket?.id"></tspan>
+							<tspan
+								[attr.x]="'request.ticket.sm_sizes.bottom_details.ticket_id' | translate"
+								[innerHTML]="ticket?.id"
+							></tspan>
 						</text>
 					</g>
 					<g [attr.transform]="'request.ticket.sm_sizes.bottom_details.icon' | translate">
@@ -247,8 +315,7 @@
 							<circle cx="0" cy="60" r="27.5" stroke="#fff" stroke-width="0.5" fill="transparent" />
 							<circle cx="0" cy="60" r="25" class="fill-white" fill-opacity="0.5" />
 							<circle cx="0" cy="60" r="20" class="fill-white" />
-							<text class="svg-fa fill-blue" font-size="24" text-anchor="middle"
-								transform="translate(2.5 67.5)">
+							<text class="svg-fa fill-blue" font-size="24" text-anchor="middle" transform="translate(2.5 67.5)">
 								&#xf072;
 							</text>
 							<line class="splitter s-splitter" y2="20" transform="translate(0 100)" />
@@ -258,8 +325,7 @@
 							<tspan y="175" x="140" [innerHTML]="ticket?.destinationName | uppercase"></tspan>
 						</text>
 					</g>
-					<g font-size="12"
-						[attr.transform]="'request.ticket.sm_sizes.bottom_details.description' | translate">
+					<g font-size="12" [attr.transform]="'request.ticket.sm_sizes.bottom_details.description' | translate">
 						<text y="0" [innerHTML]="'request.ticket.sm_text.line1' | translate"></text>
 						<text y="25" [innerHTML]="'request.ticket.sm_text.line2' | translate"></text>
 						<text y="50" [innerHTML]="'request.ticket.sm_text.line3' | translate"></text>
@@ -267,40 +333,71 @@
 					</g>
 				</g>
 			</g>
-			<g *ngIf="ticket && ticket?.packageUrl"
-				[attr.transform]="'request.ticket.sm_sizes.actions.position' | translate" class="ticket-links"
-				font-size="9">
+			<g
+				*ngIf="ticket && ticket?.packageUrl"
+				[attr.transform]="'request.ticket.sm_sizes.actions.position' | translate"
+				class="ticket-links"
+				font-size="9"
+			>
 				<a [attr.xlink:href]="ticket?.packageUrl" target="_blank">
-					<text [attr.x]="'request.ticket.sm_sizes.actions.view_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.view_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.view_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG"
-						[innerHTML]="'request.ticket.view_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.view_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						[innerHTML]="'request.ticket.view_package' | translate"
+					></text>
 				</a>
 				<a [attr.xlink:href]="ticket?.packageDownloadUrl" target="_blank" download>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.download_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.download_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1c1;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.download_package.button' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa" [innerHTML]="'request.ticket.download_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.download_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+						[innerHTML]="'request.ticket.download_package' | translate"
+					></text>
 				</a>
 				<a *ngIf="!isSentByMail" (click)="sendByMail()" xlink:href="javascript:void(0)">
-					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.icon' | translate"
-					[class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa">
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.send_package.icon' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+					>
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate" [class.fill-white]="invalidForSVG" [class.fill-bule]="!invalidForSVG" class="fa"
-						[innerHTML]="'request.ticket.send_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate"
+						[class.fill-white]="invalidForSVG"
+						[class.fill-bule]="!invalidForSVG"
+						class="fa"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 				<a *ngIf="isSentByMail" xlink:href="javascript:void(0)">
-					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.icon' | translate"
-						class="fill-gray fa">
+					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.icon' | translate" class="fill-gray fa">
 						&#xf1e0;
 					</text>
-					<text [attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate" class="fill-gray"
-						[innerHTML]="'request.ticket.send_package' | translate"></text>
+					<text
+						[attr.x]="'request.ticket.sm_sizes.actions.send_package.button' | translate"
+						class="fill-gray"
+						[innerHTML]="'request.ticket.send_package' | translate"
+					></text>
 				</a>
 			</g>
 		</g>

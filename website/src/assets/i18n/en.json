@@ -1,402 +1,414 @@
 {
-  "dir": "ltr",
-  "currency": {
-    "EGP": "EGP"
-  },
-  "core": {
-    "nav_bar": {
-      "blog": "Blog",
-      "our_team": "Our Team"
-    },
-    "user_profile": {
-      "sign_out": "Sign Out",
-      "sign_in": "Sign In"
-    },
-    "footer": {
-      "logo": "../../../assets/img/logo-250x131.svg",
-      "slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
-      "location": "26 Mohammed Mazhar, Zamalek, Cairo Governorate, Egypt",
-      "plan_trip": "Plan your trip"
-    }
-  },
-  "shared": {
-    "error_messages": {
-      "required": "Required",
-      "validDate": "Date format D / M / Y",
-      "matDatepickerParse": "Invalid date",
-      "compareDates": "Invalid dates",
-      "email": "Invalid email address",
-      "numericOnly": "Numeric only",
-      "equalTo": "Value doesn't match",
-      "copyPaste": "Please, Don't copy and paste me",
-      "notEmpty": "Invalid value",
-      "invalidPromoCode": "Invalid promo code"
-    },
-    "login_dialog": {
-      "sign_out": "Sign Out",
-      "sign_in": "Sign In",
-      "sign_in_google": "Sign in with Google",
-      "sign_in_facebook": "Sign in with Facebook",
-      "or": "or",
-      "continue_without_login": "Continue without login",
-      "improve_experience": "To improve your experience"
-    },
-    "suggest_country_modal": {
-      "submit": "Submit",
-      "back": "Back",
-      "suggest_country_adding": "Suggest country adding"
-    }
-  },
-  "home": {
-    "landing": {
-      "lets_go_traveller": "../../assets/img/lets-go-traveller.png",
-      "landing_question": "The new way to plan your next trip",
-      "destination_place_holder": "Enter Destination ( italy, spain, france... )",
-      "have_plan": "Start my plan",
-      "surprise_me": "No, Surprise me",
-      "scroll_down": "ScrollDown"
-    },
-    "testimonials": {
-      "featured_in": "Featured In"
-    },
-    "videos": {
-      "watch_videos": "Watch our videos on"
-    },
-    "why_us": {
-      "tailor_made": {
-        "label": "Tailor-made trips",
-        "description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
-      },
-      "enhanced_travel_experience": {
-        "label": "Enhanced travel experience",
-        "description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
-      },
-      "hassle_free": {
-        "label": "Hassle-free",
-        "description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
-      }
-    },
-    "dialog": {
-      "title": "Need help?",
-      "description": "Leave your phone number and one of our agents will call you.",
-      "inputs": {
-        "input0": "Phone number"
-      },
-      "buttonsLabel": {
-        "ok": "Submit",
-        "cancel": "No, thanks"
-      }
-    },
-    "suggest_country_dialog": {
-      "title": "we’re sorry, couldn’t find your desired destination",
-      "description": "Kindly add suggested country & your contact data, so we can notify you as soon as we add it to our countries list",
-      "inputs": {
-        "input0": "Full name",
-        "input1": "Phone number",
-        "input2": "E-mail address",
-        "input3": "Suggested country"
-      },
-      "buttonsLabel": {
-        "ok": "Submit",
-        "cancel": "Cancel"
-      }
-    }
-  },
-  "request": {
-    "travel_info": {
-      "traveling_to": "Traveling To",
-      "traveling_from": "Traveling From",
-      "airports": [
-        {
-          "iataCode": "CAI",
-          "name": "Cairo"
-        },
-        {
-          "iataCode": "HBE",
-          "name": "Alexandria"
-        },
-        {
-          "iataCode": "HRG",
-          "name": "Hurghada"
-        },
-        {
-          "iataCode": "SSH",
-          "name": "Sharm El-Sheikh"
-        }
-      ],
-      "departure": "Departure",
-      "return": "Return",
-      "flexible": "Flexible dates ( +/- 3 days )",
-      "compare_dates": "Return Date must be greater than departure date",
-      "dialog": {
-        "title": "Other destination",
-        "description": "Where would you like to travel?",
-        "inputs": {
-          "input0": "Specify your destination"
-        },
-        "buttonsLabel": {
-          "ok": "Done",
-          "cancel": "Cancel"
-        }
-      }
-    },
-    "budget": {
-      "budget": "Budget/Person",
-      "choice": "OR choose one of our prepared budget categories"
-    },
-    "departure_return": {
-      "departure": "Departure",
-      "return": "Return",
-      "flexible": "Flexible dates ( +/- 3 days )",
-      "compare_dates": "Return Date must be greater than departure date"
-    },
-    "destinations": {
-      "dialog": {
-        "title": "Other destination",
-        "description": "Where would you like to travel?",
-        "inputs": {
-          "input0": "Specify your destination"
-        },
-        "buttonsLabel": {
-          "ok": "Done",
-          "cancel": "Cancel"
-        }
-      }
-    },
-    "estimated_cost": {
-      "hint0": "Total price for {{numberOfTravelers}} person{{withS}}",
-      "hint1": "The costs are estimates and subject to change in the actual package",
-      "flights": "Flights",
-      "accommodation": "Accommodation",
-      "ferries": "Ferries",
-      "daily_spending": "Daily Spending",
-      "per_person": "per person",
-      "hint2": "International + Domestic flights",
-      "hint3": "Just an indicator for daily spending per person, not included in the package cost",
-      "header": {
-        "number_of_days": "{{numberOfNights}} Day{{withS}} in",
-        "dates": "From {{departureDate}} To {{returnDate}}"
-      },
-      "tab_cities": {
-        "title": "Cities",
-        "view_choose": "View and choose your cities",
-        "things_to_do": "Things to do in",
-        "view_map": "View map",
-        "next_label": "Continue",
-        "back_label": "Back"
-      },
-      "tab_flights": {
-        "title": "Flights",
-        "view_edit": "View / edit route",
-        "change_flight": "Change Flight",
-        "change_city": "Change City",
-        "reorder_route": "Reorder Route",
-        "total_cost": "Total Flights Cost",
-        "next_label": "Continue",
-        "back_label": "Back",
-        "start": "Start",
-        "end": "End",
-        "no_flights": "No flights are available for this trip",
-        "nights": "{{numberOfNights}} Day{{withS}}",
-        "stops": "{{numberOfStops}} Stop{{withS}}",
-        "departure": "Departure",
-        "duration": "Duration",
-        "arrival": "Arrival",
-        "select": "Select",
-        "selected": "Selected"
-      },
-      "tab_accommodations": {
-        "title": "Accommodations",
-        "choose_hotel": "View and choose your hotels",
-        "select": "Select",
-        "selected": "Selected",
-        "total_price": "Total price",
-        "total_cost": "Total Hotels Cost",
-        "next_label": "Continue",
-        "back_label": "Back"
-      },
-      "summary": {
-        "view_details": "View details for your trip",
-        "accommodation": "Accommodation",
-        "activities": "Activities",
-        "modify": "Modify",
-        "total_cost": "Total Itinerary Cost"
-      }
-    },
-    "form_layout": {
-      "next_label": "Continue",
-      "back_label": "Back"
-    },
-    "information": {
-      "next_label": "Submit",
-      "name": "Name",
-      "mobile": "Mobile No.",
-      "email": "Email",
-      "confirm_email": "Confirm Email",
-      "gender": "Gender",
-      "male": "Male",
-      "female": "Female",
-      "birthday": "Birthday",
-      "profession": "Profession",
-      "referral": "How did you know about us?",
-      "travel_history": "Travel History",
-      "traveled_before": "Traveled Before",
-      "never_traveled": "Never Traveled",
-      "equal_to": "Email doesn't match"
-    },
-    "nav_bar": {
-      "travel_info": "Trip Details",
-      "traveling_from": "Traveling from",
-      "traveling_to": "Traveling to",
-      "departure_return": "Departure & Return",
-      "travelers": {
-        "title": "Travelers",
-        "value": "{{adultsNumber}} adults"
-      },
-      "budget": "Budget",
-      "purpose": "Purpose",
-      "preferences": "Preferences",
-      "destinations": "Destinations",
-      "estimated_cost": "Itinerary",
-      "travel_assistance": {
-        "title": "Travel Assistance",
-        "visaAssistance": "Visa",
-        "tourGuide": "Tour guide"
-      },
-      "information": {
-        "title": "One more step",
-        "value": "Information"
-      },
-      "ticket": ""
-    },
-    "preferences": {
-      "other": "Other"
-    },
-    "purpose": {
-      "other": "Other"
-    },
-    "recommended_destinations": {
-      "rank": "Rank",
-      "highest": "Highest",
-      "lowest": "Lowest"
-    },
-    "ticket": {
-      "request_number": "Request No.",
-      "adults": "{{adultsNumber}} adults",
-      "lg_sizes": {
-        "left_part": "M0,425V25A25,25,0,0,0,25,0H225a25,25,0,0,0,25,25v400A25,25,0,0,0,225,450H25A25,25,0,0,0,0,425Z",
-        "right_part": "M175,425V25A25,25,0,0,0,200,0h900a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
-        "right_part_transform": "matrix(1, 0, 0, 1, 225, 150)",
-        "splitter": "translate(450 250)",
-        "request": {
-          "position": "translate(222 238)",
-          "left_details": "translate(30 {{calc}})",
-          "right_details": {
-            "position": "translate(400 20)",
-            "ticket_id": "30",
-            "icon": "translate(190 0)",
-            "from": "20",
-            "to": "420"
-          }
-        },
-        "actions": {
-          "position": "translate(850 690)",
-          "view_package": {
-            "icon": 0,
-            "button": 25
-          },
-          "download_package": {
-            "icon": 170,
-            "button": 195
-          },
-          "send_package": {
-            "icon": 375,
-            "button": 400
-          }
-        }
-      },
-      "sm_sizes": {
-        "position": "translate(108 128)",
-        "top_details": {
-          "number": "1",
-          "sign": "*"
-        },
-        "bottom_details": {
-          "position": "translate(0 0)",
-          "ticket_id": "15",
-          "icon": "translate(0 80)",
-          "description": "translate(0 295)"
-        },
-        "actions": {
-          "position": "translate(100 755)",
-          "view_package": {
-            "icon": 0,
-            "button": 15
-          },
-          "download_package": {
-            "icon": 95,
-            "button": 110
-          },
-          "send_package": {
-            "icon": 215,
-            "button": 230
-          }
-        }
-      },
-      "lg_text": {
-        "line1": "Hey, you're only a few steps away from your dream trip.",
-        "line2": "Check out your itinerary and one of our advisors",
-        "line3": "will be calling you shortly."
-      },
-      "sm_text": {
-        "line1": "Hey, you're only a few steps away",
-        "line2": "from your dream trip. Check out",
-        "line3": "your itinerary and one of our advisors",
-        "line4": "will be calling you shortly."
-      },
-      "view_package": "View package",
-      "download_package": "Download package",
-      "send_package": "Send to mail",
-      "dialog": {
-        "description": "Package has been sent",
-        "buttonsLabel": {
-          "cancel": "OK"
-        }
-      }
-    },
-    "travel_assistance": {
-      "visa_assistance": "I need assistance with getting the visas",
-      "tour_guide": "I need a tour guide",
-      "promo_code": "Promo code",
-      "hint": "Enter promo code",
-      "apply": "Apply",
-      "special_request": "Special Request"
-    },
-    "travelers": {
-      "adults": "Adults",
-      "kids": "Kids",
-      "infants": "Infants"
-    },
-    "traveling_from": {
-      "traveling_from": "Traveling From",
-      "airports": [
-        {
-          "iataCode": "CAI",
-          "name": "Cairo"
-        },
-        {
-          "iataCode": "HBE",
-          "name": "Alexandria"
-        },
-        {
-          "iataCode": "HRG",
-          "name": "Hurghada"
-        },
-        {
-          "iataCode": "SSH",
-          "name": "Sharm El-Sheikh"
-        }
-      ]
-    }
-  }
+	"dir": "ltr",
+	"core": {
+		"nav_bar": {
+			"blog": "Blog",
+			"our_team": "Our Team"
+		},
+		"user_profile": {
+			"sign_out": "Sign Out",
+			"sign_in": "Sign In"
+		},
+		"footer": {
+			"logo": "../../../assets/img/logo-250x131.svg",
+			"slogan": "We promise to save your time and money while tailoring a personalized trip that exceeds your expectations.",
+			"location": "26 Mohammed Mazhar, Zamalek, Cairo Governorate, Egypt",
+			"plan_trip": "Plan your trip"
+		}
+	},
+	"shared": {
+		"error_messages": {
+			"required": "Required",
+			"validDate": "Date format D / M / Y",
+			"matDatepickerParse": "Invalid date",
+			"compareDates": "Invalid dates",
+			"email": "Invalid email address",
+			"numericOnly": "Numeric only",
+			"equalTo": "Value doesn't match",
+			"copyPaste": "Please, Don't copy and paste me",
+			"notEmpty": "Invalid value",
+			"invalidPromoCode": "Invalid promo code"
+		},
+		"login_dialog": {
+			"sign_out": "Sign Out",
+			"sign_in": "Sign In",
+			"sign_in_google": "Sign in with Google",
+			"sign_in_facebook": "Sign in with Facebook",
+			"or": "or",
+			"continue_without_login": "Continue without login",
+			"improve_experience": "To improve your experience"
+		},
+		"suggest_country_modal": {
+			"submit": "Submit",
+			"back": "Back",
+			"suggest_country_adding": "Suggest country adding"
+		}
+	},
+	"home": {
+		"landing": {
+			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+			"landing_question": "The new way to plan your next trip",
+			"destination_place_holder": "Enter Destination ( italy, spain, france... )",
+			"have_plan": "Start my plan",
+			"surprise_me": "No, Surprise me",
+			"scroll_down": "ScrollDown"
+		},
+		"testimonials": {
+			"featured_in": "Featured In"
+		},
+		"videos": {
+			"watch_videos": "Watch our videos on"
+		},
+		"why_us": {
+			"tailor_made": {
+				"label": "Tailor-made trips",
+				"description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
+			},
+			"enhanced_travel_experience": {
+				"label": "Enhanced travel experience",
+				"description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
+			},
+			"hassle_free": {
+				"label": "Hassle-free",
+				"description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+			}
+		},
+		"dialog": {
+			"title": "Need help?",
+			"description": "Leave your phone number and one of our agents will call you.",
+			"inputs": {
+				"input0": "Phone number"
+			},
+			"buttonsLabel": {
+				"ok": "Submit",
+				"cancel": "No, thanks"
+			}
+		},
+		"suggest_country_dialog": {
+			"title": "we’re sorry, couldn’t find your desired destination",
+			"description": "Kindly add suggested country & your contact data, so we can notify you as soon as we add it to our countries list",
+			"inputs": {
+				"input0": "Full name",
+				"input1": "Phone number",
+				"input2": "E-mail address",
+				"input3": "Suggested country"
+			},
+			"buttonsLabel": {
+				"ok": "Submit",
+				"cancel": "Cancel"
+			}
+		}
+	},
+	"request": {
+		"travel_info": {
+			"traveling_to": "Traveling To",
+			"traveling_from": "Traveling From",
+			"airports": [
+				{
+					"iataCode": "CAI",
+					"name": "Cairo"
+				},
+				{
+					"iataCode": "HBE",
+					"name": "Alexandria"
+				},
+				{
+					"iataCode": "HRG",
+					"name": "Hurghada"
+				},
+				{
+					"iataCode": "SSH",
+					"name": "Sharm El-Sheikh"
+				}
+			],
+			"departure": "Departure",
+			"return": "Return",
+			"flexible": "Flexible dates ( +/- 3 days )",
+			"compare_dates": "Return Date must be greater than departure date",
+			"dialog": {
+				"title": "Other destination",
+				"description": "Where would you like to travel?",
+				"inputs": {
+					"input0": "Specify your destination"
+				},
+				"buttonsLabel": {
+					"ok": "Done",
+					"cancel": "Cancel"
+				}
+			}
+		},
+		"budget": {
+			"budget": "Budget/Person",
+			"choice": "OR choose one of our prepared budget categories"
+		},
+		"departure_return": {
+			"departure": "Departure",
+			"return": "Return",
+			"flexible": "Flexible dates ( +/- 3 days )",
+			"compare_dates": "Return Date must be greater than departure date"
+		},
+		"destinations": {
+			"dialog": {
+				"title": "Other destination",
+				"description": "Where would you like to travel?",
+				"inputs": {
+					"input0": "Specify your destination"
+				},
+				"buttonsLabel": {
+					"ok": "Done",
+					"cancel": "Cancel"
+				}
+			}
+		},
+		"estimated_cost": {
+			"hint0": "Total price for {{numberOfTravelers}} person{{withS}}",
+			"hint1": "The costs are estimates and subject to change in the actual package",
+			"flights": "Flights",
+			"accommodation": "Accommodation",
+			"ferries": "Ferries",
+			"daily_spending": "Daily Spending",
+			"per_person": "per person",
+			"hint2": "International + Domestic flights",
+			"hint3": "Just an indicator for daily spending per person, not included in the package cost",
+			"header": {
+				"number_of_days": "{{numberOfNights}} Day{{withS}} in",
+				"dates": "From {{departureDate}} To {{returnDate}}"
+			},
+			"loading_messages": {
+				"cities_tab_message": "Locating the best cities that match your interests",
+				"flights_tab_message": "Finding the best flight deals ...",
+				"accommodation_tab_message": "Finding the best hotels ..."
+			},
+			"tab_cities": {
+				"title": "Cities",
+				"view_choose": "View and choose your cities",
+				"things_to_do": "Things to do in",
+				"view_map": "View map",
+				"next_label": "Continue",
+				"back_label": "Back"
+			},
+			"tab_flights": {
+				"title": "Flights",
+				"view_edit": "View / edit route",
+				"change_flight": "Change Flight",
+				"change_city": "Change City",
+				"reorder_route": "Reorder Route",
+				"total_cost": "Total Flights Cost",
+				"next_label": "Continue",
+				"back_label": "Back",
+				"start": "Start",
+				"end": "End",
+				"no_flights": "No flights are available for this trip",
+				"nights": "{{numberOfNights}} Day{{withS}}",
+				"stops": "{{numberOfStops}} Stop{{withS}}",
+				"departure": "Departure",
+				"duration": "Duration",
+				"arrival": "Arrival",
+				"select": "Select",
+				"selected": "Selected"
+			},
+			"tab_accommodations": {
+				"title": "Accommodations",
+				"choose_hotel": "View and choose your hotels",
+				"select": "Select",
+				"selected": "Selected",
+				"total_price": "Total price",
+				"total_cost": "Total Hotels Cost",
+				"next_label": "Continue",
+				"back_label": "Back"
+			},
+			"summary": {
+				"view_details": "View details for your trip",
+				"accommodation": "Accommodation",
+				"activities": "Activities",
+				"modify": "Modify",
+				"total_cost": "Total Itinerary Cost",
+				"day": "Day",
+				"no_accommodation": "No accommodation chosen",
+				"star_rating": "Star Rating",
+				"duration": "Duration",
+				"no_flights": "No flights chosen",
+				"to": "to",
+				"from": "from",
+				"arrival": "Arrival",
+				"depart": "Depart",
+				"nights": "Nights"
+			}
+		},
+		"form_layout": {
+			"next_label": "Continue",
+			"back_label": "Back"
+		},
+		"information": {
+			"next_label": "Submit",
+			"name": "Name",
+			"mobile": "Mobile No.",
+			"email": "Email",
+			"confirm_email": "Confirm Email",
+			"gender": "Gender",
+			"male": "Male",
+			"female": "Female",
+			"birthday": "Birthday",
+			"profession": "Profession",
+			"referral": "How did you know about us?",
+			"travel_history": "Travel History",
+			"traveled_before": "Traveled Before",
+			"never_traveled": "Never Traveled",
+			"equal_to": "Email doesn't match"
+		},
+		"nav_bar": {
+			"travel_info": "Trip Details",
+			"traveling_from": "Traveling from",
+			"traveling_to": "Traveling to",
+			"departure_return": "Departure & Return",
+			"travelers": {
+				"title": "Travelers",
+				"value": "{{adultsNumber}} adults"
+			},
+			"budget": "Budget",
+			"purpose": "Purpose",
+			"preferences": "Preferences",
+			"destinations": "Destinations",
+			"estimated_cost": "Itinerary",
+			"travel_assistance": {
+				"title": "Travel Assistance",
+				"visaAssistance": "Visa",
+				"tourGuide": "Tour guide"
+			},
+			"information": {
+				"title": "One more step",
+				"value": "Information"
+			},
+			"ticket": ""
+		},
+		"preferences": {
+			"other": "Other"
+		},
+		"purpose": {
+			"other": "Other"
+		},
+		"recommended_destinations": {
+			"rank": "Rank",
+			"highest": "Highest",
+			"lowest": "Lowest"
+		},
+		"ticket": {
+			"request_number": "Request No.",
+			"adults": "{{adultsNumber}} adults",
+			"lg_sizes": {
+				"left_part": "M0,425V25A25,25,0,0,0,25,0H225a25,25,0,0,0,25,25v400A25,25,0,0,0,225,450H25A25,25,0,0,0,0,425Z",
+				"right_part": "M175,425V25A25,25,0,0,0,200,0h900a25,25,0,0,0,25,25v400a25,25,0,0,0-25,25H200A25,25,0,0,0,175,425Z",
+				"right_part_transform": "matrix(1, 0, 0, 1, 225, 150)",
+				"splitter": "translate(450 250)",
+				"request": {
+					"position": "translate(222 238)",
+					"left_details": "translate(30 {{calc}})",
+					"right_details": {
+						"position": "translate(400 20)",
+						"ticket_id": "30",
+						"icon": "translate(190 0)",
+						"from": "20",
+						"to": "420"
+					}
+				},
+				"actions": {
+					"position": "translate(850 690)",
+					"view_package": {
+						"icon": 0,
+						"button": 25
+					},
+					"download_package": {
+						"icon": 170,
+						"button": 195
+					},
+					"send_package": {
+						"icon": 375,
+						"button": 400
+					}
+				}
+			},
+			"sm_sizes": {
+				"position": "translate(108 128)",
+				"top_details": {
+					"number": "1",
+					"sign": "*"
+				},
+				"bottom_details": {
+					"position": "translate(0 0)",
+					"ticket_id": "15",
+					"icon": "translate(0 80)",
+					"description": "translate(0 295)"
+				},
+				"actions": {
+					"position": "translate(100 755)",
+					"view_package": {
+						"icon": 0,
+						"button": 15
+					},
+					"download_package": {
+						"icon": 95,
+						"button": 110
+					},
+					"send_package": {
+						"icon": 215,
+						"button": 230
+					}
+				}
+			},
+			"lg_text": {
+				"line1": "Hey, you're only a few steps away from your dream trip.",
+				"line2": "Check out your itinerary and one of our advisors",
+				"line3": "will be calling you shortly."
+			},
+			"sm_text": {
+				"line1": "Hey, you're only a few steps away",
+				"line2": "from your dream trip. Check out",
+				"line3": "your itinerary and one of our advisors",
+				"line4": "will be calling you shortly."
+			},
+			"view_package": "View package",
+			"download_package": "Download package",
+			"send_package": "Send to mail",
+			"dialog": {
+				"description": "Package has been sent",
+				"buttonsLabel": {
+					"cancel": "OK"
+				}
+			}
+		},
+		"travel_assistance": {
+			"visa_assistance": "I need assistance with getting the visas",
+			"tour_guide": "I need a tour guide",
+			"promo_code": "Promo code",
+			"hint": "Enter promo code",
+			"apply": "Apply",
+			"special_request": "Special Request"
+		},
+		"travelers": {
+			"adults": "Adults",
+			"kids": "Kids",
+			"infants": "Infants"
+		},
+		"traveling_from": {
+			"traveling_from": "Traveling From",
+			"airports": [
+				{
+					"iataCode": "CAI",
+					"name": "Cairo"
+				},
+				{
+					"iataCode": "HBE",
+					"name": "Alexandria"
+				},
+				{
+					"iataCode": "HRG",
+					"name": "Hurghada"
+				},
+				{
+					"iataCode": "SSH",
+					"name": "Sharm El-Sheikh"
+				}
+			]
+		}
+	}
 }

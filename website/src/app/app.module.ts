@@ -1,18 +1,20 @@
-import { MatDialogModule } from '@angular/material/dialog';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material';
 import {
 	MatMomentDateModule,
 	MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 	MomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from '@angular/material'
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import localeAr from '../assets/i18n/ar-EG';
+import localeEn from '../assets/i18n/en-EG';
 import { AppRoutingModule } from './app-routing.module';
 import {
 	AppTranslateLoader,
@@ -24,8 +26,11 @@ import {
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { JWTokenInterceptor } from './http.interceptor';
-import { CUSTOM_FORMATS } from './shared/utils';
+import { CUSTOM_DATE_FORMATS, CUSTOM_LOCALE_FORMATS } from './shared/utils';
 import { SocialAuthServiceConfig } from './social-auth-service.config';
+
+registerLocaleData(localeEn, 'en');
+registerLocaleData(localeAr, 'ar');
 
 @NgModule({
 	declarations: [AppComponent],
@@ -50,10 +55,11 @@ import { SocialAuthServiceConfig } from './social-auth-service.config';
 	],
 	providers: [
 		CurrencyPipe,
+		{ provide: LOCALE_ID, useClass: CUSTOM_LOCALE_FORMATS, deps: [TranslateService] },
 		{ provide: HTTP_INTERCEPTORS, useClass: JWTokenInterceptor, multi: true },
 		{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
 		{ provide: DateAdapter, useClass: MomentDateAdapter },
-		{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_FORMATS },
+		{ provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
 		{ provide: AuthServiceConfig, useFactory: SocialAuthServiceConfig },
 	],
 	bootstrap: [AppComponent],

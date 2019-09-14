@@ -5,10 +5,15 @@
 		</h5>
 
 		<div class="routes position-relative">
-			<div
-				*ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
-				<c-estimated-cost-flight-row [flight]="flight" [index]="index" [isEven]="isEven" [isFirst]="isFirst"
-					[isLast]="isLast" (offerChanged)="offerChanged($event)"></c-estimated-cost-flight-row>
+			<div *ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
+				<c-estimated-cost-flight-row
+					[flight]="flight"
+					[index]="index"
+					[isEven]="isEven"
+					[isFirst]="isFirst"
+					[isLast]="isLast"
+					(offerChanged)="offerChanged($event)"
+				></c-estimated-cost-flight-row>
 			</div>
 		</div>
 	</div>
@@ -21,17 +26,25 @@
 		</div>
 		<div class="row my-2 my-sm-3 my-md-4 my-lg-5">
 			<div class="col-12">
-				<div class="float-right bg-blue text-white text-center px-5 py-2">
+				<div
+					class="bg-blue text-white text-center px-5 py-2"
+					[ngClass]="('dir' | translate) === 'ltr' ? 'float-right' : 'float-left'"
+				>
 					<span>{{ 'request.estimated_cost.tab_flights.total_cost' | translate }}</span>
 					<br />
-					<span>{{ totalCost | currency: 'EGP':('currency.EGP' | translate) + ' ':'0.0-0' }}</span>
+					<span>{{ totalCost | currency: 'EGP' }}</span>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
-					[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_flights.back_label' | translate }}</a>
+				<a
+					href="javascript:void(0)"
+					(click)="back()"
+					class="back-btn position-relative"
+					[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'"
+					>{{ 'request.estimated_cost.tab_flights.back_label' | translate }}</a
+				>
 
 				<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
 					{{ 'request.estimated_cost.tab_flights.next_label' | translate }}

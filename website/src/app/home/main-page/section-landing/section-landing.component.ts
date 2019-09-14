@@ -23,14 +23,12 @@ export class SectionLandingComponent {
 	constructor(
 		private router: Router,
 		private trackingService: TrackingService,
-        lutService: LookupsService,
-        public translate: TranslateService, 
+		lutService: LookupsService,
+		public translate: TranslateService
 	) {
-        this.countries = lutService.getValidCountries();
-        
-        this.translate.onLangChange.subscribe(() => {
-			this.countries = lutService.getValidCountries();
-		});
+		this.countries = lutService.getValidCountries();
+
+		this.translate.onLangChange.subscribe(() => (this.countries = lutService.getValidCountries()));
 	}
 
 	havePlan() {

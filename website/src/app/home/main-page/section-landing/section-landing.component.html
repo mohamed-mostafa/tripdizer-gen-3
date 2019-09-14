@@ -2,7 +2,9 @@
 	<img [src]="'home.landing.lets_go_traveller' | translate" class="col-8 offset-2" alt="" />
 
 	<div class="col-12 text-center">
-		<span class="text-white landing-question">{{ 'home.landing.landing_question' | translate }}</span>
+		<h1 class="text-white landing-question" [class.title-font]="('dir' | translate) === 'rtl'">
+			{{ 'home.landing.landing_question' | translate }}
+		</h1>
 		<div class="m-auto mt-1 countries-select-box">
 			<c-shared-places-select-box
 				classes="w-100 p-2 bg-white border-blue"

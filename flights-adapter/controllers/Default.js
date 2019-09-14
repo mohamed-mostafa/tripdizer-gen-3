@@ -3,7 +3,8 @@
 var utils = require('../utils/writer.js');
 var Default = require('../service/AmadeusFlightLowFareSearchService.js');
 
-module.exports.searchFlights = function searchFlights (req, res, next) {
+module.exports.searchFlights = function searchFlights(req, res, next) {
+  var language = req.swagger.params['language'].value;
   var origin = req.swagger.params['origin'].value;
   var destination = req.swagger.params['destination'].value;
   var departure = req.swagger.params['departure'].value;
@@ -11,7 +12,7 @@ module.exports.searchFlights = function searchFlights (req, res, next) {
   var _return = req.swagger.params['return'].value;
   var numberOfChildren = req.swagger.params['numberOfChildren'].value;
   var numberOfInfants = req.swagger.params['numberOfInfants'].value;
-  Default.searchFlights(origin,destination,departure,numberOfAdults,_return,numberOfChildren,numberOfInfants)
+  Default.searchFlights(origin, destination, departure, numberOfAdults, _return, numberOfChildren, numberOfInfants, language)
     .then(function (response) {
       utils.writeJson(res, response);
     })
