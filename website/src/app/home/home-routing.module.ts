@@ -1,3 +1,4 @@
+import { SectionHowToComponent } from './main-page/section-how-to/section-how-to.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
@@ -22,10 +23,11 @@ export const COMPONENTS = [
 	SectionWhyUsComponent,
 	SectionTestimonialsComponent,
 	OurTeamComponent,
+	SectionHowToComponent
 ];
 
 @NgModule({
 	exports: [RouterModule],
 	imports: [RouterModule.forChild(routes)],
 })
-export class HomeRoutingModule {}
+export class HomeRoutingModule { }
