@@ -46,11 +46,11 @@
 	},
 	"home": {
 		"landing": {
-			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+			"lets_go_traveller": "../../assets/img/icon-white.png",
 			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
 			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
 			"have_plan": "ابدأ التخطيط",
-			"surprise_me": "لا ... ساعدنى"
+			"surprise_me": "ساعدنى"
         },
         "why_us": {
             "why_us_title": "لماذا نحن الأفضل",
