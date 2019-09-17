@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
 import { OwlCarousel } from 'ngx-owl-carousel';
 
 /* Services */
