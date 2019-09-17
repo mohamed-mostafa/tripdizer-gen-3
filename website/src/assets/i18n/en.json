@@ -66,6 +66,9 @@
             "image_1": "../../assets/img/how_to_01.png",
             "image_2": "../../assets/img/how_to_02.png"
         },
+        "testimonials": {
+            "testimonials_title": "What our clients say"
+        },
 		"dialog": {
 			"title": "Need help?",
 			"description": "Leave your phone number and one of our agents will call you.",
