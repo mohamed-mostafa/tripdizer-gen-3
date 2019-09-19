@@ -417,6 +417,7 @@ var g2gControlCenterApplication = angular
 						{ id: 2, enName: 'Facebook' },
 						{ id: 3, enName: 'Instagram' },
 						{ id: 4, enName: 'Word of mouth' },
+						{ id: 5, enName: 'Whatsapp' },
 					]);
 				});
 				// return $http.get(prefix + 'statuses', {}).then(function(response) {
