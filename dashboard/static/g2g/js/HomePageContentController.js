@@ -16,7 +16,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 	'ReferralTypesService',
 	'StatusesService',
 	'ChannelsService',
-	function(
+	function (
 		$rootScope,
 		$scope,
 		$http,
@@ -89,7 +89,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.currentRequest = 1;
 
 		// functions
-		$scope.refreshOrdersCount = function(statusId) {
+		$scope.refreshOrdersCount = function (statusId) {
 			let query = statusId;
 			const statusIndex = $scope.statuses.findIndex(state => state.id === statusId);
 			const statusTitle = statusIndex !== -1 ? $scope.statuses[statusIndex].title : '';
@@ -104,12 +104,12 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$http
 				.get(
 					$rootScope.requestsServerUrl +
-						'/statuses/count?statuses=' +
-						query +
-						'&filter=' +
-						JSON.stringify($scope.searchCriteria)
+					'/statuses/count?statuses=' +
+					query +
+					'&filter=' +
+					JSON.stringify($scope.searchCriteria)
 				)
-				.success(function(response) {
+				.success(function (response) {
 					if (!response.count) response.count = 0;
 					if (!response.revenue) response.revenue = 0;
 					if (!response.profit) response.profit = 0;
@@ -121,12 +121,12 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					$scope.statuses[statusIndex].refresh = false;
 					$scope.calculateTotals();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.statuses[statusIndex].count = 'N/A';
 					$scope.statuses[statusIndex].refresh = false;
 				});
 		};
-		$scope.refreshOrders = function(statusId) {
+		$scope.refreshOrders = function (statusId) {
 			if ($scope.currentRequest != statusId) {
 				$scope.currentPage = 1;
 			}
@@ -151,16 +151,16 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$http
 				.get(
 					$rootScope.requestsServerUrl +
-						'/statuses/summaries?statuses=' +
-						$scope.currentRequest +
-						'&page=' +
-						$scope.currentPage +
-						'&size=' +
-						pageSize
+					'/statuses/summaries?statuses=' +
+					$scope.currentRequest +
+					'&page=' +
+					$scope.currentPage +
+					'&size=' +
+					pageSize
 				)
-				.success(function(response) {
+				.success(function (response) {
 					$scope.totalItems = response.totalRows;
-					response = response.requests.map(function(request) {
+					response = response.requests.map(function (request) {
 						if (request.date) request.date = new Date(request.date);
 						if (request.traveler) request.traveler.dateOfBirth = new Date(request.traveler.dateOfBirth);
 						if (request.departureDate) request.departureDate = new Date(request.departureDate);
@@ -172,27 +172,27 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					$scope.searchOrders();
 					$scope.refreshingOrders = false;
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.currentOrders = [];
 					$scope.refreshingOrders = false;
 				});
 		};
-		$scope.changeOrderStatus = function(order) {
+		$scope.changeOrderStatus = function (order) {
 			$scope.markingOrder = true;
 			$http
 				.post($rootScope.requestsServerUrl + '/status', {
 					requestId: order.id,
 					status: order.status,
 				})
-				.success(function() {
+				.success(function () {
 					$scope.markingOrder = false;
 					$scope.refreshContent();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.markingOrder = false;
 				});
 		};
-		$scope.showMailModal = function(type, request) {
+		$scope.showMailModal = function (type, request) {
 			$scope.email = {
 				recipients: [],
 				recipientsMissing: false,
@@ -205,7 +205,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			else $scope.email.recipients.push(request);
 			$('#emailModal').modal('show');
 		};
-		$scope.sendMail = function(request) {
+		$scope.sendMail = function (request) {
 			$scope.email.recipientsMissing = $scope.email.subjectMissing = $scope.email.bodyMissing = false;
 			if ($scope.email.recipients.length <= 0) $scope.email.recipientsMissing = true;
 			if (!$scope.email.subject) $scope.email.subjectMissing = true;
@@ -215,27 +215,27 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					.post($rootScope.requestsServerUrl + '/statuses/send-mails', {
 						email: $scope.email,
 					})
-					.success(function(response) {
+					.success(function (response) {
 						$('#emailModal').modal('hide');
 					})
-					.error(function(err) {
+					.error(function (err) {
 						$scope.serverError = true;
 						$scope.serverErrorMessage = err;
 						$('#emailModal').modal('hide');
 					});
 			}
 		};
-		$scope.toggleCheckBox = function(item, list) {
+		$scope.toggleCheckBox = function (item, list) {
 			if (!list) list = [];
 			var idx = list.indexOf(item);
 			if (idx > -1) list.splice(idx, 1);
 			else list.push(item);
 		};
-		$scope.existsCheckBox = function(item, list) {
+		$scope.existsCheckBox = function (item, list) {
 			if (!list) list = [];
 			return list.indexOf(item) > -1;
 		};
-		$scope.calculateTotals = function() {
+		$scope.calculateTotals = function () {
 			var total = {
 				count: 0,
 				revenue: 0,
@@ -253,36 +253,36 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			$scope.total.profit = total.profit;
 			$scope.total.numberOfTravelers = total.numberOfTravelers;
 		};
-		$scope.refreshRegisteredUsersCount = function() {
+		$scope.refreshRegisteredUsersCount = function () {
 			$scope.refreshingRegisteredUsersCount = true;
 			$http
 				.get($rootScope.requestsServerUrl + '/user/users/count')
-				.success(function(response) {
+				.success(function (response) {
 					$scope.registeredUsersCount = response.registeredUsersIds;
 					$scope.refreshingRegisteredUsersCount = false;
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.registeredUsersCount = 'N/A';
 					$scope.refreshingRegisteredUsersCount = false;
 				});
 		};
-		$scope.collapseAdvancedSearchIfExpanded = function() {
+		$scope.collapseAdvancedSearchIfExpanded = function () {
 			var advancedSearchBoxExpanded = $('#collapseExpandIcon').hasClass('fa-minus');
 			if (advancedSearchBoxExpanded) {
 				$('#collapseExpandBtn').trigger('click');
 			}
 		};
-		$scope.getAllUsersToAssign = function() {
+		$scope.getAllUsersToAssign = function () {
 			$http
 				.get($rootScope.masterDataServerUrl + '/users/to-assign')
-				.success(function(response) {
+				.success(function (response) {
 					$scope.users = response;
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.users = [];
 				});
 		};
-		$scope.searchOrders = function() {
+		$scope.searchOrders = function () {
 			$scope.currentOrders = $scope.originalOrders;
 
 			if ($scope.searchCriteria.name) {
@@ -444,63 +444,63 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 
 			$scope.refreshContent();
 		};
-		$scope.markOrderDelivered = function(order) {
+		$scope.markOrderDelivered = function (order) {
 			$scope.markingOrder = true;
 			$http
 				.post($rootScope.requestsServerUrl + '/status/delivered', {
 					requestId: order.id,
 				})
-				.success(function() {
+				.success(function () {
 					order.status = 'Completed';
 					$scope.markingOrder = false;
 					$scope.refreshContent();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.markingOrder = false;
 				});
 		};
 
-		$scope.markOrderPlaced = function(order) {
+		$scope.markOrderPlaced = function (order) {
 			$scope.markingOrder = true;
 			$http
 				.post($rootScope.requestsServerUrl + '/status/placed', {
 					requestId: order.id,
 				})
-				.success(function() {
+				.success(function () {
 					order.status = 'New';
 					$scope.markingOrder = false;
 					$scope.refreshContent();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.markingOrder = false;
 				});
 		};
-		$scope.markOrderBeingPrepared = function(order) {
+		$scope.markOrderBeingPrepared = function (order) {
 			$scope.markingOrder = true;
 			$http
 				.post($rootScope.requestsServerUrl + '/status/beingprepared', {
 					requestId: order.id,
 				})
-				.success(function() {
+				.success(function () {
 					order.status = 'In Progress';
 					$scope.markingOrder = false;
 					$scope.refreshContent();
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.markingOrder = false;
 				});
 		};
 
-		$scope.refreshContent = function() {
+		$scope.refreshContent = function () {
 			for (var i = 0; i < $scope.statuses.length; ++i) $scope.refreshOrdersCount($scope.statuses[i].id);
 		};
-		$scope.openFullDetailsDialog = function(requestId) {
+		$scope.openFullDetailsDialog = function (requestId) {
 			$scope.loading = true;
 			$scope.serverError = false;
 			$('#orderDetailsModal').modal('show');
 			$http
 				.get($rootScope.requestsServerUrl + '/' + requestId)
-				.success(function(request) {
+				.success(function (request) {
 					$scope.loading = false;
 					if (request.date) request.date = new Date(request.date);
 					if (request.traveler) request.traveler.dateOfBirth = new Date(request.traveler.dateOfBirth);
@@ -510,32 +510,32 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 						request.mailsHistory[i].date = new Date(request.mailsHistory[i].date);
 					$scope.currentOrder = request;
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.serverError = true;
 					$scope.serverErrorMessage = err;
 					$scope.loading = false;
 				});
 		};
 
-		$scope.updateOrder = function() {
+		$scope.updateOrder = function () {
 			$scope.loading = true;
 			$scope.serverError = false;
 			$http
-				.put($rootScope.requestsServerUrl, {
+				.put($rootScope.requestsServerUrl + "/", {
 					request: $scope.currentOrder,
 				})
-				.success(function() {
+				.success(function () {
 					$scope.loading = false;
 					$('#orderDetailsModal').modal('hide');
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.serverError = true;
 					$scope.serverErrorMessage = err;
 					$scope.loading = false;
 				});
 		};
 
-		$scope.assignRequestToUser = function() {
+		$scope.assignRequestToUser = function () {
 			var selectedUserId = $scope.selectedUser.id;
 			var selectedUserFullName = $scope.selectedUser.fullName;
 			var currentRequestId = $scope.currentOrder.id;
@@ -547,19 +547,19 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					requestId: currentRequestId,
 					userId: selectedUserId,
 				})
-				.success(function() {
+				.success(function () {
 					$scope.loading = false;
 					$scope.currentOrder.userFullName = selectedUserFullName;
 					$('#assignUserModal').modal('hide');
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.serverError = true;
 					$scope.serverErrorMessage = err;
 					$scope.loading = false;
 				});
 		};
 
-		$scope.toggleOptions = function(id, option) {
+		$scope.toggleOptions = function (id, option) {
 			$scope.loading = true;
 			$scope.serverError = false;
 			$http
@@ -567,7 +567,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					requestId: id,
 					option: option,
 				})
-				.success(function(response) {
+				.success(function (response) {
 					$scope.loading = false;
 					$scope.serverError = false;
 					for (let i = 0; i < $scope.currentOrders.length; i++) {
@@ -576,14 +576,14 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 						}
 					}
 				})
-				.error(function(err) {
+				.error(function (err) {
 					$scope.serverError = true;
 					$scope.serverErrorMessage = err;
 					$scope.loading = false;
 				});
 		};
 
-		$scope.openAssignRequestToUser = function(request) {
+		$scope.openAssignRequestToUser = function (request) {
 			$scope.currentOrder = request;
 			$('#assignUserModal').modal('show');
 		};
@@ -591,7 +591,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		$scope.generatePackage = () => {
 			$scope.loading = true;
 			$http.get($rootScope.requestsServerUrl + '/package/' + $scope.currentOrder.id).then(
-				function(response) {
+				function (response) {
 					if (response) {
 						$scope.serverError = false;
 						$scope.currentOrder.docUrl = response.data.docUrl;
@@ -603,7 +603,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 					}
 					$scope.loading = false;
 				},
-				function(err) {
+				function (err) {
 					$scope.serverError = true;
 					$scope.serverErrorMessage = err;
 					$scope.loading = false;
@@ -611,7 +611,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			);
 		};
 
-		$scope.pageChanged = function() {
+		$scope.pageChanged = function () {
 			$scope.refreshOrders($scope.currentRequest);
 		};
 
@@ -637,39 +637,39 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		window.setInterval($scope.refreshContent, 30000); // set the timer
 		window.setInterval($scope.refreshLocations, 5000); // set the timer
 
-		$scope.$watch('currentOrder.actualDestination', function(val) {
+		$scope.$watch('currentOrder.actualDestination', function (val) {
 			if (!val) delete $scope.currentOrder.actualDestination;
 		});
 
-		CountriesService.getAll().then(function(countries) {
+		CountriesService.getAll().then(function (countries) {
 			$scope.countries = countries;
 		});
 
-		PurposesService.getAll().then(function(purposes) {
+		PurposesService.getAll().then(function (purposes) {
 			$scope.purposes = purposes;
 		});
 
-		BudgetCategoriesService.getAll().then(function(budgetCategories) {
+		BudgetCategoriesService.getAll().then(function (budgetCategories) {
 			$scope.budgetCategories = budgetCategories;
 		});
 
-		InterestsService.getAll().then(function(interests) {
+		InterestsService.getAll().then(function (interests) {
 			$scope.interests = interests;
 		});
 
-		ItinerariesService.getAll().then(function(itineraries) {
+		ItinerariesService.getAll().then(function (itineraries) {
 			$scope.itineraries = itineraries;
 		});
 
-		ProfessionsService.getAll().then(function(professions) {
+		ProfessionsService.getAll().then(function (professions) {
 			$scope.professions = professions;
 		});
 
-		ReferralTypesService.getAll().then(function(referralTypes) {
+		ReferralTypesService.getAll().then(function (referralTypes) {
 			$scope.referralTypes = referralTypes;
 		});
 
-		StatusesService.getAll().then(function(statuses) {
+		StatusesService.getAll().then(function (statuses) {
 			for (let i = 0; i < statuses.length; ++i) {
 				statuses[i].count = 0;
 				statuses[i].revenue = 0;
@@ -682,7 +682,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 			}
 		});
 
-		ChannelsService.getAll().then(function(channels) {
+		ChannelsService.getAll().then(function (channels) {
 			$scope.channels = channels;
 		});
 
@@ -690,7 +690,7 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 	},
 ]);
 
-g2gControlCenterApplication.directive('exportExcel', function() {
+g2gControlCenterApplication.directive('exportExcel', function () {
 	return {
 		restrict: 'AE',
 		scope: {
@@ -702,13 +702,13 @@ g2gControlCenterApplication.directive('exportExcel', function() {
 			purposes: '=',
 			interests: '=',
 		},
-		link: function(scope, element) {
+		link: function (scope, element) {
 			scope.filename = !!scope.filename ? scope.filename : 'export-excel';
 
 			var fields = [];
 			var header = [];
 
-			angular.forEach(scope.reportFields, function(field, key) {
+			angular.forEach(scope.reportFields, function (field, key) {
 				if (!field || !key) {
 					throw new Error('error json report fields');
 				}
@@ -717,7 +717,7 @@ g2gControlCenterApplication.directive('exportExcel', function() {
 				header.push(field);
 			});
 
-			element.bind('click', function() {
+			element.bind('click', function () {
 				var bodyData = _bodyData();
 				var strData = _convertToExcel(bodyData);
 
@@ -754,23 +754,23 @@ g2gControlCenterApplication.directive('exportExcel', function() {
 					request.isTourGuideNeeded = request.tourGuideNeeded === 1 ? 'True' : 'False';
 					request.interests = scope.interests
 						? request.interests.map(interest => {
-								interest.name = scope.interests.find(i => i.id === interest.id).en_name;
-								return interest;
-						  })
+							interest.name = scope.interests.find(i => i.id === interest.id).en_name;
+							return interest;
+						})
 						: [];
 					return request;
 				});
 				var body = '';
-				angular.forEach(data, function(dataItem) {
+				angular.forEach(data, function (dataItem) {
 					var rowItems = [];
 
-					angular.forEach(fields, function(field) {
+					angular.forEach(fields, function (field) {
 						if (field.indexOf('.')) {
 							field = field.split('.');
 							var curItem = dataItem;
 
 							// deep access to obect property
-							angular.forEach(field, function(prop) {
+							angular.forEach(field, function (prop) {
 								if (curItem !== null && curItem !== undefined) {
 									curItem = curItem[prop];
 								}
@@ -807,7 +807,7 @@ g2gControlCenterApplication.directive('exportExcel', function() {
 
 			function _objectToString(object) {
 				var output = '';
-				angular.forEach(object, function(value, key) {
+				angular.forEach(object, function (value, key) {
 					output += key + ':' + value + ' ';
 				});
 
