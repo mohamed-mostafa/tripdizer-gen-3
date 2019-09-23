@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 	providedIn: 'root',
 })
 export class SectionTestimonialService {
-	private endPoint = 'master-data/public/testimonial' /*+ (lang ? '?lang=' + lang : '')*/;
+	// private endPoint = 'master-data/public/testimonial' + (lang ? '?lang=' + lang : '');
 	private testimonial: Array<any> = [
 		{
 			name: 'Rania Saleh',
@@ -25,22 +25,24 @@ export class SectionTestimonialService {
             I travelled to Malaysia and Bali and I couldn’t enjoy it more.`,
 			picture: '../../../assets/img/tamer_mohamed.jpg',
 		},
-	];
-	private sponsors: Array<any> = [
-		{ picture: 'https://i.imgur.com/8QVRpzj.png' },
-		{ picture: 'https://i.imgur.com/wd0fhgr.jpg' },
-		{ picture: 'https://i.imgur.com/o6ele3c.jpg' },
+		{
+			name: 'Tamer Mohamed',
+			text: `Best website to use if you are looking for a plan that matches your travel style,
+            I travelled to Malaysia and Bali and I couldn’t enjoy it more.`,
+			picture: '../../../assets/img/tamer_mohamed.jpg',
+		},
+		{
+			name: 'Tamer Mohamed',
+			text: `Best website to use if you are looking for a plan that matches your travel style,
+            I travelled to Malaysia and Bali and I couldn’t enjoy it more.`,
+			picture: '../../../assets/img/tamer_mohamed.jpg',
+		},
 	];
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
 	getTestimonials(): Observable<Array<any>> {
 		return of(this.testimonial);
-		// return this.http.get<Array<any>>(`${this.endPoint}s`);
-	}
-
-	getSponsors(): Observable<Array<any>> {
-		return of(this.sponsors);
 		// return this.http.get<Array<any>>(`${this.endPoint}s`);
 	}
 }

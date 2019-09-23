@@ -1,0 +1,32 @@
+:host {
+	width: 100%;
+
+	& > * {
+        background-color: #fff;
+        background-image: url(../../../../assets/img/how-to-bg.png);
+        background-repeat: no-repeat;
+		background-size: 100% 77%;
+		background-position: top;
+    }
+
+    @media (max-width: 767px) {
+        & > * {
+            background-size: cover;
+        } 
+    }
+
+    .section-title {
+        color: #2680eb;
+    }
+
+    .underline {
+        background-color: #ffcb2a;
+        width: 3.125rem;
+        height: 0.3125rem;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+}

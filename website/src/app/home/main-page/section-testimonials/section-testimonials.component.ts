@@ -1,7 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { OwlCarousel } from 'ngx-owl-carousel';
 
 /* Services */
 import { SectionTestimonialService } from './section-testimonials.service';
@@ -13,10 +13,14 @@ import { SectionTestimonialService } from './section-testimonials.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class SectionTestimonialsComponent {
+
+	@ViewChild('owlElement') owlElement: OwlCarousel;
+
 	testimonials: Array<any> = [];
 	sponsors: Array<any> = [];
 	options: any;
-	refreshCarousel = new Subject();
+	carousel: OwlCarousel;
+	selectedSlide = 0;
 
 	constructor(service: SectionTestimonialService, public sanitizer: DomSanitizer, translate: TranslateService) {
 		service.getTestimonials().subscribe(testimonials => {
@@ -27,34 +31,35 @@ export class SectionTestimonialsComponent {
 		translate.onLangChange.subscribe(() => {
 			service.getTestimonials().subscribe(testimonials => {
 				this.testimonials = testimonials;
-				if (this.options) {
-					this.refreshCarousel.next();
-				}
 			});
 		});
 
-		service.getSponsors().subscribe(sponsors => {
-			this.sponsors = sponsors;
-		});
 	}
 
 	setOptions() {
 		this.options = {
 			dots: false,
+			nav: true,
 			responsive: {
 				0: {
 					items: 1,
 					margin: 10,
 				},
 				768: {
-					items: 2,
-					margin: 30,
+					items: 1,
+					margin: 10,
 				},
 				992: {
-					items: 2,
-					margin: 40,
+					items: 1,
+					margin: 10,
 				},
 			},
 		};
+	}
+
+	goToSlide(i) {
+		this.owlElement.to([i]);
+		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex;
+		console.log(this.owlElement.$owlChild.currentSlideIndex, i);
 	}
 }

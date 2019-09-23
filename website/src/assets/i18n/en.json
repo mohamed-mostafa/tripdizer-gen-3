@@ -46,33 +46,29 @@
 	},
 	"home": {
 		"landing": {
-			"lets_go_traveller": "../../assets/img/lets-go-traveller.png",
+			"lets_go_traveller": "../../assets/img/icon-white.png",
 			"landing_question": "The new way to plan your next trip",
 			"destination_place_holder": "Enter Destination ( italy, spain, france... )",
 			"have_plan": "Start my plan",
-			"surprise_me": "No, Surprise me",
-			"scroll_down": "ScrollDown"
+			"surprise_me": "Surprise me"
 		},
-		"testimonials": {
-			"featured_in": "Featured In"
-		},
-		"videos": {
-			"watch_videos": "Watch our videos on"
-		},
-		"why_us": {
-			"tailor_made": {
-				"label": "Tailor-made trips",
-				"description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs."
-			},
-			"enhanced_travel_experience": {
-				"label": "Enhanced travel experience",
-				"description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip."
-			},
-			"hassle_free": {
-				"label": "Hassle-free",
-				"description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
-			}
-		},
+        "why_us": {
+            "why_us_title": "Why we're the best",
+            "item1_title": "Tailor-made trips",
+            "item1_description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs.",
+            "item2_title": "Enhanced travel experience",
+            "item2_description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip.",
+            "item3_title": "Hassle-free",
+            "item3_description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+        },
+        "how_to": {
+            "how_to_title": "How to make your trip",
+            "image_1": "../../assets/img/how_to_01.png",
+            "image_2": "../../assets/img/how_to_02.png"
+        },
+        "testimonials": {
+            "testimonials_title": "What our clients say"
+        },
 		"dialog": {
 			"title": "Need help?",
 			"description": "Leave your phone number and one of our agents will call you.",
