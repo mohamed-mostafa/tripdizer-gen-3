@@ -1,39 +1,27 @@
-<div class="row px-sm-5 py-sm-4 px-4 py-3 footer">
-	<div class="col-12 col-xl-4 col-lg-6 row d-none d-lg-block">
-		<a [routerLink]="['/']" class="col-12 brand">
-			<img [src]="'core.footer.logo' | translate" width="178" height="51.68" class="d-inline-block align-top" alt="" />
-		</a>
-		<p class="col-12 p-3 slogan">{{ 'core.footer.slogan' | translate }}</p>
-	</div>
-
-	<ul class="d-none d-xl-block col-xl-4 text-center menu-item">
-		<li class="py-2" *ngFor="let item of menuItems">{{ item }}</li>
-	</ul>
-
-	<ul class="contact-info col-12 col-xl-4 col-lg-6">
-		<li class="py-2">
-			<img src="../../../assets/img/icon-phone.svg" class="pr-3 img-fluid footer-icons" alt="" />
-			<span dir="ltr">+2 0101 907 5876</span>
-		</li>
-		<li class="py-2">
-			<img src="../../../assets/img/icon-email.svg" class="pr-3 img-fluid footer-icons" alt="" />
-			<span dir="ltr">bookings@tripdizer.com</span>
-		</li>
-		<li class="py-2">
-			<img src="../../../assets/img/icon-location.svg" class="pr-3 img-fluid footer-icons" alt="" />
-			<span>{{ 'core.footer.location' | translate }}</span>
-		</li>
-		<li class="py-5 py-xl-2 footer-li-btn">
-			<a [routerLink]="['/', 'request']" class="btn btn-dark custom-bs btn-rounded px-5">{{
+<div class="row px-sm-5 py-sm-4 px-4 py-3 footer text-center text-md-left"
+  [class.title-font]="('dir' | translate) !== 'rtl'" [class.text-md-left]="('dir' | translate) !== 'rtl'"
+  [class.text-md-right]="('dir' | translate) === 'rtl'">
+  <div class="col-12 col-md-6 col-lg-3 row">
+    <a [routerLink]="['/']" class="col-12 mb-3 mb-md-1 mt-3 px-0 brand d-inline-block">
+      <img [src]="'core.footer.logo' | translate" width="178" height="51.68" alt="" />
+    </a>
+    <p class="col-12 slogan">{{ 'core.footer.slogan' | translate }}</p>
+  </div>
+  <div class="d-none d-lg-inline-block col-lg-6"></div>
+  <ul class="contact-info pt-4 col-12 col-md-6 col-lg-3">
+    <li class="py-1">
+      <span dir="ltr">+2 0101 907 5876</span>
+    </li>
+    <li class="py-1">
+      <span dir="ltr">bookings@tripdizer.com</span>
+    </li>
+    <li class="py-1">
+      <span>{{ 'core.footer.location' | translate }}</span>
+    </li>
+    <li class="py-1 py-xl-2 mt-2 footer-li-btn">
+      <a [routerLink]="['/', 'request']" class="btn custom-bs btn-rounded px-5 font-weight-bold font-italic">{{
 				'core.footer.plan_trip' | translate
 			}}</a>
-		</li>
-	</ul>
-
-	<div class="col-12 col-xl-4 row d-lg-none d-block">
-		<a [routerLink]="['/']" class="col-12 brand">
-			<img [src]="'core.footer.logo' | translate" width="178" height="51.68" class="d-inline-block align-top" alt="" />
-		</a>
-		<p class="col-12 p-3 slogan">{{ 'core.footer.slogan' | translate }}</p>
-	</div>
+    </li>
+  </ul>
 </div>

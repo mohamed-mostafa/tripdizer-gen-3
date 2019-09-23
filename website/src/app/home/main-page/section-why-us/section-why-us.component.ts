@@ -5,4 +5,5 @@ import { Component } from '@angular/core';
 	templateUrl: './section-why-us.component.html',
 	styleUrls: ['./section-why-us.component.scss'],
 })
+
 export class SectionWhyUsComponent {}
