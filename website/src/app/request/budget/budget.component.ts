@@ -17,6 +17,7 @@ export class BudgetComponent {
 	};
 	budgetCategories: Array<BudgetCategory>;
 	isOwnBudget;
+	selectedBudgetCategory: any;
 
 	constructor(private requestService: RequestService, private trackingService: TrackingService) {
 		this.formGroup = new FormGroup({});
@@ -41,24 +42,44 @@ export class BudgetComponent {
 		});
 		requestService
 			.getBudgetCategories()
-			.subscribe((budgetCategories: Array<BudgetCategory>) => (this.budgetCategories = budgetCategories));
+			.subscribe((budgetCategories: Array<BudgetCategory>) => {
+				if (budgetCategories.length > 4) {
+					budgetCategories.splice(budgetCategories.length - 1, 1);
+					this.budgetCategories = budgetCategories.reverse();
+					console.log(this.budgetCategories);
+				} else {
+					this.budgetCategories = budgetCategories;
+					console.log(this.budgetCategories);
+				}
+			});
 	}
 
 	save(): void {
-		for (const controlName in this.formGroup.controls) {
-			if (this.formGroup.controls.hasOwnProperty(controlName)) {
-				this.requestService.setProperty(controlName, this.formGroup.controls[controlName].value);
-			}
+
+		this.requestService.setProperty('budget', this.formGroup.controls.budget.value);
+		const budgetAmount = this.formGroup.controls.budget.value;
+		console.log(budgetAmount);
+
+		if (budgetAmount > 0 && budgetAmount <= 15000) {
+			this.selectedBudgetCategory = this.budgetCategories[0];
 		}
-		const selectedBudgetCategory = this.budgetCategories.find(
-			bc => bc.id === this.formGroup.controls['budgetCategory'].value
-		);
-		if (selectedBudgetCategory) {
-			this.requestService.setProperty('budgetCategoryName', selectedBudgetCategory.name);
+
+		if (budgetAmount > 15000 && budgetAmount <= 30000) {
+			this.selectedBudgetCategory = this.budgetCategories[1];
 		}
+
+		if (budgetAmount > 30000 && budgetAmount <= 45000) {
+			this.selectedBudgetCategory = this.budgetCategories[2];
+		}
+
+		if (budgetAmount > 45000 && budgetAmount <= 60000) {
+			this.selectedBudgetCategory = this.budgetCategories[3];
+		}
+
+		this.requestService.setProperty('budgetCategoryName', this.selectedBudgetCategory.name);
 		this.trackingService.track('Submit - Budget', {
 			...this.formGroup.value,
-			budgetCategoryName: selectedBudgetCategory.name,
+			budgetCategoryName: this.selectedBudgetCategory.name,
 		});
 	}
 }

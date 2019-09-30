@@ -1,40 +1,19 @@
-<c-request-form-layout [formGroup]="formGroup" (next)="save()">
-	<mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
-		<div
-			class="mat-radio-group-label-wrapper text-capitalize col-12"
-			[class.mat-error]="formGroup.controls['budget'].invalid"
-		>
-			<span class="mat-radio-group-label" [class.text-muted]="!isOwnBudget">{{
+<c-request-form-layout class="budget-section" [formGroup]="formGroup" (next)="save()">
+  <mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
+    <div class="mat-radio-group-label-wrapper text-capitalize col-12"
+      [class.mat-error]="formGroup.controls['budget'].invalid">
+      <span class="mat-radio-group-label budget-title title-font">{{
 				'request.budget.budget' | translate
 			}}</span>
-			<span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
-		</div>
-		<mat-slider
-			min="0"
-			max="50000"
-			step="1000"
-			class="col-12 col-lg-8"
-			thumbLabel
-			formControlName="budget"
-		></mat-slider>
-		<div
-			class="col-12 mat-display-2 text-yellow"
-			[class.text-muted]="!isOwnBudget"
-			[class.text-right]="('dir' | translate) === 'rtl'"
-		>
-			{{ formGroup.controls['budget'].value | currency: 'EGP' }}
-		</div>
-		<div class="col-12 text-center budget-categories">
-			<p>{{ 'request.budget.choice' | translate }}</p>
-		</div>
-		<div class="col-12 text-center budget-categories">
-			<mat-radio-button
-				*ngFor="let budgetCategory of budgetCategories"
-				[value]="budgetCategory.id"
-				[hidden]="budgetCategory.id == 1"
-				class="m-1 m-lg-2"
-				>{{ budgetCategory.name }}</mat-radio-button
-			>
-		</div>
-	</mat-radio-group>
+      <span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
+    </div>
+    <div class="budget-container">
+      <img src="../../../assets/img/budget.svg" class="budget-svg" alt="">
+      <mat-slider min="0" max="60000" step="100" class="col-12" thumbLabel formControlName="budget" width="100%">
+      </mat-slider>
+      <div class="budget-categories">
+        <div *ngFor="let budgetCategory of budgetCategories" [hidden]="budgetCategory.id == 1" class="budget-category text-center title-font font-weight-bold">{{ budgetCategory.name }}</div>
+      </div>
+    </div>
+  </mat-radio-group>
 </c-request-form-layout>
