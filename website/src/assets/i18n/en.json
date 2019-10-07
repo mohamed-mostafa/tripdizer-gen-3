@@ -409,5 +409,11 @@
 				}
 			]
 		}
-	}
+    }, 
+    "user": {
+        "user_core": {
+            "language_label": "عربى",
+            "blog": "Blog"
+        }
+    }
 }
