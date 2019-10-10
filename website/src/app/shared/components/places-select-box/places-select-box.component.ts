@@ -222,6 +222,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 	}
 
 	setIsLoading(isLoading: boolean, message: string) {
-		this.requestService.isLoading.next({ show: isLoading, message: message });
+		this.requestService.isLoading.next({ show: isLoading, message });
 	}
 }

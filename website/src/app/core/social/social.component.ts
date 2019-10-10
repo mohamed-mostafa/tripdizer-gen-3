@@ -9,7 +9,7 @@ export class SocialComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit() {
-		(function(d, s, id) {
+		((d, s, id) => {
 			let js;
 			const fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) {

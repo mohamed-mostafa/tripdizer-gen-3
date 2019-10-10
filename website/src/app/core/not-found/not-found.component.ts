@@ -28,13 +28,13 @@ export class NotFoundComponent implements OnInit {
 		if (windowWidth < 768) {
 			return;
 		}
-		const halfFieldWidth = $('.parallax').width() / 2,
-			halfFieldHeight = $('.parallax').height() / 2,
-			fieldPos = $('.parallax').offset(),
-			x = e.pageX,
-			y = e.pageY - fieldPos.top,
-			newX = (x - halfFieldWidth) / 30,
-			newY = (y - halfFieldHeight) / 30;
+		const halfFieldWidth = $('.parallax').width() / 2;
+		const halfFieldHeight = $('.parallax').height() / 2;
+		const fieldPos = $('.parallax').offset();
+		const x = e.pageX;
+		const y = e.pageY - fieldPos.top;
+		const newX = (x - halfFieldWidth) / 30;
+		const newY = (y - halfFieldHeight) / 30;
 		$('.parallax [class*="wave"]').each(function(index) {
 			$(this).css({
 				transition: '',

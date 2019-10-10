@@ -15,14 +15,10 @@ export class DialogComponent {
 
 	constructor(public dialogRef: MatDialogRef<DialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Dialog) {
 		this.formGroup = new FormGroup({});
-		for (let i = 0; i < data.inputs.length; i++) {
-			const input = new FormControl(
-				data.inputs[i].formState,
-				data.inputs[i].validatorOrOpts,
-				data.inputs[i].asyncValidator
-			);
-			input.setValue(data.inputs[i].value);
-			this.formGroup.addControl(data.inputs[i].id, input);
+		for (const dataInput of data.inputs) {
+			const input = new FormControl(dataInput.formState, dataInput.validatorOrOpts, dataInput.asyncValidator);
+			input.setValue(dataInput.value);
+			this.formGroup.addControl(dataInput.id, input);
 		}
 	}
 
