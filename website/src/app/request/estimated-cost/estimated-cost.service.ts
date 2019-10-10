@@ -226,6 +226,7 @@ export class EstimatedCostService {
 						// dates
 						from: moment(tripStartDate).format('DD/MM'),
 						to: moment(tripStartDate)
+							// tslint:disable-next-line: deprecation
 							.add('days', stationCity.numberOfNights)
 							.format('DD/MM'),
 
@@ -260,6 +261,7 @@ export class EstimatedCostService {
 					this.summaryStations.push(station);
 				}
 				// jump to next date
+				// tslint:disable-next-line: deprecation
 				tripStartDate.add('days', stationCity.numberOfNights);
 			});
 
@@ -290,6 +292,7 @@ export class EstimatedCostService {
 					arrive_time: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
 								'DD/MM HH:mm'
+								// tslint:disable-next-line: indent
 						  )
 						: 'unknown time',
 

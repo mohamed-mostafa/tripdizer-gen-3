@@ -22,7 +22,7 @@ export class CommonFunctions {
 			});
 	}
 
-	public static getOSName(): string {
+	public static getOSName(x): string {
 		if (navigator.appVersion.indexOf('Win') !== -1) {
 			return 'Windows';
 		} else if (navigator.appVersion.indexOf('Mac') !== -1) {
@@ -46,6 +46,7 @@ export class CommonFunctions {
 		let ix;
 
 		// In Opera, the true version is after "Opera" or after "Version"
+		// tslint:disable: no-conditional-assignment
 		if ((verOffset = nAgt.indexOf('Opera')) !== -1) {
 			browserName = 'Opera';
 			fullVersion = nAgt.substring(verOffset + 6);

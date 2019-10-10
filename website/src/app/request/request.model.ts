@@ -162,6 +162,9 @@ export class Request extends CommonFunctions {
 		this.resetEstimatedCost();
 		this._destination = value;
 	}
+	get destination(): Destination {
+		return this._destination;
+	}
 	get selectedCities(): Array<CityDTO> {
 		return this._selectedCities;
 	}
@@ -185,9 +188,6 @@ export class Request extends CommonFunctions {
 	}
 	set selectedAttractions(value: Array<Attraction>) {
 		this._selectedAttractions = value;
-	}
-	get destination(): Destination {
-		return this._destination;
 	}
 	set estimatedCost(value: number) {
 		this._estimatedCost = value;
