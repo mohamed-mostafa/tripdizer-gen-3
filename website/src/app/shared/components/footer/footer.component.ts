@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'c-core-footer',
+	selector: 'c-shared-footer',
 	templateUrl: './footer.component.html',
 	styleUrls: ['./footer.component.scss'],
 })
