@@ -15,7 +15,7 @@ export class RequestLoadingComponent {
 		requestService.isLoading.subscribe(input => {
 			if (!this.isLoading) {
 				// Only set the new message if the loading is not already displayed, otherwise don't change the message
-				this.message = input.message
+				this.message = input.message;
 			}
 			this.isLoading = input.show;
 		});

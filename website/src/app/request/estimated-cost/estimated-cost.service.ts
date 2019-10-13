@@ -89,7 +89,7 @@ export class EstimatedCostService {
 		const flightRequest: FlightRequest = {
 			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
 			departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
-			citiesSequence: citiesSequence,
+			citiesSequence,
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
@@ -128,8 +128,8 @@ export class EstimatedCostService {
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
-		for (let x = 0; x < this.selectedCities.length; x++) {
-			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		for (const sc of this.selectedCities) {
+			cities.push({ cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
 		}
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
@@ -146,7 +146,7 @@ export class EstimatedCostService {
 		const accommodationRequest: AccommodationRequest = {
 			arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
 			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
-			cities: cities,
+			cities,
 			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
@@ -166,23 +166,23 @@ export class EstimatedCostService {
 
 	getHotelsTotalCost() {
 		let totalCost = 0;
-		for (let t = 0; t < this.selectedHotels.length; t++) {
-			totalCost = this.selectedHotels[t].price + totalCost;
+		for (const sh of this.selectedHotels) {
+			totalCost = sh.price + totalCost;
 		}
 		return totalCost;
 	}
 
 	setIsLoading(isLoading: boolean, message: string) {
-		this.requestService.isLoading.next({ show: isLoading, message: message });
+		this.requestService.isLoading.next({ show: isLoading, message });
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
 		this.setIsLoading(true, '');
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
-		for (let x = 0; x < this.selectedCities.length; x++) {
-			cities.push({ cityIata: this.selectedCities[x].iataCode, numberOfNights: this.selectedCities[x].numberOfNights });
+		for (const selectedCity of this.selectedCities) {
+			cities.push({ cityIata: selectedCity.iataCode, numberOfNights: selectedCity.numberOfNights });
 		}
-		const attractionsRequest: AttractionsRequest = { cities: cities };
+		const attractionsRequest: AttractionsRequest = { cities };
 		return this.http.post<Array<CityAttractions>>(`${this.attractionsEndPoint}/search`, attractionsRequest).pipe(
 			tap(() => {
 				this.setIsLoading(false, '');
@@ -226,6 +226,7 @@ export class EstimatedCostService {
 						// dates
 						from: moment(tripStartDate).format('DD/MM'),
 						to: moment(tripStartDate)
+							// tslint:disable-next-line: deprecation
 							.add('days', stationCity.numberOfNights)
 							.format('DD/MM'),
 
@@ -260,6 +261,7 @@ export class EstimatedCostService {
 					this.summaryStations.push(station);
 				}
 				// jump to next date
+				// tslint:disable-next-line: deprecation
 				tripStartDate.add('days', stationCity.numberOfNights);
 			});
 
@@ -290,6 +292,7 @@ export class EstimatedCostService {
 					arrive_time: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
 								'DD/MM HH:mm'
+								// tslint:disable-next-line: indent
 						  )
 						: 'unknown time',
 

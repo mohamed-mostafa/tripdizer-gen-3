@@ -40,6 +40,9 @@ var getById = function (id, lang, onSuccess, onFailure) {
 								visaRequirements: rows[0].Visa_Requirements,
 								ISOCode: rows[0].ISO_Code,
 								active: rows[0].Active,
+								minimumTravelBudget: rows[0].Minimum_Travel_Budget,
+								minimumDailyBudget: rows[0].Minimum_Daily_Budget,
+								maximumDailyBudget: rows[0].Maximum_Daily_Budget,
 							};
 
 							if (lang) {
@@ -83,7 +86,7 @@ var create = function (country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO Countries (EN_Name, EN_Description, AR_Name, AR_Description, Introduction, Includes, Excludes, Visa_Type, Visa_Requirements, ISO_Code, Minimum_Travel_Budget, Minimum_Daily_Budget, Maximum_Daily_Budget) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 						[
 							country.enName,
 							country.enDescription,
@@ -95,6 +98,9 @@ var create = function (country, onSuccess, onFailure) {
 							country.visaType,
 							country.visaRequirements,
 							country.ISOCode,
+							country.minimumTravelBudget,
+							country.minimumDailyBudget,
+							country.maximumDailyBudget
 						],
 						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -146,7 +152,7 @@ var update = function (country, onSuccess, onFailure) {
 					onFailure(err);
 				} else {
 					connection.query(
-						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ? WHERE Id = ?',
+						'UPDATE Countries SET EN_Name = ?, EN_Description = ?, AR_Name = ?, AR_Description = ?, Introduction = ?, Includes = ?, Excludes = ?, Visa_Type = ?, Visa_Requirements = ?, ISO_Code = ?, Minimum_Travel_Budget = ?, Minimum_Daily_Budget = ?, Maximum_Daily_Budget = ? WHERE Id = ?',
 						[
 							country.enName,
 							country.enDescription,
@@ -158,7 +164,10 @@ var update = function (country, onSuccess, onFailure) {
 							country.visaType,
 							country.visaRequirements,
 							country.ISOCode,
-							country.id,
+							country.minimumTravelBudget,
+							country.minimumDailyBudget,
+							country.maximumDailyBudget,
+							country.id
 						],
 						function (err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -227,6 +236,9 @@ var getAll = function (lang, onSuccess, onFailure) {
 								visaRequirements: rows[i].Visa_Requirements,
 								ISOCode: rows[i].ISO_Code,
 								active: rows[i].Active,
+								minimumTravelBudget: rows[i].Minimum_Travel_Budget,
+								minimumDailyBudget: rows[i].Minimum_Daily_Budget,
+								maximumDailyBudget: rows[i].Maximum_Daily_Budget,
 							};
 							if (lang) {
 								country.name = country[lang.toLowerCase() + 'Name'];

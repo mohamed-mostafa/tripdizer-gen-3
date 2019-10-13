@@ -135,7 +135,7 @@
 								<textarea bullet class="form-control" id="excludes" ng-model="newCountry.excludes"
 									placeholder="Enter excludes" rows="2" maxlength="500"></textarea>
 							</div>
-							<div class="form-group form-group-4" ng-show="saving==false">
+							<div class="form-group form-group-3" ng-show="saving==false">
 								<label class="control-label text-red" for="visaType" ng-show="visaTypeMissing==true">
 									<i class="fa fa-times-circle-o"></i>Visa type is missing</label>
 								<label for="visaType" ng-show="visaTypeMissing==false">Visa type</label>
@@ -146,6 +146,39 @@
 									<option value="2">Visa required</option>
 								</select>
 							</div>
+
+							<div class="form-group form-group-3" ng-show="saving==false">
+								<label class="control-label text-red" for="minimumTravelBudget"
+									ng-show="minimumTravelBudgetMissing==true">
+									<i class="fa fa-times-circle-o"></i>Minimum Travel Budget is issing</label>
+								<label for="minimumTravelBudget" ng-show="minimumTravelBudgetMissing==false">Minimum
+									Travel Budget per person</label>
+								<input type="number" class="form-control" id="minimumTravelBudget"
+									ng-model="newCountry.minimumTravelBudget"
+									placeholder="Enter minimum travel budget"></input>
+							</div>
+							<div class="form-group form-group-3" ng-show="saving==false">
+								<label class="control-label text-red" for="minimumDailyBudget"
+									ng-show="minimumDailyBudgetMissing==true">
+									<i class="fa fa-times-circle-o"></i>Minimum Travel Budget is missing</label>
+								<label for="minimumDailyBudget" class="control-label"
+									ng-show="minimumDailyBudgetMissing==false">Minimum
+									Travel Budget per person</label>
+								<input type="number" class="form-control" id="minimumDailyBudget"
+									ng-model="newCountry.minimumDailyBudget"
+									placeholder="Enter minimum daily budget"></input>
+							</div>
+							<div class="form-group form-group-3" ng-show="saving==false">
+								<label class="control-label text-red" for="maximumDailyBudget"
+									ng-show="maximumDailyBudgetMissing==true">
+									<i class="fa fa-times-circle-o"></i>Minimum Travel Budget is issing</label>
+								<label for="maximumDailyBudget" ng-show="maximumDailyBudgetMissing==false">Maximum
+									Daily Budget per person</label>
+								<input type="number" class="form-control" id="maximumTravelBudget"
+									ng-model="newCountry.maximumDailyBudget"
+									placeholder="Enter maximum travel budget"></textarea>
+							</div>
+
 							<div class="form-group" ng-show="saving==false">
 								<label class="control-label text-red" for="visaRequirements"
 									ng-show="visaRequirementsMissing==true">

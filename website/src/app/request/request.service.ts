@@ -32,7 +32,7 @@ export class RequestService {
 	private requestData;
 	private travelersRadioButtonsStart = {};
 
-	isLoading = new Subject<{ show: boolean, message: string }>();
+	isLoading = new Subject<{ show: boolean; message: string }>();
 	requestDataChanged = new Subject<{ key: string; value: any; request: Request }>();
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
@@ -49,7 +49,6 @@ export class RequestService {
 		private trackingService: TrackingService,
 		private lutService: LookupsService
 	) {
-
 		this.initRequest();
 		this.isLoading = this.lutService.isLoading;
 	}
@@ -137,31 +136,31 @@ export class RequestService {
 
 	getNextStep(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
-			nextSteps = this.requestData.validSteps
-				.filter(s => s.order > currentStep.order)
-				.sort((a, b) => a.order - b.order);
+		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath);
+		const nextSteps = this.requestData.validSteps
+			.filter(s => s.order > currentStep.order)
+			.sort((a, b) => a.order - b.order);
 		return nextSteps[0] ? nextSteps[0].path : currentStep.path;
 	}
 
 	getPrevStep(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
-			prevSteps = this.requestData.validSteps
-				.filter(s => s.order < currentStep.order)
-				.sort((a, b) => b.order - a.order);
+		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath);
+		const prevSteps = this.requestData.validSteps
+			.filter(s => s.order < currentStep.order)
+			.sort((a, b) => b.order - a.order);
 		return prevSteps[0] ? prevSteps[0].path : currentStep.path;
 	}
 
 	getPrevInvalidStepForRecommendedDestinations(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
-			prevSteps = this.requestData.validSteps
-				.filter(s => s.requiredForRecommendation && s.order < currentStep.order)
-				.sort((a, b) => a.order - b.order);
-		for (let i = 0; i < prevSteps.length; ++i) {
-			if (!prevSteps[i].isValid()) {
-				return prevSteps[i].path;
+		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath);
+		const prevSteps = this.requestData.validSteps
+			.filter(s => s.requiredForRecommendation && s.order < currentStep.order)
+			.sort((a, b) => a.order - b.order);
+		for (const ps of prevSteps) {
+			if (!ps.isValid()) {
+				return ps.path;
 			}
 		}
 		return currentStep.path;
@@ -169,13 +168,13 @@ export class RequestService {
 
 	getPrevInvalidStepForEstimateCalc(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
-			prevSteps = this.requestData.validSteps
-				.filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
-				.sort((a, b) => a.order - b.order);
-		for (let i = 0; i < prevSteps.length; ++i) {
-			if (!prevSteps[i].isValid()) {
-				return prevSteps[i].path;
+		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath);
+		const prevSteps = this.requestData.validSteps
+			.filter(s => s.requiredForEstimateCalc && s.order < currentStep.order)
+			.sort((a, b) => a.order - b.order);
+		for (const ps of prevSteps) {
+			if (!ps.isValid()) {
+				return ps.path;
 			}
 		}
 		return currentStep.path;
@@ -183,13 +182,13 @@ export class RequestService {
 
 	getPrevInvalidStep(stepPath: string): string {
 		stepPath = this.refineStepPath(stepPath);
-		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath),
-			prevSteps = this.requestData.validSteps
-				.filter(s => s.order < currentStep.order)
-				.sort((a, b) => a.order - b.order);
-		for (let i = 0; i < prevSteps.length; ++i) {
-			if (!prevSteps[i].isValid()) {
-				return prevSteps[i].path;
+		const currentStep = this.requestData.validSteps.find(s => s.path === stepPath);
+		const prevSteps = this.requestData.validSteps
+			.filter(s => s.order < currentStep.order)
+			.sort((a, b) => a.order - b.order);
+		for (const ps of prevSteps) {
+			if (!ps.isValid()) {
+				return ps.path;
 			}
 		}
 		return currentStep.path;
@@ -198,12 +197,12 @@ export class RequestService {
 	setProperty(key: string, value: any): void {
 		this.requestData[key] = value;
 		this.requestDataChanged.next({
-			key: key,
+			key,
 			value: this.requestData[key],
 			request: this.requestData,
 		});
 		this.requestNavBarDataChanged.next({
-			key: key,
+			key,
 			value: this.requestData.validSteps.find(s => s.key === key),
 			navBar: this.requestData.navBar,
 		});
@@ -335,7 +334,7 @@ export class RequestService {
 	}
 
 	validatePromoCode(promoCode: string): Observable<boolean> {
-		return this.http.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode: promoCode } }).pipe(
+		return this.http.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode } }).pipe(
 			map(isValid => {
 				if (isValid) {
 					this.setProperty('promoCode', promoCode);
@@ -363,7 +362,7 @@ export class RequestService {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
-			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request: request }).pipe(
+			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
 					this.lastRequestId = ticket.id;
@@ -380,8 +379,8 @@ export class RequestService {
 	sendPackageByMail(): void {
 		this.isLoading.next({ show: true, message: '' });
 		this.http
-			.post<Boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
+			.post<boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
 			.pipe(finalize(() => this.isLoading.next({ show: false, message: '' })))
-			.subscribe(() => { });
+			.subscribe(() => {});
 	}
 }

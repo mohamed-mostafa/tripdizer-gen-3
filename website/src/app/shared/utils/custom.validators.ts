@@ -16,17 +16,17 @@ export class CustomValidators {
 	}
 	static dateGreaterThan(dateField1: string, dateField2: string, errorMessage?: string): ValidatorFn {
 		return (fg: FormGroup): { [key: string]: boolean } | null => {
-			const c1 = fg.controls[dateField1],
-				c2 = fg.controls[dateField2];
+			const c1 = fg.controls[dateField1];
+			const c2 = fg.controls[dateField2];
 			if (!c1 || !c2) {
 				return null;
 			}
-			const errorKey = 'compareDates',
-				error = {},
-				c1Date = c1.value,
-				c2Date = c2.value;
-			let c1errors = c1.errors,
-				c2errors = c2.errors;
+			const errorKey = 'compareDates';
+			const error = {};
+			const c1Date = c1.value;
+			const c2Date = c2.value;
+			let c1errors = c1.errors;
+			let c2errors = c2.errors;
 			error[errorKey] = errorMessage || true;
 			if (c1Date !== null && c2Date !== null && c1Date >= c2Date) {
 				c1.setErrors(c1errors ? { ...c1errors, ...error } : error);

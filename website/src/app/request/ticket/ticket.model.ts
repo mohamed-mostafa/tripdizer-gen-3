@@ -10,7 +10,11 @@ export class Ticket extends RequestResponse {
 			...requestResponse,
 			travelingFrom: request.travelingFrom.iataCode,
 			preferenceNames: request.preferenceNames,
-			destinationName: request.selectedCities ? (request.selectedCities.length == 1 ? request.selectedCities[0].countryIsoCode : "WORLD") : request.destination["iataCode"],
+			destinationName: request.selectedCities
+				? request.selectedCities.length === 1
+					? request.selectedCities[0].countryIsoCode
+					: 'WORLD'
+				: request.destination['iataCode'],
 		};
 	}
 }

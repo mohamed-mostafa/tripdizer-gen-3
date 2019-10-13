@@ -9,7 +9,7 @@ export class ErrorMessagePipe implements PipeTransform {
 		translate.get('shared.error_messages').subscribe(errorMessages => (this.errorMessages = errorMessages));
 	}
 
-	transform(obj: Object, separator: string = ', '): string {
+	transform(obj: object, separator: string = ', '): string {
 		if (obj && obj instanceof Object) {
 			return Object.keys(obj)
 				.map(key => (typeof obj[key] === 'string' ? obj[key] : this.errorMessages[key]))

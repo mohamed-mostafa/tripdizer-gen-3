@@ -19,12 +19,12 @@ export class TabAccommodationComponent {
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
 			const items = res;
-			for (let b = 0; b < items.length; b++) {
-				if (items[b].hotels.length > 0) {
-					items[b].hotels[0].select = true;
-					this.accommodations.push(items[b]);
-					this.selectedHotels.push(items[b].hotels[0]);
-					this.totalCost = this.totalCost + items[b].hotels[0].price;
+			for (const item of items) {
+				if (item.hotels.length > 0) {
+					item.hotels[0].select = true;
+					this.accommodations.push(item);
+					this.selectedHotels.push(item.hotels[0]);
+					this.totalCost = this.totalCost + item.hotels[0].price;
 				}
 			}
 		});
@@ -32,14 +32,10 @@ export class TabAccommodationComponent {
 
 	selectHotel(hotel) {
 		if (!hotel.select) {
-			for (let c = 0; c < this.accommodations.length; c++) {
-				if (this.accommodations[c].city.name === hotel.city) {
-					for (let d = 0; d < this.accommodations[c].hotels.length; d++) {
-						if (this.accommodations[c].hotels[d].id === hotel.id) {
-							this.accommodations[c].hotels[d].select = true;
-						} else {
-							this.accommodations[c].hotels[d].select = false;
-						}
+			for (const ac of this.accommodations) {
+				if (ac.city.name === hotel.city) {
+					for (const h of ac.hotels) {
+						h.select = h.id === hotel.id;
 					}
 				}
 			}

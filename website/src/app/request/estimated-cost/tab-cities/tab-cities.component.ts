@@ -63,9 +63,9 @@ export class TabCitiesComponent {
 					this.selectedCities.splice(r, 1);
 				}
 			}
-			for (let d = 0; d < this.cities.length; d++) {
-				if (this.cities[d].iataCode === city.iataCode) {
-					this.cities[d].select = false;
+			for (const c of this.cities) {
+				if (c.iataCode === city.iataCode) {
+					c.select = false;
 				}
 			}
 			for (let m = 0; m < this.cityPaths.length; m++) {
@@ -87,17 +87,17 @@ export class TabCitiesComponent {
 				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
 				this.selectedCities.splice(0, this.selectedCities.length); // clear list
 				this.cityPaths.splice(0, this.cityPaths.length);
-				for (let x = 0; x < this.cities.length; x++) {
+				for (const c of this.cities) {
 					// add all selected cities again
-					if (this.cities[x].select) {
-						this.selectedCities.push(this.cities[x]);
-						const coordinates = this.cities[x].coordinates.split(', ');
+					if (c.select) {
+						this.selectedCities.push(c);
+						const coordinates = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
-					if (this.cities[x].iataCode === city.iataCode) {
-						this.cities[x].select = true;
-						this.selectedCities.push(this.cities[x]); // add this newly selected city
-						const coordinates2 = this.cities[x].coordinates.split(', ');
+					if (c.iataCode === city.iataCode) {
+						c.select = true;
+						this.selectedCities.push(c); // add this newly selected city
+						const coordinates2 = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates2[0]), lng: Number(coordinates2[1]) });
 					}
 				}

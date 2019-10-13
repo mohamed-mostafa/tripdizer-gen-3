@@ -136,6 +136,9 @@ export class TravelInfoComponent {
 					ISOCode: inputs[0].value,
 					image: null,
 					visaTypeName: null,
+					minimumTravelBudget: 0,
+					minimumDailyBudget: 0,
+					maximumDailyBudget: 0
 				};
 				this.formGroup.get('destination').setValue({ ...destination, triggered: true });
 				this.trackingService.track('Submit - Destination', {

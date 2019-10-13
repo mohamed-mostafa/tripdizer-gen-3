@@ -53,14 +53,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 		this._places = places || [];
 		this.formGroup.get(this.controlName).setValue(null);
 	}
-	@Input() set selectedPlaces(places: Array<Place>) {
-		if (places) {
-			this._selectedPlaces = places;
-		}
-	}
-
-	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
-
 	get places(): Array<Place> {
 		this._selectedPlaces.forEach(place => {
 			if (place.id === 0) {
@@ -80,6 +72,13 @@ export class PlacesSelectBoxComponent implements OnInit {
 			place => this._selectedPlaces.findIndex(p => p[this.property] === place[this.property]) < 0
 		);
 	}
+	@Input() set selectedPlaces(places: Array<Place>) {
+		if (places) {
+			this._selectedPlaces = places;
+		}
+	}
+
+	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
 
 	constructor(
 		public translate: TranslateService,
@@ -222,6 +221,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 	}
 
 	setIsLoading(isLoading: boolean, message: string) {
-		this.requestService.isLoading.next({ show: isLoading, message: message });
+		this.requestService.isLoading.next({ show: isLoading, message });
 	}
 }

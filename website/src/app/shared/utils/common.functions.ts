@@ -17,12 +17,12 @@ export class CommonFunctions {
 			.replace(/[٠١٢٣٤٥٦٧٨٩]/g, d => {
 				return d.charCodeAt(0) - 1632; // Convert Arabic numbers
 			})
-			.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, function(d) {
+			.replace(/[۰۱۲۳۴۵۶۷۸۹]/g, d => {
 				return d.charCodeAt(0) - 1776; // Convert Persian numbers
 			});
 	}
 
-	public static getOSName(): string {
+	public static getOSName(x): string {
 		if (navigator.appVersion.indexOf('Win') !== -1) {
 			return 'Windows';
 		} else if (navigator.appVersion.indexOf('Mac') !== -1) {
@@ -38,14 +38,15 @@ export class CommonFunctions {
 
 	public static getBrowserInfo(): { name: string; majorVersion: number } {
 		const nAgt = navigator.userAgent;
-		let browserName = navigator.appName,
-			fullVersion = '' + parseFloat(navigator.appVersion),
-			majorVersion = parseInt(navigator.appVersion, 10),
-			nameOffset,
-			verOffset,
-			ix;
+		let browserName = navigator.appName;
+		let fullVersion = '' + parseFloat(navigator.appVersion);
+		let majorVersion = parseInt(navigator.appVersion, 10);
+		let nameOffset;
+		let verOffset;
+		let ix;
 
 		// In Opera, the true version is after "Opera" or after "Version"
+		// tslint:disable: no-conditional-assignment
 		if ((verOffset = nAgt.indexOf('Opera')) !== -1) {
 			browserName = 'Opera';
 			fullVersion = nAgt.substring(verOffset + 6);
@@ -90,7 +91,7 @@ export class CommonFunctions {
 
 		return {
 			name: browserName,
-			majorVersion: majorVersion,
+			majorVersion,
 		};
 	}
 }

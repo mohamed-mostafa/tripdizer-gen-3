@@ -17,6 +17,22 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 		$scope.emailMissing = false;
 		$scope.serverError = false;
 		$scope.serverErrorMessage = '';
+		$scope.enNameMissing = false;
+		$scope.arNameMissing = false;
+		$scope.enDescriptionMissing = false;
+		$scope.arDescriptionMissing = false;
+		$scope.thumbnailMissing = false;
+		$scope.introductionMissing = false;
+		$scope.includesMissing = false;
+		$scope.excludesMissing = false;
+		$scope.visaTypeMissing = false;
+		$scope.visaRequirementsMissing = false;
+		$scope.ISOCodeMissing = false;
+		$scope.minimumTravelBudgetMissing = false;
+		$scope.minimumDailyBudgetMissing = false;
+		$scope.maximumDailyBudgetMissing = false;
+		$scope.serverError = false;
+		$scope.serverErrorMessage = '';
 		// form fields
 		$scope.newCountry = {};
 		$scope.editMode = false;
@@ -38,6 +54,9 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			$scope.visaTypeMissing = false;
 			$scope.visaRequirementsMissing = false;
 			$scope.ISOCodeMissing = false;
+			$scope.minimumTravelBudgetMissing = false;
+			$scope.minimumDailyBudgetMissing = false;
+			$scope.maximumDailyBudgetMissing = false;
 			$scope.serverError = false;
 			$scope.serverErrorMessage = '';
 		};
@@ -76,6 +95,15 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 			if ($scope.newCountry.ISOCode == null || $scope.newCountry.ISOCode == '' || $scope.newCountry.ISOCode.length != 3) {
 				$scope.ISOCodeMissing = true;
 			}
+			if ($scope.newCountry.minimumTravelBudget == null || $scope.newCountry.minimumTravelBudget == '' || $scope.newCountry.minimumTravelBudget == 0) {
+				$scope.minimumTravelBudgetMissing = true;
+			}
+			if ($scope.newCountry.minimumDailyBudget == null || $scope.newCountry.minimumDailyBudget == '' || $scope.newCountry.minimumDailyBudget == 0) {
+				$scope.minimumDailyBudgetMissing = true;
+			}
+			if ($scope.newCountry.maximumDailyBudget == null || $scope.newCountry.maximumDailyBudget == '' || $scope.newCountry.maximumDailyBudget == 0) {
+				$scope.maximumDailyBudgetMissing = true;
+			}
 			return (
 				$scope.enNameMissing !== true &&
 				$scope.arNameMissing !== true &&
@@ -87,7 +115,10 @@ g2gControlCenterApplication.controller('CountriesPageContentController', [
 				$scope.excludesMissing !== true &&
 				$scope.visaTypeMissing !== true &&
 				$scope.visaRequirementsMissing !== true &&
-				$scope.ISOCodeMissing !== true
+				$scope.ISOCodeMissing !== true &&
+				$scope.minimumTravelBudgetMissing != true &&
+				$scope.minimumDailyBudgetMissing != true &&
+				$scope.maximumDailyBudgetMissing != true
 			);
 		};
 		$scope.addCountry = function (close) {

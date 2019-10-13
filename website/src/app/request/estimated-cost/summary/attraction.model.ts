@@ -6,11 +6,11 @@ export class CityAttractions {
 }
 
 export class Attraction {
-	name: String;
-	descriptipn: String;
-	category: String;
+	name: string;
+	descriptipn: string;
+	category: string;
 }
 
 export class AttractionsRequest {
-	cities: Array<{ cityIata: string, numberOfNights: number }>;
+	cities: Array<{ cityIata: string; numberOfNights: number }>;
 }
