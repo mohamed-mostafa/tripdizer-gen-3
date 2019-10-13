@@ -38,7 +38,7 @@ export class TicketComponent {
 		translate: TranslateService
 	) {
 		this.currentStepPath = route.routeConfig.path;
-		if (CommonFunctions.getOSName() === 'MacOS' || CommonFunctions.getBrowserInfo().name === 'Safari') {
+		if (CommonFunctions.getOSName({}) === 'MacOS' || CommonFunctions.getBrowserInfo().name === 'Safari') {
 			this.invalidForSVG = true;
 		}
 		requestService.submitRequest().subscribe((response: Ticket | null) => {
