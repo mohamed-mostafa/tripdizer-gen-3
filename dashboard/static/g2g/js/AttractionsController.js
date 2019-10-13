@@ -14,8 +14,15 @@ g2gControlCenterApplication.controller('AttractionsController', [
 		$scope.selectedCity = null;
 
 		// validation flags
-		$scope.nameMissing = false;
-		$scope.emailMissing = false;
+		$scope.enNameMissing = false;
+		$scope.arNameMissing = false;
+		$scope.enDescriptionMissing = false;
+		$scope.arDescriptionMissing = false;
+		$scope.cityIdMissing = false;
+		$scope.thumbnailMissing = false;
+		$scope.enCategoryMissing = false;
+		$scope.arCategoryMissing = false;
+		$scope.priorityMissing = false;
 		$scope.serverError = false;
 		$scope.serverErrorMessage = '';
 		// form fields

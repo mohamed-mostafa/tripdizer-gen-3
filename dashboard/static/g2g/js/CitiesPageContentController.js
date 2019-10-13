@@ -12,9 +12,20 @@ g2gControlCenterApplication.controller('CitiesPageContentController', [
 		$scope.selectedCountry = null;
 
 		// validation flags
-		$scope.nameMissing = false;
-		$scope.emailMissing = false;
+		$scope.iataCodeMissing = false;
+		$scope.enNameMissing = false;
+		$scope.arNameMissing = false;
+		$scope.enDescriptionMissing = false;
+		$scope.arDescriptionMissing = false;
+		$scope.countryIdMissing = false;
+		$scope.thumbnailMissing = false;
+		$scope.latMissing = false;
+		$scope.lngMissing = false;
+		$scope.visitOrderMissing = false;
+		$scope.activeMissing = false;
+		$scope.interestsMissing = false;
 		$scope.serverError = false;
+		$scope.dailySpendingMissing = false;
 		$scope.serverErrorMessage = '';
 		// form fields
 		$scope.newCity = { countryId: $scope.selectedCountry, interests: [] };

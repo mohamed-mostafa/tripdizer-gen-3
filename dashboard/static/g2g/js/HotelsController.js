@@ -15,9 +15,18 @@ g2gControlCenterApplication.controller('HotelsController', [
 		$scope.selectedCity = null;
 
 		// validation flags
-		$scope.nameMissing = false;
-		$scope.emailMissing = false;
+		$scope.enNameMissing = false;
+		$scope.arNameMissing = false;
+		$scope.enDescriptionMissing = false;
+		$scope.arDescriptionMissing = false;
+		$scope.cityIdMissing = false;
+		$scope.thumbnailMissing = false;
+		$scope.budgetCategoryMissing = false;
+		$scope.starsMissing = false;
+		$scope.addressMissing = false;
+		$scope.activeMissing = false;
 		$scope.serverError = false;
+		$scope.ratesIncomplete = false;
 		$scope.serverErrorMessage = '';
 		// form fields
 		$scope.newHotel = { cityId: $scope.selectedCity };

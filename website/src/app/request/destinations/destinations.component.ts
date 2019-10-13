@@ -96,6 +96,9 @@ export class DestinationsComponent {
 					ISOCode: inputs[0].value,
 					image: null,
 					visaTypeName: null,
+					minimumDailyBudget: 0,
+					minimumTravelBudget: 0,
+					maximumDailyBudget: 0
 				};
 				this.requestService.setProperty('destination', destination);
 				this.trackingService.track('Submit - Destination', {
