@@ -434,6 +434,9 @@
             "mobile": "Mobile Number",
             "birth_date": "Date of birth",
             "location": "Location"
+        },
+        "user_plans": {
+            "my_plans": "My Plans"
         }
     }
 }

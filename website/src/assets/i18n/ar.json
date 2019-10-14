@@ -434,6 +434,9 @@
             "mobile": "الموبايل",
             "birth_date": "تاريخ الميلاد",
             "location": "الدولة"
+        },
+        "user_plans": {
+            "my_plans": "رحلاتى"
         }
     }
 }

@@ -12,12 +12,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { SideBarComponent } from './core/side-bar/side-bar.component';
+import { UserPlansComponent } from './user-plans/user-plans.component';
 
 @NgModule({
 	declarations: [
 		UserComponent,
 		UserInfoComponent,
-		SideBarComponent
+		SideBarComponent,
+		UserPlansComponent
 	],
 	imports: [
 		CommonModule,
@@ -27,8 +29,8 @@ import { SideBarComponent } from './core/side-bar/side-bar.component';
 		MatToolbarModule,
 		MatSidenavModule,
 		TranslateModule,
-        MatListModule,
-        MatInputModule,
+		MatListModule,
+		MatInputModule
 	]
 })
 export class UserModule { }
