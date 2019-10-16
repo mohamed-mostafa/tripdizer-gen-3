@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 	styleUrls: ['./login-dialog.component.scss'],
 })
 export class LoginDialogComponent implements OnInit {
+	loading = false;
 	isAuthenticated = false;
 
 	constructor(
@@ -30,14 +31,17 @@ export class LoginDialogComponent implements OnInit {
 	}
 
 	signInWithGoogle(): void {
+		this.loading = true;
 		this.authService.signInWithGoogle();
 	}
 
 	signInWithFacebook(): void {
+		this.loading = true;
 		this.authService.signInWithFacebook();
 	}
 
 	signInWithLinkedIn(): void {
+		this.loading = true;
 		this.authService.signInWithLinkedIn();
 	}
 
