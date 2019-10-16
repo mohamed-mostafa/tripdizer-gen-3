@@ -10,7 +10,7 @@
 	</span>
 	<h6>{{ 'shared.login_dialog.improve_experience' | translate }}</h6>
 	<div mat-dialog-content>
-		<div class="text-center" *ngIf="user; else notUser">
+		<div class="text-center" *ngIf="isAuthenticated; else notUser">
 			<c-core-user-profile></c-core-user-profile>
 		</div>
 		<ng-template #notUser>
