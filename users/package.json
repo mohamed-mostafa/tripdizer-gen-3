@@ -1,7 +1,7 @@
 {
-  "name": "tripdizer-authentication-server",
+  "name": "tripdizer-users-module",
   "version": "0.0.1",
-  "description": "Tripdizer Authentication Server",
+  "description": "Tripdizer Users Module",
   "author": "Ahmed Essawy",
   "license": "MIT",
   "scripts": {

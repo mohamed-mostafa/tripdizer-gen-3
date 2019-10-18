@@ -1,9 +1,9 @@
 {
   "routes": [
     {
-      "route": "auth",
+      "route": "users",
       "address": "http://localhost:8081",
-      "path": "../authentication/dist/server.js"
+      "path": "../users/dist/server.js"
     },
     {
       "route": "requests",

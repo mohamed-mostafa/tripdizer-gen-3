@@ -17,7 +17,7 @@ declare const FB: any;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	private endPoint = 'auth';
+	private endPoint = 'users';
 	authenticatedUser = new Subject<User>();
 	isAuthenticated = new Subject<boolean>();
 
