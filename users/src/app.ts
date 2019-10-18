@@ -10,14 +10,10 @@ const app = express();
 mongoose();
 middlewares(app);
 
-app.get("/", isAuthenticated, userCtrl.getUserInfo);
-
-app.head("/validate-token", isAuthenticated, (req: any, res: any) =>
-  res.sendStatus(200)
-);
+app.get("/auth", isAuthenticated, userCtrl.getUserInfo);
 
 app.get(
-  "/auth/facebook/token",
+  "/auth/facebook",
   passport.authenticate("facebook-token"),
   userCtrl.getUserInfo,
   requestTokenValidator

@@ -17,7 +17,7 @@ declare const FB: any;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	private endPoint = 'users';
+	private endPoint = 'users/auth';
 	authenticatedUser = new Subject<User>();
 	isAuthenticated = new Subject<boolean>();
 
@@ -64,7 +64,7 @@ export class AuthService {
 	private authenticateUserServerSide(provider: string, token: string): void {
 		this.trackingService.track(`${provider} client-side authentication`);
 		this.http
-			.get(`/${this.endPoint}/${provider}/token`, {
+			.get(`/${this.endPoint}/${provider}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.subscribe((user: User) => {
