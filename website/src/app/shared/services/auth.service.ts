@@ -36,6 +36,7 @@ export class AuthService {
 
 	signInWithGoogle(): void {
 		this.loading.next(true);
+		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(GoogleLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -48,6 +49,7 @@ export class AuthService {
 
 	signInWithFacebook(): void {
 		this.loading.next(true);
+		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(FacebookLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -60,6 +62,7 @@ export class AuthService {
 
 	signInWithLinkedIn(): void {
 		this.loading.next(true);
+		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(LinkedInLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
