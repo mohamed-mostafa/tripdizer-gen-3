@@ -35,8 +35,8 @@ export class AuthService {
 	}
 
 	signInWithGoogle(): void {
+		this.resetAuthState();
 		this.loading.next(true);
-		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(GoogleLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -48,8 +48,8 @@ export class AuthService {
 	}
 
 	signInWithFacebook(): void {
+		this.resetAuthState();
 		this.loading.next(true);
-		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(FacebookLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -61,8 +61,8 @@ export class AuthService {
 	}
 
 	signInWithLinkedIn(): void {
+		this.resetAuthState();
 		this.loading.next(true);
-		this.errorMsg.next('');
 		this.socialAuthService
 			.signIn(LinkedInLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -80,8 +80,7 @@ export class AuthService {
 	signOut(): void {
 		this.socialAuthService.signOut();
 		localStorage.removeItem('cred');
-		this.isAuthenticated.next(false);
-		this.authenticatedUser.next(null);
+		this.resetAuthState();
 		this.trackingService.track('Sign out');
 	}
 
@@ -163,6 +162,12 @@ export class AuthService {
 				}
 			}
 		}
+	}
+
+	private resetAuthState(): void {
+		this.isAuthenticated.next(false);
+		this.authenticatedUser.next(null);
+		this.loading.next(false);
 	}
 }
 
