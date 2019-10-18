@@ -10,13 +10,16 @@ const app = express();
 mongoose();
 middlewares(app);
 
-app.get("/auth", isAuthenticated, userCtrl.getUserInfo);
-
 app.get(
   "/auth/facebook",
   passport.authenticate("facebook-token"),
   userCtrl.getUserInfo,
   requestTokenValidator
 );
+
+app.use(passport.authenticate("jwt", { session: false }));
+app.use(isAuthenticated);
+
+app.get("/auth", userCtrl.getUserInfo);
 
 export default app;

@@ -1,7 +1,9 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import passport from "passport";
-import passportFacebookToken, { Profile } from "passport-facebook-token";
+import passportFacebookToken, {
+  Profile as FacebookProfile
+} from "passport-facebook-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
@@ -16,11 +18,11 @@ export const encodeToken = (user: User) =>
   jwt.sign({ ...new UserClaims(user) }, JWT_SECRET, { expiresIn: "30d" });
 
 passport.serializeUser<any, any>((user, done) => {
-  done(undefined, user.id);
+  done(undefined, user.uuid);
 });
 
-passport.deserializeUser((id, done) => {
-  userSchema.findById(id, (err, user) => {
+passport.deserializeUser((uuid, done) => {
+  userSchema.findOne({ uuid: uuid }, (err, user) => {
     done(err, user);
   });
 });
@@ -31,7 +33,12 @@ passport.use(
       clientID: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET
     },
-    (accessToken: string, refreshToken: string, profile: Profile, done) => {
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: FacebookProfile,
+      done
+    ) => {
       userSchema.findOne(
         { email: profile._json.email },
         (err, existingUser) => {
@@ -71,7 +78,9 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    userSchema.exists({ uuid: jwtPayload.uuid }, (err, res) => done(err, res));
+    userSchema.findOne({ uuid: jwtPayload.uuid }, (err, user) => {
+      done(err, user);
+    });
   })
 );
 
@@ -84,4 +93,11 @@ export const requestTokenValidator = (
   if (error) res.sendStatus(401);
 };
 
-export const isAuthenticated = passport.authenticate("jwt", { session: false });
+export const isAuthenticated = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && (req.user as User).uuid) next();
+  else res.sendStatus(401);
+};
