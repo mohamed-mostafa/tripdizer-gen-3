@@ -128,6 +128,16 @@ passport.use(
   })
 );
 
+export const getAuthenticatedUser = (req: Request, res: Response) => {
+  const user = req.user as User;
+  res.json({
+    ...user.profile,
+    email: user.email,
+    token: user.token,
+    provider: user.lastLoginProvider
+  });
+};
+
 export const fromAuthHeaderAsBearerTokenToAccessTokenHeader = (
   req: Request,
   res: Response,

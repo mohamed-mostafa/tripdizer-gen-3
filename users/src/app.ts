@@ -4,10 +4,10 @@ import middlewares from "./config/middlewares";
 import mongoose from "./config/mongoose";
 import {
   fromAuthHeaderAsBearerTokenToAccessTokenHeader,
+  getAuthenticatedUser,
   isAuthenticated,
   requestTokenValidator
 } from "./config/passport";
-import * as userCtrl from "./controllers/user";
 
 const app = express();
 
@@ -18,20 +18,20 @@ app.get(
   "/auth/google",
   fromAuthHeaderAsBearerTokenToAccessTokenHeader,
   passport.authenticate("google-token"),
-  userCtrl.getUserInfo,
+  getAuthenticatedUser,
   requestTokenValidator
 );
 
 app.get(
   "/auth/facebook",
   passport.authenticate("facebook-token"),
-  userCtrl.getUserInfo,
+  getAuthenticatedUser,
   requestTokenValidator
 );
 
 app.use(passport.authenticate("jwt", { session: false }));
 app.use(isAuthenticated);
 
-app.get("/auth", userCtrl.getUserInfo);
+app.get("/info", getAuthenticatedUser);
 
 export default app;
