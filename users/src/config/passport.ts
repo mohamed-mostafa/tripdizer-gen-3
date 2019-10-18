@@ -4,12 +4,16 @@ import passport from "passport";
 import passportFacebookToken, {
   Profile as FacebookProfile
 } from "passport-facebook-token";
+import passportGoogleToken, {
+  Profile as GoogleProfile
+} from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
 import { User as userSchema } from "../schemas/user";
 import { JWT_SECRET } from "../util/secrets";
 
+const GoogleTokenStrategy = passportGoogleToken.Strategy;
 const FacebookTokenStrategy = passportFacebookToken;
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
@@ -26,6 +30,46 @@ passport.deserializeUser((uuid, done) => {
     done(err, user);
   });
 });
+
+passport.use(
+  new GoogleTokenStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    },
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: GoogleProfile,
+      done: any
+    ) => {
+      userSchema.findOne(
+        { email: profile._json.email },
+        (err, existingUser) => {
+          if (err) {
+            return done(err);
+          }
+          let user: User = new userSchema();
+          if (existingUser) {
+            user = existingUser;
+          }
+          user.email = profile._json.email;
+          user.google = profile.id;
+          user.tokens = user.tokens.filter(t => t.provider !== "google");
+          user.tokens.push({ provider: "google", accessToken });
+          user.profile.firstName = profile.name.givenName;
+          user.profile.lastName = profile.name.familyName;
+          user.profile.picture = profile._json.picture;
+          user.lastLoginProvider = "google";
+          user.save((err: Error) => {
+            user.token = encodeToken(user);
+            done(err, user);
+          });
+        }
+      );
+    }
+  )
+);
 
 passport.use(
   new FacebookTokenStrategy(
@@ -83,6 +127,24 @@ passport.use(
     });
   })
 );
+
+export const fromAuthHeaderAsBearerTokenToAccessTokenHeader = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const OAuth2AuthorizationField = "Authorization";
+  req.headers = req.headers || {};
+  const hdrValue = (
+    req.headers[OAuth2AuthorizationField] ||
+    req.headers[OAuth2AuthorizationField.toLowerCase()]
+  ).toString();
+
+  const matches = hdrValue.match(/Bearer\s+(\S+)/);
+
+  req.headers["access_token"] = matches && matches[1];
+  next();
+};
 
 export const requestTokenValidator = (
   error: ErrorRequestHandler,

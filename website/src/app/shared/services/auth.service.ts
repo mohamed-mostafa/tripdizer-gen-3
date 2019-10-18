@@ -33,7 +33,7 @@ export class AuthService {
 
 	signInWithGoogle(): void {
 		this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-			this.authenticateUserServerSide(user.provider, user.idToken);
+			this.authenticateUserServerSide(user.provider, user.authToken);
 		});
 	}
 
