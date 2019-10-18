@@ -8,9 +8,9 @@ import passportGoogleToken, {
   Profile as GoogleProfile
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
+import { default as UserDao } from "../data-access/user";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
-import { User as userSchema } from "../schemas/user";
 import { JWT_SECRET } from "../util/secrets";
 
 const GoogleTokenStrategy = passportGoogleToken.Strategy;
@@ -25,8 +25,8 @@ passport.serializeUser<any, any>((user, done) => {
   done(undefined, user.uuid);
 });
 
-passport.deserializeUser((uuid, done) => {
-  userSchema.findOne({ uuid: uuid }, (err, user) => {
+passport.deserializeUser((uuid: string, done) => {
+  UserDao.findByUUID(uuid, (err: any, user: any) => {
     done(err, user);
   });
 });
@@ -43,28 +43,15 @@ passport.use(
       profile: GoogleProfile,
       done: any
     ) => {
-      userSchema.findOne(
-        { email: profile._json.email },
-        (err, existingUser) => {
+      UserDao.addOrUpdateFromGoogle(
+        profile,
+        accessToken,
+        (err: any, user: User) => {
           if (err) {
             return done(err);
           }
-          let user: User = new userSchema();
-          if (existingUser) {
-            user = existingUser;
-          }
-          user.email = profile._json.email;
-          user.google = profile.id;
-          user.tokens = user.tokens.filter(t => t.provider !== "google");
-          user.tokens.push({ provider: "google", accessToken });
-          user.profile.firstName = profile.name.givenName;
-          user.profile.lastName = profile.name.familyName;
-          user.profile.picture = profile._json.picture;
-          user.lastLoginProvider = "google";
-          user.save((err: Error) => {
-            user.token = encodeToken(user);
-            done(err, user);
-          });
+          user.token = encodeToken(user);
+          done(err, user);
         }
       );
     }
@@ -83,32 +70,15 @@ passport.use(
       profile: FacebookProfile,
       done
     ) => {
-      userSchema.findOne(
-        { email: profile._json.email },
-        (err, existingUser) => {
+      UserDao.addOrUpdateFromFacebook(
+        profile,
+        accessToken,
+        (err: any, user: User) => {
           if (err) {
             return done(err);
           }
-          let user: User = new userSchema();
-          if (existingUser) {
-            user = existingUser;
-          }
-          user.email = profile._json.email;
-          user.facebook = profile.id;
-          user.tokens = user.tokens.filter(t => t.provider !== "facebook");
-          user.tokens.push({ provider: "facebook", accessToken });
-          user.profile.firstName = profile.name.givenName;
-          user.profile.lastName = profile.name.familyName;
-          user.profile.gender = profile._json.gender;
-          user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
-          user.profile.location = profile._json.location
-            ? profile._json.location.name
-            : "";
-          user.lastLoginProvider = "facebook";
-          user.save((err: Error) => {
-            user.token = encodeToken(user);
-            done(err, user);
-          });
+          user.token = encodeToken(user);
+          done(err, user);
         }
       );
     }
@@ -122,7 +92,7 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    userSchema.findOne({ uuid: jwtPayload.uuid }, (err, user) => {
+    UserDao.findByUUID(jwtPayload.uuid, (err: any, user: any) => {
       done(err, user);
     });
   })
