@@ -19,6 +19,7 @@ declare const FB: any;
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 	private endPoint = 'users/auth';
+	loading = new Subject<boolean>();
 	authenticatedUser = new Subject<User>();
 	isAuthenticated = new Subject<boolean>();
 	errorMsg = new Subject<string>();
@@ -34,6 +35,7 @@ export class AuthService {
 	}
 
 	signInWithGoogle(): void {
+		this.loading.next(true);
 		this.socialAuthService
 			.signIn(GoogleLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -45,6 +47,7 @@ export class AuthService {
 	}
 
 	signInWithFacebook(): void {
+		this.loading.next(true);
 		this.socialAuthService
 			.signIn(FacebookLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -56,6 +59,7 @@ export class AuthService {
 	}
 
 	signInWithLinkedIn(): void {
+		this.loading.next(true);
 		this.socialAuthService
 			.signIn(LinkedInLoginProvider.PROVIDER_ID)
 			.then((user: SocialUser) => {
@@ -101,6 +105,7 @@ export class AuthService {
 		this.errorMsg.next(error.toString());
 		this.isAuthenticated.next(false);
 		this.authenticatedUser.next(null);
+		this.loading.next(false);
 	}
 
 	private signInWithProvider(provider: string): void {
@@ -123,6 +128,7 @@ export class AuthService {
 	private storeAuthenticatedUser(user: User): void {
 		this.setAuthenticatedUserInLocalStorage(user);
 		this.initAuthenticationState();
+		this.loading.next(false);
 	}
 
 	private setAuthenticatedUserInLocalStorage(user: User): void {
