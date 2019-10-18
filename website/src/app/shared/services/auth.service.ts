@@ -9,6 +9,7 @@ import {
 	SocialUser,
 } from 'angularx-social-login';
 import { Subject } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import { TrackingService } from './tracking.service';
@@ -20,6 +21,7 @@ export class AuthService {
 	private endPoint = 'users/auth';
 	authenticatedUser = new Subject<User>();
 	isAuthenticated = new Subject<boolean>();
+	errorMsg = new Subject<string>();
 
 	constructor(
 		private http: HttpClient,
@@ -32,21 +34,36 @@ export class AuthService {
 	}
 
 	signInWithGoogle(): void {
-		this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-			this.authenticateUserServerSide(user.provider, user.authToken);
-		});
+		this.socialAuthService
+			.signIn(GoogleLoginProvider.PROVIDER_ID)
+			.then((user: SocialUser) => {
+				this.authenticateUserServerSide(user.provider, user.authToken);
+			})
+			.catch(err => {
+				this.authenticationFailed(err);
+			});
 	}
 
 	signInWithFacebook(): void {
-		this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-			this.authenticateUserServerSide(user.provider, user.authToken);
-		});
+		this.socialAuthService
+			.signIn(FacebookLoginProvider.PROVIDER_ID)
+			.then((user: SocialUser) => {
+				this.authenticateUserServerSide(user.provider, user.authToken);
+			})
+			.catch(err => {
+				this.authenticationFailed(err);
+			});
 	}
 
 	signInWithLinkedIn(): void {
-		this.socialAuthService.signIn(LinkedInLoginProvider.PROVIDER_ID).then((user: SocialUser) => {
-			this.authenticateUserServerSide(user.provider, user.idToken);
-		});
+		this.socialAuthService
+			.signIn(LinkedInLoginProvider.PROVIDER_ID)
+			.then((user: SocialUser) => {
+				this.authenticateUserServerSide(user.provider, user.idToken);
+			})
+			.catch(err => {
+				this.authenticationFailed(err);
+			});
 	}
 
 	continueWithoutLogin(): void {
@@ -67,10 +84,23 @@ export class AuthService {
 			.get(`/${this.endPoint}/${provider}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
+			.pipe(
+				catchError(
+					(err: any): any => {
+						this.authenticationFailed(err);
+					}
+				)
+			)
 			.subscribe((user: User) => {
 				this.storeAuthenticatedUser(user);
 				this.trackingService.track(`${provider} back-end authentication`, user);
 			});
+	}
+
+	private authenticationFailed(error: string): any {
+		this.errorMsg.next(error.toString());
+		this.isAuthenticated.next(false);
+		this.authenticatedUser.next(null);
 	}
 
 	private signInWithProvider(provider: string): void {

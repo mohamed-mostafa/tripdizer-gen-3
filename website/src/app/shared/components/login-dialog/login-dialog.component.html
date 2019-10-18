@@ -32,4 +32,5 @@
 			</div>
 		</ng-template>
 	</div>
+	<h6 *ngIf="!isAuthenticated" class="text-danger">{{ authErrorMsg | async }}</h6>
 </span>

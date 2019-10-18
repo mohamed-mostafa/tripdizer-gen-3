@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginDialogComponent implements OnInit {
 	loading = false;
 	isAuthenticated = false;
+	authErrorMsg = new Subject<string>();
 
 	constructor(
 		public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -24,6 +26,7 @@ export class LoginDialogComponent implements OnInit {
 			}
 			this.isAuthenticated = value;
 		});
+		this.authErrorMsg = this.authService.errorMsg;
 	}
 
 	close(): void {
