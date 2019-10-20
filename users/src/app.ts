@@ -8,6 +8,7 @@ import {
   isAuthenticated,
   requestTokenValidator
 } from "./config/passport";
+import { updatePhone } from "./controllers/user";
 
 const app = express();
 
@@ -33,5 +34,6 @@ app.use(passport.authenticate("jwt", { session: false }));
 app.use(isAuthenticated);
 
 app.get("/info", getAuthenticatedUser);
+app.put("/phone", updatePhone);
 
 export default app;

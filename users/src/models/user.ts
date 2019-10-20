@@ -20,6 +20,7 @@ export type User = mongoose.Document & {
     location: string;
     website: string;
     picture: string;
+    phone: string;
   };
 
   lastLoginProvider?: string;

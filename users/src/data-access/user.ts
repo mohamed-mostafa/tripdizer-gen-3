@@ -72,9 +72,18 @@ const addOrUpdateFromFacebook = (
   });
 };
 
+const update = (
+  uuid: string,
+  data: object,
+  callback: (err: any, raw: any) => void
+) => {
+  userSchema.updateOne({ uuid }, data, callback);
+};
+
 export default {
   findByUUID,
   findByEmail,
   addOrUpdateFromGoogle,
-  addOrUpdateFromFacebook
+  addOrUpdateFromFacebook,
+  update
 };
