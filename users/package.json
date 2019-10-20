@@ -16,6 +16,7 @@
     "watch-ts": "tsc -w"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^2.4.0",
     "acorn": "^7.1.0",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
