@@ -87,7 +87,7 @@ export class AuthService {
 	private authenticateUserServerSide(provider: string, token: string): void {
 		this.trackingService.track(`${provider} client-side authentication`);
 		this.http
-			.get(`/${this.endPoint}/${provider}`, {
+			.get(`${this.endPoint}/${provider}`, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.pipe(
