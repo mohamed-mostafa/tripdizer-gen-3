@@ -2,7 +2,7 @@ import bluebird from "bluebird";
 import mongoose from "mongoose";
 import { MONGODB_URI } from "../util/secrets";
 
-export default () => {
+const dbConnect = () => {
   mongoose.Promise = bluebird;
   mongoose
     .connect(MONGODB_URI, {
@@ -20,3 +20,4 @@ export default () => {
       // process.exit();
     });
 };
+dbConnect();

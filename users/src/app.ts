@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
+import "./config/database";
 import middlewares from "./config/middlewares";
-import mongoose from "./config/mongoose";
 import {
   fromAuthHeaderAsBearerTokenToAccessTokenHeader,
   getAuthenticatedUser,
@@ -12,10 +12,9 @@ import { updatePhone } from "./controllers/user";
 
 const app = express();
 
-mongoose();
 middlewares(app);
 
-var router = express.Router();
+const router = express.Router();
 
 router.get(
   "/auth/google",
