@@ -15,7 +15,9 @@ const app = express();
 mongoose();
 middlewares(app);
 
-app.get(
+var router = express.Router();
+
+router.get(
   "/auth/google",
   fromAuthHeaderAsBearerTokenToAccessTokenHeader,
   passport.authenticate("google-token"),
@@ -23,17 +25,20 @@ app.get(
   requestTokenValidator
 );
 
-app.get(
+router.get(
   "/auth/facebook",
   passport.authenticate("facebook-token"),
   getAuthenticatedUser,
   requestTokenValidator
 );
 
-app.use(passport.authenticate("jwt", { session: false }));
-app.use(isAuthenticated);
+router.use(passport.authenticate("jwt", { session: false }));
+router.use(isAuthenticated);
 
-app.get("/info", getAuthenticatedUser);
-app.put("/phone", updatePhone);
+// Authenticated endpoints
+router.get("/info", getAuthenticatedUser);
+router.put("/phone", updatePhone);
+
+app.use("/users", router);
 
 export default app;
