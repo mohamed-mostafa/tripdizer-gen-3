@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import mongoose from "mongoose";
 import uuid from "uuid/v4";
-import { User as UserModel } from "../models/user";
+import { TempUser as UserModel } from "../models/temp-user";
 
 const userSchema = new mongoose.Schema(
   {

@@ -8,8 +8,8 @@ import passportGoogleToken, {
   Profile as GoogleProfile
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
-import { default as UserDao } from "../data-access/user";
-import { User } from "../models/user";
+import { default as TempUserDao } from "../data-access/temp-user";
+import { TempUser } from "../models/temp-user";
 import { UserClaims } from "../models/user-claims";
 import { JWT_SECRET } from "../util/secrets";
 
@@ -18,7 +18,7 @@ const FacebookTokenStrategy = passportFacebookToken;
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 
-export const encodeToken = (user: User) =>
+export const encodeToken = (user: TempUser) =>
   jwt.sign({ ...new UserClaims(user) }, JWT_SECRET, { expiresIn: "30d" });
 
 passport.serializeUser<any, any>((user, done) => {
@@ -26,7 +26,7 @@ passport.serializeUser<any, any>((user, done) => {
 });
 
 passport.deserializeUser((uuid: string, done) => {
-  UserDao.findByUUID(uuid, (err: any, user: any) => {
+  TempUserDao.findByUUID(uuid, (err: any, user: any) => {
     done(err, user);
   });
 });
@@ -43,10 +43,10 @@ passport.use(
       profile: GoogleProfile,
       done: any
     ) => {
-      UserDao.addOrUpdateFromGoogle(
+      TempUserDao.addOrUpdateFromGoogle(
         profile,
         accessToken,
-        (err: any, user: User) => {
+        (err: any, user: TempUser) => {
           if (err) {
             return done(err);
           }
@@ -70,10 +70,10 @@ passport.use(
       profile: FacebookProfile,
       done
     ) => {
-      UserDao.addOrUpdateFromFacebook(
+      TempUserDao.addOrUpdateFromFacebook(
         profile,
         accessToken,
-        (err: any, user: User) => {
+        (err: any, user: TempUser) => {
           if (err) {
             return done(err);
           }
@@ -92,14 +92,14 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    UserDao.findByUUID(jwtPayload.uuid, (err: any, user: any) => {
+    TempUserDao.findByUUID(jwtPayload.uuid, (err: any, user: any) => {
       done(err, user);
     });
   })
 );
 
 export const getAuthenticatedUser = (req: Request, res: Response) => {
-  const user = req.user as User;
+  const user = req.user as TempUser;
   res.json({
     ...user.profile,
     email: user.email,
@@ -140,6 +140,6 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.user && (req.user as User).uuid) next();
+  if (req.user && (req.user as TempUser).uuid) next();
   else res.sendStatus(401);
 };

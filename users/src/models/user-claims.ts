@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { TempUser } from "./temp-user";
 
 export class UserClaims {
   uuid: string;
@@ -7,7 +7,7 @@ export class UserClaims {
   facebook: string;
   twitter: string;
 
-  constructor(user: User) {
+  constructor(user: TempUser) {
     this.uuid = user.uuid;
     this.email = user.email;
     this.google = user.google;

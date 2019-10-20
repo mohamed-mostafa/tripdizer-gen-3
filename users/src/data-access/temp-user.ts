@@ -1,15 +1,18 @@
 import { Profile as FacebookProfile } from "passport-facebook-token";
 import { Profile as GoogleProfile } from "passport-google-token";
-import { User } from "../models/user";
+import { TempUser } from "../models/temp-user";
 import { User as userSchema } from "../schemas/user";
 
-const findByUUID = (uuid: string, callback: (err: any, res: User) => void) => {
+const findByUUID = (
+  uuid: string,
+  callback: (err: any, res: TempUser) => void
+) => {
   userSchema.findOne({ uuid }, callback);
 };
 
 const findByEmail = (
   email: string,
-  callback: (err: any, res: User) => void
+  callback: (err: any, res: TempUser) => void
 ) => {
   userSchema.findOne({ email }, callback);
 };
@@ -23,7 +26,7 @@ const addOrUpdateFromGoogle = (
     if (err) {
       callback(err);
     }
-    let user: User = new userSchema();
+    let user: TempUser = new userSchema();
     if (existingUser) {
       user = existingUser;
     }
@@ -50,7 +53,7 @@ const addOrUpdateFromFacebook = (
     if (err) {
       callback(err);
     }
-    let user: User = new userSchema();
+    let user: TempUser = new userSchema();
     if (existingUser) {
       user = existingUser;
     }

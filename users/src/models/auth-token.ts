@@ -1,4 +1,4 @@
-export interface AuthToken {
+export type AuthToken = {
   accessToken: string;
   provider: string;
-}
+};

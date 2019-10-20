@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { AuthToken } from "./auth-token";
 
-export type User = mongoose.Document & {
+export type TempUser = mongoose.Document & {
   uuid: string;
   email: string;
   password: string;
