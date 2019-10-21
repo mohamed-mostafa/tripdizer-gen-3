@@ -1,0 +1,10 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "eslint.validate": [
+    "javascript",
+    { "language": "typescript", "autoFix": true }
+  ],
+  "typescript.referencesCodeLens.enabled": true,
+  "appService.zipIgnorePattern": [".vscode{,/**}"],
+  "appService.deploySubpath": ""
+}
