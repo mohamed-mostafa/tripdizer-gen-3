@@ -32,6 +32,7 @@
     "passport-google-token": "^0.1.2",
     "passport-jwt": "^4.0.0",
     "uuid": "^3.3.3",
+    "concurrently": "^4.1.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -59,7 +60,6 @@
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
     "chai": "^4.2.0",
-    "concurrently": "^4.1.2",
     "eslint": "^6.4.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.2",
