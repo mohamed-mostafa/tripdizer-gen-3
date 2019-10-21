@@ -5,7 +5,8 @@
   "author": "Ahmed Essawy",
   "license": "MIT",
   "scripts": {
-    "start": "npm run watch",
+    "start": "npm run build && node dist/server.js",
+    "debug": "npm run watch",
     "build": "npm run build-ts && npm run lint",
     "test": "jest --forceExit --coverage --verbose",
     "watch-test": "npm run test -- --watchAll",
