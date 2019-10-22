@@ -28,12 +28,7 @@ passport.serializeUser<any, any>((user, done) => {
 
 passport.deserializeUser((email: string, done) => {
   UserService.get(email).then((res: SuccessResponse<User> | ErrorResponse) => {
-    const user = (res as SuccessResponse<User>).data;
-    if (res.success && user) {
-      done(null, user);
-    } else {
-      done(res, null);
-    }
+    done((res as ErrorResponse).message, (res as SuccessResponse<User>).data);
   });
 });
 
@@ -122,12 +117,10 @@ passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
     UserService.get(jwtPayload.email).then(
       (res: SuccessResponse<User> | ErrorResponse) => {
-        const user = (res as SuccessResponse<User>).data;
-        if (res.success && user) {
-          done(null, user);
-        } else {
-          done(res, null);
-        }
+        done(
+          (res as ErrorResponse).message,
+          (res as SuccessResponse<User>).data
+        );
       }
     );
   })

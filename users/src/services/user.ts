@@ -4,22 +4,26 @@ import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 
 const addOrUpdateFromSocial = (
-  user: User
+  newUser: User
 ): Promise<SuccessResponse<User> | ErrorResponse> => {
-  return UserDao.get(user.email).then(
+  return UserDao.get(newUser.email).then(
     (res: SuccessResponse<User> | ErrorResponse) => {
       if (!res.success) return res;
+      let user: User = (res as SuccessResponse<User>).data;
 
-      const existingUser = (res as SuccessResponse<User>).data || {
-        uuid: uuid(),
-        tokens: [] as any[]
-      };
-      const newUser: User = { ...existingUser, ...user };
+      if (res.success && user) {
+        const tempUser = { ...user, ...newUser };
+        tempUser.profile = { ...user.profile, ...newUser.profile };
+        tempUser.tokens = user.tokens
+          .filter(t => !newUser.tokens.some(ut => ut.provider === t.provider))
+          .concat(newUser.tokens);
 
-      newUser.tokens = existingUser.tokens
-        .filter(t => !newUser.tokens.some(ut => ut.provider === t.provider))
-        .concat(newUser.tokens);
-      return UserDao.addOrUpdate(newUser).then(
+        user = tempUser;
+      } else {
+        user = { uuid: uuid(), ...newUser };
+      }
+
+      return UserDao.addOrUpdate(user).then(
         (res: SuccessResponse<User> | ErrorResponse) => {
           if (!res.success) return res;
 
