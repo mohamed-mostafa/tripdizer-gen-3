@@ -59,17 +59,20 @@ const addOrUpdateFromGoogle = (
   return get(user.email).then((res: SuccessResponse<User> | ErrorResponse) => {
     if (!res.success) return res;
 
-    const u = (res as SuccessResponse<User>).data;
-    const existingUser: User = { ...(u || { uuid: uuid() }), ...user };
+    const existingUser = (res as SuccessResponse<User>).data || {
+      uuid: uuid(),
+      tokens: [] as any[]
+    };
+    const newUser: User = { ...existingUser, ...user };
 
-    existingUser.tokens = u.tokens
-      .filter(t => !existingUser.tokens.some(ut => ut.provider === t.provider))
-      .concat(existingUser.tokens);
-    return addOrUpdate(existingUser).then(
+    newUser.tokens = existingUser.tokens
+      .filter(t => !newUser.tokens.some(ut => ut.provider === t.provider))
+      .concat(newUser.tokens);
+    return addOrUpdate(newUser).then(
       (res: SuccessResponse<User> | ErrorResponse) => {
         if (!res.success) return res;
 
-        return new SuccessResponse<User>(existingUser);
+        return new SuccessResponse<User>(newUser);
       }
     );
   });
@@ -93,17 +96,20 @@ const addOrUpdateFromFacebook = (
   return get(user.email).then((res: SuccessResponse<User> | ErrorResponse) => {
     if (!res.success) return res;
 
-    const u = (res as SuccessResponse<User>).data;
-    const existingUser: User = { ...(u || { uuid: uuid() }), ...user };
+    const existingUser = (res as SuccessResponse<User>).data || {
+      uuid: uuid(),
+      tokens: [] as any[]
+    };
+    const newUser: User = { ...existingUser, ...user };
 
-    existingUser.tokens = u.tokens
-      .filter(t => !existingUser.tokens.some(ut => ut.provider === t.provider))
-      .concat(existingUser.tokens);
-    return addOrUpdate(existingUser).then(
+    newUser.tokens = existingUser.tokens
+      .filter(t => !newUser.tokens.some(ut => ut.provider === t.provider))
+      .concat(newUser.tokens);
+    return addOrUpdate(newUser).then(
       (res: SuccessResponse<User> | ErrorResponse) => {
         if (!res.success) return res;
 
-        return new SuccessResponse<User>(existingUser);
+        return new SuccessResponse<User>(newUser);
       }
     );
   });
