@@ -9,26 +9,33 @@ import passportGoogleToken, {
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
 import { default as TempUserDao } from "../data-access/temp-user";
+import { default as UserDao } from "../data-access/user";
 import { TempUser } from "../models/temp-user";
+import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
 import { JWT_SECRET } from "../util/secrets";
+import { SuccessResponse, ErrorResponse } from "../models/response";
 
 const GoogleTokenStrategy = passportGoogleToken.Strategy;
 const FacebookTokenStrategy = passportFacebookToken;
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
 
-export const encodeToken = (user: TempUser) =>
+export const encodeToken = (user: User) =>
   jwt.sign({ ...new UserClaims(user) }, JWT_SECRET, { expiresIn: "30d" });
 
 passport.serializeUser<any, any>((user, done) => {
-  done(undefined, user.uuid);
+  done(undefined, user.email);
 });
 
-passport.deserializeUser((uuid: string, done) => {
-  TempUserDao.findByUUID(uuid, (err: any, user: any) => {
-    done(err, user);
-  });
+passport.deserializeUser((email: string, done) => {
+  UserDao.get(email)
+    .then((user: any) => {
+      done(null, user);
+    })
+    .catch((err: any) => {
+      done(err, null);
+    });
 });
 
 passport.use(
@@ -70,15 +77,15 @@ passport.use(
       profile: FacebookProfile,
       done
     ) => {
-      TempUserDao.addOrUpdateFromFacebook(
-        profile,
-        accessToken,
-        (err: any, user: TempUser) => {
-          if (err) {
-            return done(err);
+      UserDao.addOrUpdateFromFacebook(profile, accessToken).then(
+        (res: SuccessResponse<User> | ErrorResponse) => {
+          if (res.success) {
+            const user = (res as SuccessResponse<User>).data;
+            user.token = encodeToken(user);
+            done(null, user);
+          } else {
+            done(res, null);
           }
-          user.token = encodeToken(user);
-          done(err, user);
         }
       );
     }
@@ -92,14 +99,18 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    TempUserDao.findByUUID(jwtPayload.uuid, (err: any, user: any) => {
-      done(err, user);
-    });
+    UserDao.get(jwtPayload.email)
+      .then((user: any) => {
+        done(null, user);
+      })
+      .catch((err: any) => {
+        done(err, null);
+      });
   })
 );
 
 export const getAuthenticatedUser = (req: Request, res: Response) => {
-  const user = req.user as TempUser;
+  const user = req.user as User;
   res.json({
     ...user.profile,
     email: user.email,
