@@ -8,13 +8,11 @@ import passportGoogleToken, {
   Profile as GoogleProfile
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
-import { default as TempUserDao } from "../data-access/temp-user";
 import { default as UserDao } from "../data-access/user";
-import { TempUser } from "../models/temp-user";
+import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
 import { JWT_SECRET } from "../util/secrets";
-import { SuccessResponse, ErrorResponse } from "../models/response";
 
 const GoogleTokenStrategy = passportGoogleToken.Strategy;
 const FacebookTokenStrategy = passportFacebookToken;
@@ -29,13 +27,14 @@ passport.serializeUser<any, any>((user, done) => {
 });
 
 passport.deserializeUser((email: string, done) => {
-  UserDao.get(email)
-    .then((user: any) => {
+  UserDao.get(email).then((res: SuccessResponse<User> | ErrorResponse) => {
+    const user = (res as SuccessResponse<User>).data;
+    if (res.success && user) {
       done(null, user);
-    })
-    .catch((err: any) => {
-      done(err, null);
-    });
+    } else {
+      done(res, null);
+    }
+  });
 });
 
 passport.use(
@@ -99,13 +98,16 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    UserDao.get(jwtPayload.email)
-      .then((user: any) => {
-        done(null, user);
-      })
-      .catch((err: any) => {
-        done(err, null);
-      });
+    UserDao.get(jwtPayload.email).then(
+      (res: SuccessResponse<User> | ErrorResponse) => {
+        const user = (res as SuccessResponse<User>).data;
+        if (res.success && user) {
+          done(null, user);
+        } else {
+          done(res, null);
+        }
+      }
+    );
   })
 );
 
@@ -151,6 +153,6 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.user && (req.user as TempUser).uuid) next();
+  if (req.user && (req.user as User).email) next();
   else res.sendStatus(401);
 };
