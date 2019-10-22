@@ -50,15 +50,15 @@ passport.use(
       profile: GoogleProfile,
       done: any
     ) => {
-      TempUserDao.addOrUpdateFromGoogle(
-        profile,
-        accessToken,
-        (err: any, user: TempUser) => {
-          if (err) {
-            return done(err);
+      UserDao.addOrUpdateFromGoogle(profile, accessToken).then(
+        (res: SuccessResponse<User> | ErrorResponse) => {
+          if (res.success) {
+            const user = (res as SuccessResponse<User>).data;
+            user.token = encodeToken(user);
+            done(null, user);
+          } else {
+            done(res, null);
           }
-          user.token = encodeToken(user);
-          done(err, user);
         }
       );
     }

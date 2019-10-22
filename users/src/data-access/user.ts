@@ -1,8 +1,9 @@
 import { Profile as FacebookProfile } from "passport-facebook-token";
+import { Profile as GoogleProfile } from "passport-google-token";
 import { db } from "../config/database";
+import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 import uuid = require("uuid");
-import { SuccessResponse, ErrorResponse } from "../models/response";
 
 const users = db.collection("users");
 
@@ -29,6 +30,40 @@ const addOrUpdate = (
     .catch(
       () => new ErrorResponse(`Error on adding or updating user "${user.email}`)
     );
+
+const addOrUpdateFromGoogle = (
+  profile: GoogleProfile,
+  accessToken: string
+): Promise<SuccessResponse<User> | ErrorResponse> => {
+  const user: User = {
+    email: profile._json.email,
+    google: profile.id,
+    tokens: [{ provider: "google", accessToken }],
+    profile: {
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+      picture: profile._json.picture
+    },
+    lastLoginProvider: "google"
+  };
+  return get(user.email).then((res: SuccessResponse<User> | ErrorResponse) => {
+    if (!res.success) return res;
+
+    const u = (res as SuccessResponse<User>).data;
+    const existingUser: User = { ...(u || { uuid: uuid() }), ...user };
+
+    existingUser.tokens = u.tokens
+      .filter(t => !existingUser.tokens.some(ut => ut.provider === t.provider))
+      .concat(existingUser.tokens);
+    return addOrUpdate(existingUser).then(
+      (res: SuccessResponse<User> | ErrorResponse) => {
+        if (!res.success) return res;
+
+        return new SuccessResponse<User>(existingUser);
+      }
+    );
+  });
+};
 
 const addOrUpdateFromFacebook = (
   profile: FacebookProfile,
@@ -66,5 +101,6 @@ const addOrUpdateFromFacebook = (
 
 export default {
   get,
+  addOrUpdateFromGoogle,
   addOrUpdateFromFacebook
 };
