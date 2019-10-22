@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/login-dialog.component';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { LoginDialogComponent } from '../../shared/components/login-dialog/login-dialog.component';
+import { AuthService } from '../../shared/services/auth.service';
 import { User } from '../../user/user.model';
 
 @Component({
