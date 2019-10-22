@@ -11,7 +11,7 @@ import {
 import { Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { User } from '../models/user.model';
+import { User } from '../../user/user.model';
 import { TrackingService } from './tracking.service';
 
 declare const FB: any;

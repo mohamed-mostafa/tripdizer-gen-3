@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/login-dialog.component';
-import { User } from 'src/app/shared/models/user.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { User } from '../../user/user.model';
 
 @Component({
 	selector: 'c-core-user-profile',
