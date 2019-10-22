@@ -21,11 +21,10 @@ if (fs.existsSync(".env")) {
 
 export const ENVIRONMENT = process.env.NODE_ENV;
 export const JWT_SECRET = process.env.JWT_SECRET;
-export const MONGODB_URI = process.env.MONGODB_URI;
+export const PROJECT_NAME = process.env.PROJECT_NAME;
+export const KEY_FILE_NAME = process.env.KEY_FILE_NAME;
 
-if (!MONGODB_URI) {
-  logger.error(
-    "No mongo connection string. Set MONGODB_URI environment variable."
-  );
+if (!PROJECT_NAME || !KEY_FILE_NAME) {
+  logger.error("Set Firestone config environment variable.");
   process.exit(1);
 }

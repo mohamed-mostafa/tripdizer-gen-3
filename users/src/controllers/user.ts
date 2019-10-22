@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { default as UserDao } from "../data-access/user";
+import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 
-export const updatePhone = (req: Request, res: Response) => {
+export const update = (req: Request, res: Response) => {
   const user = req.user as User;
-  UserDao.update(user.uuid, { "profile.phone": req.body.phone }, (err, raw) => {
-    if (err) {
-      res.sendStatus(500).json(err);
+  UserDao.update(user.email, req.body).then(
+    (resp: SuccessResponse<User> | ErrorResponse) => {
+      if (!resp.success) res.sendStatus(500).json(resp);
+      res.json(resp);
     }
-    res.json(raw);
-  });
+  );
 };

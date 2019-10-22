@@ -1,30 +1,16 @@
-import mongoose from "mongoose";
 import { AuthToken } from "./auth-token";
+import { UserProfile } from "./user-profile";
 
-export type User = mongoose.Document & {
-  uuid: string;
+export type User = {
+  uuid?: string;
   email: string;
-  password: string;
-  passwordResetToken: string;
-  passwordResetExpires: Date;
 
-  facebook: string;
-  twitter: string;
-  google: string;
-  tokens: AuthToken[];
+  profile: UserProfile;
 
-  profile: {
-    firstName: string;
-    lastName: string;
-    gender: string;
-    location: string;
-    website: string;
-    picture: string;
-    phone: string;
-  };
-
+  facebook?: string;
+  google?: string;
   lastLoginProvider?: string;
-  token?: string;
 
-  gravatar: (size: number) => string;
+  tokens: AuthToken[];
+  token?: string;
 };

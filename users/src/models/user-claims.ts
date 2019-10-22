@@ -5,13 +5,11 @@ export class UserClaims {
   email: string;
   google: string;
   facebook: string;
-  twitter: string;
 
   constructor(user: User) {
     this.uuid = user.uuid;
     this.email = user.email;
     this.google = user.google;
     this.facebook = user.facebook;
-    this.twitter = user.twitter;
   }
 }

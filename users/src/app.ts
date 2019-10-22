@@ -8,7 +8,7 @@ import {
   isAuthenticated,
   requestTokenValidator
 } from "./config/passport";
-import { updatePhone } from "./controllers/user";
+import { update } from "./controllers/user";
 
 const app = express();
 
@@ -36,7 +36,7 @@ router.use(isAuthenticated);
 
 // Authenticated endpoints
 router.get("/info", getAuthenticatedUser);
-router.put("/phone", updatePhone);
+router.put("/", update);
 
 app.use("/users", router);
 
