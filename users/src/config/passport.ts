@@ -8,7 +8,7 @@ import passportGoogleToken, {
   Profile as GoogleProfile
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
-import { default as UserDao } from "../data-access/user";
+import { default as UserService } from "../services/user";
 import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
@@ -27,7 +27,7 @@ passport.serializeUser<any, any>((user, done) => {
 });
 
 passport.deserializeUser((email: string, done) => {
-  UserDao.get(email).then((res: SuccessResponse<User> | ErrorResponse) => {
+  UserService.get(email).then((res: SuccessResponse<User> | ErrorResponse) => {
     const user = (res as SuccessResponse<User>).data;
     if (res.success && user) {
       done(null, user);
@@ -49,7 +49,18 @@ passport.use(
       profile: GoogleProfile,
       done: any
     ) => {
-      UserDao.addOrUpdateFromGoogle(profile, accessToken).then(
+      const user: User = {
+        email: profile._json.email,
+        google: profile.id,
+        tokens: [{ provider: "google", accessToken }],
+        profile: {
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          picture: profile._json.picture
+        },
+        lastLoginProvider: "google"
+      };
+      UserService.addOrUpdateFromSocial(user).then(
         (res: SuccessResponse<User> | ErrorResponse) => {
           if (res.success) {
             const user = (res as SuccessResponse<User>).data;
@@ -76,7 +87,18 @@ passport.use(
       profile: FacebookProfile,
       done
     ) => {
-      UserDao.addOrUpdateFromFacebook(profile, accessToken).then(
+      const user: User = {
+        email: profile._json.email,
+        facebook: profile.id,
+        tokens: [{ provider: "facebook", accessToken }],
+        profile: {
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          picture: `https://graph.facebook.com/${profile.id}/picture?type=large`
+        },
+        lastLoginProvider: "facebook"
+      };
+      UserService.addOrUpdateFromSocial(user).then(
         (res: SuccessResponse<User> | ErrorResponse) => {
           if (res.success) {
             const user = (res as SuccessResponse<User>).data;
@@ -98,7 +120,7 @@ const jwtOptions: StrategyOptions = {
 };
 passport.use(
   new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-    UserDao.get(jwtPayload.email).then(
+    UserService.get(jwtPayload.email).then(
       (res: SuccessResponse<User> | ErrorResponse) => {
         const user = (res as SuccessResponse<User>).data;
         if (res.success && user) {
