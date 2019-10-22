@@ -31,6 +31,16 @@ const addOrUpdate = (
       () => new ErrorResponse(`Error on adding or updating user "${user.email}`)
     );
 
+const update = (
+  email: string,
+  user: User
+): Promise<SuccessResponse<User> | ErrorResponse> =>
+  users
+    .doc(email)
+    .set({ profile: user }, { merge: true })
+    .then(() => new SuccessResponse<User>(user))
+    .catch(() => new ErrorResponse(`Error on updating user "${user.email}`));
+
 const addOrUpdateFromGoogle = (
   profile: GoogleProfile,
   accessToken: string
@@ -101,6 +111,7 @@ const addOrUpdateFromFacebook = (
 
 export default {
   get,
+  update,
   addOrUpdateFromGoogle,
   addOrUpdateFromFacebook
 };
