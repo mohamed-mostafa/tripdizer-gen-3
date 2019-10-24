@@ -1,7 +1,7 @@
 <div *ngIf="user; else notUser">
 	<!-- <div>
 		<a href="javascript:void(0)" data-toggle="dropdown">
-			<img [src]="user.photoUrl" alt="" class="user-img rounded-circle" />
+			<img [src]="user.picture" alt="" class="user-img rounded-circle" />
 		</a>
 
 		<ul class="dropdown-menu">
@@ -9,7 +9,7 @@
 				class="mx-3 mt-1 text-body text-capitalize"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'"
 			>
-				{{ user.name }}
+				{{ user.firstName }} {{ user.lastName }}
 			</li>
 			<li
 				class="mx-3 mb-1 small text-monospace text-muted"
@@ -24,7 +24,7 @@
 		<tr>
 			<td [attr.rowspan]="rowSpanNum">
 				<img
-					[src]="user.photoUrl"
+					[src]="user.picture"
 					alt=""
 					class="user-img rounded-circle"
 					[ngClass]="('dir' | translate) === 'rtl' ? 'ml-2' : 'mr-2'"
@@ -34,7 +34,7 @@
 				class="text-body text-capitalize"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right pl-3' : 'text-left pr-3'"
 			>
-				{{ user.name }}
+				{{ user.firstName }} {{ user.lastName }}
 			</td>
 		</tr>
 		<tr *ngIf="rowSpanNum === 2">

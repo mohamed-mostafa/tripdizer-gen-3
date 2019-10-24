@@ -5,17 +5,17 @@
 export const environment = {
 	production: false,
 	apiUrl: 'https://development-services.tripdizer.com/',
-	// apiUrl: 'http://localhost:8083/',
+	// apiUrl: 'http://localhost:8080/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	experimentKey: '',
 	saveRequestState: true,
 	showSigningPopup: false,
 	facebook: {
-		appID: '1597597783733890',
+		appID: '987129541621584',
 		pixelID: null,
 	},
 	google: {
-		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
+		OAuthID: '121939121166-01m8e12acch3s3pjpkknh3obkmpl8l97.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-2',
 		conversionTrackingId: '',
 		conversionTrackingTarget: '',

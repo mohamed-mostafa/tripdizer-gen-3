@@ -26,8 +26,8 @@ import {
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { JWTokenInterceptor } from './http.interceptor';
+import { SocialAuthServiceConfig } from './shared/services/auth.service';
 import { CUSTOM_DATE_FORMATS, CUSTOM_LOCALE_FORMATS } from './shared/utils';
-import { SocialAuthServiceConfig } from './social-auth-service.config';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localeAr, 'ar');

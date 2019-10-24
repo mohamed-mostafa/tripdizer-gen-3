@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService as SocialAuthService } from 'angularx-social-login';
 import { environment } from '../../environments/environment';
 import { LoginDialogComponent } from '../shared/components/login-dialog/login-dialog.component';
 import { Country } from '../shared/models/country.model';
+import { AuthService } from '../shared/services/auth.service';
 import { RequestService } from './request.service';
 
 @Component({
@@ -21,10 +21,9 @@ export class RequestComponent implements OnInit, OnDestroy {
 	constructor(
 		private requestService: RequestService,
 		private activatedRoute: ActivatedRoute,
-		private socialAuthService: SocialAuthService,
+		private authService: AuthService,
 		private dialog: MatDialog
 	) {
-
 		requestService.getCountries().subscribe(countries => {
 			this.countries = countries;
 			this.setPreSelectedCountries();
@@ -39,7 +38,7 @@ export class RequestComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => {
+		this.authService.authenticatedUser.subscribe(user => {
 			if (user) {
 				this.requestService.setProperty('socialSigning', true);
 				this.requestService.setProperty('travelerName', user.name);

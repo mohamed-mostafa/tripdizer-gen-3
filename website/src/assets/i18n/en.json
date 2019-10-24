@@ -408,5 +408,34 @@
 				}
 			]
 		}
-	}
+    }, 
+    "user": {
+        "user_core": {
+            "language_label": "عربى",
+            "blog": "Blog",
+            "my_profile": "My Profile",
+            "my_plans": "My Plans",
+            "my_booking": "My Booking",
+            "log_out": "Log out",
+            "language": "Language"
+        },
+        "side_bar": {
+            "my_profile": "My Profile",
+            "my_plans": "My Plans",
+            "my_booking": "My Booking",
+            "log_out": "Log out"
+        },
+        "user_info": {
+            "my_profile": "My Profile",
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "email": "Email Address",
+            "mobile": "Mobile Number",
+            "birth_date": "Date of birth",
+            "location": "Location"
+        },
+        "user_plans": {
+            "my_plans": "My Plans"
+        }
+    }
 }

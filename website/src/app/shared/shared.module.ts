@@ -15,6 +15,7 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { OwlCarouselComponent } from './components/owl-carousel/owl-carousel.component';
 import { PlacesSelectBoxComponent } from './components/places-select-box/places-select-box.component';
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
 	imports: [
@@ -37,6 +38,7 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
 		TranslateModule,
+		FooterComponent
 	],
 	declarations: [
 		DialogComponent,
@@ -45,7 +47,8 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
 		LoginDialogComponent,
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
+		FooterComponent
 	],
 	entryComponents: [DialogComponent, LoginDialogComponent],
 })
-export class SharedModule {}
+export class SharedModule { }

@@ -1,15 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {
-	AuthService as SocialAuthService,
-	FacebookLoginProvider,
-	GoogleLoginProvider,
-	LinkedInLoginProvider,
-	SocialUser,
-} from 'angularx-social-login';
-import { TrackingService } from '../../services/tracking.service';
-
-declare const FB: any;
+import { Subject } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
 	selector: 'c-shared-login-dialog',
@@ -17,22 +9,25 @@ declare const FB: any;
 	styleUrls: ['./login-dialog.component.scss'],
 })
 export class LoginDialogComponent implements OnInit {
-	user: SocialUser;
+	isAuthenticated = false;
+	authLoading = new Subject<boolean>();
+	authErrorMsg = new Subject<string>();
 
 	constructor(
 		public dialogRef: MatDialogRef<LoginDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private socialAuthService: SocialAuthService,
-		private trackingService: TrackingService
+		private authService: AuthService
 	) {}
 
 	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => {
-			if (user) {
+		this.authService.isAuthenticated.subscribe(value => {
+			if (value) {
 				this.close();
 			}
-			this.user = user;
+			this.isAuthenticated = value;
 		});
+		this.authLoading = this.authService.loading;
+		this.authErrorMsg = this.authService.errorMsg;
 	}
 
 	close(): void {
@@ -40,27 +35,23 @@ export class LoginDialogComponent implements OnInit {
 	}
 
 	signInWithGoogle(): void {
-		this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-		this.trackingService.track('Sign in with Google');
+		this.authService.signInWithGoogle();
 	}
 
 	signInWithFacebook(): void {
-		this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-		this.trackingService.track('Sign in with Facebook');
+		this.authService.signInWithFacebook();
 	}
 
 	signInWithLinkedIn(): void {
-		this.socialAuthService.signIn(LinkedInLoginProvider.PROVIDER_ID);
-		this.trackingService.track('Sign in with LinkedIn');
+		this.authService.signInWithLinkedIn();
 	}
 
 	continueWithoutLogin(): void {
 		this.close();
-		this.trackingService.track('Continue without login');
+		this.authService.continueWithoutLogin();
 	}
 
 	signOut(): void {
-		this.socialAuthService.signOut();
-		this.trackingService.track('Sign out');
+		this.authService.signOut();
 	}
 }

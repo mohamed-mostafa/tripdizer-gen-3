@@ -5,6 +5,8 @@ dispatch:
     service: tripdizer-requests
   - url: 'development-services.tripdizer.com/master-data/*'
     service: tripdizer-master-data
+  - url: 'development-services.tripdizer.com/users/*'
+    service: tripdizer-users
   - url: 'development-dashboard.tripdizer.com/*'
     service: tripdizer-dashboard
   - url: 'development.tripdizer.com/*'

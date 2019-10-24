@@ -408,5 +408,34 @@
 				}
 			]
 		}
-	}
+	}, 
+    "user": {
+        "user_core": {
+            "language_label": "English",
+            "blog": "المدونة",
+            "my_profile": "بياناتى",
+            "my_plans": "رحلاتى",
+            "my_booking": "حجوزاتى",
+            "log_out": "تسجيل الخروج",
+            "language": "اللغة"
+        },
+        "side_bar": {
+            "my_profile": "بياناتى",
+            "my_plans": "رحلاتى",
+            "my_booking": "حجوزاتى",
+            "log_out": "تسجيل الخروج"
+        },
+        "user_info": {
+            "my_profile": "بياناتى",
+            "first_name": "الاسم الأول",
+            "last_name": "اسم الأب",
+            "email": "البريد الإلكترونى",
+            "mobile": "الموبايل",
+            "birth_date": "تاريخ الميلاد",
+            "location": "الدولة"
+        },
+        "user_plans": {
+            "my_plans": "رحلاتى"
+        }
+    }
 }
