@@ -1,3 +1,4 @@
+import { AuthGuard } from './../shared/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { UserComponent } from './user.component';
@@ -8,7 +9,7 @@ const routes: Routes = [
 	{
 		path: '',
 		component: UserComponent,
-		// canActivate: [UserGuard],
+		canActivate: [AuthGuard],
 		children: [
 			{ path: 'plans', component: UserPlansComponent },
 			{ path: '', component: UserInfoComponent },
