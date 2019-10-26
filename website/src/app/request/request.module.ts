@@ -1,3 +1,4 @@
+import { OwlModule } from 'ngx-owl-carousel';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -43,6 +44,7 @@ import { SummaryComponent } from './estimated-cost/summary/summary.component';
 		MatSliderModule,
 		MatTabsModule,
 		MatMenuModule,
+		OwlModule
 	],
 	declarations: [
 		...RequestComponents,

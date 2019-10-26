@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OwlCarousel } from 'ngx-owl-carousel';
+import { Component, ViewChild } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
 import { RequestService } from '../../request.service';
@@ -9,10 +10,15 @@ import { RequestService } from '../../request.service';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
+
+	@ViewChild('owlElement') owlElement: OwlCarousel;
+
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
 	loadedData: boolean;
+	options: any;
+	carousel: OwlCarousel;
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsAccommodationTabVisited(true);
@@ -27,6 +33,13 @@ export class TabAccommodationComponent {
 					this.totalCost = this.totalCost + item.hotels[0].price;
 				}
 			}
+
+			this.setSliderOptions();
+
+			// to remove when api is ready
+			this.accommodations[0].hotels = [...this.accommodations[0].hotels, ...this.accommodations[0].hotels, ...this.accommodations[0].hotels];
+			console.log(this.accommodations);
+
 		});
 	}
 
@@ -51,6 +64,31 @@ export class TabAccommodationComponent {
 		}
 	}
 
+	setSliderOptions() {
+		this.options = {
+			nav: true,
+			dots: false,
+			navText: ['<', '>'],
+			responsive: {
+				0: {
+					items: 1,
+					margin: 10,
+					slideBy: 1,
+				},
+				600: {
+					items: 2,
+					margin: 10,
+					slideBy: 2
+				},
+				1000: {
+					items: 3,
+					margin: 10,
+					slideBy: 3
+				},
+			},
+		};
+	}
+
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
 		this.service.setCurrentTabIndex(4);
@@ -58,5 +96,13 @@ export class TabAccommodationComponent {
 
 	back(): void {
 		this.service.setCurrentTabIndex(1);
+	}
+
+	nextSlide() {
+		this.owlElement.next();
+	}
+
+	PrevSlide() {
+		this.owlElement.previous();
 	}
 }

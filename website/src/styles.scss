@@ -91,3 +91,22 @@ body {
 .custom-bs.btn.btn-rounded {
   font-family: $kufi;
 }
+
+/* owl nav */
+.hotels-tab .owl-nav {
+    position: absolute;
+    top: 50%;
+    font-size: 1.8rem;
+    font-weight: bold;
+    width: 100%;
+
+    button.owl-prev {
+        position: absolute;
+        left: -20px;
+    }
+
+    button.owl-next {
+        position: absolute;
+        right: -20px;
+    }
+}

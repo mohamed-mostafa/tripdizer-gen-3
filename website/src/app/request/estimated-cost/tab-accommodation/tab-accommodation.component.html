@@ -1,116 +1,111 @@
 <div class="row justify-content-center hotels-tab py-2 py-md-4" *ngIf="loadedData">
-	<div class="col-lg-9 hotels-list">
-		<h4 class="list-title font-weight-bold title-font">
-			{{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
-		</h4>
+  <div class="col-lg-9 hotels-list">
+    <h4 class="list-title font-weight-bold title-font">
+      {{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
+    </h4>
 
-		<div *ngFor="let accommodation of accommodations">
-			<div class="row mt-2">
-				<div class="col">
-					<h3 class="destination-name font-italic">{{ accommodation.city.name }}</h3>
-				</div>
-			</div>
+    <div *ngFor="let accommodation of accommodations">
+      <div class="row mt-2">
+        <div class="col">
+          <h3 class="destination-name font-italic">{{ accommodation.city.name }}</h3>
+        </div>
+      </div>
 
-			<div class="row">
-				<div class="col-sm-12 col-md-6 col-lg-4 mb-2" *ngFor="let hotel of accommodation.hotels"
-					(click)="selectHotel(hotel)" [class.can-select]="!hotel.select">
-					<div class="hotel-item p-3" [class.selected-hotel]="hotel.select">
-						<div class="item-img-container">
-							<img [src]="hotel.thumbnail" alt=""
-								onerror="this.onerror=null; this.src='https://static.tripdizer.com/hotels/anonymoys-hotel-room.png'" />
-						</div>
+      <div class="row justify-content-center slider-content">
+        <div class="col-11">
+          <owl-carousel class="carousel" #owlElement [options]="options" [carouselClasses]="['row']">
 
-						<div class="mt-2">
-							<div class="row">
-								<div class="col-7">
-									<p class="dark-grey hotel-name mb-1">
-										<span class="font-weight-bold">{{ hotel.displayName.substring(0, 20) }}<span
-												*ngIf="hotel.displayName.length > 20">...</span></span>
-									</p>
-								</div>
-								<div class="col-5 rating">
-									<p class="mb-0">
-										{{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}</p>
-									<p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
-										<span class="mr-1" *ngIf="hotel.stars >= 2"><i class="fa fa-star"></i></span>
-										<span class="mr-1" *ngIf="hotel.stars >= 3"><i class="fa fa-star"></i></span>
-										<span class="mr-1" *ngIf="hotel.stars >= 4"><i class="fa fa-star"></i></span>
-										<span class="mr-1" *ngIf="hotel.stars == 5"><i class="fa fa-star"></i></span>
-									</p>
-									<p class="mb-0 rating-stars" *ngIf="hotel.stars < 2">
-										{{ 'request.estimated_cost.tab_accommodations.hostel' | translate }}
-									</p>
-								</div>
-							</div>
-							<div class="hotel-address">
-								<p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
-							</div>
+            <div class="mb-2 mx-1 item" *ngFor="let hotel of accommodation.hotels" (click)="selectHotel(hotel)"
+              [class.can-select]="!hotel.select">
+              <div class="hotel-item p-3" [class.selected-hotel]="hotel.select">
+                <div class="item-img-container">
+                  <img [src]="hotel.thumbnail" alt=""
+                    onerror="this.onerror=null; this.src='https://static.tripdizer.com/hotels/anonymoys-hotel-room.png'" />
+                </div>
 
-							<div class="row">
-								<div class="col-12">
-									<p class="grey item-text hotel-description">
-										{{ hotel.description.substring(0, 150) }}<span
-											*ngIf="hotel.description.length > 150">...</span>
-									</p>
-								</div>
-								<div class="col-12">
-									<div class="row">
-										<div class="col-6">
-											<h6 class="font-weight-bold price-title">
-												{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-											</h6>
-											<p class="item-text price-text">{{ hotel.price | currency: 'EGP' }}</p>
-										</div>
-										<div class="col-6 justify-content-end">
-											<mat-checkbox class="float-right mr-1" [checked]="hotel.select"
-												[disableRipple]="true" (click)="$event.preventDefault()"></mat-checkbox>
-											<!-- <button
-												*ngIf="!hotel.select"
-												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button"
-												(click)="hotel.select = !hotel.select"
-												(click)="selectHotel(hotel, accommodation.hotels)"
-											>
-												{{ 'request.estimated_cost.tab_accommodations.select' | translate }}
-											</button>
-											<button
-												*ngIf="hotel.select"
-												class="btn btn-primary custom-bs white select-btn btn-rounded my-2 mt-1 py-2 px-3"
-												role="button"
-												[disabled]="hotel.select"
-											>
-												{{ 'request.estimated_cost.tab_accommodations.selected' | translate }}
-											</button> -->
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                <div class="mt-2">
+                  <div class="row">
+                    <div class="col-7">
+                      <p class="dark-grey hotel-name mb-1">
+                        <span class="font-weight-bold">{{ hotel.displayName.substring(0, 20) }}<span
+                            *ngIf="hotel.displayName.length > 20">...</span></span>
+                      </p>
+                    </div>
+                    <div class="col-5 rating">
+                      <p class="mb-0">
+                        {{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}</p>
+                      <p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
+                        <span class="mr-1" *ngIf="hotel.stars >= 2"><i class="fa fa-star"></i></span>
+                        <span class="mr-1" *ngIf="hotel.stars >= 3"><i class="fa fa-star"></i></span>
+                        <span class="mr-1" *ngIf="hotel.stars >= 4"><i class="fa fa-star"></i></span>
+                        <span class="mr-1" *ngIf="hotel.stars == 5"><i class="fa fa-star"></i></span>
+                      </p>
+                      <p class="mb-0 rating-stars" *ngIf="hotel.stars < 2">
+                        {{ 'request.estimated_cost.tab_accommodations.hostel' | translate }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="hotel-address">
+                    <p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
+                  </div>
 
-		<div class="row my-2 my-sm-3 my-md-4 my-lg-5">
-			<div class="col-12">
-				<div class="bg-blue text-white text-center p-1 total-cost-box">
-					<span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
-					<br />
-					<span>{{ totalCost | currency: 'EGP' }}</span>
-				</div>
-			</div>
-		</div>
+                  <div class="row">
+                    <div class="col-12">
+                      <p class="grey item-text hotel-description">
+                        {{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span>
+                      </p>
+                    </div>
 
-		<div class="row mt-3">
-			<div class="col-12 text-center">
-				<a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
-					[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a>
+                    <div class="col-12">
+                        <p class="font-weight-bold">standard double room</p>
+                        <p>breakfast included - free cancellation</p>
+                    </div>
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-6">
+                          <h6 class="font-weight-bold price-title">
+                            {{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
+                          </h6>
+                          <p class="item-text price-text">{{ hotel.price | currency: 'EGP' }}</p>
+                        </div>
+                        <div class="col-6 justify-content-end">
+                          <mat-checkbox class="float-right mr-1" [checked]="hotel.select" [disableRipple]="true"
+                            (click)="$event.preventDefault()"></mat-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </owl-carousel>
+        </div>
+      </div>
 
-				<button (click)="next()" [disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-					{{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
-				</button>
-			</div>
-		</div>
-	</div>
+
+
+    </div>
+
+    <div class="row my-2 my-sm-3 my-md-4 my-lg-5">
+      <div class="col-12">
+        <div class="bg-blue text-white text-center p-1 total-cost-box">
+          <span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
+          <br />
+          <span>{{ totalCost | currency: 'EGP' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12 text-center">
+        <a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a>
+
+        <button (click)="next()" [disabled]="false"
+          class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+          {{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
