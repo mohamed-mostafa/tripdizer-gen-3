@@ -25,7 +25,7 @@ env_variables:
   PROJECT_NAME: tripdizer-dev
   KEY_FILE_NAME: ./firestone-dev-config.json
   JWT_SECRET: asikdjngfdjgnfkgjndfgkdfnk
-  GOOGLE_CLIENT_ID: 121939121166-01m8e12acch3s3pjpkknh3obkmpl8l97.apps.googleusercontent.com
-  GOOGLE_CLIENT_SECRET: odAcOdlFmA3W_xl1D6gJn1zZ
-  FACEBOOK_ID: 987129541621584
-  FACEBOOK_SECRET: 7f9078846b8efad4f13089b9b75ed459
+  GOOGLE_CLIENT_ID: 1004287460562-o43geqvk6s63rteosdftluhkpiq1kid4.apps.googleusercontent.com
+  GOOGLE_CLIENT_SECRET: 6JHHgsA15a8TzJW1-f57cmti
+  FACEBOOK_ID: 734243320376855
+  FACEBOOK_SECRET: 8d91f0bd678fe909704d000be4d0a01c
