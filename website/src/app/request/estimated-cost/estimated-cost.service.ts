@@ -1,3 +1,5 @@
+import { CityAttractions, AttractionsRequest } from './../summary/attraction.model';
+import { Station } from './../summary/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
@@ -7,8 +9,6 @@ import { map, tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
-import { AttractionsRequest, CityAttractions } from './summary/attraction.model';
-import { Station } from './summary/station.model';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';

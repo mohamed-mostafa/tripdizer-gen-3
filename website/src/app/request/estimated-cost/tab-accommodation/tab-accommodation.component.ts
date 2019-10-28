@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
 import { RequestService } from '../../request.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'c-estimated-cost-accommodation',
@@ -13,8 +14,15 @@ export class TabAccommodationComponent {
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
 	loadedData: boolean;
+	currentStepPath: string;
 
-	constructor(private service: EstimatedCostService, requestService: RequestService) {
+	constructor(
+		private service: EstimatedCostService,
+		public requestService: RequestService,
+		private router: Router,
+		private route: ActivatedRoute,
+	) {
+		this.currentStepPath = this.route.routeConfig.path;
 		requestService.setIsAccommodationTabVisited(true);
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
@@ -53,7 +61,8 @@ export class TabAccommodationComponent {
 
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
-		this.service.setCurrentTabIndex(4);
+		// this.service.setCurrentTabIndex(4);
+		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
 	back(): void {

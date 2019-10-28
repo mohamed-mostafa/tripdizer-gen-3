@@ -1,4 +1,5 @@
-import { City } from '../../../shared/models/city.model';
+import { City } from '../../shared/models/city.model';
+
 
 export class CityAttractions {
 	city: City;

@@ -7,7 +7,7 @@ import { IRequester } from './requester.model';
 import { TravelHistory } from './travel-history.enum';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
-import { Attraction } from './estimated-cost/summary/attraction.model';
+import { Attraction } from './summary/attraction.model';
 
 export class RequestRequest {
 	travelingFrom: string;

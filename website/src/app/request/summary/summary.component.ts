@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RequestService } from '../../request.service';
-import { EstimatedCostService } from '../estimated-cost.service';
 import { Station } from './station.model';
+import { EstimatedCostService } from '../estimated-cost/estimated-cost.service';
+import { RequestService } from '../request.service';
 
 @Component({
 	selector: 'c-app-summary',

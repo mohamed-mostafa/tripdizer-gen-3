@@ -267,7 +267,8 @@
 			"purpose": "Purpose",
 			"preferences": "Preferences",
 			"destinations": "Destinations",
-			"estimated_cost": "Itinerary",
+            "estimated_cost": "Itinerary",
+            "summary": "summary",
 			"travel_assistance": {
 				"title": "Travel Assistance",
 				"visaAssistance": "Visa",

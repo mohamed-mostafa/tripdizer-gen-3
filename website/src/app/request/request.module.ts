@@ -24,11 +24,13 @@ import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
-import { SummaryComponent } from './estimated-cost/summary/summary.component';
+import { SummaryComponent } from './summary/summary.component';
+import { SummaryModule } from './summary/summary.module';
 
 @NgModule({
 	imports: [
-		CommonModule,
+        CommonModule,
+        SummaryModule,
 		RequestRoutingModule,
 		CoreModule,
 		FormsModule,

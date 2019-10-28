@@ -63,10 +63,8 @@ export class BudgetComponent {
 				if (budgetCategories.length > 4) {
 					budgetCategories.splice(budgetCategories.length - 1, 1);
 					this.budgetCategories = budgetCategories.reverse();
-					console.log(this.budgetCategories);
 				} else {
 					this.budgetCategories = budgetCategories;
-					console.log(this.budgetCategories);
 				}
 			});
 	}
