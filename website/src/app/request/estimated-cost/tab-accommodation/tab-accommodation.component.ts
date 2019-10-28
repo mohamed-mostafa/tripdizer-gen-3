@@ -68,7 +68,6 @@ export class TabAccommodationComponent {
 		this.options = {
 			nav: true,
 			dots: false,
-			navText: ['<', '>'],
 			responsive: {
 				0: {
 					items: 1,
