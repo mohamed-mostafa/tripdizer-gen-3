@@ -8,10 +8,11 @@ import passportGoogleToken, {
   Profile as GoogleProfile
 } from "passport-google-token";
 import passportJwt, { StrategyOptions } from "passport-jwt";
-import { default as UserService } from "../services/user";
 import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
+import { default as UserService } from "../services/user";
+import logger from "../util/logger";
 import { JWT_SECRET } from "../util/secrets";
 
 const GoogleTokenStrategy = passportGoogleToken.Strategy;
@@ -160,7 +161,10 @@ export const requestTokenValidator = (
   res: Response,
   next: NextFunction
 ) => {
-  if (error) res.sendStatus(401);
+  if (error) {
+    logger.error(error);
+    res.sendStatus(401);
+  }
 };
 
 export const isAuthenticated = (
