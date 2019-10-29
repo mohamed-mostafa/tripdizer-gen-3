@@ -5,6 +5,7 @@ import { Express } from "express";
 import fs from "fs";
 import lusca from "lusca";
 import passport from "passport";
+import { LOGGING_CRED } from "../util/secrets";
 
 export default (app: Express) => {
   app.use(compression());
@@ -22,7 +23,7 @@ export default (app: Express) => {
         req.headers.authorization.split(" ")[1],
         "base64"
       ).toString();
-      if (cred === "logUser:P@ssw0rd") {
+      if (cred === LOGGING_CRED) {
         fs.readFile("debug.log", (err, data) => {
           if (err) res.send(err);
           else res.send(data);
