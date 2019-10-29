@@ -23,7 +23,7 @@ resources:
   disk_size_gb: 10
 env_variables:
   PROJECT_NAME: tripdizer-dev
-  KEY_FILE_NAME: ./firestone-dev-config.json
+  KEY_FILE_NAME: firestone-dev-config.json
   JWT_SECRET: asikdjngfdjgnfkgjndfgkdfnk
   GOOGLE_CLIENT_ID: 1004287460562-o43geqvk6s63rteosdftluhkpiq1kid4.apps.googleusercontent.com
   GOOGLE_CLIENT_SECRET: 6JHHgsA15a8TzJW1-f57cmti
