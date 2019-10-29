@@ -1,12 +1,12 @@
 import { Firestore } from "@google-cloud/firestore";
-import { FIRESTORE_CREDENTIALS, PROJECT_NAME } from "../util/secrets";
+import { FIRESTORE_CREDENTIALS } from "../util/secrets";
 
 export let db: Firestore;
 
 const dbConnect = () => {
   // mongoose.Promise = bluebird;
   db = new Firestore({
-    projectId: PROJECT_NAME,
+    projectId: FIRESTORE_CREDENTIALS.project_id,
     credentials: FIRESTORE_CREDENTIALS
   });
 };

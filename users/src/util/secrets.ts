@@ -29,7 +29,7 @@ export const FIRESTORE_CREDENTIALS =
     ? require("./tripdizer-service-account-key.json")
     : require("./tripdizer-service-account.json");
 
-if (!PROJECT_NAME || !FIRESTORE_CREDENTIALS) {
+if (!FIRESTORE_CREDENTIALS || !FIRESTORE_CREDENTIALS.project_id) {
   logger.error("Set Firestone config environment variable.");
   process.exit(1);
 }
