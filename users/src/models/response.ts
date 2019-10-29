@@ -20,9 +20,12 @@ class Response implements IResponse {
 
 export class ErrorResponse extends Response implements IErrorResponse {
   message: string;
-  constructor(message: string) {
+
+  constructor(message: string);
+  constructor(message: string, error: object);
+  constructor(message: string, error?: object) {
     super(false);
-    this.message = message;
+    this.message = message + (error ? error.toString() : "");
   }
 }
 

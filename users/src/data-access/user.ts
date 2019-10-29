@@ -1,9 +1,6 @@
-import { Profile as FacebookProfile } from "passport-facebook-token";
-import { Profile as GoogleProfile } from "passport-google-token";
 import { db } from "../config/database";
 import { ErrorResponse, SuccessResponse } from "../models/response";
 import { User } from "../models/user";
-import uuid = require("uuid");
 
 const users = db.collection("users");
 
@@ -18,7 +15,7 @@ const get = (email: string): Promise<SuccessResponse<User> | ErrorResponse> =>
         return new SuccessResponse<User>(doc.data());
       }
     })
-    .catch(err => new ErrorResponse(`Error on getting user "${email}"`));
+    .catch(e => new ErrorResponse(`Error on getting user "${email}"`, e));
 
 const addOrUpdate = (
   user: User
@@ -28,7 +25,8 @@ const addOrUpdate = (
     .set(user)
     .then(() => new SuccessResponse<User>(user))
     .catch(
-      () => new ErrorResponse(`Error on adding or updating user "${user.email}`)
+      e =>
+        new ErrorResponse(`Error on adding or updating user "${user.email}`, e)
     );
 
 const update = (
@@ -39,7 +37,7 @@ const update = (
     .doc(email)
     .set({ profile: user }, { merge: true })
     .then(() => new SuccessResponse<User>(user))
-    .catch(() => new ErrorResponse(`Error on updating user "${user.email}`));
+    .catch(e => new ErrorResponse(`Error on updating user "${user.email}`, e));
 
 export default {
   get,
