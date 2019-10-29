@@ -4,7 +4,6 @@ import { FIRESTORE_CREDENTIALS } from "../util/secrets";
 export let db: Firestore;
 
 const dbConnect = () => {
-  // mongoose.Promise = bluebird;
   db = new Firestore({
     projectId: FIRESTORE_CREDENTIALS.project_id,
     credentials: FIRESTORE_CREDENTIALS
