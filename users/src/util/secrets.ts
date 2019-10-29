@@ -23,7 +23,6 @@ if (fs.existsSync(".env")) {
 
 export const ENVIRONMENT = process.env.NODE_ENV;
 export const JWT_SECRET = process.env.JWT_SECRET;
-export const PROJECT_NAME = process.env.PROJECT_NAME;
 export const FIRESTORE_CREDENTIALS =
   ENVIRONMENT === "production"
     ? require("./tripdizer-service-account-key.json")

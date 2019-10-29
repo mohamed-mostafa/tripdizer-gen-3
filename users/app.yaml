@@ -22,8 +22,7 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  PROJECT_NAME: tripdizer-dev
-  JWT_SECRET: asikdjngfdjgnfkgjndfgkdfnk
+  JWT_SECRET: gfi73ygwtwofyhg48o7yu4jhf4
   GOOGLE_CLIENT_ID: 1004287460562-o43geqvk6s63rteosdftluhkpiq1kid4.apps.googleusercontent.com
   GOOGLE_CLIENT_SECRET: 6JHHgsA15a8TzJW1-f57cmti
   FACEBOOK_ID: 734243320376855
