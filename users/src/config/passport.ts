@@ -13,7 +13,7 @@ import { User } from "../models/user";
 import { UserClaims } from "../models/user-claims";
 import { default as UserService } from "../services/user";
 import logger from "../util/logger";
-import { JWT_SECRET } from "../util/secrets";
+import { FACEBOOK_CRED, GOOGLE_CRED, JWT_SECRET } from "../util/secrets";
 
 const GoogleTokenStrategy = passportGoogleToken.Strategy;
 const FacebookTokenStrategy = passportFacebookToken;
@@ -36,8 +36,8 @@ passport.deserializeUser((email: string, done) => {
 passport.use(
   new GoogleTokenStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      clientID: GOOGLE_CRED.id,
+      clientSecret: GOOGLE_CRED.secret
     },
     (
       accessToken: string,
@@ -74,8 +74,8 @@ passport.use(
 passport.use(
   new FacebookTokenStrategy(
     {
-      clientID: process.env.FACEBOOK_ID,
-      clientSecret: process.env.FACEBOOK_SECRET
+      clientID: FACEBOOK_CRED.id,
+      clientSecret: FACEBOOK_CRED.secret
     },
     (
       accessToken: string,

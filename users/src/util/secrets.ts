@@ -24,6 +24,14 @@ if (fs.existsSync(".env")) {
 export const ENVIRONMENT = process.env.NODE_ENV;
 export const JWT_SECRET = process.env.JWT_SECRET;
 export const LOGGING_CRED = process.env.LOGGING_CRED;
+export const GOOGLE_CRED = {
+  id: process.env.GOOGLE_CLIENT_ID,
+  secret: process.env.GOOGLE_CLIENT_SECRET
+};
+export const FACEBOOK_CRED = {
+  id: process.env.FACEBOOK_ID,
+  secret: process.env.FACEBOOK_SECRET
+};
 export const FIRESTORE_CREDENTIALS =
   ENVIRONMENT === "production"
     ? require("./tripdizer-service-account-key.json")
