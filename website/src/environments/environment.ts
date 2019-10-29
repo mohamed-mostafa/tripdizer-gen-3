@@ -11,11 +11,13 @@ export const environment = {
 	saveRequestState: true,
 	showSigningPopup: false,
 	facebook: {
-		appID: '987129541621584',
+		appID: '734243320376855',
+		// appID: '987129541621584',
 		pixelID: null,
 	},
 	google: {
-		OAuthID: '121939121166-01m8e12acch3s3pjpkknh3obkmpl8l97.apps.googleusercontent.com',
+		OAuthID: '1004287460562-o43geqvk6s63rteosdftluhkpiq1kid4.apps.googleusercontent.com',
+		// OAuthID: '121939121166-01m8e12acch3s3pjpkknh3obkmpl8l97.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-2',
 		conversionTrackingId: '',
 		conversionTrackingTarget: '',
