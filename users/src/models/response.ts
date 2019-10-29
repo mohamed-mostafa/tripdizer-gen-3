@@ -25,7 +25,7 @@ export class ErrorResponse extends Response implements IErrorResponse {
   constructor(message: string, error: object);
   constructor(message: string, error?: object) {
     super(false);
-    this.message = message + (error ? error.toString() : "");
+    this.message = `${message},  ${error ? error.toString() : ""}`;
   }
 }
 
