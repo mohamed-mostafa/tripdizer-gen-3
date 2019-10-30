@@ -23,7 +23,7 @@ exports.searchHotels = function(language,hotelSearchRequest) {
 
 
 /**
- * searches flights from origin to destination on specific dates for number of travelers
+ * searches multi-city flights from origin to multiple destinations on specific dates for number of travelers
  * By passing in the appropriate options, you can search for flights
  *
  * language String 
@@ -31,6 +31,48 @@ exports.searchHotels = function(language,hotelSearchRequest) {
  * returns FlightOffers
  **/
 exports.searchMultiCityFlights = function(language,multiCityFlightsSearchRequest) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = "";
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * searches one way flights from origin to destination on specific dates for number of travelers
+ * By passing in the appropriate options, you can search for flights
+ *
+ * language String 
+ * oneWayFlightsSearchRequest OneWayFlightsSearchRequest 
+ * returns FlightOffers
+ **/
+exports.searchOneWayFlights = function(language,oneWayFlightsSearchRequest) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = "";
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * searches return flights from origin to destination on specific dates for number of travelers
+ * By passing in the appropriate options, you can search for flights
+ *
+ * language String 
+ * returnFlightsSearchRequest ReturnFlightsSearchRequest 
+ * returns FlightOffers
+ **/
+exports.searchReturnFlights = function(language,returnFlightsSearchRequest) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = "";

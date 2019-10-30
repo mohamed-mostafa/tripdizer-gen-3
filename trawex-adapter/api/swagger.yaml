@@ -16,8 +16,8 @@ schemes:
 paths:
   /search/multi-city-flights:
     post:
-      summary: "searches flights from origin to destination on specific dates for\
-        \ number of travelers"
+      summary: "searches multi-city flights from origin to multiple destinations on\
+        \ specific dates for number of travelers"
       description: "By passing in the appropriate options, you can search for flights"
       operationId: "searchMultiCityFlights"
       consumes:
@@ -35,6 +35,64 @@ paths:
         required: true
         schema:
           $ref: "#/definitions/MultiCityFlightsSearchRequest"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            $ref: "#/definitions/FlightOffers"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /search/return-flights:
+    post:
+      summary: "searches return flights from origin to destination on specific dates\
+        \ for number of travelers"
+      description: "By passing in the appropriate options, you can search for flights"
+      operationId: "searchReturnFlights"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - in: "body"
+        name: "returnFlightsSearchRequest"
+        required: true
+        schema:
+          $ref: "#/definitions/ReturnFlightsSearchRequest"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            $ref: "#/definitions/FlightOffers"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /search/one-way-flights:
+    post:
+      summary: "searches one way flights from origin to destination on specific dates\
+        \ for number of travelers"
+      description: "By passing in the appropriate options, you can search for flights"
+      operationId: "searchOneWayFlights"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - in: "body"
+        name: "oneWayFlightsSearchRequest"
+        required: true
+        schema:
+          $ref: "#/definitions/OneWayFlightsSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -89,7 +147,7 @@ definitions:
       countryIso:
         type: "string"
         description: "The ISO-alpha3 code of the city's country"
-      arrivaldate:
+      arrivalDate:
         type: "string"
         format: "date"
         example: "2019-10-10"
@@ -136,21 +194,112 @@ definitions:
       numberOfChildren: 0
       tripSegments:
       - cityIata: "CAI"
-        arrivaldate: "2000-01-23"
+        arrivaldate: "2020-05-01"
         cityName: "Cairo"
         countryIso: "EGY"
-        leavingDate: "2000-01-23"
+        leavingDate: "2020-05-04"
       - cityIata: "AMS"
-        arrivaldate: "2000-01-23"
+        arrivaldate: "2000-05-04"
         cityName: "Amsterdam"
         countryIso: "NLD"
-        leavingDate: "2000-01-23"
+        leavingDate: "2020-05-08"
       - cityIata: "PAR"
-        arrivaldate: "2000-01-23"
+        arrivaldate: "2000-05-08"
         cityName: "Paris"
         countryIso: "FRA"
-        leavingDate: "2000-01-23"
+        leavingDate: "2020-05-12"
       numberOfAdults: 1
+  ReturnFlightsSearchRequest:
+    required:
+    - "departure"
+    - "destination"
+    - "numberOfAdults"
+    - "origin"
+    - "return"
+    properties:
+      origin:
+        type: "string"
+        example: "CAI"
+        description: "The origin city iata code"
+      destination:
+        type: "string"
+        example: "AMS"
+        description: "The destination city iata code"
+      departure:
+        type: "string"
+        format: "date"
+        example: "2019-12-20"
+        description: "The travel date from the origin to the destination"
+      return:
+        type: "string"
+        format: "date"
+        example: "2019-12-20"
+        description: "The return date from the destination to the origin"
+      numberOfAdults:
+        type: "number"
+        example: 1
+        description: "The number of adults in the trip"
+        minimum: 1
+      numberOfChildren:
+        type: "number"
+        example: 0
+        description: "The number of children in the trip"
+        minimum: 0
+      numberOfInfants:
+        type: "number"
+        example: 0
+        description: "The number of infants in the trip"
+        minimum: 0
+    example:
+      numberOfInfants: 0
+      numberOfChildren: 0
+      numberOfAdults: 1
+      origin: "CAI"
+      destination: "AMS"
+      departure: "2019-12-20"
+      return: "2019-12-20"
+  OneWayFlightsSearchRequest:
+    required:
+    - "departure"
+    - "destination"
+    - "numberOfAdults"
+    - "origin"
+    properties:
+      origin:
+        type: "string"
+        example: "CAI"
+        description: "The origin city iata code"
+      destination:
+        type: "string"
+        example: "AMS"
+        description: "The destination city iata code"
+      departure:
+        type: "string"
+        format: "date"
+        example: "2019-12-20"
+        description: "The travel date from the origin to the destination"
+      numberOfAdults:
+        type: "number"
+        example: 1
+        description: "The number of adults in the trip"
+        minimum: 1
+      numberOfChildren:
+        type: "number"
+        example: 0
+        description: "The number of children in the trip"
+        minimum: 0
+      numberOfInfants:
+        type: "number"
+        example: 0
+        description: "The number of infants in the trip"
+        minimum: 0
+    example:
+      numberOfInfants: 0
+      numberOfChildren: 0
+      numberOfAdults: 1
+      origin: "CAI"
+      destination: "AMS"
+      departure: "2019-12-20"
   HotelsSearchRequest:
     required:
     - "roomRequirements"
@@ -219,6 +368,12 @@ definitions:
           \ flight, if its more than 2 legs, then its a multi-city flight"
         items:
           $ref: "#/definitions/FlightLeg"
+      segments:
+        type: "array"
+        description: "a list of flight segments. Will only be present if flightsLegs\
+          \ don not, in case of multi-city searches"
+        items:
+          $ref: "#/definitions/FlightSegment"
       price:
         type: "number"
         format: "currency"
@@ -286,6 +441,8 @@ definitions:
       durationInMinutes:
         type: "number"
         example: 120
+      carrier:
+        $ref: "#/definitions/Carrier"
     description: "represents a part of a flight from an origin to a destination."
   Carrier:
     type: "object"
