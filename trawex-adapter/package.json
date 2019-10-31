@@ -21,6 +21,7 @@
     "moment": "2.24.0",
     "cors": "2.5.3",
     "request": "^2.88.0",
-    "humanize-duration": "^3.21.0"
+    "humanize-duration": "^3.21.0",
+    "nodemon": "^1.19.4"
   }
 }

@@ -13,6 +13,7 @@ let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019"
 let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143"
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -35,6 +36,11 @@ const shortArabicHumanizer = humanizeDuration.humanizer({
     }
   }
 })
+
+
+let airlinesMap = require("../lookups/Airlines.json");
+let airportsMap = require("../lookups/Airports.json");
+
 /**
  * searches flights from origin to destination on specific dates for number of travelers
  * By passing in the appropriate options, you can search for flights
@@ -62,19 +68,19 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
             currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             segments: []
           }
-          fareItinerary.FareItinerary.OriginDestinationOptions[0].OriginDestinationOption.forEach(originDestinationOptionItem => {
+          fareItinerary.FareItinerary.OriginDestinationOptions[0].OriginDestinationOption.forEach(async originDestinationOptionItem => {
             let flightSegment = {
               origin: originDestinationOptionItem.FlightSegment.DepartureAirportLocationCode,
               destination: originDestinationOptionItem.FlightSegment.ArrivalAirportLocationCode,
-              originDetails: originDestinationOptionItem.FlightSegment.DepartureAirportLocationCode, // map using airport list 
-              destinationDetails: originDestinationOptionItem.FlightSegment.ArrivalAirportLocationCode, // map using airport list 
+              originDetails: mapAirportCodeToName(originDestinationOptionItem.FlightSegment.DepartureAirportLocationCode), // map using airport list 
+              destinationDetails: mapAirportCodeToName(originDestinationOptionItem.FlightSegment.ArrivalAirportLocationCode), // map using airport list 
               departure: originDestinationOptionItem.FlightSegment.DepartureDateTime,
               arrival: originDestinationOptionItem.FlightSegment.ArrivalDateTime,
               totalDurationInWords: language == 'ar' ? shortArabicHumanizer(originDestinationOptionItem.FlightSegment.JourneyDuration * 60 * 1000) : shortEnglishHumanizer(originDestinationOptionItem.FlightSegment.JourneyDuration * 60 * 1000),
               totalDurationInMinutes: originDestinationOptionItem.FlightSegment.JourneyDuration,
               carrier: {
                 iataCode: originDestinationOptionItem.FlightSegment.MarketingAirlineCode,
-                name: originDestinationOptionItem.FlightSegment.MarketingAirlineCode
+                name: mapAirlineCodeToName(originDestinationOptionItem.FlightSegment.MarketingAirlineCode)
               }
             }
             flightOffer.segments.push(flightSegment);
@@ -101,7 +107,7 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
             currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode
           }
-          flightOffer.flightLegs = fareItinerary.FareItinerary.OriginDestinationOptions.map(originDestinationOptionsItem => {
+          flightOffer.flightLegs = fareItinerary.FareItinerary.OriginDestinationOptions.map(async originDestinationOptionsItem => {
             var flightDurationInMillis = new Date(originDestinationOptionsItem.OriginDestinationOption[originDestinationOptionsItem.OriginDestinationOption.length - 1].FlightSegment.ArrivalDateTime).getTime() - new Date(originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.DepartureDateTime).getTime();
             var transitDurationInMillis = calculateTotalTransit(originDestinationOptionsItem.OriginDestinationOption);
             let flightLeg = {
@@ -113,22 +119,22 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
               transitDurationInWords: language == 'ar' ? shortArabicHumanizer(transitDurationInMillis) : shortEnglishHumanizer(transitDurationInMillis),
               carrier: {
                 iataCode: originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode,
-                name: originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode
+                name: mapAirlineCodeToName(originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode)
               }
             }
-            flightLeg.segments = originDestinationOptionsItem.OriginDestinationOption.map(originDestinationOption => {
+            flightLeg.segments = originDestinationOptionsItem.OriginDestinationOption.map(async originDestinationOption => {
               let flightSegment = {
                 origin: originDestinationOption.FlightSegment.DepartureAirportLocationCode,
                 destination: originDestinationOption.FlightSegment.ArrivalAirportLocationCode,
-                originDetails: originDestinationOption.FlightSegment.DepartureAirportLocationCode, // map using airport list 
-                destinationDetails: originDestinationOption.FlightSegment.ArrivalAirportLocationCode, // map using airport list 
+                originDetails: mapAirportCodeToName(originDestinationOption.FlightSegment.DepartureAirportLocationCode), // map using airport list 
+                destinationDetails: mapAirportCodeToName(originDestinationOption.FlightSegment.ArrivalAirportLocationCode), // map using airport list 
                 departure: originDestinationOption.FlightSegment.DepartureDateTime,
                 arrival: originDestinationOption.FlightSegment.ArrivalDateTime,
                 totalDurationInWords: language == 'ar' ? shortArabicHumanizer(originDestinationOption.FlightSegment.JourneyDuration * 60 * 1000) : shortEnglishHumanizer(originDestinationOption.FlightSegment.JourneyDuration * 60 * 1000),
                 totalDurationInMinutes: originDestinationOption.FlightSegment.JourneyDuration,
                 carrier: {
                   iataCode: originDestinationOption.FlightSegment.MarketingAirlineCode,
-                  name: originDestinationOption.FlightSegment.MarketingAirlineCode
+                  name: mapAirlineCodeToName(originDestinationOption.FlightSegment.MarketingAirlineCode)
                 }
               }
               return flightSegment;
@@ -169,22 +175,22 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
               transitDurationInWords: language == 'ar' ? shortArabicHumanizer(transitDurationInMillis) : shortEnglishHumanizer(transitDurationInMillis),
               carrier: {
                 iataCode: originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode,
-                name: originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode
+                name: mapAirlineCodeToName(originDestinationOptionsItem.OriginDestinationOption[0].FlightSegment.MarketingAirlineCode)
               }
             }
             flightLeg.segments = originDestinationOptionsItem.OriginDestinationOption.map(originDestinationOption => {
               let flightSegment = {
                 origin: originDestinationOption.FlightSegment.DepartureAirportLocationCode,
                 destination: originDestinationOption.FlightSegment.ArrivalAirportLocationCode,
-                originDetails: originDestinationOption.FlightSegment.DepartureAirportLocationCode, // map using airport list 
-                destinationDetails: originDestinationOption.FlightSegment.ArrivalAirportLocationCode, // map using airport list 
+                originDetails: mapAirportCodeToName(originDestinationOption.FlightSegment.DepartureAirportLocationCode), // map using airport list 
+                destinationDetails: mapAirportCodeToName(originDestinationOption.FlightSegment.ArrivalAirportLocationCode), // map using airport list 
                 departure: originDestinationOption.FlightSegment.DepartureDateTime,
                 arrival: originDestinationOption.FlightSegment.ArrivalDateTime,
                 totalDurationInWords: language == 'ar' ? shortArabicHumanizer(originDestinationOption.FlightSegment.JourneyDuration * 60 * 1000) : shortEnglishHumanizer(originDestinationOption.FlightSegment.JourneyDuration * 60 * 1000),
                 totalDurationInMinutes: originDestinationOption.FlightSegment.JourneyDuration,
                 carrier: {
                   iataCode: originDestinationOption.FlightSegment.MarketingAirlineCode,
-                  name: originDestinationOption.FlightSegment.MarketingAirlineCode
+                  name: mapAirlineCodeToName(originDestinationOption.FlightSegment.MarketingAirlineCode)
                 }
               }
               return flightSegment;
@@ -203,12 +209,13 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
   });
 }
 
+
 function authenticate() {
   return new Promise(function (resolve, reject) {
     var trawexAuthenticationUrl = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AUTHENTICATE_URL;
     httpRequest.get(
       {
-        url: trawexAuthenticationUrl, json: true, proxy: "http://jumpbox.tripdizer.com:8080", rejectUnauthorized: false,
+        url: trawexAuthenticationUrl, json: true, proxy: TRAWEX_PROXY_ENDPOINT,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
       },
       function (error, response, data) {
@@ -231,7 +238,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
     var trawexAuthenticationUrl = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL;
     httpRequest.get(
       {
-        url: trawexAuthenticationUrl, json: true, proxy: "http://jumpbox.tripdizer.com:8080", rejectUnauthorized: false,
+        url: trawexAuthenticationUrl, json: true, proxy: TRAWEX_PROXY_ENDPOINT,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
           session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
@@ -252,6 +259,24 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
       }
     );
   });
+}
+
+var mapAirlineCodeToName = function (airlineCode) {
+  let airlineCodeNamePair = airlinesMap.filter(element => element.AirLineCode == airlineCode);
+  if (airlineCodeNamePair.length != 0) {
+    return airlineCodeNamePair[0].AirLineName;
+  } else {
+    return airlineCode;
+  }
+}
+
+var mapAirportCodeToName = function (airportCode) {
+  let airportCodeNamePair = airportsMap.filter(element => element.AirportCode == airportCode);
+  if (airportCodeNamePair.length != 0) {
+    return airportCodeNamePair[0].AirportName;
+  } else {
+    return airportCode;
+  }
 }
 
 var calculateTotalTransit = function (segments) {

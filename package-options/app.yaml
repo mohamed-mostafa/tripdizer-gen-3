@@ -22,7 +22,7 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  FLIGHTS_ADAPTER_ENDPOINT: https://tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com/flights/1.0.0/flights
+  FLIGHTS_ADAPTER_ENDPOINT: https://tripdizer-trawex-adapter-dot-tripdizer-dev.appspot.com/trawex-adapter/1.0.0/search/one-way-flights
   MASTER_DATA_ENDPOINT: https://tripdizer-master-data-dot-tripdizer-dev.appspot.com/master-data
   MEDIA_STORAGE_BASE_URL: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com'
 
