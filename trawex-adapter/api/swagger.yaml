@@ -14,7 +14,7 @@ basePath: "/trawex-adapter/1.0.0"
 schemes:
 - "https"
 paths:
-  /search/multi-city-flights:
+  /flights/search/multi-city:
     post:
       summary: "searches multi-city flights from origin to multiple destinations on\
         \ specific dates for number of travelers"
@@ -43,7 +43,7 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /search/return-flights:
+  /flights/search/return:
     post:
       summary: "searches return flights from origin to destination on specific dates\
         \ for number of travelers"
@@ -72,7 +72,7 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
-  /search/one-way-flights:
+  /flights/search/one-way:
     post:
       summary: "searches one way flights from origin to destination on specific dates\
         \ for number of travelers"
@@ -100,6 +100,159 @@ paths:
             $ref: "#/definitions/FlightOffers"
         400:
           description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /flights/fare/details:
+    get:
+      summary: "gets the details of a flight fair, using the fareSourceCode returned\
+        \ from the search"
+      description: "By passing in the appropriate options, you can retrieve details\
+        \ of a fareSourceCode returned from the search"
+      operationId: "getFareDetails"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - name: "sessionId"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "fareSourceCode"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful Execution"
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
+  /flights/fare/revalidate:
+    get:
+      summary: "Revalidates a flight fair, using the fareSourceCode returned from\
+        \ the search"
+      description: "By passing in the appropriate options, you can revalidate a flight\
+        \ fair using the fareSourceCode returned from the search"
+      operationId: "revalidateFare"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - name: "sessionId"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "fareSourceCode"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              requiredFieldsToBook:
+                type: "array"
+                example:
+                - "Passport"
+                - "Passport No"
+                - "DOB"
+                - "PassengerNationality"
+                - "PostCode"
+                - "Gender"
+                - "Email"
+                - "IssueCountry"
+                - "ExpiredOn"
+                - "Title"
+                - "ContactNumber"
+                items:
+                  type: "string"
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
+  /flights/fare/book:
+    post:
+      summary: "Books a flight fair, using the fareSourceCode returned from the search,\
+        \ and the PNR information of the travelers"
+      description: "By passing in the appropriate options, you can book a flight fair\
+        \ using the fareSourceCode returned from the search, ad the PNR information\
+        \ of the travelers"
+      operationId: "bookFlight"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - in: "body"
+        name: "bookFlightRequest"
+        required: true
+        schema:
+          $ref: "#/definitions/BookFlightRequest"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              bookingStatus:
+                type: "string"
+              bookingUniqueId:
+                type: "string"
+              bookingTicketTimeLimit:
+                type: "string"
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
+  /flights/ticket/issue:
+    get:
+      summary: "Issues a ticket for a booking. Should only be done for Piblic or Private"
+      description: "By passing in the appropriate options, you can issue the ticket\
+        \ for a booking"
+      operationId: "issueTicket"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "language"
+        in: "header"
+        required: true
+        type: "string"
+        default: "en"
+      - name: "sessionId"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "bookingUniqueId"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              ticketUniqueId:
+                type: "string"
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
       x-swagger-router-controller: "Default"
   /search/hotels:
     post:
@@ -380,6 +533,21 @@ definitions:
       currency:
         type: "string"
         example: "EGP"
+      sessionId:
+        type: "string"
+        description: "the id of the session at trawex"
+      fareSourceCode:
+        type: "string"
+        description: "the unique identifier of the offer at trawex. will be used to\
+          \ validate and book the offer later"
+      fareType:
+        type: "string"
+        description: "the type of the fare (Public, Private, LCC). It affects whether\
+          \ we need to issue a ticket after booking, or if booking does it already"
+      refundable:
+        type: "string"
+      passportMandatory:
+        type: "boolean"
     description: "represents an offer to the client"
   FlightLeg:
     type: "object"
@@ -454,6 +622,178 @@ definitions:
         type: "string"
         example: "Egypt Air"
     description: "describes an airline carrier"
+  BookFlightRequest:
+    type: "object"
+    properties:
+      sessionId:
+        type: "string"
+        description: "the id of the session at trawex"
+      fareSourceCode:
+        type: "string"
+        description: "the unique identifier of the offer at trawex. will be used to\
+          \ validate and book the offer later"
+      fareType:
+        type: "string"
+        description: "the type of the fare (Public:normal, Private:discounted for\
+          \ a consolidator, LCC:low cost carrier). It affects whether we need to issue\
+          \ a ticket after booking, or if booking does it already"
+      adultsPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"
+      childrenPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"
+      infantsPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"
+    description: "Describes a request to book a flight"
+    example:
+      passportMandatory: true
+      infantsPNRInfoList:
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      fareSourceCode: "fareSourceCode"
+      childrenPNRInfoList:
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      adultsPNRInfoList:
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      - passportNumber: "A08102235"
+        lastName: "Mostafa"
+        gender: "M"
+        dateOfBirth: "1984-02-01T00:00:00"
+        title: "Mr"
+        passportExpiry: "2013-02-03"
+        firstName: "Mohamed"
+        areaCode: "02"
+        nationality: "EG"
+        phone: 33378321
+        passportIssueCountry: "EG"
+        countryCode: "+2"
+        email: "email"
+      refundable: "refundable"
+      sessionId: "sessionId"
+      fareType: "fareType"
+  PNRInfo:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+        example: "Mohamed"
+      lastName:
+        type: "string"
+        example: "Mostafa"
+      title:
+        type: "string"
+        example: "Mr"
+      gender:
+        type: "string"
+        example: "M"
+      dateOfBirth:
+        type: "string"
+        format: "date-time"
+        example: "1984-02-01T00:00:00"
+      nationality:
+        type: "string"
+        example: "EG"
+      email:
+        type: "string"
+      countryCode:
+        type: "string"
+        example: "+2"
+      areaCode:
+        type: "string"
+        example: "02"
+      phone:
+        type: "number"
+        example: 33378321
+      passportNumber:
+        type: "string"
+        example: "A08102235"
+      passportExpiry:
+        type: "string"
+        format: "date"
+        example: "2013-02-03"
+      passportIssueCountry:
+        type: "string"
+        example: "EG"
+    example:
+      passportNumber: "A08102235"
+      lastName: "Mostafa"
+      gender: "M"
+      dateOfBirth: "1984-02-01T00:00:00"
+      title: "Mr"
+      passportExpiry: "2013-02-03"
+      firstName: "Mohamed"
+      areaCode: "02"
+      nationality: "EG"
+      phone: 33378321
+      passportIssueCountry: "EG"
+      countryCode: "+2"
+      email: "email"
   HotelOffers:
     type: "array"
     description: "a list of hotel offers"

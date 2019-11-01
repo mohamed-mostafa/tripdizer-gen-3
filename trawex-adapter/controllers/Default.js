@@ -2,7 +2,58 @@
 
 var utils = require('../utils/writer.js');
 var Default = require('../service/DefaultService');
-var flightsService = require('../service/FlightsService');
+var flightsService = require('../service/FlightsService')
+
+module.exports.bookFlight = function bookFlight(req, res, next) {
+  var language = req.swagger.params['language'].value;
+  var bookFlightRequest = req.swagger.params['bookFlightRequest'].value;
+  flightsService.bookFlight(language, bookFlightRequest)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.getFareDetails = function getFareDetails(req, res, next) {
+  var language = req.swagger.params['language'].value;
+  var sessionId = req.swagger.params['sessionId'].value;
+  var fareSourceCode = req.swagger.params['fareSourceCode'].value;
+  flightsService.getFareDetails(language, sessionId, fareSourceCode)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.issueTicket = function issueTicket(req, res, next) {
+  var language = req.swagger.params['language'].value;
+  var sessionId = req.swagger.params['sessionId'].value;
+  var bookingUniqueId = req.swagger.params['bookingUniqueId'].value;
+  flightsService.issueTicket(language, sessionId, bookingUniqueId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.revalidateFare = function revalidateFare(req, res, next) {
+  var language = req.swagger.params['language'].value;
+  var sessionId = req.swagger.params['sessionId'].value;
+  var fareSourceCode = req.swagger.params['fareSourceCode'].value;
+  flightsService.revalidateFare(language, sessionId, fareSourceCode)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
 
 module.exports.searchHotels = function searchHotels(req, res, next) {
   var language = req.swagger.params['language'].value;

@@ -4,7 +4,7 @@ const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8 * 60;
 const FLIGHTS_ADAPTER_ENDPOINT =
   process.env.FLIGHTS_ADAPTER_ENDPOINT ||
-  "http://localhost:8085/trawex-adapter/1.0.0/search/one-way-flights";
+  "http://localhost:8085/trawex-adapter/1.0.0/flights/search/one-way";
 const MASTER_DATA_ENDPOINT =
   process.env.MASTER_DATA_ENDPOINT || "http://localhost:8083/master-data";
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
@@ -311,6 +311,8 @@ function createPackageOptiosOfferFromFlightsAdapterOffer(
     transitDurationInMinutes:
       flightOffer.flightLegs[0].transitDurationInMinutes,
     segments: flightOffer.flightLegs[0].segments,
+    sessionId: flightOffer.sessionId, fareSourceCode: flightOffer.fareSourceCode,
+    fareType: flightOffer.fareType, refundable: flightOffer.refundable, passportMandatory: flightOffer.passportMandatory,
     carrier: {
       iataCode: flightOffer.flightLegs[0].carrier.iataCode,
       name: flightOffer.flightLegs[0].carrier.name,
