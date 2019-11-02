@@ -100,10 +100,10 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, { error: "Failed to search for flights with trawex. Reason: " + error }))
+        reject(writer.respondWithCode(500, error))
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, { error: "Failed to authenticate with trawex. Reason: " + error }))
+      reject(writer.respondWithCode(500, error))
     });
   });
 }
@@ -162,10 +162,10 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, { error: "Failed to search for flights with trawex. Reason: " + error }))
+        reject(writer.respondWithCode(500, error))
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, { error: "Failed to authenticate with trawex. Reason: " + error }))
+      reject(writer.respondWithCode(500, error))
     });
   });
 }
@@ -224,10 +224,10 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, { error: "Failed to search for flights with trawex. Reason: " + error }))
+        reject(writer.respondWithCode(500, error))
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, { error: "Failed to authenticate with trawex. Reason: " + error }))
+      reject(writer.respondWithCode(500, error))
     });
   });
 }
@@ -247,7 +247,7 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
           reject(writer.respondWithCode(500, { error: "Failed to get fare rules with trawex. Reason: " + response.statusMessage }))
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
             reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
           }
@@ -274,12 +274,12 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
           reject(writer.respondWithCode(500, { error: "Failed to revalidate fare with trawex. Reason: " + response.statusMessage }))
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
             reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
           }
         } else {
-          if (data.AirRevalidateResponse.AirRevalidateResult.IsValid) {
+          if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
             resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
           } else {
             reject(writer.respondWithCode(500, { error: "Failed to revalidate fare with trawex. Reason: Fare is no longer valid for booking" }))
@@ -360,7 +360,7 @@ exports.bookFlight = function (language, bookFlightRequest) {
           reject(writer.respondWithCode(500, { error: "Failed to book with trawex. Reason: " + response.statusMessage }))
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
             reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
           }
@@ -371,9 +371,13 @@ exports.bookFlight = function (language, bookFlightRequest) {
             reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
           }
         } else {
-          if (data.BookFlightResponse.BookFlightResult.Success == false) {
+          if (data.BookFlightResponse.BookFlightResult.Success == "false" || data.BookFlightResponse.BookFlightResult.Success == false) {
             // return all errors, coma-separated
-            reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
+              reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            } else {
+              reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.ErrorMessage }));
+            }
           } else {
             resolve({
               bookingStatus: data.BookFlightResponse.BookFlightResult.Status,
@@ -412,14 +416,14 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
           }
         } else if (data.AirOrderTicketRS.TicketOrderResult.Errors) {
           if (Array.isArray(data.AirOrderTicketRS.TicketOrderResult.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage }));
+            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error ? data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage : (data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage ? data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage : "UNKNOWN ERROR") }));
           }
         } else {
-          if (data.AirOrderTicketRS.TicketOrderResult.Success == "false") {
+          if (data.AirOrderTicketRS.TicketOrderResult.Success == "false" || data.AirOrderTicketRS.TicketOrderResult.Success == false) {
             // return all errors, coma-separated
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
             resolve({ ticketUniqueId: data.AirOrderTicketRS.TicketOrderResult.UniqueID });
           }
@@ -472,7 +476,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
           reject(response.statusMessage);
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage.reduce((oneError, nextError) => oneError + ", " + nextError)) }));
+            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
           } else {
             reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
           }
