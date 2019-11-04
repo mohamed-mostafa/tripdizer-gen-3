@@ -100,7 +100,6 @@ const searchHotelsAPI = (
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH,
         json: true,
-        proxy: TRAWEX_PROXY_ENDPOINT,
         body: {
           user_id: TRAWEX_USERNAME,
           user_password: TRAWEX_PASSWORD,
@@ -160,7 +159,6 @@ const getMoreHotelsAPI = (sessionId, nextToken) => {
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE,
         json: true,
-        proxy: TRAWEX_PROXY_ENDPOINT,
         qs: {
           user_id: TRAWEX_USERNAME,
           user_password: TRAWEX_PASSWORD,
