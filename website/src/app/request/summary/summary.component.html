@@ -1,158 +1,219 @@
-<div
-	class="row justify-content-center summary-c py-2 py-md-4 pb-4"
-	[class.text-right]="('dir' | translate) === 'rtl'"
-	*ngIf="loadedData"
->
-	<div class="col-lg-10 summary-list">
-		<h4 class="list-title font-weight-bold title-font">
-			{{ 'request.estimated_cost.summary.view_details' | translate }}
-		</h4>
+<div class="row justify-content-center summary-c py-2 py-md-4 pb-4" [class.text-right]="('dir' | translate) === 'rtl'"
+  *ngIf="loadedData">
+  <div class="col-lg-11 summary-list">
 
-		<div class="row mt-3 mx-0">
-			<div class="col-12 station-item" *ngFor="let station of stations">
-				<div class="row">
-					<div class="col-12 top-box p-2">
-						<div class="row">
-							<div class="col-2 col-md-1 nights-count">
-								<div class="row" [hidden]="station.nights_count <= 0">
-									<div class="col-12 text-center font-weight-bold nights-count-number">
-										{{ station.nights_count }}
-									</div>
-									<div class="col-12 text-center nights-label font-weight-bold font-italic">
-										{{ 'request.estimated_cost.summary.nights' | translate }}
-									</div>
-								</div>
-							</div>
-							<div class="col-4 col-md-2">
-								<div class="row">
-									<div class="col-12 font-weight-bold station-name">{{ station.name }}</div>
-									<div class="col-12 smaller-text" [hidden]="station.isReturnStation">
-										{{ station.from }} {{ 'request.estimated_cost.summary.to' | translate }} {{ station.to }}
-									</div>
-									<div class="col-12 smaller-text" [hidden]="!station.isReturnStation">
-										{{ station.from }}
-									</div>
-								</div>
-							</div>
-							<div class="col-5 col-md-6 align-self-center">
-								<div class="row" *ngIf="station.flightDataExists == true">
-									<div class="col-12 col-md-6 smaller-text">
-										{{ station.travel_time }}
-										<span class="d-none d-md-inline-block"
-											>{{ 'request.estimated_cost.summary.depart' | translate }}
-										</span>
-										{{ 'request.estimated_cost.summary.from' | translate }}
-										{{ station.depart_from }}
-									</div>
-									<div class="col-12 col-md-6 smaller-text">
-										{{ station.arrive_time }}
-										<span class="d-none d-md-inline-block"
-											>{{ 'request.estimated_cost.summary.arrival' | translate }}
-										</span>
-										{{ 'request.estimated_cost.summary.to' | translate }}
-										{{ station.arrive_to }}
-									</div>
-								</div>
-								<div class="row" *ngIf="station.flightDataExists == false">
-									<div class="col-12 col-md-6 smaller-text">
-										{{ 'request.estimated_cost.summary.no_flights' | translate }}
-									</div>
-								</div>
-							</div>
-							<div *ngIf="station.flightDataExists == true" class="col-3 align-self-center d-none d-md-block">
-								{{ 'request.estimated_cost.summary.duration' | translate }}: {{ station.duration }}
-							</div>
-						</div>
-					</div>
-					<div class="col-12 p-2 p-md-3" [hidden]="station.isReturnStation == true">
-						<div class="row">
-							<div class="col-12 col-md-3 station-img"><img [src]="station.image" alt="" /></div>
-							<div class="col-12 col-md-9 mt-2 mt-md-0">
-								<h6 class="font-weight-bold">{{ station.title }}</h6>
-								<p class="smaller-text">
-									{{ station.description.substring(0, 300) }}<span *ngIf="station.description.length > 300">...</span>
-								</p>
-								<hr class="d-block d-md-none" />
-								<h5
-									class="font-weight-bold blue-title text-uppercase"
-									[hidden]="station.accommodationDataExists == false"
-								>
-									{{ 'request.estimated_cost.summary.accommodation' | translate }}
-								</h5>
-								<div class=" row" *ngIf="station.accommodationDataExists == true">
-									<div class="col-8 col-md-6">
-										<h6 class="font-weight-bold">{{ station.hotel }}</h6>
-										<p class="mt-1">
-											<i class="fa fa-map-marker mr-1" [class.ml-1]="('dir' | translate) === 'rtl'"></i
-											>{{ station.hotel_address }}
-										</p>
-									</div>
-									<div class="col-4 col-md-6">
-										<p class="mb-0">{{ 'request.estimated_cost.summary.star_rating' | translate }}</p>
-										<p class="mb-0 rating-stars">
-											<span class="mr-1" *ngIf="station.hotel_rate >= 1"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 2"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 3"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate >= 4"><i class="fa fa-star"></i></span>
-											<span class="mr-1" *ngIf="station.hotel_rate == 5"><i class="fa fa-star"></i></span>
-										</p>
-									</div>
-								</div>
-								<div class="row" *ngIf="station.accommodationDataExists == false">
-									<div class=" col-12">
-										<h6 class="font-weight-bold">
-											{{ 'request.estimated_cost.summary.no_accommodation' | translate }}
-										</h6>
-									</div>
-								</div>
-								<hr class="d-block d-md-none" />
-								<h5 class="font-weight-bold blue-title text-uppercase" *ngIf="station.activities.length > 0">
-									{{ 'request.estimated_cost.summary.activities' | translate }}
-								</h5>
-								<div class="row">
-									<div class="col-12 col-md-6" *ngFor="let day of station.activities; let i = index">
-										<h6 class="smaller-text font-weight-bold">
-											{{ 'request.estimated_cost.summary.day' | translate }} {{ i + 1 }}
-										</h6>
-										<p class="smaller-text mb-1" *ngFor="let item of day.night">
-											{{ item }}
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row py-2">
-			<div class="col-12">
-				<div class="bg-blue text-white text-center px-5 py-2 float-right">
-					<span>{{ 'request.estimated_cost.summary.total_cost' | translate }}</span>
-					<br />
-					<span>{{ totalCost | currency: 'EGP' }}</span>
-				</div>
-			</div>
-		</div>
-		<div class="row py-2">
-			<div class="col-6">
-				<button
-					(click)="prev()"
-					[disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2"
-				>
-					{{ 'request.estimated_cost.summary.modify' | translate }}
-				</button>
-			</div>
-			<div class="col-6 text-center">
-				<button
-					(click)="goToNextStep()"
-					[disabled]="false"
-					class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2 float-right"
-				>
-					{{ 'request.form_layout.next_label' | translate }}
-				</button>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+      <div class="col-lg-9">
+
+        <h4 class="list-title font-weight-bold title-font">
+          {{ 'request.estimated_cost.summary.view_details' | translate }}
+        </h4>
+
+        <div class="row mt-3 mx-0">
+          <div class="col-12 station-item" *ngFor="let station of stations">
+            <div class="row">
+              <div class="col-12 top-box p-2">
+                <div class="row">
+                  <div class="col-2 col-md-1 nights-count">
+                    <div class="row" [hidden]="station.nights_count <= 0">
+                      <div class="col-12 text-center font-weight-bold nights-count-number">
+                        {{ station.nights_count }}
+                      </div>
+                      <div class="col-12 text-center nights-label font-weight-bold font-italic">
+                        {{ 'request.estimated_cost.summary.nights' | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4 col-md-2">
+                    <div class="row">
+                      <div class="col-12 font-weight-bold station-name">{{ station.name }}</div>
+                      <div class="col-12 smaller-text" [hidden]="station.isReturnStation">
+                        {{ station.from }} {{ 'request.estimated_cost.summary.to' | translate }} {{ station.to }}
+                      </div>
+                      <div class="col-12 smaller-text" [hidden]="!station.isReturnStation">
+                        {{ station.from }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-5 col-md-6 align-self-center">
+                    <div class="row" *ngIf="station.flightDataExists == true">
+                      <div class="col-12 col-md-6 smaller-text">
+                        {{ station.travel_time }}
+                        <span class="d-none d-md-inline-block">{{ 'request.estimated_cost.summary.depart' | translate }}
+                        </span>
+                        {{ 'request.estimated_cost.summary.from' | translate }}
+                        {{ station.depart_from }}
+                      </div>
+                      <div class="col-12 col-md-6 smaller-text">
+                        {{ station.arrive_time }}
+                        <span
+                          class="d-none d-md-inline-block">{{ 'request.estimated_cost.summary.arrival' | translate }}
+                        </span>
+                        {{ 'request.estimated_cost.summary.to' | translate }}
+                        {{ station.arrive_to }}
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="station.flightDataExists == false">
+                      <div class="col-12 col-md-6 smaller-text">
+                        {{ 'request.estimated_cost.summary.no_flights' | translate }}
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="station.flightDataExists == true" class="col-3 align-self-center d-none d-md-block">
+                    {{ 'request.estimated_cost.summary.duration' | translate }}: {{ station.duration }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 p-2 p-md-3" [hidden]="station.isReturnStation == true">
+                <div class="row">
+                  <div class="col-12 col-md-3 station-img"><img [src]="station.image" alt="" /></div>
+                  <div class="col-12 col-md-9 mt-2 mt-md-0">
+                    <h6 class="font-weight-bold">{{ station.title }}</h6>
+                    <p class="smaller-text">
+                      {{ station.description.substring(0, 300) }}<span
+                        *ngIf="station.description.length > 300">...</span>
+                    </p>
+                    <hr class="d-block d-md-none" />
+                    <h5 class="font-weight-bold blue-title text-uppercase"
+                      [hidden]="station.accommodationDataExists == false">
+                      {{ 'request.estimated_cost.summary.accommodation' | translate }}
+                    </h5>
+                    <div class=" row" *ngIf="station.accommodationDataExists == true">
+                      <div class="col-8 col-md-6">
+                        <h6 class="font-weight-bold">{{ station.hotel }}</h6>
+                        <p class="mt-1">
+                          <i class="fa fa-map-marker mr-1"
+                            [class.ml-1]="('dir' | translate) === 'rtl'"></i>{{ station.hotel_address }}
+                        </p>
+                      </div>
+                      <div class="col-4 col-md-6">
+                        <p class="mb-0">{{ 'request.estimated_cost.summary.star_rating' | translate }}</p>
+                        <p class="mb-0 rating-stars">
+                          <span class="mr-1" *ngIf="station.hotel_rate >= 1"><i class="fa fa-star"></i></span>
+                          <span class="mr-1" *ngIf="station.hotel_rate >= 2"><i class="fa fa-star"></i></span>
+                          <span class="mr-1" *ngIf="station.hotel_rate >= 3"><i class="fa fa-star"></i></span>
+                          <span class="mr-1" *ngIf="station.hotel_rate >= 4"><i class="fa fa-star"></i></span>
+                          <span class="mr-1" *ngIf="station.hotel_rate == 5"><i class="fa fa-star"></i></span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="station.accommodationDataExists == false">
+                      <div class=" col-12">
+                        <h6 class="font-weight-bold">
+                          {{ 'request.estimated_cost.summary.no_accommodation' | translate }}
+                        </h6>
+                      </div>
+                    </div>
+                    <hr class="d-block d-md-none" />
+                    <h5 class="font-weight-bold blue-title text-uppercase" *ngIf="station.activities.length > 0">
+                      {{ 'request.estimated_cost.summary.activities' | translate }}
+                    </h5>
+                    <div class="row">
+                      <div class="col-12 col-md-6" *ngFor="let day of station.activities; let i = index">
+                        <h6 class="smaller-text font-weight-bold">
+                          {{ 'request.estimated_cost.summary.day' | translate }} {{ i + 1 }}
+                        </h6>
+                        <p class="smaller-text mb-1" *ngFor="let item of day.night">
+                          {{ item }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-lg-3">
+
+        <h4 class="list-title font-weight-bold title-font">
+          {{ 'request.estimated_cost.summary.payment_details' | translate }}
+        </h4>
+
+        <div class="row mt-3 mx-0">
+          <div class="col-12 cost-item pt-3" *ngFor="let station of stations">
+            <h6 class="font-weight-bold" *ngIf="!station.isReturnStation">{{ station.nights_count }}
+              {{ 'request.estimated_cost.summary.nights_in' | translate }} {{ station.name }}</h6>
+
+            <div class="mb-1">
+              <h6 class="font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</h6>
+              <p class="font-weight-bold mb-0">Cairo (CAI)</p>
+              <p class="mb-0">Thu 17 October, 2019</p>
+              <p class="font-weight-bold mb-0">Rome Fiumicino (FCO)</p>
+              <p class="mb-0">Thu 17 October, 2019</p>
+            </div>
+
+
+            <div class="row">
+              <div class="col-3">
+                <p class="flight-label mb-0">{{ 'request.estimated_cost.summary.arrival' | translate }}</p>
+                <p class="font-weight-bold mb-0">02:50</p>
+                <p class="mb-0">ROM</p>
+              </div>
+              <div class="col-6 text-center">flight Image</div>
+              <div class="col-3">
+                <p class="flight-label mb-0">{{ 'request.estimated_cost.summary.depart' | translate }}</p>
+                <p class="font-weight-bold mb-0">04:00</p>
+                <p class="mb-0">VEN</p>
+              </div>
+            </div>
+
+            <div *ngIf="station.accommodationDataExists">
+              <hr>
+
+              <h6 class="font-weight-bold">{{station.hotel}}</h6>
+
+              <p class="mb-0">{{ 'request.estimated_cost.summary.from' | translate }}: 28 October 2019</p>
+              <p class="font-weight-bold mb-0">{{ 'request.estimated_cost.summary.check_in' | translate }}: 12:00 am</p>
+              <p class="mb-0">{{ 'request.estimated_cost.summary.to' | translate }}: 30 October 2019</p>
+              <p class="font-weight-bold mb-0">{{ 'request.estimated_cost.summary.check_out' | translate }}: 12:00 am
+              </p>
+              <p class="mb-0">Standard double room</p>
+
+            </div>
+          </div>
+
+
+          <div class="col-12 card-box pt-2">
+            <div class="row">
+                <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.hotels' | translate }}</div>
+                <div class="col-6 text-right">{{ totalCost.hotels | currency: 'EGP' }}</div>
+            </div>
+            <div class="row">
+                    <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</div>
+                    <div class="col-6 text-right">{{ totalCost.flights | currency: 'EGP' }}</div>
+                </div>
+          </div>
+
+          <div class="col-12 card-box pt-2">
+                <div class="row">
+                    <div class="col-6 text-left font-weight-bold">Total amount</div>
+                    <div class="col-6 text-right">{{ totalCost.hotels + totalCost.flights | currency: 'EGP' }}</div>
+                </div>
+              </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row py-2">
+      <div class="col-6">
+        <button (click)="prev()" [disabled]="false"
+          class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
+          {{ 'request.estimated_cost.summary.modify' | translate }}
+        </button>
+      </div>
+      <div class="col-6 text-center">
+        <button (click)="goToNextStep()" [disabled]="false"
+          class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2 float-right">
+          {{ 'request.form_layout.next_label' | translate }}
+        </button>
+      </div>
+    </div>
+
+  </div>
 </div>

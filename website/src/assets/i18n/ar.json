@@ -230,7 +230,14 @@
 				"from": "من",
 				"arrival": "الوصول",
 				"depart": "المغادرة",
-				"nights": "ليالى"
+				"nights": "ليالى",
+                "payment_details": "تفاصيل الدفع",
+                "check_in": "استلام الغرفة",
+                "check_out": "مغادرة الغرفة",
+                "flights": "رحلات الطيران",
+                "nights_in": "رحلات فى",
+                "hotels": "الفنادق",
+                "total_amount": "إجمالى المبلغ"
 			}
 		},
 		"form_layout": {

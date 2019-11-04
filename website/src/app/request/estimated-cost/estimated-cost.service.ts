@@ -36,7 +36,7 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) {}
+	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -291,9 +291,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_time: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
-								'DD/MM HH:mm'
-								// tslint:disable-next-line: indent
-						  )
+							'DD/MM HH:mm'
+							// tslint:disable-next-line: indent
+						)
 						: 'unknown time',
 
 					// dates
@@ -320,8 +320,9 @@ export class EstimatedCostService {
 	}
 
 	public get summaryTotalCost() {
-		const flightsTotalCost = this.getFlightsTotalCost();
-		this.getHotelsTotalCost();
-		return flightsTotalCost + this.getHotelsTotalCost();
+		return {
+			hotels: this.getHotelsTotalCost(),
+			flights: this.getFlightsTotalCost()
+		};
 	}
 }
