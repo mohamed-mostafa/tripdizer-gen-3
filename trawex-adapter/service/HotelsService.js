@@ -38,7 +38,15 @@ exports.searchHotels = (language, hotelSearchRequest) => {
     )
   };
   const filters = {
-    stars: hotelSearchRequest.stars || []
+    stars: hotelSearchRequest.stars || [],
+    sortColumn: hotelSearchRequest.sortColumn || "price",
+    limits: hotelSearchRequest.tripSegments.reduce(
+      (pv, cv) => ({
+        ...pv,
+        [cv.cityName]: cv.limit || hotelSearchRequest.limitPerCity || 9
+      }),
+      {}
+    )
   };
 
   const requestPromises = hotelSearchRequest.tripSegments.map(ts =>
@@ -63,6 +71,10 @@ exports.searchHotels = (language, hotelSearchRequest) => {
       return []
         .concat(...itineraries)
         .filter(i => !filters.stars.length || filters.stars.includes(+i.rating))
+        .sort((i1, i2) => i1[filters.sortColumn] - i2[filters.sortColumn])
+        .filter(
+          i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
+        )
         .map(i => ({
           name: i.hotelName,
           displaName: i.hotelName,

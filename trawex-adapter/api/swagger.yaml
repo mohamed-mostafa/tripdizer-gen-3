@@ -322,6 +322,10 @@ definitions:
         format: "date"
         example: "2019-10-10"
         description: "The date of leaving from the city"
+      limit:
+        type: "number"
+        example: 9
+        description: "The number of hotels for this city"
     example:
       cityIata: "cityIata"
       arrivalDate: "2000-01-23"
@@ -785,6 +789,14 @@ definitions:
           type: "number"
         example: [3, 4]
         description: "the range of stars to filter the hotels by"
+      sortColumn:
+        type: "string"
+        default: "price"
+        description: "sorting column"
+      limitPerCity:
+        type: "number"
+        example: 9
+        description: "The number of hotels per city"
       nationality:
         type: "string"
         default: "EG"
@@ -797,10 +809,12 @@ definitions:
           countryName: "Egypt"
           arrivalDate: "2020-05-01"
           leavingDate: "2020-05-03"
+          limit: 9
         - cityName: "Cairo"
           countryName: "Egypt"
           arrivalDate: "2020-05-04"
           leavingDate: "2020-05-06"
+          limit: 8
       rooms:
         - - type: "adult"
             age: 28
@@ -815,6 +829,8 @@ definitions:
         - - type: "adult"
             age: 30
       stars: [4]
+      sortColumn: "price"
+      limitPerCity: 9
       nationality: "EG"
       currency: "EGP"
   HotelOffers:
