@@ -36,6 +36,9 @@ exports.searchHotels = (language, hotelSearchRequest) => {
       {}
     )
   };
+  const filters = {
+    stars: hotelSearchRequest.stars || []
+  };
 
   const requestPromises = hotelSearchRequest.tripSegments.map(ts =>
     searchHotelsAPI(
@@ -50,14 +53,30 @@ exports.searchHotels = (language, hotelSearchRequest) => {
       roomsInfo.childAges,
 
       hotelSearchRequest.nationality,
-      hotelSearchRequest.currency,
-
-      hotelSearchRequest.stars
+      hotelSearchRequest.currency
     )
   );
 
   return Promise.all(requestPromises)
-    .then(data => [].concat(...data))
+    .then(data => {
+      return []
+        .concat(...data)
+        .filter(i => !filters.stars.length || filters.stars.includes(+i.rating))
+        .map(i => ({
+          name: i.hotelName,
+          displaName: i.hotelName,
+          thumbnail: i.image,
+          stars: i.rating,
+          price: i.price,
+          currency: i.currency,
+          cityName: i.cityName,
+          countryName: i.countryName,
+          address: i.hotelIAddress,
+          latitude: i.latitude,
+          longitude: i.longitude,
+          facilities: i.facilities
+        }));
+    })
     .catch(err => {
       return err;
     });
@@ -73,8 +92,7 @@ const searchHotelsAPI = (
   child,
   child_age,
   nationality = "EG",
-  currency = "EGP",
-  stars = []
+  currency = "EGP"
 ) => {
   return new Promise((resolve, reject) => {
     httpRequest.get(
@@ -109,22 +127,11 @@ const searchHotelsAPI = (
           reject(data.status.errors.map(e => e.errorMessage));
         } else {
           resolve(
-            data.itineraries
-              .filter(i => !stars.length || stars.includes(+i.rating))
-              .map(i => ({
-                name: i.hotelName,
-                displaName: i.hotelName,
-                thumbnail: i.image,
-                stars: i.rating,
-                price: i.price,
-                currency: i.currency,
-                cityName: city,
-                countryName: country,
-                address: i.hotelIAddress,
-                latitude: i.latitude,
-                longitude: i.longitude,
-                facilities: i.facilities
-              }))
+            data.itineraries.map(i => ({
+              ...i,
+              cityName: city,
+              countryName: country
+            }))
           );
         }
       }
