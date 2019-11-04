@@ -5,6 +5,7 @@ const httpRequest = require("request");
 const TRAWEX_BASE_ENDPOINT = "https://trawex.biz/api";
 const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
 const TRAWEX_HOTELS_SEARCH = "/hotel_search";
+const TRAWEX_HOTELS_MORE = "/getMoreHotels";
 
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
@@ -58,9 +59,9 @@ exports.searchHotels = (language, hotelSearchRequest) => {
   );
 
   return Promise.all(requestPromises)
-    .then(data => {
+    .then(itineraries => {
       return []
-        .concat(...data)
+        .concat(...itineraries)
         .filter(i => !filters.stars.length || filters.stars.includes(+i.rating))
         .map(i => ({
           name: i.hotelName,
@@ -126,13 +127,67 @@ const searchHotelsAPI = (
         } else if (data.status.errors) {
           reject(data.status.errors.map(e => e.errorMessage));
         } else {
-          resolve(
-            data.itineraries.map(i => ({
-              ...i,
-              cityName: city,
-              countryName: country
-            }))
-          );
+          if (data.status.moreResults === "true") {
+            getMoreHotelsAPI(data.status.sessionId, data.status.nextToken)
+              .then(moreItineraries => {
+                resolve(
+                  [...data.itineraries, ...moreItineraries].map(i => ({
+                    ...i,
+                    cityName: city,
+                    countryName: country
+                  }))
+                );
+              })
+              .catch(err => reject(err));
+          } else {
+            resolve(
+              data.itineraries.map(i => ({
+                ...i,
+                cityName: city,
+                countryName: country
+              }))
+            );
+          }
+        }
+      }
+    );
+  });
+};
+
+const getMoreHotelsAPI = (sessionId, nextToken) => {
+  return new Promise((resolve, reject) => {
+    httpRequest.get(
+      {
+        url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE,
+        json: true,
+        proxy: TRAWEX_PROXY_ENDPOINT,
+        qs: {
+          user_id: TRAWEX_USERNAME,
+          user_password: TRAWEX_PASSWORD,
+          access: TRAWEX_ENVIRONMENT,
+          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          trackingId: TRAWEX_TRACKING_ID,
+          sessionId: sessionId,
+          nextToken: nextToken
+        }
+      },
+      (error, response, data) => {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else if (data.status.errors) {
+          reject(data.status.errors.map(e => e.errorMessage));
+        } else {
+          if (data.status.moreResults === "true") {
+            getMoreHotelsAPI(data.status.sessionId, data.status.nextToken).then(
+              otherData => {
+                resolve([...data.itineraries, ...otherData.itineraries]);
+              }
+            );
+          } else {
+            resolve(data.itineraries);
+          }
         }
       }
     );
