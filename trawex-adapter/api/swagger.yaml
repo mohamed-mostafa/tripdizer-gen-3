@@ -12,29 +12,30 @@ info:
 host: "tripdizer-trawex-adapter-dot-tripdizer-dev.appspot.com"
 basePath: "/trawex-adapter/1.0.0"
 schemes:
-- "https"
+  - "https"
 paths:
   /flights/search/multi-city:
     post:
-      summary: "searches multi-city flights from origin to multiple destinations on\
+      summary:
+        "searches multi-city flights from origin to multiple destinations on\
         \ specific dates for number of travelers"
       description: "By passing in the appropriate options, you can search for flights"
       operationId: "searchMultiCityFlights"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - in: "body"
-        name: "multiCityFlightsSearchRequest"
-        required: true
-        schema:
-          $ref: "#/definitions/MultiCityFlightsSearchRequest"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - in: "body"
+          name: "multiCityFlightsSearchRequest"
+          required: true
+          schema:
+            $ref: "#/definitions/MultiCityFlightsSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -45,25 +46,26 @@ paths:
       x-swagger-router-controller: "Default"
   /flights/search/return:
     post:
-      summary: "searches return flights from origin to destination on specific dates\
+      summary:
+        "searches return flights from origin to destination on specific dates\
         \ for number of travelers"
       description: "By passing in the appropriate options, you can search for flights"
       operationId: "searchReturnFlights"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - in: "body"
-        name: "returnFlightsSearchRequest"
-        required: true
-        schema:
-          $ref: "#/definitions/ReturnFlightsSearchRequest"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - in: "body"
+          name: "returnFlightsSearchRequest"
+          required: true
+          schema:
+            $ref: "#/definitions/ReturnFlightsSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -74,25 +76,26 @@ paths:
       x-swagger-router-controller: "Default"
   /flights/search/one-way:
     post:
-      summary: "searches one way flights from origin to destination on specific dates\
+      summary:
+        "searches one way flights from origin to destination on specific dates\
         \ for number of travelers"
       description: "By passing in the appropriate options, you can search for flights"
       operationId: "searchOneWayFlights"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - in: "body"
-        name: "oneWayFlightsSearchRequest"
-        required: true
-        schema:
-          $ref: "#/definitions/OneWayFlightsSearchRequest"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - in: "body"
+          name: "oneWayFlightsSearchRequest"
+          required: true
+          schema:
+            $ref: "#/definitions/OneWayFlightsSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -103,27 +106,29 @@ paths:
       x-swagger-router-controller: "Default"
   /flights/fare/details:
     get:
-      summary: "gets the details of a flight fair, using the fareSourceCode returned\
+      summary:
+        "gets the details of a flight fair, using the fareSourceCode returned\
         \ from the search"
-      description: "By passing in the appropriate options, you can retrieve details\
+      description:
+        "By passing in the appropriate options, you can retrieve details\
         \ of a fareSourceCode returned from the search"
       operationId: "getFareDetails"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - name: "sessionId"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "fareSourceCode"
-        in: "query"
-        required: false
-        type: "string"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "sessionId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "fareSourceCode"
+          in: "query"
+          required: false
+          type: "string"
       responses:
         200:
           description: "Successful Execution"
@@ -134,27 +139,29 @@ paths:
       x-swagger-router-controller: "Default"
   /flights/fare/revalidate:
     get:
-      summary: "Revalidates a flight fair, using the fareSourceCode returned from\
+      summary:
+        "Revalidates a flight fair, using the fareSourceCode returned from\
         \ the search"
-      description: "By passing in the appropriate options, you can revalidate a flight\
+      description:
+        "By passing in the appropriate options, you can revalidate a flight\
         \ fair using the fareSourceCode returned from the search"
       operationId: "revalidateFare"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - name: "sessionId"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "fareSourceCode"
-        in: "query"
-        required: false
-        type: "string"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "sessionId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "fareSourceCode"
+          in: "query"
+          required: false
+          type: "string"
       responses:
         200:
           description: "Successful Execution"
@@ -163,17 +170,17 @@ paths:
               requiredFieldsToBook:
                 type: "array"
                 example:
-                - "Passport"
-                - "Passport No"
-                - "DOB"
-                - "PassengerNationality"
-                - "PostCode"
-                - "Gender"
-                - "Email"
-                - "IssueCountry"
-                - "ExpiredOn"
-                - "Title"
-                - "ContactNumber"
+                  - "Passport"
+                  - "Passport No"
+                  - "DOB"
+                  - "PassengerNationality"
+                  - "PostCode"
+                  - "Gender"
+                  - "Email"
+                  - "IssueCountry"
+                  - "ExpiredOn"
+                  - "Title"
+                  - "ContactNumber"
                 items:
                   type: "string"
         400:
@@ -183,27 +190,29 @@ paths:
       x-swagger-router-controller: "Default"
   /flights/fare/book:
     post:
-      summary: "Books a flight fair, using the fareSourceCode returned from the search,\
+      summary:
+        "Books a flight fair, using the fareSourceCode returned from the search,\
         \ and the PNR information of the travelers"
-      description: "By passing in the appropriate options, you can book a flight fair\
+      description:
+        "By passing in the appropriate options, you can book a flight fair\
         \ using the fareSourceCode returned from the search, ad the PNR information\
         \ of the travelers"
       operationId: "bookFlight"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - in: "body"
-        name: "bookFlightRequest"
-        required: true
-        schema:
-          $ref: "#/definitions/BookFlightRequest"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - in: "body"
+          name: "bookFlightRequest"
+          required: true
+          schema:
+            $ref: "#/definitions/BookFlightRequest"
       responses:
         200:
           description: "Successful Execution"
@@ -223,25 +232,26 @@ paths:
   /flights/ticket/issue:
     get:
       summary: "Issues a ticket for a booking. Should only be done for Piblic or Private"
-      description: "By passing in the appropriate options, you can issue the ticket\
+      description:
+        "By passing in the appropriate options, you can issue the ticket\
         \ for a booking"
       operationId: "issueTicket"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - name: "sessionId"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "bookingUniqueId"
-        in: "query"
-        required: false
-        type: "string"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "sessionId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "bookingUniqueId"
+          in: "query"
+          required: false
+          type: "string"
       responses:
         200:
           description: "Successful Execution"
@@ -254,27 +264,28 @@ paths:
         500:
           description: "Internal Server Error"
       x-swagger-router-controller: "Default"
-  /search/hotels:
+  /hotels/search:
     post:
       summary: "retrieve options of hotels for a city"
-      description: "By passing in the appropriate options, you can search for available\
+      description:
+        "By passing in the appropriate options, you can search for available\
         \ hotels in the system"
       operationId: "searchHotels"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "language"
-        in: "header"
-        required: true
-        type: "string"
-        default: "en"
-      - in: "body"
-        name: "HotelSearchRequest"
-        required: true
-        schema:
-          $ref: "#/definitions/HotelsSearchRequest"
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "HotelSearchRequest"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HotelSearchRequest"
       responses:
         200:
           description: "search results matching criteria"
@@ -286,10 +297,8 @@ paths:
 definitions:
   TripSegment:
     required:
-    - "cityIata"
-    - "cityName"
-    - "countryIso"
-    - "leavingDate"
+      - "cityName"
+      - "leavingDate"
     properties:
       cityName:
         type: "string"
@@ -297,6 +306,9 @@ definitions:
       cityIata:
         type: "string"
         description: "The IATA code of the city"
+      countryName:
+        type: "string"
+        description: "The name of the country"
       countryIso:
         type: "string"
         description: "The ISO-alpha3 code of the city's country"
@@ -312,18 +324,19 @@ definitions:
         description: "The date of leaving from the city"
     example:
       cityIata: "cityIata"
-      arrivaldate: "2000-01-23"
+      arrivalDate: "2000-01-23"
       cityName: "cityName"
       countryIso: "countryIso"
       leavingDate: "2000-01-23"
   MultiCityFlightsSearchRequest:
     required:
-    - "numberOfAdults"
-    - "tripSegments"
+      - "numberOfAdults"
+      - "tripSegments"
     properties:
       tripSegments:
         type: "array"
-        description: "The sequence of cities / dates of the trip, where the city of\
+        description:
+          "The sequence of cities / dates of the trip, where the city of\
           \ the first segment is the first and last city in the multi-city circle"
         items:
           $ref: "#/definitions/TripSegment"
@@ -346,29 +359,29 @@ definitions:
       numberOfInfants: 0
       numberOfChildren: 0
       tripSegments:
-      - cityIata: "CAI"
-        arrivaldate: "2020-05-01"
-        cityName: "Cairo"
-        countryIso: "EGY"
-        leavingDate: "2020-05-04"
-      - cityIata: "AMS"
-        arrivaldate: "2000-05-04"
-        cityName: "Amsterdam"
-        countryIso: "NLD"
-        leavingDate: "2020-05-08"
-      - cityIata: "PAR"
-        arrivaldate: "2000-05-08"
-        cityName: "Paris"
-        countryIso: "FRA"
-        leavingDate: "2020-05-12"
+        - cityIata: "CAI"
+          arrivalDate: "2020-05-01"
+          cityName: "Cairo"
+          countryIso: "EGY"
+          leavingDate: "2020-05-04"
+        - cityIata: "AMS"
+          arrivalDate: "2000-05-04"
+          cityName: "Amsterdam"
+          countryIso: "NLD"
+          leavingDate: "2020-05-08"
+        - cityIata: "PAR"
+          arrivalDate: "2000-05-08"
+          cityName: "Paris"
+          countryIso: "FRA"
+          leavingDate: "2020-05-12"
       numberOfAdults: 1
   ReturnFlightsSearchRequest:
     required:
-    - "departure"
-    - "destination"
-    - "numberOfAdults"
-    - "origin"
-    - "return"
+      - "departure"
+      - "destination"
+      - "numberOfAdults"
+      - "origin"
+      - "return"
     properties:
       origin:
         type: "string"
@@ -413,10 +426,10 @@ definitions:
       return: "2019-12-20"
   OneWayFlightsSearchRequest:
     required:
-    - "departure"
-    - "destination"
-    - "numberOfAdults"
-    - "origin"
+      - "departure"
+      - "destination"
+      - "numberOfAdults"
+      - "origin"
     properties:
       origin:
         type: "string"
@@ -453,59 +466,6 @@ definitions:
       origin: "CAI"
       destination: "AMS"
       departure: "2019-12-20"
-  HotelsSearchRequest:
-    required:
-    - "roomRequirements"
-    - "starsRequirements"
-    - "tripSegment"
-    properties:
-      tripSegment:
-        $ref: "#/definitions/TripSegment"
-      starsRequirements:
-        type: "string"
-        example: "2-4"
-        description: "the range of stars to filter the hotels by"
-      roomRequirements:
-        type: "array"
-        description: "the required rooms, occupants in each room, and their ages"
-        items:
-          $ref: "#/definitions/RoomRequirements"
-    example:
-      roomRequirements:
-      - occupantType: "adult"
-        occupantAge: 20
-      - occupantType: "child"
-        occupantAge: 3
-      tripSegment:
-        cityIata: "AMS"
-        arrivaldate: "2000-01-23"
-        cityName: "cityName"
-        countryIso: "countryIso"
-        leavingDate: "2000-01-23"
-      starsRequirements: "2-4"
-  RoomRequirements:
-    type: "object"
-    properties:
-      items:
-        $ref: "#/definitions/RoomOccupant"
-    description: "represents a requirement for a hotel room"
-    example:
-      items:
-        occupantType: "adult | child"
-        occupantAge: 20
-  RoomOccupant:
-    type: "object"
-    properties:
-      occupantType:
-        type: "string"
-        example: "adult | child"
-      occupantAge:
-        type: "number"
-        example: 20
-    description: "an occupant in a hotel room"
-    example:
-      occupantType: "adult | child"
-      occupantAge: 20
   FlightOffers:
     type: "array"
     description: "a list of flight offers"
@@ -516,14 +476,16 @@ definitions:
     properties:
       flightLegs:
         type: "array"
-        description: "a list of flights from an origin to a destination. if there's\
+        description:
+          "a list of flights from an origin to a destination. if there's\
           \ only one leg, then its a one-way flight, if its two legs, then its a return\
           \ flight, if its more than 2 legs, then its a multi-city flight"
         items:
           $ref: "#/definitions/FlightLeg"
       segments:
         type: "array"
-        description: "a list of flight segments. Will only be present if flightsLegs\
+        description:
+          "a list of flight segments. Will only be present if flightsLegs\
           \ don not, in case of multi-city searches"
         items:
           $ref: "#/definitions/FlightSegment"
@@ -538,11 +500,13 @@ definitions:
         description: "the id of the session at trawex"
       fareSourceCode:
         type: "string"
-        description: "the unique identifier of the offer at trawex. will be used to\
+        description:
+          "the unique identifier of the offer at trawex. will be used to\
           \ validate and book the offer later"
       fareType:
         type: "string"
-        description: "the type of the fare (Public, Private, LCC). It affects whether\
+        description:
+          "the type of the fare (Public, Private, LCC). It affects whether\
           \ we need to issue a ticket after booking, or if booking does it already"
       refundable:
         type: "string"
@@ -560,7 +524,8 @@ definitions:
         example: "AMS"
       segments:
         type: "array"
-        description: "represents one segment in a flight leg. if there's only one,\
+        description:
+          "represents one segment in a flight leg. if there's only one,\
           \ then it is a direct flight leg"
         items:
           $ref: "#/definitions/FlightSegment"
@@ -578,7 +543,8 @@ definitions:
         example: 120
       carrier:
         $ref: "#/definitions/Carrier"
-    description: "represents a trip from an origin to a destination. can be a direct\
+    description:
+      "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
   FlightSegment:
     type: "object"
@@ -630,11 +596,13 @@ definitions:
         description: "the id of the session at trawex"
       fareSourceCode:
         type: "string"
-        description: "the unique identifier of the offer at trawex. will be used to\
+        description:
+          "the unique identifier of the offer at trawex. will be used to\
           \ validate and book the offer later"
       fareType:
         type: "string"
-        description: "the type of the fare (Public:normal, Private:discounted for\
+        description:
+          "the type of the fare (Public:normal, Private:discounted for\
           \ a consolidator, LCC:low cost carrier). It affects whether we need to issue\
           \ a ticket after booking, or if booking does it already"
       adultsPNRInfoList:
@@ -653,87 +621,87 @@ definitions:
     example:
       passportMandatory: true
       infantsPNRInfoList:
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
       fareSourceCode: "fareSourceCode"
       childrenPNRInfoList:
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
       adultsPNRInfoList:
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
-      - passportNumber: "A08102235"
-        lastName: "Mostafa"
-        gender: "M"
-        dateOfBirth: "1984-02-01T00:00:00"
-        title: "Mr"
-        passportExpiry: "2013-02-03"
-        firstName: "Mohamed"
-        areaCode: "02"
-        nationality: "EG"
-        phone: 33378321
-        passportIssueCountry: "EG"
-        countryCode: "+2"
-        email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
+        - passportNumber: "A08102235"
+          lastName: "Mostafa"
+          gender: "M"
+          dateOfBirth: "1984-02-01T00:00:00"
+          title: "Mr"
+          passportExpiry: "2013-02-03"
+          firstName: "Mohamed"
+          areaCode: "02"
+          nationality: "EG"
+          phone: 33378321
+          passportIssueCountry: "EG"
+          countryCode: "+2"
+          email: "email"
       refundable: "refundable"
       sessionId: "sessionId"
       fareType: "fareType"
@@ -794,6 +762,61 @@ definitions:
       passportIssueCountry: "EG"
       countryCode: "+2"
       email: "email"
+  HotelSearchRequest:
+    required:
+      - "tripSegments"
+      - "rooms"
+    properties:
+      tripSegments:
+        type: "array"
+        description:
+          "The sequence of cities / dates of the trip, where the city of\
+          \ the first segment is the first and last city in the multi-city circle"
+        items:
+          $ref: "#/definitions/TripSegment"
+      rooms:
+        type: "array"
+        description: "the required rooms, occupants in each room, and their ages"
+        items:
+          $ref: "#/definitions/Room"
+      stars:
+        type: "array"
+        items:
+          type: "number"
+        example: [3, 4]
+        description: "the range of stars to filter the hotels by"
+      nationality:
+        type: "string"
+        default: "EG"
+      currency:
+        type: "string"
+        default: "EGP"
+    example:
+      tripSegments:
+        - cityName: "Alexandria"
+          countryName: "Egypt"
+          arrivalDate: "2020-05-01"
+          leavingDate: "2020-05-03"
+        - cityName: "Cairo"
+          countryName: "Egypt"
+          arrivalDate: "2020-05-04"
+          leavingDate: "2020-05-06"
+      rooms:
+        - - type: "adult"
+            age: 28
+          - type: "adult"
+            age: 25
+          - type: "child"
+            age: 3
+        - - type: "adult"
+            age: 40
+          - type: "adult"
+            age: 38
+        - - type: "adult"
+            age: 30
+      stars: [4]
+      nationality: "EG"
+      currency: "EGP"
   HotelOffers:
     type: "array"
     description: "a list of hotel offers"
@@ -802,35 +825,67 @@ definitions:
   Hotel:
     type: "object"
     properties:
-      id:
-        type: "number"
       name:
         type: "string"
         example: "Hilton Capetown Hotel"
       displaName:
         type: "string"
         example: "هيلتون كيب تاون"
-      description:
-        type: "string"
-        example: "One of the best hotels in Cape Town"
       thumbnail:
         type: "string"
         format: "url"
         example: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-      address:
-        type: "string"
-        example: "10 Sukhumvit Str."
       stars:
         type: "number"
         example: 5
-      rate:
+      price:
         type: "number"
         format: "currency"
         example: 1000
       currency:
         type: "string"
         example: "EGP"
-      price:
+      cityName:
+        type: "string"
+        example: "Alexandria"
+      countryName:
+        type: "string"
+        example: "Egypt"
+      address:
+        type: "string"
+        example: "10 Sukhumvit Str."
+      latitude:
         type: "number"
-        format: "currency"
-        example: 2000
+        example: 12.980879
+      longitude:
+        type: "number"
+        example: 77.576013
+      facilities:
+        type: "array"
+        items:
+          $ref: "#/definitions/Facility"
+        example:
+          - "Conference Room"
+          - "Conference Room"
+          - "Internet access"
+          - "WLAN access"
+          - "Car Park"
+  Room:
+    type: "array"
+    description: "The occupants in the room"
+    items:
+      $ref: "#/definitions/Occupant"
+  Occupant:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+        example: "adult | child"
+      age:
+        type: "number"
+        example: 20
+    example:
+      type: adult
+      age: 20
+  Facility:
+    type: "string"
