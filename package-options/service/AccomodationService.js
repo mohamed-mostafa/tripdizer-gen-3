@@ -71,7 +71,23 @@ const getHotelsOfCity = (
         } else if (response.statusCode != 200) {
           reject(response.statusMessage);
         } else {
-          resolve(hotels);
+          resolve(
+            hotels.map(h => ({
+              name: h.name,
+              displayName: h.displaName,
+              description: h.facilities.join(", "),
+              city: h.cityName,
+              thumbnail: h.thumbnail,
+              address: h.address,
+              stars: h.stars,
+              checkin: h.checkin,
+              checkout: h.checkout,
+              numberOfNights: moment(h.checkout).diff(h.checkin, "days"),
+              rate: 0,
+              price: h.price,
+              currency: h.currency
+            }))
+          );
         }
       }
     );
