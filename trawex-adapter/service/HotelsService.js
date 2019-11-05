@@ -14,7 +14,7 @@ const TRAWEX_SOURCE_IP_ADDRESS =
 const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
-  process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
+  process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 
 exports.searchHotels = (language, hotelSearchRequest) => {
   const roomsInfo = {
@@ -68,27 +68,27 @@ exports.searchHotels = (language, hotelSearchRequest) => {
 
   return Promise.all(requestPromises)
     .then(itineraries => {
-      return []
+      const selectedIitineraries = []
         .concat(...itineraries)
         .filter(i => !filters.stars.length || filters.stars.includes(+i.rating))
         .sort((i1, i2) => i1[filters.sortColumn] - i2[filters.sortColumn])
         .filter(
           i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
-        )
-        .map(i => ({
-          name: i.hotelName,
-          displaName: i.hotelName,
-          thumbnail: i.image,
-          stars: i.rating,
-          price: i.price,
-          currency: i.currency,
-          cityName: i.cityName,
-          countryName: i.countryName,
-          address: i.hotelIAddress,
-          latitude: i.latitude,
-          longitude: i.longitude,
-          facilities: i.facilities
-        }));
+        );
+      return selectedIitineraries.map(i => ({
+        name: i.hotelName,
+        displaName: i.hotelName,
+        thumbnail: i.image,
+        stars: i.rating,
+        price: i.price,
+        currency: i.currency,
+        cityName: i.cityName,
+        countryName: i.countryName,
+        address: i.hotelIAddress,
+        latitude: i.latitude,
+        longitude: i.longitude,
+        facilities: i.facilities
+      }));
     })
     .catch(err => {
       return err;
