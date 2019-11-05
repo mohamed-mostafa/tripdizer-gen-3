@@ -119,16 +119,16 @@ const getOrganizedRooms = (adults, kids, infants) => {
 };
 
 const getRangeOfStarsByBudgetCategory = budgetCategory => {
-  switch (budgetCategory) {
-    case 1 || "1":
+  switch (Number(budgetCategory)) {
+    case 1:
       return [];
-    case 2 || "2":
+    case 2:
       return [1, 2];
-    case 3 || "3":
+    case 3:
       return [2, 3];
-    case 4 || "4":
+    case 4:
       return [3, 4];
-    case 5 || "5":
+    case 5:
       return [4, 5];
   }
 };
