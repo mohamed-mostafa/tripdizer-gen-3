@@ -129,73 +129,7 @@
       </div>
       <div class="col-lg-3">
 
-        <h4 class="list-title font-weight-bold title-font">
-          {{ 'request.estimated_cost.summary.payment_details' | translate }}
-        </h4>
-
-        <div class="row mt-3 mx-0">
-          <div class="col-12 cost-item pt-3" *ngFor="let station of stations">
-            <h6 class="font-weight-bold" *ngIf="!station.isReturnStation">{{ station.nights_count }}
-              {{ 'request.estimated_cost.summary.nights_in' | translate }} {{ station.name }}</h6>
-
-            <div class="mb-1">
-              <h6 class="font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</h6>
-              <p class="font-weight-bold mb-0">Cairo (CAI)</p>
-              <p class="mb-0">Thu 17 October, 2019</p>
-              <p class="font-weight-bold mb-0">Rome Fiumicino (FCO)</p>
-              <p class="mb-0">Thu 17 October, 2019</p>
-            </div>
-
-
-            <div class="row">
-              <div class="col-3">
-                <p class="flight-label mb-0">{{ 'request.estimated_cost.summary.arrival' | translate }}</p>
-                <p class="font-weight-bold mb-0">02:50</p>
-                <p class="mb-0">ROM</p>
-              </div>
-              <div class="col-6 text-center">flight Image</div>
-              <div class="col-3">
-                <p class="flight-label mb-0">{{ 'request.estimated_cost.summary.depart' | translate }}</p>
-                <p class="font-weight-bold mb-0">04:00</p>
-                <p class="mb-0">VEN</p>
-              </div>
-            </div>
-
-            <div *ngIf="station.accommodationDataExists">
-              <hr>
-
-              <h6 class="font-weight-bold">{{station.hotel}}</h6>
-
-              <p class="mb-0">{{ 'request.estimated_cost.summary.from' | translate }}: 28 October 2019</p>
-              <p class="font-weight-bold mb-0">{{ 'request.estimated_cost.summary.check_in' | translate }}: 12:00 am</p>
-              <p class="mb-0">{{ 'request.estimated_cost.summary.to' | translate }}: 30 October 2019</p>
-              <p class="font-weight-bold mb-0">{{ 'request.estimated_cost.summary.check_out' | translate }}: 12:00 am
-              </p>
-              <p class="mb-0">Standard double room</p>
-
-            </div>
-          </div>
-
-
-          <div class="col-12 card-box pt-2">
-            <div class="row">
-                <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.hotels' | translate }}</div>
-                <div class="col-6 text-right">{{ totalCost.hotels | currency: 'EGP' }}</div>
-            </div>
-            <div class="row">
-                    <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</div>
-                    <div class="col-6 text-right">{{ totalCost.flights | currency: 'EGP' }}</div>
-                </div>
-          </div>
-
-          <div class="col-12 card-box pt-2">
-                <div class="row">
-                    <div class="col-6 text-left font-weight-bold">Total amount</div>
-                    <div class="col-6 text-right">{{ totalCost.hotels + totalCost.flights | currency: 'EGP' }}</div>
-                </div>
-              </div>
-
-        </div>
+        <c-payment-details [stations]=stations></c-payment-details>
 
       </div>
     </div>

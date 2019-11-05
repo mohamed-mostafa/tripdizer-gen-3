@@ -13,7 +13,6 @@ export class SummaryComponent {
 
 	currentStepPath: string;
 	stations: Array<Station> = [];
-	totalCost: { hotels: number, flights: number };
 	loadedData: boolean;
 
 	constructor(
@@ -24,16 +23,9 @@ export class SummaryComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.stations = service.getSummaryStations();
-		this.totalCost = service.summaryTotalCost;
 		service.finishGetAttractions.subscribe(x => {
 			this.loadedData = x;
-			console.log(x);
-
-			console.log(this.totalCost);
 		});
-		setTimeout(() => {
-			console.log(this.stations);
-		}, 2000);
 	}
 
 	prev() {
