@@ -79,7 +79,7 @@ exports.searchHotels = (language, hotelSearchRequest) => {
         name: i.hotelName,
         displaName: i.hotelName,
         thumbnail: i.image,
-        stars: i.rating,
+        stars: Number(i.rating),
         price: i.price,
         currency: i.currency,
         cityName: i.cityName,
@@ -87,6 +87,8 @@ exports.searchHotels = (language, hotelSearchRequest) => {
         address: i.hotelIAddress,
         latitude: i.latitude,
         longitude: i.longitude,
+        checkin: i.checkin,
+        checkout: i.checkout,
         facilities: i.facilities
       }));
     })
@@ -144,6 +146,8 @@ const searchHotelsAPI = (
                 resolve(
                   [...data.itineraries, ...moreItineraries].map(i => ({
                     ...i,
+                    checkin,
+                    checkout,
                     cityName: city,
                     countryName: country
                   }))
@@ -154,6 +158,8 @@ const searchHotelsAPI = (
             resolve(
               data.itineraries.map(i => ({
                 ...i,
+                checkin,
+                checkout,
                 cityName: city,
                 countryName: country
               }))
