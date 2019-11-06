@@ -1,3 +1,4 @@
+import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { CityAttractions, AttractionsRequest } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
 import { HttpClient } from '@angular/common/http';
@@ -127,15 +128,14 @@ export class EstimatedCostService {
 			true,
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
-		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
+		const cities: Array<{ cityName: string; numberOfNights: number, countryName: string }> = [];
 		for (const sc of this.selectedCities) {
-			cities.push({ cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
+			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, numberOfNights: sc.numberOfNights });
 		}
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
 		let accommodationDesiredCostPerPerson = 0;
-		if (this.budgetCategory === 1) {
-			// ownBudget
+		if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
 			const flightCost = this.getFlightsTotalCost();
 			const numberOfPayingCustomers =
 				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
