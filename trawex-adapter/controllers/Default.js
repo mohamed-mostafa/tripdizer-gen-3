@@ -124,6 +124,9 @@ module.exports.searchHotels = function searchHotels(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(
+        res,
+        utils.respondWithCode(response.code, response.message)
+      );
     });
 };

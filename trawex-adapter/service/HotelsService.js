@@ -66,20 +66,16 @@ exports.searchHotels = (language, hotelSearchRequest) => {
     )
   );
 
-  return Promise.all(requestPromises)
-    .then(itineraries => {
-      const selectedIitineraries = []
-        .concat(...itineraries)
-        .filter(i => !filters.stars.length || filters.stars.includes(+i.stars))
-        .sort((i1, i2) => i1[filters.sortColumn] - i2[filters.sortColumn])
-        .filter(
-          i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
-        );
-      return selectedIitineraries;
-    })
-    .catch(err => {
-      return err;
-    });
+  return Promise.all(requestPromises).then(itineraries => {
+    const selectedIitineraries = []
+      .concat(...itineraries)
+      .filter(i => !filters.stars.length || filters.stars.includes(+i.stars))
+      .sort((i1, i2) => i1[filters.sortColumn] - i2[filters.sortColumn])
+      .filter(
+        i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
+      );
+    return selectedIitineraries;
+  });
 };
 
 const searchHotelsAPI = (
@@ -120,25 +116,32 @@ const searchHotelsAPI = (
       },
       (error, response, data) => {
         if (error) {
-          reject(error);
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
         } else if (response.statusCode != 200) {
-          reject(response.statusMessage);
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
         } else if (data.status.errors) {
-          reject(data.status.errors.map(e => e.errorMessage));
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
         } else {
           if (data.status.moreResults === "true") {
             getMoreHotelsAPI(
               request,
               data.status.sessionId,
               data.status.nextToken
-            )
-              .then(moreItineraries => {
-                resolve([
-                  ...mapItineraryDetails(request, data),
-                  ...moreItineraries
-                ]);
-              })
-              .catch(err => reject(err));
+            ).then(moreItineraries => {
+              resolve([
+                ...mapItineraryDetails(request, data),
+                ...moreItineraries
+              ]);
+            });
           } else {
             resolve(mapItineraryDetails(request, data));
           }
@@ -166,25 +169,32 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
       },
       (error, response, data) => {
         if (error) {
-          reject(error);
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
         } else if (response.statusCode != 200) {
-          reject(response.statusMessage);
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
         } else if (data.status.errors) {
-          reject(data.status.errors.map(e => e.errorMessage));
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
         } else {
           if (data.status.moreResults === "true") {
             getMoreHotelsAPI(
               originalReq,
               data.status.sessionId,
               data.status.nextToken
-            )
-              .then(moreItineraries => {
-                resolve([
-                  ...mapItineraryDetails(originalReq, data),
-                  ...moreItineraries
-                ]);
-              })
-              .catch(err => reject(err));
+            ).then(moreItineraries => {
+              resolve([
+                ...mapItineraryDetails(originalReq, data),
+                ...moreItineraries
+              ]);
+            });
           } else {
             resolve(mapItineraryDetails(originalReq, data));
           }
