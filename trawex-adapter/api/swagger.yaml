@@ -835,57 +835,98 @@ definitions:
       currency: "EGP"
   HotelOffers:
     type: "array"
-    description: "a list of hotel offers"
+    description: "List of hotel offers"
     items:
       $ref: "#/definitions/Hotel"
   Hotel:
     type: "object"
     properties:
-      name:
+      address:
         type: "string"
-        example: "Hilton Capetown Hotel"
-      displaName:
+        example: "399 El Geish Road P.O Box 164 Alexandria  El Geish Road"
+      checkin:
         type: "string"
-        example: "هيلتون كيب تاون"
-      thumbnail:
+        example: "2020-05-01"
+      checkout:
         type: "string"
-        format: "url"
-        example: "https://static.tripdizer.com/hilton-capetown-hotel.png"
-      stars:
-        type: "number"
-        example: 5
-      price:
-        type: "number"
-        format: "currency"
-        example: 1000
-      currency:
-        type: "string"
-        example: "EGP"
+        example: "2020-05-03"
       cityName:
         type: "string"
         example: "Alexandria"
       countryName:
         type: "string"
         example: "Egypt"
-      address:
+      currency:
         type: "string"
-        example: "10 Sukhumvit Str."
+        example: "EGP"
+      image:
+        type: "string"
+        example: "https://images.grnconnect.com/H!0122508/0e87aab229cae78f91894e824873adb1.jpg"
       latitude:
         type: "number"
-        example: 12.980879
+        example: 31.245575
+      locality:
+        type: "string"
+        example: "San Istifanu"
       longitude:
         type: "number"
-        example: 77.576013
+        example: 29.966335
+      name:
+        type: "string"
+        example: "Four Seasons Alexandria at San Stefano"
+      price:
+        type: "number"
+        example: 29221.1
+      stars:
+        type: "number"
+        example: 5
       facilities:
         type: "array"
         items:
-          $ref: "#/definitions/Facility"
+          type: "string"
         example:
-          - "Conference Room"
-          - "Conference Room"
-          - "Internet access"
-          - "WLAN access"
-          - "Car Park"
+          - "24 Hour business center"
+          - "Maid Service"
+          - "Car Rental"
+          - "24 Hour health club"
+          - "Health Club"
+          - "Spa tub"
+          - "Television"
+          - "24 Hour Front Desk"
+          - "Wireless Internet Access"
+          - "Reception Area"
+          - "Hairdryer"
+          - "ATM"
+          - "24 Hour Check-In"
+          - "Fitness Center"
+          - "Newspaper"
+          - "Lounge"
+          - "Valet parking"
+      moreDetails:
+        type: object
+        properties:
+          sessionId:
+            type: "string"
+          succeededSuppliers:
+            type: "array"
+          faultedSuppliers:
+            type: "array"
+          warnings:
+            type: "array"
+          bookingToken:
+            type: "string"
+          hotelId:
+            type: "string"
+          productId:
+            type: "string"
+          propertyId:
+            type: "string"
+          resultIndex:
+            type: "string"
+          tokenId:
+            type: "string"
+          traceId:
+            type: "string"
   Room:
     type: "array"
     description: "The occupants in the room"
@@ -903,5 +944,3 @@ definitions:
     example:
       type: adult
       age: 20
-  Facility:
-    type: "string"

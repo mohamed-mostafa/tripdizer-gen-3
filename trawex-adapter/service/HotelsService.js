@@ -43,7 +43,7 @@ exports.searchHotels = (language, hotelSearchRequest) => {
     limits: hotelSearchRequest.tripSegments.reduce(
       (pv, cv) => ({
         ...pv,
-        [cv.cityName]: cv.limit || hotelSearchRequest.limitPerCity || 9
+        [cv.cityName]: cv.limit || hotelSearchRequest.limitPerCity
       }),
       {}
     )
@@ -70,27 +70,12 @@ exports.searchHotels = (language, hotelSearchRequest) => {
     .then(itineraries => {
       const selectedIitineraries = []
         .concat(...itineraries)
-        .filter(i => !filters.stars.length || filters.stars.includes(+i.rating))
+        .filter(i => !filters.stars.length || filters.stars.includes(+i.stars))
         .sort((i1, i2) => i1[filters.sortColumn] - i2[filters.sortColumn])
         .filter(
           i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
         );
-      return selectedIitineraries.map(i => ({
-        name: i.hotelName,
-        displaName: i.hotelName,
-        thumbnail: i.image,
-        stars: Number(i.rating),
-        price: i.price,
-        currency: i.currency,
-        cityName: i.cityName,
-        countryName: i.countryName,
-        address: i.hotelIAddress,
-        latitude: i.latitude,
-        longitude: i.longitude,
-        checkin: i.checkin,
-        checkout: i.checkout,
-        facilities: i.facilities
-      }));
+      return selectedIitineraries;
     })
     .catch(err => {
       return err;
@@ -110,6 +95,7 @@ const searchHotelsAPI = (
   currency = "EGP"
 ) => {
   return new Promise((resolve, reject) => {
+    const request = { city, country, checkin, checkout };
     httpRequest.get(
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH,
@@ -141,29 +127,20 @@ const searchHotelsAPI = (
           reject(data.status.errors.map(e => e.errorMessage));
         } else {
           if (data.status.moreResults === "true") {
-            getMoreHotelsAPI(data.status.sessionId, data.status.nextToken)
+            getMoreHotelsAPI(
+              request,
+              data.status.sessionId,
+              data.status.nextToken
+            )
               .then(moreItineraries => {
-                resolve(
-                  [...data.itineraries, ...moreItineraries].map(i => ({
-                    ...i,
-                    checkin,
-                    checkout,
-                    cityName: city,
-                    countryName: country
-                  }))
-                );
+                resolve([
+                  ...mapItineraryDetails(request, data),
+                  ...moreItineraries
+                ]);
               })
               .catch(err => reject(err));
           } else {
-            resolve(
-              data.itineraries.map(i => ({
-                ...i,
-                checkin,
-                checkout,
-                cityName: city,
-                countryName: country
-              }))
-            );
+            resolve(mapItineraryDetails(request, data));
           }
         }
       }
@@ -171,7 +148,7 @@ const searchHotelsAPI = (
   });
 };
 
-const getMoreHotelsAPI = (sessionId, nextToken) => {
+const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
   return new Promise((resolve, reject) => {
     httpRequest.get(
       {
@@ -196,16 +173,53 @@ const getMoreHotelsAPI = (sessionId, nextToken) => {
           reject(data.status.errors.map(e => e.errorMessage));
         } else {
           if (data.status.moreResults === "true") {
-            getMoreHotelsAPI(data.status.sessionId, data.status.nextToken).then(
-              otherData => {
-                resolve([...data.itineraries, ...otherData.itineraries]);
-              }
-            );
+            getMoreHotelsAPI(
+              originalReq,
+              data.status.sessionId,
+              data.status.nextToken
+            )
+              .then(moreItineraries => {
+                resolve([
+                  ...mapItineraryDetails(originalReq, data),
+                  ...moreItineraries
+                ]);
+              })
+              .catch(err => reject(err));
           } else {
-            resolve(data.itineraries);
+            resolve(mapItineraryDetails(originalReq, data));
           }
         }
       }
     );
   });
+};
+
+const mapItineraryDetails = (requestData, responseData) => {
+  const { moreResults, nextToken, ...moreDetails } = responseData.status;
+  return responseData.itineraries.map(i => ({
+    address: i.hotelIAddress,
+    checkin: requestData.checkin,
+    checkout: requestData.checkout,
+    cityName: requestData.city,
+    countryName: requestData.country,
+    currency: i.currency,
+    image: i.image,
+    latitude: Number(i.latitude),
+    locality: i.locality,
+    longitude: Number(i.longitude),
+    name: i.hotelName,
+    price: i.price,
+    stars: Number(i.rating),
+    facilities: i.facilities,
+    moreDetails: {
+      ...moreDetails,
+      bookingToken: i.BookingToken,
+      hotelId: i.hotelId,
+      productId: i.productId,
+      propertyId: i.propertyid,
+      resultIndex: i.result_index,
+      tokenId: i.TokenId,
+      traceId: i.TraceId
+    }
+  }));
 };
