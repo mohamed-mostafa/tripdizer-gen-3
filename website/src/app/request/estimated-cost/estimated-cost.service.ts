@@ -243,12 +243,28 @@ export class EstimatedCostService {
 						arrive_time: stationFlightOffer
 							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm')
 							: 'unknown time',
+						carrier_logo: stationFlightOffer ? stationFlightOffer.carrier.squareLogo : null,
+						depart_hour: stationFlightOffer
+							? moment(stationFlightOffer.segments[0].departure).format('HH:mm')
+							: 'Unknown time',
+						arrive_hour: stationFlightOffer
+							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('HH:mm')
+							: 'unknown time',
+						arrive_code: stationFlightOffer.arrival.destination,
+						depart_code: stationFlightOffer.departure.origin,
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
 						hotel: stationHotel ? stationHotel.name : 'None Selected',
 						hotel_rate: stationHotel ? stationHotel.stars : 0,
 						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
+						accommodation_from: stationFlightOffer
+						? moment(stationFlightOffer.segments[0].departure).format('DD MMM YYYY')
+						: 'Unknown time',
+						accommodation_to: moment(tripStartDate)
+						// tslint:disable-next-line: deprecation
+						.add('days', stationCity.numberOfNights)
+						.format('DD MMM YYYY'),
 
 						// activities
 						activities: cityAttraction.attractions.map(attraction => ({
@@ -295,12 +311,26 @@ export class EstimatedCostService {
 							// tslint:disable-next-line: indent
 						)
 						: 'unknown time',
+					carrier_logo: lastStationFlightOffer ? lastStationFlightOffer.carrier.squareLogo : null,
 
 					// dates
 					from: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM')
 						: '',
 					to: null,
+
+					depart_hour: lastStationFlightOffer
+						? moment(lastStationFlightOffer.segments[0].departure).format('HH:mm')
+						: 'Unknown time',
+					arrive_hour: lastStationFlightOffer
+						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
+							'HH:mm'
+							// tslint:disable-next-line: indent
+						)
+						: 'unknown time',
+
+					arrive_code: lastStationFlightOffer.arrival.destination,
+					depart_code: lastStationFlightOffer.departure.origin,
 
 					// accommodation
 					accommodationDataExists: false,

@@ -232,8 +232,6 @@
 				"depart": "Depart",
                 "nights": "Nights",
                 "payment_details": "Payment details",
-                "check_in": "Check in",
-                "check_out": "Check out",
                 "flights": "Flights",
                 "nights_in": "nights in",
                 "hotels": "Hotels",

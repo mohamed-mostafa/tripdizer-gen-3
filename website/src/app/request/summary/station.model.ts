@@ -19,4 +19,11 @@ export class Station {
 	flightDataExists: boolean;
 	accommodationDataExists: boolean;
 	isReturnStation: boolean;
+	carrier_logo: string;
+	depart_hour: string;
+	arrive_hour: string;
+	depart_code: string;
+	arrive_code: string;
+	accommodation_from?: string;
+	accommodation_to?: string;
 }

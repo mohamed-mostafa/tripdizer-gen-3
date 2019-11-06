@@ -12,9 +12,8 @@ export class PaymentDetailsComponent implements OnInit {
 	totalCost: { hotels: number, flights: number };
 
 	constructor(
-		private service: EstimatedCostService,
+		service: EstimatedCostService,
 	) {
-		console.log(this.stations);
 		this.totalCost = service.summaryTotalCost;
 	}
 
