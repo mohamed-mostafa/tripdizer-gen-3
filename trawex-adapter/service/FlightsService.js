@@ -76,7 +76,14 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
             refundable: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType.IsRefundable,
             passportMandatory: fareItinerary.FareItinerary.IsPassportMandatory,
-            segments: []
+            flightLegs: originList.map((origin, index) => (
+              {
+                origin: origin,
+                destination: destinationsList[index],
+                flightDay: departureDatesList[index],
+                segments: []
+              }
+            )),
           }
           fareItinerary.FareItinerary.OriginDestinationOptions[0].OriginDestinationOption.forEach(async originDestinationOptionItem => {
             let flightSegment = {
@@ -94,8 +101,30 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
                 name: mapAirlineCodeToName(originDestinationOptionItem.FlightSegment.MarketingAirlineCode)
               }
             }
-            flightOffer.segments.push(flightSegment);
+
+            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment
+            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day'));
+            if (flightLeg) { // we found a leg that starts on the same day of the segment
+              flightLeg.segments.push(flightSegment);
+            } else { // couldn't find a leg whose dat is the departure date of a segment, then this is a second segment of a leg that happens to be in the next day
+              // find the first leg that has a segment whole destination is the same origin of the segment (segments should be sorted, so the first segment of this leg should already be there)
+              flightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.segments.find(flightLegSegment => flightLegSegment.destination == flightSegment.origin) != null);
+              if (flightLeg) {
+                flightLeg.segments.push(flightSegment);
+              } else {
+                console.error("A flight segment couldn't be added to a leg. Adding it to the offer directly");
+                flightOffer.segment.push(flightSegment);
+              }
+            }
           });
+          flightOffer.flightLegs.forEach(flightLeg => {
+            flightLeg.carrier = flightLeg.segments.length != 0 ? flightLeg.segments[0].carrier : null;
+            flightLeg.totalDurationInMinutes = (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000;
+            flightLeg.totalDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000);
+            flightLeg.transitDurationInMinutes = calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000;
+            flightLeg.transitDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000);
+
+          })
           return flightOffer;
         })
         resolve(flightOffers);
@@ -515,6 +544,21 @@ var calculateTotalTransit = function (segments) {
       var thisSegment = segments[i];
       var nextSegment = segments[i + 1];
       var transitBetween2Segments = new Date(nextSegment.FlightSegment.DepartureDateTime).getTime() - new Date(thisSegment.FlightSegment.ArrivalDateTime).getTime();
+      totalTransit += transitBetween2Segments;
+    }
+    return totalTransit;
+  }
+}
+
+var calculateTotalTransitFromFlightSegments = function (segments) {
+  var totalTransit = 0;
+  if (segments.length < 2) {
+    return totalTransit;
+  } else {
+    for (var i = 0; i < segments.length - 1; i++) { // iterate over all segments except last one
+      var thisSegment = segments[i];
+      var nextSegment = segments[i + 1];
+      var transitBetween2Segments = new Date(nextSegment.departure).getTime() - new Date(thisSegment.arrival).getTime();
       totalTransit += transitBetween2Segments;
     }
     return totalTransit;
