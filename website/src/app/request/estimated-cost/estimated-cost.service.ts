@@ -128,9 +128,9 @@ export class EstimatedCostService {
 			true,
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
-		const cities: Array<{ cityName: string; numberOfNights: number, countryName: string }> = [];
+		const cities: Array<{ cityName: string; numberOfNights: number, cityIata: string, countryName: string }> = [];
 		for (const sc of this.selectedCities) {
-			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, numberOfNights: sc.numberOfNights });
+			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
 		}
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
