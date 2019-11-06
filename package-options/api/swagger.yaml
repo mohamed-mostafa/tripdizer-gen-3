@@ -368,6 +368,31 @@ definitions:
         type: "number"
         format: "currency"
         example: 2000
+      moreDetails:
+        type: object
+        properties:
+          sessionId:
+            type: "string"
+          succeededSuppliers:
+            type: "array"
+          faultedSuppliers:
+            type: "array"
+          warnings:
+            type: "array"
+          bookingToken:
+            type: "string"
+          hotelId:
+            type: "string"
+          productId:
+            type: "string"
+          propertyId:
+            type: "string"
+          resultIndex:
+            type: "string"
+          tokenId:  
+            type: "string"
+          traceId:
+            type: "string"
   attractionsOffer:
     properties:
       city:

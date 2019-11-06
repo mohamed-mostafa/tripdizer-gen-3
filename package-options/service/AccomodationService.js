@@ -74,10 +74,10 @@ const getHotelsOfCity = (
           resolve(
             hotels.map(h => ({
               name: h.name,
-              displayName: h.displaName,
+              displayName: h.name,
               description: h.facilities.join(", "),
               city: h.cityName,
-              thumbnail: h.thumbnail,
+              thumbnail: h.image,
               address: h.address,
               stars: h.stars,
               checkin: h.checkin,
@@ -85,7 +85,8 @@ const getHotelsOfCity = (
               numberOfNights: moment(h.checkout).diff(h.checkin, "days"),
               rate: 0,
               price: h.price,
-              currency: h.currency
+              currency: h.currency,
+              moreDetails: h.moreDetails
             }))
           );
         }
