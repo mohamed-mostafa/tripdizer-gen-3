@@ -29,7 +29,7 @@ resources:
   memory_gb: 0.8
   disk_size_gb: 10
 env_variables:
-  TRAWEX_BASE_ENDPOINT: https://trawex.biz/api;
+  TRAWEX_BASE_ENDPOINT: https://trawex.biz/api
   TRAWEX_USERNAME: TripdizerAPITest
   TRAWEX_PASSWORD: TripdizerAPI@2019
   TRAWEX_SOURCE_IP_ADDRESS: 35.242.174.95

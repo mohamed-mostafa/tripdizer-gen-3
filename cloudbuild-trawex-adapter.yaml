@@ -8,7 +8,7 @@ steps:
   dir: flights-adapter
   id: 'GCLOUD DEPLOY'
 # - name: gcr.io/cloud-builders/gcloud
-#   args: ['compute', 'firewall-rules', 'create', 'trawex-allow', '--allow=tcp', '--direction=in', '--target-tags=trawex', '--source-tags=trawex-consumer', '--priority=900']
+#   args: ['compute', 'firewall-rules', 'create', 'allow-trawex-ingress', '--allow=tcp', '--direction=in', '--target-tags=trawex', '--source-ranges=0.0.0.0/0', '--priority=900', '--network=tripdizer-vpc']
 #   id: 'CREATE ALLOW FIREWALL RULE'
 # - name: gcr.io/cloud-builders/gcloud
 #   args: ['compute', 'firewall-rules', 'create trawex-deny', '--action=deny', '--rules=all', '--direction=in', '--target-tags=trawex', '--source-ranges=0.0.0.0/0', '--priority=910']
