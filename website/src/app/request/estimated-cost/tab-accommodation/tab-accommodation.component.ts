@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OwlCarousel } from 'ngx-owl-carousel';
+import { Component, ViewChild } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
 import { RequestService } from '../../request.service';
@@ -10,11 +11,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
+
+	@ViewChild('owlElement') owlElement: OwlCarousel;
+
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
 	loadedData: boolean;
 	currentStepPath: string;
+	options: any;
+	carousel: OwlCarousel;
 
 	constructor(
 		private service: EstimatedCostService,
@@ -35,6 +41,7 @@ export class TabAccommodationComponent {
 					this.totalCost = this.totalCost + item.hotels[0].price;
 				}
 			}
+			this.setSliderOptions();
 		});
 	}
 
@@ -59,6 +66,30 @@ export class TabAccommodationComponent {
 		}
 	}
 
+	setSliderOptions() {
+		this.options = {
+			nav: true,
+			dots: false,
+			responsive: {
+				0: {
+					items: 1,
+					margin: 10,
+					slideBy: 1,
+				},
+				600: {
+					items: 2,
+					margin: 10,
+					slideBy: 2
+				},
+				1000: {
+					items: 3,
+					margin: 10,
+					slideBy: 3
+				},
+			},
+		};
+	}
+
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
 		// this.service.setCurrentTabIndex(4);
@@ -67,5 +98,13 @@ export class TabAccommodationComponent {
 
 	back(): void {
 		this.service.setCurrentTabIndex(1);
+	}
+
+	nextSlide() {
+		this.owlElement.next();
+	}
+
+	PrevSlide() {
+		this.owlElement.previous();
 	}
 }
