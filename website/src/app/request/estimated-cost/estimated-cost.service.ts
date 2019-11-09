@@ -1,3 +1,4 @@
+import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { CityAttractions, AttractionsRequest } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
 import { HttpClient } from '@angular/common/http';
@@ -36,7 +37,7 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) {}
+	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) { }
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -127,15 +128,14 @@ export class EstimatedCostService {
 			true,
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
-		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
+		const cities: Array<{ cityName: string; numberOfNights: number, cityIata: string, countryName: string }> = [];
 		for (const sc of this.selectedCities) {
-			cities.push({ cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
+			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
 		}
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
 		let accommodationDesiredCostPerPerson = 0;
-		if (this.budgetCategory === 1) {
-			// ownBudget
+		if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
 			const flightCost = this.getFlightsTotalCost();
 			const numberOfPayingCustomers =
 				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
@@ -243,12 +243,28 @@ export class EstimatedCostService {
 						arrive_time: stationFlightOffer
 							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm')
 							: 'unknown time',
+						carrier_logo: stationFlightOffer ? stationFlightOffer.carrier.squareLogo : null,
+						depart_hour: stationFlightOffer
+							? moment(stationFlightOffer.segments[0].departure).format('HH:mm')
+							: 'Unknown time',
+						arrive_hour: stationFlightOffer
+							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('HH:mm')
+							: 'unknown time',
+						arrive_code: stationFlightOffer.arrival.destination,
+						depart_code: stationFlightOffer.departure.origin,
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
 						hotel: stationHotel ? stationHotel.name : 'None Selected',
 						hotel_rate: stationHotel ? stationHotel.stars : 0,
 						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
+						accommodation_from: stationFlightOffer
+						? moment(stationFlightOffer.segments[0].departure).format('DD MMM YYYY')
+						: 'Unknown time',
+						accommodation_to: moment(tripStartDate)
+						// tslint:disable-next-line: deprecation
+						.add('days', stationCity.numberOfNights)
+						.format('DD MMM YYYY'),
 
 						// activities
 						activities: cityAttraction.attractions.map(attraction => ({
@@ -291,16 +307,30 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_time: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
-								'DD/MM HH:mm'
-								// tslint:disable-next-line: indent
-						  )
+							'DD/MM HH:mm'
+							// tslint:disable-next-line: indent
+						)
 						: 'unknown time',
+					carrier_logo: lastStationFlightOffer ? lastStationFlightOffer.carrier.squareLogo : null,
 
 					// dates
 					from: lastStationFlightOffer
 						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM')
 						: '',
 					to: null,
+
+					depart_hour: lastStationFlightOffer
+						? moment(lastStationFlightOffer.segments[0].departure).format('HH:mm')
+						: 'Unknown time',
+					arrive_hour: lastStationFlightOffer
+						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
+							'HH:mm'
+							// tslint:disable-next-line: indent
+						)
+						: 'unknown time',
+
+					arrive_code: lastStationFlightOffer.arrival.destination,
+					depart_code: lastStationFlightOffer.departure.origin,
 
 					// accommodation
 					accommodationDataExists: false,
@@ -320,8 +350,9 @@ export class EstimatedCostService {
 	}
 
 	public get summaryTotalCost() {
-		const flightsTotalCost = this.getFlightsTotalCost();
-		this.getHotelsTotalCost();
-		return flightsTotalCost + this.getHotelsTotalCost();
+		return {
+			hotels: this.getHotelsTotalCost(),
+			flights: this.getFlightsTotalCost()
+		};
 	}
 }

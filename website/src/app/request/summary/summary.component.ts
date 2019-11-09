@@ -10,9 +10,9 @@ import { RequestService } from '../request.service';
 	styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent {
+
 	currentStepPath: string;
 	stations: Array<Station> = [];
-	totalCost: number;
 	loadedData: boolean;
 
 	constructor(
@@ -23,7 +23,6 @@ export class SummaryComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.stations = service.getSummaryStations();
-		this.totalCost = service.summaryTotalCost;
 		service.finishGetAttractions.subscribe(x => {
 			this.loadedData = x;
 		});

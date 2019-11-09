@@ -1,3 +1,4 @@
+import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,12 +26,10 @@ import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
 import { SummaryComponent } from './summary/summary.component';
-import { SummaryModule } from './summary/summary.module';
 
 @NgModule({
 	imports: [
         CommonModule,
-        SummaryModule,
 		RequestRoutingModule,
 		CoreModule,
 		FormsModule,
@@ -59,7 +58,8 @@ import { SummaryModule } from './summary/summary.module';
 		FlightOptionsComponent,
 		ChangeFlightComponent,
 		TabAccommodationComponent,
-		SummaryComponent,
+        SummaryComponent,
+        PaymentDetailsComponent
 	]
 })
 export class RequestModule { }
