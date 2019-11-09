@@ -2,9 +2,9 @@ let request = require("request");
 let moment = require("moment");
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8 * 60;
-const FLIGHTS_ADAPTER_ENDPOINT =
-  process.env.FLIGHTS_ADAPTER_ENDPOINT ||
-  "http://localhost:8085/trawex-adapter/1.0.0/flights/search/one-way";
+const TRAWEX_ADAPTER_ENDPOINT =
+  process.env.TRAWEX_ADAPTER_ENDPOINT ||
+  "http://localhost:8085/trawex-adapter/1.0.0";
 const MASTER_DATA_ENDPOINT =
   process.env.MASTER_DATA_ENDPOINT || "http://localhost:8083/master-data";
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
@@ -138,7 +138,7 @@ function createFlightLegBetweenOriginAndDestination(
         numberOfInfants: numberOfInfants
       };
       request.post(
-        { url: FLIGHTS_ADAPTER_ENDPOINT, body: legSearchRequest, headers: { 'language': language }, json: true },
+        { url: TRAWEX_ADAPTER_ENDPOINT + "/flights/search/one-way", body: legSearchRequest, headers: { 'language': language }, json: true },
         function (err, httpResponse, body) {
           if (err || httpResponse.statusCode != 200) {
             // reject(err || httpResponse.statusMessage);

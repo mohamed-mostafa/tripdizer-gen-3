@@ -1,8 +1,8 @@
 let httpRequest = require("request");
 let moment = require("moment");
 
-const MASTER_DATA_ENDPOINT =
-  process.env.MASTER_DATA_ENDPOINT ||
+const TRAWEX_ADAPTER_ENDPOINT =
+  process.env.TRAWEX_ADAPTER_ENDPOINT ||
   "http://localhost:8085/trawex-adapter/1.0.0";
 const MAX_NUMBER_OF_HOTELS_PER_CITY = 9;
 
@@ -10,7 +10,7 @@ const ADULT = { type: "adult", age: 20 };
 const KID = { type: "child", age: 5 };
 const INFANT = { type: "child", age: 1 };
 
-exports.searchAccomodations = function(language, accomomdationSearchRequest) {
+exports.searchAccomodations = function (language, accomomdationSearchRequest) {
   return new Promise((resolve, reject) => {
     const {
       arrival,
@@ -50,10 +50,10 @@ const getHotelsOfCity = (
   nationality = "EG",
   currency = "EGP"
 ) => {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     httpRequest.post(
       {
-        url: MASTER_DATA_ENDPOINT + "/hotels/search",
+        url: TRAWEX_ADAPTER_ENDPOINT + "/hotels/search",
         json: true,
         body: {
           tripSegments,
@@ -65,7 +65,7 @@ const getHotelsOfCity = (
           currency
         }
       },
-      function(error, response, hotels) {
+      function (error, response, hotels) {
         if (error) {
           reject(error);
         } else if (response.statusCode != 200) {
