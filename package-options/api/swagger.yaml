@@ -259,6 +259,19 @@ definitions:
         example: 120
       carrier:
         $ref: "#/definitions/carrier"
+      sessionId:
+        type: "string"
+        description: "the id of the session at trawex"
+      fareSourceCode:
+        type: "string"
+        description: "the unique identifier of the offer at trawex. will be used to validate and book the offer later"
+      fareType:
+        type: "string"
+        description: "the type of the fare (Public:normal, Private:discounted for a consolidator, LCC:low cost carrier). It affects whether we need to issue a ticket after booking, or if booking does it already"
+      refundable:
+        type: "string"
+      passportMandatory:
+        type: "boolean"
     description: "represents a trip from an origin to a destination. can be a direct\
       \ flight or a flight with transits."
   flightLeg:
@@ -355,6 +368,31 @@ definitions:
         type: "number"
         format: "currency"
         example: 2000
+      moreDetails:
+        type: object
+        properties:
+          sessionId:
+            type: "string"
+          succeededSuppliers:
+            type: "array"
+          faultedSuppliers:
+            type: "array"
+          warnings:
+            type: "array"
+          bookingToken:
+            type: "string"
+          hotelId:
+            type: "string"
+          productId:
+            type: "string"
+          propertyId:
+            type: "string"
+          resultIndex:
+            type: "string"
+          tokenId:  
+            type: "string"
+          traceId:
+            type: "string"
   attractionsOffer:
     properties:
       city:
