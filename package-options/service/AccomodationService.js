@@ -114,6 +114,7 @@ const getHotelsOfMultipleCities = (
         } else {
           resolve(
             hotels.map(h => ({
+              id: h.id,
               name: h.name,
               displayName: h.name,
               description: h.facilities.join(", "),

@@ -209,6 +209,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
 const mapItineraryDetails = (requestData, responseData) => {
   const { moreResults, nextToken, ...moreDetails } = responseData.status;
   return responseData.itineraries.map(i => ({
+    id: i.id,
     address: i.hotelIAddress,
     checkin: requestData.checkin,
     checkout: requestData.checkout,
