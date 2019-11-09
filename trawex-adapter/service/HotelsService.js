@@ -2,7 +2,7 @@
 
 const httpRequest = require("request");
 
-const TRAWEX_BASE_ENDPOINT = "https://trawex.biz/api";
+const TRAWEX_BASE_ENDPOINT = process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
 const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
 const TRAWEX_HOTELS_SEARCH = "/hotel_search";
 const TRAWEX_HOTELS_MORE = "/getMoreHotels";

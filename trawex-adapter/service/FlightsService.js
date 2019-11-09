@@ -5,7 +5,7 @@ let moment = require("moment");
 let humanizeDuration = require('humanize-duration');
 let writer = require('../utils/writer');
 
-let TRAWEX_BASE_ENDPOINT = "https://trawex.biz/api";
+let TRAWEX_BASE_ENDPOINT = process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
 let TRAWEX_FLIGHTS_ROOT = "/flight_trawex";
 let TRAWEX_FLIGHTS_AUTHENTICATE_URL = "/authenticate";
 let TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL = "/flight_availability_search";

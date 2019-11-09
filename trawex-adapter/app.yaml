@@ -16,6 +16,7 @@ env: flex
 service: tripdizer-trawex-adapter
 
 network:
+  name: tripdizer-vpc
   instance_tag: trawex
 
 readiness_check:
