@@ -7,7 +7,7 @@
     <h6 class="font-weight-bold" *ngIf="!station.isReturnStation">{{ station.nights_count }}
       {{ 'request.estimated_cost.summary.nights_in' | translate }} {{ station.name }}</h6>
 
-    <div class="mb-1">
+    <div class="mb-1" *ngIf="station.flightDataExists">
       <h6 class="font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</h6>
       <p class="font-weight-bold mb-0">{{ station.depart_from }} ({{station.depart_code}})</p>
       <p class="mb-0">{{ station.travel_time }}</p>
@@ -16,7 +16,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="row" *ngIf="station.flightDataExists">
       <div class="col-3">
         <p class="flight-label mb-0">{{ 'request.estimated_cost.summary.depart' | translate }}</p>
         <p class="font-weight-bold mb-0">{{station.depart_hour}}</p>
@@ -40,9 +40,9 @@
       <h6 class="font-weight-bold">{{station.hotel}}</h6>
 
       <p class="mb-0"><span class="font-weight-bold">{{ 'request.estimated_cost.summary.from' | translate }}:</span>
-        {{station.accommodation_from}}</p>
+        {{station.from}}</p>
       <p class="mb-0"><span class="font-weight-bold">{{ 'request.estimated_cost.summary.to' | translate }}:</span>
-        {{station.accommodation_to}}</p>
+        {{station.to}}</p>
       <p class="mb-0">Standard double room</p>
 
     </div>
