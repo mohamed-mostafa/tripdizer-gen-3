@@ -250,8 +250,8 @@ export class EstimatedCostService {
 						arrive_hour: stationFlightOffer
 							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('HH:mm')
 							: 'unknown time',
-						arrive_code: stationFlightOffer.arrival.destination,
-						depart_code: stationFlightOffer.departure.origin,
+						arrive_code: stationFlightOffer ? stationFlightOffer.arrival.destination : "",
+						depart_code: stationFlightOffer ? stationFlightOffer.departure.origin : "",
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
@@ -259,12 +259,12 @@ export class EstimatedCostService {
 						hotel_rate: stationHotel ? stationHotel.stars : 0,
 						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
 						accommodation_from: stationFlightOffer
-						? moment(stationFlightOffer.segments[0].departure).format('DD MMM YYYY')
-						: 'Unknown time',
+							? moment(stationFlightOffer.segments[0].departure).format('DD MMM YYYY')
+							: 'Unknown time',
 						accommodation_to: moment(tripStartDate)
-						// tslint:disable-next-line: deprecation
-						.add('days', stationCity.numberOfNights)
-						.format('DD MMM YYYY'),
+							// tslint:disable-next-line: deprecation
+							.add('days', stationCity.numberOfNights)
+							.format('DD MMM YYYY'),
 
 						// activities
 						activities: cityAttraction.attractions.map(attraction => ({
