@@ -373,6 +373,67 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
+  /hotels/book:
+    post:
+      summary:
+        "Books a hotel, using the the PNR information of the travelers"
+      description:
+        "By passing in the appropriate options, you can book a hotel using the PNR information of the travelers"
+      operationId: "bookHotel"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "BookHotelRequest"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/BookHotelRequest"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              bookingStatus:
+                type: string
+              supplierConfirmationNum:
+                type: array
+                items:
+                  type: number
+              reference:
+                type: array
+                items:
+                  type: string
+              clientReference:
+                type: string
+              bookingDetails:
+                type: object
+                properties:
+                  checkOut:
+                    type: object
+                  checkIn:
+                    type: object
+                  destinationName:
+                    type: string
+                  latitude:
+                    type: string
+                  longitude:
+                    type: string
+                  roomCount:
+                    type: object
+                  address:
+                    type: string
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
 definitions:
   TripSegment:
     required:
@@ -806,7 +867,7 @@ definitions:
       dateOfBirth:
         type: "string"
         format: "date-time"
-        example: "1984-02-01T00:00:00"
+        example: "1984-02-01T00:00:00Z"
       nationality:
         type: "string"
         example: "EG"
@@ -832,19 +893,19 @@ definitions:
         type: "string"
         example: "EG"
     example:
-      passportNumber: "A08102235"
-      lastName: "Mostafa"
-      gender: "M"
-      dateOfBirth: "1984-02-01T00:00:00"
-      title: "Mr"
-      passportExpiry: "2013-02-03"
       firstName: "Mohamed"
-      areaCode: "02"
+      lastName: "Mostafa"
+      title: "Mr"
+      gender: "M"
+      dateOfBirth: "1984-02-01T00:00:00Z"
       nationality: "EG"
-      phone: 33378321
-      passportIssueCountry: "EG"
-      countryCode: "+2"
       email: "email"
+      countryCode: "+2"
+      areaCode: "02"
+      phone: 33378321
+      passportNumber: "A08102235"
+      passportExpiry: "2013-02-03"
+      passportIssueCountry: "EG"
   HotelSearchRequest:
     required:
       - "tripSegments"
@@ -1183,3 +1244,44 @@ definitions:
             type: array
             items:
               type: object
+  BookHotelRequest:
+    type: object
+    properties:
+      sessionId:
+        type: string
+      traceId:
+        type: string
+      tokenId:
+        type: string
+      productId:
+        type: string
+      hotelId:
+        type: string
+      propertyId:
+        type: string
+      resultIndex:
+        type: string
+      refCode:
+        type: string
+      preBookingToken:
+        type: string
+      changedOccupancy:
+        type: array
+        items:
+          type: object
+      extraBeds:
+        type: array
+        items:
+          type: number
+      adultsPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"
+      childrenPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"
+      infantsPNRInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PNRInfo"

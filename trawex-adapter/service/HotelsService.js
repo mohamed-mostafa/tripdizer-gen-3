@@ -9,6 +9,7 @@ const TRAWEX_HOTELS_SEARCH = "/hotel_search";
 const TRAWEX_HOTELS_MORE = "/getMoreHotels";
 const TRAWEX_HOTELS_SPECIFIC_CONTENT = "/get_specific_hotel_content";
 const TRAWEX_HOTELS_ROOM_RATES = "/get_room_rates";
+const TRAWEX_HOTELS_BOOK = "/hotel_book";
 
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
@@ -178,6 +179,45 @@ exports.getRoomRates = (language, roomRatesRequest) => {
   });
 };
 
+exports.bookHotel = (language, bookHotelRequest) => {
+  const request = {
+    sessionId: bookHotelRequest.sessionId,
+    traceId: bookHotelRequest.traceId,
+    tokenId: bookHotelRequest.tokenId,
+    productId: bookHotelRequest.productId,
+    hotelId: bookHotelRequest.hotelId,
+    propertyId: bookHotelRequest.propertyId,
+    resultIndex: bookHotelRequest.resultIndex,
+    refCode: bookHotelRequest.refCode,
+    preBookingToken: bookHotelRequest.preBookingToken,
+    changedOccupancy: bookHotelRequest.changedOccupancy,
+    extraBeds: bookHotelRequest.extraBeds,
+    guestsDetails: {
+      titles: bookHotelRequest.adultsPNRInfoList.map(a => a.title),
+      firstNames: bookHotelRequest.adultsPNRInfoList.map(a => a.firstName),
+      lastName: bookHotelRequest.adultsPNRInfoList.map(a => a.lastName),
+      childTitles: [
+        ...bookHotelRequest.childrenPNRInfoList,
+        ...bookHotelRequest.infantsPNRInfoList
+      ].map(a => a.title),
+      childFirstNames: [
+        ...bookHotelRequest.childrenPNRInfoList,
+        ...bookHotelRequest.infantsPNRInfoList
+      ].map(a => a.firstName),
+      childLastNames: [
+        ...bookHotelRequest.childrenPNRInfoList,
+        ...bookHotelRequest.infantsPNRInfoList
+      ].map(a => a.lastName),
+      city: bookHotelRequest.adultsPNRInfoList[0].city,
+      email: bookHotelRequest.adultsPNRInfoList[0].email,
+      address: bookHotelRequest.adultsPNRInfoList[0].address,
+      phone: bookHotelRequest.adultsPNRInfoList[0].phone
+    }
+  };
+
+  return bookHotel(language, request);
+};
+
 const searchHotelsAPI = (
   city,
   country,
@@ -334,4 +374,82 @@ const mapItineraryDetails = (requestData, responseData) => {
       traceId: i.TraceId
     }
   }));
+};
+
+const bookHotel = (language, bookHotelRequest) => {
+  return new Promise((resolve, reject) => {
+    httpRequest.post(
+      {
+        url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK,
+        proxy: TRAWEX_PROXY_ENDPOINT,
+        json: true,
+        body: {
+          user_id: TRAWEX_USERNAME,
+          user_password: TRAWEX_PASSWORD,
+          access: TRAWEX_ENVIRONMENT,
+          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          trackingId: TRAWEX_TRACKING_ID,
+          productId: bookHotelRequest.productId,
+          hotelcode: bookHotelRequest.hotelId,
+          propertyid: bookHotelRequest.propertyId,
+          changedOccupancy: bookHotelRequest.changedOccupancy,
+          extrabeds: bookHotelRequest.extraBeds,
+          guests_details: {
+            title: bookHotelRequest.guestsDetails.titles,
+            first_name: bookHotelRequest.guestsDetails.firstNames,
+            last_name: bookHotelRequest.guestsDetails.lastName,
+            child_title: bookHotelRequest.guestsDetails.childTitles,
+            child_first_name: bookHotelRequest.guestsDetails.childFirstNames,
+            child_last_name: bookHotelRequest.guestsDetails.childLastNames,
+            city: bookHotelRequest.guestsDetails.city,
+            email: bookHotelRequest.guestsDetails.email,
+            address: bookHotelRequest.guestsDetails.address,
+            mobile_no: bookHotelRequest.guestsDetails.phone
+          },
+          refcode: bookHotelRequest.refCode,
+          prebookingtoken: bookHotelRequest.preBookingToken,
+          resultindex: bookHotelRequest.resultIndex,
+          sessionId: bookHotelRequest.sessionId,
+          TraceId: bookHotelRequest.traceId,
+          TokenId: bookHotelRequest.tokenId
+        }
+      },
+      (error, response, data) => {
+        if (error) {
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
+        } else if (response.statusCode != 200) {
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
+        } else if (data.status && data.status.errors) {
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
+        } else if (!data.status && !data.isRateAvailable) {
+          reject({
+            code: 404,
+            message: [data.errors.message]
+          });
+        } else {
+          resolve({
+            bookingStatus: data.status,
+            supplierConfirmationNum: data.supplierConfirmationNum,
+            reference: data.reference,
+            clientReference: data.clientReference,
+            bookingDetails: data.booking
+              ? {
+                  ...data.booking.roomBookingDetails,
+                  roomCount: data.booking.roomBookingDetails.room_count
+                }
+              : null
+          });
+        }
+      }
+    );
+  });
 };

@@ -158,3 +158,17 @@ module.exports.getRoomRates = function getRoomRates(req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.bookHotel = function bookHotel(req, res, next) {
+  var language = req.swagger.params["language"].value;
+  var bookHotelRequest = req.swagger.params["BookHotelRequest"].value;
+
+  hotelsService
+    .bookHotel(language, bookHotelRequest)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+};
