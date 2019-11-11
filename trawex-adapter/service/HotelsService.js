@@ -2,15 +2,17 @@
 
 const httpRequest = require("request");
 
-const TRAWEX_BASE_ENDPOINT = process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
+const TRAWEX_BASE_ENDPOINT =
+  process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
 const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
 const TRAWEX_HOTELS_SEARCH = "/hotel_search";
 const TRAWEX_HOTELS_MORE = "/getMoreHotels";
+const TRAWEX_HOTELS_SPECIFIC_CONTENT = "/get_specific_hotel_content";
 
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
 const TRAWEX_SOURCE_IP_ADDRESS =
-  process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95";
+  process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
 const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
@@ -75,6 +77,46 @@ exports.searchHotels = (language, hotelSearchRequest) => {
         i => filters.limits[i.cityName]-- > 0 || !filters.limits[i.cityName]
       );
     return selectedIitineraries;
+  });
+};
+
+exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
+  return new Promise((resolve, reject) => {
+    httpRequest.get(
+      {
+        url:
+          TRAWEX_BASE_ENDPOINT +
+          TRAWEX_HOTELS_ROOT +
+          TRAWEX_HOTELS_SPECIFIC_CONTENT,
+        proxy: TRAWEX_PROXY_ENDPOINT,
+        json: true,
+        qs: {
+          user_id: TRAWEX_USERNAME,
+          user_password: TRAWEX_PASSWORD,
+          access: TRAWEX_ENVIRONMENT,
+          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          trackingId: TRAWEX_TRACKING_ID,
+          sessionId: sessionId,
+          productId: productId,
+          hotelId: hotelId
+        }
+      },
+      (error, response, data) => {
+        if (error) {
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
+        } else if (response.statusCode != 200) {
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
+        } else {
+          resolve(data.hotels.length ? data.hotels[0] : {});
+        }
+      }
+    );
   });
 };
 

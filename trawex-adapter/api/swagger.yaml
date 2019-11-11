@@ -294,6 +294,43 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
+  /hotels/details:
+    get:
+      summary:
+        "gets the details of a hotel, using the prodcut and hotel Id returned from the search"
+      description:
+        "By passing in the appropriate options, you can retrieve details of a hotel returned from the search"
+      operationId: "getHotelDetails"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "sessionId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "productId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "hotelId"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            $ref: '#/definitions/HotelDetails'
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
 definitions:
   TripSegment:
     required:
@@ -909,10 +946,16 @@ definitions:
             type: "string"
           succeededSuppliers:
             type: "array"
+            items:
+              type: "object"
           faultedSuppliers:
             type: "array"
+            items:
+              type: "object"
           warnings:
             type: "array"
+            items:
+              type: "object"
           bookingToken:
             type: "string"
           hotelId:
@@ -944,3 +987,80 @@ definitions:
     example:
       type: adult
       age: 20
+  HotelDetails:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      geoCode:
+        type: object
+        properties:
+          lat:
+            type: string
+          long:
+            type: string
+      contact:
+        type: object
+        properties:
+          address:
+            type: object
+            properties:
+              line1:
+                type: string
+              line2:
+                type: string
+              city:
+                type: object
+                properties:
+                  code:
+                    type: object
+                  name:
+                    type: string
+              state:
+                type: object
+                properties:
+                  code:
+                    type: object
+                  name:
+                    type: string
+              country:
+                type: string
+              postalCode:
+                type: string
+          phones:
+            type: string
+          email:
+            type: string
+      rating:
+        type: string
+      amenities:
+        type: array
+        items:
+          type: object
+          properties:
+            def_name:
+              type: string
+            amenities_values:
+              type: array
+              items:
+                type: object
+                properties:
+                  fact_title:
+                    type: string
+                  fact_value:
+                    type: string
+      images:
+        type: array
+        items:
+          type: string
+      descriptions:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              type: string
+            value:
+              type: string

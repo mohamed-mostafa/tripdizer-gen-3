@@ -130,3 +130,18 @@ module.exports.searchHotels = function searchHotels(req, res, next) {
       );
     });
 };
+
+module.exports.getHotelDetails = function getHotelDetails(req, res, next) {
+  var language = req.swagger.params["language"].value;
+  var sessionId = req.swagger.params["sessionId"].value;
+  var productId = req.swagger.params["productId"].value;
+  var hotelId = req.swagger.params["hotelId"].value;
+  hotelsService
+    .getHotelDetails(language, sessionId, productId, hotelId)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+};
