@@ -8,6 +8,7 @@ const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
 const TRAWEX_HOTELS_SEARCH = "/hotel_search";
 const TRAWEX_HOTELS_MORE = "/getMoreHotels";
 const TRAWEX_HOTELS_SPECIFIC_CONTENT = "/get_specific_hotel_content";
+const TRAWEX_HOTELS_ROOM_RATES = "/get_room_rates";
 
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
@@ -112,8 +113,65 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
             code: response.statusCode,
             message: [response.statusMessage]
           });
+        } else if (data.status && data.status.errors) {
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
         } else {
           resolve(data.hotels.length ? data.hotels[0] : {});
+        }
+      }
+    );
+  });
+};
+
+exports.getRoomRates = (language, roomRatesRequest) => {
+  return new Promise((resolve, reject) => {
+    httpRequest.post(
+      {
+        url:
+          TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES,
+        proxy: TRAWEX_PROXY_ENDPOINT,
+        json: true,
+        body: {
+          user_id: TRAWEX_USERNAME,
+          user_password: TRAWEX_PASSWORD,
+          access: TRAWEX_ENVIRONMENT,
+          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          trackingId: TRAWEX_TRACKING_ID,
+          TraceId: roomRatesRequest.traceId,
+          propertyid: roomRatesRequest.propertyId,
+          productId: roomRatesRequest.productId,
+          TokenId: roomRatesRequest.tokenId,
+          resultindex: roomRatesRequest.resultIndex,
+          sessionId: roomRatesRequest.sessionId,
+          hotelcode: roomRatesRequest.hotelId
+        }
+      },
+      (error, response, data) => {
+        if (error) {
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
+        } else if (response.statusCode != 200) {
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
+        } else if (data.status && data.status.errors) {
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
+        } else if (!data.status && !data.isRateAvailable) {
+          reject({
+            code: 404,
+            message: [data.errors.message]
+          });
+        } else {
+          resolve(data.result);
         }
       }
     );
@@ -168,7 +226,7 @@ const searchHotelsAPI = (
             code: response.statusCode,
             message: [response.statusMessage]
           });
-        } else if (data.status.errors) {
+        } else if (data.status && data.status.errors) {
           reject({
             code: 400,
             message: data.status.errors.map(e => e.errorMessage)
@@ -222,7 +280,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
             code: response.statusCode,
             message: [response.statusMessage]
           });
-        } else if (data.status.errors) {
+        } else if (data.status && data.status.errors) {
           reject({
             code: 400,
             message: data.status.errors.map(e => e.errorMessage)
