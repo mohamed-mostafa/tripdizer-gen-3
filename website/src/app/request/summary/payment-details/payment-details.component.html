@@ -9,10 +9,20 @@
 
     <div class="mb-1" *ngIf="station.flightDataExists">
       <h6 class="font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</h6>
-      <p class="font-weight-bold mb-0">{{ station.depart_from }} ({{station.depart_code}})</p>
-      <p class="mb-0">{{ station.travel_time }}</p>
-      <p class="font-weight-bold mb-0">{{ station.arrive_to }} ({{station.arrive_code}})</p>
-      <p class="mb-0">{{ station.arrive_time }}</p>
+      <div class="row">
+        <div class="col-2">
+          <img class="mt-3" src="../../../../assets/img/arrow_1.svg" alt="">
+        </div>
+        <div class="col-10">
+          <p class="font-weight-bold mb-0">{{ station.depart_from.substring(0, 20) }}<span
+              *ngIf="station.depart_from.length > 20">... </span>({{station.depart_code}})</p>
+          <p class="mb-0">{{ station.travel_time }}</p>
+          <p class="font-weight-bold mb-0">{{ station.arrive_to.substring(0, 20) }}<span
+              *ngIf="station.arrive_to.length > 20">... </span>({{station.arrive_code}})</p>
+          <p class="mb-0">{{ station.arrive_time }}</p>
+        </div>
+      </div>
+
     </div>
 
 
@@ -24,7 +34,12 @@
       </div>
 
       <div class="col-6 text-center">
-        <img src="{{station.carrier_logo}}" class="carrier-logo align-middle pt-1" alt="carrier logo">
+        <div>
+          <img src="{{station.carrier_logo}}" class="carrier-logo align-middle pt-1" alt="carrier logo">
+        </div>
+        <div>
+            <img src="../../../../assets/img/arrow_2.svg" alt="">
+        </div>
       </div>
 
       <div class="col-3">
