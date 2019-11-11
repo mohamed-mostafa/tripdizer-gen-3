@@ -28,7 +28,7 @@
 }
 
 .hotel-description {
-	min-height: 110px;
+	min-height: 70px;
 }
 
 .hotel-address {
@@ -45,6 +45,10 @@
 
 .item-img-container {
 	height: 100%;
+}
+
+.item-img-container img {
+    height: 11.25rem;
 }
 
 .dark-grey {

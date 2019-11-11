@@ -29,7 +29,7 @@ export class SummaryComponent {
 	}
 
 	prev() {
-		this.service.setCurrentTabIndex(0);
+		this.router.navigate(['/request/estimated-cost']);
 	}
 
 	goToNextStep() {

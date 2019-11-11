@@ -1,6 +1,6 @@
 <div class="row justify-content-center hotels-tab py-2 py-md-4" *ngIf="loadedData">
   <div class="col-lg-9 hotels-list">
-    <h4 class="list-title font-weight-bold title-font">
+    <h4 class="list-title font-weight-bold title-font mb-2">
       {{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
     </h4>
 
@@ -25,13 +25,13 @@
 
                 <div class="mt-2">
                   <div class="row">
-                    <div class="col-7">
+                    <div class="col-8">
                       <p class="dark-grey hotel-name mb-1">
                         <span class="font-weight-bold">{{ hotel.displayName.substring(0, 20) }}<span
                             *ngIf="hotel.displayName.length > 20">...</span></span>
                       </p>
                     </div>
-                    <div class="col-5 rating">
+                    <div class="col-4 rating">
                       <p class="mb-0">
                         {{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}</p>
                       <p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
