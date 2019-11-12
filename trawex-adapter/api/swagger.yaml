@@ -296,10 +296,8 @@ paths:
       x-swagger-router-controller: "Default"
   /hotels/details:
     get:
-      summary:
-        "gets the details of a hotel, using the prodcut and hotel Id returned from the search"
-      description:
-        "By passing in the appropriate options, you can retrieve details of a hotel returned from the search"
+      summary: "gets the details of a hotel, using the prodcut and hotel Id returned from the search"
+      description: "By passing in the appropriate options, you can retrieve details of a hotel returned from the search"
       operationId: "getHotelDetails"
       produces:
         - "application/json"
@@ -325,7 +323,7 @@ paths:
         200:
           description: "Successful Execution"
           schema:
-            $ref: '#/definitions/HotelDetails'
+            $ref: "#/definitions/HotelDetails"
         400:
           description: "bad input parameter"
         500:
@@ -375,10 +373,8 @@ paths:
       x-swagger-router-controller: "Default"
   /hotels/book:
     post:
-      summary:
-        "Books a hotel, using the the PNR information of the travelers"
-      description:
-        "By passing in the appropriate options, you can book a hotel using the PNR information of the travelers"
+      summary: "Books a hotel, using the the PNR information of the travelers"
+      description: "By passing in the appropriate options, you can book a hotel using the PNR information of the travelers"
       operationId: "bookHotel"
       consumes:
         - "application/json"
@@ -1273,15 +1269,9 @@ definitions:
         type: array
         items:
           type: number
-      adultsPNRInfoList:
-        type: "array"
+      rooms:
+        type: array
         items:
-          $ref: "#/definitions/PNRInfo"
-      childrenPNRInfoList:
-        type: "array"
-        items:
-          $ref: "#/definitions/PNRInfo"
-      infantsPNRInfoList:
-        type: "array"
-        items:
-          $ref: "#/definitions/PNRInfo"
+          type: array
+          items:
+            $ref: "#/definitions/PNRInfo"

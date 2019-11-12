@@ -1,6 +1,7 @@
 "use strict";
 
 const httpRequest = require("request");
+let moment = require("moment");
 
 const TRAWEX_BASE_ENDPOINT =
   process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
@@ -19,6 +20,10 @@ const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+
+const ADULT_AGE = 20;
+const KID_AGE = 5;
+const INFANT_AGE = 0;
 
 exports.searchHotels = (language, hotelSearchRequest) => {
   const roomsInfo = {
@@ -193,28 +198,37 @@ exports.bookHotel = (language, bookHotelRequest) => {
     changedOccupancy: bookHotelRequest.changedOccupancy,
     extraBeds: bookHotelRequest.extraBeds,
     guestsDetails: {
-      titles: bookHotelRequest.adultsPNRInfoList.map(a => a.title),
-      firstNames: bookHotelRequest.adultsPNRInfoList.map(a => a.firstName),
-      lastName: bookHotelRequest.adultsPNRInfoList.map(a => a.lastName),
-      childTitles: [
-        ...bookHotelRequest.childrenPNRInfoList,
-        ...bookHotelRequest.infantsPNRInfoList
-      ].map(a => a.title),
-      childFirstNames: [
-        ...bookHotelRequest.childrenPNRInfoList,
-        ...bookHotelRequest.infantsPNRInfoList
-      ].map(a => a.firstName),
-      childLastNames: [
-        ...bookHotelRequest.childrenPNRInfoList,
-        ...bookHotelRequest.infantsPNRInfoList
-      ].map(a => a.lastName),
-      city: bookHotelRequest.adultsPNRInfoList[0].city,
-      email: bookHotelRequest.adultsPNRInfoList[0].email,
-      address: bookHotelRequest.adultsPNRInfoList[0].address,
-      phone: bookHotelRequest.adultsPNRInfoList[0].phone
+      titles: bookHotelRequest.rooms.map(l =>
+        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.title)
+      ),
+      firstNames: bookHotelRequest.rooms.map(l =>
+        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.firstName)
+      ),
+      lastName: bookHotelRequest.rooms.map(l =>
+        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.lastName)
+      ),
+      childTitles: bookHotelRequest.rooms.map(l =>
+        l
+          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
+          .map(o => o.title)
+      ),
+      childFirstNames: bookHotelRequest.rooms.map(l =>
+        l
+          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
+          .map(o => o.firstName)
+      ),
+      childLastNames: bookHotelRequest.rooms.map(l =>
+        l
+          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
+          .map(o => o.lastName)
+      ),
+      city: bookHotelRequest.rooms[0][0].city,
+      email: bookHotelRequest.rooms[0][0].email,
+      address: bookHotelRequest.rooms[0][0].address,
+      phone: bookHotelRequest.rooms[0][0].phone
     }
   };
-
+  console.log(request.guestsDetails);
   return bookHotel(language, request);
 };
 
@@ -452,4 +466,19 @@ const bookHotel = (language, bookHotelRequest) => {
       }
     );
   });
+};
+
+const isAdult = dateOfBirth => {
+  const years = moment().diff(dateOfBirth, "years");
+  return years >= ADULT_AGE;
+};
+
+const isKid = dateOfBirth => {
+  const years = moment().diff(dateOfBirth, "years");
+  return years >= KID_AGE && years < ADULT_AGE;
+};
+
+const isInfant = dateOfBirth => {
+  const years = moment().diff(dateOfBirth, "years");
+  return years >= INFANT_AGE && years < KID_AGE;
 };
