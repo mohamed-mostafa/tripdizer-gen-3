@@ -765,6 +765,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "infant"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -778,6 +779,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "infant"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -793,6 +795,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "kid"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -806,6 +809,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "kid"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -820,6 +824,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "adult"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -833,6 +838,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "adult"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -864,6 +870,9 @@ definitions:
         type: "string"
         format: "date-time"
         example: "1984-02-01T00:00:00Z"
+      ageGroup:
+        type: "string"
+        example: "adult | kid | infant"
       nationality:
         type: "string"
         example: "EG"
@@ -894,6 +903,7 @@ definitions:
       title: "Mr"
       gender: "M"
       dateOfBirth: "1984-02-01T00:00:00Z"
+      ageGroup: "adult"
       nationality: "EG"
       email: "email"
       countryCode: "+2"
@@ -1079,7 +1089,7 @@ definitions:
     properties:
       type:
         type: "string"
-        example: "adult | child"
+        example: "adult | kid | infant"
       age:
         type: "number"
         example: 20

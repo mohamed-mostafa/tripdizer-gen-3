@@ -29,19 +29,19 @@ exports.searchHotels = (language, hotelSearchRequest) => {
   const roomsInfo = {
     roomslength: hotelSearchRequest.rooms.length,
     adultsPerRoom: hotelSearchRequest.rooms.map(
-      r => r.filter(o => o.type === "adult").length
+      r => r.filter(o => isAdult(o.type)).length
     ),
     childsPerRoom: hotelSearchRequest.rooms.reduce(
       (pv, cv, i) => ({
         ...pv,
-        [i]: cv.filter(o => o.type === "child").length
+        [i]: cv.filter(o => isChild(o.type)).length
       }),
       {}
     ),
     childAges: hotelSearchRequest.rooms.reduce(
       (pv, cv, i) => ({
         ...pv,
-        [i]: cv.filter(o => o.type === "child").map(o => o.age)
+        [i]: cv.filter(o => isChild(o.type)).map(o => o.age)
       }),
       {}
     )
@@ -199,32 +199,26 @@ exports.bookHotel = (language, bookHotelRequest) => {
     extraBeds: bookHotelRequest.extraBeds,
     guestsDetails: {
       titles: bookHotelRequest.rooms.map(l =>
-        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.title)
+        l.filter(o => isAdult(o.ageGroup)).map(o => o.title)
       ),
       firstNames: bookHotelRequest.rooms.map(l =>
-        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.firstName)
+        l.filter(o => isAdult(o.ageGroup)).map(o => o.firstName)
       ),
       lastName: bookHotelRequest.rooms.map(l =>
-        l.filter(o => isAdult(o.dateOfBirth)).map(o => o.lastName)
+        l.filter(o => isAdult(o.ageGroup)).map(o => o.lastName)
       ),
       childTitles: bookHotelRequest.rooms.map(l =>
-        l
-          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
-          .map(o => o.title)
+        l.filter(o => isChild(o.ageGroup)).map(o => o.title)
       ),
       childFirstNames: bookHotelRequest.rooms.map(l =>
-        l
-          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
-          .map(o => o.firstName)
+        l.filter(o => isChild(o.ageGroup)).map(o => o.firstName)
       ),
       childLastNames: bookHotelRequest.rooms.map(l =>
-        l
-          .filter(o => isKid(o.dateOfBirth) || isInfant(o.dateOfBirth))
-          .map(o => o.lastName)
+        l.filter(o => isChild(o.ageGroup)).map(o => o.lastName)
       ),
-      city: bookHotelRequest.rooms[0][0].city,
+      city: bookHotelRequest.rooms[0][0].areaCode,
       email: bookHotelRequest.rooms[0][0].email,
-      address: bookHotelRequest.rooms[0][0].address,
+      address: `${bookHotelRequest.rooms[0][0].areaCode} ${bookHotelRequest.rooms[0][0].countryCode}`,
       phone: bookHotelRequest.rooms[0][0].phone
     }
   };
@@ -468,17 +462,6 @@ const bookHotel = (language, bookHotelRequest) => {
   });
 };
 
-const isAdult = dateOfBirth => {
-  const years = moment().diff(dateOfBirth, "years");
-  return years >= ADULT_AGE;
-};
+const isAdult = type => type === "adult";
 
-const isKid = dateOfBirth => {
-  const years = moment().diff(dateOfBirth, "years");
-  return years >= KID_AGE && years < ADULT_AGE;
-};
-
-const isInfant = dateOfBirth => {
-  const years = moment().diff(dateOfBirth, "years");
-  return years >= INFANT_AGE && years < KID_AGE;
-};
+const isChild = type => type === "kid" || type === "infant";
