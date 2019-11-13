@@ -377,6 +377,35 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
+  /hotels/revalidate:
+    post:
+      summary: "revalidate hotel offer"
+      operationId: "validateHotelOffer"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "HotelOfferRequest"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HotelOfferRequest"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              preBookingToken:
+                type: string
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
   /hotels/book:
     post:
       summary: "Books a hotel, using the the PNR information of the travelers"
@@ -1191,7 +1220,7 @@ definitions:
         type: array
         items:
           type: string
-      codes:
+      roomCodes:
         type: array
         items:
           type: string
@@ -1221,18 +1250,28 @@ definitions:
         type: array
         items:
           type: string
-      supplierHotelId:
+      hotelCode:
         type: string
       price:
         type: number
       type:
         type: string
     example:
-      allocationDetails: ["1573603021000001B1008B1","1573603021000001B1008B5","1573603021000001B1008B9"]
+      allocationDetails:
+        [
+          "1573603021000001B1008B1",
+          "1573603021000001B1008B5",
+          "1573603021000001B1008B9",
+        ]
       boardBasis: "Room Only"
-      cancellationPolicies: ["If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ","If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ","If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1637.82 | Cancellation will not be possible from 2020-04-30 05:30:01 | "]
-      changedOccupancies: ["","",""]
-      codes: ["1574305","1574305","1574305"]
+      cancellationPolicies:
+        [
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1637.82 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+        ]
+      changedOccupancies: ["", "", ""]
+      roomCodes: ["1574305", "1574305", "1574305"]
       currency: "EGP"
       description: "TRIPLE STANDARD"
       extraBeds: "0"
@@ -1241,10 +1280,10 @@ definitions:
       mealCode: ""
       onRequest: "false"
       productId: "trx101"
-      rateBasisIds: ["1331","1331","1331"]
+      rateBasisIds: ["1331", "1331", "1331"]
       refundable: "false"
-      roomTypeRunnos: ["0","1","2"]
-      supplierHotelId: "243916"
+      roomTypeRunnos: ["0", "1", "2"]
+      hotelCode: "243916"
       price: 9738.86
       type: "negotiated"
   BookHotelRequest:
@@ -1282,3 +1321,64 @@ definitions:
           type: array
           items:
             $ref: "#/definitions/PNRInfo"
+  HotelOfferRequest:
+    type: object
+    properties:
+      boardBasis:
+        type: string
+      bookingToken:
+        type: string
+      hotelName:
+        type: string
+      hotelCode:
+        type: string
+      infoSource:
+        type: string
+      mealCode:
+        type: string
+      productId:
+        type: string
+      propertyId:
+        type: string
+      resultIndex:
+        type: string
+      sessionId:
+        type: string
+      tokenId:
+        type: string
+      traceId:
+        type: string
+      allocationDetails:
+        type: array
+        items:
+          type: string
+      rateBasisIds:
+        type: array
+        items:
+          type: string
+      roomCodes:
+        type: array
+        items:
+          type: string
+      roomTypeRunnos:
+        type: array
+        items:
+          type: string
+    example:
+      sessionId: "MTU3Mzd78as4ODI0Mw=="
+      bookingToken: UxMGCOENnk7Das7d6as76sdygdgdguKa6tmWiIogdPH0F4uAvV
+      hotelId: "243936"
+      productId: "trx007"
+      propertyId: "32423"
+      resultIndex: "16"
+      tokenId: "YkRduads8u9L5F7QCBUa"
+      traceId: "1xMb6sd9fdf78s82PRl3"
+      boardBasis: "Room Only"
+      hotelName: "AS Hoteles Porta de Barcelona"
+      hotelCode: "2894498"
+      infoSource: "OpenCombination"
+      mealCode: ""
+      allocationDetails: ["1345673204000001B1008B0","1345673204000001B1008B4","1345673204000001B1008B8"]
+      rateBasisIds: ["1293", "1293", "1293"]
+      roomCodes: ["1764838", "1764838", "1764838"]
+      roomTypeRunnos: ["0", "1", "2"]

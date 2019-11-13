@@ -114,7 +114,7 @@ module.exports.searchReturnFlights = function searchReturnFlights(
     });
 };
 
-module.exports.searchHotels = function searchHotels(req, res, next) {
+module.exports.searchHotels = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var hotelSearchRequest = req.swagger.params["HotelSearchRequest"].value;
 
@@ -131,7 +131,7 @@ module.exports.searchHotels = function searchHotels(req, res, next) {
     });
 };
 
-module.exports.getHotelDetails = function getHotelDetails(req, res, next) {
+module.exports.getHotelDetails = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var sessionId = req.swagger.params["sessionId"].value;
   var productId = req.swagger.params["productId"].value;
@@ -146,7 +146,7 @@ module.exports.getHotelDetails = function getHotelDetails(req, res, next) {
     });
 };
 
-module.exports.getHotelOffers = function getHotelOffers(req, res, next) {
+module.exports.getHotelOffers = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var hotelOffersRequest = req.swagger.params["HotelOffersRequest"].value;
   hotelsService
@@ -159,7 +159,20 @@ module.exports.getHotelOffers = function getHotelOffers(req, res, next) {
     });
 };
 
-module.exports.bookHotel = function bookHotel(req, res, next) {
+module.exports.validateHotelOffer = function(req, res, next) {
+  var language = req.swagger.params["language"].value;
+  var hotelOfferRequest = req.swagger.params["HotelOfferRequest"].value;
+  hotelsService
+    .validateHotelOffer(language, hotelOfferRequest)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.bookHotel = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var bookHotelRequest = req.swagger.params["BookHotelRequest"].value;
 

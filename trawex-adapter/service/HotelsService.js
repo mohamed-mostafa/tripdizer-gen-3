@@ -10,6 +10,7 @@ const TRAWEX_HOTELS_SEARCH = "/hotel_search";
 const TRAWEX_HOTELS_MORE = "/getMoreHotels";
 const TRAWEX_HOTELS_SPECIFIC_CONTENT = "/get_specific_hotel_content";
 const TRAWEX_HOTELS_ROOM_RATES = "/get_room_rates";
+const TRAWEX_HOTELS_CHECK_RATES = "/get_booking_terms";
 const TRAWEX_HOTELS_BOOK = "/hotel_book";
 
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
@@ -178,6 +179,63 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
           });
         } else {
           resolve(data.result.roomRate.perBookingRates.map(mapHotelOffer));
+        }
+      }
+    );
+  });
+};
+
+exports.validateHotelOffer = (language, hotelOfferRequest) => {
+  return new Promise((resolve, reject) => {
+    httpRequest.post(
+      {
+        url:
+          TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES,
+        proxy: TRAWEX_PROXY_ENDPOINT,
+        json: true,
+        body: {
+          ...config,
+          TraceId: hotelOfferRequest.traceId,
+          TokenId: hotelOfferRequest.tokenId,
+          allocationDetails: hotelOfferRequest.allocationDetails,
+          boardCode: hotelOfferRequest.boardBasis,
+          booking_token: [hotelOfferRequest.bookingToken],
+          hotel_name: hotelOfferRequest.hotelName,
+          hotelcode: hotelOfferRequest.hotelCode,
+          infosource: hotelOfferRequest.infoSource,
+          meal_code: [hotelOfferRequest.mealCode],
+          productId: hotelOfferRequest.productId,
+          propertyid: hotelOfferRequest.propertyId,
+          rate_basis_id: hotelOfferRequest.rateBasisIds,
+          resultindex: hotelOfferRequest.resultIndex,
+          roomType_runno: hotelOfferRequest.roomTypeRunnos,
+          room_code: hotelOfferRequest.roomCodes,
+          sessionId: hotelOfferRequest.sessionId
+        }
+      },
+      (error, response, data) => {
+        if (error) {
+          reject({
+            code: 500,
+            message: [error.toString()]
+          });
+        } else if (response.statusCode != 200) {
+          reject({
+            code: response.statusCode,
+            message: [response.statusMessage]
+          });
+        } else if (data.status && data.status.errors) {
+          reject({
+            code: 400,
+            message: data.status.errors.map(e => e.errorMessage)
+          });
+        } else if (!data.status && !data.isRateAvailable) {
+          reject({
+            code: 404,
+            message: [data.errors.message]
+          });
+        } else {
+          resolve({ preBookingToken: data.PreBookingToken });
         }
       }
     );
@@ -455,7 +513,7 @@ const mapHotelOffer = room => ({
   boardBasis: room.boardBasis,
   cancellationPolicies: room.cancellation_policy.split("|t|"),
   changedOccupancies: room.changedOccupancy.split("|t|"),
-  codes: room.code.split("|t|"),
+  roomCodes: room.code.split("|t|"),
   currency: room.currency,
   description: room.desc,
   extraBeds: room.extrabeds,
@@ -467,7 +525,7 @@ const mapHotelOffer = room => ({
   rateBasisIds: room.rate_basis_id.split("|t|"),
   refundable: room.refundable,
   roomTypeRunnos: room.roomType_runno.split("|t|"),
-  supplierHotelId: room.supplierHotelId,
+  hotelCode: room.supplierHotelId,
   price: room.total,
   type: room.type
 });
