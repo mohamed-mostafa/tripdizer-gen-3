@@ -21,6 +21,14 @@ const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 
+const config = {
+  user_id: TRAWEX_USERNAME,
+  user_password: TRAWEX_PASSWORD,
+  access: TRAWEX_ENVIRONMENT,
+  ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+  trackingId: TRAWEX_TRACKING_ID
+};
+
 const ADULT_AGE = 20;
 const KID_AGE = 5;
 const INFANT_AGE = 0;
@@ -98,11 +106,7 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
         proxy: TRAWEX_PROXY_ENDPOINT,
         json: true,
         qs: {
-          user_id: TRAWEX_USERNAME,
-          user_password: TRAWEX_PASSWORD,
-          access: TRAWEX_ENVIRONMENT,
-          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          trackingId: TRAWEX_TRACKING_ID,
+          ...config,
           sessionId: sessionId,
           productId: productId,
           hotelId: hotelId
@@ -141,11 +145,7 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
         proxy: TRAWEX_PROXY_ENDPOINT,
         json: true,
         body: {
-          user_id: TRAWEX_USERNAME,
-          user_password: TRAWEX_PASSWORD,
-          access: TRAWEX_ENVIRONMENT,
-          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          trackingId: TRAWEX_TRACKING_ID,
+          ...config,
           TraceId: hotelOffersRequest.traceId,
           propertyid: hotelOffersRequest.propertyId,
           productId: hotelOffersRequest.productId,
@@ -246,11 +246,7 @@ const searchHotelsAPI = (
         json: true,
         proxy: TRAWEX_PROXY_ENDPOINT,
         body: {
-          user_id: TRAWEX_USERNAME,
-          user_password: TRAWEX_PASSWORD,
-          access: TRAWEX_ENVIRONMENT,
-          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          trackingId: TRAWEX_TRACKING_ID,
+          ...config,
           city_name: city,
           country_name: country,
           room_count: room_count,
@@ -308,11 +304,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
         proxy: TRAWEX_PROXY_ENDPOINT,
         json: true,
         qs: {
-          user_id: TRAWEX_USERNAME,
-          user_password: TRAWEX_PASSWORD,
-          access: TRAWEX_ENVIRONMENT,
-          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          trackingId: TRAWEX_TRACKING_ID,
+          ...config,
           sessionId: sessionId,
           nextToken: nextToken
         }
@@ -392,11 +384,7 @@ const bookHotel = (language, bookHotelRequest) => {
         proxy: TRAWEX_PROXY_ENDPOINT,
         json: true,
         body: {
-          user_id: TRAWEX_USERNAME,
-          user_password: TRAWEX_PASSWORD,
-          access: TRAWEX_ENVIRONMENT,
-          ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          trackingId: TRAWEX_TRACKING_ID,
+          ...config,
           productId: bookHotelRequest.productId,
           hotelcode: bookHotelRequest.hotelId,
           propertyid: bookHotelRequest.propertyId,
