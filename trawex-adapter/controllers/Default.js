@@ -146,11 +146,11 @@ module.exports.getHotelDetails = function getHotelDetails(req, res, next) {
     });
 };
 
-module.exports.getRoomRates = function getRoomRates(req, res, next) {
+module.exports.getHotelOffers = function getHotelOffers(req, res, next) {
   var language = req.swagger.params["language"].value;
-  var roomRatesRequest = req.swagger.params["RoomRatesRequest"].value;
+  var hotelOffersRequest = req.swagger.params["HotelOffersRequest"].value;
   hotelsService
-    .getRoomRates(language, roomRatesRequest)
+    .getHotelOffers(language, hotelOffersRequest)
     .then(function(response) {
       utils.writeJson(res, response);
     })

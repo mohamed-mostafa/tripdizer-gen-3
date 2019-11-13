@@ -290,7 +290,10 @@ paths:
         200:
           description: "search results matching criteria"
           schema:
-            $ref: "#/definitions/HotelOffers"
+            type: "array"
+            description: "List of hotel"
+            items:
+              $ref: "#/definitions/Hotel"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
@@ -329,10 +332,10 @@ paths:
         500:
           description: "Internal Server Error"
       x-swagger-router-controller: "Default"
-  /hotels/room-rates:
+  /hotels/offers:
     post:
-      summary: "get hotel room rates"
-      operationId: "getRoomRates"
+      summary: "get hotel offers"
+      operationId: "getHotelOffers"
       consumes:
         - "application/json"
       produces:
@@ -343,7 +346,7 @@ paths:
           required: true
           type: "string"
           default: "en"
-        - name: "RoomRatesRequest"
+        - name: "HotelOffersRequest"
           in: "body"
           required: true
           schema:
@@ -367,7 +370,10 @@ paths:
         200:
           description: "Successful Execution"
           schema:
-            $ref: "#/definitions/RoomRates"
+            type: "array"
+            description: "List of hotel offers"
+            items:
+              $ref: "#/definitions/HotelOffer"
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Default"
@@ -979,11 +985,6 @@ definitions:
       limitPerCity: 9
       nationality: "EG"
       currency: "EGP"
-  HotelOffers:
-    type: "array"
-    description: "List of hotel offers"
-    items:
-      $ref: "#/definitions/Hotel"
   Hotel:
     type: "object"
     properties:
@@ -1173,83 +1174,79 @@ definitions:
               type: string
             value:
               type: string
-  RoomRates:
+  HotelOffer:
     type: object
     properties:
-      hotelId:
-        type: string
-      hotelName:
-        type: string
-      roomOptions:
+      allocationDetails:
         type: array
         items:
-          type: object
-          properties:
-            code:
-              type: string
-            name:
-              type: string
-      occupancies:
+          type: string
+      boardBasis:
+        type: string
+      cancellationPolicies:
         type: array
         items:
-          type: object
-          properties:
-            refId:
-              type: number
-            adults:
-              type: string
-            children:
-              type: string
-      roomRate:
-        type: object
-        properties:
-          perBookingRates:
-            type: array
-            items:
-              type: object
-              properties:
-                productId:
-                  type: string
-                supplierHotelId:
-                  type: string
-                code:
-                  type: string
-                desc:
-                  type: string
-                roomType_runno:
-                  type: string
-                rate_basis_id:
-                  type: string
-                meal_code:
-                  type: string
-                type:
-                  type: string
-                infosource:
-                  type: string
-                inventoryType:
-                  type: string
-                currency:
-                  type: string
-                total:
-                  type: number
-                cancellation_policy:
-                  type: string
-                refundable:
-                  type: string
-                onRequest:
-                  type: string
-                extrabeds:
-                  type: string
-                changedOccupancy:
-                  type: string
-                allocationDetails:
-                  type: string
-                boardBasis:
-                  type: string
-          perRoomRates:
-            type: array
-            items:
-              type: object
+          type: string
+      changedOccupancies:
+        type: array
+        items:
+          type: string
+      codes:
+        type: array
+        items:
+          type: string
+      currency:
+        type: string
+      description:
+        type: string
+      extraBeds:
+        type: string
+      infoSource:
+        type: string
+      inventoryType:
+        type: string
+      mealCode:
+        type: string
+      onRequest:
+        type: string
+      productId:
+        type: string
+      rateBasisIds:
+        type: array
+        items:
+          type: string
+      refundable:
+        type: string
+      roomTypeRunnos:
+        type: array
+        items:
+          type: string
+      supplierHotelId:
+        type: string
+      price:
+        type: number
+      type:
+        type: string
+    example:
+      allocationDetails: ["1573603021000001B1008B1","1573603021000001B1008B5","1573603021000001B1008B9"]
+      boardBasis: "Room Only"
+      cancellationPolicies: ["If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ","If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ","If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1637.82 | Cancellation will not be possible from 2020-04-30 05:30:01 | "]
+      changedOccupancies: ["","",""]
+      codes: ["1574305","1574305","1574305"]
+      currency: "EGP"
+      description: "TRIPLE STANDARD"
+      extraBeds: "0"
+      infoSource: "OpenCombination"
+      inventoryType: "prepaid"
+      mealCode: ""
+      onRequest: "false"
+      productId: "trx101"
+      rateBasisIds: ["1331","1331","1331"]
+      refundable: "false"
+      roomTypeRunnos: ["0","1","2"]
+      supplierHotelId: "243916"
+      price: 9738.86
+      type: "negotiated"
   BookHotelRequest:
     type: object
     properties:

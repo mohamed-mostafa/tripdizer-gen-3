@@ -132,7 +132,7 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
   });
 };
 
-exports.getRoomRates = (language, roomRatesRequest) => {
+exports.getHotelOffers = (language, hotelOffersRequest) => {
   return new Promise((resolve, reject) => {
     httpRequest.post(
       {
@@ -146,13 +146,13 @@ exports.getRoomRates = (language, roomRatesRequest) => {
           access: TRAWEX_ENVIRONMENT,
           ip_address: TRAWEX_SOURCE_IP_ADDRESS,
           trackingId: TRAWEX_TRACKING_ID,
-          TraceId: roomRatesRequest.traceId,
-          propertyid: roomRatesRequest.propertyId,
-          productId: roomRatesRequest.productId,
-          TokenId: roomRatesRequest.tokenId,
-          resultindex: roomRatesRequest.resultIndex,
-          sessionId: roomRatesRequest.sessionId,
-          hotelcode: roomRatesRequest.hotelId
+          TraceId: hotelOffersRequest.traceId,
+          propertyid: hotelOffersRequest.propertyId,
+          productId: hotelOffersRequest.productId,
+          TokenId: hotelOffersRequest.tokenId,
+          resultindex: hotelOffersRequest.resultIndex,
+          sessionId: hotelOffersRequest.sessionId,
+          hotelcode: hotelOffersRequest.hotelId
         }
       },
       (error, response, data) => {
@@ -177,7 +177,7 @@ exports.getRoomRates = (language, roomRatesRequest) => {
             message: [data.errors.message]
           });
         } else {
-          resolve(data.result);
+          resolve(data.result.roomRate.perBookingRates.map(mapHotelOffer));
         }
       }
     );
@@ -222,7 +222,7 @@ exports.bookHotel = (language, bookHotelRequest) => {
       phone: bookHotelRequest.rooms[0][0].phone
     }
   };
-  console.log(request.guestsDetails);
+
   return bookHotel(language, request);
 };
 
@@ -461,6 +461,28 @@ const bookHotel = (language, bookHotelRequest) => {
     );
   });
 };
+
+const mapHotelOffer = room => ({
+  allocationDetails: room.allocationDetails.split("|t|"),
+  boardBasis: room.boardBasis,
+  cancellationPolicies: room.cancellation_policy.split("|t|"),
+  changedOccupancies: room.changedOccupancy.split("|t|"),
+  codes: room.code.split("|t|"),
+  currency: room.currency,
+  description: room.desc,
+  extraBeds: room.extrabeds,
+  infoSource: room.infosource,
+  inventoryType: room.inventoryType,
+  mealCode: room.meal_code,
+  onRequest: room.onRequest,
+  productId: room.productId,
+  rateBasisIds: room.rate_basis_id.split("|t|"),
+  refundable: room.refundable,
+  roomTypeRunnos: room.roomType_runno.split("|t|"),
+  supplierHotelId: room.supplierHotelId,
+  price: room.total,
+  type: room.type
+});
 
 const isAdult = type => type === "adult";
 
