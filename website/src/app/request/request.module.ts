@@ -1,3 +1,4 @@
+import { FlightRouteComponent } from './estimated-cost/tab-flights/flight-route/flight-route.component';
 import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
 import { OwlModule } from 'ngx-owl-carousel';
 import { CommonModule } from '@angular/common';
@@ -61,7 +62,8 @@ import { SummaryComponent } from './summary/summary.component';
 		ChangeFlightComponent,
 		TabAccommodationComponent,
 		SummaryComponent,
-		PaymentDetailsComponent
+		PaymentDetailsComponent,
+		FlightRouteComponent
 	]
 })
 export class RequestModule { }

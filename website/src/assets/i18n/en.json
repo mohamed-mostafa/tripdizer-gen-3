@@ -200,7 +200,8 @@
 				"duration": "Duration",
 				"arrival": "Arrival",
 				"select": "Select",
-				"selected": "Selected"
+                "selected": "Selected",
+                "flight_to": "Flight to"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

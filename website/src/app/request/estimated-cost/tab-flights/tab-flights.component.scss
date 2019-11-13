@@ -1,13 +1,14 @@
 .routes {
-	$line-width: 2px;
-	$bullet-margin: 2rem;
-	&:before {
-		content: '';
-		position: absolute;
-		background-color: #6c757d;
-		width: $line-width;
-		height: calc(100% - #{$bullet-margin});
-		top: calc(#{$bullet-margin} / 2);
-		left: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
-	}
+  $line-width: 2px;
+  $bullet-margin: 2rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    background-color: #6c757d;
+    width: $line-width;
+    height: calc(100% - #{$bullet-margin});
+    top: calc(#{$bullet-margin} / 2);
+    left: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
+  }
 }

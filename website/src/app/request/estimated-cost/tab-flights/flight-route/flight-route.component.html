@@ -1,0 +1,55 @@
+<div class="flights-route p-2">
+  <h4 class="mb-3">{{ 'request.estimated_cost.tab_flights.flight_to' | translate }}</h4>
+
+
+  <div class="routes position-relative"> 
+    <div *ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
+
+      <div *ngIf="isFirst" class="min-height-60">
+        <ng-container *ngTemplateOutlet="startAndEndSection"></ng-container>
+      </div>
+
+      <div *ngIf="!isFirst" class="min-height-60">
+        <div class="bullet position-relative text-white text-center"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'mr-2' : 'ml-2'">
+          <div class="w-text" [ngClass]="isEven ? 'bg-secondary' : 'bg-primary'">
+            {{ index }}
+          </div>
+        </div>
+        <div class="city-name text-capitalize"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
+          <span>{{ flight.origin.name }}</span>
+          <span *ngIf="flight.numberOfNights"> :
+            {{ 'request.estimated_cost.tab_flights.nights' | translate: { numberOfNights: flight.numberOfNights, withS: flight.numberOfNights > 1 ? 's' : '' } }}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="isLast" [class.min-height-60]="!isLast">
+        <ng-container *ngTemplateOutlet="startAndEndSection"></ng-container>
+      </div>
+
+      <ng-template #startAndEndSection>
+        <div class="bullet position-relative text-white text-center"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'float-left' : 'float-right'"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'mr-2' : 'ml-2'">
+          <div class="wo-text bg-dark"></div>
+        </div>
+        <div class="city-name text-capitalize font-italic"
+          [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
+          <span *ngIf="isFirst">
+            {{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flight.origin.name }}
+          </span>
+          <span *ngIf="isLast">
+            {{ 'request.estimated_cost.tab_flights.end' | translate }} : {{ flight.destination.name }}
+          </span>
+        </div>
+      </ng-template>
+
+
+    </div>
+  </div>
+
+
+</div>

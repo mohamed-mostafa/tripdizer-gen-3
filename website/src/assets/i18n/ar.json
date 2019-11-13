@@ -200,7 +200,8 @@
 				"duration": "المدة",
 				"arrival": "الوصول",
 				"select": "اختر",
-				"selected": "مختار"
+				"selected": "مختار",
+                "flight_to": "مسار الرحلة"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",
