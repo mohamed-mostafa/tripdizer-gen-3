@@ -1083,18 +1083,6 @@ definitions:
         properties:
           sessionId:
             type: "string"
-          succeededSuppliers:
-            type: "array"
-            items:
-              type: "object"
-          faultedSuppliers:
-            type: "array"
-            items:
-              type: "object"
-          warnings:
-            type: "array"
-            items:
-              type: "object"
           bookingToken:
             type: "string"
           hotelId:

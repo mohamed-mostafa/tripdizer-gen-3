@@ -422,7 +422,7 @@ const mapItineraryDetails = (requestData, responseData) => {
     stars: Number(i.rating),
     facilities: i.facilities,
     moreDetails: {
-      ...moreDetails,
+      sessionId: moreDetails.sessionId,
       bookingToken: i.BookingToken,
       hotelId: i.hotelId,
       productId: i.productId,
