@@ -9,6 +9,7 @@ let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
+var paymentsService = require('./hws_payments_business');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
@@ -78,10 +79,11 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		delete request.second_country;
 		delete request.third_country;
 	}
+	request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
 	request.score = calculateRequestScore(request);
 	requestsDao.createNewRequest(
 		request,
-		function(request) {
+		async function(request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
 			var requestSelectedHotels = { choices: request.selectedHotels };
 			var requestSelectedCities = { choices: request.selectedCities };
@@ -91,30 +93,50 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, requestFlightOffers);
 			citiesDao.save(request.id, requestSelectedCities);
 			attractionsDao.save(request.id, requestSelectedAttractions);
-			getPackage(
-				request.id,
-				null,
-				data => {
-					console.log('Package creation succedded. Now responding to caller');
-					request.packageUrl = data.pdfUrl;
-					request.packageDownloadUrl = data.pdfDownloadUrl;
-					onSuccess(request);
-				},
-				data => {
-					if (data && data.pdfUrl) {
-						console.log('Package creation partially succedded. Now responding to caller');
-						request.packageUrl = data.pdfUrl;
-						request.packageDownloadUrl = data.pdfDownloadUrl;
-					} else {
-						console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+			requestsDao.modifyRequestStatusById(request.id, 16, () => {}, () => {});
+			request.paymentKey = await new Promise(resolve => {
+				paymentsService.generatePaymentKey(
+					request,
+					({ paymentKey }) => {
+						resolve(paymentKey);
+					},
+					err => {
+						console.error('An error occurred while generating a payment key');
+						console.error(err);
+						resolve();
 					}
-					onSuccess(request);
-				},
-				{ choices: request.flightOffers },
-				{ choices: request.selectedCities },
-				{ choices: request.selectedHotels },
-				{ choices: request.selectedAttractions }
-			);
+				);
+			});
+
+			onSuccess(request);
+
+			const package = await new Promise(resolve => {
+				getPackage(
+					request.id,
+					null,
+					data => {
+						console.log('Package creation succeeded. Now responding to caller');
+						resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+					},
+					data => {
+						if (data && data.pdfUrl) {
+							console.log('Package creation partially succeeded. Now responding to caller');
+							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+						} else {
+							console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+							resolve({});
+						}
+						// onSuccess(request);
+					},
+					{ choices: request.flightOffers },
+					{ choices: request.selectedCities },
+					{ choices: request.selectedHotels },
+					{ choices: request.selectedAttractions }
+				);
+			});
+
+			request = { ...request, ...package };
+
 			// onSuccess(request);
 
 			// the following happens asynchronously
@@ -466,7 +488,7 @@ var getPackage = function(
 					request = {
 						id: request.id,
 						travelerName: request.traveler.name ? request.traveler.name : '',
-						estimatedCost: getItineraryCostFromRequest(flightOffers.choices, selectedHotels.choices),
+						estimatedCost: request.estimatedCost,
 						numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
 						itinerary: {
 							name: selectedCities.choices.reduce(
