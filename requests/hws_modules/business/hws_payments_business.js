@@ -37,7 +37,7 @@ var registerRequestOrder = (request, onSuccess, onFailure) => {
 	}, onFailure);
 };
 
-var generatePaymentKeyForPreRegisteredOrder = (request, onSuccess, onFailure) => {
+var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 	registerRequestOrder(
 		request,
 		({ authToken, orderId, amountCents, currency }) => {
@@ -62,7 +62,7 @@ var generatePaymentKeyForPreRegisteredOrder = (request, onSuccess, onFailure) =>
 	);
 };
 
-var generatePaymentKey = (request, onSuccess, onFailure) => {
+var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 	authenticate(({ authToken }) => {
 		const payload = {
 			auth_token: authToken,
@@ -81,5 +81,5 @@ var generatePaymentKey = (request, onSuccess, onFailure) => {
 	}, onFailure);
 };
 
-exports.generatePaymentKey = generatePaymentKey;
-exports.generatePaymentKeyForPreRegisteredOrder = generatePaymentKeyForPreRegisteredOrder;
+exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
+exports.registeredOrderAndGeneratePaymentKey = registeredOrderAndGeneratePaymentKey;

@@ -94,7 +94,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			citiesDao.save(request.id, requestSelectedCities);
 			attractionsDao.save(request.id, requestSelectedAttractions);
 			request.paymentKey = await new Promise(resolve => {
-				paymentsService.generatePaymentKey(
+				paymentsService.registeredOrderAndGeneratePaymentKey(
 					request,
 					({ paymentKey }) => {
 						requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});
