@@ -7,7 +7,7 @@ const WE_ACCEPT_PAYMENT_API_KEY =
 	'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SndjbTltYVd4bFgzQnJJam95T0RRNExDSnVZVzFsSWpvaWFXNXBkR2xoYkNJc0ltTnNZWE56SWpvaVRXVnlZMmhoYm5RaWZRLnRRclNhZXpnMWtqbDd2MEx0alAxbWl4eFVXT3R4aHBOSDFkeDdFOWQzN3RaTjBNWGtrMmYzLTZBdlhrWmxBMHBLdTFEdzJ3UElqQmVwNEFzQnF6STlR';
 const WE_ACCEPT_INTEGRATION_ID = process.env.WE_ACCEPT_INTEGRATION_ID || 4361;
 
-var authenticate = function(onSuccess, onFailure) {
+var authenticate = (onSuccess, onFailure) => {
 	httpRequest.post(
 		{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/auth/tokens`, json: true, body: { api_key: WE_ACCEPT_PAYMENT_API_KEY } },
 		(error, response, data) => {
@@ -17,7 +17,7 @@ var authenticate = function(onSuccess, onFailure) {
 	);
 };
 
-var registerRequestOrder = function(request, onSuccess, onFailure) {
+var registerRequestOrder = (request, onSuccess, onFailure) => {
 	authenticate(({ merchantId, authToken }) => {
 		const payload = {
 			auth_token: authToken,
@@ -37,7 +37,7 @@ var registerRequestOrder = function(request, onSuccess, onFailure) {
 	}, onFailure);
 };
 
-var generatePaymentKey = function(request, onSuccess, onFailure) {
+var generatePaymentKeyForPreRegisteredOrder = (request, onSuccess, onFailure) => {
 	registerRequestOrder(
 		request,
 		({ authToken, orderId, amountCents, currency }) => {
@@ -62,4 +62,24 @@ var generatePaymentKey = function(request, onSuccess, onFailure) {
 	);
 };
 
+var generatePaymentKey = (request, onSuccess, onFailure) => {
+	authenticate(({ authToken }) => {
+		const payload = {
+			auth_token: authToken,
+			amount_cents: request.estimatedCost,
+			currency: CURRENCY,
+			integration_id: WE_ACCEPT_INTEGRATION_ID,
+			order: { ...request, amount_cents: request.estimatedCost },
+		};
+		httpRequest.post(
+			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
+			(error, response, data) => {
+				if (!data || !data.token) onFailure('Payment key generation failed', error);
+				else onSuccess({ paymentKey: data.token });
+			}
+		);
+	}, onFailure);
+};
+
 exports.generatePaymentKey = generatePaymentKey;
+exports.generatePaymentKeyForPreRegisteredOrder = generatePaymentKeyForPreRegisteredOrder;
