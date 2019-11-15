@@ -25,263 +25,82 @@ const FLIGHT_PROFIT_ABOVE_THRESHOLD = 500;
  **/
 exports.searchTransportation = function (language, transportationSearchRequest) {
   return new Promise(async function (resolve, reject) {
-    try {
-      // change JS date to moments
-      let departureMoment = new moment(transportationSearchRequest.departure);
-      let transportationLegs = [];
 
-      // retrieve the leg from the origin to the first city
-      let originToFirstCityLeg = await createFlightLegBetweenOriginAndDestination(
-        transportationSearchRequest.origin,
-        transportationSearchRequest.citiesSequence[0].cityIata,
-        departureMoment,
-        transportationSearchRequest.numberOfAdults,
-        transportationSearchRequest.numberOfChildren,
-        transportationSearchRequest.numberOfInfants,
-        true,
-        language
-      );
-      transportationLegs.push(originToFirstCityLeg);
+    // change JS date to moments
+    let departureMoment = new moment(transportationSearchRequest.departure);
 
-      // retrieve legs between each city and the next city, after spending the nights in the city (except for the last city, which will be retrieved at the end)
-      for (
-        let i = 0;
-        i < transportationSearchRequest.citiesSequence.length - 1;
-        i++
-      ) {
-        let legOrigin = transportationSearchRequest.citiesSequence[i].cityIata;
-        let legDestination =
-          transportationSearchRequest.citiesSequence[i + 1].cityIata;
+    let multiCitySearchRequest = {
+      numberOfAdults: transportationSearchRequest.numberOfAdults,
+      numberOfChildren: transportationSearchRequest.numberOfChildren,
+      numberOfInfants: transportationSearchRequest.numberOfInfants,
+      tripSegments: [
+        {
+          cityIata: transportationSearchRequest.origin,
+          arrivalDate: departureMoment.format('YYYY-MM-DD'),
+          leavingDate: departureMoment.format('YYYY-MM-DD'),
+          cityName: transportationSearchRequest.origin,
+          countryIso: transportationSearchRequest.origin,
+        }
+      ]
+    };
 
-        let originCountry =
-          transportationSearchRequest.citiesSequence[i].countryIso;
-        let destinationCountry =
-          transportationSearchRequest.citiesSequence[i + 1].countryIso;
-        let isCrossCountry = originCountry != destinationCountry;
-
-        departureMoment = departureMoment.add(
-          transportationSearchRequest.citiesSequence[i].numberOfNights,
-          "Days"
-        );
-
-        let transportationLeg = await createFlightLegBetweenOriginAndDestination(
-          legOrigin,
-          legDestination,
-          departureMoment,
-          transportationSearchRequest.numberOfAdults,
-          transportationSearchRequest.numberOfChildren,
-          transportationSearchRequest.numberOfInfants,
-          isCrossCountry,
-          language
-        );
-        transportationLegs.push(transportationLeg);
+    // create a trip segment for each city
+    for (let i = 0; i < transportationSearchRequest.citiesSequence.length; i++) {
+      let newTripSegment = {
+        cityIata: transportationSearchRequest.citiesSequence[i].cityIata,
+        arrivalDate: departureMoment.format('YYYY-MM-DD'),
+        cityName: transportationSearchRequest.citiesSequence[i].cityIata,
+        countryIso: transportationSearchRequest.citiesSequence[i].countryIso,
+        leavingDate: departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, "Days").format('YYYY-MM-DD')
       }
-
-      // retrieve the leg from the last city back to the origin
-      departureMoment = departureMoment.add(
-        transportationSearchRequest.citiesSequence[
-          transportationSearchRequest.citiesSequence.length - 1
-        ].numberOfNights,
-        "Days"
-      );
-      let lastCityToOriginLeg = await createFlightLegBetweenOriginAndDestination(
-        transportationSearchRequest.citiesSequence[
-          transportationSearchRequest.citiesSequence.length - 1
-        ].cityIata,
-        transportationSearchRequest.origin,
-        departureMoment,
-        transportationSearchRequest.numberOfAdults,
-        transportationSearchRequest.numberOfChildren,
-        transportationSearchRequest.numberOfInfants,
-        true,
-        language
-      );
-      transportationLegs.push(lastCityToOriginLeg);
-
-      if (transportationLegs) {
-        resolve(transportationLegs);
-      } else {
-        resolve();
-      }
-    } catch (err) {
-      reject(err);
+      multiCitySearchRequest.tripSegments.push(newTripSegment);
+      departureMoment = departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, "Days");
     }
-  });
-};
 
-function createFlightLegBetweenOriginAndDestination(
-  origin,
-  destination,
-  departure,
-  numberOfAdults,
-  numberOfChildren,
-  numberOfInfants,
-  isInternationalLeg,
-  language
-) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      let originCity = await getCityByIata(origin, language);
-      let destinationCity = await getCityByIata(destination, language);
-      let transportationLeg = {
-        origin: originCity,
-        destination: destinationCity,
-        departure: departure.toISOString(),
-        flightOffers: []
-      };
-      let legSearchRequest = {
-        departure: new moment(transportationLeg.departure).format('YYYY-MM-DD'),
-        origin: transportationLeg.origin.iataCode.substr(0, 3),
-        destination: transportationLeg.destination.iataCode.substr(0, 3),
-        numberOfAdults: numberOfAdults,
-        numberOfChildren: numberOfChildren,
-        numberOfInfants: numberOfInfants
-      };
-      request.post(
-        { url: TRAWEX_ADAPTER_ENDPOINT + "/flights/search/one-way", body: legSearchRequest, headers: { 'language': language }, json: true },
-        function (err, httpResponse, body) {
-          if (err || httpResponse.statusCode != 200) {
-            // reject(err || httpResponse.statusMessage);
-            console.error(
-              "Failed to retrieve offers for leg: " + transportationLeg
-            );
-            console.error(err || httpResponse.statusMessage);
-            resolve(transportationLeg);
+    request.post(
+      { url: TRAWEX_ADAPTER_ENDPOINT + "/flights/search/multi-city", body: multiCitySearchRequest, headers: { 'language': language }, json: true },
+      async function (err, httpResponse, body) {
+        if (err || httpResponse.statusCode != 200) {
+          // reject(err || httpResponse.statusMessage);
+          console.error(
+            "Failed to retrieve flight offers for request: " + JSON.stringify(transportationSearchRequest)
+          );
+          console.error(err || body.error || httpResponse.statusMessage);
+          reject({ error: err || body.error || httpResponse.statusMessage });
+        } else {
+          if (body.error) {
+            reject(body);
           } else {
-            let legFlightOffers = body; // offers coming form flights adapter
-            if (legFlightOffers) {
-              if (isInternationalLeg) {
-                let filteredLegFlightOffers = filterInternationalOffers(
-                  legFlightOffers,
-                  transportationLeg.origin.iataCode,
-                  transportationLeg.destination.iataCode
-                );
-                transportationLeg.flightOffers = filteredLegFlightOffers;
-                resolve(transportationLeg);
-              } else {
-                let filteredLegFlightOffers = filterInternalOffers(
-                  legFlightOffers,
-                  transportationLeg.origin.iataCode,
-                  transportationLeg.destination.iataCode
-                );
-                transportationLeg.flightOffers = filteredLegFlightOffers;
-                resolve(transportationLeg);
+            let flightOffers = body; // offers coming form flights adapter
+            if (flightOffers) {
+              // flightOffers = filterFlightOffers(flightOffers);
+              for (var i = 0; i < flightOffers.length; i++) {
+                for (var j = 0; j < flightOffers[i].flightLegs.length; j++) {
+                  var flightLeg = flightOffers[i].flightLegs[j];
+                  flightLeg.origin = await getCityByIata(flightLeg.origin);
+                  flightLeg.destination = await getCityByIata(flightLeg.destination);
+                }
               }
+              resolve({ flightOffers: flightOffers });
             } else {
               console.warn(
-                "No flight offers found for leg: " + legSearchRequest
+                "No flight offers found for request: " + JSON.stringify(transportationSearchRequest)
               );
-              resolve(transportationLeg);
+              resolve({ flightOffers: {} });
             }
           }
         }
-      );
-    } catch (err) {
-      reject(err);
-    }
+      }
+    );
   });
-}
+};
 
-function applyFlightOffersCleansing(legFlightOffers, legSearchRequest) {
-  return legFlightOffers.filter(
-    legFlightOffer =>
-      legFlightOffer.flightLegs[0].origin == legSearchRequest.origin &&
-      legFlightOffer.flightLegs[0].destination == legSearchRequest.destination
-  );
-}
-
-function filterInternationalOffers(flightOffers, originIata, destinationIata) {
+function filterFlightOffers(flightOffers) {
   let filteredflightOffers = [];
-  // offers are already sorted by price since we're using low fare search from amadeus
-  if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
-    flightOffers.forEach(flightOffer => {
-      filteredflightOffers.push(
-        createPackageOptiosOfferFromFlightsAdapterOffer(
-          flightOffer,
-          originIata,
-          destinationIata
-        )
-      );
-    });
-    return filteredflightOffers;
-  }
   for (let i = 0; i < flightOffers.length; i++) {
     let currentOffer = flightOffers[i];
-    // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
-    let airlineFound = false;
-    for (let j = 0; j < filteredflightOffers.length; j++) {
-      // compare the carriers from the flights-adapter offer with the carrier in the package-options offer
-      if (
-        currentOffer.flightLegs[0].carrier.iataCode ==
-        filteredflightOffers[j].carrier.iataCode
-      ) {
-        airlineFound = true;
-        break;
-      }
-    }
-    if (!airlineFound) {
-      if (
-        currentOffer.flightLegs[0].transitDurationInMinutes <
-        MAX_TRANSIT_TIME_IN_MINUTES
-      ) {
-        // also transit has to be less than a limit
-        // create a new offer in package-options format
-        let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(
-          currentOffer,
-          originIata,
-          destinationIata
-        );
-        filteredflightOffers.push(newOffer);
-      }
-    }
-
-    if (filteredflightOffers.length == MAX_NUMBER_OF_OFFERS_PER_LEG) {
-      break;
-    }
-  }
-  return filteredflightOffers;
-}
-
-function filterInternalOffers(flightOffers, originIata, destinationIata) {
-  let filteredflightOffers = [];
-  // offers are already sorted by price since we're using low fare search from amadeus
-  if (flightOffers.length <= MAX_NUMBER_OF_OFFERS_PER_LEG) {
-    flightOffers.forEach(flightOffer => {
-      filteredflightOffers.push(
-        createPackageOptiosOfferFromFlightsAdapterOffer(
-          flightOffer,
-          originIata,
-          destinationIata
-        )
-      );
-    });
-    return filteredflightOffers;
-  }
-  for (let i = 0; i < flightOffers.length; i++) {
-    let currentOffer = flightOffers[i];
-    // find out if the airline name doesn't exists before - we have to show the cheapest in every airline and don't repeat airlines
-    let airlineFound = false;
-    for (let j = 0; j < filteredflightOffers.length; j++) {
-      // compare the carriers from the flights-adapter offer with the carrier in the package-options offer
-      if (
-        currentOffer.flightLegs[0].carrier.iataCode ==
-        filteredflightOffers[j].carrier.iataCode
-      ) {
-        airlineFound = true;
-        break;
-      }
-    }
-    if (!airlineFound) {
-      if (currentOffer.flightLegs[0].transitDurationInMinutes == 0) {
-        // Internal flights should be direct
-        // create a new offer in package-options format
-        let newOffer = createPackageOptiosOfferFromFlightsAdapterOffer(
-          currentOffer,
-          originIata,
-          destinationIata
-        );
-        filteredflightOffers.push(newOffer);
-      }
+    if (currentOffer.transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES) {
+      filterFlightOffers.push(currentOffer);
     }
     if (filteredflightOffers.length == MAX_NUMBER_OF_OFFERS_PER_LEG) {
       break;
@@ -290,44 +109,13 @@ function filterInternalOffers(flightOffers, originIata, destinationIata) {
   return filteredflightOffers;
 }
 
-function createPackageOptiosOfferFromFlightsAdapterOffer(
-  flightOffer,
-  originIata,
-  destinationIata
-) {
-  // at the moment, we only support one-way flights, so we always use flightLegs[0]
-  let newOffer = {
-    // add profit margin
-    price:
-      flightOffer.price <= FLIGHT_COST_THRESHOLD
-        ? parseInt(flightOffer.price) + FLIGHT_PROFIT_BELOW_THRESHOLD
-        : parseInt(flightOffer.price) + FLIGHT_PROFIT_ABOVE_THRESHOLD,
-    currency: flightOffer.currency,
-    originCityIata: originIata,
-    destinationCityIata: destinationIata,
-    totalDurationInWords: flightOffer.flightLegs[0].totalDurationInWords,
-    transitDurationInWords: flightOffer.flightLegs[0].transitDurationInWords,
-    totalDurationInMinutes: flightOffer.flightLegs[0].totalDurationInMinutes,
-    transitDurationInMinutes:
-      flightOffer.flightLegs[0].transitDurationInMinutes,
-    segments: flightOffer.flightLegs[0].segments,
-    sessionId: flightOffer.sessionId, fareSourceCode: flightOffer.fareSourceCode,
-    fareType: flightOffer.fareType, refundable: flightOffer.refundable, passportMandatory: flightOffer.passportMandatory,
-    carrier: {
-      iataCode: flightOffer.flightLegs[0].carrier.iataCode,
-      name: flightOffer.flightLegs[0].carrier.name,
-      displayName: flightOffer.flightLegs[0].carrier.displayName,
-      squareLogo:
-        SQUARE_LOGOS_ROOT + flightOffer.flightLegs[0].carrier.iataCode + ".png",
-      wideLogo:
-        WIDE_LOGOS_ROOT + flightOffer.flightLegs[0].carrier.iataCode + ".png"
-    }
-  };
-  return newOffer;
-}
-
+var citiesCache = {};
 function getCityByIata(cityIata, language) {
   return new Promise(function (resolve, reject) {
+
+    if (citiesCache[cityIata] != null) {
+      resolve(citiesCache[cityIata]);
+    }
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
     request.get({ url: cityUrl, json: true, qs: { lang: language } }, function (
@@ -340,7 +128,7 @@ function getCityByIata(cityIata, language) {
       } else if (response.statusCode != 200) {
         reject(response.statusMessage);
       } else {
-        resolve({
+        citiesCache[cityIata] = {
           iataCode: city != null ? city.iataCode : cityIata,
           name:
             city != null
@@ -350,7 +138,8 @@ function getCityByIata(cityIata, language) {
               : null,
           latitude: city != null ? city.lat : null,
           longitude: city != null ? city.lng : null
-        });
+        }
+        resolve(citiesCache[cityIata]);
       }
     });
   });

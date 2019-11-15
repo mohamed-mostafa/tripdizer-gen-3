@@ -59,7 +59,7 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
     authenticate().then(function (sessionId) {
       let originList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata);
       let destinationsList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata); destinationsList.push(destinationsList.shift());
-      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.arrivalDate); departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
+      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.leavingDate);// departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
 
       let airportFromCodesSequence = ""; airportFromCodesSequence = originList.reduce((airportFromCodesSequence, cityIata) => airportFromCodesSequence + "<br>" + cityIata);
       let airportToCodesSequence = ""; airportToCodesSequence = destinationsList.reduce((airportToCodesSequence, cityIata) => airportToCodesSequence + "<br>" + cityIata);
@@ -102,8 +102,8 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
               }
             }
 
-            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment
-            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day'));
+            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment (or one day after for overnight flights)
+            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day') || moment(flightLeg.flightDay).isSame(moment(flightSegment.departure).add(-1, 'days'), 'day'));
             if (flightLeg) { // we found a leg that starts on the same day of the segment
               flightLeg.segments.push(flightSegment);
             } else { // couldn't find a leg whose dat is the departure date of a segment, then this is a second segment of a leg that happens to be in the next day
