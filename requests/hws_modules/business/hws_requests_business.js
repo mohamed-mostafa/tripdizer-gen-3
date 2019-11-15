@@ -93,11 +93,12 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, requestFlightOffers);
 			citiesDao.save(request.id, requestSelectedCities);
 			attractionsDao.save(request.id, requestSelectedAttractions);
-			requestsDao.modifyRequestStatusById(request.id, 16, () => {}, () => {});
 			request.paymentKey = await new Promise(resolve => {
 				paymentsService.generatePaymentKey(
 					request,
 					({ paymentKey }) => {
+						requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});
+						requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {}, () => {});
 						resolve(paymentKey);
 					},
 					err => {
@@ -483,7 +484,6 @@ var getPackage = function(
 					);
 				} else if (flightOffers && selectedHotels && selectedCities && selectedAttractions) {
 					console.log('Starting to generate package for request:');
-					console.log(JSON.stringify(request));
 					var detailsOfFirstCountry = await getPackageDetailsOfCountry(selectedCities.choices[0].countryIsoCode);
 					request = {
 						id: request.id,
@@ -522,7 +522,6 @@ var getPackage = function(
 						},
 					};
 					console.log('Request going to google docs:');
-					console.log(JSON.stringify(request));
 					packageHttp(
 						'post',
 						'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
@@ -580,7 +579,6 @@ var getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
-	console.log('Itinerary cost: ' + cost);
 	return cost;
 };
 

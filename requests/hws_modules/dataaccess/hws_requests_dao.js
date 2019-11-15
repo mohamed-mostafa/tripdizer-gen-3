@@ -591,6 +591,42 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
+var modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query(
+				'UPDATE `traveler_request` SET `Payment_Key` = ? WHERE `Id` = ?',
+				[paymentKey, requestId],
+				function(err) {
+					// if an error is thrown, end the connection and throw an error
+					//				connection.end();
+					if (err) {
+						console.error('An error occurred while trying to update a request with id ' + requestId);
+						console.error(err);
+						connection.rollback();
+						connection.end();
+						onFailure(err);
+					} else {
+						// no error is thrown
+						connection.commit();
+						connection.end();
+						onSuccess();
+					}
+				}
+			);
+		}
+	});
+};
+
+//calls the onSuccess
+//calls the onFailure with an err object in case of technical error
 var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
@@ -871,5 +907,6 @@ exports.addNewMailHistory = addNewMailHistory;
 exports.getRequestCounts = getRequestCounts;
 exports.toggleOptions = toggleOptions;
 exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
+exports.modifyRequestPaymentInfo = modifyRequestPaymentInfo;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
 exports.getTravelerEmails = getTravelerEmails;
