@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import logger from "./logger";
-import "./tripdizer-service-account-key.json";
 import "./tripdizer-service-account.json";
 
 if (fs.existsSync(".env")) {
