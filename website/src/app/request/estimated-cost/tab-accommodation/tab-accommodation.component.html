@@ -56,17 +56,17 @@
                       </p>
                     </div>
 
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <p class="font-weight-bold">standard double room</p>
                         <p>breakfast included - free cancellation</p>
-                    </div>
+                    </div> -->
                     <div class="col-12">
                       <div class="row">
                         <div class="col-6">
                           <h6 class="font-weight-bold price-title">
                             {{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
                           </h6>
-                          <p class="item-text price-text">{{ hotel.price | currency: 'EGP' }}</p>
+                          <p class="item-text price-text">{{ hotel.price | currency:'EGP':'symbol':'1.0-0' }}</p>
                         </div>
                         <div class="col-6 justify-content-end">
                           <mat-checkbox class="float-right mr-1" [checked]="hotel.select" [disableRipple]="true"
@@ -91,7 +91,7 @@
         <div class="bg-blue text-white text-center p-1 total-cost-box">
           <span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
           <br />
-          <span>{{ totalCost | currency: 'EGP' }}</span>
+          <span>{{ totalCost | currency:'EGP':'symbol':'1.0-0' }}</span>
         </div>
       </div>
     </div>
