@@ -1,8 +1,8 @@
 steps:
-- name: gcr.io/cloud-builders/gcloud
-  args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
-  dir: trawex-adapter
-  id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
+# - name: gcr.io/cloud-builders/gcloud
+#   args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
+#   dir: trawex-adapter
+#   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
   dir: trawex-adapter
