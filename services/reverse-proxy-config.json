@@ -1,6 +1,11 @@
 {
   "routes": [
     {
+      "route": "users",
+      "address": "http://localhost:8081",
+      "path": "../users/dist/server.js"
+    },
+    {
       "route": "requests",
       "address": "http://localhost:8082",
       "path": "../requests/hws_modules/webserver/hws_server.js"

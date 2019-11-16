@@ -1,0 +1,16 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
+  dir: flights-adapter
+  id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
+- name: gcr.io/cloud-builders/gcloud
+  args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
+  dir: flights-adapter
+  id: 'GCLOUD DEPLOY'
+# - name: gcr.io/cloud-builders/gcloud
+#   args: ['compute', 'firewall-rules', 'create', 'allow-trawex-ingress', '--allow=tcp', '--direction=in', '--target-tags=trawex', '--source-ranges=0.0.0.0/0', '--priority=900', '--network=tripdizer-vpc']
+#   id: 'CREATE ALLOW FIREWALL RULE'
+# - name: gcr.io/cloud-builders/gcloud
+#   args: ['compute', 'firewall-rules', 'create trawex-deny', '--action=deny', '--rules=all', '--direction=in', '--target-tags=trawex', '--source-ranges=0.0.0.0/0', '--priority=910']
+#   id: 'CREATE DENY FIREWALL RULE'
+timeout: 1800s

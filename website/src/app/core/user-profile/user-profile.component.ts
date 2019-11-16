@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService as SocialAuthService, SocialUser } from 'angularx-social-login';
-import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/login-dialog.component';
+import { LoginDialogComponent } from '../../shared/components/login-dialog/login-dialog.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { User } from '../../user/user.model';
 
 @Component({
 	selector: 'c-core-user-profile',
@@ -9,18 +10,18 @@ import { LoginDialogComponent } from 'src/app/shared/components/login-dialog/log
 	styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-	user: SocialUser;
+	user: User;
 	rowSpanNum = 1;
 	setRowSpanNumTimeout: any;
 
-	constructor(private socialAuthService: SocialAuthService, private dialog: MatDialog) {}
+	constructor(private authService: AuthService, private dialog: MatDialog) {}
 
 	ngOnInit() {
-		this.socialAuthService.authState.subscribe(user => (this.user = user));
+		this.authService.authenticatedUser.subscribe(user => (this.user = user));
 	}
 
 	signOut(): void {
-		this.socialAuthService.signOut();
+		this.authService.signOut();
 	}
 
 	setRowSpanNum(num: number) {

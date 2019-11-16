@@ -6,11 +6,11 @@ export const environment = {
 	saveRequestState: false,
 	showSigningPopup: true,
 	facebook: {
-		appID: '1597597783733890',
+		appID: '734243320376855',
 		pixelID: null,
 	},
 	google: {
-		OAuthID: '367695840720-sj3d2fuotd3gnnhtmi8g2iimobnmbnmt.apps.googleusercontent.com',
+		OAuthID: '1004287460562-o43geqvk6s63rteosdftluhkpiq1kid4.apps.googleusercontent.com',
 		analyticsTrackingID: 'UA-106443087-3',
 		conversionTrackingId: '',
 		conversionTrackingTarget: '',

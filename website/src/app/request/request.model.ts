@@ -8,7 +8,6 @@ import { Preference } from '../shared/models/preference.model';
 import { LUTPurpose } from '../shared/models/purpose.model';
 import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
-import { Attraction } from './estimated-cost/summary/attraction.model';
 import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
@@ -17,6 +16,7 @@ import { IRequester } from './requester.model';
 import { Step } from './step.model';
 import { TravelHistory } from './travel-history.enum';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
+import { Attraction } from './summary/attraction.model';
 
 export class Request extends CommonFunctions {
 	private _requestType: RequestType;
@@ -32,6 +32,7 @@ export class Request extends CommonFunctions {
 		preferences?: string;
 		destinations?: string;
 		estimated_cost?: string;
+		summary?: string;
 		travel_assistance?: { title?: string; tourGuide?: string; visaAssistance?: string };
 		information?: { title?: string; value?: string };
 		ticket?: string;
@@ -579,6 +580,16 @@ export class Request extends CommonFunctions {
 				},
 			},
 			{
+				key: 'summary',
+				title: this._localeLabels.summary,
+				path: 'summary',
+				order: this.getStepOrder('summary'),
+				value: '',
+				isHiddenOnNavBar: false,
+				isClickable: (): boolean => false,
+				isValid: (): boolean => true,
+			},
+			{
 				key: 'travelAssistance',
 				title: this._localeLabels.travel_assistance.title,
 				path: 'travel-assistance',
@@ -710,8 +721,9 @@ export class Request extends CommonFunctions {
 			preferences: this.getOrderByRequestType(8, 7),
 			destinations: this.getOrderByRequestType(7, 8),
 			estimatedCost: this.getOrderByRequestType(9, 9),
-			travelAssistance: 10,
-			information: 11,
+			summary: 10,
+			travelAssistance: 11,
+			information: 12,
 			ticket: 99,
 		};
 		return steps[stepKey];

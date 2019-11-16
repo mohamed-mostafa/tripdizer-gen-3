@@ -1,3 +1,5 @@
+import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
+import { OwlModule } from 'ngx-owl-carousel';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,7 +26,7 @@ import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
-import { SummaryComponent } from './estimated-cost/summary/summary.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
 	imports: [
@@ -43,6 +45,7 @@ import { SummaryComponent } from './estimated-cost/summary/summary.component';
 		MatSliderModule,
 		MatTabsModule,
 		MatMenuModule,
+		OwlModule
 	],
 	declarations: [
 		...RequestComponents,
@@ -58,6 +61,7 @@ import { SummaryComponent } from './estimated-cost/summary/summary.component';
 		ChangeFlightComponent,
 		TabAccommodationComponent,
 		SummaryComponent,
+		PaymentDetailsComponent
 	]
 })
 export class RequestModule { }

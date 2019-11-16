@@ -1,14 +1,10 @@
-<a
-	href="javascript:void(0)"
-	mat-button
-	[matMenuTriggerFor]="flightOffer"
-	(menuClosed)="menuClosed()"
-	(menuOpened)="menuOpened()"
->
+<a href="javascript:void(0)" mat-button [matMenuTriggerFor]="flightOffer" (menuClosed)="menuClosed()"
+	(menuOpened)="menuOpened()">
 	{{ 'request.estimated_cost.tab_flights.change_flight' | translate }}
 </a>
 <mat-menu #flightOffer="matMenu" class="pretty-scroll">
-	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
+	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)"
+		class="row m-0 border-blue">
 		<div class="col-12 col-md-3 text-md-center align-self-md-center">
 			<img [src]="offer.carrier.wideLogo" alt="{{ offer.carrier.name }}" />
 		</div>
@@ -59,12 +55,14 @@
 		</div>
 		<div class="col-12 col-sm-3 text-center align-self-center my-2 my-sm-0">
 			<div class="row">
-				<div class="col-6 col-sm-12">{{ offer.price | currency: 'EGP' }}</div>
+				<div class="col-6 col-sm-12">{{ offer.price | currency:'EGP':'symbol':'1.0-0' }}</div>
 				<div class="col-6 col-sm-12">
-					<button *ngIf="selectedOffer.flightOfferIndex !== offer.flightOfferIndex" class="btn btn-sm btn-blue">
+					<button *ngIf="selectedOffer.flightOfferIndex !== offer.flightOfferIndex"
+						class="btn btn-sm btn-blue">
 						{{ 'request.estimated_cost.tab_flights.select' | translate }}
 					</button>
-					<button *ngIf="selectedOffer.flightOfferIndex === offer.flightOfferIndex" class="btn btn-sm btn-outline-blue">
+					<button *ngIf="selectedOffer.flightOfferIndex === offer.flightOfferIndex"
+						class="btn btn-sm btn-outline-blue">
 						{{ 'request.estimated_cost.tab_flights.selected' | translate }}
 					</button>
 				</div>

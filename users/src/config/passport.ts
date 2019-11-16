@@ -1,0 +1,177 @@
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import * as jwt from "jsonwebtoken";
+import passport from "passport";
+import passportFacebookToken, {
+  Profile as FacebookProfile
+} from "passport-facebook-token";
+import passportGoogleToken, {
+  Profile as GoogleProfile
+} from "passport-google-token";
+import passportJwt, { StrategyOptions } from "passport-jwt";
+import { ErrorResponse, SuccessResponse } from "../models/response";
+import { User } from "../models/user";
+import { UserClaims } from "../models/user-claims";
+import { default as UserService } from "../services/user";
+import logger from "../util/logger";
+import { FACEBOOK_CRED, GOOGLE_CRED, JWT_SECRET } from "../util/secrets";
+
+const GoogleTokenStrategy = passportGoogleToken.Strategy;
+const FacebookTokenStrategy = passportFacebookToken;
+const JwtStrategy = passportJwt.Strategy;
+const ExtractJwt = passportJwt.ExtractJwt;
+
+export const encodeToken = (user: User) =>
+  jwt.sign({ ...new UserClaims(user) }, JWT_SECRET, { expiresIn: "30d" });
+
+passport.serializeUser<any, any>((user, done) => {
+  done(undefined, user.email);
+});
+
+passport.deserializeUser((email: string, done) => {
+  UserService.get(email).then((res: SuccessResponse<User> | ErrorResponse) => {
+    done((res as ErrorResponse).message, (res as SuccessResponse<User>).data);
+  });
+});
+
+passport.use(
+  new GoogleTokenStrategy(
+    {
+      clientID: GOOGLE_CRED.id,
+      clientSecret: GOOGLE_CRED.secret
+    },
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: GoogleProfile,
+      done: any
+    ) => {
+      const user: User = {
+        email: profile._json.email,
+        google: profile.id,
+        tokens: [{ provider: "google", accessToken }],
+        profile: {
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          picture: profile._json.picture
+        },
+        lastLoginProvider: "google"
+      };
+      UserService.addOrUpdateFromSocial(user).then(
+        (res: SuccessResponse<User> | ErrorResponse) => {
+          if (res.success) {
+            const user = (res as SuccessResponse<User>).data;
+            user.token = encodeToken(user);
+            done(null, user);
+          } else {
+            done(res, null);
+          }
+        }
+      );
+    }
+  )
+);
+
+passport.use(
+  new FacebookTokenStrategy(
+    {
+      clientID: FACEBOOK_CRED.id,
+      clientSecret: FACEBOOK_CRED.secret
+    },
+    (
+      accessToken: string,
+      refreshToken: string,
+      profile: FacebookProfile,
+      done
+    ) => {
+      const user: User = {
+        email: profile._json.email,
+        facebook: profile.id,
+        tokens: [{ provider: "facebook", accessToken }],
+        profile: {
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+          picture: `https://graph.facebook.com/${profile.id}/picture?type=large`
+        },
+        lastLoginProvider: "facebook"
+      };
+      UserService.addOrUpdateFromSocial(user).then(
+        (res: SuccessResponse<User> | ErrorResponse) => {
+          if (res.success) {
+            const user = (res as SuccessResponse<User>).data;
+            user.token = encodeToken(user);
+            done(null, user);
+          } else {
+            done(res, null);
+          }
+        }
+      );
+    }
+  )
+);
+
+const jwtOptions: StrategyOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET,
+  ignoreExpiration: true
+};
+passport.use(
+  new JwtStrategy(jwtOptions, (jwtPayload, done) => {
+    UserService.get(jwtPayload.email).then(
+      (res: SuccessResponse<User> | ErrorResponse) => {
+        done(
+          (res as ErrorResponse).message,
+          (res as SuccessResponse<User>).data
+        );
+      }
+    );
+  })
+);
+
+export const getAuthenticatedUser = (req: Request, res: Response) => {
+  const user = req.user as User;
+  res.json({
+    ...user.profile,
+    email: user.email,
+    token: user.token,
+    provider: user.lastLoginProvider
+  });
+};
+
+export const fromAuthHeaderAsBearerTokenToAccessTokenHeader = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const OAuth2AuthorizationField = "Authorization";
+  req.headers = req.headers || {};
+  const hdrValue = (
+    req.headers[OAuth2AuthorizationField] ||
+    req.headers[OAuth2AuthorizationField.toLowerCase()]
+  ).toString();
+
+  const matches = hdrValue.match(/Bearer\s+(\S+)/);
+
+  req.headers["access_token"] = matches && matches[1];
+  next();
+};
+
+export const requestTokenValidator = (
+  error: ErrorRequestHandler,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (error) {
+    logger.error(error);
+    res.sendStatus(401);
+  }
+};
+
+export const isAuthenticated = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.user && (req.user as User).email) next();
+  else res.sendStatus(401);
+};

@@ -60,6 +60,5 @@ export class SectionTestimonialsComponent {
 	goToSlide(i) {
 		this.owlElement.to([i]);
 		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex;
-		console.log(this.owlElement.$owlChild.currentSlideIndex, i);
 	}
 }

@@ -2,9 +2,9 @@ let request = require("request");
 let moment = require("moment");
 const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8 * 60;
-const FLIGHTS_ADAPTER_ENDPOINT =
-  process.env.FLIGHTS_ADAPTER_ENDPOINT ||
-  "http://localhost:8085/flights/1.0.0/flights";
+const TRAWEX_ADAPTER_ENDPOINT =
+  process.env.TRAWEX_ADAPTER_ENDPOINT ||
+  "http://localhost:8085/trawex-adapter/1.0.0";
 const MASTER_DATA_ENDPOINT =
   process.env.MASTER_DATA_ENDPOINT || "http://localhost:8083/master-data";
 const SQUARE_LOGOS_ROOT = "https://www.gstatic.com/flights/airline_logos/70px/";
@@ -23,8 +23,8 @@ const FLIGHT_PROFIT_ABOVE_THRESHOLD = 500;
  * transportationSearchRequest TransportationSearchRequest
  * returns transportationLegOffers
  **/
-exports.searchTransportation = function(language, transportationSearchRequest) {
-  return new Promise(async function(resolve, reject) {
+exports.searchTransportation = function (language, transportationSearchRequest) {
+  return new Promise(async function (resolve, reject) {
     try {
       // change JS date to moments
       let departureMoment = new moment(transportationSearchRequest.departure);
@@ -119,7 +119,7 @@ function createFlightLegBetweenOriginAndDestination(
   isInternationalLeg,
   language
 ) {
-  return new Promise(async function(resolve, reject) {
+  return new Promise(async function (resolve, reject) {
     try {
       let originCity = await getCityByIata(origin, language);
       let destinationCity = await getCityByIata(destination, language);
@@ -130,15 +130,15 @@ function createFlightLegBetweenOriginAndDestination(
         flightOffers: []
       };
       let legSearchRequest = {
-        departure: transportationLeg.departure,
+        departure: new moment(transportationLeg.departure).format('YYYY-MM-DD'),
         origin: transportationLeg.origin.iataCode.substr(0, 3),
         destination: transportationLeg.destination.iataCode.substr(0, 3),
         numberOfAdults: numberOfAdults,
         numberOfChildren: numberOfChildren,
         numberOfInfants: numberOfInfants
       };
-      request.get(
-        { url: FLIGHTS_ADAPTER_ENDPOINT, qs: legSearchRequest, headers: { 'language': language }, json: true },
+      request.post(
+        { url: TRAWEX_ADAPTER_ENDPOINT + "/flights/search/one-way", body: legSearchRequest, headers: { 'language': language }, json: true },
         function (err, httpResponse, body) {
           if (err || httpResponse.statusCode != 200) {
             // reject(err || httpResponse.statusMessage);
@@ -311,6 +311,8 @@ function createPackageOptiosOfferFromFlightsAdapterOffer(
     transitDurationInMinutes:
       flightOffer.flightLegs[0].transitDurationInMinutes,
     segments: flightOffer.flightLegs[0].segments,
+    sessionId: flightOffer.sessionId, fareSourceCode: flightOffer.fareSourceCode,
+    fareType: flightOffer.fareType, refundable: flightOffer.refundable, passportMandatory: flightOffer.passportMandatory,
     carrier: {
       iataCode: flightOffer.flightLegs[0].carrier.iataCode,
       name: flightOffer.flightLegs[0].carrier.name,
@@ -325,10 +327,10 @@ function createPackageOptiosOfferFromFlightsAdapterOffer(
 }
 
 function getCityByIata(cityIata, language) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
-    request.get({ url: cityUrl, json: true, qs: { lang: language } }, function(
+    request.get({ url: cityUrl, json: true, qs: { lang: language } }, function (
       error,
       response,
       city

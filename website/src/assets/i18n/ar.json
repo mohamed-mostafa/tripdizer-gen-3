@@ -230,7 +230,12 @@
 				"from": "من",
 				"arrival": "الوصول",
 				"depart": "المغادرة",
-				"nights": "ليالى"
+				"nights": "ليالى",
+                "payment_details": "تفاصيل الدفع",
+                "flights": "رحلات الطيران",
+                "nights_in": "رحلات فى",
+                "hotels": "الفنادق",
+                "total_amount": "إجمالى المبلغ"
 			}
 		},
 		"form_layout": {
@@ -268,6 +273,7 @@
 			"preferences": "الإهتمامات",
 			"destinations": "الوجهات",
 			"estimated_cost": "خط سير الرحلة",
+            "summary": "تفاصيل الرحلة",
 			"travel_assistance": {
 				"title": "المساعدة",
 				"visaAssistance": "التأشيرة",
@@ -408,5 +414,34 @@
 				}
 			]
 		}
-	}
+	}, 
+    "user": {
+        "user_core": {
+            "language_label": "English",
+            "blog": "المدونة",
+            "my_profile": "بياناتى",
+            "my_plans": "رحلاتى",
+            "my_booking": "حجوزاتى",
+            "log_out": "تسجيل الخروج",
+            "language": "اللغة"
+        },
+        "side_bar": {
+            "my_profile": "بياناتى",
+            "my_plans": "رحلاتى",
+            "my_booking": "حجوزاتى",
+            "log_out": "تسجيل الخروج"
+        },
+        "user_info": {
+            "my_profile": "بياناتى",
+            "first_name": "الاسم الأول",
+            "last_name": "اسم الأب",
+            "email": "البريد الإلكترونى",
+            "mobile": "الموبايل",
+            "birth_date": "تاريخ الميلاد",
+            "location": "الدولة"
+        },
+        "user_plans": {
+            "my_plans": "رحلاتى"
+        }
+    }
 }
