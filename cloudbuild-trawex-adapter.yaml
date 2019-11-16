@@ -1,11 +1,11 @@
 steps:
 - name: gcr.io/cloud-builders/gcloud
   args: ['endpoints', 'services', 'deploy', 'api/swagger.yaml']
-  dir: flights-adapter
+  dir: trawex-adapter
   id: 'GCLOUD DEPLOY ENDPOINT SERVICE'
 - name: gcr.io/cloud-builders/gcloud
   args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}', '--promote', '--stop-previous-version', '--format=yaml']
-  dir: flights-adapter
+  dir: trawex-adapter
   id: 'GCLOUD DEPLOY'
 # - name: gcr.io/cloud-builders/gcloud
 #   args: ['compute', 'firewall-rules', 'create', 'allow-trawex-ingress', '--allow=tcp', '--direction=in', '--target-tags=trawex', '--source-ranges=0.0.0.0/0', '--priority=900', '--network=tripdizer-vpc']
