@@ -33,7 +33,7 @@ export const FACEBOOK_CRED = {
 };
 
 // this file is different on every environment, but has the same name
-export const FIRESTORE_CREDENTIALS = require("./tripdizer-service-account.json");
+export const FIRESTORE_CREDENTIALS = ENVIRONMENT === "production" ? require("./tripdizer-service-account.json") : require("./tripdizer-service-account.json");
 
 if (!FIRESTORE_CREDENTIALS || !FIRESTORE_CREDENTIALS.project_id) {
   logger.error("Set Firestore config environment variable.");
