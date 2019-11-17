@@ -93,52 +93,53 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, requestFlightOffers);
 			citiesDao.save(request.id, requestSelectedCities);
 			attractionsDao.save(request.id, requestSelectedAttractions);
-			request.paymentKey = await new Promise(resolve => {
-				paymentsService.registeredOrderAndGeneratePaymentKey(
-					request,
-					({ paymentKey }) => {
-						requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});
-						requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {}, () => {});
-						resolve(paymentKey);
-					},
-					err => {
-						console.error('An error occurred while generating a payment key');
-						console.error(err);
-						resolve();
-					}
-				);
-			});
+
+			if (request.requiresPayment) {
+				request.paymentKey = await new Promise(resolve => {
+					paymentsService.generatePaymentKeyWithoutRegistration(
+						request,
+						({ paymentKey }) => {
+							requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});
+							requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {}, () => {});
+							resolve(paymentKey);
+						},
+						err => {
+							console.error('An error occurred while generating a payment key');
+							console.error(err);
+							resolve();
+						}
+					);
+				});
+			} else {
+				const package = await new Promise(resolve => {
+					getPackage(
+						request.id,
+						null,
+						data => {
+							console.log('Package creation succeeded. Now responding to caller');
+							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+						},
+						data => {
+							if (data && data.pdfUrl) {
+								console.log('Package creation partially succeeded. Now responding to caller');
+								resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+							} else {
+								console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+								resolve({});
+							}
+							// onSuccess(request);
+						},
+						{ choices: request.flightOffers },
+						{ choices: request.selectedCities },
+						{ choices: request.selectedHotels },
+						{ choices: request.selectedAttractions }
+					);
+				});
+
+				request = { ...request, ...package };
+			}
 
 			onSuccess(request);
-
-			const package = await new Promise(resolve => {
-				getPackage(
-					request.id,
-					null,
-					data => {
-						console.log('Package creation succeeded. Now responding to caller');
-						resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-					},
-					data => {
-						if (data && data.pdfUrl) {
-							console.log('Package creation partially succeeded. Now responding to caller');
-							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-						} else {
-							console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
-							resolve({});
-						}
-						// onSuccess(request);
-					},
-					{ choices: request.flightOffers },
-					{ choices: request.selectedCities },
-					{ choices: request.selectedHotels },
-					{ choices: request.selectedAttractions }
-				);
-			});
-
-			request = { ...request, ...package };
-
-			// onSuccess(request);
 
 			// the following happens asynchronously
 			if (request.traveler.name === 'Essawy') {
