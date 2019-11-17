@@ -13,6 +13,7 @@ var start = function() {
 	require('../app/cron/index');
 	var requestsInterface = require('./hws_requests_interface.js');
 	var grouptripsInterface = require('./hws_grouptrips_interface.js');
+	var paymentsInterface = require('./hws_payments_interface');
 
 	var json2xls = require('json2xls');
 	var app = express();
@@ -56,6 +57,11 @@ var start = function() {
 	router.post('/group-trips/register', grouptripsInterface.register);
 	router.put('/group-trips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
+
+	// Payments
+	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
+	router.get('/payments/response-callback', paymentsInterface.responseCallback);
+	router.get('/payments/read-files/:fileName', paymentsInterface.readFiles);
 
 	// routing - end
 	app.use('/requests', router);

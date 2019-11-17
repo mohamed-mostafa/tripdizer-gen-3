@@ -1,4 +1,5 @@
 var httpRequest = require('request');
+var fs = require('fs');
 
 const CURRENCY = 'EGP';
 const WE_ACCEPT_PAYMENT_BASE_URL = 'https://accept.paymobsolutions.com/api/';
@@ -81,5 +82,30 @@ var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 	}, onFailure);
 };
 
+var notificationCallback = (type, payload, onSuccess, onFailure) => {
+	fs.writeFile('notification_callback.json', JSON.stringify({ type, ...payload }), err => {
+		console.log(err);
+	});
+	onSuccess('s');
+};
+
+var responseCallback = (payload, onSuccess, onFailure) => {
+	console.log(payload);
+	fs.writeFile('response_callback.json', JSON.stringify(payload), err => {
+		console.log(err);
+	});
+	onSuccess('s');
+};
+
+var readFiles = (fileName, onSuccess, onFailure) => {
+	fs.readFile('' + fileName + '.json', (err, data) => {
+		console.log(data);
+		onSuccess(data);
+	});
+};
+
 exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
 exports.registeredOrderAndGeneratePaymentKey = registeredOrderAndGeneratePaymentKey;
+exports.notificationCallback = notificationCallback;
+exports.responseCallback = responseCallback;
+exports.readFiles = readFiles;
