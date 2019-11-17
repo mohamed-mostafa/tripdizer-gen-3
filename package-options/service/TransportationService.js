@@ -1,6 +1,6 @@
 let request = require("request");
 let moment = require("moment");
-const MAX_NUMBER_OF_OFFERS_PER_LEG = 3;
+const MAX_NUMBER_OF_OFFERS_PER_LEG = 9;
 const MAX_TRANSIT_TIME_IN_MINUTES = 8 * 60;
 const TRAWEX_ADAPTER_ENDPOINT =
   process.env.TRAWEX_ADAPTER_ENDPOINT ||
@@ -73,7 +73,7 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
           } else {
             let flightOffers = body; // offers coming form flights adapter
             if (flightOffers) {
-              // flightOffers = filterFlightOffers(flightOffers);
+              flightOffers = filterFlightOffers(flightOffers);
               for (var i = 0; i < flightOffers.length; i++) {
                 for (var j = 0; j < flightOffers[i].flightLegs.length; j++) {
                   var flightLeg = flightOffers[i].flightLegs[j];
@@ -99,8 +99,9 @@ function filterFlightOffers(flightOffers) {
   let filteredflightOffers = [];
   for (let i = 0; i < flightOffers.length; i++) {
     let currentOffer = flightOffers[i];
-    if (currentOffer.transitDurationInMinutes < MAX_TRANSIT_TIME_IN_MINUTES) {
-      filterFlightOffers.push(currentOffer);
+    // include offers which contains legs with transit shorter than the threshold
+    if (currentOffer.flightLegs.filter(flightLeg => flightLeg.transitDurationInMinutes > MAX_TRANSIT_TIME_IN_MINUTES).length == 0) {
+      filteredflightOffers.push(currentOffer);
     }
     if (filteredflightOffers.length == MAX_NUMBER_OF_OFFERS_PER_LEG) {
       break;
