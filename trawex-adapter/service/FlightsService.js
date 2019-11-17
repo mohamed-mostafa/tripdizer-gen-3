@@ -70,7 +70,7 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -145,7 +145,7 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItineraries.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -207,7 +207,7 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
