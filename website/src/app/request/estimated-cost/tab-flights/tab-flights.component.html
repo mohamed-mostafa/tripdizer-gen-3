@@ -1,11 +1,21 @@
-<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5" *ngIf="flights">
+<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5" *ngIf="flightOffers">
 
-  <div class="col-12 col-lg-3">
-    <c-app-flight-route [flights]="flights"></c-app-flight-route>
+  <div class="col-12 col-lg-3 d-none d-lg-block">
+    <c-app-flight-route [flightOffers]="flightOffers"></c-app-flight-route>
   </div>
 
 
   <div class="col-12 col-lg-6">
+      <div class="flights-box">
+          <div class="flights-title p-1">
+                <h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.best_flights' | translate }}</h6>
+          </div>
+
+          <div class="py-4">
+            <p>hi</p>
+          </div>
+            
+      </div>
     <!-- <h5 class="font-italic text-secondary view-edit">
       {{ 'request.estimated_cost.tab_flights.view_edit' | translate }}
     </h5>
@@ -16,7 +26,6 @@
           [isLast]="isLast" (offerChanged)="offerChanged($event)"></c-estimated-cost-flight-row>
       </div>
     </div> -->
-    <h4>flights slider here</h4>
   </div>
 
   <div class="col-12 col-lg-3">

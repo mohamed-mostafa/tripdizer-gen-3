@@ -1,5 +1,5 @@
+import { FlightOffer } from './../../flight-offer.model';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Flight, FlightOffer } from '../../flight.model';
 
 @Component({
 	selector: 'c-estimated-cost-flight-row-options',
@@ -7,7 +7,7 @@ import { Flight, FlightOffer } from '../../flight.model';
 	styleUrls: ['./flight-options.component.scss'],
 })
 export class FlightOptionsComponent {
-	@Input() flight: Flight;
+	@Input() flightOffers: FlightOffer;
 
 	@Output() offerChanged = new EventEmitter<FlightOffer>();
 

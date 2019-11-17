@@ -12,8 +12,8 @@
 		</div>
 	</div>
 	<div class="city-name text-capitalize" [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
-		<span>{{ flight.origin.name }}</span>
-		<span *ngIf="flight.numberOfNights">
+		<span>{{ flightOffer.origin.name }}</span>
+		<span *ngIf="flightOffer.numberOfNights">
 			:
 			{{
 				'request.estimated_cost.tab_flights.nights'
@@ -31,7 +31,7 @@
 	<div [ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'">
 		<c-estimated-cost-flight-row-options
 			*ngIf="isAnyFlightOfferExists; else noFlightOffers"
-			[flight]="flight"
+			[flightOffers]="flightOffer"
 			(offerChanged)="selectedOfferChanged($event)"
 		></c-estimated-cost-flight-row-options>
 		<ng-template #noFlightOffers>{{ 'request.estimated_cost.tab_flights.no_flights' | translate }} </ng-template>
@@ -54,10 +54,10 @@
 		[ngClass]="('dir' | translate) === 'ltr' ? 'mr-5 ml-lg-6' : 'mr-5 mr-lg-6'"
 	>
 		<span *ngIf="isFirst">
-			{{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flight.origin.name }}
+			{{ 'request.estimated_cost.tab_flights.start' | translate }} : {{ flightOffer.flightLegs.origin.name }}
 		</span>
 		<span *ngIf="isLast">
-			{{ 'request.estimated_cost.tab_flights.end' | translate }} : {{ flight.destination.name }}
+			{{ 'request.estimated_cost.tab_flights.end' | translate }} : {{ flightOffer.flightLegs.destination.name }}
 		</span>
 	</div>
 </ng-template>

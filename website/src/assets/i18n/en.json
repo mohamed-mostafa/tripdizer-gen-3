@@ -201,7 +201,8 @@
 				"arrival": "Arrival",
 				"select": "Select",
                 "selected": "Selected",
-                "flight_to": "Flight to"
+                "flight_to": "Flight to",
+                "best_flights": "Best flights"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

@@ -1,3 +1,4 @@
+import { FlightOffer, CitySequence, FlightRequest, FlightLeg } from './tab-flights/flight-offer.model';
 import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { CityAttractions, AttractionsRequest } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
@@ -13,7 +14,6 @@ import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
-import { CitySequence, Flight, FlightOffer, FlightRequest } from './tab-flights/flight.model';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
@@ -80,7 +80,7 @@ export class EstimatedCostService {
 		return this.selectedCities;
 	}
 
-	getFlights(): Observable<Array<Flight>> {
+	getFlightOffers(): Observable<Array<FlightOffer>> {
 		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
@@ -96,12 +96,13 @@ export class EstimatedCostService {
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 		};
 
-		return this.http.post<Array<Flight>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			map(flights =>
-				flights.map(flight => {
-					const city = citiesSequence.find(cs => cs.cityIata === flight.origin.iataCode);
-					flight.numberOfNights = city ? city.numberOfNights : null;
-					return flight;
+		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
+			map(flightOffers =>
+				flightOffers.map(flightLeg => {
+					const city = citiesSequence.find(cs => cs.cityIata === flightLeg.origin.iataCode);
+					flightLeg.numberOfNights = city ? city.numberOfNights : null;
+					console.log(flightLeg);
+					return flightLeg;
 				})
 			),
 			tap(() => {

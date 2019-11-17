@@ -1,7 +1,7 @@
+import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { Moment } from 'moment';
 import { LUTPreference } from '../shared/models/preference.model';
 import { CommonFunctions } from '../shared/utils';
-import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
 import { TravelHistory } from './travel-history.enum';

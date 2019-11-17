@@ -201,7 +201,8 @@
 				"arrival": "الوصول",
 				"select": "اختر",
 				"selected": "مختار",
-                "flight_to": "مسار الرحلة"
+                "flight_to": "مسار الرحلة",
+                "best_flights": "أفضل الرحلات"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

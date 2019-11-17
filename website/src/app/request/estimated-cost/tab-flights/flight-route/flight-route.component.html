@@ -3,7 +3,7 @@
 
 
   <div class="routes position-relative"> 
-    <div *ngFor="let flight of flights; let index = index; let isEven = even; let isFirst = first; let isLast = last">
+    <div *ngFor="let flight of flightOffers; let index = index; let isEven = even; let isFirst = first; let isLast = last">
 
       <div *ngIf="isFirst" class="min-height-60">
         <ng-container *ngTemplateOutlet="startAndEndSection"></ng-container>

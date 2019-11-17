@@ -1,5 +1,5 @@
+import { FlightOffer } from './../flight-offer.model';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Flight, FlightOffer } from '../flight.model';
 
 @Component({
 	selector: 'c-estimated-cost-flight-row',
@@ -7,16 +7,20 @@ import { Flight, FlightOffer } from '../flight.model';
 	styleUrls: ['./flight-row.component.scss'],
 })
 export class FlightRowComponent {
-	@Input() flight: Flight;
+	@Input() flightOffer: FlightOffer;
 	@Input() index: number;
 	@Input() isEven: boolean;
 	@Input() isFirst: boolean;
 	@Input() isLast: boolean;
 
-	@Output() offerChanged = new EventEmitter<FlightOffer>();
+    @Output() offerChanged = new EventEmitter<FlightOffer>();
+    
+    constructor() {
+        console.log(this.flightOffer);
+    }
 
 	get isAnyFlightOfferExists(): boolean {
-		return Boolean(this.flight) && Boolean(this.flight.flightOffers.length);
+		return Boolean(this.flightOffer) && Boolean(this.flightOffer.flightLegs.length);
 	}
 
 	selectedOfferChanged(flightOffer: FlightOffer): void {
