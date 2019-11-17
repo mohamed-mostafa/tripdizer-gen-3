@@ -54,7 +54,7 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
         leavingDate: departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, "Days").format('YYYY-MM-DD')
       }
       multiCitySearchRequest.tripSegments.push(newTripSegment);
-      departureMoment = departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, "Days");
+      departureMoment = moment(newTripSegment.leavingDate);
     }
 
     request.post(
