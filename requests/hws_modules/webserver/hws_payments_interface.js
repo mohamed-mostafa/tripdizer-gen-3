@@ -7,7 +7,7 @@ var notificationCallback = function(req, res) {
 		paymentsBusiness.notificationCallback(
 			type,
 			payload,
-			data => res.json(data),
+			data => res.sendStatus(204),
 			() =>
 				res
 					.status(500)
@@ -27,26 +27,6 @@ var responseCallback = function(req, res) {
 		var queryParams = req.query;
 		paymentsBusiness.responseCallback(
 			queryParams,
-			data => res.json(data),
-			() =>
-				res
-					.status(500)
-					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.")
-		);
-	} catch (error) {
-		console.error('An error occurred in /payments/response-callback');
-		console.error(error);
-		res
-			.status(500)
-			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
-	}
-};
-
-var readFiles = function(req, res) {
-	try {
-		var fileName = req.params.fileName;
-		paymentsBusiness.readFiles(
-			fileName,
 			data => res.send(data),
 			() =>
 				res
@@ -64,4 +44,3 @@ var readFiles = function(req, res) {
 
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;
-exports.readFiles = readFiles;

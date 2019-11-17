@@ -1,5 +1,6 @@
 var httpRequest = require('request');
-var fs = require('fs');
+let paymentsDao = require('../dataaccess/hws_payments_dao');
+var requestsDao = require('../dataaccess/hws_requests_dao.js');
 
 const CURRENCY = 'EGP';
 const WE_ACCEPT_PAYMENT_BASE_URL = 'https://accept.paymobsolutions.com/api/';
@@ -49,7 +50,21 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 				order_id: orderId,
 				currency: currency,
 				integration_id: WE_ACCEPT_INTEGRATION_ID,
-				lock_order_when_paid: false,
+				billing_data: {
+					apartment: '803',
+					email: 'claudette09@exa.com',
+					floor: '42',
+					first_name: 'Clifford',
+					street: 'Ethan Land',
+					building: '8028',
+					phone_number: '+86(8)9135210487',
+					shipping_method: 'PKG',
+					postal_code: '01898',
+					city: 'Jaskolskiburgh',
+					country: 'CR',
+					last_name: 'Nicolas',
+					state: 'Utah',
+				},
 			};
 			httpRequest.post(
 				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
@@ -83,29 +98,26 @@ var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 };
 
 var notificationCallback = (type, payload, onSuccess, onFailure) => {
-	fs.writeFile('notification_callback.json', JSON.stringify({ type, ...payload }), err => {
-		console.log(err);
-	});
-	onSuccess('s');
+	paymentsDao.save(payload.id, type, payload);
+	if (type === 'TRANSACTION' && payload.success) {
+		requestsDao.modifyRequestStatusById(
+			payload.order.merchant_order_id,
+			18,
+			() => {
+				onSuccess({ success: true });
+			},
+			() => {
+				onFailure({ success: false });
+			}
+		);
+	}
 };
 
 var responseCallback = (payload, onSuccess, onFailure) => {
-	console.log(payload);
-	fs.writeFile('response_callback.json', JSON.stringify(payload), err => {
-		console.log(err);
-	});
-	onSuccess('s');
-};
-
-var readFiles = (fileName, onSuccess, onFailure) => {
-	fs.readFile('' + fileName + '.json', (err, data) => {
-		console.log(data);
-		onSuccess(data);
-	});
+	onSuccess(payload.data.message);
 };
 
 exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
 exports.registeredOrderAndGeneratePaymentKey = registeredOrderAndGeneratePaymentKey;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;
-exports.readFiles = readFiles;

@@ -96,7 +96,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 
 			if (request.requiresPayment) {
 				request.paymentKey = await new Promise(resolve => {
-					paymentsService.generatePaymentKeyWithoutRegistration(
+					paymentsService.registeredOrderAndGeneratePaymentKey(
 						request,
 						({ paymentKey }) => {
 							requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});

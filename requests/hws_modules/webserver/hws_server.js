@@ -61,7 +61,6 @@ var start = function() {
 	// Payments
 	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
 	router.get('/payments/response-callback', paymentsInterface.responseCallback);
-	router.get('/payments/read-files/:fileName', paymentsInterface.readFiles);
 
 	// routing - end
 	app.use('/requests', router);
