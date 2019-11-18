@@ -114,7 +114,7 @@ var notificationCallback = (type, payload, onSuccess, onFailure) => {
 };
 
 var responseCallback = (payload, onSuccess, onFailure) => {
-	onSuccess(payload.data.message);
+	onSuccess(payload['data.message']);
 };
 
 exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
