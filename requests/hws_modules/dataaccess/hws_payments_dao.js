@@ -1,12 +1,12 @@
 let daoUtilities = require('./hws_dao_utilities');
 
-exports.save = async function(paymentId, paymentType, response) {
+exports.save = async function(paymentId, paymentType, createdAt, response) {
 	let firestore = daoUtilities.getFireStoreClient();
 	// Obtain a document reference.
 	const document = firestore
 		.doc(`payments/${paymentId}`)
 		.collection(paymentType)
-		.doc();
+		.doc(createdAt);
 	// Enter new data into the document.
 	try {
 		await document.set(response);
