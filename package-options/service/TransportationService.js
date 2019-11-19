@@ -79,6 +79,11 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
                   var flightLeg = flightOffers[i].flightLegs[j];
                   flightLeg.origin = await getCityByIata(flightLeg.origin);
                   flightLeg.destination = await getCityByIata(flightLeg.destination);
+                  flightLeg.segments = flightLeg.segments.map(segment => {
+                    segment.carrier.wideLogo = WIDE_LOGOS_ROOT + segment.carrier.iataCode + ".png";
+                    segment.carrier.squareLogo = SQUARE_LOGOS_ROOT + segment.carrier.iataCode + ".png";
+                    return segment;
+                  });
                 }
               }
               resolve(flightOffers);
