@@ -52,23 +52,23 @@
 			"have_plan": "Start my plan",
 			"surprise_me": "Surprise me"
 		},
-        "why_us": {
-            "why_us_title": "Why we're the best",
-            "item1_title": "Tailor-made trips",
-            "item1_description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs.",
-            "item2_title": "Enhanced travel experience",
-            "item2_description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip.",
-            "item3_title": "Hassle-free",
-            "item3_description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
-        },
-        "how_to": {
-            "how_to_title": "How to create your trip",
-            "image_1": "../../assets/img/how_to_01.png",
-            "image_2": "../../assets/img/how_to_02.png"
-        },
-        "testimonials": {
-            "testimonials_title": "What our clients say"
-        },
+		"why_us": {
+			"why_us_title": "Why we're the best",
+			"item1_title": "Tailor-made trips",
+			"item1_description": "We pay attention to the details to offer you a top quality customized travel experience, tailor made for your specific interests within your budget and according to your needs.",
+			"item2_title": "Enhanced travel experience",
+			"item2_description": "We focus on providing your trip with the elements that contribute to the quality and the travel experience. we'll be in charge of putting together your flight, accommodation and activities itinerary. All you need to do is relax, pack and enjoy your trip.",
+			"item3_title": "Hassle-free",
+			"item3_description": "We put a lot of effort into creating a detailed travel itineraries that will guide you through your trip. Through booking with us, you won't have to go through the hassle of researching your destination for weeks, instead, you will have tailor made trip that addresses your interests, budget and needs."
+		},
+		"how_to": {
+			"how_to_title": "How to create your trip",
+			"image_1": "../../assets/img/how_to_01.png",
+			"image_2": "../../assets/img/how_to_02.png"
+		},
+		"testimonials": {
+			"testimonials_title": "What our clients say"
+		},
 		"dialog": {
 			"title": "Need help?",
 			"description": "Leave your phone number and one of our agents will call you.",
@@ -200,11 +200,11 @@
 				"duration": "Duration",
 				"arrival": "Arrival",
 				"select": "Select",
-                "selected": "Selected",
-                "flight_to": "Flight to",
-                "best_flights": "Best flights",
-                "no_flight_offers": "Sorry, no offers available currently",
-                "choose": "Choose"
+				"selected": "Selected",
+				"flight_to": "Trip Route",
+				"choose_flights": "Choose a flight offer",
+				"no_flight_offers": "Sorry, no offers available currently",
+				"choose": "Choose"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",
@@ -234,12 +234,12 @@
 				"from": "from",
 				"arrival": "Arrival",
 				"depart": "Depart",
-                "nights": "Nights",
-                "payment_details": "Payment details",
-                "flights": "Flights",
-                "nights_in": "nights in",
-                "hotels": "Hotels",
-                "total_amount": "Total amount"
+				"nights": "Nights",
+				"payment_details": "Payment details",
+				"flights": "Flights",
+				"nights_in": "nights in",
+				"hotels": "Hotels",
+				"total_amount": "Total amount"
 			}
 		},
 		"form_layout": {
@@ -276,8 +276,8 @@
 			"purpose": "Purpose",
 			"preferences": "Preferences",
 			"destinations": "Destinations",
-            "estimated_cost": "Itinerary",
-            "summary": "summary",
+			"estimated_cost": "Itinerary",
+			"summary": "summary",
 			"travel_assistance": {
 				"title": "Travel Assistance",
 				"visaAssistance": "Visa",
@@ -418,34 +418,34 @@
 				}
 			]
 		}
-    }, 
-    "user": {
-        "user_core": {
-            "language_label": "عربى",
-            "blog": "Blog",
-            "my_profile": "My Profile",
-            "my_plans": "My Plans",
-            "my_booking": "My Booking",
-            "log_out": "Log out",
-            "language": "Language"
-        },
-        "side_bar": {
-            "my_profile": "My Profile",
-            "my_plans": "My Plans",
-            "my_booking": "My Booking",
-            "log_out": "Log out"
-        },
-        "user_info": {
-            "my_profile": "My Profile",
-            "first_name": "First Name",
-            "last_name": "Last Name",
-            "email": "Email Address",
-            "mobile": "Mobile Number",
-            "birth_date": "Date of birth",
-            "location": "Location"
-        },
-        "user_plans": {
-            "my_plans": "My Plans"
-        }
-    }
+	},
+	"user": {
+		"user_core": {
+			"language_label": "عربى",
+			"blog": "Blog",
+			"my_profile": "My Profile",
+			"my_plans": "My Plans",
+			"my_booking": "My Booking",
+			"log_out": "Log out",
+			"language": "Language"
+		},
+		"side_bar": {
+			"my_profile": "My Profile",
+			"my_plans": "My Plans",
+			"my_booking": "My Booking",
+			"log_out": "Log out"
+		},
+		"user_info": {
+			"my_profile": "My Profile",
+			"first_name": "First Name",
+			"last_name": "Last Name",
+			"email": "Email Address",
+			"mobile": "Mobile Number",
+			"birth_date": "Date of birth",
+			"location": "Location"
+		},
+		"user_plans": {
+			"my_plans": "My Plans"
+		}
+	}
 }
