@@ -212,9 +212,10 @@ export class EstimatedCostService {
 
 			cityAttractionsList.forEach(cityAttraction => {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
-				const stationFlightOffer = selectedFlightOffers.find(
-					flightOffer => flightOffer.destinationCityIata === cityAttraction.city.iataCode
-				);
+				var stationFlightLeg = null;
+				selectedFlightOffers.forEach(flightOffer => {
+					stationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === cityAttraction.city.iataCode);
+				});
 				const stationHotel = selectedHotels.find(hotel => hotel.city === cityAttraction.city.name);
 
 				if (stationCity) {
@@ -233,35 +234,35 @@ export class EstimatedCostService {
 							.format('DD/MM'),
 
 						// flights
-						flightDataExists: stationFlightOffer ? true : false,
-						depart_from: stationFlightOffer ? stationFlightOffer.segments[0].originDetails : 'origin',
-						arrive_to: stationFlightOffer
-							? stationFlightOffer.segments[stationFlightOffer.segments.length - 1].destinationDetails
+						flightDataExists: stationFlightLeg ? true : false,
+						depart_from: stationFlightLeg ? stationFlightLeg.segments[0].originDetails : 'origin',
+						arrive_to: stationFlightLeg
+							? stationFlightLeg.segments[stationFlightLeg.segments.length - 1].destinationDetails
 							: 'destination',
-						duration: stationFlightOffer ? stationFlightOffer.totalDurationInWords : 'Unknown',
-						travel_time: stationFlightOffer
-							? moment(stationFlightOffer.segments[0].departure).format('DD/MM HH:mm')
+						duration: stationFlightLeg ? stationFlightLeg.totalDurationInWords : 'Unknown',
+						travel_time: stationFlightLeg
+							? moment(stationFlightLeg.segments[0].departure).format('DD/MM HH:mm')
 							: 'Unknown time',
-						arrive_time: stationFlightOffer
-							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('DD/MM HH:mm')
+						arrive_time: stationFlightLeg
+							? moment(stationFlightLeg.segments[stationFlightLeg.segments.length - 1].arrival).format('DD/MM HH:mm')
 							: 'unknown time',
-						carrier_logo: stationFlightOffer ? stationFlightOffer.carrier.squareLogo : null,
-						depart_hour: stationFlightOffer
-							? moment(stationFlightOffer.segments[0].departure).format('HH:mm')
+						carrier_logo: stationFlightLeg ? stationFlightLeg.segments[0].carrier.squareLogo : null,
+						depart_hour: stationFlightLeg
+							? moment(stationFlightLeg.segments[0].departure).format('HH:mm')
 							: 'Unknown time',
-						arrive_hour: stationFlightOffer
-							? moment(stationFlightOffer.segments[stationFlightOffer.segments.length - 1].return).format('HH:mm')
+						arrive_hour: stationFlightLeg
+							? moment(stationFlightLeg.segments[stationFlightLeg.segments.length - 1].arrival).format('HH:mm')
 							: 'unknown time',
-						arrive_code: stationFlightOffer ? stationFlightOffer.arrival.destination : "",
-						depart_code: stationFlightOffer ? stationFlightOffer.departure.origin : "",
+						arrive_code: stationFlightLeg ? stationFlightLeg.destination.iataCode : "",
+						depart_code: stationFlightLeg ? stationFlightLeg.origin.iataCode : "",
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
 						hotel: stationHotel ? stationHotel.name : 'None Selected',
 						hotel_rate: stationHotel ? stationHotel.stars : 0,
 						hotel_address: stationHotel ? stationHotel.address : 'No Hotel Selected',
-						accommodation_from: stationFlightOffer
-							? moment(stationFlightOffer.segments[0].departure).format('DD MMM YYYY')
+						accommodation_from: stationFlightLeg
+							? moment(stationFlightLeg.segments[0].departure).format('DD MMM YYYY')
 							: 'Unknown time',
 						accommodation_to: moment(tripStartDate)
 							// tslint:disable-next-line: deprecation
@@ -286,9 +287,10 @@ export class EstimatedCostService {
 			// add an extra station, which is the origin step (e.g. return to cairo)
 			if (this.summaryStations.length > 0) {
 				const lastStationAirport = this.requestService.getProperty('travelingFrom');
-				const lastStationFlightOffer = selectedFlightOffers.find(
-					flightOffer => flightOffer.destinationCityIata === lastStationAirport.iataCode
-				);
+				var lastStationFlightLeg = null;
+				selectedFlightOffers.forEach(flightOffer => {
+					lastStationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === lastStationAirport.iataCode)
+				})
 				const lastStation: Station = {
 					// city
 					image: '',
@@ -298,41 +300,41 @@ export class EstimatedCostService {
 					nights_count: 0,
 
 					// flights
-					flightDataExists: lastStationFlightOffer ? true : false,
-					depart_from: lastStationFlightOffer ? lastStationFlightOffer.segments[0].originDetails : 'origin',
-					arrive_to: lastStationFlightOffer
-						? lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].destinationDetails
+					flightDataExists: lastStationFlightLeg ? true : false,
+					depart_from: lastStationFlightLeg ? lastStationFlightLeg.segments[0].originDetails : 'origin',
+					arrive_to: lastStationFlightLeg
+						? lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].destinationDetails
 						: 'destination',
-					duration: lastStationFlightOffer ? lastStationFlightOffer.totalDurationInWords : 'Unknown',
-					travel_time: lastStationFlightOffer
-						? moment(lastStationFlightOffer.segments[0].departure).format('DD/MM HH:mm')
+					duration: lastStationFlightLeg ? lastStationFlightLeg.totalDurationInWords : 'Unknown',
+					travel_time: lastStationFlightLeg
+						? moment(lastStationFlightLeg.segments[0].departure).format('DD/MM HH:mm')
 						: 'Unknown time',
-					arrive_time: lastStationFlightOffer
-						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
+					arrive_time: lastStationFlightLeg
+						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
 							'DD/MM HH:mm'
 							// tslint:disable-next-line: indent
 						)
 						: 'unknown time',
-					carrier_logo: lastStationFlightOffer ? lastStationFlightOffer.carrier.squareLogo : null,
+					carrier_logo: lastStationFlightLeg ? lastStationFlightLeg.segments[0].carrier.squareLogo : null,
 
 					// dates
-					from: lastStationFlightOffer
-						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format('DD/MM')
+					from: lastStationFlightLeg
+						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format('DD/MM')
 						: '',
 					to: null,
 
-					depart_hour: lastStationFlightOffer
-						? moment(lastStationFlightOffer.segments[0].departure).format('HH:mm')
+					depart_hour: lastStationFlightLeg
+						? moment(lastStationFlightLeg.segments[0].departure).format('HH:mm')
 						: 'Unknown time',
-					arrive_hour: lastStationFlightOffer
-						? moment(lastStationFlightOffer.segments[lastStationFlightOffer.segments.length - 1].return).format(
+					arrive_hour: lastStationFlightLeg
+						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
 							'HH:mm'
 							// tslint:disable-next-line: indent
 						)
 						: 'unknown time',
 
-					arrive_code: lastStationFlightOffer.arrival.destination,
-					depart_code: lastStationFlightOffer.departure.origin,
+					arrive_code: lastStationFlightLeg.destination.iataCode,
+					depart_code: lastStationFlightLeg.origin.iataCode,
 
 					// accommodation
 					accommodationDataExists: false,

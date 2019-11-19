@@ -25,21 +25,9 @@ export class TabFlightsComponent {
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
 		});
 
-		console.log(this.flightPaths);
 
 		service.getFlightOffers().subscribe(flightOffers => {
-			console.log(flightOffers);
 			this.flightOffers = flightOffers;
-
-			this.flightOffers.forEach(flightOffer => {
-				flightOffer.flightLegs.forEach(flightLeg => {
-					flightLeg.segments.forEach(segment => {
-						segment.departure = moment(segment.departure).format('HH:mm');
-						segment.arrival = moment(segment.arrival).format('HH:mm');
-					});
-				});
-			});
-
 			this.flightOffers[0].selected = true;
 			this.selectedFlightOffers.push(this.flightOffers[0]);
 
@@ -49,7 +37,6 @@ export class TabFlightsComponent {
 	}
 
 	selectOffer(offer) {
-		console.log(offer);
 		this.flightOffers.forEach(flightOffer => {
 			if (offer.fareSourceCode === flightOffer.fareSourceCode) {
 				flightOffer.selected = true;
@@ -59,16 +46,9 @@ export class TabFlightsComponent {
 			this.selectedFlightOffers = [];
 			this.selectedFlightOffers.push(offer);
 		});
-		console.log(this.selectedFlightOffers);
 	}
 
 	next(): void {
-		// const selectedOffers = Object.keys(this.selectedFlightOffers).map(key => {
-		// 	const returnedFlightOffer: FlightOffer = this.selectedFlightOffers[key];
-		// 	delete returnedFlightOffer.flightIndex;
-		// 	return returnedFlightOffer;
-		// });
-
 		this.service.setSelectedFlightOffers(this.selectedFlightOffers);
 		this.service.setCurrentTabIndex(2);
 	}

@@ -23,12 +23,12 @@
                   <div class="row">
                     <div class="col-3 text-center">
                       <div class="carrier-logo d-inline-block">
-                            <img src="{{segment.carrier.squareLogo}}" class="mt-1 mx-auto" alt="">
+                        <img src="{{segment.carrier.wideLogo}}" class="mt-1 mx-auto" alt="">
                       </div>
                     </div>
                     <div class="col-3 text-center">
                       <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
-                      <p class="mb-0 font-weight-bold">{{segment.departure}}</p>
+                      <p class="mb-0 font-weight-bold">{{segment.departure | date:'shortTime'}}</p>
                       <p class="mb-0">{{segment.origin}}</p>
                     </div>
                     <div class="col-3 text-center">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-3 text-center">
                       <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
-                      <p class="mb-0 font-weight-bold">{{segment.arrival}}</p>
+                      <p class="mb-0 font-weight-bold">{{segment.arrival | date:'shortTime'}}</p>
                       <p class="mb-0">{{segment.destination}}</p>
                     </div>
                   </div>
@@ -51,7 +51,8 @@
               <div class="row">
                 <div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP' }}</div>
                 <div class="col-6 text-right text-blue font-weight-bold">
-                  <span class="mr-2 choose-btn" (click)="selectOffer(offer)">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+                  <span class="mr-2 choose-btn"
+                    (click)="selectOffer(offer)">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
                   <mat-checkbox class="float-right mr-1" [checked]="offer.selected" [disableRipple]="true"
                     (click)="$event.preventDefault()"></mat-checkbox>
                 </div>
