@@ -38,3 +38,5 @@ env_variables:
   ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION: "TRUE"
   GOOGLE_PEOPLE_CONTACTS_ACCOUNT: "test@tripdizer.com"
   PROJECT_NAME: "tripdizer-dev"
+  FLIGHT_BOOKING_PUBSUB_TOPIC_NAME: flight-booking-topic
+  HOTEL_BOOKING_PUBSUB_TOPIC_NAME: hotel-booking-topic
