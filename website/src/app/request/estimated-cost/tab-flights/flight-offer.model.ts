@@ -20,7 +20,9 @@ export class FlightOffer {
 	arrival?: Segment;
 	numberOfStops?: number;
 	numberOfNights?: number;
-	flightLegs: Array<FlightLeg>;
+    flightLegs: Array<FlightLeg>;
+    selected?: boolean;
+    fareSourceCode: string;
 }
 
 export class FlightLeg {

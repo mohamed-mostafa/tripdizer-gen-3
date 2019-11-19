@@ -14,6 +14,29 @@
 
   .flight-offer-slide {
     min-height: 6.25rem;
+
+    .carrier-logo {
+        height: 100%;
+        vertical-align: middle;
+
+      img {
+        max-width: 100%;
+        width: auto;
+      }
+
+    }
+
+    p {
+      font-size: .8rem;
+    }
+
+    hr {
+      border-top: 1px solid #2680eb;
+    }
+
+    .choose-btn {
+        cursor: pointer;
+    }
   }
 }
 

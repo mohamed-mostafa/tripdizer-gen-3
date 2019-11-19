@@ -203,7 +203,8 @@
                 "selected": "Selected",
                 "flight_to": "Flight to",
                 "best_flights": "Best flights",
-                "no_flight_offers": "Sorry, no offers available currently"
+                "no_flight_offers": "Sorry, no offers available currently",
+                "choose": "Choose"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",

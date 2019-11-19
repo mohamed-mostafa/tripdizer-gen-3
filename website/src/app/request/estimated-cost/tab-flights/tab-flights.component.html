@@ -14,19 +14,55 @@
 
         <div class="px-4 mt-3">
 
-          <owl-carousel *ngIf="flightOffers.length > 0" class="carousel" #owlElement [options]="options" [carouselClasses]="['row']">
+          <owl-carousel *ngIf="flightOffers.length > 0" class="carousel" #owlElement [options]="options"
+            [carouselClasses]="['row']">
             <div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
 
-                <div *ngFor="let flightLeg of offer.flightLegs">
-                        <p>flightLeg</p>
+              <div *ngFor="let flightLeg of offer.flightLegs">
+                <div *ngFor="let segment of flightLeg.segments" class="mb-1">
+                  <div class="row">
+                    <div class="col-3 text-center">
+                      <div class="carrier-logo d-inline-block">
+                            <img src="{{segment.carrier.squareLogo}}" class="mt-1 mx-auto" alt="">
+                      </div>
+                    </div>
+                    <div class="col-3 text-center">
+                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
+                      <p class="mb-0 font-weight-bold">{{segment.departure}}</p>
+                      <p class="mb-0">{{segment.origin}}</p>
+                    </div>
+                    <div class="col-3 text-center">
+                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.duration' | translate }}</p>
+                      <p class="mb-0 font-weight-bold">{{segment.totalDurationInWords}}</p>
+                      <p class="mb-0">
+                        <img src="../../../../assets/img/arrow_2.svg" alt="">
+                      </p>
+                    </div>
+                    <div class="col-3 text-center">
+                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
+                      <p class="mb-0 font-weight-bold">{{segment.arrival}}</p>
+                      <p class="mb-0">{{segment.destination}}</p>
+                    </div>
+                  </div>
                 </div>
-              
+                <hr />
+              </div>
+
+              <div class="row">
+                <div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP' }}</div>
+                <div class="col-6 text-right text-blue font-weight-bold">
+                  <span class="mr-2 choose-btn" (click)="selectOffer(offer)">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+                  <mat-checkbox class="float-right mr-1" [checked]="offer.selected" [disableRipple]="true"
+                    (click)="$event.preventDefault()"></mat-checkbox>
+                </div>
+              </div>
+
             </div>
 
           </owl-carousel>
 
           <p *ngIf="flightOffers.length < 1">
-                {{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
+            {{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
           </p>
 
         </div>
