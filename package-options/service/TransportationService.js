@@ -81,12 +81,12 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
                   flightLeg.destination = await getCityByIata(flightLeg.destination);
                 }
               }
-              resolve({ flightOffers: flightOffers });
+              resolve(flightOffers);
             } else {
               console.warn(
                 "No flight offers found for request: " + JSON.stringify(transportationSearchRequest)
               );
-              resolve({ flightOffers: {} });
+              resolve([]);
             }
           }
         }
