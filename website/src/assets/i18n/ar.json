@@ -202,7 +202,8 @@
 				"select": "اختر",
 				"selected": "مختار",
                 "flight_to": "مسار الرحلة",
-                "best_flights": "أفضل الرحلات"
+                "best_flights": "أفضل الرحلات",
+                "no_flight_offers": "عذرا، لا توجد عروض رحلات فى الوقت الحالى"
 			},
 			"tab_accommodations": {
 				"title": "الفنادق",

@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
@@ -97,14 +97,15 @@ export class EstimatedCostService {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			map(flightOffers =>
-				flightOffers.map(flightLeg => {
-					const city = citiesSequence.find(cs => cs.cityIata === flightLeg.origin.iataCode);
-					flightLeg.numberOfNights = city ? city.numberOfNights : null;
-					console.log(flightLeg);
-					return flightLeg;
-				})
-			),
+			// tap((flightOffers) => {
+			// 	flightOffers.forEach((flightOffer) => {
+			// 		flightOffer.flightLegs.map(flightLeg => {
+			// 			const city = citiesSequence.find(cs => cs.cityIata === flightLeg.origin.iataCode);
+			// 			flightLeg.numberOfNights = city ? city.numberOfNights : null;
+			// 			return flightLeg;
+			// 		});
+			// 	});
+			// }),
 			tap(() => {
 				this.setIsLoading(false, '');
 			})

@@ -24,8 +24,8 @@ export class FlightOffer {
 }
 
 export class FlightLeg {
-	origin: Origin;
-	destination: Destination;
+	origin: City;
+	destination: City;
 	flightDay: string;
 	segments: Array<Segment>;
 	carrier: { iataCode: string, name: string };
@@ -33,6 +33,7 @@ export class FlightLeg {
 	totalDurationInWords: string;
 	transitDurationInMinutes: number;
 	transitDurationInWords: string;
+	numberOfNights?: number;
 }
 
 export class Segment {
@@ -61,18 +62,4 @@ export class CitySequence {
 	countryIso: string;
 	cityIata: string;
 	numberOfNights?: number;
-}
-
-export class Origin {
-	iataCode: string;
-	name: string;
-	latitude: number;
-	longitude: number;
-}
-
-export class Destination {
-	iataCode: string;
-	name: string;
-	latitude: number;
-	longitude: number;
 }

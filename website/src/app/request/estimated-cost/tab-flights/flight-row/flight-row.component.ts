@@ -13,11 +13,11 @@ export class FlightRowComponent {
 	@Input() isFirst: boolean;
 	@Input() isLast: boolean;
 
-    @Output() offerChanged = new EventEmitter<FlightOffer>();
-    
-    constructor() {
-        console.log(this.flightOffer);
-    }
+	@Output() offerChanged = new EventEmitter<FlightOffer>();
+
+	constructor() {
+		console.log(this.flightOffer);
+	}
 
 	get isAnyFlightOfferExists(): boolean {
 		return Boolean(this.flightOffer) && Boolean(this.flightOffer.flightLegs.length);

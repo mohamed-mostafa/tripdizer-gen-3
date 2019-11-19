@@ -2,6 +2,7 @@ import { FlightOffer } from './flight-offer.model';
 import { Component } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
+import { CityDTO } from '../tab-cities/city-dto.model';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -10,34 +11,49 @@ import { RequestService } from '../../request.service';
 })
 export class TabFlightsComponent {
 	flightOffers: Array<FlightOffer>;
-	flightPaths: Array<{ lat: number; lng: number }>;
 	selectedFlightOffers = {};
 	isLoading: boolean;
-	get totalCost(): number {
-		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
-	}
+	flightPaths: Array<{ lat: number; lng: number }> = [];
+	options: any;
+	// get totalCost(): number {
+	// 	return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
+	// }
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsFlightsTabVisited(true);
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
-		service.getFlightOffers().subscribe(flights => {
-			// this.flights = flights.map((flight, flightIndex) => ({
-			// 	...flight,
-			// 	flightOffers: flight.flightOffers.map((fo, flightOfferIndex) => ({
+
+		service.getSelectedCities().forEach(city => {
+			const cityLatLong = city.coordinates.split(',');
+			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
+		});
+
+		console.log(this.flightPaths);
+
+		service.getFlightOffers().subscribe(flightOffers => {
+			console.log(flightOffers);
+			this.flightOffers = flightOffers;
+			// this.flightOffers = flightOffers.map((flightOffer, flightIndex) => ({
+			// 	...flightOffer,
+			// 	flightOffers: flightOffers.map((fo, flightOfferIndex) => ({
 			// 		...fo,
 			// 		flightIndex,
 			// 		flightOfferIndex,
-			// 		departure: [...fo.segments].shift(),
-			// 		arrival: [...fo.segments].pop(),
-			// 		numberOfStops: fo.segments.length - 1,
+			// 		departure: [...fo.flightLegs['0'].segments].shift(),
+			// 		arrival: [...fo.flightLegs[fo.flightLegs.length - 1].segments].pop(),
+			// 		numberOfStops: fo.flightLegs.segments.length - 1,
 			// 	})),
 			// }));
-			// this.flightPaths = flights
-			// 	.filter(flight => flight.origin && flight.origin.latitude && flight.origin.longitude)
-			// 	.map(flight => ({ lat: flight.origin.latitude, lng: flight.origin.longitude }));
-			this.flightOffers = flights;
-			console.log(flights);
+			// console.log(flightOffers);
+			// this.flightPaths = flightOffers
+			// 	.filter(flightOffer => flightOffer.origin && flightOffer.origin.latitude && flightOffer.origin.longitude)
+			// 	.map(flightOffer => ({ lat: flightOffer.origin.latitude, lng: flightOffer.origin.longitude }));
+			// this.flightOffers = flightOffers;
+			// console.log(flightOffers);
+			// console.log(this.flightPaths);
 		});
+
+		this.setSliderOptions();
 	}
 
 	next(): void {
@@ -55,9 +71,23 @@ export class TabFlightsComponent {
 		this.service.setCurrentTabIndex(0);
 	}
 
-	offerChanged(flightOffer: FlightOffer): void {
-		if (flightOffer) {
-			this.selectedFlightOffers[flightOffer.flightIndex] = flightOffer;
-		}
+	// offerChanged(flightOffer: FlightOffer): void {
+	// 	if (flightOffer) {
+	// 		this.selectedFlightOffers[flightOffer.flightIndex] = flightOffer;
+	// 	}
+	// }
+
+	setSliderOptions() {
+		this.options = {
+			nav: true,
+			dots: false,
+			responsive: {
+				0: {
+					items: 1,
+					margin: 10,
+					slideBy: 1,
+				}
+			}
+		};
 	}
 }

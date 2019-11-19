@@ -75,6 +75,10 @@ export class RequestService {
 		return path.split('/')[0];
 	}
 
+	getRequestTravelFromCity() {
+		return this.requestData.getPureRequest().travelingFrom;
+	}
+
 	setIsCitiesTabVisited(value: boolean): void {
 		this.isCitiesTabVisited.next(value);
 	}
@@ -381,6 +385,6 @@ export class RequestService {
 		this.http
 			.post<boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
 			.pipe(finalize(() => this.isLoading.next({ show: false, message: '' })))
-			.subscribe(() => {});
+			.subscribe(() => { });
 	}
 }
