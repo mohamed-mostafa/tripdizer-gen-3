@@ -119,9 +119,9 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
           });
           flightOffer.flightLegs.forEach(flightLeg => {
             flightLeg.carrier = flightLeg.segments.length != 0 ? flightLeg.segments[0].carrier : null;
-            flightLeg.totalDurationInMinutes = (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000;
+            flightLeg.totalDurationInMinutes = flightLeg.segments.length > 0 ? (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000 : 0;
             flightLeg.totalDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000);
-            flightLeg.transitDurationInMinutes = calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000;
+            flightLeg.transitDurationInMinutes = flightLeg.segments.length > 0 ? calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000 : 0;
             flightLeg.transitDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000);
 
           })
