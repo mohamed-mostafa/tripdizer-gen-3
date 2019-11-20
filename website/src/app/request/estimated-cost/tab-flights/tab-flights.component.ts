@@ -1,8 +1,8 @@
+import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
-import * as moment from 'moment';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -10,11 +10,15 @@ import * as moment from 'moment';
 	styleUrls: ['./tab-flights.component.scss'],
 })
 export class TabFlightsComponent {
+
+	@ViewChild('owlElement') owlElement: OwlCarousel;
+
 	flightOffers: Array<FlightOffer>;
 	selectedFlightOffers = [];
 	isLoading: boolean;
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
+	selectedSlide = 0;
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsFlightsTabVisited(true);
@@ -69,5 +73,18 @@ export class TabFlightsComponent {
 				}
 			}
 		};
+	}
+
+	goToSlide(i) {
+		this.owlElement.to([i]);
+		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex;
+	}
+
+	nextSlide() {
+		this.owlElement.next();
+	}
+
+	previousSlide() {
+		this.owlElement.previous();
 	}
 }

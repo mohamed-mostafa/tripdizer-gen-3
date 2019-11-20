@@ -12,9 +12,9 @@
           <h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.choose_flights' | translate }}</h6>
         </div>
 
-        <div class="px-4 mt-3">
+        <div class="mt-3">
 
-          <owl-carousel *ngIf="flightOffers.length > 0" class="carousel" #owlElement [options]="options"
+          <owl-carousel *ngIf="flightOffers?.length > 0" class="carousel" #owlElement [options]="options"
             [carouselClasses]="['row']">
             <div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
 
@@ -57,8 +57,11 @@
                     (click)="$event.preventDefault()"></mat-checkbox>
                 </div>
               </div>
+              <hr />
 
             </div>
+
+
 
           </owl-carousel>
 
@@ -66,6 +69,15 @@
             {{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
           </p>
 
+        </div>
+
+        <div class="row mb-2">
+          <div class="col-12 text-center slider-pagination">
+            <span (click)="previousSlide()">‹</span>
+            <span *ngFor="let offer of flightOffers; let i = index" class="mx-1"
+              (click)="goToSlide(i)">{{ i + 1 }}</span>
+            <span (click)="nextSlide()">›</span>
+          </div>
         </div>
 
       </div>
