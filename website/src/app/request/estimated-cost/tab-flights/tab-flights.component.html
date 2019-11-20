@@ -75,7 +75,7 @@
           <div class="col-12 text-center slider-pagination">
             <span (click)="previousSlide()">‹</span>
             <span *ngFor="let offer of flightOffers; let i = index" class="mx-1"
-              (click)="goToSlide(i)">{{ i + 1 }}</span>
+              (click)="goToSlide(i)" [class.selected-slide-index]="i+1 === selectedSlide">{{ i + 1 }}</span>
             <span (click)="nextSlide()">›</span>
           </div>
         </div>

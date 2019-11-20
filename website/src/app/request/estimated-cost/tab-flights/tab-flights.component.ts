@@ -18,7 +18,7 @@ export class TabFlightsComponent {
 	isLoading: boolean;
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
-	selectedSlide = 0;
+	selectedSlide = 1;
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		requestService.setIsFlightsTabVisited(true);
@@ -77,14 +77,21 @@ export class TabFlightsComponent {
 
 	goToSlide(i) {
 		this.owlElement.to([i]);
-		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex;
+		this.updateCurrentSlideIndex();
 	}
 
 	nextSlide() {
 		this.owlElement.next();
+		this.updateCurrentSlideIndex();
 	}
 
 	previousSlide() {
 		this.owlElement.previous();
+		this.updateCurrentSlideIndex();
+	}
+
+	updateCurrentSlideIndex() {
+		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
+		console.log(this.selectedSlide);
 	}
 }
