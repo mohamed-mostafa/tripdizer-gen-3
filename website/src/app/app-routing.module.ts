@@ -6,6 +6,7 @@ import { PathResolveService } from './core/not-found/path-resolve.service';
 const routes: Routes = [
 	{ path: '', loadChildren: './home/home.module#HomeModule' },
     { path: 'request', loadChildren: './request/request.module#RequestModule' },
+    { path: 'payment-confirm', loadChildren: './payment-confirm/payment-confirm.module#PaymentConfirmModule' },
 	{ path: 'user', loadChildren: './user/user.module#UserModule' },
 	{
 		path: '**',
