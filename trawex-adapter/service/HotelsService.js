@@ -2,7 +2,7 @@
 
 const httpRequest = require("request");
 let moment = require("moment");
-
+let writer = require('../utils/writer');
 const TRAWEX_BASE_ENDPOINT =
   process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
 const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
@@ -115,20 +115,11 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else {
           resolve(data.hotels.length ? data.hotels[0] : {});
         }
@@ -158,25 +149,13 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else if (!data.status && !data.isRateAvailable) {
-          reject({
-            code: 404,
-            message: [data.errors.message]
-          });
+          reject(reject(writer.respondWithCode(404, [data.errors.message])))
         } else {
           resolve(data.result.roomRate.perBookingRates.map(mapHotelOffer));
         }
@@ -215,25 +194,13 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else if (!data.status && !data.isRateAvailable) {
-          reject({
-            code: 404,
-            message: [data.errors.message]
-          });
+          reject(reject(writer.respondWithCode(404, [data.errors.message])))
         } else {
           resolve({ preBookingToken: data.PreBookingToken });
         }
@@ -319,20 +286,11 @@ const searchHotelsAPI = (
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else {
           if (data.status.moreResults === "true") {
             getMoreHotelsAPI(
@@ -369,20 +327,11 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else {
           if (data.status.moreResults === "true") {
             getMoreHotelsAPI(
@@ -470,25 +419,13 @@ const bookHotel = (language, bookHotelRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          reject({
-            code: 500,
-            message: [error.toString()]
-          });
+          reject(writer.respondWithCode(500, [error.toString()]));
         } else if (response.statusCode != 200) {
-          reject({
-            code: response.statusCode,
-            message: [response.statusMessage]
-          });
+          reject(writer.respondWithCode(response.statusCode, [response.statusMessage]));
         } else if (data.status && data.status.errors) {
-          reject({
-            code: 400,
-            message: data.status.errors.map(e => e.errorMessage)
-          });
+          reject(writer.respondWithCode(400, [data.status.errors.map(e => e.errorMessage)]));
         } else if (!data.status && !data.isRateAvailable) {
-          reject({
-            code: 404,
-            message: [data.errors.message]
-          });
+          reject(reject(writer.respondWithCode(404, [data.errors.message])))
         } else {
           resolve({
             bookingStatus: data.status,
@@ -497,9 +434,9 @@ const bookHotel = (language, bookHotelRequest) => {
             clientReference: data.clientReference,
             bookingDetails: data.booking
               ? {
-                  ...data.booking.roomBookingDetails,
-                  roomCount: data.booking.roomBookingDetails.room_count
-                }
+                ...data.booking.roomBookingDetails,
+                roomCount: data.booking.roomBookingDetails.room_count
+              }
               : null
           });
         }

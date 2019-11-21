@@ -903,8 +903,8 @@ definitions:
         example: "M"
       dateOfBirth:
         type: "string"
-        format: "date-time"
-        example: "1984-02-01T00:00:00Z"
+        format: "date"
+        example: "1984-02-01"
       ageGroup:
         type: "string"
         example: "adult | kid | infant"
@@ -937,7 +937,7 @@ definitions:
       lastName: "Mostafa"
       title: "Mr"
       gender: "M"
-      dateOfBirth: "1984-02-01T00:00:00Z"
+      dateOfBirth: "1984-02-01"
       ageGroup: "adult"
       nationality: "EG"
       email: "email"

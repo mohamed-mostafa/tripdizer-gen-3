@@ -349,9 +349,9 @@ exports.bookFlight = function (language, bookFlightRequest) {
       passport_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName), // "A08102235",
       passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
       issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
-      email_id: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.email).reduce((result, nextName) => result + "<br>" + nextName), // "mohamed@tripdizer.com",
-      mobile_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.phone).reduce((result, nextName) => result + "<br>" + nextName), // 19739626
       nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+      email_id: bookFlightRequest.adultsPNRInfoList[0].email, // "mohamed@tripdizer.com",
+      mobile_no: bookFlightRequest.adultsPNRInfoList[0].phone, // 19739626
       frequentFlyrNum: null,
       adultmealplan: null,
       // children
@@ -376,7 +376,6 @@ exports.bookFlight = function (language, bookFlightRequest) {
       // infant_issue_country: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
       infantMealplan: null,
     }
-    console.log(params);
     httpRequest.get(
       {
         url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
