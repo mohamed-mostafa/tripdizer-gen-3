@@ -13,7 +13,7 @@ let TRAWEX_FLIGHTS_FARE_RULES_URL = "/fare_rules";
 let TRAWEX_FLIGHTS_REVALIDATE_FARE_URL = "/revalidate";
 let TRAWEX_FLIGHTS_BOOK_URL = "/book";
 let TRAWEX_FLIGHTS_TICKET_ORDER_URL = "/ticket_order";
-let ENABLE_TRAWEX_PROXY = "Y";
+let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";

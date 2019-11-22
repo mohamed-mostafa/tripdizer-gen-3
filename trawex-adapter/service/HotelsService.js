@@ -21,7 +21,7 @@ const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
-const ENABLE_TRAWEX_PROXY = "Y";
+let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 const config = {
   user_id: TRAWEX_USERNAME,
   user_password: TRAWEX_PASSWORD,
