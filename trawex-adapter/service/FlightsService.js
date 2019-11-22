@@ -13,12 +13,13 @@ let TRAWEX_FLIGHTS_FARE_RULES_URL = "/fare_rules";
 let TRAWEX_FLIGHTS_REVALIDATE_FARE_URL = "/revalidate";
 let TRAWEX_FLIGHTS_BOOK_URL = "/book";
 let TRAWEX_FLIGHTS_TICKET_ORDER_URL = "/ticket_order";
+let ENABLE_TRAWEX_PROXY = true;
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
-let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019"
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95"
+let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -266,7 +267,7 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_FARE_RULES_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -293,7 +294,7 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_REVALIDATE_FARE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -378,7 +379,7 @@ exports.bookFlight = function (language, bookFlightRequest) {
     }
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: params
       },
       function (error, response, data) {
@@ -424,7 +425,7 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TICKET_ORDER_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
           target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
@@ -466,7 +467,7 @@ function authenticate() {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AUTHENTICATE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
       },
       function (error, response, data) {
@@ -489,7 +490,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
           session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
