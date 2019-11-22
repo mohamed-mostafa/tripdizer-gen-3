@@ -21,7 +21,7 @@ const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
-const ENABLE_TRAWEX_PROXY = true;
+const ENABLE_TRAWEX_PROXY = "Y";
 const config = {
   user_id: TRAWEX_USERNAME,
   user_password: TRAWEX_PASSWORD,
@@ -104,7 +104,7 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
           TRAWEX_BASE_ENDPOINT +
           TRAWEX_HOTELS_ROOT +
           TRAWEX_HOTELS_SPECIFIC_CONTENT,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
         qs: {
           ...config,
@@ -134,7 +134,7 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
       {
         url:
           TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
         body: {
           ...config,
@@ -170,7 +170,7 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
       {
         url:
           TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
         body: {
           ...config,
@@ -269,7 +269,7 @@ const searchHotelsAPI = (
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH,
         json: true,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         body: {
           ...config,
           city_name: city,
@@ -317,7 +317,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
     httpRequest.get(
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
         qs: {
           ...config,
@@ -388,7 +388,7 @@ const bookHotel = (language, bookHotelRequest) => {
     httpRequest.post(
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK,
-        proxy: ENABLE_TRAWEX_PROXY ? TRAWEX_PROXY_ENDPOINT : null,
+        proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
         body: {
           ...config,
