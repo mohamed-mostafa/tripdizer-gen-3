@@ -1,9 +1,9 @@
 FROM node:10-alpine
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
+RUN mkdir -p /opt/tripdizer/trawex-adapter/node_modules
+WORKDIR /opt/tripdizer/trawex-adapter
 COPY package*.json ./
 USER node
 RUN npm install
-COPY --chown=node:node . .
+COPY . .
 EXPOSE 80
 CMD [ "npm", "start" ]
