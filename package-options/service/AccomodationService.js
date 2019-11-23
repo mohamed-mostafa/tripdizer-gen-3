@@ -3,7 +3,7 @@ let moment = require("moment");
 
 const TRAWEX_ADAPTER_ENDPOINT =
   process.env.TRAWEX_ADAPTER_ENDPOINT ||
-  "https://tripdizer-trawex-adapter-dot-tripdizer-dev.appspot.com/trawex-adapter/1.0.0";
+  "http://localhost:8085/trawex-adapter/1.0.0";
 const MASTER_DATA_ENDPOINT =
   process.env.MASTER_DATA_ENDPOINT || "http://localhost:8083/master-data";
 
@@ -74,8 +74,8 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
         resolve(accomodationOffers);
       })
       .catch(err => {
-        console.err("Failed to retrieve accomodation offers for: " + JSON.stringify(accomomdationSearchRequest));
-        console.err(err);
+        console.error("Failed to retrieve accomodation offers for: " + JSON.stringify(accomomdationSearchRequest));
+        console.error(err);
         reject(accomodationOffers);
       });
   });
