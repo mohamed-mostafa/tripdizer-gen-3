@@ -21,9 +21,9 @@
       "path": "../package-options/index.js"
     },
     {
-      "route": "flights",
+      "route": "trawex-adapter",
       "address": "http://localhost:8085",
-      "path": "../flights-adapter/index.js"
+      "path": "../trawex-adapter/index.js"
     }
   ]
 }

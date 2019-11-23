@@ -35,3 +35,6 @@ env_variables:
   TRAWEX_SOURCE_IP_ADDRESS: 34.90.113.143
   TRAWEX_PROXY_ENDPOINT: "http://35.242.174.95:3128"
   TRAWEX_ENVIRONMENT: Test
+  PROJECT_ID: tripdizer-dev
+  FLIGHT_BOOKING_SUBSCRIPTION_NAME: flight-booking-subscription
+  HOTEL_BOOKING_SUBSCRIPTION_NAME: hotel-booking-subscription

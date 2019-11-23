@@ -13,12 +13,13 @@ let TRAWEX_FLIGHTS_FARE_RULES_URL = "/fare_rules";
 let TRAWEX_FLIGHTS_REVALIDATE_FARE_URL = "/revalidate";
 let TRAWEX_FLIGHTS_BOOK_URL = "/book";
 let TRAWEX_FLIGHTS_TICKET_ORDER_URL = "/ticket_order";
+let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
-let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019"
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95"
+let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -119,9 +120,9 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
           });
           flightOffer.flightLegs.forEach(flightLeg => {
             flightLeg.carrier = flightLeg.segments.length != 0 ? flightLeg.segments[0].carrier : null;
-            flightLeg.totalDurationInMinutes = (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000;
+            flightLeg.totalDurationInMinutes = flightLeg.segments.length > 0 ? (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000 : 0;
             flightLeg.totalDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000);
-            flightLeg.transitDurationInMinutes = calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000;
+            flightLeg.transitDurationInMinutes = flightLeg.segments.length > 0 ? calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000 : 0;
             flightLeg.transitDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000);
 
           })
@@ -266,7 +267,7 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_FARE_RULES_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -293,7 +294,7 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_REVALIDATE_FARE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -349,9 +350,9 @@ exports.bookFlight = function (language, bookFlightRequest) {
       passport_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName), // "A08102235",
       passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
       issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
-      email_id: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.email).reduce((result, nextName) => result + "<br>" + nextName), // "mohamed@tripdizer.com",
-      mobile_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.phone).reduce((result, nextName) => result + "<br>" + nextName), // 19739626
       nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+      email_id: bookFlightRequest.adultsPNRInfoList[0].email, // "mohamed@tripdizer.com",
+      mobile_no: bookFlightRequest.adultsPNRInfoList[0].phone, // 19739626
       frequentFlyrNum: null,
       adultmealplan: null,
       // children
@@ -376,10 +377,9 @@ exports.bookFlight = function (language, bookFlightRequest) {
       // infant_issue_country: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
       infantMealplan: null,
     }
-    console.log(params);
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: params
       },
       function (error, response, data) {
@@ -425,7 +425,7 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TICKET_ORDER_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
           target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
@@ -467,7 +467,7 @@ function authenticate() {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AUTHENTICATE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
       },
       function (error, response, data) {
@@ -490,7 +490,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
           session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,

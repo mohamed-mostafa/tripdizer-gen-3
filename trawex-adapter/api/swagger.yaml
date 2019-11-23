@@ -290,9 +290,180 @@ paths:
         200:
           description: "search results matching criteria"
           schema:
-            $ref: "#/definitions/HotelOffers"
+            type: "array"
+            description: "List of hotel"
+            items:
+              $ref: "#/definitions/Hotel"
         400:
           description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /hotels/details:
+    get:
+      summary: "gets the details of a hotel, using the prodcut and hotel Id returned from the search"
+      description: "By passing in the appropriate options, you can retrieve details of a hotel returned from the search"
+      operationId: "getHotelDetails"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "sessionId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "productId"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "hotelId"
+          in: "query"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            $ref: "#/definitions/HotelDetails"
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
+      x-swagger-router-controller: "Default"
+  /hotels/offers:
+    post:
+      summary: "get hotel offers"
+      operationId: "getHotelOffers"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "HotelOffersRequest"
+          in: "body"
+          required: true
+          schema:
+            type: object
+            properties:
+              traceId:
+                type: string
+              propertyId:
+                type: string
+              productId:
+                type: string
+              tokenId:
+                type: string
+              resultIndex:
+                type: string
+              sessionId:
+                type: string
+              hotelId:
+                type: string
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            type: "array"
+            description: "List of hotel offers"
+            items:
+              $ref: "#/definitions/HotelOffer"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /hotels/revalidate:
+    post:
+      summary: "revalidate hotel offer"
+      operationId: "validateHotelOffer"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "HotelOfferRequest"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/HotelOfferRequest"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              preBookingToken:
+                type: string
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Default"
+  /hotels/book:
+    post:
+      summary: "Books a hotel, using the the PNR information of the travelers"
+      description: "By passing in the appropriate options, you can book a hotel using the PNR information of the travelers"
+      operationId: "bookHotel"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "language"
+          in: "header"
+          required: true
+          type: "string"
+          default: "en"
+        - name: "BookHotelRequest"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/BookHotelRequest"
+      responses:
+        200:
+          description: "Successful Execution"
+          schema:
+            properties:
+              bookingStatus:
+                type: string
+              supplierConfirmationNum:
+                type: array
+                items:
+                  type: number
+              reference:
+                type: array
+                items:
+                  type: string
+              clientReference:
+                type: string
+              bookingDetails:
+                type: object
+                properties:
+                  checkOut:
+                    type: object
+                  checkIn:
+                    type: object
+                  destinationName:
+                    type: string
+                  latitude:
+                    type: string
+                  longitude:
+                    type: string
+                  roomCount:
+                    type: object
+                  address:
+                    type: string
+        400:
+          description: "bad input parameter"
+        500:
+          description: "Internal Server Error"
       x-swagger-router-controller: "Default"
 definitions:
   TripSegment:
@@ -629,6 +800,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "infant"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -642,6 +814,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "infant"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -657,6 +830,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "kid"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -670,6 +844,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "kid"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -684,6 +859,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "adult"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -697,6 +873,7 @@ definitions:
           lastName: "Mostafa"
           gender: "M"
           dateOfBirth: "1984-02-01T00:00:00"
+          ageGroup: "adult"
           title: "Mr"
           passportExpiry: "2013-02-03"
           firstName: "Mohamed"
@@ -726,8 +903,11 @@ definitions:
         example: "M"
       dateOfBirth:
         type: "string"
-        format: "date-time"
-        example: "1984-02-01T00:00:00"
+        format: "date"
+        example: "1984-02-01"
+      ageGroup:
+        type: "string"
+        example: "adult | kid | infant"
       nationality:
         type: "string"
         example: "EG"
@@ -753,19 +933,20 @@ definitions:
         type: "string"
         example: "EG"
     example:
-      passportNumber: "A08102235"
-      lastName: "Mostafa"
-      gender: "M"
-      dateOfBirth: "1984-02-01T00:00:00"
-      title: "Mr"
-      passportExpiry: "2013-02-03"
       firstName: "Mohamed"
-      areaCode: "02"
+      lastName: "Mostafa"
+      title: "Mr"
+      gender: "M"
+      dateOfBirth: "1984-02-01"
+      ageGroup: "adult"
       nationality: "EG"
-      phone: 33378321
-      passportIssueCountry: "EG"
-      countryCode: "+2"
       email: "email"
+      countryCode: "+2"
+      areaCode: "02"
+      phone: 33378321
+      passportNumber: "A08102235"
+      passportExpiry: "2013-02-03"
+      passportIssueCountry: "EG"
   HotelSearchRequest:
     required:
       - "tripSegments"
@@ -833,11 +1014,6 @@ definitions:
       limitPerCity: 9
       nationality: "EG"
       currency: "EGP"
-  HotelOffers:
-    type: "array"
-    description: "List of hotel offers"
-    items:
-      $ref: "#/definitions/Hotel"
   Hotel:
     type: "object"
     properties:
@@ -907,12 +1083,6 @@ definitions:
         properties:
           sessionId:
             type: "string"
-          succeededSuppliers:
-            type: "array"
-          faultedSuppliers:
-            type: "array"
-          warnings:
-            type: "array"
           bookingToken:
             type: "string"
           hotelId:
@@ -937,10 +1107,266 @@ definitions:
     properties:
       type:
         type: "string"
-        example: "adult | child"
+        example: "adult | kid | infant"
       age:
         type: "number"
         example: 20
     example:
       type: adult
       age: 20
+  HotelDetails:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      geoCode:
+        type: object
+        properties:
+          lat:
+            type: string
+          long:
+            type: string
+      contact:
+        type: object
+        properties:
+          address:
+            type: object
+            properties:
+              line1:
+                type: string
+              line2:
+                type: string
+              city:
+                type: object
+                properties:
+                  code:
+                    type: object
+                  name:
+                    type: string
+              state:
+                type: object
+                properties:
+                  code:
+                    type: object
+                  name:
+                    type: string
+              country:
+                type: string
+              postalCode:
+                type: string
+          phones:
+            type: string
+          email:
+            type: string
+      rating:
+        type: string
+      amenities:
+        type: array
+        items:
+          type: object
+          properties:
+            def_name:
+              type: string
+            amenities_values:
+              type: array
+              items:
+                type: object
+                properties:
+                  fact_title:
+                    type: string
+                  fact_value:
+                    type: string
+      images:
+        type: array
+        items:
+          type: string
+      descriptions:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              type: string
+            value:
+              type: string
+  HotelOffer:
+    type: object
+    properties:
+      allocationDetails:
+        type: array
+        items:
+          type: string
+      boardBasis:
+        type: string
+      cancellationPolicies:
+        type: array
+        items:
+          type: string
+      changedOccupancies:
+        type: array
+        items:
+          type: string
+      roomCodes:
+        type: array
+        items:
+          type: string
+      currency:
+        type: string
+      description:
+        type: string
+      extraBeds:
+        type: string
+      infoSource:
+        type: string
+      inventoryType:
+        type: string
+      mealCode:
+        type: string
+      onRequest:
+        type: string
+      productId:
+        type: string
+      rateBasisIds:
+        type: array
+        items:
+          type: string
+      refundable:
+        type: string
+      roomTypeRunnos:
+        type: array
+        items:
+          type: string
+      hotelCode:
+        type: string
+      price:
+        type: number
+      type:
+        type: string
+    example:
+      allocationDetails:
+        [
+          "1573603021000001B1008B1",
+          "1573603021000001B1008B5",
+          "1573603021000001B1008B9",
+        ]
+      boardBasis: "Room Only"
+      cancellationPolicies:
+        [
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1770.55 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+          "If Cancellation done between Current date and 2020-04-30 05:30:00 Cancellation charge would be EGP 1637.82 | Cancellation will not be possible from 2020-04-30 05:30:01 | ",
+        ]
+      changedOccupancies: ["", "", ""]
+      roomCodes: ["1574305", "1574305", "1574305"]
+      currency: "EGP"
+      description: "TRIPLE STANDARD"
+      extraBeds: "0"
+      infoSource: "OpenCombination"
+      inventoryType: "prepaid"
+      mealCode: ""
+      onRequest: "false"
+      productId: "trx101"
+      rateBasisIds: ["1331", "1331", "1331"]
+      refundable: "false"
+      roomTypeRunnos: ["0", "1", "2"]
+      hotelCode: "243916"
+      price: 9738.86
+      type: "negotiated"
+  BookHotelRequest:
+    type: object
+    properties:
+      sessionId:
+        type: string
+      traceId:
+        type: string
+      tokenId:
+        type: string
+      productId:
+        type: string
+      hotelId:
+        type: string
+      propertyId:
+        type: string
+      resultIndex:
+        type: string
+      refCode:
+        type: string
+      preBookingToken:
+        type: string
+      changedOccupancy:
+        type: array
+        items:
+          type: object
+      extraBeds:
+        type: array
+        items:
+          type: number
+      rooms:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: "#/definitions/PNRInfo"
+  HotelOfferRequest:
+    type: object
+    properties:
+      boardBasis:
+        type: string
+      bookingToken:
+        type: string
+      hotelName:
+        type: string
+      hotelCode:
+        type: string
+      infoSource:
+        type: string
+      mealCode:
+        type: string
+      productId:
+        type: string
+      propertyId:
+        type: string
+      resultIndex:
+        type: string
+      sessionId:
+        type: string
+      tokenId:
+        type: string
+      traceId:
+        type: string
+      allocationDetails:
+        type: array
+        items:
+          type: string
+      rateBasisIds:
+        type: array
+        items:
+          type: string
+      roomCodes:
+        type: array
+        items:
+          type: string
+      roomTypeRunnos:
+        type: array
+        items:
+          type: string
+    example:
+      sessionId: "MTU3Mzd78as4ODI0Mw=="
+      bookingToken: UxMGCOENnk7Das7d6as76sdygdgdguKa6tmWiIogdPH0F4uAvV
+      hotelId: "243936"
+      productId: "trx007"
+      propertyId: "32423"
+      resultIndex: "16"
+      tokenId: "YkRduads8u9L5F7QCBUa"
+      traceId: "1xMb6sd9fdf78s82PRl3"
+      boardBasis: "Room Only"
+      hotelName: "AS Hoteles Porta de Barcelona"
+      hotelCode: "2894498"
+      infoSource: "OpenCombination"
+      mealCode: ""
+      allocationDetails: ["1345673204000001B1008B0","1345673204000001B1008B4","1345673204000001B1008B8"]
+      rateBasisIds: ["1293", "1293", "1293"]
+      roomCodes: ["1764838", "1764838", "1764838"]
+      roomTypeRunnos: ["0", "1", "2"]
