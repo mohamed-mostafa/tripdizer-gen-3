@@ -60,7 +60,7 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
     authenticate().then(function (sessionId) {
       let originList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata);
       let destinationsList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata); destinationsList.push(destinationsList.shift());
-      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.arrivalDate); departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
+      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.leavingDate);// departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
 
       let airportFromCodesSequence = ""; airportFromCodesSequence = originList.reduce((airportFromCodesSequence, cityIata) => airportFromCodesSequence + "<br>" + cityIata);
       let airportToCodesSequence = ""; airportToCodesSequence = destinationsList.reduce((airportToCodesSequence, cityIata) => airportToCodesSequence + "<br>" + cityIata);
@@ -71,7 +71,7 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -103,8 +103,8 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
               }
             }
 
-            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment
-            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day'));
+            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment (or one day after for overnight flights)
+            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day') || moment(flightLeg.flightDay).isSame(moment(flightSegment.departure).add(-1, 'days'), 'day'));
             if (flightLeg) { // we found a leg that starts on the same day of the segment
               flightLeg.segments.push(flightSegment);
             } else { // couldn't find a leg whose dat is the departure date of a segment, then this is a second segment of a leg that happens to be in the next day
@@ -146,7 +146,7 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItineraries.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -208,7 +208,7 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,

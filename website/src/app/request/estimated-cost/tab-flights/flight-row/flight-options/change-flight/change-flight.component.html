@@ -1,14 +1,14 @@
 <a
 	href="javascript:void(0)"
 	mat-button
-	[matMenuTriggerFor]="flightOffer"
+	[matMenuTriggerFor]="flightOfferMenu"
 	(menuClosed)="menuClosed()"
 	(menuOpened)="menuOpened()"
 >
 	{{ 'request.estimated_cost.tab_flights.change_flight' | translate }}
 </a>
-<mat-menu #flightOffer="matMenu" class="pretty-scroll">
-	<div mat-menu-item *ngFor="let offer of flight.flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
+<mat-menu #flightOfferMenu="matMenu" class="pretty-scroll">
+	<div mat-menu-item *ngFor="let offer of flightOffers" (click)="selectOffer(offer)" class="row m-0 border-blue">
 		<div class="col-12 col-md-3 text-md-center align-self-md-center">
 			<img [src]="offer.carrier.wideLogo" alt="{{ offer.carrier.name }}" />
 		</div>

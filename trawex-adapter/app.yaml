@@ -15,9 +15,9 @@ runtime: nodejs
 env: flex
 service: tripdizer-trawex-adapter
 
-network:
-  name: tripdizer-vpc
-  instance_tag: trawex
+# network:
+#   name: tripdizer-vpc
+#   instance_tag: trawex
 
 readiness_check:
   app_start_timeout_sec: 600

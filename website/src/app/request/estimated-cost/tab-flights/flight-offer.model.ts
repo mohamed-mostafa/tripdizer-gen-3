@@ -1,16 +1,9 @@
 import { City } from '../../../shared/models/city.model';
 import { Carrier } from './carrier.model';
 
-export class Flight {
-	origin: City;
-	destination: City;
-	departure: string;
-	flightOffers: Array<FlightOffer>;
-	numberOfNights?: number;
-}
-
 export class FlightOffer {
 	price: number;
+	origin: City;
 	currency: string;
 	originCityIata: string;
 	destinationCityIata: string;
@@ -26,6 +19,23 @@ export class FlightOffer {
 	departure?: Segment;
 	arrival?: Segment;
 	numberOfStops?: number;
+	numberOfNights?: number;
+    flightLegs: Array<FlightLeg>;
+    selected?: boolean;
+    fareSourceCode: string;
+}
+
+export class FlightLeg {
+	origin: City;
+	destination: City;
+	flightDay: string;
+	segments: Array<Segment>;
+	carrier: { iataCode: string, name: string };
+	totalDurationInMinutes: number;
+	totalDurationInWords: string;
+	transitDurationInMinutes: number;
+	transitDurationInWords: string;
+	numberOfNights?: number;
 }
 
 export class Segment {
@@ -34,9 +44,11 @@ export class Segment {
 	originDetails: string; // will usually be airport name
 	destinationDetails: string; // will usually be airport name
 	departure: string;
+	arrival: string;
 	return: string;
-	durationInWords: string;
-	durationInMinutes: number;
+	totalDurationInWords: string;
+	totalDurationInMinutes: number;
+	carrier: { iataCode: string, name: string };
 }
 
 export class FlightRequest {

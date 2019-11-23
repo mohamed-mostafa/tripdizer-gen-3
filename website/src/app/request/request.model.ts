@@ -1,3 +1,4 @@
+import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -10,7 +11,6 @@ import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
 import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
-import { FlightOffer } from './estimated-cost/tab-flights/flight.model';
 import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
