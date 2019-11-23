@@ -5,7 +5,7 @@
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve --aot --hmr --open",
-		"build-dev": "ng build --aot --prod --configuration=development",
+		"build-dev": "ng build --aot --configuration=development --optimization=false",
 		"build-stg": "ng build --aot --prod --configuration=staging",
 		"build-prod": "ng build --aot --prod --configuration=production",
 		"test": "ng test",
