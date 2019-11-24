@@ -1,4 +1,3 @@
-import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { CurrencyPipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
@@ -11,12 +10,14 @@ import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
 import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
+import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
+import { Attraction } from './summary/attraction.model';
+import { Traveller } from './summary/travellers-info/traveller-info/traveller.model';
 import { TravelHistory } from './travel-history.enum';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
-import { Attraction } from './summary/attraction.model';
 
 export class Request extends CommonFunctions {
 	private _requestType: RequestType;
@@ -65,6 +66,7 @@ export class Request extends CommonFunctions {
 	private _traveler: IRequester;
 	private _referralType: number;
 	private _travelHistory: TravelHistory;
+	private _travellers: Array<Traveller>;
 
 	get countries(): Array<Country> {
 		return this._countries || [];
@@ -258,6 +260,12 @@ export class Request extends CommonFunctions {
 	}
 	get traveler(): IRequester {
 		return this._traveler;
+	}
+	set travellers(value: Array<Traveller>) {
+		this._travellers = value;
+	}
+	get travellers(): Array<Traveller> {
+		return this._travellers;
 	}
 	set referralType(value: number) {
 		this._referralType = value;
