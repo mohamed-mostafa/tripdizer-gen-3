@@ -786,12 +786,21 @@ function getRequestById(requestId, onSuccess, onFailure) {
 var publishRequestChoicesForBooking = function (requestId) {
 	return new Promise((resolve, reject) => {
 		getRequestById(requestId, request => {
-			request.flightOffers.choices.forEach(flightOffer => {
-				googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
-			});
-			request.selectedHotels.choices.forEach(hotel => {
-				googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
-			});
+			if (request.flightOffers && request.flightOffers.choices) {
+				request.flightOffers.choices.forEach(flightOffer => {
+					googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
+				});
+			} else {
+				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No flights booking information available. Request doesn't have flight offers to book ?`)
+			}
+
+			if (request.selectedHotels && request.selectedHotels.choices) {
+				request.selectedHotels.choices.forEach(hotel => {
+					googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
+				});
+			} else {
+				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No hotel booking information available. Request doesn't have hotels to book ?`)
+			}
 			resolve();
 		}, err => {
 			console.error(`FATAL ERROR: Failed to retrieve the request with id: ${requestId}. Request should be paid but booking messages has not been published`)

@@ -121,13 +121,10 @@ module.exports.searchHotels = function (req, res, next) {
   hotelsService
     .searchHotels(language, hotelSearchRequest)
     .then(function (response) {
-      utils.writeJson(res, response, 500);
+      utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(
-        res,
-        utils.respondWithCode(response.code, response.message)
-      );
+      utils.writeJson(res, response, 500);
     });
 };
 
