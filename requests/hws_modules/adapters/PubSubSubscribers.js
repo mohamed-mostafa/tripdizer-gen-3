@@ -3,6 +3,7 @@
 // Imports the Google Cloud client library
 const { PubSub } = require('@google-cloud/pubsub');
 const bookingsDao = require('../dataaccess/hws_bookings_dao');
+const emailBusiness = require('./hws_email_adapter');
 // Creates a client
 const projectId = process.env.PROJECT_NAME || 'tripdizer-dev';
 const keyFileName = './tripdizer-service-account.json';
@@ -31,8 +32,9 @@ const flightBookingConfirmationMessageHandler = async message => {
 
     // NOTIFY CUSTOER HERE ?
   } catch (err) {
-    // NOTIFY OPERATIONS TEAM HERE ?
     console.error(`FATAL ERROR: Failed to write successful flight booking for request: ${confirmationMessage.requestId}. Missing data is ${confirmationMessage}`)
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingSuccessfulButUpdateFailureIncidentEmail(confirmationMessage.requestId, "flight");
   }
 }
 
@@ -45,8 +47,9 @@ const hotelBookingConfirmationMessageHandler = async message => {
 
     // NOTIFY CUSTOER HERE ?
   } catch (err) {
-    // NOTIFY OPERATIONS TEAM HERE ?
     console.error(`FATAL ERROR: Failed to write successful hotel booking for request: ${confirmationMessage.requestId}. Missing data is ${confirmationMessage}`)
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingSuccessfulButUpdateFailureIncidentEmail(confirmationMessage.requestId, "hotel");
   }
 }
 
@@ -57,10 +60,12 @@ const flightBookingErrorMessageHandler = async message => {
   try {
     bookingsDao.saveFlightBookingResult(confirmationMessage.requestId, confirmationMessage.fareSourceCode, { failure: confirmationMessage.failureReason, confirmation: null });
 
-    // NOTIFY OPERATIONS TEAM HERE ?
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingIncidentEmail(confirmationMessage.requestId, "flight");
   } catch (err) {
-    // NOTIFY OPERATIONS TEAM HERE ?
     console.error(`FATAL ERROR: Failed to write failed flight booking for request: ${confirmationMessage.requestId}. Missing data is ${confirmationMessage}`)
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingFailedAndUpdateFailureIncidentEmail(confirmationMessage.requestId, "flight");
   }
 }
 
@@ -71,11 +76,40 @@ const hotelBookingErrorMessageHandler = async message => {
   try {
     bookingsDao.saveHotelBookingResult(confirmationMessage.requestId, confirmationMessage.hotelId, { failure: confirmationMessage.failureReason, confirmation: null });
 
-    // NOTIFY OPERATIONS TEAM HERE ?
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingIncidentEmail(confirmationMessage.requestId, "hotel");
   } catch (err) {
-    // NOTIFY OPERATIONS TEAM HERE ?
     console.error(`FATAL ERROR: Failed to write failed hotel booking for request: ${confirmationMessage.requestId}. Missing data is ${confirmationMessage}`)
+    // NOTIFY OPERATIONS TEAM HERE
+    sendBookingFailedAndUpdateFailureIncidentEmail(confirmationMessage.requestId, "hotel");
   }
+}
+
+var sendBookingIncidentEmail = function (requestId, bookingType) {
+  emailBusiness.sendEmail(
+    'bookings@tripdizer.com',
+    process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking.`,
+    `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
+  );
+}
+
+var sendBookingSuccessfulButUpdateFailureIncidentEmail = function (requestId, bookingType) {
+  emailBusiness.sendEmail(
+    'bookings@tripdizer.com',
+    process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases.`,
+    `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases. Please contact the system administrators immediately.`
+  );
+}
+
+var sendBookingFailedAndUpdateFailureIncidentEmail = function (requestId, bookingType) {
+  emailBusiness.sendEmail(
+    'bookings@tripdizer.com',
+    process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, and failure reason not saved to Tripdizer databases.`,
+    `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, but failure reason not saved to Tripdizer databases. Please contact the system administrators immediately.`
+  );
 }
 
 module.exports.start = function () {
