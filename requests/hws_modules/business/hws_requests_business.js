@@ -106,6 +106,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 				pnrDao.save(request.id, requestPNRInfo);
 
 				if (BYPASS_PAYMENT == "Y") {
+					await new Promise((resolve, reject) => {
+						setTimeout(() => resolve(), 10000);
+					})
+
 					publishRequestChoicesForBooking(request.id);
 				} else {
 					// at this point, we've saved the request to the database. let's generate a payment key

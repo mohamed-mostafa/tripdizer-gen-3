@@ -37,7 +37,7 @@ const flightBookingMessageHandler = async message => {
     let bookingResponse = await flightsBookingService.bookFlight("en ", bookFlightRequest);
 
     // check if bookingResponse.bookingStatus = CONFIRMED ?
-    let bookingCOnfirmation = {
+    let bookingConfirmation = {
       bookingStatus: bookingResponse.bookingStatus,
       confirmationNumbers: [bookingResponse.bookingUniqueId],
     }
