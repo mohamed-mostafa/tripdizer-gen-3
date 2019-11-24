@@ -8,9 +8,9 @@ var fareSourceCode = "";
 var bookingUniqueId = "";
 var isPublicFlightOffer = true;
 
-describe('flight booking', function () {
+describe('Public flight booking', function () {
 
-	describe('happy booking scenario', function () {
+	describe('happy public booking scenario', function () {
 
 		function delay(interval) {
 			return it('should delay', done => {
@@ -25,8 +25,8 @@ describe('flight booking', function () {
 				"numberOfChildren": 0,
 				"numberOfInfants": 0,
 				"tripSegments": [
-					{ "cityIata": "BLR", "arrivalDate": "2020-01-20", "leavingDate": "2020-01-20", "cityName": "BLR", "countryIso": "IND" },
-					{ "cityIata": "DEL", "arrivalDate": "2020-01-20", "cityName": "DEL", "countryIso": "IND", "leavingDate": "2020-01-25" }]
+					{ "cityIata": "AMS", "arrivalDate": "2020-01-20", "leavingDate": "2020-01-20", "cityName": "AMS", "countryIso": "IND" },
+					{ "cityIata": "LHR", "arrivalDate": "2020-01-20", "cityName": "LHR", "countryIso": "IND", "leavingDate": "2020-01-25" }]
 			};
 			// search for offers from cairo to lahore
 			flightsService.searchMultiCityFlights("en", request)
@@ -55,7 +55,6 @@ describe('flight booking', function () {
 		});
 
 		delay(1000);
-
 		it('should retrieve the fare details', function (done) {
 			// call fare details for the first offer
 			flightsService.getFareDetails("en", sessionId, fareSourceCode)
@@ -68,7 +67,6 @@ describe('flight booking', function () {
 		})
 
 		delay(1000);
-
 		it('should validate the fare', function (done) {
 			// call validate fare for the first offer
 			flightsService.revalidateFare("en", sessionId, fareSourceCode)
@@ -81,7 +79,6 @@ describe('flight booking', function () {
 		})
 
 		delay(10000);
-
 		it('should book the fare', function (done) {
 			// call book fare for the first offer
 			var bookRequest = {
@@ -94,6 +91,7 @@ describe('flight booking', function () {
 						"lastName": "Mostafa",
 						"gender": "M",
 						"title": "Mr",
+						"ageGroup": "adult",
 						"passportExpiry": "2025-02-03",
 						"firstName": "Mohamed",
 						"areaCode": "6",
@@ -110,6 +108,7 @@ describe('flight booking', function () {
 						"lastName": "Ahmed",
 						"gender": "M",
 						"title": "Mr",
+						"ageGroup": "adult",
 						"passportExpiry": "2025-05-03",
 						"firstName": "Hossam",
 						"areaCode": "6",
@@ -142,16 +141,19 @@ describe('flight booking', function () {
 		});
 
 		delay(5000);
-
 		it('should issue the ticket', function (done) {
-			flightsService.issueTicket("en", sessionId, bookingUniqueId)
-				.then(function (res) {
-					expect(res).to.have.property("ticketUniqueId").not.null;
-					done();
-				})
-				.catch(function (err) {
-					done(err);
-				});
+			if (isPublicFlightOffer == true) {
+				flightsService.issueTicket("en", sessionId, bookingUniqueId)
+					.then(function (res) {
+						expect(res).to.have.property("ticketUniqueId").not.null;
+						done();
+					})
+					.catch(function (err) {
+						done(err);
+					});
+			} else {
+				done("Couldn't find a public offer to book");
+			}
 		})
 	}); // end function describe
 }); // end module describe

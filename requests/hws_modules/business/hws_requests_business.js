@@ -7,20 +7,23 @@ var requestsDao = require('../dataaccess/hws_requests_dao.js');
 let transportationDao = require('../dataaccess/hws_request_transporation_dao');
 let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
+let pnrDao = require('../dataaccess/hws_request_PNR_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
 var paymentsService = require('./hws_payments_business');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+let googlePubSubAdapter = require('../message-publishers/PubSubPublishers');
 let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 const MEDIA_STORAGE_BASE_URL =
 	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || "Y";
 
 //calls the onSuccess with a user object if the user was successfully created
-var placeRequest = function(request, onSuccess, onFailure, onUserError) {
+var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
 		status: request.isFromWebsite ? 1 : request.status,
@@ -83,7 +86,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request.score = calculateRequestScore(request);
 	requestsDao.createNewRequest(
 		request,
-		async function(request) {
+		async function (request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
 			var requestSelectedHotels = { choices: request.selectedHotels };
 			var requestSelectedCities = { choices: request.selectedCities };
@@ -95,21 +98,41 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			attractionsDao.save(request.id, requestSelectedAttractions);
 
 			if (request.requiresPayment) {
-				request.paymentKey = await new Promise(resolve => {
-					paymentsService.registeredOrderAndGeneratePaymentKey(
-						request,
-						({ paymentKey }) => {
-							requestsDao.modifyRequestStatusById(request.id, 17, () => {}, () => {});
-							requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {}, () => {});
-							resolve(paymentKey);
-						},
-						err => {
-							console.error('An error occurred while generating a payment key');
-							console.error(err);
-							resolve();
-						}
-					);
-				});
+				if (BYPASS_PAYMENT == "Y") {
+					request.pnrInfoList = require('../../test-data/pnr.json');
+				}
+				// save PNR info
+				var requestPNRInfo = { choices: request.pnrInfoList };
+				pnrDao.save(request.id, requestPNRInfo);
+
+				if (BYPASS_PAYMENT == "Y") {
+					publishRequestChoicesForBooking(request.id);
+				} else {
+					// at this point, we've saved the request to the database. let's generate a payment key
+					request.paymentKey = await new Promise(resolve => {
+						paymentsService.registeredOrderAndGeneratePaymentKey(
+							request,
+							({ paymentKey }) => {
+								requestsDao.modifyRequestStatusById(request.id, 17, () => {
+									requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {
+										resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
+									}, (err) => {
+										console.log('Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err));
+										resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+									});
+								}, (err) => {
+									console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
+									resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+								});
+							},
+							err => {
+								console.error('An error occurred while generating a payment key');
+								console.error(err);
+								resolve();
+							}
+						);
+					});
+				}
 			} else {
 				const package = await new Promise(resolve => {
 					getPackage(
@@ -148,7 +171,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					'notifications@tripdizer.com',
 					'Request #' + request.id + ' is placed at Tripdizer',
 					request.traveler.name +
-						' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+					' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
 				);
 
 			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE')
@@ -162,7 +185,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					'(' + request.id.toString() + ')'
 				);
 		},
-		function(err) {
+		function (err) {
 			// respond to caller
 			console.error('An error occurred while saving a new request');
 			console.error(err);
@@ -170,7 +193,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			// });
 			// }
 		},
-		function(err) {
+		function (err) {
 			console.error('An error occurred while checking if traveler exists before');
 			console.error(err);
 			onFailure(err);
@@ -178,15 +201,15 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	);
 };
 
-var updateRequest = function(request, onSuccess, onFailure) {
+var updateRequest = function (request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
 		request,
-		function(request) {
+		function (request) {
 			onSuccess(request);
 		},
-		function(err) {
+		function (err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure(err);
@@ -194,7 +217,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 	);
 };
 
-var notifyCustomer = function(to, customerName, requestId) {
+var notifyCustomer = function (to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
@@ -218,7 +241,7 @@ var notifyCustomer = function(to, customerName, requestId) {
 		emailBody
 	);
 };
-var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
+var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
 	} else if (email.type === 'request') {
@@ -226,12 +249,12 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 			email.recipients,
 			Number.MAX_SAFE_INTEGER,
 			1,
-			function(travelers) {
+			function (travelers) {
 				var emails = [];
 				for (var i = 0; i < travelers.length; i++) emails.push(travelers[i].traveler.emailAddress);
 				sendMails(emails, email, onSuccess);
 			},
-			function(err) {
+			function (err) {
 				console.error('An error occurred while getting travelers');
 				console.error(err);
 				onFailure(err);
@@ -240,26 +263,26 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	}
 };
 
-var sendMails = function(emails, email, onSuccess) {
+var sendMails = function (emails, email, onSuccess) {
 	responses = [];
 	for (var i = 0; i < emails.length; ++i)
 		responses.push(
 			emailBusiness
 				.sendEmail(emails[i], 'notifications@tripdizer.com', email.subject, email.body, email.attachments)
-				.then(function(response) {
+				.then(function (response) {
 					return response;
 				})
-				.catch(function(response) {
+				.catch(function (response) {
 					return response;
 				})
 		);
-	Promise.all(responses).then(function(resp) {
+	Promise.all(responses).then(function (resp) {
 		email.response = resp;
 		email.count = {
-			success: resp.filter(function(item) {
+			success: resp.filter(function (item) {
 				return item.done;
 			}).length,
-			fail: resp.filter(function(item) {
+			fail: resp.filter(function (item) {
 				return !item.done;
 			}).length,
 		};
@@ -267,11 +290,11 @@ var sendMails = function(emails, email, onSuccess) {
 	});
 };
 
-var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+var validatePromoCode = function (promoCode, onSuccess, onFailure) {
 	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(
 			promoCode,
-			function(count) {
+			function (count) {
 				if (count < 50) {
 					onSuccess(true);
 				} else {
@@ -285,9 +308,9 @@ var validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	}
 };
 
-var sendDailyReportOfRequestsCount = function() {
+var sendDailyReportOfRequestsCount = function () {
 	requestsDao.getRequestCounts(
-		function(counts) {
+		function (counts) {
 			// prepare email body
 			var emailBody = '';
 			emailBody +=
@@ -321,13 +344,13 @@ var sendDailyReportOfRequestsCount = function() {
 				emailBody
 			);
 		},
-		function() {
+		function () {
 			console.error('An error occurred while getting request counts');
 		}
 	);
 };
 
-var getPackage = function(
+var getPackage = function (
 	requestId,
 	accessToken,
 	onSuccess,
@@ -339,7 +362,7 @@ var getPackage = function(
 ) {
 	getRequestById(
 		requestId,
-		async function(request) {
+		async function (request) {
 			try {
 				// if flights/accommodations/attractions/cities are passed to getPackage, ignore the ones with the request
 				var flightOffers = requestFlightOffers != null ? requestFlightOffers : request.flightOffers;
@@ -357,7 +380,7 @@ var getPackage = function(
 							json: true,
 							headers: { authorization: accessToken },
 						},
-						async function(error, response, itinerary) {
+						async function (error, response, itinerary) {
 							if (error || response.statusCode != 200) {
 								console.error('An error occurred while getting itinerary from master-data to generate request package');
 								console.log(error || response.statusMessage);
@@ -384,8 +407,8 @@ var getPackage = function(
 									i === 0
 										? departureDate
 										: new Date(
-												new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
-										  );
+											new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
+										);
 								itinerary.cities[i].endDate = new Date(
 									new Date(itinerary.cities[i].startDate).setDate(
 										itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
@@ -445,14 +468,14 @@ var getPackage = function(
 								'post',
 								'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 								JSON.stringify(request),
-								function(doc) {
+								function (doc) {
 									packageHttp(
 										'get',
 										`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
-											doc.docId
+										doc.docId
 										}`,
 										null,
-										function(package) {
+										function (package) {
 											requestsDao.modifyRequestPackageInfo(
 												request.id,
 												package.docId,
@@ -522,15 +545,15 @@ var getPackage = function(
 						'post',
 						'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 						JSON.stringify(request),
-						function(doc) {
+						function (doc) {
 							console.log('File created. Id: ' + doc.docId + ', Now generating the PDF');
 							packageHttp(
 								'get',
 								`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
-									doc.docId
+								doc.docId
 								}`,
 								null,
-								function(package) {
+								function (package) {
 									console.log('PDF Created. Id: ' + package.pdfId + ', Now saving doc and pdf ids to the request');
 									requestsDao.modifyRequestPackageInfo(
 										request.id,
@@ -564,23 +587,23 @@ var getPackage = function(
 				onFailure(err);
 			}
 		},
-		function(err) {
+		function (err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure(err);
 		}
 	);
 };
-var getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
+var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	return cost;
 };
 
-var getPackageDetailsOfCountry = function(isoCode) {
+var getPackageDetailsOfCountry = function (isoCode) {
 	return new Promise((resolve, reject) => {
-		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function(
+		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function (
 			error,
 			response,
 			country
@@ -599,10 +622,10 @@ var getPackageDetailsOfCountry = function(isoCode) {
 	});
 };
 
-var sendPackageByMail = function(requestId, onSuccess, onFailure) {
+var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
-		function(request) {
+		function (request) {
 			// prepare email body
 			var emailBody = '';
 			emailBody += '<html>';
@@ -632,7 +655,7 @@ var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 			);
 			onSuccess({ success: true });
 		},
-		function(err) {
+		function (err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure({ ...err, success: false });
@@ -658,7 +681,7 @@ function currencyFormat(value) {
 
 async function isValidImage(url) {
 	return await new Promise(resolve => {
-		httpRequest(url, function(error, response, body) {
+		httpRequest(url, function (error, response, body) {
 			if (!error && response.statusCode == 200 && response.headers['content-type'].match(/(image)+\//g)) {
 				resolve(true);
 			} else {
@@ -705,7 +728,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 				'Content-Type': 'text/plain',
 			},
 		},
-		function(error, response, body) {
+		function (error, response, body) {
 			try {
 				const package = JSON.parse(body);
 				if (response.statusCode === 200 && package.docId) {
@@ -728,7 +751,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 function getRequestById(requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
-		async function(request) {
+		async function (request) {
 			try {
 				var accomodationOffers = await accomodationDao.get(requestId);
 				if (accomodationOffers.exists) request.selectedHotels = accomodationOffers.data();
@@ -742,6 +765,9 @@ function getRequestById(requestId, onSuccess, onFailure) {
 				var attractions = await attractionsDao.get(requestId);
 				if (attractions.exists) request.selectedAttractions = attractions.data();
 
+				var pnrInfo = await pnrDao.get(requestId);
+				if (pnrInfo.exists) request.pnrInfo = pnrInfo.data();
+
 				onSuccess(request);
 			} catch (err) {
 				console.log('Failed to retrieve data for request by id: ' + requestId);
@@ -749,12 +775,46 @@ function getRequestById(requestId, onSuccess, onFailure) {
 				onFailure(err);
 			}
 		},
-		function(err) {
+		function (err) {
 			console.log('Failed to retrieve a request by Id: ' + requestId);
 			console.error(err);
 			onFailure(err);
 		}
 	);
+}
+
+var publishRequestChoicesForBooking = function (requestId) {
+	return new Promise((resolve, reject) => {
+		getRequestById(requestId, request => {
+			request.flightOffers.choices.forEach(flightOffer => {
+				googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
+			});
+			request.selectedHotels.choices.forEach(hotel => {
+				googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
+			});
+			resolve();
+		}, err => {
+			console.error(`FATAL ERROR: Failed to retrieve the request with id: ${requestId}. Request should be paid but booking messages has not been published`)
+			console.error(err);
+			reject(err);
+		})
+	})
+}
+
+var handlePaidRequest = function (requestId) {
+	requestsDao.modifyRequestStatusById(
+		requestId,
+		18,
+		() => { },
+		() => {
+			console.error("FATAL ERROR: Failed to update request status to 'paid' for request: " + requestId + ". Publishing booking messages will proceed anyway");
+		}
+	);
+	publishRequestChoicesForBooking(requestId).then(result => {
+		console.log("Attempts to publish booking messages for request: " + requestId + " completed successfully for all flights and hotels");
+	}).catch(err => {
+		console.error("FATAL ERROR: Publishing booking messages for request: " + requestId + " failed for the following reason: " + JSON.stringify(err))
+	});
 }
 
 exports.placeRequest = placeRequest;
@@ -771,3 +831,4 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
+exports.handlePaidRequest = handlePaidRequest;

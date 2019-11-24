@@ -1,6 +1,6 @@
 var httpRequest = require('request');
 let paymentsDao = require('../dataaccess/hws_payments_dao');
-var requestsDao = require('../dataaccess/hws_requests_dao.js');
+var requestBusiness = require('../business/hws_requests_business');
 
 const CURRENCY = 'EGP';
 const WE_ACCEPT_PAYMENT_BASE_URL = 'https://accept.paymobsolutions.com/api/';
@@ -100,17 +100,11 @@ var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 var notificationCallback = (type, payload, onSuccess, onFailure) => {
 	paymentsDao.save(payload.id, type, payload.created_at, payload);
 	if (type === 'TRANSACTION' && payload.success) {
-		requestsDao.modifyRequestStatusById(
-			payload.order.merchant_order_id,
-			18,
-			() => {
-				onSuccess({ success: true });
-			},
-			() => {
-				onFailure({ success: false });
-			}
-		);
+		requestBusiness.handlePaidRequest(payload.order.merchant_order_id);
+	} else {
+		console.error("Recieved failed payment callback");
 	}
+	onSuccess();
 };
 
 var responseCallback = (payload, onSuccess, onFailure) => {
