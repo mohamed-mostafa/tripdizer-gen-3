@@ -8,7 +8,7 @@ var app = require('connect')();
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = process.env.PORT || 8085;
-var messageSubscribers = require('./message-subscribers/PubSubSubscribers');
+var messageSubscribers = require('./adapters/PubSubSubscribers');
 
 // swaggerRouter configuration
 var options = {

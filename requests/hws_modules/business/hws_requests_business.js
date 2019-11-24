@@ -14,7 +14,7 @@ var paymentsService = require('./hws_payments_business');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
-let googlePubSubAdapter = require('../message-publishers/PubSubPublishers');
+let googlePubSubAdapter = require('../adapters/PubSubPublishers');
 let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';

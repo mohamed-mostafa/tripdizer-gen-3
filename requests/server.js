@@ -1,7 +1,9 @@
 require('@google-cloud/trace-agent').start();
 
 var hwsWebServer = require('./hws_modules/webserver/hws_server.js');
+var pubSubScbscribers = require('./hws_modules/adapters/PubSubSubscribers');
 /*var hwsJobsManager = require("./hws_modules/jobs/hws_jobs_manager.js");*/
 
 // start the web server
 hwsWebServer.start();
+pubSubScbscribers.start();
