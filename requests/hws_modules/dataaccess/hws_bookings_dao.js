@@ -19,6 +19,8 @@ exports.getHotelBookingResult = function (requestId, hotelId) {
 	const document = firestore.doc('request-hotel-booking-result/' + requestId + "-" + hotelId);
 	// Read data fro the document.
 	return document.get();
+
+	// return firestore.getAll(...hotelIds.map(hotelId => `request-hotel-booking-result/' ${requestId}-${hotelId}`))
 }
 
 exports.saveFlightBookingResult = async function (requestId, fareSourceCode, bookingResult) {
@@ -40,4 +42,6 @@ exports.getFlightBookingResult = function (requestId, fareSourceCode) {
 	const document = firestore.doc('request-flight-booking-result/' + requestId + "-" + fareSourceCode);
 	// Read data fro the document.
 	return document.get();
+
+	// return firestore.getAll(...fareSourceCodes.map(fareSourceCode => `request-flight-booking-result/' ${requestId}-${fareSourceCode}`))
 }

@@ -90,7 +90,7 @@ var sendBookingIncidentEmail = function (requestId, bookingType) {
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
     `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking.`,
-    `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
+    `Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
   );
 }
 
@@ -99,7 +99,7 @@ var sendBookingSuccessfulButUpdateFailureIncidentEmail = function (requestId, bo
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
     `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases.`,
-    `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases. Please contact the system administrators immediately.`
+    `Request # ${requestId} Has a successful ${bookingType} booking, but booking details were not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
 }
 
@@ -108,7 +108,7 @@ var sendBookingFailedAndUpdateFailureIncidentEmail = function (requestId, bookin
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
     `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, and failure reason not saved to Tripdizer databases.`,
-    `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, but failure reason not saved to Tripdizer databases. Please contact the system administrators immediately.`
+    `Request # ${requestId} Has a a failed ${bookingType} booking, but failure reason was not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
 }
 
