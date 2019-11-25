@@ -87,8 +87,8 @@ const hotelBookingErrorMessageHandler = async message => {
 
 var sendBookingIncidentEmail = function (requestId, bookingType) {
   emailBusiness.sendEmail(
-    'bookings@tripdizer.com',
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    'bookings@tripdizer.com',
     `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking.`,
     `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
   );
@@ -96,8 +96,8 @@ var sendBookingIncidentEmail = function (requestId, bookingType) {
 
 var sendBookingSuccessfulButUpdateFailureIncidentEmail = function (requestId, bookingType) {
   emailBusiness.sendEmail(
-    'bookings@tripdizer.com',
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    'bookings@tripdizer.com',
     `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases.`,
     `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
@@ -105,8 +105,8 @@ var sendBookingSuccessfulButUpdateFailureIncidentEmail = function (requestId, bo
 
 var sendBookingFailedAndUpdateFailureIncidentEmail = function (requestId, bookingType) {
   emailBusiness.sendEmail(
-    'bookings@tripdizer.com',
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
+    'bookings@tripdizer.com',
     `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, and failure reason not saved to Tripdizer databases.`,
     `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, but failure reason not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
