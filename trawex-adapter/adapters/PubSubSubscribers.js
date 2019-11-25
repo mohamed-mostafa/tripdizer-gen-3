@@ -2,6 +2,7 @@
 
 const flightsBookingService = require('../service/FlightsService');
 const hotelsBookingService = require('../service/HotelsService');
+const pubSubPublisher = require('./PubSubPublishers');
 
 // Imports the Google Cloud client library
 const { PubSub } = require('@google-cloud/pubsub');
@@ -11,8 +12,8 @@ const keyFileName = './tripdizer-service-account.json';
 process.env.GOOGLE_APPLICATION_CREDENTIALS = keyFileName;
 
 const pubsub = new PubSub({ projectId, keyFileName });
-const flightBookingSubscriptionName = 'projects/' + projectId + '/subscriptions/' + (process.env.FLIGHT_BOOKING_SUBSCRIPTION_NAME || 'flight-booking-subscription');
-const hotelBookingSubscriptionName = 'projects/' + projectId + '/subscriptions/' + (process.env.HOTEL_BOOKING_SUBSCRIPTION_NAME || 'hotel-booking-subscription');
+const flightBookingSubscriptionName = 'projects/' + projectId + '/subscriptions/' + (process.env.FLIGHT_BOOKING_PUBSUB_SUBSCRIPTION_NAME || 'flight-booking-subscription');
+const hotelBookingSubscriptionName = 'projects/' + projectId + '/subscriptions/' + (process.env.HOTEL_BOOKING_PUBSUB_SUBSCRIPTION_NAME || 'hotel-booking-subscription');
 
 // References an existing subscription
 const flightSubscription = pubsub.subscription(flightBookingSubscriptionName);
@@ -25,9 +26,9 @@ const flightBookingMessageHandler = async message => {
   message.ack();
 
   let bookingData = JSON.parse(message.data.toString())
-  let bookFlightRequest = createBookFlightRequestFromFlightOffer(bookingData);
 
   try {
+    let bookFlightRequest = createBookFlightRequestFromFlightOffer(bookingData);
     // retrieve fare details, even though we won't do anything with it for now
     let fareDetailsResponse = await flightsBookingService.getFareDetails("en", bookFlightRequest.sessionId, bookFlightRequest.fareSourceCode);
     // revalidate fare. it may also be done before payment.
@@ -35,17 +36,23 @@ const flightBookingMessageHandler = async message => {
     // book
     let bookingResponse = await flightsBookingService.bookFlight("en ", bookFlightRequest);
 
-    // check if bookingResponse.bookingStatus = CONFIRMED or PENDING
+    // check if bookingResponse.bookingStatus = CONFIRMED ?
+    let bookingConfirmation = {
+      bookingStatus: bookingResponse.bookingStatus,
+      confirmationNumbers: [bookingResponse.bookingUniqueId],
+    }
 
     // Check if we're booking an LLC ?
-    // issue ticket
-    let issueTicketResponse = await flightsBookingService.issueTicket("en", bookFlightRequest.sessionId, bookingResponse.bookingUniqueId);
+    if (bookingData.flightOffer.fareType == 'Public' || bookingData.flightOffer.fareType == 'Private') {
+      let issueTicketResponse = await flightsBookingService.issueTicket("en", bookFlightRequest.sessionId, bookingResponse.bookingUniqueId);
+      bookingConfirmation.referenceNumbers = [issueTicketResponse.ticketUniqueId];
+    }
 
-    // NOTIFY CUSTOMER ?
-    // WE HAVE BOOKING CONFIRMATION NUMBER FROM BOOK, AND TICKET NUMBER FROM ISSUE TICKET
-
+    // notify successful booking
+    pubSubPublisher.publishFlightBookingConfirmedMessage(bookingData.requestId, bookingData.flightOffer.fareSourceCode, bookingConfirmation);
   } catch (err) {
-    console.error(`FATAL ERROR: Flight Booking for request with id: ${bookingData.requestId} failed to process. Flight booking has not been made. Flight booking data: ${JSON.stringify(bookingData)}. Error: ${JSON.stringify(err)}`);
+    // notify failed booking
+    pubSubPublisher.publishFlightBookingFailedMessage(bookingData.requestId, bookingData.flightOffer.fareSourceCode, err);
   }
 }
 
@@ -66,15 +73,21 @@ const hotelBookingMessageHandler = async message => {
       var bookRequest = createBookRequestFromHotelAndRoomRateAndPNR(bookingData, targetRoomRate, validateResponse.preBookingToken)
       var bookResponse = await hotelsBookingService.bookHotel("en", bookRequest);
 
-      // NOTIFY CUSTOMER ?
-      // WE HAVE supplierConfirmationNum:Array, bookingDetails, bookingStatus (Confirmed) IN BOOK RESPONSE
-
+      // NOTIFY successful booking
+      var bookingConfirmation = {
+        bookingDetails: bookResponse.bookingDetails,
+        bookingStatus: bookResponse.bookingStatus,
+        confirmationNumbers: bookResponse.supplierConfirmationNum,
+        referenceNumbers: bookResponse.reference
+      }
+      pubSubPublisher.publishHotelBookingConfirmedMessage(bookingData.requestId, bookingData.hotel.moreDetails.hotelId, bookingConfirmation);
     } else {
-      throw ("No room rates available for this hotel! ");
+      throw ({ errorMessage: "No room rates available for this hotel! " });
     }
 
   } catch (err) {
-    console.error(`FATAL ERROR: Hotel Booking for request with id: ${bookingData.requestId} failed to process. Hotel booking has not been made. Hotel booking data: ${JSON.stringify(bookingData)}. Error: ${JSON.stringify(err)}`);
+    // notify failed booking
+    pubSubPublisher.publishHotelBookingFailedMessage(bookingData.requestId, bookingData.hotel.moreDetails.hotelId, err);
   }
 
 }

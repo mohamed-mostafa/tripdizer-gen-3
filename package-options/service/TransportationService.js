@@ -47,7 +47,7 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
     // create a trip segment for each city
     for (let i = 0; i < transportationSearchRequest.citiesSequence.length; i++) {
       let newTripSegment = {
-        cityIata: transportationSearchRequest.citiesSequence[i].cityIata,
+        cityIata: transportationSearchRequest.citiesSequence[i].cityIata.substring(0, 3),
         arrivalDate: departureMoment.format('YYYY-MM-DD'),
         cityName: transportationSearchRequest.citiesSequence[i].cityIata,
         countryIso: transportationSearchRequest.citiesSequence[i].countryIso,

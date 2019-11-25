@@ -98,7 +98,7 @@ var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 };
 
 var notificationCallback = (type, payload, onSuccess, onFailure) => {
-	paymentsDao.save(payload.id, type, payload.created_at, payload);
+	paymentsDao.save(payload.order.merchant_order_id, type, payload.created_at, payload);
 	if (type === 'TRANSACTION' && payload.success) {
 		requestBusiness.handlePaidRequest(payload.order.merchant_order_id);
 	} else {

@@ -9,12 +9,14 @@ let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
 let pnrDao = require('../dataaccess/hws_request_PNR_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
+let bookingsDao = require('../dataaccess/hws_bookings_dao');
+let paymentDao = require('../dataaccess/hws_payments_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
 var paymentsService = require('./hws_payments_business');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
-let googlePubSubAdapter = require('../message-publishers/PubSubPublishers');
+let googlePubSubAdapter = require('../adapters/PubSubPublishers');
 let moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
@@ -106,6 +108,10 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 				pnrDao.save(request.id, requestPNRInfo);
 
 				if (BYPASS_PAYMENT == "Y") {
+					await new Promise((resolve, reject) => {
+						setTimeout(() => resolve(), 10000);
+					})
+
 					publishRequestChoicesForBooking(request.id);
 				} else {
 					// at this point, we've saved the request to the database. let's generate a payment key
@@ -767,6 +773,23 @@ function getRequestById(requestId, onSuccess, onFailure) {
 
 				var pnrInfo = await pnrDao.get(requestId);
 				if (pnrInfo.exists) request.pnrInfo = pnrInfo.data();
+
+				if (request.flightOffers && request.flightOffers.choices && request.flightOffers.choices.length > 0) {
+					for (var i = 0; i < request.flightOffers.choices.length; i++) {
+						var flightBookingInfo = await bookingsDao.getFlightBookingResult(requestId, request.flightOffers.choices[i].fareSourceCode);
+						if (flightBookingInfo.exists) request.flightOffers.choices[i].bookingInfo = flightBookingInfo.data();
+					}
+				}
+
+				if (request.selectedHotels && request.selectedHotels.choices && request.selectedHotels.choices.length > 0) {
+					for (var i = 0; i < request.selectedHotels.choices.length; i++) {
+						var hotelBookingInfo = await bookingsDao.getHotelBookingResult(requestId, request.selectedHotels.choices[i].moreDetails.hotelId);
+						if (hotelBookingInfo.exists) request.selectedHotels.choices[i].bookingInfo = hotelBookingInfo.data();
+					}
+				}
+
+				var paymentInfo = await paymentDao.get(requestId);
+				if (paymentInfo.exists) request.paymentInfo = paymentInfo.data();
 
 				onSuccess(request);
 			} catch (err) {

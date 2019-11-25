@@ -4,6 +4,20 @@ gcloud pubsub subscriptions create hotel-booking-subscription --topic hotel-book
 gcloud pubsub topics create flight-booking-topic
 gcloud pubsub subscriptions create flight-booking-subscription --topic flight-booking-topic --expiration-period=never
 
+gcloud pubsub topics create hotel-booking-confirmation-topic
+gcloud pubsub subscriptions create hotel-booking-confirmation-subscription --topic hotel-booking-confirmation-topic --expiration-period=never
+  
+gcloud pubsub topics create flight-booking-confirmation-topic
+gcloud pubsub subscriptions create flight-booking-confirmation-subscription --topic flight-booking-confirmation-topic --expiration-period=never
+
+gcloud pubsub topics create hotel-booking-error-topic
+gcloud pubsub subscriptions create hotel-booking-error-subscription --topic hotel-booking-error-topic --expiration-period=never
+  
+gcloud pubsub topics create flight-booking-error-topic
+gcloud pubsub subscriptions create flight-booking-error-subscription --topic flight-booking-error-topic --expiration-period=never
+
+
+
 gcloud compute firewall-rules create trawex-adapter-firewall --action allow --target-tags trawex-adapter --source-ranges 0.0.0.0/0 --rules tcp:8085 --enable-logging
 gcloud compute firewall-rules create trawex-proxy-firewall --action allow --target-tags trawex-proxy --source-ranges 0.0.0.0/0 --rules tcp:3128 --enable-logging
 
