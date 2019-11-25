@@ -1,3 +1,4 @@
+import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BudgetComponent } from './budget/budget.component';
@@ -37,7 +38,8 @@ const routes: Routes = [
 			{ path: 'preferences', component: PreferencesComponent },
 			{ path: 'destinations', component: RecommendedDestinationsComponent },
 			{ path: 'estimated-cost', component: EstimatedCostComponent },
-			{ path: 'summary', component: SummaryComponent },
+            { path: 'summary', component: SummaryComponent },
+            { path: 'booking', component: BookingStepsComponent },
 			{ path: 'travel-assistance', component: TravelAssistanceComponent },
 			{ path: 'information', component: InformationComponent },
 			{ path: 'ticket', component: TicketComponent },
@@ -54,7 +56,8 @@ export const COMPONENTS = [
 	PurposeComponent,
 	PreferencesComponent,
 	RecommendedDestinationsComponent,
-	EstimatedCostComponent,
+    EstimatedCostComponent,
+    SummaryComponent,
 	TravelAssistanceComponent,
 	InformationComponent,
 	TicketComponent,

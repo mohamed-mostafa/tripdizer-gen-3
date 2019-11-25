@@ -1,3 +1,4 @@
+import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
 import { FlightRouteComponent } from './estimated-cost/tab-flights/flight-route/flight-route.component';
 import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
 import { OwlModule } from 'ngx-owl-carousel';
@@ -10,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
+import {MatStepperModule} from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -45,7 +47,8 @@ import { SummaryComponent } from './summary/summary.component';
 		MatSelectModule,
 		MatSliderModule,
 		MatTabsModule,
-		MatMenuModule,
+        MatMenuModule,
+        MatStepperModule,
 		OwlModule
 	],
 	declarations: [
@@ -61,7 +64,8 @@ import { SummaryComponent } from './summary/summary.component';
 		FlightOptionsComponent,
 		ChangeFlightComponent,
 		TabAccommodationComponent,
-		SummaryComponent,
+        SummaryComponent,
+        BookingStepsComponent,
 		PaymentDetailsComponent,
 		FlightRouteComponent
 	]

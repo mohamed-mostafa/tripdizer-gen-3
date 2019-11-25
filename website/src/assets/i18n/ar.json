@@ -240,6 +240,7 @@
 				"nights_in": "رحلات فى",
 				"hotels": "الفنادق",
 				"total_amount": "إجمالى المبلغ",
+                "proceed_booking": "الذهاب الى الحجز",
 				"traveller_info": {
 					"adult": "البالغ",
 					"kid": "الطفل",
@@ -258,7 +259,11 @@
 					"9": "التاسع",
 					"10": "العاشر"
 				}
-			}
+			},
+            "booking_steps": {
+                "passenger_details": "بيانات المسافر",
+                "payment": "الدفع"
+            }
 		},
 		"form_layout": {
 			"next_label": "التالي",

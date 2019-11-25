@@ -31,10 +31,11 @@ export class TabFlightsComponent {
 
 
 		service.getFlightOffers().subscribe(flightOffers => {
-			this.flightOffers = flightOffers;
-			this.flightOffers[0].selected = true;
-			this.selectedFlightOffers.push(this.flightOffers[0]);
-
+			if (flightOffers) {
+				this.flightOffers = flightOffers;
+				this.flightOffers[0].selected = true;
+				this.selectedFlightOffers.push(this.flightOffers[0]);
+			}
 		});
 
 		this.setSliderOptions();

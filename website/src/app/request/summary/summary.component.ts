@@ -1,31 +1,36 @@
-import { Component } from '@angular/core';
+import { SummaryService } from './summary.service';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Station } from './station.model';
 import { EstimatedCostService } from '../estimated-cost/estimated-cost.service';
 import { RequestService } from '../request.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-app-summary',
 	templateUrl: './summary.component.html',
 	styleUrls: ['./summary.component.scss'],
 })
-export class SummaryComponent {
+export class SummaryComponent implements OnDestroy {
 
 	currentStepPath: string;
 	stations: Array<Station> = [];
 	loadedData: boolean;
+	private subscriptions = new Subscription();
 
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
-		private service: EstimatedCostService,
+		service: SummaryService,
 		private requestService: RequestService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
-		this.stations = service.getSummaryStations();
-		service.finishGetAttractions.subscribe(x => {
-			this.loadedData = x;
-		});
+
+		this.subscriptions.add(service.stations
+			.subscribe(stations => {
+				this.stations = stations ? stations : null;
+			})
+		);
 	}
 
 	prev() {
@@ -33,6 +38,11 @@ export class SummaryComponent {
 	}
 
 	goToNextStep() {
-		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.router.navigate(['../', this.requestService
+			.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
 	}
 }

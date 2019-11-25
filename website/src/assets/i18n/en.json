@@ -239,7 +239,8 @@
 				"flights": "Flights",
 				"nights_in": "nights in",
 				"hotels": "Hotels",
-				"total_amount": "Total amount",
+                "total_amount": "Total amount",
+                "proceed_booking": "Proceed to booking",
 				"traveller_info": {
 					"adult": "Adult",
 					"kid": "Kid",
@@ -258,7 +259,11 @@
 					"9": "ninth",
 					"10": "tenth"
 				}
-			}
+            },
+            "booking_steps": {
+                "passenger_details": "Passenger details",
+                "payment": "Payment"
+            }
 		},
 		"form_layout": {
 			"next_label": "Continue",
