@@ -408,12 +408,14 @@
                                 </tbody>
                                 <tbody
                                     ng-show="flightOffer.bookingInfo.confirmation == null && flightOffer.bookingInfo.failure != null">
-                                    <tr>
-                                        <th colspan="6">Booking failure information
+                                    <tr style="color: red">
+                                        <th colspan="6">Booking failure reason
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td colspan="6">{{flightOffer.bookingInfo.failure}}</td>
+                                        <td colspan="6">
+                                            {{flightOffer.bookingInfo.failure.error ? flightOffer.bookingInfo.failure.error : flightOffer.bookingInfo.failure }}
+                                        </td>
                                     </tr>
                                 </tbody>
                                 <tbody
@@ -423,8 +425,8 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td>Booking Status</td>
-                                        <td>flightOffer.bookingInfo.confirmation.bookingStatus</td>
+                                        <td style="color: green">Booking Status</td>
+                                        <td style="color: green">flightOffer.bookingInfo.confirmation.bookingStatus</td>
                                         <td>Confirmation Number</td>
                                         <td>flightOffer.bookingInfo.confirmation.confirmationNumbers</td>
                                         <td>Ticket Number</td>
@@ -490,28 +492,28 @@
                             </div>
                         </div>
                         <div>
-                            <div class="form-control-6">
-                                <p><b>Night Rate: </b>{{hotel.rate}} {{hotel.currency}}</p>
-                            </div>
-                            <div class="form-control-6">
+                            <div class="form-control-12">
                                 <p><b>Total: </b>{{hotel.price }} {{hotel.currency}}</p>
                             </div>
                         </div>
-                        <div ng-if="hotel.confirmation != null && hotel.failure == null">
-                            <div class="form-control-4">
-                                <p><b>Booking Status: </b>{{hotel.confirmation.bookingStatus}}</p>
+                        <div ng-if="hotel.bookingInfo.confirmation != null && hotel.bookingInfo.failure == null">
+                            <div class="form-control-12" style="color: green">
+                                <p><b>Booking Status: </b>{{hotel.bookingInfo.confirmation.bookingStatus}}</p>
                             </div>
-                            <div class="form-control-4">
-                                <p><b>Room: </b>{{hotel.bookingDetails.room_name}} ({{hotel.bookingDetails.room_count}}
+                            <div class="form-control-12">
+                                <p><b>Room: </b>{{hotel.bookingInfo.confirmation.bookingDetails.room_name}}
+                                    ({{hotel.bookingInfo.confirmation.bookingDetails.room_count}}
                                     rooms)</p>
                             </div>
-                            <div class="form-control-4">
-                                <p><b>Confirmation Number: </b>{{hotel.confirmation.referenceNumbers}}</p>
+                            <div class="form-control-12">
+                                <p><b>Confirmation Number: </b>{{hotel.bookingInfo.confirmation.referenceNumbers}}</p>
                             </div>
                         </div>
                         <div ng-if="hotel.confirmation == null && hotel.failure != null">
-                            <div class="form-control-6">
-                                <p><b>Booking error: </b>{{hotel.failure}}</p>
+                            <div class="form-control-6" style="color: red">
+                                <p><b>Booking failure reason:
+                                    </b>{{hotel.bookingInfo.failure.error ? hotel.bookingInfo.failure.error : hotel.bookingInfo.failure }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -528,9 +530,13 @@
                 <div class="tab-pane" id="pnrTab">
                     <div ng-repeat="pnrInfo in currentOrder.pnrInfo.choices"
                         ng-show="currentOrder.pnrInfo.choices.length != 0">
-                        <textArea>
-                            {{pnrInfo}}
-                        </textArea>
+                        <table>
+                            <tr ng-repeat="(key, value) in pnrInfo"
+                                style="border-width:1px; border-color: black; border-style: solid;">
+                                <th> {{key}} </th>
+                                <td> {{ value }} </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <div class="tab-pane" id="paymentTab">
@@ -538,21 +544,31 @@
                         <table>
                             <tr>
                                 <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Time</th>
-                                <th>Card #</th>
-                                <th>Reciept #</th>
-                                <th>Transaction #</th>
-                                <th>Message</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.amount}}</td>
                             </tr>
                             <tr>
-                                <td>{{obj.data.amount}}</td>
-                                <td>{{obj.data.currency}}</td>
-                                <td>{{obj.data.created_at | date:'dd MMM yyyy -hh:mm'}}</td>
-                                <td>{{obj.data.card_num}}</td>
-                                <td>{{obj.data.receipt_no}}</td>
-                                <td>{{obj.data.transaction_no}}</td>
-                                <td>{{obj.data.message}}</td>
+                                <th>Currency</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.currency}}</td>
+                            </tr>
+                            <tr>
+                                <th>Time</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.created_at | date:'dd MMM yyyy -hh:mm'}}</td>
+                            </tr>
+                            <tr>
+                                <th>Card #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.card_num}}</td>
+                            </tr>
+                            <tr>
+                                <th>Reciept #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.receipt_no}}</td>
+                            </tr>
+                            <tr>
+                                <th>Transaction #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.transaction_no}}</td>
+                            </tr>
+                            <tr>
+                                <th>Message</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.message}}</td>
                             </tr>
                         </table>
                     </div>
