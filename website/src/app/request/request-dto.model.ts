@@ -1,13 +1,14 @@
-import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { Moment } from 'moment';
 import { LUTPreference } from '../shared/models/preference.model';
 import { CommonFunctions } from '../shared/utils';
+import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
+import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
+import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
-import { TravelHistory } from './travel-history.enum';
-import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
-import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
 import { Attraction } from './summary/attraction.model';
+import { Traveller } from './summary/travellers-info/traveller-info/traveller.model';
+import { TravelHistory } from './travel-history.enum';
 
 export class RequestRequest {
 	travelingFrom: string;
@@ -36,9 +37,11 @@ export class RequestRequest {
 	traveler: IRequester;
 	referralType: number;
 	travelHistory: TravelHistory;
+	pnrInfoList: Array<Traveller>;
+	requiresPayment: boolean;
 
-	static getRequestRequestFromRequest(request: Request): RequestRequest {
-		return {
+	static getRequestRequestFromRequest(request: Request, requiresPayment: boolean): RequestRequest {
+		const requestRequest: RequestRequest = {
 			travelingFrom: request.travelingFrom.name,
 			departureDate: request.departureDate,
 			returnDate: request.returnDate,
@@ -68,7 +71,14 @@ export class RequestRequest {
 			},
 			referralType: request.referralType,
 			travelHistory: request.travelHistory,
+			pnrInfoList: request.travellers,
+			requiresPayment,
 		};
+		if (requiresPayment) {
+			requestRequest.traveler.name = `${request.travellers[0].firstName} ${request.travellers[0].lastName}`;
+			requestRequest.traveler.email = request.travellers[0].email;
+		}
+		return requestRequest;
 	}
 }
 

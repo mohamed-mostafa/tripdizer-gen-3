@@ -31,9 +31,15 @@ export class BookingStepsComponent implements OnInit {
 				}
 			}
 		}
-		travellers.adults = Object.values(travellers.adults).map(adult => adult);
-		travellers.kids = Object.values(travellers.kids).map(kid => kid);
-		travellers.infants = Object.values(travellers.infants).map(infant => infant);
-		this.requestService.setProperty('travellers', travellers);
+		const adults = Object.values(travellers.adults).map(adult => ({ ...adult, ageGroup: 'adult' }));
+		const kids = Object.values(travellers.kids).map(kid => ({ ...kid, ageGroup: 'kid' }));
+		const infants = Object.values(travellers.infants).map(infant => ({ ...infant, ageGroup: 'infant' }));
+		this.requestService.setProperty('travellers', adults.concat(kids).concat(infants));
+		this.requestService.submitRequest(true).subscribe((response: any) => {
+			if (response) {
+				console.log(response);
+			} else {
+			}
+		});
 	}
 }

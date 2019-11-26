@@ -16,7 +16,11 @@
 	<div class="col-12 col-md-3">
 		<c-payment-details></c-payment-details>
 
-		<button (click)="goToPaymentStep()" class="btn btn-primary custom-bs btn-rounded text-uppercase">
+		<button
+			(click)="goToPaymentStep()"
+			[disabled]="formGroup.invalid"
+			class="btn btn-primary custom-bs btn-rounded text-uppercase"
+		>
 			{{ 'request.form_layout.next_label' | translate }}
 		</button>
 	</div>

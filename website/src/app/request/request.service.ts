@@ -362,10 +362,10 @@ export class RequestService {
 		return this.requestData.isValid();
 	}
 
-	submitRequest(): Observable<Ticket | null> {
+	submitRequest(requiresPayment: boolean = false): Observable<Ticket | null> {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
-			const request = RequestRequest.getRequestRequestFromRequest(this.requestData);
+			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, requiresPayment);
 			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
@@ -385,6 +385,6 @@ export class RequestService {
 		this.http
 			.post<boolean>(`${this.endPoint}/send-package`, { requestId: this.lastRequestId })
 			.pipe(finalize(() => this.isLoading.next({ show: false, message: '' })))
-			.subscribe(() => { });
+			.subscribe(() => {});
 	}
 }
