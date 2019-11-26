@@ -1,16 +1,16 @@
 <div [formGroup]="formGroup" class="mt-4">
 	<h3 class="text-capitalize">{{ getTravellerTitle() }}</h3>
-	<h6>{{ 'request.estimated_cost.summary.traveller_info.hint' | translate }}</h6>
+	<h6 class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">{{ 'request.estimated_cost.summary.traveller_info.hint' | translate }}</h6>
 
 	<div class="row">
-		<mat-form-field class="form-control-sm col-2">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-2">
 			<mat-hint>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-error>
 			<mat-select [formControlName]="controlName + '-title'" [placeholder]="'user.user_info.title' | translate">
 				<mat-option *ngFor="let title of getTitles()" [value]="title">{{ title }}</mat-option>
 			</mat-select>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-4">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-error>
 			<input
@@ -22,7 +22,7 @@
 				maxlength="14"
 			/>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-4">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-error>
 			<input
@@ -34,7 +34,7 @@
 				maxlength="14"
 			/>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-2">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-2">
 			<mat-hint>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-error>
 			<mat-select [formControlName]="controlName + '-gender'" [placeholder]="'user.user_info.gender' | translate">
@@ -45,7 +45,7 @@
 	</div>
 
 	<div class="row">
-		<mat-form-field class="form-control-sm col-6">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-6">
 			<mat-hint>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-error>
 			<input
@@ -62,20 +62,22 @@
 			/>
 			<mat-datepicker #dateOfBirthPicker [touchUi]="true"></mat-datepicker>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-6">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-6">
 			<mat-hint>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-error>
-			<mat-select
-				[formControlName]="controlName + '-nationality'"
+			<input
+				matInput
+				type="text"
+				class="text-yellow text-uppercase font-weight-bold"
 				[placeholder]="'user.user_info.nationality' | translate"
-			>
-				<mat-option [value]="1">Egyptian</mat-option>
-			</mat-select>
+				[formControlName]="controlName + '-nationality'"
+				maxlength="2"
+			/>
 		</mat-form-field>
 	</div>
 
 	<div class="row">
-		<mat-form-field class="form-control-sm col-6">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-6">
 			<mat-hint>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-error>
 			<input
@@ -86,7 +88,7 @@
 				[formControlName]="controlName + '-email'"
 			/>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-6">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-6">
 			<mat-hint>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-error>
 			<input
@@ -100,7 +102,7 @@
 	</div>
 
 	<div class="row">
-		<mat-form-field class="form-control-sm col-4">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-error>
 			<input
@@ -111,7 +113,7 @@
 				[formControlName]="controlName + '-passportNumber'"
 			/>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-4">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-error>
 			<input
@@ -127,7 +129,7 @@
 			/>
 			<mat-datepicker #passportExpiryPicker [touchUi]="true"></mat-datepicker>
 		</mat-form-field>
-		<mat-form-field class="form-control-sm col-4">
+		<mat-form-field class="form-control-sm mb-1 mb-sm-2 mb-md-3 mb-lg-4 col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-error>
 			<input
@@ -136,6 +138,7 @@
 				class="text-yellow text-uppercase font-weight-bold"
 				[placeholder]="'user.user_info.passport_issue_country' | translate"
 				[formControlName]="controlName + '-passportIssueCountry'"
+				maxlength="2"
 			/>
 		</mat-form-field>
 	</div>
