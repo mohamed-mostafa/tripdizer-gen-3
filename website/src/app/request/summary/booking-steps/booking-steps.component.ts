@@ -8,8 +8,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class BookingStepsComponent implements OnInit {
 
-	firstFormGroup: FormGroup;
-	secondFormGroup: FormGroup;
+	formGroup: FormGroup;
 
 	constructor() { }
 

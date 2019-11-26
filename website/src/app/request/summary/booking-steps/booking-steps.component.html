@@ -2,12 +2,12 @@
   <div class="col-12 col-md-9">
     <mat-horizontal-stepper [linear]="false" #stepper>
 
-      <mat-step [stepControl]="firstFormGroup">
+      <mat-step>
         <ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.passenger_details' | translate }}
         </ng-template>
-        <p>step 1</p>
+        <c-request-travellers-info [formGroup]="formGroup"></c-request-travellers-info>
       </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step>
         <ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.payment' | translate }}</ng-template>
         <p>step 2</p>
       </mat-step>
