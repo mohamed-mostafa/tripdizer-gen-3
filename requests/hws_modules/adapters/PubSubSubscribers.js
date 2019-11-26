@@ -85,11 +85,20 @@ const hotelBookingErrorMessageHandler = async message => {
   }
 }
 
+var sendHotelBookingInformationEmail = function (recepient, bookingInfo, confirmationNumber) {
+  emailBusiness.sendEmail(
+    recepient,
+    'bookings@tripdizer.com',
+    `Your booking has been confirmed`,
+    `Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
+  );
+}
+
 var sendBookingIncidentEmail = function (requestId, bookingType) {
   emailBusiness.sendEmail(
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
-    `[Booking Failure Indident] Request # ${requestId} Has a failed ${bookingType} booking.`,
+    `[Booking failure incident] Request # ${requestId} Has a failed ${bookingType} booking.`,
     `Request # ${requestId} Has a failed ${bookingType} booking. Please check the dashboard immediately.`
   );
 }
@@ -98,7 +107,7 @@ var sendBookingSuccessfulButUpdateFailureIncidentEmail = function (requestId, bo
   emailBusiness.sendEmail(
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
-    `[Booking Information Persistance Indident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases.`,
+    `[Booking information persistance incident] Request # ${requestId} Has a successful ${bookingType} booking, but booking details not saved to Tripdizer databases.`,
     `Request # ${requestId} Has a successful ${bookingType} booking, but booking details were not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
 }
@@ -107,7 +116,7 @@ var sendBookingFailedAndUpdateFailureIncidentEmail = function (requestId, bookin
   emailBusiness.sendEmail(
     process.env.BOOKING_ERROR_NOTIFICATION_EMAIL || 'mohamed@tripdizer.com',
     'bookings@tripdizer.com',
-    `[Booking Information Persistance Indident] Request # ${requestId} Has a a failed ${bookingType} booking, and failure reason not saved to Tripdizer databases.`,
+    `[Booking information persistance incident] Request # ${requestId} Has a a failed ${bookingType} booking, and failure reason not saved to Tripdizer databases.`,
     `Request # ${requestId} Has a a failed ${bookingType} booking, but failure reason was not saved to Tripdizer databases. Please contact the system administrators immediately.`
   );
 }
@@ -122,4 +131,4 @@ module.exports.start = function () {
   console.log("Listenning for message on flightErrorSubscription");
   hotelErrorSubscription.on(`message`, hotelBookingErrorMessageHandler);
   console.log("Listenning for message on hotelErrorSubscription");
-}
+};

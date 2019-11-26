@@ -23,11 +23,12 @@ export class TravellerInfoComponent implements OnInit {
 		phone: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		passportNumber: new FormControl('', [Validators.required]),
 		passportExpiry: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
-		passportIssueCountry: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
+		// passportIssueCountry: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
 	};
 	travellerType: string;
 	travellerNumber: number;
 	gender = Gender;
+	effectiveControls = [];
 	currentDate = new Date();
 	travellerMinDate = () => {
 		const date = new Date();
@@ -49,19 +50,36 @@ export class TravellerInfoComponent implements OnInit {
 		return date;
 	};
 
-	constructor(private translate: TranslateService) {}
+	constructor(private translate: TranslateService) { }
 
 	ngOnInit() {
 		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);
 		this.travellerType = info[1];
 		this.travellerNumber = info[2];
 
+		const firstAdultControls = ["title", "firstName", "lastName", "dateOfBirth", "nationality", "email", "phone", "passportNumber", "passportExpiry"];
+		const otherAdultsControls = ["title", "firstName", "lastName", "dateOfBirth", "passportNumber", "passportExpiry"];
+		const kidsControls = ["title", "firstName", "lastName", "dateOfBirth", "passportNumber", "passportExpiry"];
+		const infantsControls = ["title", "firstName", "lastName", "dateOfBirth"];
+
+		this.effectiveControls = firstAdultControls;
+		if (this.travellerType === "adult" && this.travellerNumber > 1) {
+			this.effectiveControls = otherAdultsControls;
+		} else if (this.travellerType === "kid") {
+			this.effectiveControls = kidsControls;
+		} else if (this.travellerType === "infant") {
+			this.effectiveControls = infantsControls;
+		}
+
 		for (const controlName in this.controls) {
-			if (this.controls.hasOwnProperty(controlName)) {
-				this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
+			if (this.effectiveControls.find(item => controlName === item)) {
+				if (this.controls.hasOwnProperty(controlName)) {
+					this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
+				}
 			}
 		}
 	}
+
 
 	getTitles(): Array<string> {
 		const titles = this.translate.instant('user.user_info.titles');
@@ -76,5 +94,10 @@ export class TravellerInfoComponent implements OnInit {
 			return `${type} ${number}`;
 		}
 		return `${number} ${type}`;
+	}
+
+	getControlVisibility(controlName): boolean {
+		debugger;
+		return this.effectiveControls.includes(controlName);
 	}
 }
