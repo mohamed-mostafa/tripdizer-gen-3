@@ -24,27 +24,4 @@ export class TravellersInfoComponent implements OnInit {
 	arrOfN(n: number): Array<number> {
 		return Array.from(Array(n).keys());
 	}
-
-	goToNextStep() {
-		const travellers = { adults: {}, kids: {}, infants: {} };
-		for (const controlName in this.formGroup.controls) {
-			if (this.formGroup.controls.hasOwnProperty(controlName)) {
-				if (this.formGroup.controls[controlName].value) {
-					const info = controlName.match(/(adult|kid|infant)-([0-9]+)-(.+)/);
-					if (info) {
-						const type = info[1];
-						const number = info[2];
-						const control = info[3];
-						travellers[`${type}s`] = travellers[`${type}s`] || {};
-						travellers[`${type}s`][number] = travellers[`${type}s`][number] || {};
-						travellers[`${type}s`][number][control] = this.formGroup.controls[controlName].value;
-					}
-				}
-			}
-		}
-		travellers.adults = Object.values(travellers.adults).map(adult => adult);
-		travellers.kids = Object.values(travellers.kids).map(kid => kid);
-		travellers.infants = Object.values(travellers.infants).map(infant => infant);
-		this.requestService.setProperty('travellers', travellers);
-	}
 }
