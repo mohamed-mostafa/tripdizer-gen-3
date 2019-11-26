@@ -1,19 +1,19 @@
 <div class="row">
-  <div class="col-12 col-md-9">
-    <mat-horizontal-stepper [linear]="false" #stepper>
-
-      <mat-step>
-        <ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.passenger_details' | translate }}
-        </ng-template>
-        <c-request-travellers-info [formGroup]="formGroup"></c-request-travellers-info>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.payment' | translate }}</ng-template>
-        <p>step 2</p>
-      </mat-step>
-    </mat-horizontal-stepper>
-  </div>
-  <div class="col-12 col-md-3">
-        <c-payment-details></c-payment-details>
-  </div>
+	<div class="col-12 col-md-9">
+		<mat-horizontal-stepper [linear]="false" #stepper>
+			<mat-step>
+				<ng-template matStepLabel>
+					{{ 'request.estimated_cost.booking_steps.passenger_details' | translate }}
+				</ng-template>
+				<c-request-travellers-info [formGroup]="formGroup"></c-request-travellers-info>
+			</mat-step>
+			<mat-step>
+				<ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.payment' | translate }}</ng-template>
+				<p>step 2</p>
+			</mat-step>
+		</mat-horizontal-stepper>
+	</div>
+	<div class="col-12 col-md-3">
+		<c-payment-details></c-payment-details>
+	</div>
 </div>
