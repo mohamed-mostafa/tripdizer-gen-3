@@ -239,8 +239,8 @@
 				"flights": "Flights",
 				"nights_in": "nights in",
 				"hotels": "Hotels",
-                "total_amount": "Total amount",
-                "proceed_booking": "Proceed to booking",
+				"total_amount": "Total amount",
+				"proceed_booking": "Proceed to booking",
 				"traveller_info": {
 					"adult": "Adult",
 					"kid": "Kid",
@@ -259,11 +259,11 @@
 					"9": "ninth",
 					"10": "tenth"
 				}
-            },
-            "booking_steps": {
-                "passenger_details": "Passenger details",
-                "payment": "Payment"
-            }
+			},
+			"booking_steps": {
+				"passenger_details": "Passenger details",
+				"payment": "Payment"
+			}
 		},
 		"form_layout": {
 			"next_label": "Continue",
@@ -471,7 +471,12 @@
 			"nationality": "nationality",
 			"passport_number": "Passport number",
 			"passport_expiry": "Expiry date",
-			"passport_issue_country": "Issue country"
+			"passport_issue_country": "Issue country",
+			"titles": {
+				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
+				"kid": ["MSTR", "MISS"],
+				"infant": ["MISS", "MSTR", "INF"]
+			}
 		},
 		"user_plans": {
 			"my_plans": "My Plans"

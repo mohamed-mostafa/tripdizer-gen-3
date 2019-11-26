@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from 'src/app/shared/utils';
-import { Gender } from 'src/app/shared/models/gender.enum';
 import { TranslateService } from '@ngx-translate/core';
+import { Gender } from 'src/app/shared/models/gender.enum';
+import { CustomValidators } from 'src/app/shared/utils';
 
 @Component({
 	selector: 'c-request-traveller-info',
@@ -14,23 +14,48 @@ export class TravellerInfoComponent implements OnInit {
 	@Input() controlName;
 	controls: any = {
 		title: new FormControl('', [Validators.required]),
-		firstName: new FormControl('', [Validators.required]),
-		lastName: new FormControl('', [Validators.required]),
+		firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{4,10}$')]),
+		lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{4,10}$')]),
 		gender: new FormControl('', [Validators.required]),
 		dateOfBirth: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
-		nationality: new FormControl('', [Validators.required]),
-		email: new FormControl('', [Validators.required]),
-		phone: new FormControl('', [Validators.required]),
+		nationality: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
+		email: new FormControl('', [Validators.required, Validators.email]),
+		phone: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		passportNumber: new FormControl('', [Validators.required]),
 		passportExpiry: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
-		passportIssueCountry: new FormControl('', [Validators.required]),
+		passportIssueCountry: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
 	};
+	travellerType: string;
+	travellerNumber: number;
 	gender = Gender;
-	maxDate = new Date();
+	currentDate = new Date();
+	travellerMinDate = () => {
+		const date = new Date();
+
+		if (!this.travellerType || this.travellerType === 'adult') {
+			return null;
+		}
+
+		let pastYears = 0;
+
+		if (this.travellerType === 'kid') {
+			pastYears = 12;
+		}
+		if (this.travellerType === 'infant') {
+			pastYears = 2;
+		}
+
+		date.setFullYear(date.getFullYear() - pastYears);
+		return date;
+	};
 
 	constructor(private translate: TranslateService) {}
 
 	ngOnInit() {
+		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);
+		this.travellerType = info[1];
+		this.travellerNumber = info[2];
+
 		for (const controlName in this.controls) {
 			if (this.controls.hasOwnProperty(controlName)) {
 				this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
@@ -38,17 +63,18 @@ export class TravellerInfoComponent implements OnInit {
 		}
 	}
 
+	getTitles(): Array<string> {
+		const titles = this.translate.instant('user.user_info.titles');
+
+		return titles[this.travellerType];
+	}
+
 	getTravellerTitle(): string {
-		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);
-		if (info) {
-			const type = this.translate.instant(`request.estimated_cost.summary.traveller_info.${info[1]}`);
-			const number = this.translate.instant(`request.estimated_cost.summary.numbers.${info[2]}`);
-			if (this.translate.currentLang === 'ar') {
-				return `${type} ${number}`;
-			}
-			return `${number} ${type}`;
-		} else {
-			return '';
+		const type = this.translate.instant(`request.estimated_cost.summary.traveller_info.${this.travellerType}`);
+		const number = this.translate.instant(`request.estimated_cost.summary.numbers.${this.travellerNumber}`);
+		if (this.translate.currentLang === 'ar') {
+			return `${type} ${number}`;
 		}
+		return `${number} ${type}`;
 	}
 }

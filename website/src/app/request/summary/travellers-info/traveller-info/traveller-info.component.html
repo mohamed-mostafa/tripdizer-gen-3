@@ -1,18 +1,14 @@
-<div [formGroup]="formGroup">
-	<h2 class="text-capitalize">{{ getTravellerTitle() }}</h2>
+<div [formGroup]="formGroup" class="mt-4">
+	<h3 class="text-capitalize">{{ getTravellerTitle() }}</h3>
 	<h6>{{ 'request.estimated_cost.summary.traveller_info.hint' | translate }}</h6>
 
 	<div class="row">
 		<mat-form-field class="form-control-sm col-2">
 			<mat-hint>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-hint>
 			<mat-error>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-error>
-			<input
-				matInput
-				type="text"
-				class="text-yellow text-uppercase font-weight-bold"
-				[placeholder]="'user.user_info.title' | translate"
-				[formControlName]="controlName + '-title'"
-			/>
+			<mat-select [formControlName]="controlName + '-title'" [placeholder]="'user.user_info.title' | translate">
+				<mat-option *ngFor="let title of getTitles()" [value]="title">{{ title }}</mat-option>
+			</mat-select>
 		</mat-form-field>
 		<mat-form-field class="form-control-sm col-4">
 			<mat-hint>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-hint>
@@ -23,6 +19,7 @@
 				class="text-yellow text-uppercase font-weight-bold"
 				[placeholder]="'user.user_info.first_name' | translate"
 				[formControlName]="controlName + '-firstName'"
+				maxlength="14"
 			/>
 		</mat-form-field>
 		<mat-form-field class="form-control-sm col-4">
@@ -34,6 +31,7 @@
 				class="text-yellow text-uppercase font-weight-bold"
 				[placeholder]="'user.user_info.last_name' | translate"
 				[formControlName]="controlName + '-lastName'"
+				maxlength="14"
 			/>
 		</mat-form-field>
 		<mat-form-field class="form-control-sm col-2">
@@ -52,7 +50,8 @@
 			<mat-error>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-error>
 			<input
 				matInput
-				[max]="maxDate"
+				[max]="currentDate"
+				[min]="travellerMinDate()"
 				[matDatepicker]="dateOfBirthPicker"
 				id="traveler-birthday"
 				class="text-yellow text-uppercase font-weight-bold"
@@ -117,6 +116,7 @@
 			<mat-error>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-error>
 			<input
 				matInput
+				[min]="currentDate"
 				[matDatepicker]="passportExpiryPicker"
 				id="traveler-passport_expiry"
 				class="text-yellow text-uppercase font-weight-bold"
