@@ -47,5 +47,5 @@ env_variables:
   HOTEL_BOOKING_CONFIRMATION_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-confirmation-subscription #SUBSCRIPTION
   FLIGHT_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: flight-booking-error-subscription #SUBSCRIPTION
   HOTEL_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-error-subscription #SUBSCRIPTION
-  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com
-  BYPASS_PAYMENT: "Y"
+  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com,ahmed.essawy@tripdizer.com,ramy.ahmed@tripdizer.com
+  BYPASS_PAYMENT: "N"
