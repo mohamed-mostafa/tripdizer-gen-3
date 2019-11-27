@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { RequestService } from '../../request.service';
+import { PaymentInfo } from './payment-step/payment.model';
 
 @Component({
 	selector: 'c-booking-steps',
@@ -9,12 +10,13 @@ import { RequestService } from '../../request.service';
 })
 export class BookingStepsComponent implements OnInit {
 	formGroup = new FormGroup({});
+	paymentKey: string;
 
 	constructor(private requestService: RequestService) {}
 
 	ngOnInit() {}
 
-	goToPaymentStep() {
+	goToPaymentStep(stepper) {
 		const travellers = { adults: {}, kids: {}, infants: {} };
 		for (const controlName in this.formGroup.controls) {
 			if (this.formGroup.controls.hasOwnProperty(controlName)) {
@@ -35,10 +37,10 @@ export class BookingStepsComponent implements OnInit {
 		const kids = Object.values(travellers.kids).map(kid => ({ ...kid, ageGroup: 'kid' }));
 		const infants = Object.values(travellers.infants).map(infant => ({ ...infant, ageGroup: 'infant' }));
 		this.requestService.setProperty('travellers', adults.concat(kids).concat(infants));
-		this.requestService.submitRequest(true).subscribe((response: any) => {
-			if (response) {
-				console.log(response);
-			} else {
+		this.requestService.submitRequestWithPayment().subscribe((paymentInfo: PaymentInfo) => {
+			if (paymentInfo) {
+				this.paymentKey = paymentInfo.paymentKey;
+				stepper.next();
 			}
 		});
 	}

@@ -9,7 +9,7 @@
 			</mat-step>
 			<mat-step>
 				<ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.payment' | translate }}</ng-template>
-				<p>step 2</p>
+				<c-request-booking-payment-step [paymentKey]="paymentKey"></c-request-booking-payment-step>
 			</mat-step>
 		</mat-horizontal-stepper>
 	</div>
@@ -17,7 +17,7 @@
 		<c-payment-details></c-payment-details>
 
 		<button
-			(click)="goToPaymentStep()"
+			(click)="goToPaymentStep(stepper)"
 			[disabled]="formGroup.invalid"
 			class="btn btn-primary custom-bs btn-rounded text-uppercase"
 		>

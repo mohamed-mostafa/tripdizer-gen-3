@@ -23,6 +23,7 @@ import { RequestRequest, RequestResponse } from './request-dto.model';
 import { RequestType } from './request-type.enum';
 import { Request } from './request.model';
 import { Step } from './step.model';
+import { PaymentInfo } from './summary/booking-steps/payment-step/payment.model';
 import { Ticket } from './ticket/ticket.model';
 
 @Injectable({ providedIn: 'root' })
@@ -374,6 +375,23 @@ export class RequestService {
 					this.resetRequestState();
 					this.isLoading.next({ show: false, message: '' });
 					return ticket;
+				})
+			);
+		}
+		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
+	}
+
+	submitRequestWithPayment(): Observable<PaymentInfo | null> {
+		if (this.isValid()) {
+			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, true);
+			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
+				map(requestResponse => {
+					const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
+					this.lastRequestId = paymentInfo.id;
+					this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
+					this.resetRequestState();
+					this.isLoading.next({ show: false, message: '' });
+					return paymentInfo;
 				})
 			);
 		}

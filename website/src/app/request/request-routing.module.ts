@@ -11,6 +11,7 @@ import { RecommendedDestinationsComponent } from './recommended-destinations/rec
 import { RequestComponent } from './request.component';
 import { RequestGuard } from './request.guard';
 import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
+import { BookingPaymentStepComponent } from './summary/booking-steps/payment-step/payment-step.component';
 import { TravellerInfoComponent } from './summary/booking-steps/travellers-info-step/traveller-info/traveller-info.component';
 import { BookingTravellersInfoComponent } from './summary/booking-steps/travellers-info-step/travellers-info-step.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -64,6 +65,7 @@ export const COMPONENTS = [
 	TravelInfoComponent,
 	TravellerInfoComponent,
 	BookingTravellersInfoComponent,
+	BookingPaymentStepComponent,
 ];
 
 @NgModule({
