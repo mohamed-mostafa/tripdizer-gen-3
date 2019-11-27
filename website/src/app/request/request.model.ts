@@ -15,7 +15,7 @@ import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 import { Attraction } from './summary/attraction.model';
-import { Traveller } from './summary/travellers-info/traveller-info/traveller.model';
+import { Traveller } from './summary/booking-steps/travellers-info-step/traveller-info/traveller.model';
 import { TravelHistory } from './travel-history.enum';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
 

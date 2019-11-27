@@ -1,4 +1,3 @@
-import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BudgetComponent } from './budget/budget.component';
@@ -11,9 +10,10 @@ import { PurposeComponent } from './purpose/purpose.component';
 import { RecommendedDestinationsComponent } from './recommended-destinations/recommended-destinations.component';
 import { RequestComponent } from './request.component';
 import { RequestGuard } from './request.guard';
+import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
+import { TravellerInfoComponent } from './summary/booking-steps/travellers-info-step/traveller-info/traveller-info.component';
+import { BookingTravellersInfoComponent } from './summary/booking-steps/travellers-info-step/travellers-info-step.component';
 import { SummaryComponent } from './summary/summary.component';
-import { TravellerInfoComponent } from './summary/travellers-info/traveller-info/traveller-info.component';
-import { TravellersInfoComponent } from './summary/travellers-info/travellers-info.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
 import { TravelInfoComponent } from './travel-info/travel-info.component';
@@ -38,8 +38,8 @@ const routes: Routes = [
 			{ path: 'preferences', component: PreferencesComponent },
 			{ path: 'destinations', component: RecommendedDestinationsComponent },
 			{ path: 'estimated-cost', component: EstimatedCostComponent },
-            { path: 'summary', component: SummaryComponent },
-            { path: 'booking', component: BookingStepsComponent },
+			{ path: 'summary', component: SummaryComponent },
+			{ path: 'booking', component: BookingStepsComponent },
 			{ path: 'travel-assistance', component: TravelAssistanceComponent },
 			{ path: 'information', component: InformationComponent },
 			{ path: 'ticket', component: TicketComponent },
@@ -56,14 +56,14 @@ export const COMPONENTS = [
 	PurposeComponent,
 	PreferencesComponent,
 	RecommendedDestinationsComponent,
-    EstimatedCostComponent,
-    SummaryComponent,
+	EstimatedCostComponent,
+	SummaryComponent,
 	TravelAssistanceComponent,
 	InformationComponent,
 	TicketComponent,
 	TravelInfoComponent,
 	TravellerInfoComponent,
-	TravellersInfoComponent,
+	BookingTravellersInfoComponent,
 ];
 
 @NgModule({

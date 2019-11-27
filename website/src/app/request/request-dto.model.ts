@@ -7,7 +7,7 @@ import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { Request } from './request.model';
 import { IRequester } from './requester.model';
 import { Attraction } from './summary/attraction.model';
-import { Traveller } from './summary/travellers-info/traveller-info/traveller.model';
+import { Traveller } from './summary/booking-steps/travellers-info-step/traveller-info/traveller.model';
 import { TravelHistory } from './travel-history.enum';
 
 export class RequestRequest {
