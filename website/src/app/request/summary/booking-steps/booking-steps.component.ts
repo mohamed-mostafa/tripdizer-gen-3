@@ -12,7 +12,9 @@ export class BookingStepsComponent implements OnInit {
 	formGroup = new FormGroup({});
 	paymentKey: string;
 
-	constructor(private requestService: RequestService) {}
+	constructor(private requestService: RequestService) {
+		this.requestService.setProperty('requiresPayment', true);
+	}
 
 	ngOnInit() {}
 
