@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BudgetCategory } from '../shared/models/budget-category.model';
@@ -362,10 +362,10 @@ export class RequestService {
 		return this.requestData.isValid();
 	}
 
-	submitRequest(requiresPayment: boolean = false): Observable<Ticket | null> {
+	submitRequest(): Observable<Ticket | null> {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
-			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, requiresPayment);
+			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, false);
 			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
