@@ -15,7 +15,7 @@ import { RequestType } from './request-type.enum';
 import { IRequester } from './requester.model';
 import { Step } from './step.model';
 import { Attraction } from './summary/attraction.model';
-import { Traveller } from './summary/travellers-info/traveller-info/traveller.model';
+import { Traveller } from './summary/booking-steps/travellers-info-step/traveller-info/traveller.model';
 import { TravelHistory } from './travel-history.enum';
 import { TravelingFrom } from './traveling-from/traveling-from.model';
 
@@ -67,6 +67,7 @@ export class Request extends CommonFunctions {
 	private _referralType: number;
 	private _travelHistory: TravelHistory;
 	private _travellers: Array<Traveller>;
+	private _requiresPayment: boolean;
 
 	get countries(): Array<Country> {
 		return this._countries || [];
@@ -279,7 +280,12 @@ export class Request extends CommonFunctions {
 	get travelHistory(): TravelHistory {
 		return this._travelHistory;
 	}
-
+	set requiresPayment(value: boolean) {
+		this._requiresPayment = value;
+	}
+	get requiresPayment(): boolean {
+		return this._requiresPayment;
+	}
 	get validSteps(): Array<Step> {
 		return this.steps.filter(s => !s.isDisabled).sort((a, b) => a.order - b.order);
 	}
@@ -630,6 +636,7 @@ export class Request extends CommonFunctions {
 				path: 'information',
 				order: this.getStepOrder('information'),
 				value: this._localeLabels.information.value,
+				isDisabled: this.requiresPayment,
 				isClickable: (): boolean => this.isNavBarItemClickable('information'),
 				isValid: (): boolean => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('information')) === -1) {

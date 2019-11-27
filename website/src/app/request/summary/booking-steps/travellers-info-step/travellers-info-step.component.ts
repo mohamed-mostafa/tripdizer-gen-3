@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { RequestService } from '../../request.service';
+import { RequestService } from '../../../../request/request.service';
 
 @Component({
-	selector: 'c-request-travellers-info',
-	templateUrl: './travellers-info.component.html',
-	styleUrls: ['./travellers-info.component.scss'],
+	selector: 'c-request-booking-travellers-info-step',
+	templateUrl: './travellers-info-step.component.html',
+	styleUrls: ['./travellers-info-step.component.scss'],
 })
-export class TravellersInfoComponent implements OnInit {
+export class BookingTravellersInfoComponent implements OnInit {
 	@Input() formGroup: FormGroup;
 	adultsNumber: number;
 	kidsNumber: number;
