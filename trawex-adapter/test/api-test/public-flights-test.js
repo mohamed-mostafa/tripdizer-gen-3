@@ -155,5 +155,20 @@ describe('Public flight booking', function () {
 				done("Couldn't find a public offer to book");
 			}
 		})
+
+		delay(5000);
+		it('should get trip details', function (done) {
+			flightsService.getTripDetails("en", sessionId, bookingUniqueId)
+				.then(function (res) {
+					expect(res).to.have.property("passengerDetails").not.null;
+					expect(res).to.have.property("passengerDetails").to.be.an("array");
+					expect(res).to.have.property("reservationDetails").not.null;
+					expect(res).to.have.property("reservationDetails").to.be.an("array");
+					done();
+				})
+				.catch(function (err) {
+					done(err);
+				});
+		})
 	}); // end function describe
 }); // end module describe

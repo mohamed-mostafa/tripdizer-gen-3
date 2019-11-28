@@ -6,7 +6,6 @@ const moment = require('moment');
 const { PubSub } = require('@google-cloud/pubsub');
 const bookingsDao = require('../dataaccess/hws_bookings_dao');
 const requestsDao = require('../dataaccess/hws_requests_dao');
-const transportationDao = require('../dataaccess/hws_request_transporation_dao');
 const emailBusiness = require('./hws_email_adapter');
 // Creates a client
 const projectId = process.env.PROJECT_NAME || 'tripdizer-dev';
@@ -35,11 +34,7 @@ const flightBookingConfirmationMessageHandler = async message => {
     bookingsDao.saveFlightBookingResult(confirmationMessage.requestId, confirmationMessage.fareSourceCode, { failure: null, confirmation: confirmationMessage.bookingConfirmation });
     // NOTIFY CUSTOER HERE
     requestsDao.getRequestById(confirmationMessage.requestId, async request => {
-      var flightOffers = await transportationDao.get(requestId);
-      if (flightOffers.exists) {
-        var requestFlightOffers = flightOffers.data();
-        sendFlightBookingInformationEmail(request.traveler.name, request.traveler.emailAddress, requestFlightOffers, confirmationMessage.bookingConfirmation.referenceNumbers[0])
-      }
+      sendFlightBookingInformationEmail(request.traveler.name, request.traveler.emailAddress, confirmationMessage.bookingConfirmation)
     }, err => {
       console.error(`FATAL ERROR: Failed to send flight booking confirmation email to customer of request ${confirmationMessage.requestId}. Reason: ${JSON.stringify(err)}`)
     })
@@ -108,63 +103,68 @@ var sendHotelBookingInformationEmail = function (travellerName, recepient, booki
       // NOTIFY OPERATIONS TEAM HERE
 
     } else {
-      data = data.replace("#name#", travellerName);
-      data = data.replace("#confirmation#", confirmationNumber);
-      data = data.replace("#destination#", bookingInfo.destinationName);
-      data = data.replace("#hotel#", bookingInfo.hotelName);
-      data = data.replace("#checkin#", bookingInfo.checkIn);
-      data = data.replace("#checkout#", bookingInfo.checkOut);
-      data = data.replace("#address#", bookingInfo.address);
-      emailBusiness.sendEmail(
-        recepient,
-        'bookings@tripdizer.com',
-        `Your hotel booking has been confirmed`,
-        data
-      );
+      if (bookingInfo) {
+        data = data.replace("#name#", travellerName);
+        data = data.replace("#confirmation#", confirmationNumber);
+        data = data.replace("#destination#", bookingInfo.destinationName);
+        data = data.replace("#hotel#", bookingInfo.hotelName);
+        data = data.replace("#checkin#", bookingInfo.checkIn);
+        data = data.replace("#checkout#", bookingInfo.checkOut);
+        data = data.replace("#address#", bookingInfo.address);
+        emailBusiness.sendEmail(
+          recepient,
+          'bookings@tripdizer.com',
+          `Your hotel booking has been confirmed`,
+          data
+        );
+      } else {
+        console.error(`FATAL ERROR: Failed to send hotel booking confirmation mail to customer`)
+        // NOTIFY OPERATIONS TEAM HERE
+      }
     }
   });
 }
 
-var sendFlightBookingInformationEmail = function (travellerName, recepient, requestFlightOffers, confirmationNumber) {
+var sendFlightBookingInformationEmail = function (travellerName, recepient, bookingConfirmation) {
   fs.readFile("email_templates/flight_confirmation.html", 'utf8', function (err, data) {
     if (err) {
-      console.error(`FATAL ERROR: Failed to send hotel booking confirmation mail to customer`)
+      console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer`)
       // NOTIFY OPERATIONS TEAM HERE
 
     } else {
       data = data.replace("#name#", travellerName);
-      data = data.replace("#confirmation#", confirmationNumber);
 
       var flightDetailsRows = "";
-      if (requestFlightOffers.choices && requestFlightOffers.choices.length > 0) {
-        for (var i = 0; i < requestFlightOffers.choices[0].flightLegs.length; i++) {
-          var flightLeg = requestFlightOffers.choices[0].flightLegs[i];
-          for (var i = 0; j < flightLeg.segments.length; j++) {
-            var flightSegment = flightLeg.segments[j];
-            flightDetailsRows += "<tr>"
-            flightDetailsRows += "<td>"
-            flightDetailsRows += flightSegment.originDetails + " - " + moment(flightSegment.departure).format("dd/MM/yyyy hh:mm");
-            flightDetailsRows += "</td>"
-            flightDetailsRows += "<td>"
-            flightDetailsRows += flightSegment.destinationDetails + " - " + moment(flightSegment.arrival).format("dd/MM/yyyy hh:mm");
-            flightDetailsRows += "</td>"
-            flightDetailsRows += "<td>"
-            flightDetailsRows += flightSegment.totalDurationInWords;
-            flightDetailsRows += "</td>"
-            flightDetailsRows += "<td>"
-            flightDetailsRows += flightSegment.carrier.name;
-            flightDetailsRows += "</td>"
-            flightDetailsRows += "</tr>"
-          }
+      if (bookingConfirmation.reservationDetails && bookingConfirmation.reservationDetails.length > 0) {
+        for (var i = 0; i < bookingConfirmation.reservationDetails.length; i++) {
+          var flightSegment = bookingConfirmation.reservationDetails[i];
+          flightDetailsRows += "<p>"
+          flightDetailsRows += "<strong>Departure: </strong>" + flightSegment.DepartureAirportLocationName + flightSegment.DepartureTerminal != "" ? "( " + flightSegment.DepartureTerminal + " )" : "" + " at " + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Arrival: </strong>" + flightSegment.ArrivalAirportLocationName + flightSegment.ArrivalTerminal != "" ? "( " + flightSegment.ArrivalTerminal + " )" : "" + " at " + moment(flightSegment.ArrivalDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Duration: </strong>" + flightSegment.JourneyDurationInWords;
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Stops: </strong>" + flightSegment.StopQuantity == 0 || flightSegment.StopQuantity == "0" ? "Direct" : flightSegment.StopQuantity;
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Ariline: </strong>" + flightSegment.MarketingAirlineName + flightSegment.MarketingAirlineName == flightSegment.OperatingAirlineName ? "" : "( Operated by: " + flightSegment.OperatingAirlineName + " )";
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Baggage: </strong>" + flightSegment.Baggage;
+          flightDetailsRows += "<br>"
+          flightDetailsRows += "<strong>Confirmation Number: </strong><strong style = 'color:#2989ff' >" + flightSegment.AirlinePNR + "</strong>";
+          flightDetailsRows += "</p>"
         }
+        data.replace("#booking_details#", flightDetailsRows);
+        emailBusiness.sendEmail(
+          recepient,
+          'bookings@tripdizer.com',
+          `Your flight booking has been confirmed`,
+          data
+        );
+      } else {
+        console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer`)
+        // NOTIFY OPERATIONS TEAM HERE
       }
-      data.replace("#flight_rows#", flightDetailsRows);
-      emailBusiness.sendEmail(
-        recepient,
-        'bookings@tripdizer.com',
-        `Your flight booking has been confirmed`,
-        data
-      );
     }
   });
 }

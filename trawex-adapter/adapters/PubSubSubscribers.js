@@ -37,19 +37,28 @@ const flightBookingMessageHandler = async message => {
     let bookingResponse = await flightsBookingService.bookFlight("en ", bookFlightRequest);
 
     // check if bookingResponse.bookingStatus = CONFIRMED ?
-    let bookingConfirmation = {
-      bookingStatus: bookingResponse.bookingStatus,
-      confirmationNumbers: [bookingResponse.bookingUniqueId],
-    }
+    if (bookingResponse.bookingStatus == 'CONFIRMED') {
+      // Check if we're booking a Public or Private, then issue ticket
+      // With Public and Private fares, the booking is not enough, issuing the ticket is what actually confirms the booking
+      // with LCC fares (Low Cost Carriers), booking is confirmed immediately with the booking service
+      if (bookingData.flightOffer.fareType == 'Public' || bookingData.flightOffer.fareType == 'Private') {
+        let issueTicketResponse = await flightsBookingService.issueTicket("en", bookFlightRequest.sessionId, bookingResponse.bookingUniqueId);
+      }
 
-    // Check if we're booking an LLC ?
-    if (bookingData.flightOffer.fareType == 'Public' || bookingData.flightOffer.fareType == 'Private') {
-      let issueTicketResponse = await flightsBookingService.issueTicket("en", bookFlightRequest.sessionId, bookingResponse.bookingUniqueId);
-      bookingConfirmation.referenceNumbers = [issueTicketResponse.ticketUniqueId];
-    }
+      // then we recieve the details of the trip (PNR numbers, E-Ticket numbers, ... etc)
+      let tripDetailsResponse = await flightsBookingService.getTripDetails("en", bookFlightRequest.sessionId, bookingResponse.bookingUniqueId);
 
-    // notify successful booking
-    pubSubPublisher.publishFlightBookingConfirmedMessage(bookingData.requestId, bookingData.flightOffer.fareSourceCode, bookingConfirmation);
+      let bookingConfirmation = {
+        bookingStatus: bookingResponse.bookingStatus,
+        confirmationNumbers: tripDetailsResponse.reservationDetails.map(detail => detail.AirlinePNR),
+        referenceNumbers: tripDetailsResponse.passengerDetails.map(detail => detail.eTicketNumber),
+        bookingDetails: tripDetailsResponse,
+      }
+      // notify successful booking
+      pubSubPublisher.publishFlightBookingConfirmedMessage(bookingData.requestId, bookingData.flightOffer.fareSourceCode, bookingConfirmation);
+    } else {
+      throw ({ error: `Booking failed - BookingStatus recieved: ${bookingResponse.bookingStatus}` })
+    }
   } catch (err) {
     // notify failed booking
     pubSubPublisher.publishFlightBookingFailedMessage(bookingData.requestId, bookingData.flightOffer.fareSourceCode, err);

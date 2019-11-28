@@ -13,6 +13,7 @@ let TRAWEX_FLIGHTS_FARE_RULES_URL = "/fare_rules";
 let TRAWEX_FLIGHTS_REVALIDATE_FARE_URL = "/revalidate";
 let TRAWEX_FLIGHTS_BOOK_URL = "/book";
 let TRAWEX_FLIGHTS_TICKET_ORDER_URL = "/ticket_order";
+let TRAWEX_FLIGHTS_TRIP_DETAILS_URL = "/trip_details";
 let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
@@ -457,6 +458,61 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
             reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             resolve({ ticketUniqueId: data.AirOrderTicketRS.TicketOrderResult.UniqueID });
+          }
+        }
+      }
+    );
+  });
+}
+
+exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
+  return new Promise(function (resolve, reject) {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TRIP_DETAILS_URL;
+    httpRequest.get(
+      {
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        qs: {
+          user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
+          target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          UniqueID: bookingUniqueId, session_id: sessionId
+        }
+      },
+      function (error, response, data) {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else if (data.Errors) {
+          if (Array.isArray(data.Errors)) {
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            reject({
+              error: data.Errors.ErrorMessage
+            });
+          }
+        } else if (data.TripDetailsResponse.TripDetailsResult.Errors) {
+          if (Array.isArray(data.TripDetailsResponse.TripDetailsResult.Errors)) {
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.Error ? data.TripDetailsResponse.TripDetailsResult.Errors.Error.ErrorMessage : (data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage ? data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
+          }
+        } else {
+          if (data.TripDetailsResponse.TripDetailsResult.Success == "false" || data.TripDetailsResponse.TripDetailsResult.Success == false) {
+            // return all errors, coma-separated
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            resolve(
+              {
+                passengerDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.CustomerInfos.map(item => item.CustomerInfo),
+                reservationDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.ReservationItems.map(item => ({
+                  ...item.ReservationItem,
+                  DepartureAirportLocationName: airportsMap[item.ReservationItem.DepartureAirportLocationCode],
+                  ArrivalAirportLocationName: airportsMap[item.ReservationItem.ArrivalAirportLocationCode],
+                  MarketingAirlineName: airlinesMap[item.ReservationItem.MarketingAirlineCode],
+                  OperatingAirlineName: airlinesMap[item.ReservationItem.OperatingAirlineCode],
+                  JourneyDurationInWords = shortEnglishHumanizer(item.ReservationItem.JourneyDuration * 60 * 1000)
+                }))
+              });
           }
         }
       }
