@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BudgetCategory } from '../shared/models/budget-category.model';
@@ -23,6 +23,7 @@ import { RequestRequest, RequestResponse } from './request-dto.model';
 import { RequestType } from './request-type.enum';
 import { Request } from './request.model';
 import { Step } from './step.model';
+import { PaymentInfo } from './summary/booking-steps/payment-step/payment.model';
 import { Ticket } from './ticket/ticket.model';
 
 @Injectable({ providedIn: 'root' })
@@ -362,10 +363,10 @@ export class RequestService {
 		return this.requestData.isValid();
 	}
 
-	submitRequest(requiresPayment: boolean = false): Observable<Ticket | null> {
+	submitRequest(): Observable<Ticket | null> {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
-			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, requiresPayment);
+			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, false);
 			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
 				map(requestResponse => {
 					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
@@ -374,6 +375,23 @@ export class RequestService {
 					this.resetRequestState();
 					this.isLoading.next({ show: false, message: '' });
 					return ticket;
+				})
+			);
+		}
+		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
+	}
+
+	submitRequestWithPayment(): Observable<PaymentInfo | null> {
+		if (this.isValid()) {
+			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, true);
+			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
+				map(requestResponse => {
+					const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
+					this.lastRequestId = paymentInfo.id;
+					this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
+					this.resetRequestState();
+					this.isLoading.next({ show: false, message: '' });
+					return paymentInfo;
 				})
 			);
 		}
