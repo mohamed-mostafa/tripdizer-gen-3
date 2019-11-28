@@ -97,7 +97,6 @@ export class TravellerInfoComponent implements OnInit {
 	}
 
 	getControlVisibility(controlName): boolean {
-		debugger;
 		return this.effectiveControls.includes(controlName);
 	}
 }
