@@ -1,3 +1,4 @@
+import { PaymentConfirmComponent } from './payment-confirm/payment-confirm.component';
 import { OwlModule } from 'ngx-owl-carousel';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -7,6 +8,6 @@ import { COMPONENTS as HomeComponents, HomeRoutingModule } from './home-routing.
 
 @NgModule({
 	imports: [CommonModule, HomeRoutingModule, SharedModule, CoreModule, OwlModule],
-	declarations: [...HomeComponents],
+	declarations: [...HomeComponents, PaymentConfirmComponent],
 })
 export class HomeModule {}
