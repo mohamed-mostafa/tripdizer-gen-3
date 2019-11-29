@@ -41,6 +41,12 @@
                 <li ng-if="currentOrder.selectedAttractions.choices">
                     <a href="#attractionsTab" data-toggle="tab">Attractions</a>
                 </li>
+                <li ng-if="!isCreate && currentOrder.paymentInfo">
+                    <a href="#paymentTab" data-toggle="tab">Payment</a>
+                </li>
+                <li ng-if="!isCreate && currentOrder.pnrInfo">
+                    <a href="#pnrTab" data-toggle="tab">Passengers</a>
+                </li>
                 <li ng-if="!isCreate && currentOrder.destination">
                     <a href="#generatePackageTab" data-toggle="tab">Package</a>
                 </li>
@@ -361,35 +367,108 @@
                 <div class="tab-pane" id="flightsTab">
                     <div ng-repeat="flightOffer in currentOrder.flightOffers.choices"
                         ng-show="currentOrder.flightOffers.choices.length != 0">
-                        <h4><img src="{{flightOffer.carrier.squareLogo}}" width="30px" height="30px" />
-                            {{flightOffer.segments[0].origin}} to
-                            {{flightOffer.segments[flightOffer.segments.length - 1].destination}} on
-                            {{flightOffer.carrier.name}} </h4>
-                        <div>
-                            <div class="form-control-6">
-                                <p><b>Departure: </b>{{flightOffer.segments[0].departure | date:'dd MMM yyyy - hh:mm'}}
-                                </p>
-                            </div>
-                            <div class="form-control-6">
-                                <p><b>Arrival:
-                                    </b>{{flightOffer.segments[flightOffer.segments.length - 1].return | date:'dd MMM yyyy - hh:mm'}}
-                                </p>
-                            </div>
+                        <!-- The folowing displays the new filght offer model: one flight offer containing all flight legs-->
+                        <div ng-show="flightOffer.fareSourceCode != null">
+                            <table>
+                                <tbody ng-repeat="flightLeg in flightOffer.flightLegs">
+                                    <tr>
+                                        <th colspan="6">{{flightLeg.origin.name }} to {{flightLeg.destination.name}}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Depart</th>
+                                        <th>Arrive</th>
+                                        <th>Duration</th>
+                                        <th>Airline</th>
+                                    </tr>
+                                    <tr ng-repeat="segment in flightLeg.segments">
+                                        <td>{{segment.origin }} ({{segment.originDetails}}) </td>
+                                        <td>{{segment.destination }} ({{segment.destinationDetails}}) </td>
+                                        <td>{{segment.departure | date:'dd MMM yyyy - hh:mm'}}</td>
+                                        <td>{{segment.arrival | date:'dd MMM yyyy - hh:mm'}}</td>
+                                        <td>{{segment.totalDurationInWords}}</td>
+                                        <td>{{segment.carrier.name}}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <th colspan="6">Cost Details
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>Price</td>
+                                        <td>{{flightOffer.price}}</td>
+                                        <td>Currency</td>
+                                        <td>{{flightOffer.currency}}</td>
+                                        <td>Fare Type</td>
+                                        <td>{{flightOffer.fareType}}</td>
+                                    </tr>
+                                </tbody>
+                                <tbody
+                                    ng-show="flightOffer.bookingInfo.confirmation == null && flightOffer.bookingInfo.failure != null">
+                                    <tr style="color: red">
+                                        <th colspan="6">Booking failure reason
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            {{flightOffer.bookingInfo.failure.error ? flightOffer.bookingInfo.failure.error : flightOffer.bookingInfo.failure }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody
+                                    ng-show="flightOffer.bookingInfo.confirmation != null && flightOffer.bookingInfo.failure == null">
+                                    <tr>
+                                        <th colspan="6">Booking information
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: green">Booking Status</td>
+                                        <td style="color: green">{{flightOffer.bookingInfo.confirmation.bookingStatus}}
+                                        </td>
+                                        <td>Confirmation Numbers</td>
+                                        <td>{{flightOffer.bookingInfo.confirmation.confirmationNumbers}}</td>
+                                        <td>E-Ticket Numbers</td>
+                                        <td>{{flightOffer.bookingInfo.confirmation.referenceNumbers}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div>
-                            <div class="form-control-6">
-                                <p><b>Price: </b>{{flightOffer.price}} {{flightOffer.currency}}</p>
+                        <!-- The folowing displays the legacy filght offer model: one flight offer per flight leg-->
+                        <div ng-show="flightOffer.fareSourceCode == null">
+                            <h4><img src="{{flightOffer.carrier.squareLogo}}" width="30px" height="30px" />
+                                {{flightOffer.segments[0].origin}} to
+                                {{flightOffer.segments[flightOffer.segments.length - 1].destination}} on
+                                {{flightOffer.carrier.name}} </h4>
+                            <div>
+                                <div class="form-control-6">
+                                    <p><b>Departure:
+                                        </b>{{flightOffer.segments[0].departure | date:'dd MMM yyyy - hh:mm'}}
+                                    </p>
+                                </div>
+                                <div class="form-control-6">
+                                    <p><b>Arrival:
+                                        </b>{{flightOffer.segments[flightOffer.segments.length - 1].return | date:'dd MMM yyyy - hh:mm'}}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="form-control-6">
-                                <p><b>Stops:
-                                    </b>{{flightOffer.segments.length == 1 ? 'direct' : flightOffer.segments.length - 1 }}
-                                </p>
+                            <div>
+                                <div class="form-control-6">
+                                    <p><b>Price: </b>{{flightOffer.price}} {{flightOffer.currency}}</p>
+                                </div>
+                                <div class="form-control-6">
+                                    <p><b>Stops:
+                                        </b>{{flightOffer.segments.length == 1 ? 'direct' : flightOffer.segments.length - 1 }}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div ng-repeat="segment in flightOffer.segments" ng-hide="flightOffer.segments.length == 1">
-                            <p>{{segment.origin}}: {{segment.departure | date:'dd MMM yyyy - hh:mm'}} |
-                                {{segment.destination }}: {{segment.return | date:'dd MMM yyyy - hh:mm'}} |
-                                {{segment.durationInWords}}</p>
+                            <div ng-repeat="segment in flightOffer.segments" ng-hide="flightOffer.segments.length == 1">
+                                <p>{{segment.origin}}: {{segment.departure | date:'dd MMM yyyy - hh:mm'}} |
+                                    {{segment.destination }}: {{segment.return | date:'dd MMM yyyy - hh:mm'}} |
+                                    {{segment.durationInWords}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -414,11 +493,28 @@
                             </div>
                         </div>
                         <div>
-                            <div class="form-control-6">
-                                <p><b>Night Rate: </b>{{hotel.rate}} {{hotel.currency}}</p>
-                            </div>
-                            <div class="form-control-6">
+                            <div class="form-control-12">
                                 <p><b>Total: </b>{{hotel.price }} {{hotel.currency}}</p>
+                            </div>
+                        </div>
+                        <div ng-if="hotel.bookingInfo.confirmation != null && hotel.bookingInfo.failure == null">
+                            <div class="form-control-12" style="color: green">
+                                <p><b>Booking Status: </b>{{hotel.bookingInfo.confirmation.bookingStatus}}</p>
+                            </div>
+                            <div class="form-control-12">
+                                <p><b>Room: </b>{{hotel.bookingInfo.confirmation.bookingDetails.room_name}}
+                                    ({{hotel.bookingInfo.confirmation.bookingDetails.room_count}}
+                                    rooms)</p>
+                            </div>
+                            <div class="form-control-12">
+                                <p><b>Confirmation Number: </b>{{hotel.bookingInfo.confirmation.referenceNumbers}}</p>
+                            </div>
+                        </div>
+                        <div ng-if="hotel.confirmation == null && hotel.failure != null">
+                            <div class="form-control-6" style="color: red">
+                                <p><b>Booking failure reason:
+                                    </b>{{hotel.bookingInfo.failure.error ? hotel.bookingInfo.failure.error : hotel.bookingInfo.failure }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -430,6 +526,52 @@
                         <div ng-repeat="attraction in item.attractions">
                             <input type="checkbox" disabled checked>{{attraction.name}}</input>
                         </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="pnrTab">
+                    <div ng-repeat="pnrInfo in currentOrder.pnrInfo.choices"
+                        ng-show="currentOrder.pnrInfo.choices.length != 0">
+                        <table>
+                            <tr ng-repeat="(key, value) in pnrInfo"
+                                style="border-width:1px; border-color: black; border-style: solid;">
+                                <th> {{key}} </th>
+                                <td> {{ value }} </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="paymentTab">
+                    <div>
+                        <table>
+                            <tr>
+                                <th>Amount</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.amount}}</td>
+                            </tr>
+                            <tr>
+                                <th>Currency</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.currency}}</td>
+                            </tr>
+                            <tr>
+                                <th>Time</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.created_at | date:'dd MMM yyyy -hh:mm'}}</td>
+                            </tr>
+                            <tr>
+                                <th>Card #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.card_num}}</td>
+                            </tr>
+                            <tr>
+                                <th>Reciept #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.receipt_no}}</td>
+                            </tr>
+                            <tr>
+                                <th>Transaction #</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.transaction_no}}</td>
+                            </tr>
+                            <tr>
+                                <th>Message</th>
+                                <td>{{currentOrder.paymentInfo.obj.data.message}}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <!-- /.tab-pane -->

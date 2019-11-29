@@ -4,7 +4,7 @@
   "description": "Tripdizer requests Back-end Services",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon --watch ../requests --watch ../master-data --watch ../users/dist"
+    "start": "nodemon --watch ../requests --watch ../master-data --watch ../users/dist --watch ../trawex-adapter"
   },
   "dependencies": {
     "express": "^4.17.1"

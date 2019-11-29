@@ -1,0 +1,53 @@
+.flights-route {
+  border: 1px solid #e4e1e1;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+  -moz-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+  box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+  margin-bottom: 20px;
+
+  .min-height-60 {
+    min-height: 3.75rem;
+  }
+}
+
+$bullet-margin: 2rem;
+
+.bullet {
+  .w-text {
+    width: $bullet-margin;
+    line-height: $bullet-margin;
+    border-radius: 50%;
+  }
+
+  .wo-text {
+    width: $bullet-margin / 2;
+    height: $bullet-margin / 2;
+    margin: calc(#{$bullet-margin} / 4);
+    border-radius: 50%;
+  }
+}
+
+.city-name {
+  line-height: $bullet-margin;
+}
+
+.icon {
+  width: $bullet-margin;
+  line-height: $bullet-margin;
+}
+
+.routes {
+  $line-width: 2px;
+  $bullet-margin: 2rem;
+
+  &:before {
+    content: '';
+    position: absolute;
+    background-color: #6c757d;
+    width: $line-width;
+    height: calc(100% - #{$bullet-margin});
+    top: calc(#{$bullet-margin} / 2);
+    left: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
+  }
+}

@@ -1,0 +1,23 @@
+[
+    {
+        "ageGroup": "adult",
+        "dateOfBirth": "1984-09-11",
+        "email": "eng.mmustafa84@gmail.com",
+        "firstName": "Mohamed",
+        "lastName": "Mostafa",
+        "nationality": "EG",
+        "passportExpiry": "2025-02-03",
+        "passportNumber": "A99999999",
+        "phone": 19739626,
+        "title": "Mr"
+    },
+    {
+        "passportNumber": "A99999999",
+        "lastName": "Ahmed",
+        "title": "Mr",
+        "passportExpiry": "2025-05-03",
+        "ageGroup": "adult",
+        "firstName": "Hossam",
+        "dateOfBirth": "1984-10-11"
+    }
+]

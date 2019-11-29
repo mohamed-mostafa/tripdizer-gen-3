@@ -13,12 +13,14 @@ let TRAWEX_FLIGHTS_FARE_RULES_URL = "/fare_rules";
 let TRAWEX_FLIGHTS_REVALIDATE_FARE_URL = "/revalidate";
 let TRAWEX_FLIGHTS_BOOK_URL = "/book";
 let TRAWEX_FLIGHTS_TICKET_ORDER_URL = "/ticket_order";
+let TRAWEX_FLIGHTS_TRIP_DETAILS_URL = "/trip_details";
+let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
-let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019"
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95"
+let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -59,18 +61,18 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
     authenticate().then(function (sessionId) {
       let originList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata);
       let destinationsList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.cityIata); destinationsList.push(destinationsList.shift());
-      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.arrivalDate); departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
+      let departureDatesList = multiCityFlightsSearchRequest.tripSegments.map(tripSegment => tripSegment.leavingDate);// departureDatesList.push(multiCityFlightsSearchRequest.tripSegments[multiCityFlightsSearchRequest.tripSegments.length - 1].leavingDate)
 
       let airportFromCodesSequence = ""; airportFromCodesSequence = originList.reduce((airportFromCodesSequence, cityIata) => airportFromCodesSequence + "<br>" + cityIata);
       let airportToCodesSequence = ""; airportToCodesSequence = destinationsList.reduce((airportToCodesSequence, cityIata) => airportToCodesSequence + "<br>" + cityIata);
       let departureDatesSequence = ""; departureDatesSequence = departureDatesList.reduce((departureDatesSequence, arrivalDate) => departureDatesSequence + "<br>" + arrivalDate);
 
-      searchFlights(sessionId, "Circle", airportFromCodesSequence, airportToCodesSequence, departureDatesSequence, null, multiCityFlightsSearchRequest.numberOfAdults, multiCityFlightsSearchRequest.numberOfKids, multiCityFlightsSearchRequest.numberOfInfants, "Economy", "EGP").then(function (data) {
+      searchFlights(sessionId, "Circle", airportFromCodesSequence, airportToCodesSequence, departureDatesSequence, null, multiCityFlightsSearchRequest.numberOfAdults, multiCityFlightsSearchRequest.numberOfChildren, multiCityFlightsSearchRequest.numberOfInfants, "Economy", "EGP").then(function (data) {
         // for multi-city flights  requests, the API returns all the segments under the same originDestinationOption
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -102,8 +104,8 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
               }
             }
 
-            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment
-            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day'));
+            // find which tripSegment this flightSegment belongs to, based on the flight date of the leg and the departureDate of the flightSegment (or one day after for overnight flights)
+            var flightLeg = flightOffer.flightLegs.find(flightLeg => moment(flightLeg.flightDay).isSame(moment(flightSegment.departure), 'day') || moment(flightLeg.flightDay).isSame(moment(flightSegment.departure).add(-1, 'days'), 'day'));
             if (flightLeg) { // we found a leg that starts on the same day of the segment
               flightLeg.segments.push(flightSegment);
             } else { // couldn't find a leg whose dat is the departure date of a segment, then this is a second segment of a leg that happens to be in the next day
@@ -119,9 +121,9 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
           });
           flightOffer.flightLegs.forEach(flightLeg => {
             flightLeg.carrier = flightLeg.segments.length != 0 ? flightLeg.segments[0].carrier : null;
-            flightLeg.totalDurationInMinutes = (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000;
+            flightLeg.totalDurationInMinutes = flightLeg.segments.length > 0 ? (new Date(flightLeg.segments[flightLeg.segments.length - 1].arrival).getTime() - new Date(flightLeg.segments[0].departure).getTime()) / 60000 : 0;
             flightLeg.totalDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.totalDurationInMinutes * 60 * 1000);
-            flightLeg.transitDurationInMinutes = calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000;
+            flightLeg.transitDurationInMinutes = flightLeg.segments.length > 0 ? calculateTotalTransitFromFlightSegments(flightLeg.segments) / 60000 : 0;
             flightLeg.transitDurationInWords = language == 'ar' ? shortArabicHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000) : shortEnglishHumanizer(flightLeg.transitDurationInMinutes * 60 * 1000);
 
           })
@@ -129,10 +131,10 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, error))
+        reject(error)
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, error))
+      reject(error)
     });
   });
 }
@@ -145,7 +147,7 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItineraries.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -191,10 +193,10 @@ exports.searchReturnFlights = function (language, returnFlightSearchRequest) {
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, error))
+        reject(error)
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, error))
+      reject(error)
     });
   });
 }
@@ -207,7 +209,7 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
             price: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.Amount,
-            currenty: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
+            currency: fareItinerary.FareItinerary.AirItineraryFareInfo.ItinTotalFares.TotalFare.CurrencyCode,
             sessionId: sessionId,
             fareSourceCode: fareItinerary.FareItinerary.AirItineraryFareInfo.FareSourceCode,
             fareType: fareItinerary.FareItinerary.AirItineraryFareInfo.FareType,
@@ -253,10 +255,10 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
         })
         resolve(flightOffers);
       }).catch(function (error) {
-        reject(writer.respondWithCode(500, error))
+        reject(error)
       })
     }).catch(function (error) {
-      reject(writer.respondWithCode(500, error))
+      reject(error)
     });
   });
 }
@@ -266,19 +268,19 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_FARE_RULES_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
         if (error) {
-          reject(writer.respondWithCode(500, { error: "Failed to get fare rules with trawex. Reason: " + error }))
+          reject({ error: "Failed to get fare rules with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          reject(writer.respondWithCode(500, { error: "Failed to get fare rules with trawex. Reason: " + response.statusMessage }))
+          reject({ error: "Failed to get fare rules with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.Errors.map(err => err.ErroCode + "|" + err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({ error: data.Errors.ErrorCode + "|" + data.Errors.ErrorMessage });
           }
         } else {
           resolve(data);
@@ -293,25 +295,25 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_REVALIDATE_FARE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
         if (error) {
-          reject(writer.respondWithCode(500, { error: "Failed to revalidate fare with trawex. Reason: " + error }))
+          reject({ error: "Failed to revalidate fare with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          reject(writer.respondWithCode(500, { error: "Failed to revalidate fare with trawex. Reason: " + response.statusMessage }))
+          reject({ error: "Failed to revalidate fare with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({ error: data.Errors.ErrorMessage });
           }
         } else {
           if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
             resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
           } else {
-            reject(writer.respondWithCode(500, { error: "Failed to revalidate fare with trawex. Reason: Fare is no longer valid for booking" }))
+            reject({ error: "Fare is no longer valid for booking. Please select another offer" })
           }
         }
       }
@@ -322,6 +324,9 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
 exports.bookFlight = function (language, bookFlightRequest) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_BOOK_URL;
+    var titlesToGenderMap = {
+      lord: "M", miss: "F", mr: "M", mrs: "F", sir: "M", mstr: "M"
+    }
     var params = {
       user_id: TRAWEX_USERNAME,
       user_password: TRAWEX_PASSWORD,
@@ -330,82 +335,89 @@ exports.bookFlight = function (language, bookFlightRequest) {
       ip_address: TRAWEX_SOURCE_IP_ADDRESS,
       // general booking fields
       session_id: bookFlightRequest.sessionId,
-      area_code: bookFlightRequest.adultsPNRInfoList[0].areaCode, // 6
-      country_code: bookFlightRequest.adultsPNRInfoList[0].countryCode,// 31,
+      area_code: 2, // bookFlightRequest.adultsPNRInfoList[0].areaCode, // 6
+      country_code: 2, //bookFlightRequest.adultsPNRInfoList[0].countryCode,// 31,
       FareSourceCode: bookFlightRequest.fareSourceCode,
       type: bookFlightRequest.fareType, //'Public',
-      PostCode: bookFlightRequest.adultsPNRInfoList[0].postCode, // 123411
+      PostCode: 12311, // bookFlightRequest.adultsPNRInfoList[0].postCode, // 123411
       IsPassportMandatory: bookFlightRequest.passportMandatory,  // false, 
       // number of travelers
       adult_flight: bookFlightRequest.adultsPNRInfoList.length, //1 
       child_flight: bookFlightRequest.childrenPNRInfoList.length, //0
       infant_flight: bookFlightRequest.infantsPNRInfoList.length, // 1,
-      // adults
+
+      // generic booking fields taken from first adult
+      email_id: bookFlightRequest.adultsPNRInfoList[0].email, // "mohamed@tripdizer.com",
+      mobile_no: bookFlightRequest.adultsPNRInfoList[0].phone, // 19739626
+      // adults unique fields
       first_name: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName), // "Mohamed"
       last_name: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName), // Mostafa
       title: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName), //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf", // "Mr"
-      gender: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName), //"M",
-      dob: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName), //"2014-02-01",
+      dob: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName), //"2014-02-01",
       passport_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName), // "A08102235",
-      passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
-      issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
-      email_id: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.email).reduce((result, nextName) => result + "<br>" + nextName), // "mohamed@tripdizer.com",
-      mobile_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.phone).reduce((result, nextName) => result + "<br>" + nextName), // 19739626
-      nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+      passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
+      gender: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName), //"M",
+
+      // adults fields taken from first adult
+      nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+      issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+
       frequentFlyrNum: null,
       adultmealplan: null,
-      // children
+      // children unique fields
       child_first_name: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       child_last_name: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       child_title: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName) : null, //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf",
-      child_gender: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
-      child_dob: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
+      child_dob: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
       child_passport_no: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
-      child_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
-      child_issue_country: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+      child_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
+      child_gender: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
+
+      // children fields taken from first adult
+      child_issue_country: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+
       child_FrequentFlyrNum: null,
       childMealplan: null,
       // infants
       infant_first_name: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       infant_last_name: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       infant_title: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName) : null, //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf",
-      infant_gender: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
-      infant_dob: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
-      // infant_passport_no: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
-      // infant_passport_expiry_date: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
-      // infant_issue_country: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+      infant_dob: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
+      infant_passport_no: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
+      infant_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
+      infant_gender: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
+
       infantMealplan: null,
     }
-    console.log(params);
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: params
       },
       function (error, response, data) {
         if (error) {
-          reject(writer.respondWithCode(500, { error: "Failed to book with trawex. Reason: " + error }))
+          reject({ error: "Failed to book with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          reject(writer.respondWithCode(500, { error: "Failed to book with trawex. Reason: " + response.statusMessage }))
+          reject({ error: "Failed to book with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({ error: data.Errors.ErrorMessage });
           }
         } else if (data.BookFlightResponse.BookFlightResult.Errors) {
           if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.Errors.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.Errors.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({ error: data.Errors.ErrorMessage });
           }
         } else {
           if (data.BookFlightResponse.BookFlightResult.Success == "false" || data.BookFlightResponse.BookFlightResult.Success == false) {
             // return all errors, coma-separated
             if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
-              reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+              reject({ error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
             } else {
-              reject(writer.respondWithCode(500, { error: data.BookFlightResponse.BookFlightResult.Errors.ErrorMessage }));
+              reject({ error: data.BookFlightResponse.BookFlightResult.Errors.ErrorMessage });
             }
           } else {
             resolve({
@@ -425,7 +437,7 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TICKET_ORDER_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
           target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
@@ -439,22 +451,79 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
           reject(response.statusMessage);
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({
+              error: data.Errors.ErrorMessage
+            });
           }
         } else if (data.AirOrderTicketRS.TicketOrderResult.Errors) {
           if (Array.isArray(data.AirOrderTicketRS.TicketOrderResult.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error ? data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage : (data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage ? data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage : "UNKNOWN ERROR") }));
+            reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error ? data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage : (data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage ? data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
           }
         } else {
           if (data.AirOrderTicketRS.TicketOrderResult.Success == "false" || data.AirOrderTicketRS.TicketOrderResult.Success == false) {
             // return all errors, coma-separated
-            reject(writer.respondWithCode(500, { error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             resolve({ ticketUniqueId: data.AirOrderTicketRS.TicketOrderResult.UniqueID });
+          }
+        }
+      }
+    );
+  });
+}
+
+exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
+  return new Promise(function (resolve, reject) {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TRIP_DETAILS_URL;
+    httpRequest.get(
+      {
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        qs: {
+          user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
+          target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+          UniqueID: bookingUniqueId, session_id: sessionId
+        }
+      },
+      function (error, response, data) {
+        if (error) {
+          reject(error);
+        } else if (response.statusCode != 200) {
+          reject(response.statusMessage);
+        } else if (data.Errors) {
+          if (Array.isArray(data.Errors)) {
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            reject({
+              error: data.Errors.ErrorMessage
+            });
+          }
+        } else if (data.TripDetailsResponse.TripDetailsResult.Errors) {
+          if (Array.isArray(data.TripDetailsResponse.TripDetailsResult.Errors)) {
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.Error ? data.TripDetailsResponse.TripDetailsResult.Errors.Error.ErrorMessage : (data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage ? data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
+          }
+        } else {
+          if (data.TripDetailsResponse.TripDetailsResult.Success == "false" || data.TripDetailsResponse.TripDetailsResult.Success == false) {
+            // return all errors, coma-separated
+            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
+          } else {
+            resolve(
+              {
+                passengerDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.CustomerInfos.map(item => item.CustomerInfo),
+                reservationDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.ReservationItems.map(item => ({
+                  ...item.ReservationItem,
+                  DepartureAirportLocationName: airportsMap[item.ReservationItem.DepartureAirportLocationCode],
+                  ArrivalAirportLocationName: airportsMap[item.ReservationItem.ArrivalAirportLocationCode],
+                  MarketingAirlineName: airlinesMap[item.ReservationItem.MarketingAirlineCode],
+                  OperatingAirlineName: airlinesMap[item.ReservationItem.OperatingAirlineCode],
+                  JourneyDurationInWords: shortEnglishHumanizer(item.ReservationItem.JourneyDuration * 60 * 1000)
+                }))
+              });
           }
         }
       }
@@ -467,7 +536,7 @@ function authenticate() {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AUTHENTICATE_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
       },
       function (error, response, data) {
@@ -490,7 +559,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL;
     httpRequest.get(
       {
-        url: url, json: true, proxy: TRAWEX_PROXY_ENDPOINT, timeout: 60 * 1000,
+        url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
           session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
@@ -505,9 +574,11 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
           reject(response.statusMessage);
         } else if (data.Errors) {
           if (Array.isArray(data.Errors)) {
-            reject(writer.respondWithCode(500, { error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) }));
+            reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
-            reject(writer.respondWithCode(500, { error: data.Errors.ErrorMessage }));
+            reject({
+              error: data.Errors.ErrorMessage
+            });
           }
         } else {
           resolve(data);

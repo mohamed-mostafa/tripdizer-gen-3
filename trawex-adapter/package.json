@@ -7,7 +7,8 @@
     "prestart": "npm install",
     "start": "node index.js",
     "predebug": "npm install",
-    "debug": "nodemon --inspect index.js"
+    "debug": "nodemon --inspect index.js",
+    "debug-unit-test": "mocha test/api-test --no-timeouts --inspect-brk"
   },
   "keywords": [
     "swagger"
@@ -22,6 +23,14 @@
     "cors": "2.5.3",
     "request": "^2.88.0",
     "humanize-duration": "^3.21.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "@google-cloud/pubsub": "^1.1.5"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^5.2.0",
+    "mockery": "^2.1.0",
+    "prettier": "1.16.4"
   }
 }
