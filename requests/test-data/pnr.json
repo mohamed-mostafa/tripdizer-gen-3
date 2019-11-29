@@ -1,36 +1,23 @@
 [
     {
-        "passportNumber": "A99999999",
-        "lastName": "Mostafa",
-        "gender": "M",
-        "title": "Mr",
         "ageGroup": "adult",
-        "passportExpiry": "2025-02-03",
-        "firstName": "Mohamed",
-        "areaCode": "6",
-        "nationality": "EG",
-        "phone": 19739626,
-        "passportIssueCountry": "EG",
-        "countryCode": "0031",
+        "dateOfBirth": "1984-09-11",
         "email": "eng.mmustafa84@gmail.com",
-        "postCode": 12311,
-        "dateOfBirth": "1984-09-11"
+        "firstName": "Mohamed",
+        "lastName": "Mostafa",
+        "nationality": "EG",
+        "passportExpiry": "2025-02-03",
+        "passportNumber": "A99999999",
+        "phone": 19739626,
+        "title": "Mr"
     },
     {
         "passportNumber": "A99999999",
         "lastName": "Ahmed",
-        "gender": "M",
         "title": "Mr",
-        "ageGroup": "adult",
         "passportExpiry": "2025-05-03",
+        "ageGroup": "adult",
         "firstName": "Hossam",
-        "areaCode": "6",
-        "nationality": "EG",
-        "phone": 19737626,
-        "passportIssueCountry": "EG",
-        "countryCode": "0031",
-        "email": "mohamed@tripdizer.com",
-        "postCode": 12311,
         "dateOfBirth": "1984-10-11"
     }
 ]

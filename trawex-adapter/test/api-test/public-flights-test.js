@@ -1,5 +1,6 @@
 var chai = require('chai');
 var expect = chai.expect;
+let moment = require("moment");
 
 const flightsService = require('../../service/FlightsService');
 
@@ -22,11 +23,11 @@ describe('Public flight booking', function () {
 		it('search for multi-city flights', function (done) {
 			var request = {
 				"numberOfAdults": 2,
-				"numberOfChildren": 0,
-				"numberOfInfants": 0,
+				"numberOfChildren": 1,
+				"numberOfInfants": 1,
 				"tripSegments": [
-					{ "cityIata": "AMS", "arrivalDate": "2020-01-20", "leavingDate": "2020-01-20", "cityName": "AMS", "countryIso": "IND" },
-					{ "cityIata": "LHR", "arrivalDate": "2020-01-20", "cityName": "LHR", "countryIso": "IND", "leavingDate": "2020-01-25" }]
+					{ "cityIata": "AMS", "arrivalDate": moment().add(7, 'days').format("YYYY-MM-DD"), "leavingDate": moment().add(7, 'days').format("YYYY-MM-DD"), "cityName": "AMS", "countryIso": "IND" },
+					{ "cityIata": "LHR", "arrivalDate": moment().add(7, 'days').format("YYYY-MM-DD"), "cityName": "LHR", "countryIso": "IND", "leavingDate": moment().add(14, 'days').format("YYYY-MM-DD") }]
 			};
 			// search for offers from cairo to lahore
 			flightsService.searchMultiCityFlights("en", request)
@@ -85,45 +86,51 @@ describe('Public flight booking', function () {
 				"passportMandatory": true,
 				"sessionId": sessionId,
 				"fareSourceCode": fareSourceCode,
-				"adultsPNRInfoList": [
+				"adultsPNRInfoList":
+					[
+						{
+							"ageGroup": "adult",
+							"dateOfBirth": "1984-09-11",
+							"email": "eng.mmustafa84" + Math.random() * 1000 + "@gmail.com",
+							"firstName": "Mohamed",
+							"lastName": "Mostafa",
+							"nationality": "EG",
+							"passportExpiry": "2025-02-03",
+							"passportNumber": "A" + Math.random() * 10000000,
+							"phone": 19739626,
+							"title": "Mr"
+						},
+						{
+							"passportNumber": "A" + Math.random() * 10000000,
+							"lastName": "Ahmed",
+							"title": "Mr",
+							"passportExpiry": "2025-05-03",
+							"ageGroup": "adult",
+							"firstName": "Hossam",
+							"dateOfBirth": "1984-10-11"
+						}
+					],
+				"childrenPNRInfoList": [
 					{
-						"passportNumber": "A" + Math.random() * 99999999,
-						"lastName": "Mostafa",
-						"gender": "M",
-						"title": "Mr",
-						"ageGroup": "adult",
-						"passportExpiry": "2025-02-03",
-						"firstName": "Mohamed",
-						"areaCode": "6",
-						"nationality": "EG",
-						"phone": 19739626,
-						"passportIssueCountry": "EG",
-						"countryCode": "0031",
-						"email": "eng.mmustafa84" + Math.random() * 1000 + "@gmail.com",
-						"postCode": 12311,
-						"dateOfBirth": "1984-09-11"
-					},
-					{
-						"passportNumber": "A" + Math.random() * 99999999,
-						"lastName": "Ahmed",
-						"gender": "M",
-						"title": "Mr",
-						"ageGroup": "adult",
+						"passportNumber": "A" + Math.random() * 10000000,
 						"passportExpiry": "2025-05-03",
-						"firstName": "Hossam",
-						"areaCode": "6",
-						"nationality": "EG",
-						"phone": 19737626,
-						"passportIssueCountry": "EG",
-						"countryCode": "0031",
-						"email": "mohamed" + Math.random() * 1000 + "@tripdizer.com",
-						"postCode": 12311,
-						"dateOfBirth": "1984-10-11"
+						"lastName": "Ahmed",
+						"title": "Mr",
+						"ageGroup": "kid",
+						"firstName": "Aly",
+						"dateOfBirth": "2016-10-11"
 					}
 				],
-				"childrenPNRInfoList": [
-				],
 				"infantsPNRInfoList": [
+					{
+						"passportNumber": "A" + Math.random() * 10000000,
+						"passportExpiry": "2025-05-03",
+						"lastName": "Emam",
+						"title": "Mr",
+						"ageGroup": "infant",
+						"firstName": "Mohsen",
+						"dateOfBirth": "2019-10-11"
+					}
 				],
 				"refundable": "true",
 				"fareType": "Public"

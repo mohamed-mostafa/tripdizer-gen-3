@@ -67,7 +67,7 @@ exports.searchMultiCityFlights = function (language, multiCityFlightsSearchReque
       let airportToCodesSequence = ""; airportToCodesSequence = destinationsList.reduce((airportToCodesSequence, cityIata) => airportToCodesSequence + "<br>" + cityIata);
       let departureDatesSequence = ""; departureDatesSequence = departureDatesList.reduce((departureDatesSequence, arrivalDate) => departureDatesSequence + "<br>" + arrivalDate);
 
-      searchFlights(sessionId, "Circle", airportFromCodesSequence, airportToCodesSequence, departureDatesSequence, null, multiCityFlightsSearchRequest.numberOfAdults, multiCityFlightsSearchRequest.numberOfKids, multiCityFlightsSearchRequest.numberOfInfants, "Economy", "EGP").then(function (data) {
+      searchFlights(sessionId, "Circle", airportFromCodesSequence, airportToCodesSequence, departureDatesSequence, null, multiCityFlightsSearchRequest.numberOfAdults, multiCityFlightsSearchRequest.numberOfChildren, multiCityFlightsSearchRequest.numberOfInfants, "Economy", "EGP").then(function (data) {
         // for multi-city flights  requests, the API returns all the segments under the same originDestinationOption
         let flightOffers = data.AirSearchResponse.AirSearchResult.FareItineraries.map(fareItinerary => {
           let flightOffer = {
@@ -324,6 +324,9 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
 exports.bookFlight = function (language, bookFlightRequest) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_BOOK_URL;
+    var titlesToGenderMap = {
+      lord: "M", miss: "F", mr: "M", mrs: "F", sir: "M", mstr: "M"
+    }
     var params = {
       user_id: TRAWEX_USERNAME,
       user_password: TRAWEX_PASSWORD,
@@ -332,50 +335,58 @@ exports.bookFlight = function (language, bookFlightRequest) {
       ip_address: TRAWEX_SOURCE_IP_ADDRESS,
       // general booking fields
       session_id: bookFlightRequest.sessionId,
-      area_code: bookFlightRequest.adultsPNRInfoList[0].areaCode, // 6
-      country_code: bookFlightRequest.adultsPNRInfoList[0].countryCode,// 31,
+      area_code: 2, // bookFlightRequest.adultsPNRInfoList[0].areaCode, // 6
+      country_code: 2, //bookFlightRequest.adultsPNRInfoList[0].countryCode,// 31,
       FareSourceCode: bookFlightRequest.fareSourceCode,
       type: bookFlightRequest.fareType, //'Public',
-      PostCode: bookFlightRequest.adultsPNRInfoList[0].postCode, // 123411
+      PostCode: 12311, // bookFlightRequest.adultsPNRInfoList[0].postCode, // 123411
       IsPassportMandatory: bookFlightRequest.passportMandatory,  // false, 
       // number of travelers
       adult_flight: bookFlightRequest.adultsPNRInfoList.length, //1 
       child_flight: bookFlightRequest.childrenPNRInfoList.length, //0
       infant_flight: bookFlightRequest.infantsPNRInfoList.length, // 1,
-      // adults
+
+      // generic booking fields taken from first adult
+      email_id: bookFlightRequest.adultsPNRInfoList[0].email, // "mohamed@tripdizer.com",
+      mobile_no: bookFlightRequest.adultsPNRInfoList[0].phone, // 19739626
+      // adults unique fields
       first_name: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName), // "Mohamed"
       last_name: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName), // Mostafa
       title: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName), //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf", // "Mr"
-      gender: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName), //"M",
-      dob: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName), //"2014-02-01",
+      dob: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName), //"2014-02-01",
       passport_no: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName), // "A08102235",
-      passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
-      issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
-      nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => pnrInfo.nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
-      email_id: bookFlightRequest.adultsPNRInfoList[0].email, // "mohamed@tripdizer.com",
-      mobile_no: bookFlightRequest.adultsPNRInfoList[0].phone, // 19739626
+      passport_expiry: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName), //"2013-02-03",
+      gender: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName), //"M",
+
+      // adults fields taken from first adult
+      nationality: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+      issue_country: bookFlightRequest.adultsPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName), //"EG",
+
       frequentFlyrNum: null,
       adultmealplan: null,
-      // children
+      // children unique fields
       child_first_name: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       child_last_name: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       child_title: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName) : null, //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf",
-      child_gender: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
-      child_dob: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
+      child_dob: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
       child_passport_no: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
-      child_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
-      child_issue_country: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+      child_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
+      child_gender: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
+
+      // children fields taken from first adult
+      child_issue_country: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.childrenPNRInfoList.map(pnrInfo => bookFlightRequest.adultsPNRInfoList[0].nationality).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+
       child_FrequentFlyrNum: null,
       childMealplan: null,
       // infants
       infant_first_name: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.firstName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       infant_last_name: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.lastName).reduce((result, nextName) => result + "<br>" + nextName) : null,
       infant_title: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.title).reduce((result, nextName) => result + "<br>" + nextName) : null, //"Mr/Mrs/Sir/Lord/Lady/Miss/Inf",
-      infant_gender: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.gender).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
-      infant_dob: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.dateOfBirth).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
-      // infant_passport_no: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
-      // infant_passport_expiry_date: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportExpiry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
-      // infant_issue_country: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportIssueCountry).reduce((result, nextName) => result + "<br>" + nextName) : null, //"EG",
+      infant_dob: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => moment(pnrInfo.dateOfBirth).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2014-02-01 T00:00:00",
+      infant_passport_no: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => pnrInfo.passportNumber).reduce((result, nextName) => result + "<br>" + nextName) : null,
+      infant_passport_expiry_date: bookFlightRequest.childrenPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => moment(pnrInfo.passportExpiry).format('YYYY-MM-DD')).reduce((result, nextName) => result + "<br>" + nextName) : null, //"2013-02-03",
+      infant_gender: bookFlightRequest.infantsPNRInfoList.length > 0 ? bookFlightRequest.infantsPNRInfoList.map(pnrInfo => titlesToGenderMap[pnrInfo.title.toLowerCase()]).reduce((result, nextName) => result + "<br>" + nextName) : null, //"M",
+
       infantMealplan: null,
     }
     httpRequest.get(
@@ -510,7 +521,7 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
                   ArrivalAirportLocationName: airportsMap[item.ReservationItem.ArrivalAirportLocationCode],
                   MarketingAirlineName: airlinesMap[item.ReservationItem.MarketingAirlineCode],
                   OperatingAirlineName: airlinesMap[item.ReservationItem.OperatingAirlineCode],
-                  JourneyDurationInWords = shortEnglishHumanizer(item.ReservationItem.JourneyDuration * 60 * 1000)
+                  JourneyDurationInWords: shortEnglishHumanizer(item.ReservationItem.JourneyDuration * 60 * 1000)
                 }))
               });
           }

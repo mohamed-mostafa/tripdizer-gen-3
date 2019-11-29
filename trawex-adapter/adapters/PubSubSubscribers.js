@@ -107,7 +107,7 @@ var createBookFlightRequestFromFlightOffer = function (bookingData) {
     fareSourceCode: bookingData.flightOffer.fareSourceCode,
     fareType: bookingData.flightOffer.fareType,
     adultsPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "adult"),
-    childrenPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "child"),
+    childrenPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "kid"),
     infantPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "infant")
   }
 }
