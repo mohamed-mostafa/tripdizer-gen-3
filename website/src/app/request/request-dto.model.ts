@@ -67,7 +67,7 @@ export class RequestRequest {
 			specialRequests: request.specialRequests,
 			traveler: {
 				...request.traveler,
-				mobile: CommonFunctions.parseArabicNumber(request.traveler.mobile),
+				mobile: CommonFunctions.parseArabicNumber(request.traveler.mobile || request.travellers[0].phone),
 			},
 			referralType: request.referralType,
 			travelHistory: request.travelHistory,

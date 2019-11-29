@@ -180,7 +180,7 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
 				);
 
-			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE')
+			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && request.requiresPayment == true)
 				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
 
 			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
