@@ -1,3 +1,4 @@
+import { PaymentConfirmComponent } from './payment-confirm/payment-confirm.component';
 import { SectionHowToComponent } from './main-page/section-how-to/section-how-to.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,7 +13,11 @@ const routes: Routes = [
 	{
 		path: '',
 		component: HomeComponent,
-		children: [{ path: '', component: MainPageComponent }, { path: 'our-team', component: OurTeamComponent }],
+		children: [
+            { path: '', component: MainPageComponent }, 
+            { path: 'our-team', component: OurTeamComponent },
+            { path: 'payment-confirm', component: PaymentConfirmComponent }
+        ],
 	},
 ];
 

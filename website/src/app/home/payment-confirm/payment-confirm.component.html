@@ -1,0 +1,37 @@
+<div id="payment-confirm-container">
+  <div class="row response">
+    <div *ngIf="success === 'true'" class="col-12 text-center success-response mt-4">
+      <p><i class="fa fa-check-circle"></i></p>
+
+      <h3 class="font-weight-bold mb-4 title-font">{{ 'payment_confirm.confirmation' | translate }}</h3>
+
+      <p class="mb-2" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.booking_confirmed' | translate }}</p>
+      <p [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.confirmation_email_sending' | translate }}</p>
+    </div>
+
+    <div *ngIf="success === 'false'" class="col-12 text-center fail-response mt-4">
+      <p><i class="fa fa-times-circle"></i></p>
+
+      <h3 class="font-weight-bold mb-4 title-font">{{ 'payment_confirm.process_failed' | translate }}</h3>
+
+      <p *ngIf="responseCode === '1'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_1' | translate }}
+      </p>
+
+      <p *ngIf="responseCode === '2'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_2' | translate }}</p>
+
+      <p *ngIf="responseCode === '4'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_4' | translate }}</p>
+
+      <p *ngIf="responseCode === '5'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_5' | translate }}</p>
+
+      <p *ngIf="responseCode === '6'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_6' | translate }}</p>
+    </div>
+
+    <div class="col-12 text-center">
+      <button class="btn btn-primary custom-bs btn-rounded text-uppercase mt-4">
+        Go Home
+      </button>
+    </div>
+  </div>
+</div>

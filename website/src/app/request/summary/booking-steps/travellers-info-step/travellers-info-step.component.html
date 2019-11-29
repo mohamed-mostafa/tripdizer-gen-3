@@ -1,0 +1,19 @@
+<div>
+	<c-request-traveller-info
+		[formGroup]="formGroup"
+		*ngFor="let adultNumber of arrOfN(adultsNumber)"
+		controlName="adult-{{ adultNumber + 1 }}"
+	></c-request-traveller-info>
+
+	<c-request-traveller-info
+		[formGroup]="formGroup"
+		*ngFor="let kidNumber of arrOfN(kidsNumber)"
+		controlName="kid-{{ kidNumber + 1 }}"
+	></c-request-traveller-info>
+
+	<c-request-traveller-info
+		[formGroup]="formGroup"
+		*ngFor="let infantNumber of arrOfN(infantsNumber)"
+		controlName="infant-{{ infantNumber + 1 }}"
+	></c-request-traveller-info>
+</div>

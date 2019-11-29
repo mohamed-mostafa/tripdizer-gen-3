@@ -8,6 +8,7 @@ var app = require('connect')();
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = process.env.PORT || 8085;
+var messageSubscribers = require('./adapters/PubSubSubscribers');
 
 // swaggerRouter configuration
 var options = {
@@ -40,5 +41,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
     console.log('%s: "trawex adapter" Node server started on %d (http://localhost:%d)', Date(Date.now()), serverPort, serverPort);
     console.log('trawex adapter Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
+
+  messageSubscribers.start();
 
 });

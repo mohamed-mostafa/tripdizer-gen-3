@@ -1,10 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-/* Guards */
-import { RequestGuard } from './request.guard';
-
-/* Components */
 import { BudgetComponent } from './budget/budget.component';
 import { DepartureReturnComponent } from './departure-return/departure-return.component';
 import { DestinationsComponent } from './destinations/destinations.component';
@@ -14,12 +9,17 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { PurposeComponent } from './purpose/purpose.component';
 import { RecommendedDestinationsComponent } from './recommended-destinations/recommended-destinations.component';
 import { RequestComponent } from './request.component';
+import { RequestGuard } from './request.guard';
+import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
+import { BookingPaymentStepComponent } from './summary/booking-steps/payment-step/payment-step.component';
+import { TravellerInfoComponent } from './summary/booking-steps/travellers-info-step/traveller-info/traveller-info.component';
+import { BookingTravellersInfoComponent } from './summary/booking-steps/travellers-info-step/travellers-info-step.component';
+import { SummaryComponent } from './summary/summary.component';
 import { TicketComponent } from './ticket/ticket.component';
 import { TravelAssistanceComponent } from './travel-assistance/travel-assistance.component';
 import { TravelInfoComponent } from './travel-info/travel-info.component';
 import { TravelersComponent } from './travelers/travelers.component';
 import { TravelingFromComponent } from './traveling-from/traveling-from.component';
-import { SummaryComponent } from './summary/summary.component';
 
 const routes: Routes = [
 	{
@@ -38,8 +38,9 @@ const routes: Routes = [
 			{ path: 'purpose', component: PurposeComponent },
 			{ path: 'preferences', component: PreferencesComponent },
 			{ path: 'destinations', component: RecommendedDestinationsComponent },
-            { path: 'estimated-cost', component: EstimatedCostComponent },
-            { path: 'summary', component: SummaryComponent },
+			{ path: 'estimated-cost', component: EstimatedCostComponent },
+			{ path: 'summary', component: SummaryComponent },
+			{ path: 'booking', component: BookingStepsComponent },
 			{ path: 'travel-assistance', component: TravelAssistanceComponent },
 			{ path: 'information', component: InformationComponent },
 			{ path: 'ticket', component: TicketComponent },
@@ -57,14 +58,18 @@ export const COMPONENTS = [
 	PreferencesComponent,
 	RecommendedDestinationsComponent,
 	EstimatedCostComponent,
+	SummaryComponent,
 	TravelAssistanceComponent,
 	InformationComponent,
 	TicketComponent,
 	TravelInfoComponent,
+	TravellerInfoComponent,
+	BookingTravellersInfoComponent,
+	BookingPaymentStepComponent,
 ];
 
 @NgModule({
 	exports: [RouterModule],
 	imports: [RouterModule.forChild(routes)],
 })
-export class RequestRoutingModule { }
+export class RequestRoutingModule {}

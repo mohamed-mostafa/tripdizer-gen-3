@@ -200,7 +200,11 @@
 				"duration": "Duration",
 				"arrival": "Arrival",
 				"select": "Select",
-				"selected": "Selected"
+				"selected": "Selected",
+				"flight_to": "Trip Route",
+				"choose_flights": "Choose a flight offer",
+				"no_flight_offers": "Sorry, no offers available currently",
+				"choose": "Choose"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",
@@ -235,7 +239,30 @@
 				"flights": "Flights",
 				"nights_in": "nights in",
 				"hotels": "Hotels",
-				"total_amount": "Total amount"
+				"total_amount": "Total amount",
+				"proceed_booking": "Proceed to booking",
+				"traveller_info": {
+					"adult": "Adult",
+					"kid": "Kid",
+					"infant": "Infant",
+					"hint": "Information must match passport"
+				},
+				"numbers": {
+					"1": "first",
+					"2": "second",
+					"3": "third",
+					"4": "forth",
+					"5": "fifth",
+					"6": "sixth",
+					"7": "seventh",
+					"8": "eighth",
+					"9": "ninth",
+					"10": "tenth"
+				}
+			},
+			"booking_steps": {
+				"passenger_details": "Passenger details",
+				"payment": "Payment"
 			}
 		},
 		"form_layout": {
@@ -438,10 +465,54 @@
 			"email": "Email Address",
 			"mobile": "Mobile Number",
 			"birth_date": "Date of birth",
+<<<<<<< HEAD
 			"location": "Location"
+=======
+			"location": "Location",
+			"title": "Title",
+			"gender": "Gender",
+			"nationality": "nationality",
+			"passport_number": "Passport number",
+			"passport_expiry": "Expiry date",
+			"passport_issue_country": "Issue country",
+			"titles": {
+				"adult": [
+					"LORD",
+					"MISS",
+					"MR",
+					"MRS",
+					"SIR"
+				],
+				"kid": [
+					"MSTR",
+					"MISS"
+				],
+				"infant": [
+					"MISS",
+					"MSTR",
+					"INF"
+				]
+			}
+>>>>>>> feature/payment
 		},
 		"user_plans": {
 			"my_plans": "My Plans"
 		}
+<<<<<<< HEAD
 	}
 }
+=======
+},
+"payment_confirm": {
+"confirmation": "Confirmation",
+"booking_confirmed": "Your booking has been confirmed",
+"confirmation_email_sending": "A confirmation email will be sent soon to your email address",
+"process_failed": "Process failed",
+"message_1": "There was an error processing the transaction",
+"message_2": "Contact card issuing bank",
+"message_4": "Expired Card",
+"message_5": "Insufficient Funds",
+"message_6": "Payment is already being processed"
+}
+}
+>>>>>>> feature/payment

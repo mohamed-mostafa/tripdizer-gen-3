@@ -1,0 +1,18 @@
+#payment-confirm-container {
+    background-color: #fafafa;
+    height: 100%;
+
+    .response {
+        i {
+            font-size: 4rem;
+        }
+
+        .success-response i {
+            color: #43A047;
+        }
+
+        .fail-response i {
+            color: #DD2C00;
+        }
+    }
+}

@@ -7,15 +7,22 @@ var requestsDao = require('../dataaccess/hws_requests_dao.js');
 let transportationDao = require('../dataaccess/hws_request_transporation_dao');
 let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
+let pnrDao = require('../dataaccess/hws_request_PNR_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
+let bookingsDao = require('../dataaccess/hws_bookings_dao');
+let paymentDao = require('../dataaccess/hws_payments_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
+var paymentsService = require('./hws_payments_business');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+let googlePubSubAdapter = require('../adapters/PubSubPublishers');
 let moment = require('moment');
 
-const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083'
-const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
+const MEDIA_STORAGE_BASE_URL =
+	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || "Y";
 
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function (request, onSuccess, onFailure, onUserError) {
@@ -77,10 +84,11 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		delete request.second_country;
 		delete request.third_country;
 	}
+	request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
 	request.score = calculateRequestScore(request);
 	requestsDao.createNewRequest(
 		request,
-		function (request) {
+		async function (request) {
 			// request is created. now persist the cities/accomodation/transportation/attractions
 			var requestSelectedHotels = { choices: request.selectedHotels };
 			var requestSelectedCities = { choices: request.selectedCities };
@@ -90,53 +98,98 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 			transportationDao.save(request.id, requestFlightOffers);
 			citiesDao.save(request.id, requestSelectedCities);
 			attractionsDao.save(request.id, requestSelectedAttractions);
-			getPackage(
-				request.id,
-				null,
-				data => {
-					console.log("Package creation succedded. Now responding to caller");
-					request.packageUrl = data.pdfUrl;
-					request.packageDownloadUrl = data.pdfDownloadUrl;
-					onSuccess(request);
-				},
-				data => {
-					if (data && data.pdfUrl) {
-						console.log("Package creation partially succedded. Now responding to caller");
-						request.packageUrl = data.pdfUrl;
-						request.packageDownloadUrl = data.pdfDownloadUrl;
-					} else {
-						console.error("Package creation failed. Reason: " + data + ", Responding to caller anyway");
-					}
-					onSuccess(request);
-				}, { choices: request.flightOffers }, { choices: request.selectedCities }, { choices: request.selectedHotels }, { choices: request.selectedAttractions }
-			);
-			// onSuccess(request);
 
-			// the following happens asynchronously
-			if (request.traveler.name === 'Essawy') {
-				requestsDao.modifyRequestStatusById(request.id, 11, () => { }, () => { });
+			if (request.requiresPayment) {
+				if (BYPASS_PAYMENT == "Y") {
+					request.pnrInfoList = require('../../test-data/pnr.json');
+				}
+				// save PNR info
+				var requestPNRInfo = { choices: request.pnrInfoList };
+				pnrDao.save(request.id, requestPNRInfo);
+
+				if (BYPASS_PAYMENT == "Y") {
+					await new Promise((resolve, reject) => {
+						setTimeout(() => resolve(), 10000);
+					})
+
+					publishRequestChoicesForBooking(request.id);
+				} else {
+					// at this point, we've saved the request to the database. let's generate a payment key
+					request.paymentKey = await new Promise(resolve => {
+						paymentsService.registeredOrderAndGeneratePaymentKey(
+							request,
+							({ paymentKey }) => {
+								requestsDao.modifyRequestStatusById(request.id, 17, () => {
+									requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {
+										resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
+									}, (err) => {
+										console.log('Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err));
+										resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+									});
+								}, (err) => {
+									console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
+									resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+								});
+							},
+							err => {
+								console.error('An error occurred while generating a payment key');
+								console.error(err);
+								resolve();
+							}
+						);
+					});
+				}
 			} else {
-				// notify creation
-				if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
-					emailBusiness.sendEmail(
-						'bookings@tripdizer.com',
-						'notifications@tripdizer.com',
-						'Request #' + request.id + ' is placed at Tripdizer',
-						request.traveler.name +
-						' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+				const package = await new Promise(resolve => {
+					getPackage(
+						request.id,
+						null,
+						data => {
+							console.log('Package creation succeeded. Now responding to caller');
+							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+						},
+						data => {
+							if (data && data.pdfUrl) {
+								console.log('Package creation partially succeeded. Now responding to caller');
+								resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+							} else {
+								console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+								resolve({});
+							}
+							// onSuccess(request);
+						},
+						{ choices: request.flightOffers },
+						{ choices: request.selectedCities },
+						{ choices: request.selectedHotels },
+						{ choices: request.selectedAttractions }
 					);
+				});
 
-				if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE')
-					notifyCustomer(request.traveler.email, request.traveler.name, request.id);
-
-				if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
-					googlePeopleAdapter.createNewContact(
-						request.traveler.email,
-						request.traveler.name,
-						request.traveler.mobile,
-						'(' + request.id.toString() + ')'
-					);
+				request = { ...request, ...package };
 			}
+
+			onSuccess(request);
+
+			// notify creation
+			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
+				emailBusiness.sendEmail(
+					'bookings@tripdizer.com',
+					'notifications@tripdizer.com',
+					'Request #' + request.id + ' is placed at Tripdizer',
+					request.traveler.name +
+					' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+				);
+
+			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && request.requiresPayment == true)
+				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
+
+			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
+				googlePeopleAdapter.createNewContact(
+					request.traveler.email,
+					request.traveler.name,
+					request.traveler.mobile,
+					'(' + request.id.toString() + ')'
+				);
 		},
 		function (err) {
 			// respond to caller
@@ -303,7 +356,16 @@ var sendDailyReportOfRequestsCount = function () {
 	);
 };
 
-var getPackage = function (requestId, accessToken, onSuccess, onFailure, requestFlightOffers, requestSelectedCities, requestSelectedHotels, requestSelectedAttractions) {
+var getPackage = function (
+	requestId,
+	accessToken,
+	onSuccess,
+	onFailure,
+	requestFlightOffers,
+	requestSelectedCities,
+	requestSelectedHotels,
+	requestSelectedAttractions
+) {
 	getRequestById(
 		requestId,
 		async function (request) {
@@ -312,19 +374,24 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 				var flightOffers = requestFlightOffers != null ? requestFlightOffers : request.flightOffers;
 				var selectedCities = requestSelectedCities != null ? requestSelectedCities : request.selectedCities;
 				var selectedHotels = requestSelectedHotels != null ? requestSelectedHotels : request.selectedHotels;
-				var selectedAttractions = requestSelectedAttractions != null ? requestSelectedAttractions : request.selectedAttractions;
+				var selectedAttractions =
+					requestSelectedAttractions != null ? requestSelectedAttractions : request.selectedAttractions;
 				const departureDate = new Date(request.departureDate);
 				const returnDate = new Date(request.returnDate);
 				const tripDays = Math.ceil(Math.abs(returnDate.getTime() - departureDate.getTime()) / (1000 * 3600 * 24));
 				if (request.itineraryId && request.itineraryId !== -1) {
-					httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/itinerary/" + request.itineraryId, json: true, headers: { authorization: accessToken } },
+					httpRequest.get(
+						{
+							url: MASTER_DATA_ENDPOINT + '/master-data/itinerary/' + request.itineraryId,
+							json: true,
+							headers: { authorization: accessToken },
+						},
 						async function (error, response, itinerary) {
 							if (error || response.statusCode != 200) {
 								console.error('An error occurred while getting itinerary from master-data to generate request package');
 								console.log(error || response.statusMessage);
 								onFailure(error || response.statusMessage);
-							}
-							else if (itinerary.flights.length > 0) {
+							} else if (itinerary.flights.length > 0) {
 								itinerary.flights = itinerary.flights.sort((a, b) => a.type - b.type);
 								itinerary.flights[0].date = departureDate.toLocaleDateString();
 								for (let i = itinerary.flights.length - 1; i >= 0; i--)
@@ -441,24 +508,33 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 						}
 					);
 				} else if (flightOffers && selectedHotels && selectedCities && selectedAttractions) {
-					console.log("Starting to generate package for request:");
-					console.log(JSON.stringify(request));
+					console.log('Starting to generate package for request:');
 					var detailsOfFirstCountry = await getPackageDetailsOfCountry(selectedCities.choices[0].countryIsoCode);
 					request = {
 						id: request.id,
 						travelerName: request.traveler.name ? request.traveler.name : '',
-						estimatedCost: getItineraryCostFromRequest(flightOffers.choices, selectedHotels.choices),
+						estimatedCost: request.estimatedCost,
 						numberOfTravelers: request.adultsNumber + request.kidsNumber + request.infantsNumber,
 						itinerary: {
-							name: selectedCities.choices.reduce((itineraryName, city, index) => index == 0 ? itineraryName + city.name : itineraryName + ", " + city.name, ''),
+							name: selectedCities.choices.reduce(
+								(itineraryName, city, index) =>
+									index == 0 ? itineraryName + city.name : itineraryName + ', ' + city.name,
+								''
+							),
 							...detailsOfFirstCountry,
-							image1: (await isValidImage(MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png")) ? MEDIA_STORAGE_BASE_URL + "/" + selectedCities.choices[0].countryIsoCode + ".png" : 'https://i.imgur.com/LsHCFiD.jpg',
+							image1: (await isValidImage(
+								MEDIA_STORAGE_BASE_URL + '/' + selectedCities.choices[0].countryIsoCode + '.png'
+							))
+								? MEDIA_STORAGE_BASE_URL + '/' + selectedCities.choices[0].countryIsoCode + '.png'
+								: 'https://i.imgur.com/LsHCFiD.jpg',
 							flights: flightOffers.choices.map(offer => ({
 								date: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM/YYYY') : '',
 								departingFrom: offer.segments ? offer.segments[0].originDetails : '',
 								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destinationDetails : '',
 								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM HH:mm') : '',
-								arrivalTime: offer.segments ? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM HH:mm') : '',
+								arrivalTime: offer.segments
+									? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM HH:mm')
+									: '',
 								layOver: offer.transitDurationInMinutes == 0 ? 'Direct' : offer.transitDurationInWords,
 							})),
 							hotels: selectedHotels.choices.map(offer => ({
@@ -467,17 +543,16 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 								checkOut: offer.checkout ? new moment(offer.checkout).format('DD/MM') : '',
 								nights: offer.numberOfNights ? offer.numberOfNights : '',
 								name: offer.name ? offer.name : '',
-							}))
+							})),
 						},
 					};
-					console.log("Request going to google docs:");
-					console.log(JSON.stringify(request));
+					console.log('Request going to google docs:');
 					packageHttp(
 						'post',
 						'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 						JSON.stringify(request),
 						function (doc) {
-							console.log("File created. Id: " + doc.docId + ", Now generating the PDF");
+							console.log('File created. Id: ' + doc.docId + ', Now generating the PDF');
 							packageHttp(
 								'get',
 								`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
@@ -485,7 +560,7 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 								}`,
 								null,
 								function (package) {
-									console.log("PDF Created. Id: " + package.pdfId + ", Now saving doc and pdf ids to the request")
+									console.log('PDF Created. Id: ' + package.pdfId + ', Now saving doc and pdf ids to the request');
 									requestsDao.modifyRequestPackageInfo(
 										request.id,
 										package.docId,
@@ -513,7 +588,7 @@ var getPackage = function (requestId, accessToken, onSuccess, onFailure, request
 					onFailure("Itinerary Id doesn't exists!, or selected flights/accomodation/cities/attractions don't exist");
 				}
 			} catch (err) {
-				console.error("An error occured while building the package");
+				console.error('An error occured while building the package');
 				console.error(err);
 				onFailure(err);
 			}
@@ -529,29 +604,29 @@ var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
-	console.log("Itinerary cost: " + cost);
 	return cost;
-}
+};
 
 var getPackageDetailsOfCountry = function (isoCode) {
 	return new Promise((resolve, reject) => {
-
-		httpRequest.get({ url: MASTER_DATA_ENDPOINT + "/master-data/country/" + isoCode, json: true },
-			function (error, response, country) {
-				if (error || response.statusCode != 200) {
-					reject(error || response.statusMessage);
-				} else {
-					resolve({
-						introduction: country.introduction,
-						includes: country.includes,
-						excludes: country.excludes,
-						visaRequirements: country.visaRequirements
-					})
-				}
+		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function (
+			error,
+			response,
+			country
+		) {
+			if (error || response.statusCode != 200) {
+				reject(error || response.statusMessage);
+			} else {
+				resolve({
+					introduction: country.introduction,
+					includes: country.includes,
+					excludes: country.excludes,
+					visaRequirements: country.visaRequirements,
+				});
 			}
-		);
+		});
 	});
-}
+};
 
 var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
@@ -680,35 +755,98 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 }
 
 function getRequestById(requestId, onSuccess, onFailure) {
-	requestsDao.getRequestById(requestId, async function (request) {
-		try {
-			var accomodationOffers = await accomodationDao.get(requestId);
-			if (accomodationOffers.exists)
-				request.selectedHotels = accomodationOffers.data();
+	requestsDao.getRequestById(
+		requestId,
+		async function (request) {
+			try {
+				var accomodationOffers = await accomodationDao.get(requestId);
+				if (accomodationOffers.exists) request.selectedHotels = accomodationOffers.data();
 
-			var flightOffers = await transportationDao.get(requestId);
-			if (flightOffers.exists)
-				request.flightOffers = flightOffers.data();
+				var flightOffers = await transportationDao.get(requestId);
+				if (flightOffers.exists) request.flightOffers = flightOffers.data();
 
-			var cities = await citiesDao.get(requestId);
-			if (cities.exists)
-				request.selectedCities = cities.data();;
+				var cities = await citiesDao.get(requestId);
+				if (cities.exists) request.selectedCities = cities.data();
 
-			var attractions = await attractionsDao.get(requestId);
-			if (attractions.exists)
-				request.selectedAttractions = attractions.data();;
+				var attractions = await attractionsDao.get(requestId);
+				if (attractions.exists) request.selectedAttractions = attractions.data();
 
-			onSuccess(request);
-		} catch (err) {
-			console.log("Failed to retrieve data for request by id: " + requestId);
+				var pnrInfo = await pnrDao.get(requestId);
+				if (pnrInfo.exists) request.pnrInfo = pnrInfo.data();
+
+				if (request.flightOffers && request.flightOffers.choices && request.flightOffers.choices.length > 0) {
+					for (var i = 0; i < request.flightOffers.choices.length; i++) {
+						var flightBookingInfo = await bookingsDao.getFlightBookingResult(requestId, request.flightOffers.choices[i].fareSourceCode);
+						if (flightBookingInfo.exists) request.flightOffers.choices[i].bookingInfo = flightBookingInfo.data();
+					}
+				}
+
+				if (request.selectedHotels && request.selectedHotels.choices && request.selectedHotels.choices.length > 0) {
+					for (var i = 0; i < request.selectedHotels.choices.length; i++) {
+						var hotelBookingInfo = await bookingsDao.getHotelBookingResult(requestId, request.selectedHotels.choices[i].moreDetails.hotelId);
+						if (hotelBookingInfo.exists) request.selectedHotels.choices[i].bookingInfo = hotelBookingInfo.data();
+					}
+				}
+
+				var paymentInfo = await paymentDao.get(requestId);
+				if (paymentInfo.exists) request.paymentInfo = paymentInfo.data();
+
+				onSuccess(request);
+			} catch (err) {
+				console.log('Failed to retrieve data for request by id: ' + requestId);
+				console.error(err);
+				onFailure(err);
+			}
+		},
+		function (err) {
+			console.log('Failed to retrieve a request by Id: ' + requestId);
 			console.error(err);
 			onFailure(err);
 		}
-	}, function (err) {
-		console.log("Failed to retrieve a request by Id: " + requestId);
-		console.error(err);
-		onFailure(err);
+	);
+}
+
+var publishRequestChoicesForBooking = function (requestId) {
+	return new Promise((resolve, reject) => {
+		getRequestById(requestId, request => {
+			if (request.flightOffers && request.flightOffers.choices) {
+				request.flightOffers.choices.forEach(flightOffer => {
+					googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
+				});
+			} else {
+				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No flights booking information available. Request doesn't have flight offers to book ?`)
+			}
+
+			if (request.selectedHotels && request.selectedHotels.choices) {
+				request.selectedHotels.choices.forEach(hotel => {
+					googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
+				});
+			} else {
+				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No hotel booking information available. Request doesn't have hotels to book ?`)
+			}
+			resolve();
+		}, err => {
+			console.error(`FATAL ERROR: Failed to retrieve the request with id: ${requestId}. Request should be paid but booking messages has not been published`)
+			console.error(err);
+			reject(err);
+		})
 	})
+}
+
+var handlePaidRequest = function (requestId) {
+	requestsDao.modifyRequestStatusById(
+		requestId,
+		18,
+		() => { },
+		() => {
+			console.error("FATAL ERROR: Failed to update request status to 'paid' for request: " + requestId + ". Publishing booking messages will proceed anyway");
+		}
+	);
+	publishRequestChoicesForBooking(requestId).then(result => {
+		console.log("Attempts to publish booking messages for request: " + requestId + " completed successfully for all flights and hotels");
+	}).catch(err => {
+		console.error("FATAL ERROR: Publishing booking messages for request: " + requestId + " failed for the following reason: " + JSON.stringify(err))
+	});
 }
 
 exports.placeRequest = placeRequest;
@@ -725,3 +863,4 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
+exports.handlePaidRequest = handlePaidRequest;
