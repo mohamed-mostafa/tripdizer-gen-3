@@ -343,6 +343,8 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
                 ...mapItineraryDetails(originalReq, data),
                 ...moreItineraries
               ]);
+            }).catch(err => {
+              reject(err);
             });
           } else {
             resolve(mapItineraryDetails(originalReq, data));
@@ -355,33 +357,37 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
 
 const mapItineraryDetails = (requestData, responseData) => {
   const { moreResults, nextToken, ...moreDetails } = responseData.status;
-  return responseData.itineraries.map(i => ({
-    id: i.id,
-    address: i.hotelIAddress,
-    checkin: requestData.checkin,
-    checkout: requestData.checkout,
-    cityName: requestData.city,
-    countryName: requestData.country,
-    currency: i.currency,
-    image: i.image,
-    latitude: Number(i.latitude),
-    locality: i.locality,
-    longitude: Number(i.longitude),
-    name: i.hotelName,
-    price: i.price,
-    stars: Number(i.rating),
-    facilities: i.facilities,
-    moreDetails: {
-      sessionId: moreDetails.sessionId,
-      bookingToken: i.BookingToken,
-      hotelId: i.hotelId,
-      productId: i.productId,
-      propertyId: i.propertyid,
-      resultIndex: i.result_index,
-      tokenId: i.TokenId,
-      traceId: i.TraceId
-    }
-  }));
+  if (responseData && responseData.itineraries) {
+    return responseData.itineraries.map(i => ({
+      id: i.id,
+      address: i.hotelIAddress,
+      checkin: requestData.checkin,
+      checkout: requestData.checkout,
+      cityName: requestData.city,
+      countryName: requestData.country,
+      currency: i.currency,
+      image: i.image,
+      latitude: Number(i.latitude),
+      locality: i.locality,
+      longitude: Number(i.longitude),
+      name: i.hotelName,
+      price: i.price,
+      stars: Number(i.rating),
+      facilities: i.facilities,
+      moreDetails: {
+        sessionId: moreDetails.sessionId,
+        bookingToken: i.BookingToken,
+        hotelId: i.hotelId,
+        productId: i.productId,
+        propertyId: i.propertyid,
+        resultIndex: i.result_index,
+        tokenId: i.TokenId,
+        traceId: i.TraceId
+      }
+    }));
+  } else {
+    return [];
+  }
 };
 
 const bookHotel = (language, bookHotelRequest) => {
