@@ -22,7 +22,7 @@ let moment = require('moment');
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 const MEDIA_STORAGE_BASE_URL =
 	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
-const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || "Y";
+const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || "N";
 
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function (request, onSuccess, onFailure, onUserError) {
@@ -100,9 +100,9 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 			attractionsDao.save(request.id, requestSelectedAttractions);
 
 			if (request.requiresPayment) {
-				if (BYPASS_PAYMENT == "Y") {
-					request.pnrInfoList = require('../../test-data/pnr.json');
-				}
+				// if (BYPASS_PAYMENT == "Y") {
+				// 	request.pnrInfoList = require('../../test-data/pnr.json');
+				// }
 				// save PNR info
 				var requestPNRInfo = { choices: request.pnrInfoList };
 				pnrDao.save(request.id, requestPNRInfo);
@@ -111,34 +111,32 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					await new Promise((resolve, reject) => {
 						setTimeout(() => resolve(), 10000);
 					})
-
 					publishRequestChoicesForBooking(request.id);
-				} else {
-					// at this point, we've saved the request to the database. let's generate a payment key
-					request.paymentKey = await new Promise(resolve => {
-						paymentsService.registeredOrderAndGeneratePaymentKey(
-							request,
-							({ paymentKey }) => {
-								requestsDao.modifyRequestStatusById(request.id, 17, () => {
-									requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {
-										resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
-									}, (err) => {
-										console.log('Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err));
-										resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
-									});
+				}
+				// at this point, we've saved the request to the database. let's generate a payment key
+				request.paymentKey = await new Promise(resolve => {
+					paymentsService.registeredOrderAndGeneratePaymentKey(
+						request,
+						({ paymentKey }) => {
+							requestsDao.modifyRequestStatusById(request.id, 17, () => {
+								requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {
+									resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
 								}, (err) => {
-									console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
+									console.log('Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err));
 									resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
 								});
-							},
-							err => {
-								console.error('An error occurred while generating a payment key');
-								console.error(err);
-								resolve();
-							}
-						);
-					});
-				}
+							}, (err) => {
+								console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
+								resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+							});
+						},
+						err => {
+							console.error('An error occurred while generating a payment key');
+							console.error(err);
+							resolve();
+						}
+					);
+				});
 			} else {
 				const package = await new Promise(resolve => {
 					getPackage(
@@ -180,7 +178,7 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 					' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
 				);
 
-			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && request.requiresPayment == true)
+			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && !request.requiresPayment)
 				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
 
 			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
@@ -842,11 +840,16 @@ var handlePaidRequest = function (requestId) {
 			console.error("FATAL ERROR: Failed to update request status to 'paid' for request: " + requestId + ". Publishing booking messages will proceed anyway");
 		}
 	);
-	publishRequestChoicesForBooking(requestId).then(result => {
-		console.log("Attempts to publish booking messages for request: " + requestId + " completed successfully for all flights and hotels");
-	}).catch(err => {
-		console.error("FATAL ERROR: Publishing booking messages for request: " + requestId + " failed for the following reason: " + JSON.stringify(err))
-	});
+	if (BYPASS_PAYMENT == "Y") {
+		// booking was started immediately after saving the request, without waiting for the payment
+		// no need to proceed with bookings again
+	} else {
+		publishRequestChoicesForBooking(requestId).then(result => {
+			console.log("Attempts to publish booking messages for request: " + requestId + " completed successfully for all flights and hotels");
+		}).catch(err => {
+			console.error("FATAL ERROR: Publishing booking messages for request: " + requestId + " failed for the following reason: " + JSON.stringify(err))
+		});
+	}
 }
 
 exports.placeRequest = placeRequest;
