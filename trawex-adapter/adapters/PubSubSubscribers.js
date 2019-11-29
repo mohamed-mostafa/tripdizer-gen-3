@@ -7,7 +7,7 @@ const pubSubPublisher = require('./PubSubPublishers');
 // Imports the Google Cloud client library
 const { PubSub } = require('@google-cloud/pubsub');
 // Creates a client
-const projectId = process.env.PROJECT_NAME || 'tripdizer-dev';
+const projectId = process.env.PROJECT_ID || 'tripdizer-dev';
 const keyFileName = './tripdizer-service-account.json';
 process.env.GOOGLE_APPLICATION_CREDENTIALS = keyFileName;
 
