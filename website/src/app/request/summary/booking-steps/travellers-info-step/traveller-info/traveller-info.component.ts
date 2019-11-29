@@ -60,7 +60,7 @@ export class TravellerInfoComponent implements OnInit {
 		const firstAdultControls = ["title", "firstName", "lastName", "dateOfBirth", "nationality", "email", "phone", "passportNumber", "passportExpiry"];
 		const otherAdultsControls = ["title", "firstName", "lastName", "dateOfBirth", "passportNumber", "passportExpiry"];
 		const kidsControls = ["title", "firstName", "lastName", "dateOfBirth", "passportNumber", "passportExpiry"];
-		const infantsControls = ["title", "firstName", "lastName", "dateOfBirth"];
+		const infantsControls = ["title", "firstName", "lastName", "dateOfBirth", "passportNumber", "passportExpiry"];
 
 		this.effectiveControls = firstAdultControls;
 		if (this.travellerType === "adult" && this.travellerNumber > 1) {
