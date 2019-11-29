@@ -465,9 +465,6 @@
 			"email": "Email Address",
 			"mobile": "Mobile Number",
 			"birth_date": "Date of birth",
-<<<<<<< HEAD
-			"location": "Location"
-=======
 			"location": "Location",
 			"title": "Title",
 			"gender": "Gender",
@@ -493,26 +490,20 @@
 					"INF"
 				]
 			}
->>>>>>> feature/payment
 		},
 		"user_plans": {
 			"my_plans": "My Plans"
 		}
-<<<<<<< HEAD
+	},
+	"payment_confirm": {
+		"confirmation": "Confirmation",
+		"booking_confirmed": "Your booking has been confirmed",
+		"confirmation_email_sending": "A confirmation email will be sent soon to your email address",
+		"process_failed": "Process failed",
+		"message_1": "There was an error processing the transaction",
+		"message_2": "Contact card issuing bank",
+		"message_4": "Expired Card",
+		"message_5": "Insufficient Funds",
+		"message_6": "Payment is already being processed"
 	}
 }
-=======
-},
-"payment_confirm": {
-"confirmation": "Confirmation",
-"booking_confirmed": "Your booking has been confirmed",
-"confirmation_email_sending": "A confirmation email will be sent soon to your email address",
-"process_failed": "Process failed",
-"message_1": "There was an error processing the transaction",
-"message_2": "Contact card issuing bank",
-"message_4": "Expired Card",
-"message_5": "Insufficient Funds",
-"message_6": "Payment is already being processed"
-}
-}
->>>>>>> feature/payment
