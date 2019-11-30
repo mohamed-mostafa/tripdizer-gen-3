@@ -50,9 +50,8 @@
 
               <div class="row mx-2">
                 <div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP' }}</div>
-                <div class="col-6 text-right text-blue font-weight-bold">
-                  <span class="mr-2 choose-btn"
-                    (click)="selectOffer(offer)">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+                <div class="col-6 text-right text-blue font-weight-bold" (click)="selectOffer(offer)">
+                  <span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
                   <mat-checkbox class="float-right mr-1" [checked]="offer.selected" [disableRipple]="true"
                     (click)="$event.preventDefault()"></mat-checkbox>
                 </div>
@@ -74,8 +73,8 @@
         <div *ngIf="flightOffers.length > 1" class="row mb-2">
           <div class="col-12 text-center slider-pagination">
             <span (click)="previousSlide()">‹</span>
-            <span *ngFor="let offer of flightOffers; let i = index" class="mx-1"
-              (click)="goToSlide(i)" [class.selected-slide-index]="i+1 === selectedSlide">{{ i + 1 }}</span>
+            <span *ngFor="let offer of flightOffers; let i = index" class="mx-1" (click)="goToSlide(i)"
+              [class.selected-slide-index]="i+1 === selectedSlide">{{ i + 1 }}</span>
             <span (click)="nextSlide()">›</span>
           </div>
         </div>
