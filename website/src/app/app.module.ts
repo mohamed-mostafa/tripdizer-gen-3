@@ -1,7 +1,7 @@
 import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { MatSnackBarModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
 	MatMomentDateModule,
 	MAT_MOMENT_DATE_ADAPTER_OPTIONS,

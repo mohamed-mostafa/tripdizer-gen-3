@@ -11,8 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
-
-	@ViewChild('owlElement') owlElement: OwlCarousel;
+	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
@@ -26,25 +25,28 @@ export class TabAccommodationComponent {
 		private service: EstimatedCostService,
 		public requestService: RequestService,
 		private router: Router,
-		private route: ActivatedRoute,
+		private route: ActivatedRoute
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		requestService.setIsAccommodationTabVisited(true);
-		service.getAccommodation().subscribe(res => {
-			this.loadedData = true;
-			const items = res;
-			for (const item of items) {
-				if (item.hotels.length > 0) {
-					item.hotels[0].select = true;
-					this.accommodations.push(item);
-					this.selectedHotels.push(item.hotels[0]);
-					this.totalCost = this.totalCost + item.hotels[0].price;
+		service.getAccommodation().subscribe(
+			res => {
+				this.loadedData = true;
+				const items = res;
+				for (const item of items) {
+					if (item.hotels.length > 0) {
+						item.hotels[0].select = true;
+						this.accommodations.push(item);
+						this.selectedHotels.push(item.hotels[0]);
+						this.totalCost = this.totalCost + item.hotels[0].price;
+					}
 				}
+				this.setSliderOptions();
+			},
+			error => {
+				this.accommodations = [];
 			}
-			this.setSliderOptions();
-		}, error => {
-			this.accommodations = [];
-		});
+		);
 	}
 
 	selectHotel(hotel) {
@@ -81,12 +83,12 @@ export class TabAccommodationComponent {
 				600: {
 					items: 2,
 					margin: 10,
-					slideBy: 2
+					slideBy: 2,
 				},
 				1000: {
 					items: 3,
 					margin: 10,
-					slideBy: 3
+					slideBy: 3,
 				},
 			},
 		};
