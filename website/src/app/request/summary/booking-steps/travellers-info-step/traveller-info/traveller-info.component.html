@@ -47,7 +47,7 @@
       <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
         <mat-hint>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-hint>
         <mat-error>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-error>
-        <input matInput [max]="currentDate" [min]="travellerMinDate()" [matDatepicker]="dateOfBirthPicker"
+        <input matInput [max]="travellerMaxDate()" [min]="travellerMinDate()" [matDatepicker]="dateOfBirthPicker"
           id="traveler-birthday" class="text-yellow text-uppercase font-weight-bold"
           [placeholder]="'user.user_info.birth_date' | translate" (click)="dateOfBirthPicker.open()"
           (focus)="dateOfBirthPicker.open()" [formControlName]="controlName + '-dateOfBirth'" />
