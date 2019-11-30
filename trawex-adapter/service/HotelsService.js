@@ -302,6 +302,9 @@ const searchHotelsAPI = (
                 ...mapItineraryDetails(request, data),
                 ...moreItineraries
               ]);
+            }).catch(err => {
+              console.log(`Failed to retrieve more hotels even though data.status.moreResults was true. Using hotels from first request only. Request: ${JSON.stringify(request)}, Error: ${JSON.stringify(err)}`)
+              resolve(mapItineraryDetails(request, data));
             });
           } else {
             resolve(mapItineraryDetails(request, data));
