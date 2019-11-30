@@ -5,6 +5,7 @@ export class Traveller {
 	firstName: string;
 	lastName: string;
 	dateOfBirth: moment.Moment;
+	ageGroup: string;
 	gender: string;
 	email: string;
 	phone: string;
