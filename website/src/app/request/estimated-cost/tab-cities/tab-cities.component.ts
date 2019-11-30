@@ -77,7 +77,7 @@ export class TabCitiesComponent {
 		} else if (city.select === false) {
 			// check if no more cities should be selected
 			const numberOfNights = this.service.getNumberOfNights();
-			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
+			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
 			if (this.selectedCities.length >= maxNumberOfCities) {
 				// prevent more selections
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {

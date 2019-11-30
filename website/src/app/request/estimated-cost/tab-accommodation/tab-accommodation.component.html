@@ -78,6 +78,11 @@
                 </div>
               </div>
             </div>
+            <div class="mb-2 mx-1 item" *ngIf="accommodation.hotels.length > 0">
+              <p *ngIf="accommodations.length < 1" class="px-2 text-center">
+                {{ 'request.estimated_cost.tab_flights.no_hotel_offers' | translate }}
+              </p>
+            </div>
           </owl-carousel>
         </div>
       </div>
@@ -85,6 +90,10 @@
 
 
     </div>
+
+    <p *ngIf="accommodations.length < 1" class="px-2 text-center">
+      {{ 'request.estimated_cost.tab_accommodations.no_hotel_offers' | translate }}
+    </p>
 
     <div class="row my-2 my-sm-3 my-md-4 my-lg-5">
       <div class="col-12">
