@@ -46,8 +46,28 @@ exports.searchTransportation = function (language, transportationSearchRequest) 
 
     // create a trip segment for each city
     for (let i = 0; i < transportationSearchRequest.citiesSequence.length; i++) {
+      var currentSegmentCityIata = transportationSearchRequest.citiesSequence[i].cityIata.substring(0, 3);
+
+      // START HANDLING ZONES IN SAME CITY
+      var skipSegment = false;
+      // check if there is a previous segment, and if it was for the same destination
+      if (i > 0) {
+        previousSegmentCityIata = transportationSearchRequest.citiesSequence[i - 1].cityIata.substring(0, 3);
+        if (currentSegmentCityIata == previousSegmentCityIata) {
+          skipSegment = true;
+          // update leaving date of previous segment to what should be leaving data of current segment
+          var correspondingSegment = multiCitySearchRequest.tripSegments.find(segment => segment.cityIata == currentSegmentCityIata);
+          if (correspondingSegment) {
+            correspondingSegment.leavingDate = departureMoment.add(transportationSearchRequest.citiesSequence[i].numberOfNights, "Days").format('YYYY-MM-DD');
+          }
+          departureMoment = moment(transportationSearchRequest.citiesSequence[i - 1].leavingDate);
+        }
+      }
+      if (skipSegment) continue;
+      // END HANDLING ZONES IN SAME CITY
+
       let newTripSegment = {
-        cityIata: transportationSearchRequest.citiesSequence[i].cityIata.substring(0, 3),
+        cityIata: currentSegmentCityIata,
         arrivalDate: departureMoment.format('YYYY-MM-DD'),
         cityName: transportationSearchRequest.citiesSequence[i].cityIata,
         countryIso: transportationSearchRequest.citiesSequence[i].countryIso,

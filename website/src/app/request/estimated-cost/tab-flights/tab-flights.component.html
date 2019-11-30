@@ -49,10 +49,9 @@
               </div>
 
               <div class="row mx-2">
-                <div class="col-6 font-weight-bold">{{ offer.price | currency:'EGP':'symbol':'1.0-0' }}</div>
-                <div class="col-6 text-right text-blue font-weight-bold">
-                  <span class="mr-2 choose-btn"
-                    (click)="selectOffer(offer)">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+                <div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP':'symbol':'1.0-0' }}</div>
+                <div class="col-6 text-right text-blue font-weight-bold" (click)="selectOffer(offer)">
+                  <span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
                   <mat-checkbox class="float-right mr-1" [checked]="offer.selected" [disableRipple]="true"
                     (click)="$event.preventDefault()"></mat-checkbox>
                 </div>

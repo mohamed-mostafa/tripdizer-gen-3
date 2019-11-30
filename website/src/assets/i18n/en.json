@@ -203,12 +203,13 @@
 				"selected": "Selected",
 				"flight_to": "Trip Route",
 				"choose_flights": "Choose a flight offer",
-				"no_flight_offers": "Sorry, no offers available currently",
+				"no_flight_offers": "Sorry, no offers are currently available",
 				"choose": "Choose"
 			},
 			"tab_accommodations": {
 				"title": "Accommodations",
 				"choose_hotel": "View and choose your hotels",
+				"no_hotel_offers": "Sorry, no offers are currently available",
 				"select": "Select",
 				"selected": "Selected",
 				"total_price": "Total price",

@@ -97,16 +97,10 @@ export class EstimatedCostService {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			// tap((flightOffers) => {
-			// 	flightOffers.forEach((flightOffer) => {
-			// 		flightOffer.flightLegs.map(flightLeg => {
-			// 			const city = citiesSequence.find(cs => cs.cityIata === flightLeg.origin.iataCode);
-			// 			flightLeg.numberOfNights = city ? city.numberOfNights : null;
-			// 			return flightLeg;
-			// 		});
-			// 	});
-			// }),
 			tap(() => {
+				this.setIsLoading(false, '');
+			}, error => {
+				console.error(JSON.stringify(error));
 				this.setIsLoading(false, '');
 			})
 		);
@@ -156,6 +150,9 @@ export class EstimatedCostService {
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(() => {
+				this.setIsLoading(false, '');
+			}, error => {
+				console.error(JSON.stringify(error));
 				this.setIsLoading(false, '');
 			})
 		);
