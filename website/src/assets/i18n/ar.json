@@ -209,6 +209,7 @@
 			"tab_accommodations": {
 				"title": "الفنادق",
 				"choose_hotel": "عرض واختيار الفنادق",
+				"no_hotel_offers": "عذرا، لا توجد عروض فى الوقت الحالى",
 				"select": "اختيار",
 				"selected": "تم اختياره",
 				"total_price": "إجمالى السعر",
@@ -473,9 +474,22 @@
 			"passport_expiry": "تاريخ الإنتهاء",
 			"passport_issue_country": "مصدر الجواز",
 			"titles": {
-				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
-				"kid": ["MSTR", "MISS"],
-				"infant": ["MISS", "MSTR", "INF"]
+				"adult": [
+					"LORD",
+					"MISS",
+					"MR",
+					"MRS",
+					"SIR"
+				],
+				"kid": [
+					"MSTR",
+					"MISS"
+				],
+				"infant": [
+					"MISS",
+					"MSTR",
+					"INF"
+				]
 			}
 		},
 		"user_plans": {
