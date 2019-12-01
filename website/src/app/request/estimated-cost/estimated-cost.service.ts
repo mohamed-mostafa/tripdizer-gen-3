@@ -180,7 +180,6 @@ export class EstimatedCostService {
 			tap(
 				() => {
 					this.setIsLoading(false, '');
-					this.startSessionTimer();
 				},
 				error => {
 					console.error(JSON.stringify(error));
