@@ -269,6 +269,7 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -296,6 +297,7 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
       },
       function (error, response, data) {
@@ -392,6 +394,7 @@ exports.bookFlight = function (language, bookFlightRequest) {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: params
       },
       function (error, response, data) {
@@ -438,6 +441,7 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
           target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
@@ -482,6 +486,7 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
           target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
@@ -537,6 +542,7 @@ function authenticate() {
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
       },
       function (error, response, data) {
@@ -560,6 +566,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
+        gzip: true,
         qs: {
           user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
           session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
