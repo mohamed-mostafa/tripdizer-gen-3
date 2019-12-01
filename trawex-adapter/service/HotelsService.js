@@ -106,6 +106,7 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
           TRAWEX_HOTELS_SPECIFIC_CONTENT,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
+        gzip: true,
         qs: {
           ...config,
           sessionId: sessionId,
@@ -136,6 +137,7 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
           TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
+        gzip: true,
         body: {
           ...config,
           TraceId: hotelOffersRequest.traceId,
@@ -172,6 +174,7 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
           TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
+        gzip: true,
         body: {
           ...config,
           TraceId: hotelOfferRequest.traceId,
@@ -269,6 +272,7 @@ const searchHotelsAPI = (
       {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH,
         json: true,
+        gzip: true,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         body: {
           ...config,
@@ -322,6 +326,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
+        gzip: true,
         qs: {
           ...config,
           sessionId: sessionId,
@@ -400,6 +405,7 @@ const bookHotel = (language, bookHotelRequest) => {
         url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
+        gzip: true,
         body: {
           ...config,
           productId: bookHotelRequest.productId,

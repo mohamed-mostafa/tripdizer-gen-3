@@ -211,7 +211,7 @@ export class EstimatedCostService {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				var stationFlightLeg = null;
 				selectedFlightOffers.forEach(flightOffer => {
-					stationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === cityAttraction.city.iataCode);
+					stationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === cityAttraction.city.iataCode.substring(0, 3) && this.summaryStations.find(summaryStation => summaryStation.arrive_code == flightLeg.destination.iataCode) == null);
 				});
 				const stationHotel = selectedHotels.find(hotel => hotel.city === cityAttraction.city.name);
 
