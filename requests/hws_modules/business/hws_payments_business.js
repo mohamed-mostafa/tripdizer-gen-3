@@ -25,7 +25,7 @@ var registerRequestOrder = (request, onSuccess, onFailure) => {
 			auth_token: authToken,
 			delivery_needed: false,
 			merchant_id: merchantId,
-			amount_cents: request.estimatedCost * 100, // cost in the request is in EGP, gateway requires cost in cents (1 EGP = 100 cents/piasters)
+			amount_cents: request.estimatedCost * 100, // cost in the request is in EGP, gateway requires cost in cents (1 EGP = 100 piasters)
 			currency: CURRENCY,
 			merchant_order_id: request.id,
 		};
@@ -50,21 +50,21 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 				order_id: orderId,
 				currency: currency,
 				integration_id: WE_ACCEPT_INTEGRATION_ID,
-				// billing_data: {
-				// apartment: '803',
-				// email: 'claudette09@exa.com',
-				// floor: '42',
-				// first_name: 'Clifford',
-				// street: 'Ethan Land',
-				// building: '8028',
-				// phone_number: '+86(8)9135210487',
-				// shipping_method: 'PKG',
-				// postal_code: '01898',
-				// city: 'Jaskolskiburgh',
-				// country: 'CR',
-				// last_name: 'Nicolas',
-				// state: 'Utah',
-				// },
+				billing_data: {
+					first_name: request.pnrInfoList[0].firstName,
+					last_name: request.pnrInfoList[0].lastName,
+					phone_number: request.pnrInfoList[0].phone,
+					email: request.pnrInfoList[0].email,
+					country: request.pnrInfoList[0].nationality,
+					apartment: '0',
+					floor: '0',
+					building: 'N/A',
+					street: 'N/A',
+					postal_code: 'N/A',
+					city: 'N/A',
+					state: 'N/A',
+					shipping_method: 'PKG',
+				},
 			};
 			httpRequest.post(
 				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
