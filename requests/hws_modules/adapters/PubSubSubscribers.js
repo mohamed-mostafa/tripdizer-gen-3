@@ -135,9 +135,9 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
       data = data.replace("#name#", travellerName);
 
       var flightDetailsRows = "";
-      if (bookingConfirmation.reservationDetails && bookingConfirmation.reservationDetails.length > 0) {
-        for (var i = 0; i < bookingConfirmation.reservationDetails.length; i++) {
-          var flightSegment = bookingConfirmation.reservationDetails[i];
+      if (bookingConfirmation.bookingDetails.reservationDetails && bookingConfirmation.bookingDetails.reservationDetails.length > 0) {
+        for (var i = 0; i < bookingConfirmation.bookingDetails.reservationDetails.length; i++) {
+          var flightSegment = bookingConfirmation.bookingDetails.reservationDetails[i];
           flightDetailsRows += "<p>"
           flightDetailsRows += "<strong>Departure: </strong>" + flightSegment.DepartureAirportLocationName + flightSegment.DepartureTerminal != "" ? "( " + flightSegment.DepartureTerminal + " )" : "" + " at " + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm");
           flightDetailsRows += "<br>"
@@ -154,7 +154,7 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
           flightDetailsRows += "<strong>Confirmation Number: </strong><strong style = 'color:#2989ff' >" + flightSegment.AirlinePNR + "</strong>";
           flightDetailsRows += "</p>"
         }
-        data.replace("#booking_details#", flightDetailsRows);
+        data = data.replace("#booking_details#", flightDetailsRows);
         emailBusiness.sendEmail(
           recepient,
           'bookings@tripdizer.com',
@@ -162,7 +162,7 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
           data
         );
       } else {
-        console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer`)
+        console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer. Confirmation: ${JSON.stringify(bookingConfirmation)}`)
         // NOTIFY OPERATIONS TEAM HERE
       }
     }
