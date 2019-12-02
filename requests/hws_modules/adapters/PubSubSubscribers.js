@@ -154,7 +154,7 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
           flightDetailsRows += "<strong>Confirmation Number: </strong><strong style = 'color:#2989ff' >" + flightSegment.AirlinePNR + "</strong>";
           flightDetailsRows += "</p>"
         }
-        data.replace("#booking_details#", flightDetailsRows);
+        data = data.replace("#booking_details#", flightDetailsRows);
         emailBusiness.sendEmail(
           recepient,
           'bookings@tripdizer.com',
