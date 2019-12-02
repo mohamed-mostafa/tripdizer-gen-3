@@ -28,16 +28,34 @@ export class EstimatedCostService {
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
 
-	selectedFlightOffers: Array<FlightOffer>;
-	selectedCities: Array<CityDTO>;
-	selectedHotels: Array<Hotel>;
+	selectedFlightOffers = new Subject<FlightOffer[]>();
+	flightOffersSelected: Array<FlightOffer> = [];
+	selectedCities = new Subject<CityDTO[]>();
+	citiesSelected: Array<CityDTO> = [];
+	selectedHotels = new Subject<Hotel[]>();
+	hotelsSelected: Array<Hotel> = [];
 	summaryStations: Array<Station> = [];
-	cityAttractionsList: Array<CityAttractions>;
+	cityAttractionsList: Array<CityAttractions> = [];
 
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) { }
+	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) {
+		this.selectedCities.subscribe(citiesSelected => {
+			this.citiesSelected = citiesSelected;
+			this.requestService.setProperty('selectedCities', citiesSelected);
+		});
+
+		this.selectedFlightOffers.subscribe(flightOffersSelected => {
+			this.flightOffersSelected = flightOffersSelected;
+			this.requestService.setProperty('flightOffers', flightOffersSelected);
+		});
+
+		this.selectedHotels.subscribe(hotelsSelected => {
+			this.hotelsSelected = hotelsSelected;
+			this.requestService.setProperty('selectedHotels', hotelsSelected);
+		});
+	}
 
 	getDepartureDate(): Moment {
 		return this.departureDate;
@@ -72,12 +90,11 @@ export class EstimatedCostService {
 	}
 
 	setSelectedCities(selectedCities: Array<CityDTO>): void {
-		this.selectedCities = selectedCities;
-		this.requestService.setProperty('selectedCities', selectedCities);
+		this.selectedCities.next(selectedCities);
 	}
 
 	getSelectedCities(): Array<CityDTO> {
-		return this.selectedCities;
+		return this.citiesSelected;
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
@@ -107,12 +124,11 @@ export class EstimatedCostService {
 	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
-		this.selectedFlightOffers = flightOffers;
-		this.requestService.setProperty('flightOffers', flightOffers);
+		this.selectedFlightOffers.next(flightOffers);
 	}
 
 	getFlightsTotalCost(): number {
-		return Object.keys(this.selectedFlightOffers).reduce((pv, cv) => pv + +this.selectedFlightOffers[cv].price, 0);
+		return Object.keys(this.flightOffersSelected).reduce((pv, cv) => pv + +this.flightOffersSelected[cv].price, 0);
 	}
 
 	setCurrentTabIndex(index) {
@@ -125,7 +141,7 @@ export class EstimatedCostService {
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
 		const cities: Array<{ cityName: string; numberOfNights: number, cityIata: string, countryName: string }> = [];
-		for (const sc of this.selectedCities) {
+		for (const sc of this.citiesSelected) {
 			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
 		}
 
@@ -159,13 +175,16 @@ export class EstimatedCostService {
 	}
 
 	setSelectedHotels(selectedHotels) {
-		this.requestService.setProperty('selectedHotels', selectedHotels);
-		this.selectedHotels = selectedHotels;
+		this.selectedHotels.next(selectedHotels);
+	}
+
+	getSelectedHotels() {
+		return this.hotelsSelected;
 	}
 
 	getHotelsTotalCost() {
 		let totalCost = 0;
-		for (const sh of this.selectedHotels) {
+		for (const sh of this.hotelsSelected) {
 			totalCost = sh.price + totalCost;
 		}
 		return totalCost;
@@ -178,7 +197,7 @@ export class EstimatedCostService {
 	getAttractions(): Observable<Array<CityAttractions>> {
 		this.setIsLoading(true, '');
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
-		for (const selectedCity of this.selectedCities) {
+		for (const selectedCity of this.citiesSelected) {
 			cities.push({ cityIata: selectedCity.iataCode, numberOfNights: selectedCity.numberOfNights });
 		}
 		const attractionsRequest: AttractionsRequest = { cities };
@@ -191,7 +210,7 @@ export class EstimatedCostService {
 	}
 
 	getSelectedFlightOffers(): Array<FlightOffer> {
-		return this.selectedFlightOffers;
+		return this.flightOffersSelected;
 	}
 
 	getSummaryStations(): Array<Station> {
@@ -201,7 +220,7 @@ export class EstimatedCostService {
 
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const selectedCities: Array<CityDTO> = this.getSelectedCities();
-			const selectedHotels: Array<Hotel> = this.selectedHotels;
+			const selectedHotels: Array<Hotel> = this.getSelectedHotels();
 
 			// then construct the corresponding 'stations' objects
 			this.summaryStations.splice(0, this.summaryStations.length);
@@ -284,10 +303,11 @@ export class EstimatedCostService {
 			// add an extra station, which is the origin step (e.g. return to cairo)
 			if (this.summaryStations.length > 0) {
 				const lastStationAirport = this.requestService.getProperty('travelingFrom');
-				var lastStationFlightLeg = null;
+				let lastStationFlightLeg = null;
 				selectedFlightOffers.forEach(flightOffer => {
-					lastStationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === lastStationAirport.iataCode)
-				})
+					lastStationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === lastStationAirport.iataCode);
+				});
+
 				const lastStation: Station = {
 					// city
 					image: '',
@@ -330,8 +350,8 @@ export class EstimatedCostService {
 						)
 						: 'unknown time',
 
-					arrive_code: lastStationFlightLeg.destination.iataCode,
-					depart_code: lastStationFlightLeg.origin.iataCode,
+					arrive_code: lastStationFlightLeg ? lastStationFlightLeg.destination.iataCode : null,
+					depart_code: lastStationFlightLeg ? lastStationFlightLeg.origin.iataCode : null,
 
 					// accommodation
 					accommodationDataExists: false,

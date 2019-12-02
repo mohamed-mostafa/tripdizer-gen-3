@@ -95,7 +95,6 @@ export class TabFlightsComponent implements DoCheck {
 
 	updateCurrentSlideIndex() {
 		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
-		console.log(this.selectedSlide);
 	}
 
 	ngDoCheck() {

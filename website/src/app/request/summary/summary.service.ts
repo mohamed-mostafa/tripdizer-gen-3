@@ -15,6 +15,10 @@ export class SummaryService {
 	) {
 		this.stations = new BehaviorSubject(this.estimatedCostService.getSummaryStations());
 		this.totalCost = new BehaviorSubject(this.estimatedCostService.summaryTotalCost);
+		this.estimatedCostService.selectedHotels.subscribe(() => {
+			this.stations.next(this.estimatedCostService.getSummaryStations());
+			this.totalCost.next(this.estimatedCostService.summaryTotalCost);
+		});
 	}
 
 }
