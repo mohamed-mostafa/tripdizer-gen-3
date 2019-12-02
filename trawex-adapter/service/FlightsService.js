@@ -522,10 +522,10 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
                 passengerDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.CustomerInfos.map(item => item.CustomerInfo),
                 reservationDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.ReservationItems.map(item => ({
                   ...item.ReservationItem,
-                  DepartureAirportLocationName: airportsMap[item.ReservationItem.DepartureAirportLocationCode],
-                  ArrivalAirportLocationName: airportsMap[item.ReservationItem.ArrivalAirportLocationCode],
-                  MarketingAirlineName: airlinesMap[item.ReservationItem.MarketingAirlineCode],
-                  OperatingAirlineName: airlinesMap[item.ReservationItem.OperatingAirlineCode],
+                  DepartureAirportLocationName: mapAirportCodeToName(item.ReservationItem.DepartureAirportLocationCode),
+                  ArrivalAirportLocationName: mapAirportCodeToName(item.ReservationItem.ArrivalAirportLocationCode),
+                  MarketingAirlineName: mapAirlineCodeToName(item.ReservationItem.MarketingAirlineCode),
+                  OperatingAirlineName: mapAirlineCodeToName(item.ReservationItem.OperatingAirlineCode),
                   JourneyDurationInWords: shortEnglishHumanizer(item.ReservationItem.JourneyDuration * 60 * 1000)
                 }))
               });
