@@ -139,15 +139,15 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
         for (var i = 0; i < bookingConfirmation.bookingDetails.reservationDetails.length; i++) {
           var flightSegment = bookingConfirmation.bookingDetails.reservationDetails[i];
           flightDetailsRows += "<p>"
-          flightDetailsRows += "<strong>Departure: </strong>" + flightSegment.DepartureAirportLocationName + flightSegment.DepartureTerminal != "" ? "( " + flightSegment.DepartureTerminal + " )" : "" + " at " + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<strong>Departure: </strong>" + (flightSegment.DepartureAirportLocationName + (flightSegment.DepartureTerminal != "" ? "( " + flightSegment.DepartureTerminal + " )" : "") + " at " + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm"));
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Arrival: </strong>" + flightSegment.ArrivalAirportLocationName + flightSegment.ArrivalTerminal != "" ? "( " + flightSegment.ArrivalTerminal + " )" : "" + " at " + moment(flightSegment.ArrivalDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<strong>Arrival: </strong>" + (flightSegment.ArrivalAirportLocationName + (flightSegment.ArrivalTerminal != "" ? "( " + flightSegment.ArrivalTerminal + " )" : "") + " at " + moment(flightSegment.ArrivalDateTime).format("dd/MM/yyyy hh:mm"));
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Duration: </strong>" + flightSegment.JourneyDurationInWords;
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Stops: </strong>" + flightSegment.StopQuantity == 0 || flightSegment.StopQuantity == "0" ? "Direct" : flightSegment.StopQuantity;
+          flightDetailsRows += "<strong>Stops: </strong>" + ((flightSegment.StopQuantity == 0 || flightSegment.StopQuantity == "0") ? "Direct" : flightSegment.StopQuantity);
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Ariline: </strong>" + flightSegment.MarketingAirlineName + flightSegment.MarketingAirlineName == flightSegment.OperatingAirlineName ? "" : "( Operated by: " + flightSegment.OperatingAirlineName + " )";
+          flightDetailsRows += "<strong>Ariline: </strong>" + (flightSegment.MarketingAirlineName + (flightSegment.MarketingAirlineName == flightSegment.OperatingAirlineName ? "" : "( Operated by: " + flightSegment.OperatingAirlineName + " )"));
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Baggage: </strong>" + flightSegment.Baggage;
           flightDetailsRows += "<br>"
