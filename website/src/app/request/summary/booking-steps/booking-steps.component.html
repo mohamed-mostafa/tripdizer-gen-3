@@ -6,6 +6,15 @@
           {{ 'request.estimated_cost.booking_steps.passenger_details' | translate }}
         </ng-template>
         <c-request-booking-travellers-info-step [formGroup]="formGroup"></c-request-booking-travellers-info-step>
+
+        <div class="row">
+          <div class="col-12">
+            <button (click)="goToPaymentStep(stepper)" [disabled]="formGroup.invalid"
+              class="btn btn-primary custom-bs btn-rounded text-uppercase">
+              {{ 'request.estimated_cost.booking_steps.proceed_to_payment' | translate }}
+            </button>
+          </div>
+        </div>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>{{ 'request.estimated_cost.booking_steps.payment' | translate }}</ng-template>
@@ -13,14 +22,7 @@
       </mat-step>
     </mat-horizontal-stepper>
 
-    <div class="row">
-      <div class="col-12">
-        <button (click)="goToPaymentStep(stepper)" [disabled]="formGroup.invalid"
-          class="btn btn-primary custom-bs btn-rounded text-uppercase">
-          {{ 'request.estimated_cost.booking_steps.proceed_to_payment' | translate }}
-        </button>
-      </div>
-    </div>
+
   </div>
   <div class="col-12 col-md-3">
     <c-payment-details></c-payment-details>
