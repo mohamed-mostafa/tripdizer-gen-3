@@ -259,11 +259,13 @@
 					"8": "الثامن",
 					"9": "التاسع",
 					"10": "العاشر"
-				}
+				},
+                "request_call": "طلب مكالمة"
 			},
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
-				"payment": "الدفع"
+				"payment": "الدفع",
+                "proceed_to_payment": "المتابعة إلى الدفع"
 			}
 		},
 		"form_layout": {
