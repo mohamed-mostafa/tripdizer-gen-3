@@ -510,7 +510,7 @@
                                 <p><b>Confirmation Number: </b>{{hotel.bookingInfo.confirmation.referenceNumbers}}</p>
                             </div>
                         </div>
-                        <div ng-if="hotel.confirmation == null && hotel.failure != null">
+                        <div ng-if="hotel.bookingInfo.confirmation == null && hotel.bookingInfo.failure != null">
                             <div class="form-control-6" style="color: red">
                                 <p><b>Booking failure reason:
                                     </b>{{hotel.bookingInfo.failure.error ? hotel.bookingInfo.failure.error : hotel.bookingInfo.failure }}

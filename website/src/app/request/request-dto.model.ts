@@ -41,7 +41,6 @@ export class RequestRequest {
 	requiresPayment: boolean;
 
 	static getRequestRequestFromRequest(request: Request, requiresPayment: boolean): RequestRequest {
-		console.log(request);
 		const requestRequest: RequestRequest = {
 			travelingFrom: request.travelingFrom.name,
 			departureDate: request.departureDate,

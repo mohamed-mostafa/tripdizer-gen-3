@@ -10,22 +10,21 @@ import { Subscription } from 'rxjs';
 })
 export class PaymentDetailsComponent implements OnDestroy {
 
-	// @Input() stations: any;
 	stations: Station[];
 	totalCost: { hotels: number, flights: number };
 	private subscriptions = new Subscription();
 
 	constructor(
-		service: SummaryService,
+		public summaryService: SummaryService,
 	) {
 
-		this.subscriptions.add(service.stations
+		this.subscriptions.add(this.summaryService.stations
 			.subscribe(stations => {
 				this.stations = stations ? stations : null;
 			})
 		);
 
-		this.subscriptions.add(service.totalCost
+		this.subscriptions.add(this.summaryService.totalCost
 			.subscribe(totalCost => {
 				this.totalCost = totalCost ? totalCost : null;
 			})

@@ -15,9 +15,7 @@ export class FlightRowComponent {
 
 	@Output() offerChanged = new EventEmitter<FlightOffer>();
 
-	constructor() {
-		console.log(this.flightOffer);
-	}
+	constructor() { }
 
 	get isAnyFlightOfferExists(): boolean {
 		return Boolean(this.flightOffer) && Boolean(this.flightOffer.flightLegs.length);
