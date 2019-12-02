@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { RequestService } from '../../request.service';
 import { PaymentInfo } from './payment-step/payment.model';
@@ -8,7 +8,7 @@ import { PaymentInfo } from './payment-step/payment.model';
 	templateUrl: './booking-steps.component.html',
 	styleUrls: ['./booking-steps.component.scss'],
 })
-export class BookingStepsComponent implements OnInit {
+export class BookingStepsComponent implements AfterViewInit {
 	formGroup = new FormGroup({});
 	paymentKey: string;
 
@@ -16,7 +16,8 @@ export class BookingStepsComponent implements OnInit {
 		this.requestService.setProperty('requiresPayment', true);
 	}
 
-	ngOnInit() {}
+	// scroll to top when page load
+	ngAfterViewInit() { window.scrollTo(0, 0); }
 
 	goToPaymentStep(stepper) {
 		const travellers = { adults: {}, kids: {}, infants: {} };
