@@ -246,7 +246,8 @@
 					"adult": "Adult",
 					"kid": "Kid",
 					"infant": "Infant",
-					"hint": "Information must match passport"
+                    "hint": "Information must match passport",
+                    "egyptian": "Egyptian"
 				},
 				"numbers": {
 					"1": "first",
