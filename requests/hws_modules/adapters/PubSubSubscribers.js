@@ -144,14 +144,14 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
               flightSegment.DepartureAirportLocationName
               + (flightSegment.DepartureTerminal != "" ? ("( " + flightSegment.DepartureTerminal + " )") : "")
               + " at "
-              + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm")
+              + moment(flightSegment.DepartureDateTime).format("DD/MM/YYYY hh:mm")
             );
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Arrival: </strong>"
             + (
               flightSegment.ArrivalAirportLocationName
               + (flightSegment.ArrivalTerminal != "" ? ("( " + flightSegment.ArrivalTerminal + " )") : "")
-              + " at " + moment(flightSegment.ArrivalDateTime).format("dd/MM/yyyy hh:mm"));
+              + " at " + moment(flightSegment.ArrivalDateTime).format("DD/MM/YYYY hh:mm"));
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Duration: </strong>" + flightSegment.JourneyDurationInWords;
           flightDetailsRows += "<br>"

@@ -525,15 +525,15 @@ var getPackage = function (
 							))
 								? MEDIA_STORAGE_BASE_URL + '/' + selectedCities.choices[0].countryIsoCode + '.png'
 								: 'https://i.imgur.com/LsHCFiD.jpg',
-							flights: flightOffers.choices.map(offer => ({
-								date: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM/YYYY') : '',
-								departingFrom: offer.segments ? offer.segments[0].originDetails : '',
-								arrivingTo: offer.segments ? offer.segments[offer.segments.length - 1].destinationDetails : '',
-								departureTime: offer.segments ? new moment(offer.segments[0].departure).format('DD/MM HH:mm') : '',
-								arrivalTime: offer.segments
-									? new moment(offer.segments[offer.segments.length - 1].return).format('DD/MM HH:mm')
+							flights: flightOffers.choices[0].flightLegs.map(leg => ({
+								date: leg.segments ? new moment(leg.segments[0].departure).format('DD/MM/YYYY') : '',
+								departingFrom: leg.segments ? leg.segments[0].originDetails : '',
+								arrivingTo: leg.segments ? leg.segments[leg.segments.length - 1].destinationDetails : '',
+								departureTime: leg.segments ? new moment(leg.segments[0].departure).format('DD/MM HH:mm') : '',
+								arrivalTime: leg.segments
+									? new moment(leg.segments[leg.segments.length - 1].return).format('DD/MM HH:mm')
 									: '',
-								layOver: offer.transitDurationInMinutes == 0 ? 'Direct' : offer.transitDurationInWords,
+								layOver: leg.transitDurationInMinutes == 0 ? 'Direct' : leg.transitDurationInWords,
 							})),
 							hotels: selectedHotels.choices.map(offer => ({
 								cityName: offer.city ? offer.city : '',
