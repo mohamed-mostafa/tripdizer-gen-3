@@ -323,8 +323,13 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
           }
         } else {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
-            resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
+
+          if (data && data.AirRevalidateResponse && data.AirRevalidateResponse.AirRevalidateResult) {
+            if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
+              resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
+            } else {
+              reject({ error: "Fare is no longer valid for booking. Please select another offer" })
+            }
           } else {
             reject({ error: "Fare is no longer valid for booking. Please select another offer" })
           }
