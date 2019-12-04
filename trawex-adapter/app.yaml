@@ -42,3 +42,4 @@ env_variables:
   HOTEL_BOOKING_CONFIRMATION_PUBSUB_TOPIC_NAME: hotel-booking-confirmation-topic #TOPIC
   FLIGHT_BOOKING_ERROR_PUBSUB_TOPIC_NAME: flight-booking-error-topic #TOPIC
   HOTEL_BOOKING_ERROR_PUBSUB_TOPIC_NAME: hotel-booking-error-topic #TOPIC
+  ENABLE_API_LOGGING: false
