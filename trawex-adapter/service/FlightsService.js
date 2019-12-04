@@ -21,6 +21,7 @@ let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
 let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
+let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || true;
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -266,24 +267,29 @@ exports.searchOneWayFlights = function (language, oneWaylightsSearchRequest) {
 exports.getFareDetails = function (language, sessionId, fareSourceCode) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_FARE_RULES_URL;
+    var qs = { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode };
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to get fare rules with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject({ error: "Failed to get fare rules with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErroCode + "|" + err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.Errors.ErrorCode + "|" + data.Errors.ErrorMessage });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve(data);
         }
       }
@@ -294,24 +300,29 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
 exports.revalidateFare = function (language, sessionId, fareSourceCode) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_REVALIDATE_FARE_URL;
+    var qs = { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode };
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, session_id: sessionId, fare_source_code: fareSourceCode }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to revalidate fare with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject({ error: "Failed to revalidate fare with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.Errors.ErrorMessage });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
             resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
           } else {
@@ -399,22 +410,27 @@ exports.bookFlight = function (language, bookFlightRequest) {
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to book with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to book with trawex. Reason: " + response.statusMessage })
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.Errors.ErrorMessage });
           }
         } else if (data.BookFlightResponse.BookFlightResult.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
             reject({ error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.Errors.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.Errors.ErrorMessage });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.BookFlightResponse.BookFlightResult.Success == "false" || data.BookFlightResponse.BookFlightResult.Success == false) {
             // return all errors, coma-separated
             if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
@@ -438,22 +454,26 @@ exports.bookFlight = function (language, bookFlightRequest) {
 exports.issueTicket = function (language, sessionId, bookingUniqueId) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TICKET_ORDER_URL;
+    var qs = {
+      user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
+      target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+      UniqueID: bookingUniqueId, session_id: sessionId
+    };
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: {
-          user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
-          target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          UniqueID: bookingUniqueId, session_id: sessionId
-        }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject(response.statusMessage);
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
@@ -462,12 +482,14 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
             });
           }
         } else if (data.AirOrderTicketRS.TicketOrderResult.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.AirOrderTicketRS.TicketOrderResult.Errors)) {
             reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error ? data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage : (data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage ? data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.AirOrderTicketRS.TicketOrderResult.Success == "false" || data.AirOrderTicketRS.TicketOrderResult.Success == false) {
             // return all errors, coma-separated
             reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
@@ -483,22 +505,26 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
 exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_TRIP_DETAILS_URL;
+    var qs = {
+      user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
+      target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+      UniqueID: bookingUniqueId, session_id: sessionId
+    };
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: {
-          user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD,
-          target: TRAWEX_ENVIRONMENT, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-          UniqueID: bookingUniqueId, session_id: sessionId
-        }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject(response.statusMessage);
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
@@ -507,16 +533,19 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
             });
           }
         } else if (data.TripDetailsResponse.TripDetailsResult.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.TripDetailsResponse.TripDetailsResult.Errors)) {
             reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
             reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.Error ? data.TripDetailsResponse.TripDetailsResult.Errors.Error.ErrorMessage : (data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage ? data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.TripDetailsResponse.TripDetailsResult.Success == "false" || data.TripDetailsResponse.TripDetailsResult.Success == false) {
             // return all errors, coma-separated
             reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
+            if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
             resolve(
               {
                 passengerDetails: data.TripDetailsResponse.TripDetailsResult.TravelItinerary.ItineraryInfo.CustomerInfos.map(item => item.CustomerInfo),
@@ -539,20 +568,25 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
 function authenticate() {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AUTHENTICATE_URL;
+    var qs = { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: { user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject(response.statusMessage);
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject(data.Errors.ErrorMessage);
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve(data.SessionId);
         }
       }
@@ -563,23 +597,27 @@ function authenticate() {
 function searchFlights(sessionId, journey_type, airport_from_code, airport_to_code, departure_date, return_date, adult_flight, child_flight, infant_flight, flight_class, currency) {
   return new Promise(function (resolve, reject) {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_FLIGHTS_ROOT + TRAWEX_FLIGHTS_AVAILABILITY_SEARCH_URL;
+    var qs = {
+      user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
+      session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
+      departure_date: departure_date, return_date: return_date, adult_flight: adult_flight, child_flight: child_flight, infant_flight: infant_flight,
+      class: flight_class, currency: currency
+    };
     httpRequest.get(
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: {
-          user_id: TRAWEX_USERNAME, user_password: TRAWEX_PASSWORD, access: TRAWEX_ENVIRONMENT, ip_address: TRAWEX_SOURCE_IP_ADDRESS, target: TRAWEX_ENVIRONMENT,
-          session_id: sessionId, journey_type: journey_type, airport_from_code: airport_from_code, airport_to_code: airport_to_code,
-          departure_date: departure_date, return_date: return_date, adult_flight: adult_flight, child_flight: child_flight, infant_flight: infant_flight,
-          class: flight_class, currency: currency
-        }
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject(response.statusMessage);
         } else if (data.Errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
             reject({ error: data.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
           } else {
@@ -588,6 +626,7 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
             });
           }
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve(data);
         }
       }
