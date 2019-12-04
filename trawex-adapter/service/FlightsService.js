@@ -340,7 +340,7 @@ exports.bookFlight = function (language, bookFlightRequest) {
     var titlesToGenderMap = {
       lord: "M", miss: "F", mr: "M", mrs: "F", sir: "M", mstr: "M"
     }
-    var params = {
+    var qs = {
       user_id: TRAWEX_USERNAME,
       user_password: TRAWEX_PASSWORD,
       access: TRAWEX_ENVIRONMENT,
@@ -406,7 +406,7 @@ exports.bookFlight = function (language, bookFlightRequest) {
       {
         url: url, json: true, proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null, timeout: 60 * 1000,
         gzip: true,
-        qs: params
+        qs: qs
       },
       function (error, response, data) {
         if (error) {
