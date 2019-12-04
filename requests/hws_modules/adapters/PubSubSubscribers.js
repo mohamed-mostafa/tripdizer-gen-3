@@ -108,8 +108,8 @@ var sendHotelBookingInformationEmail = function (travellerName, recepient, booki
         data = data.replace("#confirmation#", confirmationNumber);
         data = data.replace("#destination#", bookingInfo.destinationName);
         data = data.replace("#hotel#", bookingInfo.hotelName);
-        data = data.replace("#checkin#", bookingInfo.checkIn);
-        data = data.replace("#checkout#", bookingInfo.checkOut);
+        data = data.replace("#checkin#", bookingInfo.checkOut);
+        data = data.replace("#checkout#", bookingInfo.checkIn);
         data = data.replace("#address#", bookingInfo.address);
         emailBusiness.sendEmail(
           recepient,

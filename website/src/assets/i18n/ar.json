@@ -501,8 +501,9 @@
 	},
 	"payment_confirm": {
 		"confirmation": "تأكيد العملية",
-		"booking_confirmed": "تم تأكيد عملية حجزك",
-		"confirmation_email_sending": "ستصلك رسالة على بريدك الإلكترونى فى أقرب وقت لتأكيد الحجز",
+		"booking_confirmed": "تم قبول عملية الدفع.",
+        "confirmation_email_sending": "سيصلك تأكيد الحجز على بريدك الإلكترونى.",
+        "payment_reference": "رقم عملية الدفع هو",
 		"process_failed": "فشلت عملية الحجز",
 		"message_1": "حدث خطأ أثناء تنفيذ عملية الحجز",
 		"message_2": "يرجى التواصل مع البنك الذى استلمت منه بطاقة الإئتمان",
