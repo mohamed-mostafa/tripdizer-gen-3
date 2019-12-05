@@ -18,9 +18,9 @@ let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_FLIGHTS_SOURCE_IP_ADDRESS || "35.242.174.95";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_FLIGHTS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
