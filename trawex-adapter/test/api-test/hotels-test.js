@@ -11,6 +11,14 @@ describe('hotel booking', function () {
 
 	describe('happy booking scenario', function () {
 
+		function delay(interval) {
+			return it('should delay', done => {
+				setTimeout(() => done(), interval)
+
+			}).timeout(interval + 100) // The extra 100ms should guarantee the test will not fail due to exceeded timeout
+		}
+		delay(2000);
+
 		it('search for hotels', function (done) {
 			var request = {
 				"tripSegments": [
@@ -62,6 +70,8 @@ describe('hotel booking', function () {
 				});
 		});
 
+		delay(2000);
+
 		it('should retrieve the hotel details', function (done) {
 			// call validate fare for the first offer
 			hotelsService.getHotelDetails("en", hotelBookingDetails.sessionId, hotelBookingDetails.productId, hotelBookingDetails.hotelId)
@@ -74,6 +84,8 @@ describe('hotel booking', function () {
 					done(err);
 				});
 		})
+
+		delay(2000);
 
 		it('should retrieve the hotel room rates details', function (done) {
 			// call fare details for the first offer
@@ -88,6 +100,8 @@ describe('hotel booking', function () {
 					done(err);
 				});
 		})
+
+		delay(2000);
 
 		it('should validate the room rate', function (done) {
 			// call validate
@@ -124,6 +138,8 @@ describe('hotel booking', function () {
 					done(err);
 				});
 		});
+
+		delay(2000);
 
 		it('should book the room rate', function (done) {
 			var bookRequest = {
