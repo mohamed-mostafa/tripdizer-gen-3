@@ -18,10 +18,10 @@ let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_SOURCE_IP_ADDRESS || "35.242.174.95";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
-let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || true;
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
   language: 'shortEn',
@@ -427,13 +427,9 @@ exports.bookFlight = function (language, bookFlightRequest) {
           } else {
             reject({ error: data.Errors.ErrorMessage });
           }
-        } else if (data.BookFlightResponse.BookFlightResult.Errors) {
+        } else if (data.BookFlightResponse.BookFlightResult.Errors && Array.isArray(data.BookFlightResponse.BookFlightResult.Errors) && data.BookFlightResponse.BookFlightResult.Errors.length > 0) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          if (Array.isArray(data.BookFlightResponse.BookFlightResult.Errors)) {
-            reject({ error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.Errors.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
-          } else {
-            reject({ error: data.Errors.ErrorMessage });
-          }
+          reject({ error: data.BookFlightResponse.BookFlightResult.Errors.map(err => err.Errors.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
         } else {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.BookFlightResponse.BookFlightResult.Success == "false" || data.BookFlightResponse.BookFlightResult.Success == false) {
@@ -486,13 +482,9 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
               error: data.Errors.ErrorMessage
             });
           }
-        } else if (data.AirOrderTicketRS.TicketOrderResult.Errors) {
+        } else if (data.AirOrderTicketRS.TicketOrderResult.Errors && Array.isArray(data.AirOrderTicketRS.TicketOrderResult.Errors) && data.AirOrderTicketRS.TicketOrderResult.Errors.length > 0) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          if (Array.isArray(data.AirOrderTicketRS.TicketOrderResult.Errors)) {
-            reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
-          } else {
-            reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.Error ? data.AirOrderTicketRS.TicketOrderResult.Errors.Error.ErrorMessage : (data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage ? data.AirOrderTicketRS.TicketOrderResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
-          }
+          reject({ error: data.AirOrderTicketRS.TicketOrderResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
         } else {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.AirOrderTicketRS.TicketOrderResult.Success == "false" || data.AirOrderTicketRS.TicketOrderResult.Success == false) {
@@ -537,13 +529,9 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
               error: data.Errors.ErrorMessage
             });
           }
-        } else if (data.TripDetailsResponse.TripDetailsResult.Errors) {
+        } else if (data.TripDetailsResponse.TripDetailsResult.Errors && Array.isArray(data.TripDetailsResponse.TripDetailsResult.Errors) && data.TripDetailsResponse.TripDetailsResult.Errors.length > 0) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          if (Array.isArray(data.TripDetailsResponse.TripDetailsResult.Errors)) {
-            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
-          } else {
-            reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.Error ? data.TripDetailsResponse.TripDetailsResult.Errors.Error.ErrorMessage : (data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage ? data.TripDetailsResponse.TripDetailsResult.Errors.ErrorMessage : "UNKNOWN ERROR") });
-          }
+          reject({ error: data.TripDetailsResponse.TripDetailsResult.Errors.map(err => err.ErrorMessage).reduce((oneError, nextError) => oneError + ", " + nextError) });
         } else {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (data.TripDetailsResponse.TripDetailsResult.Success == "false" || data.TripDetailsResponse.TripDetailsResult.Success == false) {
