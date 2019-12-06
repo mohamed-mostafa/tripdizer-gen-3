@@ -18,9 +18,9 @@ let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 
 let TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 let TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
-let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_FLIGHTS_SOURCE_IP_ADDRESS || "35.242.174.95";
+let TRAWEX_SOURCE_IP_ADDRESS = process.env.TRAWEX_FLIGHTS_SOURCE_IP_ADDRESS || "34.90.113.143";
 let TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_FLIGHTS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
+let TRAWEX_PROXY_ENDPOINT = process.env.TRAWEX_FLIGHTS_PROXY_ENDPOINT || "http://34.90.113.143:3128";
 let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
@@ -328,10 +328,14 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
             if (data.AirRevalidateResponse.AirRevalidateResult.IsValid == "true" || data.AirRevalidateResponse.AirRevalidateResult.IsValid == true) {
               resolve({ requiredFieldsToBook: data.AirRevalidateResponse.AirRevalidateResult.FareItineraries.FareItinerary.RequiredFieldsToBook });
             } else {
-              reject({ error: "Fare is no longer valid for booking. Please select another offer" })
+              var error = `Fare is no longer valid for booking. AirRevalidateResult.IsValid is ${data.AirRevalidateResponse.AirRevalidateResult.IsValid}. Please select another offer`;
+              console.error(error);
+              reject({ error: error })
             }
           } else {
-            reject({ error: "Fare is no longer valid for booking. Please select another offer" })
+            var error = `Fare is no longer valid for booking. Please select another offer. Data: ${JSON.stringify(data)}`;
+            console.error(error);
+            reject({ error: error })
           }
         }
       }
