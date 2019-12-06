@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "pm2 start index.js",
+    "start": "node index.js",
     "predebug": "npm install",
     "debug": "nodemon --inspect index.js",
     "debug-unit-test": "mocha test/api-test --no-timeouts --inspect-brk"
