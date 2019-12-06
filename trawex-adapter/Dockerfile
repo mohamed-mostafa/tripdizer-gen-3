@@ -4,7 +4,6 @@ WORKDIR /home/node/app
 COPY package*.json ./
 USER node
 RUN npm install
-RUN npm install -g pm2
 COPY --chown=node:node . .
 EXPOSE 8085
 CMD [ "npm", "start" ]
