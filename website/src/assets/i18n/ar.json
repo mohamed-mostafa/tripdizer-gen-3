@@ -236,7 +236,7 @@
 				"arrival": "الوصول",
 				"depart": "المغادرة",
 				"nights": "ليالى",
-				"payment_details": "تفاصيل الدفع",
+				"payment_details": "ملخص الرحلة",
 				"flights": "رحلات الطيران",
 				"nights_in": "رحلات فى",
 				"hotels": "الفنادق",
@@ -247,7 +247,7 @@
 					"kid": "الطفل",
 					"infant": "الرضيع",
 					"hint": "البيانات يجب ان تطابق الجواز",
-                    "egyptian": "مصرى"
+					"egyptian": "مصرى"
 				},
 				"numbers": {
 					"1": "الاول",
@@ -261,12 +261,12 @@
 					"9": "التاسع",
 					"10": "العاشر"
 				},
-                "request_call": "طلب مكالمة"
+				"request_call": "طلب مكالمة"
 			},
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
-                "proceed_to_payment": "المتابعة إلى الدفع"
+				"proceed_to_payment": "المتابعة إلى الدفع"
 			}
 		},
 		"form_layout": {
@@ -502,8 +502,8 @@
 	"payment_confirm": {
 		"confirmation": "تأكيد العملية",
 		"booking_confirmed": "تم قبول عملية الدفع.",
-        "confirmation_email_sending": "سيصلك تأكيد الحجز على بريدك الإلكترونى.",
-        "payment_reference": "رقم عملية الدفع هو",
+		"confirmation_email_sending": "سيصلك تأكيد الحجز على بريدك الإلكترونى.",
+		"payment_reference": "رقم عملية الدفع هو",
 		"process_failed": "فشلت عملية الحجز",
 		"message_1": "حدث خطأ أثناء تنفيذ عملية الحجز",
 		"message_2": "يرجى التواصل مع البنك الذى استلمت منه بطاقة الإئتمان",
