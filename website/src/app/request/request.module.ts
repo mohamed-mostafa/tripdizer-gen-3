@@ -1,7 +1,3 @@
-import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
-import { FlightRouteComponent } from './estimated-cost/tab-flights/flight-route/flight-route.component';
-import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
-import { OwlModule } from 'ngx-owl-carousel';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,15 +7,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
-import {MatStepperModule} from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { OwlModule } from 'ngx-owl-carousel';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { EstimatedCostService } from './estimated-cost/estimated-cost.service';
 import { EstimatedCostHeaderComponent } from './estimated-cost/header/header.component';
+import { SessionDialogComponent } from './estimated-cost/session-dialog/session-dialog.component';
 import { TabAccommodationComponent } from './estimated-cost/tab-accommodation/tab-accommodation.component';
 import { TabCitiesComponent } from './estimated-cost/tab-cities/tab-cities.component';
+import { FlightRouteComponent } from './estimated-cost/tab-flights/flight-route/flight-route.component';
 import { ChangeFlightComponent } from './estimated-cost/tab-flights/flight-row/flight-options/change-flight/change-flight.component';
 import { FlightOptionsComponent } from './estimated-cost/tab-flights/flight-row/flight-options/flight-options.component';
 import { FlightRowComponent } from './estimated-cost/tab-flights/flight-row/flight-row.component';
@@ -29,6 +29,8 @@ import { RequestLoadingComponent } from './loading/loading.component';
 import { RequestNavBarComponent } from './nav-bar/nav-bar.component';
 import { COMPONENTS as RequestComponents, RequestRoutingModule } from './request-routing.module';
 import { RequestComponent } from './request.component';
+import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
+import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
 import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
@@ -47,9 +49,9 @@ import { SummaryComponent } from './summary/summary.component';
 		MatSelectModule,
 		MatSliderModule,
 		MatTabsModule,
-        MatMenuModule,
-        MatStepperModule,
-		OwlModule
+		MatMenuModule,
+		MatStepperModule,
+		OwlModule,
 	],
 	declarations: [
 		...RequestComponents,
@@ -64,10 +66,13 @@ import { SummaryComponent } from './summary/summary.component';
 		FlightOptionsComponent,
 		ChangeFlightComponent,
 		TabAccommodationComponent,
-        SummaryComponent,
-        BookingStepsComponent,
+		SummaryComponent,
+		BookingStepsComponent,
 		PaymentDetailsComponent,
-		FlightRouteComponent
-	]
+		FlightRouteComponent,
+		SessionDialogComponent,
+	],
+	providers: [EstimatedCostService],
+	entryComponents: [SessionDialogComponent],
 })
-export class RequestModule { }
+export class RequestModule {}

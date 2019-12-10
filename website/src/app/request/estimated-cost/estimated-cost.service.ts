@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
@@ -12,6 +14,7 @@ import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { AttractionsRequest, CityAttractions } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
+import { SessionDialogComponent } from './session-dialog/session-dialog.component';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
@@ -44,7 +47,13 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) {
+	constructor(
+		private http: HttpClient,
+		private router: Router,
+		private dialog: MatDialog,
+		private requestService: RequestService,
+		public translate: TranslateService
+	) {
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
 			this.requestService.setProperty('selectedCities', citiesSelected);
@@ -64,16 +73,21 @@ export class EstimatedCostService {
 	startSessionTimer(): void {
 		const expirationInMinutes = environment.requestSessionExpiration;
 		const notificationRatio = 1 - 2 / 15;
-		clearTimeout(this.notificationTimer);
-		clearTimeout(this.expirationTimer);
+		this.endSessionTimer();
 		this.notificationTimer = setTimeout(() => {
-			console.log('notification timer');
-			// popup
+			this.openSessionDialog(expirationInMinutes * (1 - notificationRatio));
 		}, expirationInMinutes * 60 * 1000 * notificationRatio);
 		this.expirationTimer = setTimeout(() => {
-			console.log('expiration timer');
-			// redirect
+			this.openSessionDialog(0);
+			this.router.navigate(['request']).then(() => {
+				this.router.navigate(['request', 'estimated-cost']);
+			});
 		}, expirationInMinutes * 60 * 1000);
+	}
+
+	endSessionTimer(): void {
+		clearTimeout(this.notificationTimer);
+		clearTimeout(this.expirationTimer);
 	}
 
 	getDepartureDate(): Moment {
@@ -413,5 +427,9 @@ export class EstimatedCostService {
 			hotels: this.getHotelsTotalCost(),
 			flights: this.getFlightsTotalCost(),
 		};
+	}
+
+	openSessionDialog(minutes): void {
+		this.dialog.open(SessionDialogComponent, { autoFocus: true, maxWidth: 600, data: { minutes } });
 	}
 }
