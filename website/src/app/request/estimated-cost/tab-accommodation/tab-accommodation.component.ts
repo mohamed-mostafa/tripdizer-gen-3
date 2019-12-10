@@ -42,8 +42,6 @@ export class TabAccommodationComponent {
 				}
 			}
 			this.setSliderOptions();
-		}, error => {
-			this.accommodations = [];
 		});
 	}
 

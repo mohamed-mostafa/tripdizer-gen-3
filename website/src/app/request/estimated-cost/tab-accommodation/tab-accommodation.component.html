@@ -1,4 +1,4 @@
-<div class="row justify-content-center hotels-tab py-2 py-md-4" *ngIf="loadedData">
+<div class="row justify-content-center hotels-tab py-2 py-md-4">
   <div class="col-lg-9 hotels-list">
     <h4 class="list-title font-weight-bold title-font mb-2">
       {{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
@@ -57,10 +57,6 @@
                       </p>
                     </div>
 
-                    <!-- <div class="col-12">
-                        <p class="font-weight-bold">standard double room</p>
-                        <p>breakfast included - free cancellation</p>
-                    </div> -->
                     <div class="col-12">
                       <div class="row">
                         <div class="col-6">
@@ -92,11 +88,11 @@
 
     </div>
 
-    <p *ngIf="accommodations.length < 1" class="px-2 text-center">
+    <p *ngIf="accommodations.length < 1" class="px-2 mt-4 mb-4 text-center">
       {{ 'request.estimated_cost.tab_accommodations.no_hotel_offers' | translate }}
     </p>
 
-    <div class="row my-2 my-sm-3 my-md-4 my-lg-5">
+    <div *ngIf="accommodations.length > 1" class="row my-2 my-sm-3 my-md-4 my-lg-5">
       <div class="col-12">
         <div class="bg-blue text-white text-center p-1 total-cost-box">
           <span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
@@ -107,7 +103,7 @@
     </div>
 
     <div class="row mt-3">
-      <div class="col-12 text-center">
+      <div class="col-12 mt-4 text-center">
         <a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
           [ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a>
 

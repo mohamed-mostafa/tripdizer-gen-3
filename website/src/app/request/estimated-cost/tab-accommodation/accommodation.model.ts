@@ -8,7 +8,7 @@ export class Accommodation {
 export class Hotel {
 	id: number;
 	name: string;
-	displaName: string;
+	displayName: string;
 	description: string;
 	city: string;
 	thumbnail: string;
