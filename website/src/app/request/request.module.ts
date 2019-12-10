@@ -32,6 +32,7 @@ import { RequestComponent } from './request.component';
 import { BookingStepsComponent } from './summary/booking-steps/booking-steps.component';
 import { PaymentDetailsComponent } from './summary/payment-details/payment-details.component';
 import { SummaryComponent } from './summary/summary.component';
+import { SummaryService } from './summary/summary.service';
 
 @NgModule({
 	imports: [
@@ -72,7 +73,7 @@ import { SummaryComponent } from './summary/summary.component';
 		FlightRouteComponent,
 		SessionDialogComponent,
 	],
-	providers: [EstimatedCostService],
+	providers: [EstimatedCostService, SummaryService],
 	entryComponents: [SessionDialogComponent],
 })
 export class RequestModule {}
