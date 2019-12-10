@@ -2,7 +2,7 @@ export const environment = {
 	production: true,
 	apiUrl: 'https://development-services.tripdizer.com/',
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
-	weAcceptIframeKey: 7285,
+	weAcceptIframeKey: 7284,
 	experimentKey: 'Reduce Friction',
 	saveRequestState: false,
 	showSigningPopup: true,
