@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
 	styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnDestroy {
-
 	currentStepPath: string;
 	stations: Array<Station> = [];
 	loadedData: boolean;
@@ -26,8 +25,8 @@ export class SummaryComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		this.subscriptions.add(service.stations
-			.subscribe(stations => {
+		this.subscriptions.add(
+			service.stations.subscribe(stations => {
 				this.stations = stations ? stations : null;
 			})
 		);
@@ -38,8 +37,8 @@ export class SummaryComponent implements OnDestroy {
 	}
 
 	goToNextStep() {
-		this.router.navigate(['../', this.requestService
-			.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.requestService.resetSessionTimer();
 	}
 
 	ngOnDestroy() {

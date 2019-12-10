@@ -1,6 +1,7 @@
 export const environment = {
 	production: true,
 	apiUrl: 'https://staging-services.tripdizer.com/',
+	requestSessionExpiration: 15,
 	mixpanelToken: '1da558fbd4fa7b00acef98ae6a0cb850',
 	weAcceptIframeKey: 7284,
 	experimentKey: 'Reduce Friction',

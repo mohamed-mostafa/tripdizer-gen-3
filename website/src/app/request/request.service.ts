@@ -41,6 +41,7 @@ export class RequestService {
 	isCitiesTabVisited = new BehaviorSubject<boolean>(false);
 	isFlightsTabVisited = new BehaviorSubject<boolean>(false);
 	isAccommodationTabVisited = new BehaviorSubject<boolean>(false);
+	endSessionTimerSubject = new Subject();
 
 	constructor(
 		private http: HttpClient,
@@ -90,6 +91,10 @@ export class RequestService {
 
 	setIsAccommodationTabVisited(value: boolean): void {
 		this.isAccommodationTabVisited.next(value);
+	}
+
+	resetSessionTimer(): void {
+		this.endSessionTimerSubject.next();
 	}
 
 	resetRequestState(): void {

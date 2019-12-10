@@ -174,6 +174,17 @@
 				"flights_tab_message": "Finding the best flight deals ...",
 				"accommodation_tab_message": "Finding the best hotels ..."
 			},
+			"session_dialog": {
+				"remaining": {
+					"title": "You have only {{minutes}} minutes to complete your trip with payment",
+					"description": "Prices change frequently due to availability and demand. We want to make sure you always see the best prices."
+				},
+				"timeout": {
+					"title": "Session timeout",
+					"description": "Prices change frequently due to availability and demand. We want to make sure you always see the best prices."
+				},
+				"buttonsLabel": { "ok": "Okay!" }
+			},
 			"tab_cities": {
 				"title": "Cities",
 				"view_choose": "View and choose your cities",
@@ -477,22 +488,9 @@
 			"passport_expiry": "Expiry date",
 			"passport_issue_country": "Issue country",
 			"titles": {
-				"adult": [
-					"LORD",
-					"MISS",
-					"MR",
-					"MRS",
-					"SIR"
-				],
-				"kid": [
-					"MSTR",
-					"MISS"
-				],
-				"infant": [
-					"MISS",
-					"MSTR",
-					"INF"
-				]
+				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
+				"kid": ["MSTR", "MISS"],
+				"infant": ["MISS", "MSTR", "INF"]
 			}
 		},
 		"user_plans": {
