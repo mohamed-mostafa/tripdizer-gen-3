@@ -68,6 +68,9 @@ export class EstimatedCostService {
 			this.hotelsSelected = hotelsSelected;
 			this.requestService.setProperty('selectedHotels', hotelsSelected);
 		});
+		this.requestService.endSessionTimerSubject.subscribe(() => {
+			this.endSessionTimer();
+		});
 	}
 
 	startSessionTimer(): void {
@@ -75,9 +78,11 @@ export class EstimatedCostService {
 		const notificationRatio = 1 - 2 / 15;
 		this.endSessionTimer();
 		this.notificationTimer = setTimeout(() => {
+			clearTimeout(this.notificationTimer);
 			this.openSessionDialog(expirationInMinutes * (1 - notificationRatio));
 		}, expirationInMinutes * 60 * 1000 * notificationRatio);
 		this.expirationTimer = setTimeout(() => {
+			clearTimeout(this.expirationTimer);
 			this.openSessionDialog(0);
 			this.router.navigate(['request']).then(() => {
 				this.router.navigate(['request', 'estimated-cost']);
