@@ -21,24 +21,27 @@ if (environment.production) {
 	}
 }
 
+const scripts = {} as any;
+
 // Global site tag (gtag.js) - Google Analytics
-document.write(`<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?${environment.google.analyticsTrackingID}">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+scripts.googleAnalyticsScriptP1 = document.createElement('script');
+scripts.googleAnalyticsScriptP2 = document.createElement('script');
+scripts.googleAnalyticsScriptP1.async = true;
+scripts.googleAnalyticsScriptP1.src = `https://www.googletagmanager.com/gtag/js?${environment.google.analyticsTrackingID}`;
+scripts.googleAnalyticsScriptP2.innerHTML = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-  gtag('config', '${environment.google.analyticsTrackingID}');
-  gtag('config', '${environment.google.conversionTrackingId}');
-
-</script>`);
+gtag('config', '${environment.google.analyticsTrackingID}');
+gtag('config', '${environment.google.conversionTrackingId}');
+`;
 
 // Facebook Pixel Code
-document.write(`<!-- Facebook Pixel Code -->
-<script>
-  !function(f,b,e,v,n,t,s)
+scripts.facebookPixelCodeP1 = document.createElement('script');
+scripts.facebookPixelCodeP2 = document.createElement('noscript');
+scripts.facebookPixelCodeP1.innerHTML = `
+!function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};
   if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -48,9 +51,15 @@ document.write(`<!-- Facebook Pixel Code -->
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '${environment.facebook.pixelID}');
   fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
+`;
+scripts.facebookPixelCodeP2.innerHTML = `
+<img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=${environment.facebook.pixelID}&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
-`);
+/>
+`;
+
+for (const key in scripts) {
+	if (scripts.hasOwnProperty(key)) {
+		document.head.append(scripts[key]);
+	}
+}
