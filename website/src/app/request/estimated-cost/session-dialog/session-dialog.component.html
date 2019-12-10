@@ -6,11 +6,16 @@
 <span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
 	<h5 class="text-primary" mat-dialog-title>
 		<i class="fas fa-info-circle"></i>
-		{{ 'request.estimated_cost.session_dialog.' + status + '.title' | translate: data }}
+		{{
+			'request.estimated_cost.session_dialog.' + status + '.title'
+				| translate: { minutes: data.minutes | number: '1.0-0' }
+		}}
 	</h5>
 	<div mat-dialog-content>
 		<p class="h6">{{ 'request.estimated_cost.session_dialog.' + status + '.description' | translate }}</p>
-		<p class="text-center h3"><i class="fas fa-stopwatch"></i> {{ minutes }}:{{ seconds }}</p>
+		<p class="text-center h3">
+			<i class="fas fa-stopwatch"></i> {{ minutes | number: '1.0-0' }}:{{ seconds | number: '1.0-0' }}
+		</p>
 	</div>
 	<div mat-dialog-actions class="d-block text-center">
 		<button mat-button (click)="onOK()" class="btn custom-bs btn-rounded btn-outline-blue mx-2">
