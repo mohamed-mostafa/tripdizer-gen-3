@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { RequestService } from '../../request.service';
 import { PaymentInfo } from './payment-step/payment.model';
@@ -7,6 +7,7 @@ import { PaymentInfo } from './payment-step/payment.model';
 	selector: 'c-booking-steps',
 	templateUrl: './booking-steps.component.html',
 	styleUrls: ['./booking-steps.component.scss'],
+	encapsulation: ViewEncapsulation.None
 })
 export class BookingStepsComponent implements AfterViewInit {
 	formGroup = new FormGroup({});
