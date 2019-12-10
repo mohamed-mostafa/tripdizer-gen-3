@@ -36,8 +36,6 @@ export class TabFlightsComponent implements DoCheck {
 				this.flightOffers[0].selected = true;
 				this.selectedFlightOffers.push(this.flightOffers[0]);
 			}
-		}, error => {
-			this.flightOffers = [];
 		});
 
 		this.setSliderOptions();
