@@ -1,20 +1,24 @@
-import { FlightOffer, CitySequence, FlightRequest, FlightLeg } from './tab-flights/flight-offer.model';
-import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
-import { CityAttractions, AttractionsRequest } from './../summary/attraction.model';
-import { Station } from './../summary/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
 import { TravelingFrom } from '../traveling-from/traveling-from.model';
+import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
+import { AttractionsRequest, CityAttractions } from './../summary/attraction.model';
+import { Station } from './../summary/station.model';
+import { SessionDialogComponent } from './session-dialog/session-dialog.component';
 import { Accommodation, AccommodationRequest, Hotel } from './tab-accommodation/accommodation.model';
 import { CityDTO } from './tab-cities/city-dto.model';
 import { CitiesRequest } from './tab-cities/city.model';
-import { TranslateService } from '@ngx-translate/core';
+import { CitySequence, FlightOffer, FlightRequest } from './tab-flights/flight-offer.model';
 
 @Injectable({ providedIn: 'root' })
 export class EstimatedCostService {
@@ -22,6 +26,9 @@ export class EstimatedCostService {
 	countryCities = 'package-options/1.0.0/countryCities';
 	accommodations = 'package-options/1.0.0/accomodationOffers';
 	attractionsEndPoint = 'package-options/1.0.0/cityAttractions';
+
+	notificationTimer: any;
+	expirationTimer: any;
 
 	departureDate = this.requestService.getProperty('departureDate') as Moment;
 	returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -40,7 +47,13 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
-	constructor(private http: HttpClient, private requestService: RequestService, public translate: TranslateService) {
+	constructor(
+		private http: HttpClient,
+		private router: Router,
+		private dialog: MatDialog,
+		private requestService: RequestService,
+		public translate: TranslateService
+	) {
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
 			this.requestService.setProperty('selectedCities', citiesSelected);
@@ -55,6 +68,31 @@ export class EstimatedCostService {
 			this.hotelsSelected = hotelsSelected;
 			this.requestService.setProperty('selectedHotels', hotelsSelected);
 		});
+		this.requestService.endSessionTimerSubject.subscribe(() => {
+			this.endSessionTimer();
+		});
+	}
+
+	startSessionTimer(): void {
+		const expirationInMinutes = environment.requestSessionExpiration;
+		const notificationRatio = 1 - 2 / 15;
+		this.endSessionTimer();
+		this.notificationTimer = setTimeout(() => {
+			clearTimeout(this.notificationTimer);
+			this.openSessionDialog(expirationInMinutes * (1 - notificationRatio));
+		}, expirationInMinutes * 60 * 1000 * notificationRatio);
+		this.expirationTimer = setTimeout(() => {
+			clearTimeout(this.expirationTimer);
+			this.openSessionDialog(0);
+			this.router.navigate(['request']).then(() => {
+				this.router.navigate(['request', 'estimated-cost']);
+			});
+		}, expirationInMinutes * 60 * 1000);
+	}
+
+	endSessionTimer(): void {
+		clearTimeout(this.notificationTimer);
+		clearTimeout(this.expirationTimer);
 	}
 
 	getDepartureDate(): Moment {
@@ -114,12 +152,16 @@ export class EstimatedCostService {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(() => {
-				this.setIsLoading(false, '');
-			}, error => {
-				console.error(JSON.stringify(error));
-				this.setIsLoading(false, '');
-			})
+			tap(
+				() => {
+					this.setIsLoading(false, '');
+					this.startSessionTimer();
+				},
+				error => {
+					console.error(JSON.stringify(error));
+					this.setIsLoading(false, '');
+				}
+			)
 		);
 	}
 
@@ -140,9 +182,14 @@ export class EstimatedCostService {
 			true,
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
-		const cities: Array<{ cityName: string; numberOfNights: number, cityIata: string, countryName: string }> = [];
+		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
-			cities.push({ cityName: sc.name, countryName: sc.countryDisplayName, cityIata: sc.iataCode, numberOfNights: sc.numberOfNights });
+			cities.push({
+				cityName: sc.name,
+				countryName: sc.countryDisplayName,
+				cityIata: sc.iataCode,
+				numberOfNights: sc.numberOfNights,
+			});
 		}
 
 		this.budgetCategory = this.requestService.getProperty('budgetCategory');
@@ -165,12 +212,14 @@ export class EstimatedCostService {
 			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-			tap(() => {
-				this.setIsLoading(false, '');
-			}, error => {
-				console.error(JSON.stringify(error));
-				this.setIsLoading(false, '');
-			})
+			tap(
+				() => {
+					this.setIsLoading(false, '');
+				},
+				error => {
+					this.setIsLoading(false, '');
+				}
+			)
 		);
 	}
 
@@ -230,7 +279,13 @@ export class EstimatedCostService {
 				const stationCity: CityDTO = selectedCities.find(cityDTO => cityDTO.iataCode === cityAttraction.city.iataCode);
 				var stationFlightLeg = null;
 				selectedFlightOffers.forEach(flightOffer => {
-					stationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === cityAttraction.city.iataCode.substring(0, 3) && this.summaryStations.find(summaryStation => summaryStation.arrive_code == flightLeg.destination.iataCode) == null);
+					stationFlightLeg = flightOffer.flightLegs.find(
+						flightLeg =>
+							flightLeg.destination.iataCode === cityAttraction.city.iataCode.substring(0, 3) &&
+							this.summaryStations.find(
+								summaryStation => summaryStation.arrive_code == flightLeg.destination.iataCode
+							) == null
+					);
 				});
 				const stationHotel = selectedHotels.find(hotel => hotel.city === cityAttraction.city.name);
 
@@ -269,8 +324,8 @@ export class EstimatedCostService {
 						arrive_hour: stationFlightLeg
 							? moment(stationFlightLeg.segments[stationFlightLeg.segments.length - 1].arrival).format('HH:mm')
 							: 'unknown time',
-						arrive_code: stationFlightLeg ? stationFlightLeg.destination.iataCode : "",
-						depart_code: stationFlightLeg ? stationFlightLeg.origin.iataCode : "",
+						arrive_code: stationFlightLeg ? stationFlightLeg.destination.iataCode : '',
+						depart_code: stationFlightLeg ? stationFlightLeg.origin.iataCode : '',
 
 						// accommodation
 						accommodationDataExists: stationHotel ? true : false,
@@ -305,7 +360,9 @@ export class EstimatedCostService {
 				const lastStationAirport = this.requestService.getProperty('travelingFrom');
 				let lastStationFlightLeg = null;
 				selectedFlightOffers.forEach(flightOffer => {
-					lastStationFlightLeg = flightOffer.flightLegs.find(flightLeg => flightLeg.destination.iataCode === lastStationAirport.iataCode);
+					lastStationFlightLeg = flightOffer.flightLegs.find(
+						flightLeg => flightLeg.destination.iataCode === lastStationAirport.iataCode
+					);
 				});
 
 				const lastStation: Station = {
@@ -328,9 +385,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_time: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-							'DD/MM HH:mm'
-							// tslint:disable-next-line: indent
-						)
+								'DD/MM HH:mm'
+								// tslint:disable-next-line: indent
+						  )
 						: 'unknown time',
 					carrier_logo: lastStationFlightLeg ? lastStationFlightLeg.segments[0].carrier.squareLogo : null,
 
@@ -345,9 +402,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_hour: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-							'HH:mm'
-							// tslint:disable-next-line: indent
-						)
+								'HH:mm'
+								// tslint:disable-next-line: indent
+						  )
 						: 'unknown time',
 
 					arrive_code: lastStationFlightLeg ? lastStationFlightLeg.destination.iataCode : null,
@@ -373,7 +430,11 @@ export class EstimatedCostService {
 	public get summaryTotalCost() {
 		return {
 			hotels: this.getHotelsTotalCost(),
-			flights: this.getFlightsTotalCost()
+			flights: this.getFlightsTotalCost(),
 		};
+	}
+
+	openSessionDialog(minutes): void {
+		this.dialog.open(SessionDialogComponent, { autoFocus: true, maxWidth: 600, data: { minutes } });
 	}
 }
