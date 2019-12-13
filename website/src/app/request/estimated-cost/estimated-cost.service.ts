@@ -29,6 +29,7 @@ export class EstimatedCostService {
 
 	notificationTimer: any;
 	expirationTimer: any;
+	loadings: Array<boolean> = [];
 
 	departureDate = this.requestService.getProperty('departureDate') as Moment;
 	returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -136,7 +137,11 @@ export class EstimatedCostService {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+		this.loadings.push(true);
+		this.setIsLoading(
+			this.loadings.some(l => l),
+			this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message')
+		);
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -154,12 +159,13 @@ export class EstimatedCostService {
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
 			tap(
 				() => {
-					this.setIsLoading(false, '');
+					this.loadings.pop();
+					this.setIsLoading(this.loadings.some(l => l), '');
 					this.startSessionTimer();
 				},
 				error => {
-					console.error(JSON.stringify(error));
-					this.setIsLoading(false, '');
+					this.loadings.pop();
+					this.setIsLoading(this.loadings.some(l => l), '');
 				}
 			)
 		);
@@ -178,8 +184,9 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
+		this.loadings.push(true);
 		this.setIsLoading(
-			true,
+			this.loadings.some(l => l),
 			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 		);
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
@@ -214,10 +221,12 @@ export class EstimatedCostService {
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(
 				() => {
-					this.setIsLoading(false, '');
+					this.loadings.pop();
+					this.setIsLoading(this.loadings.some(l => l), '');
 				},
 				error => {
-					this.setIsLoading(false, '');
+					this.loadings.pop();
+					this.setIsLoading(this.loadings.some(l => l), '');
 				}
 			)
 		);
