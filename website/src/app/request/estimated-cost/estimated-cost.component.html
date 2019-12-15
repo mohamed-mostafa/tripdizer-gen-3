@@ -22,7 +22,9 @@
 					<div class="row mx-0">
 						<div class="col-12">
 							<div class="m-2 p-md-0 mt-3 mt-md-0">
-								<c-estimated-cost-cities *ngIf="selectedTab === 0 || (isCitiesTabVisited | async)"></c-estimated-cost-cities>
+								<c-estimated-cost-cities
+									*ngIf="selectedTab === 0 || (isCitiesTabVisited | async)"
+								></c-estimated-cost-cities>
 							</div>
 						</div>
 					</div>
@@ -54,7 +56,13 @@
 					<div class="row mx-0">
 						<div class="col-12">
 							<div class="p-2 p-md-0 mt-3 mt-md-0">
-								<c-estimated-cost-accommodation *ngIf="selectedTab === 2 || ((isAccommodationTabVisited | async) && selectedTab !== 0 && selectedTab !== 1)"></c-estimated-cost-accommodation>
+								<c-estimated-cost-accommodation
+									*ngIf="
+										selectedTab === 1 ||
+										selectedTab === 2 ||
+										((isAccommodationTabVisited | async) && selectedTab !== 0 && selectedTab !== 1)
+									"
+								></c-estimated-cost-accommodation>
 							</div>
 						</div>
 					</div>
