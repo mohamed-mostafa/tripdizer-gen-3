@@ -41,7 +41,13 @@ export class SummaryComponent implements OnDestroy {
 		this.requestService.resetSessionTimer();
 	}
 
+	goBack() {
+		this.router.navigate(['estimated-cost', 'accommodation']);
+	}
+
 	ngOnDestroy() {
 		this.subscriptions.unsubscribe();
 	}
+
+
 }

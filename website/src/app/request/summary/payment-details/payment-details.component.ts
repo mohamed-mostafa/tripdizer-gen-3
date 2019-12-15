@@ -1,11 +1,12 @@
 import { Station } from './../station.model';
 import { SummaryService } from './../summary.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-payment-details',
-	templateUrl: './payment-details.component.html',
+    templateUrl: './payment-details.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrls: ['./payment-details.component.scss']
 })
 export class PaymentDetailsComponent implements OnDestroy {
