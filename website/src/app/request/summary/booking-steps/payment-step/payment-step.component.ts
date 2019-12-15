@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
 	selector: 'c-request-booking-payment-step',
-	templateUrl: './payment-step.component.html',
+    templateUrl: './payment-step.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrls: ['./payment-step.component.scss'],
 })
 export class BookingPaymentStepComponent implements OnInit {
