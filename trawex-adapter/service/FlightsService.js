@@ -276,11 +276,14 @@ exports.getFareDetails = function (language, sessionId, fareSourceCode) {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to get fare rules with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject({ error: "Failed to get fare rules with trawex. Reason: " + response.statusMessage })
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
@@ -309,11 +312,14 @@ exports.revalidateFare = function (language, sessionId, fareSourceCode) {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to revalidate fare with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject({ error: "Failed to revalidate fare with trawex. Reason: " + response.statusMessage })
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
@@ -415,11 +421,14 @@ exports.bookFlight = function (language, bookFlightRequest) {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to book with trawex. Reason: " + error })
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject({ error: "Failed to book with trawex. Reason: " + response.statusMessage })
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
@@ -468,11 +477,14 @@ exports.issueTicket = function (language, sessionId, bookingUniqueId) {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject(response.statusMessage);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject("Failed to issue ticket with Trawex. Reason: " + response.statusMessage);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
@@ -515,11 +527,14 @@ exports.getTripDetails = function (language, sessionId, bookingUniqueId) {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject(response.statusMessage);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject("Failed to get trip details from Trawex. Reason: " + response.statusMessage);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
@@ -570,11 +585,14 @@ function authenticate() {
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject(response.statusMessage);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject("Failed to authenticate with Trawex. Reason: " + response.statusMessage);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject(data.Errors.ErrorMessage);
@@ -604,11 +622,14 @@ function searchFlights(sessionId, journey_type, airport_from_code, airport_to_co
       },
       function (error, response, data) {
         if (error) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject(error);
         } else if (response.statusCode != 200) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject(response.statusMessage);
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject("Failed to search for flights with Trawex. Reason: " + response.statusMessage);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response Body: ${response.body}`])
         } else if (data.Errors) {
           if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           if (Array.isArray(data.Errors)) {
