@@ -19,13 +19,109 @@ var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
 let googlePubSubAdapter = require('../adapters/PubSubPublishers');
 let moment = require('moment');
 
+const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.242.174.95:8085/trawex-adapter/1.0.0';
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 const MEDIA_STORAGE_BASE_URL =
 	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
-const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || "N";
+const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || 'N';
 
+let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
+	return new Promise(function(resolve, reject) {
+		httpRequest.get(
+			{
+				url: TRAWEX_ADAPTER_ENDPOINT + '/flights/fare/details',
+				json: true,
+				qs: {
+					sessionId,
+					fareSourceCode,
+				},
+			},
+			function(error, response, flights) {
+				if (error) {
+					reject(error);
+				} else if (response.statusCode != 200) {
+					reject(response.statusMessage);
+				} else {
+					resolve(flights);
+				}
+			}
+		);
+	});
+};
+
+let validateFlightAPi = function(sessionId, fareSourceCode) {
+	return new Promise(function(resolve, reject) {
+		httpRequest.get(
+			{
+				url: TRAWEX_ADAPTER_ENDPOINT + '/flights/fare/revalidate',
+				json: true,
+				qs: {
+					sessionId,
+					fareSourceCode,
+				},
+			},
+			function(error, response, flights) {
+				if (error) {
+					reject(error);
+				} else if (response.statusCode != 200) {
+					console.log('code is not 200 in validate flights');
+
+					reject(response.statusMessage);
+				} else {
+					console.log('success in flights');
+					resolve(flights);
+				}
+			}
+		);
+	});
+};
+
+let checkHotelOffersAPi = function(data) {
+	return new Promise(function(resolve, reject) {
+		httpRequest.post(
+			{
+				url: TRAWEX_ADAPTER_ENDPOINT + '/hotels/offers',
+				json: true,
+				body: data,
+			},
+			function(error, response, hotels) {
+				if (error) {
+					reject(error);
+				} else if (response.statusCode != 200) {
+					reject(response.statusMessage);
+				} else {
+					resolve(hotels);
+				}
+			}
+		);
+	});
+};
+let reValidateHotelAPi = function(data) {
+	return new Promise(function(resolve, reject) {
+		httpRequest.post(
+			{
+				url: TRAWEX_ADAPTER_ENDPOINT + '/hotels/revalidate',
+				json: true,
+				body: data,
+			},
+			function(error, response, hotels) {
+				if (error) {
+					reject(error);
+				} else if (response.statusCode != 200) {
+					console.log('code is not 200 in validate hotels');
+
+					reject(response.statusMessage);
+				} else {
+					console.log('success in hotels');
+
+					resolve(hotels);
+				}
+			}
+		);
+	});
+};
 //calls the onSuccess with a user object if the user was successfully created
-var placeRequest = function (request, onSuccess, onFailure, onUserError) {
+var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
 		status: request.isFromWebsite ? 1 : request.status,
@@ -55,165 +151,224 @@ var placeRequest = function (request, onSuccess, onFailure, onUserError) {
 		referralType: request.referralType || 1,
 	};
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
-	if (Array.isArray(request.preferences)) {
-		request.preferences = request.preferences.map(ri => ({
-			id: ri.id || ri,
-			percentage: ri.percentage || 100,
-		}));
-	}
-	if (typeof request.preferences === 'object') {
-		const preferences = [];
-		for (const key in request.preferences) {
-			if (request.preferences.hasOwnProperty(key)) {
-				preferences.push({
-					id: key,
-					percentage: 100,
-				});
-			}
-		}
-		request.preferences = preferences;
-	}
-	// insert the request in our database
-	request.date = new Date(new Date().setHours(0, 0, 0, 0));
-	request.departureDate = new Date(request.departureDate);
-	request.returnDate = new Date(request.returnDate);
-	if (!request.budget) request.budget = 0;
-	if (request.destination) {
-		request.first_country = 1;
-		// delete request.other_country
-		delete request.second_country;
-		delete request.third_country;
-	}
-	request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
-	request.score = calculateRequestScore(request);
-	requestsDao.createNewRequest(
-		request,
-		async function (request) {
-			// request is created. now persist the cities/accomodation/transportation/attractions
-			var requestSelectedHotels = { choices: request.selectedHotels };
-			var requestSelectedCities = { choices: request.selectedCities };
-			var requestSelectedAttractions = { choices: request.selectedAttractions };
-			var requestFlightOffers = { choices: request.flightOffers };
-			accomodationDao.save(request.id, requestSelectedHotels);
-			transportationDao.save(request.id, requestFlightOffers);
-			citiesDao.save(request.id, requestSelectedCities);
-			attractionsDao.save(request.id, requestSelectedAttractions);
-
-			if (request.requiresPayment) {
-				// if (BYPASS_PAYMENT == "Y") {
-				// 	request.pnrInfoList = require('../../test-data/pnr.json');
-				// }
-				// save PNR info
-				var requestPNRInfo = { choices: request.pnrInfoList };
-				pnrDao.save(request.id, requestPNRInfo);
-
-				if (BYPASS_PAYMENT == "Y") {
-					await new Promise((resolve, reject) => {
-						setTimeout(() => resolve(), 10000);
+	let flightValidation = new Promise((resolve, reject) => {
+		request.flightOffers.map(flight =>
+			getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode).then(data => {
+				validateFlightAPi(flight.sessionId, flight.fareSourceCode)
+					.then(flights => {
+						resolve(true);
 					})
-					publishRequestChoicesForBooking(request.id);
-				}
-				// at this point, we've saved the request to the database. let's generate a payment key
-				request.paymentKey = await new Promise(resolve => {
-					paymentsService.registeredOrderAndGeneratePaymentKey(
-						request,
-						({ paymentKey }) => {
-							requestsDao.modifyRequestStatusById(request.id, 17, () => {
-								requestsDao.modifyRequestPaymentInfo(request.id, paymentKey, () => {
-									resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
-								}, (err) => {
-									console.log('Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err));
-									resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
-								});
-							}, (err) => {
-								console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
-								resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
-							});
-						},
-						err => {
-							console.error('An error occurred while generating a payment key');
-							console.error(err);
-							resolve();
-						}
-					);
+					.catch(error => {
+						reject(false);
+					});
+			})
+		);
+	});
+	let hotelValidation = new Promise((resolve, reject) => {
+		request.selectedHotels.map(hotel => {
+			let hotelName = hotel.name;
+			let hotelDetails = hotel.moreDetails;
+			checkHotelOffersAPi(hotelDetails)
+				.then(hotelRooms => {
+					let hotelRoom = {
+						boardBasis: hotelRooms[0].boardBasis,
+						infoSource: hotelRooms[0].infoSource,
+						mealCode: hotelRooms[0].mealCode,
+						allocationDetails: hotelRooms[0].allocationDetails,
+						rateBasisIds: hotelRooms[0].rateBasisIds,
+						roomCodes: hotelRooms[0].roomCodes,
+						roomTypeRunnos: hotelRooms[0].roomTypeRunnos,
+						hotelCode: hotelDetails.hotelId,
+					};
+					delete hotelDetails.hotelId;
+					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
+					reValidateHotelAPi(mergedData).then(validatedData => {
+						resolve(true);
+					});
+				})
+				.catch(error => {
+					reject(false);
 				});
-			} else {
-				const package = await new Promise(resolve => {
-					getPackage(
-						request.id,
-						null,
-						data => {
-							console.log('Package creation succeeded. Now responding to caller');
-							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-						},
-						data => {
-							if (data && data.pdfUrl) {
-								console.log('Package creation partially succeeded. Now responding to caller');
-								resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-							} else {
-								console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
-								resolve({});
-							}
-							// onSuccess(request);
-						},
-						{ choices: request.flightOffers },
-						{ choices: request.selectedCities },
-						{ choices: request.selectedHotels },
-						{ choices: request.selectedAttractions }
-					);
-				});
-
-				request = { ...request, ...package };
+		});
+	});
+	Promise.all([flightValidation, hotelValidation])
+		.then(function(valid) {
+			if (Array.isArray(request.preferences)) {
+				request.preferences = request.preferences.map(ri => ({
+					id: ri.id || ri,
+					percentage: ri.percentage || 100,
+				}));
 			}
+			if (typeof request.preferences === 'object') {
+				const preferences = [];
+				for (const key in request.preferences) {
+					if (request.preferences.hasOwnProperty(key)) {
+						preferences.push({
+							id: key,
+							percentage: 100,
+						});
+					}
+				}
+				request.preferences = preferences;
+			}
+			// insert the request in our database
+			request.date = new Date(new Date().setHours(0, 0, 0, 0));
+			request.departureDate = new Date(request.departureDate);
+			request.returnDate = new Date(request.returnDate);
+			if (!request.budget) request.budget = 0;
+			if (request.destination) {
+				request.first_country = 1;
+				// delete request.other_country
+				delete request.second_country;
+				delete request.third_country;
+			}
+			request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
+			request.score = calculateRequestScore(request);
+			requestsDao.createNewRequest(
+				request,
+				async function(request) {
+					// request is created. now persist the cities/accomodation/transportation/attractions
+					var requestSelectedHotels = { choices: request.selectedHotels };
+					var requestSelectedCities = { choices: request.selectedCities };
+					var requestSelectedAttractions = { choices: request.selectedAttractions };
+					var requestFlightOffers = { choices: request.flightOffers };
+					accomodationDao.save(request.id, requestSelectedHotels);
+					transportationDao.save(request.id, requestFlightOffers);
+					citiesDao.save(request.id, requestSelectedCities);
+					attractionsDao.save(request.id, requestSelectedAttractions);
 
-			onSuccess(request);
+					if (request.requiresPayment) {
+						// if (BYPASS_PAYMENT == "Y") {
+						// 	request.pnrInfoList = require('../../test-data/pnr.json');
+						// }
+						// save PNR info
+						var requestPNRInfo = { choices: request.pnrInfoList };
+						pnrDao.save(request.id, requestPNRInfo);
 
-			// notify creation
-			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
-				emailBusiness.sendEmail(
-					'bookings@tripdizer.com',
-					'notifications@tripdizer.com',
-					'Request #' + request.id + ' is placed at Tripdizer',
-					request.traveler.name +
-					' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
-				);
+						if (BYPASS_PAYMENT == 'Y') {
+							await new Promise((resolve, reject) => {
+								setTimeout(() => resolve(), 10000);
+							});
+							publishRequestChoicesForBooking(request.id);
+						}
+						// at this point, we've saved the request to the database. let's generate a payment key
+						request.paymentKey = await new Promise(resolve => {
+							paymentsService.registeredOrderAndGeneratePaymentKey(
+								request,
+								({ paymentKey }) => {
+									requestsDao.modifyRequestStatusById(
+										request.id,
+										17,
+										() => {
+											requestsDao.modifyRequestPaymentInfo(
+												request.id,
+												paymentKey,
+												() => {
+													resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
+												},
+												err => {
+													console.log(
+														'Failed to update payment info of the request in the database. Reason: ' +
+															JSON.stringify(err)
+													);
+													resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+												}
+											);
+										},
+										err => {
+											console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
+											resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+										}
+									);
+								},
+								err => {
+									console.error('An error occurred while generating a payment key');
+									console.error(err);
+									resolve();
+								}
+							);
+						});
+					} else {
+						const package = await new Promise(resolve => {
+							getPackage(
+								request.id,
+								null,
+								data => {
+									console.log('Package creation succeeded. Now responding to caller');
+									resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+								},
+								data => {
+									if (data && data.pdfUrl) {
+										console.log('Package creation partially succeeded. Now responding to caller');
+										resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+									} else {
+										console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+										resolve({});
+									}
+									// onSuccess(request);
+								},
+								{ choices: request.flightOffers },
+								{ choices: request.selectedCities },
+								{ choices: request.selectedHotels },
+								{ choices: request.selectedAttractions }
+							);
+						});
 
-			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && !request.requiresPayment)
-				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
+						request = { ...request, ...package };
+					}
 
-			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
-				googlePeopleAdapter.createNewContact(
-					request.traveler.email,
-					request.traveler.name,
-					request.traveler.mobile,
-					'(' + request.id.toString() + ')'
-				);
-		},
-		function (err) {
-			// respond to caller
-			console.error('An error occurred while saving a new request');
-			console.error(err);
-			onFailure(err);
-			// });
-			// }
-		},
-		function (err) {
-			console.error('An error occurred while checking if traveler exists before');
-			console.error(err);
-			onFailure(err);
-		}
-	);
+					onSuccess(request);
+
+					// notify creation
+					if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
+						emailBusiness.sendEmail(
+							'bookings@tripdizer.com',
+							'notifications@tripdizer.com',
+							'Request #' + request.id + ' is placed at Tripdizer',
+							request.traveler.name +
+								' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+						);
+
+					if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && !request.requiresPayment)
+						notifyCustomer(request.traveler.email, request.traveler.name, request.id);
+
+					if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
+						googlePeopleAdapter.createNewContact(
+							request.traveler.email,
+							request.traveler.name,
+							request.traveler.mobile,
+							'(' + request.id.toString() + ')'
+						);
+				},
+				function(err) {
+					// respond to caller
+					console.error('An error occurred while saving a new request');
+					console.error(err);
+					onFailure(err);
+					// });
+					// }
+				},
+				function(err) {
+					console.error('An error occurred while checking if traveler exists before');
+					console.error(err);
+					onFailure(err);
+				}
+			);
+		})
+		.catch(error => {
+			onUserError('Offers is not valid');
+		});
 };
 
-var updateRequest = function (request, onSuccess, onFailure) {
+var updateRequest = function(request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
 		request,
-		function (request) {
+		function(request) {
 			onSuccess(request);
 		},
-		function (err) {
+		function(err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure(err);
@@ -221,7 +376,7 @@ var updateRequest = function (request, onSuccess, onFailure) {
 	);
 };
 
-var notifyCustomer = function (to, customerName, requestId) {
+var notifyCustomer = function(to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
@@ -245,7 +400,7 @@ var notifyCustomer = function (to, customerName, requestId) {
 		emailBody
 	);
 };
-var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
+var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
 	} else if (email.type === 'request') {
@@ -253,12 +408,12 @@ var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
 			email.recipients,
 			Number.MAX_SAFE_INTEGER,
 			1,
-			function (travelers) {
+			function(travelers) {
 				var emails = [];
 				for (var i = 0; i < travelers.length; i++) emails.push(travelers[i].traveler.emailAddress);
 				sendMails(emails, email, onSuccess);
 			},
-			function (err) {
+			function(err) {
 				console.error('An error occurred while getting travelers');
 				console.error(err);
 				onFailure(err);
@@ -267,26 +422,26 @@ var sendMailsToRequestTraveler = function (email, onSuccess, onFailure) {
 	}
 };
 
-var sendMails = function (emails, email, onSuccess) {
+var sendMails = function(emails, email, onSuccess) {
 	responses = [];
 	for (var i = 0; i < emails.length; ++i)
 		responses.push(
 			emailBusiness
 				.sendEmail(emails[i], 'notifications@tripdizer.com', email.subject, email.body, email.attachments)
-				.then(function (response) {
+				.then(function(response) {
 					return response;
 				})
-				.catch(function (response) {
+				.catch(function(response) {
 					return response;
 				})
 		);
-	Promise.all(responses).then(function (resp) {
+	Promise.all(responses).then(function(resp) {
 		email.response = resp;
 		email.count = {
-			success: resp.filter(function (item) {
+			success: resp.filter(function(item) {
 				return item.done;
 			}).length,
-			fail: resp.filter(function (item) {
+			fail: resp.filter(function(item) {
 				return !item.done;
 			}).length,
 		};
@@ -294,11 +449,11 @@ var sendMails = function (emails, email, onSuccess) {
 	});
 };
 
-var validatePromoCode = function (promoCode, onSuccess, onFailure) {
+var validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(
 			promoCode,
-			function (count) {
+			function(count) {
 				if (count < 50) {
 					onSuccess(true);
 				} else {
@@ -312,9 +467,9 @@ var validatePromoCode = function (promoCode, onSuccess, onFailure) {
 	}
 };
 
-var sendDailyReportOfRequestsCount = function () {
+var sendDailyReportOfRequestsCount = function() {
 	requestsDao.getRequestCounts(
-		function (counts) {
+		function(counts) {
 			// prepare email body
 			var emailBody = '';
 			emailBody +=
@@ -348,13 +503,13 @@ var sendDailyReportOfRequestsCount = function () {
 				emailBody
 			);
 		},
-		function () {
+		function() {
 			console.error('An error occurred while getting request counts');
 		}
 	);
 };
 
-var getPackage = function (
+var getPackage = function(
 	requestId,
 	accessToken,
 	onSuccess,
@@ -366,7 +521,7 @@ var getPackage = function (
 ) {
 	getRequestById(
 		requestId,
-		async function (request) {
+		async function(request) {
 			try {
 				// if flights/accommodations/attractions/cities are passed to getPackage, ignore the ones with the request
 				var flightOffers = requestFlightOffers != null ? requestFlightOffers : request.flightOffers;
@@ -384,7 +539,7 @@ var getPackage = function (
 							json: true,
 							headers: { authorization: accessToken },
 						},
-						async function (error, response, itinerary) {
+						async function(error, response, itinerary) {
 							if (error || response.statusCode != 200) {
 								console.error('An error occurred while getting itinerary from master-data to generate request package');
 								console.log(error || response.statusMessage);
@@ -411,8 +566,8 @@ var getPackage = function (
 									i === 0
 										? departureDate
 										: new Date(
-											new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
-										);
+												new Date(itinerary.cities[i - 1].endDate).setDate(itinerary.cities[i - 1].endDate.getDate())
+										  );
 								itinerary.cities[i].endDate = new Date(
 									new Date(itinerary.cities[i].startDate).setDate(
 										itinerary.cities[i].startDate.getDate() + itinerary.cities[i].numberOfDays
@@ -472,14 +627,14 @@ var getPackage = function (
 								'post',
 								'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 								JSON.stringify(request),
-								function (doc) {
+								function(doc) {
 									packageHttp(
 										'get',
 										`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
-										doc.docId
+											doc.docId
 										}`,
 										null,
-										function (package) {
+										function(package) {
 											requestsDao.modifyRequestPackageInfo(
 												request.id,
 												package.docId,
@@ -549,15 +704,15 @@ var getPackage = function (
 						'post',
 						'https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec',
 						JSON.stringify(request),
-						function (doc) {
+						function(doc) {
 							console.log('File created. Id: ' + doc.docId + ', Now generating the PDF');
 							packageHttp(
 								'get',
 								`https://script.google.com/macros/s/AKfycbyRDf8cl_dobu-eNVnXuf9WFZ3xSwa9byvJYbTjnyO_2Vo2WIw0/exec?docId=${
-								doc.docId
+									doc.docId
 								}`,
 								null,
-								function (package) {
+								function(package) {
 									console.log('PDF Created. Id: ' + package.pdfId + ', Now saving doc and pdf ids to the request');
 									requestsDao.modifyRequestPackageInfo(
 										request.id,
@@ -591,23 +746,23 @@ var getPackage = function (
 				onFailure(err);
 			}
 		},
-		function (err) {
+		function(err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure(err);
 		}
 	);
 };
-var getItineraryCostFromRequest = function (flightOffers, accomodationOffers) {
+var getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	return cost;
 };
 
-var getPackageDetailsOfCountry = function (isoCode) {
+var getPackageDetailsOfCountry = function(isoCode) {
 	return new Promise((resolve, reject) => {
-		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function (
+		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function(
 			error,
 			response,
 			country
@@ -626,10 +781,10 @@ var getPackageDetailsOfCountry = function (isoCode) {
 	});
 };
 
-var sendPackageByMail = function (requestId, onSuccess, onFailure) {
+var sendPackageByMail = function(requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
-		function (request) {
+		function(request) {
 			// prepare email body
 			var emailBody = '';
 			emailBody += '<html>';
@@ -659,7 +814,7 @@ var sendPackageByMail = function (requestId, onSuccess, onFailure) {
 			);
 			onSuccess({ success: true });
 		},
-		function (err) {
+		function(err) {
 			console.error('An error occurred while getting request package');
 			console.error(err);
 			onFailure({ ...err, success: false });
@@ -685,7 +840,7 @@ function currencyFormat(value) {
 
 async function isValidImage(url) {
 	return await new Promise(resolve => {
-		httpRequest(url, function (error, response, body) {
+		httpRequest(url, function(error, response, body) {
 			if (!error && response.statusCode == 200 && response.headers['content-type'].match(/(image)+\//g)) {
 				resolve(true);
 			} else {
@@ -732,7 +887,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 				'Content-Type': 'text/plain',
 			},
 		},
-		function (error, response, body) {
+		function(error, response, body) {
 			try {
 				const package = JSON.parse(body);
 				if (response.statusCode === 200 && package.docId) {
@@ -755,7 +910,7 @@ function packageHttp(method, url, data = {}, onSuccess, onFailure) {
 function getRequestById(requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
-		async function (request) {
+		async function(request) {
 			try {
 				var accomodationOffers = await accomodationDao.get(requestId);
 				if (accomodationOffers.exists) request.selectedHotels = accomodationOffers.data();
@@ -774,14 +929,20 @@ function getRequestById(requestId, onSuccess, onFailure) {
 
 				if (request.flightOffers && request.flightOffers.choices && request.flightOffers.choices.length > 0) {
 					for (var i = 0; i < request.flightOffers.choices.length; i++) {
-						var flightBookingInfo = await bookingsDao.getFlightBookingResult(requestId, request.flightOffers.choices[i].fareSourceCode);
+						var flightBookingInfo = await bookingsDao.getFlightBookingResult(
+							requestId,
+							request.flightOffers.choices[i].fareSourceCode
+						);
 						if (flightBookingInfo.exists) request.flightOffers.choices[i].bookingInfo = flightBookingInfo.data();
 					}
 				}
 
 				if (request.selectedHotels && request.selectedHotels.choices && request.selectedHotels.choices.length > 0) {
 					for (var i = 0; i < request.selectedHotels.choices.length; i++) {
-						var hotelBookingInfo = await bookingsDao.getHotelBookingResult(requestId, request.selectedHotels.choices[i].moreDetails.hotelId);
+						var hotelBookingInfo = await bookingsDao.getHotelBookingResult(
+							requestId,
+							request.selectedHotels.choices[i].moreDetails.hotelId
+						);
 						if (hotelBookingInfo.exists) request.selectedHotels.choices[i].bookingInfo = hotelBookingInfo.data();
 					}
 				}
@@ -796,7 +957,7 @@ function getRequestById(requestId, onSuccess, onFailure) {
 				onFailure(err);
 			}
 		},
-		function (err) {
+		function(err) {
 			console.log('Failed to retrieve a request by Id: ' + requestId);
 			console.error(err);
 			onFailure(err);
@@ -804,53 +965,78 @@ function getRequestById(requestId, onSuccess, onFailure) {
 	);
 }
 
-var publishRequestChoicesForBooking = function (requestId) {
+var publishRequestChoicesForBooking = function(requestId) {
 	return new Promise((resolve, reject) => {
-		getRequestById(requestId, request => {
-			if (request.flightOffers && request.flightOffers.choices) {
-				request.flightOffers.choices.forEach(flightOffer => {
-					googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
-				});
-			} else {
-				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No flights booking information available. Request doesn't have flight offers to book ?`)
-			}
+		getRequestById(
+			requestId,
+			request => {
+				if (request.flightOffers && request.flightOffers.choices) {
+					request.flightOffers.choices.forEach(flightOffer => {
+						googlePubSubAdapter.publishFlightBookingMessage(requestId, flightOffer, request.pnrInfo);
+					});
+				} else {
+					console.error(
+						`FATAL ERROR: Suspecious request with id: ${requestId}. No flights booking information available. Request doesn't have flight offers to book ?`
+					);
+				}
 
-			if (request.selectedHotels && request.selectedHotels.choices) {
-				request.selectedHotels.choices.forEach(hotel => {
-					googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
-				});
-			} else {
-				console.error(`FATAL ERROR: Suspecious request with id: ${requestId}. No hotel booking information available. Request doesn't have hotels to book ?`)
+				if (request.selectedHotels && request.selectedHotels.choices) {
+					request.selectedHotels.choices.forEach(hotel => {
+						googlePubSubAdapter.publishHotelBookingMessage(requestId, hotel, request.pnrInfo);
+					});
+				} else {
+					console.error(
+						`FATAL ERROR: Suspecious request with id: ${requestId}. No hotel booking information available. Request doesn't have hotels to book ?`
+					);
+				}
+				resolve();
+			},
+			err => {
+				console.error(
+					`FATAL ERROR: Failed to retrieve the request with id: ${requestId}. Request should be paid but booking messages has not been published`
+				);
+				console.error(err);
+				reject(err);
 			}
-			resolve();
-		}, err => {
-			console.error(`FATAL ERROR: Failed to retrieve the request with id: ${requestId}. Request should be paid but booking messages has not been published`)
-			console.error(err);
-			reject(err);
-		})
-	})
-}
+		);
+	});
+};
 
-var handlePaidRequest = function (requestId) {
+var handlePaidRequest = function(requestId) {
 	requestsDao.modifyRequestStatusById(
 		requestId,
 		18,
-		() => { },
+		() => {},
 		() => {
-			console.error("FATAL ERROR: Failed to update request status to 'paid' for request: " + requestId + ". Publishing booking messages will proceed anyway");
+			console.error(
+				"FATAL ERROR: Failed to update request status to 'paid' for request: " +
+					requestId +
+					'. Publishing booking messages will proceed anyway'
+			);
 		}
 	);
-	if (BYPASS_PAYMENT == "Y") {
+	if (BYPASS_PAYMENT == 'Y') {
 		// booking was started immediately after saving the request, without waiting for the payment
 		// no need to proceed with bookings again
 	} else {
-		publishRequestChoicesForBooking(requestId).then(result => {
-			console.log("Attempts to publish booking messages for request: " + requestId + " completed successfully for all flights and hotels");
-		}).catch(err => {
-			console.error("FATAL ERROR: Publishing booking messages for request: " + requestId + " failed for the following reason: " + JSON.stringify(err))
-		});
+		publishRequestChoicesForBooking(requestId)
+			.then(result => {
+				console.log(
+					'Attempts to publish booking messages for request: ' +
+						requestId +
+						' completed successfully for all flights and hotels'
+				);
+			})
+			.catch(err => {
+				console.error(
+					'FATAL ERROR: Publishing booking messages for request: ' +
+						requestId +
+						' failed for the following reason: ' +
+						JSON.stringify(err)
+				);
+			});
 	}
-}
+};
 
 exports.placeRequest = placeRequest;
 exports.getRequestById = getRequestById;

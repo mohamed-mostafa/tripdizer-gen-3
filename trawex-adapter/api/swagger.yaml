@@ -9,10 +9,10 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "tripdizer-trawex-adapter-dot-tripdizer-dev.appspot.com"
+host: "35.242.174.95:8085"
 basePath: "/trawex-adapter/1.0.0"
 schemes:
-  - "https"
+  - "http"
 paths:
   /flights/search/multi-city:
     post:
