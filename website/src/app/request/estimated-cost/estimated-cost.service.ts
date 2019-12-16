@@ -30,6 +30,7 @@ export class EstimatedCostService {
 	isCitiesTabVisited: boolean;
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
+	isAccommodationProcessing: boolean;
 
 	notificationTimer: any;
 	expirationTimer: any;
@@ -141,7 +142,7 @@ export class EstimatedCostService {
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
 		if (this.isFlightsTabVisited) {
-			this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+			this.flightsLoading();
 		}
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
@@ -184,14 +185,16 @@ export class EstimatedCostService {
 
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
+
+		if (index === 2 && this.isAccommodationProcessing) {
+			this.accommodationLoading();
+		}
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
+		this.isAccommodationProcessing = true;
 		if (this.isAccommodationTabVisited) {
-			this.setIsLoading(
-				true,
-				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-			);
+			this.accommodationLoading();
 		}
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
@@ -222,14 +225,17 @@ export class EstimatedCostService {
 			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
 			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
+
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(
 				() => {
+					this.isAccommodationProcessing = false;
 					if (this.isAccommodationTabVisited) {
 						this.setIsLoading(false, '');
 					}
 				},
 				error => {
+					this.isAccommodationProcessing = false;
 					if (this.isAccommodationTabVisited) {
 						this.setIsLoading(false, '');
 					}
@@ -256,6 +262,17 @@ export class EstimatedCostService {
 
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message });
+	}
+
+	flightsLoading(): void {
+		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+	}
+
+	accommodationLoading(): void {
+		this.setIsLoading(
+			true,
+			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+		);
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
