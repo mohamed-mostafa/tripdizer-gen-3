@@ -47,6 +47,12 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
+	cachedTabsData: {
+		cities?: Array<CityDTO>,
+		flightOffers?: Array<FlightOffer>,
+		accommodation?: Array<Accommodation>
+	} = {};
+
 	constructor(
 		private http: HttpClient,
 		private router: Router,
@@ -110,9 +116,12 @@ export class EstimatedCostService {
 		});
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-			tap(() => {
+			tap(returnedCities => {
 				this.setIsLoading(false, '');
 				this.requestService.isLoading.next({ show: false, message: '' });
+				console.log(returnedCities);
+				this.cachedTabsData.cities = returnedCities;
+				console.log(this.cachedTabsData);
 			})
 		);
 	}
@@ -152,10 +161,12 @@ export class EstimatedCostService {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(
-				() => {
+			tap(returnedFlightOffers => {
 					this.setIsLoading(false, '');
 					this.startSessionTimer();
+					console.log(returnedFlightOffers);
+					this.cachedTabsData.flightOffers = returnedFlightOffers;
+					console.log(this.cachedTabsData);
 				},
 				error => {
 					console.error(JSON.stringify(error));
@@ -212,9 +223,11 @@ export class EstimatedCostService {
 			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-			tap(
-				() => {
+			tap(returnedAccommodation => {
 					this.setIsLoading(false, '');
+					console.log(returnedAccommodation);
+					this.cachedTabsData.accommodation = returnedAccommodation;
+					console.log(this.cachedTabsData);
 				},
 				error => {
 					this.setIsLoading(false, '');
@@ -385,9 +398,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_time: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-								'DD/MM HH:mm'
-								// tslint:disable-next-line: indent
-						  )
+							'DD/MM HH:mm'
+							// tslint:disable-next-line: indent
+						)
 						: 'unknown time',
 					carrier_logo: lastStationFlightLeg ? lastStationFlightLeg.segments[0].carrier.squareLogo : null,
 
@@ -402,9 +415,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_hour: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-								'HH:mm'
-								// tslint:disable-next-line: indent
-						  )
+							'HH:mm'
+							// tslint:disable-next-line: indent
+						)
 						: 'unknown time',
 
 					arrive_code: lastStationFlightLeg ? lastStationFlightLeg.destination.iataCode : null,

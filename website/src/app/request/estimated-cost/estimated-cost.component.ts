@@ -26,12 +26,12 @@ export class EstimatedCostComponent {
 		private requestService: RequestService,
 		private route: ActivatedRoute
 	) {
-		// const tabIndexParam = this.route.snapshot.paramMap.get('tabIndex');
-		// console.log(tabIndexParam);
-		// this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
-		// console.log(this.tabIndex);
+		const tabIndexParam = this.route.snapshot.paramMap.get('tabIndex');
+		console.log(tabIndexParam);
+		this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
+		console.log(this.tabIndex);
 
-		this.selectedTab = 0;
+		this.selectedTab = this.tabIndex || 0;
 
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;

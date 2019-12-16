@@ -42,7 +42,7 @@ export class SummaryComponent implements OnDestroy {
 	}
 
 	goBack() {
-		this.router.navigate(['estimated-cost', 'accommodation']);
+		this.router.navigate(['/request/estimated-cost', '2']);
 	}
 
 	ngOnDestroy() {
