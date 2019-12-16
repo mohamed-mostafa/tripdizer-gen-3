@@ -66,6 +66,7 @@ export class TabFlightsComponent implements DoCheck {
 		this.options = {
 			nav: true,
 			dots: false,
+			autoHeight: true,
 			responsive: {
 				0: {
 					items: 1,
