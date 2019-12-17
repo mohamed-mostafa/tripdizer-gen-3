@@ -46,7 +46,8 @@ export class SummaryComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
+        this.subscriptions.unsubscribe();
+        console.log('destroy summary component');
 	}
 
 

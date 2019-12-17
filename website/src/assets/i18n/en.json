@@ -278,7 +278,8 @@
 			"booking_steps": {
 				"passenger_details": "Passenger details",
 				"payment": "Payment",
-				"proceed_to_payment": "Proceed to payment"
+				"proceed_to_payment": "Proceed to payment",
+                "back": "Back"
 			}
 		},
 		"form_layout": {

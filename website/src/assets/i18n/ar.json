@@ -278,7 +278,8 @@
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
-				"proceed_to_payment": "المتابعة إلى الدفع"
+                "proceed_to_payment": "المتابعة إلى الدفع",
+                "back": "رجوع"
 			}
 		},
 		"form_layout": {

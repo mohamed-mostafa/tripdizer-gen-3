@@ -93,7 +93,7 @@ export class TabAccommodationComponent {
 
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
-		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.router.navigate(['/request', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
 	back(): void {

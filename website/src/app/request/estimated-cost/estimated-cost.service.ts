@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,7 +21,7 @@ import { CitiesRequest } from './tab-cities/city.model';
 import { CitySequence, FlightOffer, FlightRequest } from './tab-flights/flight-offer.model';
 
 @Injectable({ providedIn: 'root' })
-export class EstimatedCostService {
+export class EstimatedCostService implements OnDestroy {
 	transportationEndPoint = 'package-options/1.0.0/transportationOffers';
 	countryCities = 'package-options/1.0.0/countryCities';
 	accommodations = 'package-options/1.0.0/accomodationOffers';
@@ -51,7 +51,7 @@ export class EstimatedCostService {
 		cities?: Array<CityDTO>,
 		flightOffers?: Array<FlightOffer>,
 		accommodation?: Array<Accommodation>
-	} = {};
+	};
 
 	constructor(
 		private http: HttpClient,
@@ -60,6 +60,10 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+
+		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
+		console.log('init estimated service', this.cachedTabsData);
+
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
 			this.requestService.setProperty('selectedCities', citiesSelected);
@@ -162,12 +166,12 @@ export class EstimatedCostService {
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
 			tap(returnedFlightOffers => {
-					this.setIsLoading(false, '');
-					this.startSessionTimer();
-					console.log(returnedFlightOffers);
-					this.cachedTabsData.flightOffers = returnedFlightOffers;
-					console.log(this.cachedTabsData);
-				},
+				this.setIsLoading(false, '');
+				this.startSessionTimer();
+				console.log(returnedFlightOffers);
+				this.cachedTabsData.flightOffers = returnedFlightOffers;
+				console.log(this.cachedTabsData);
+			},
 				error => {
 					console.error(JSON.stringify(error));
 					this.setIsLoading(false, '');
@@ -224,11 +228,11 @@ export class EstimatedCostService {
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(returnedAccommodation => {
-					this.setIsLoading(false, '');
-					console.log(returnedAccommodation);
-					this.cachedTabsData.accommodation = returnedAccommodation;
-					console.log(this.cachedTabsData);
-				},
+				this.setIsLoading(false, '');
+				console.log(returnedAccommodation);
+				this.cachedTabsData.accommodation = returnedAccommodation;
+				console.log(this.cachedTabsData);
+			},
 				error => {
 					this.setIsLoading(false, '');
 				}
@@ -449,5 +453,10 @@ export class EstimatedCostService {
 
 	openSessionDialog(minutes): void {
 		this.dialog.open(SessionDialogComponent, { autoFocus: true, maxWidth: 600, data: { minutes } });
+	}
+
+	ngOnDestroy() {
+		this.requestService.setProperty('cachedTabsData', this.cachedTabsData);
+		console.log('destroy estimated service', this.cachedTabsData);
 	}
 }
