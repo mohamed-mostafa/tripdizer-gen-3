@@ -98,14 +98,16 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					delete hotelDetails.hotelId;
 					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
 					hotel.roomDetails = hotelRooms[0];
-					selectedHotels.push(hotel);
-					request = {
-						...request,
-						selectedHotels,
-					};
+
 					trawexService
 						.reValidateHotelAPi(mergedData)
 						.then(validatedData => {
+							hotel.preBookingToken = validatedData.preBookingToken;
+							selectedHotels.push(hotel);
+							request = {
+								...request,
+								selectedHotels,
+							};
 							resolve(true);
 						})
 						.catch(err => {
