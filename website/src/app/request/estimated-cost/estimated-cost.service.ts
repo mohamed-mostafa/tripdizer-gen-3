@@ -27,6 +27,10 @@ export class EstimatedCostService implements OnDestroy {
 	accommodations = 'package-options/1.0.0/accomodationOffers';
 	attractionsEndPoint = 'package-options/1.0.0/cityAttractions';
 
+	isCitiesTabVisited: boolean;
+	isFlightsTabVisited: boolean;
+	isAccommodationTabVisited: boolean;
+
 	notificationTimer: any;
 	expirationTimer: any;
 
@@ -149,7 +153,9 @@ export class EstimatedCostService implements OnDestroy {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+		if (this.isFlightsTabVisited) {
+			this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+		}
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -165,13 +171,17 @@ export class EstimatedCostService implements OnDestroy {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(() => {
-				this.setIsLoading(false, '');
-				this.startSessionTimer();
-			},
+			tap(
+				() => {
+					if (this.isFlightsTabVisited) {
+						this.setIsLoading(false, '');
+					}
+					this.startSessionTimer();
+				},
 				error => {
-					console.error(JSON.stringify(error));
-					this.setIsLoading(false, '');
+					if (this.isFlightsTabVisited) {
+						this.setIsLoading(false, '');
+					}
 				}
 			)
 		);
@@ -194,10 +204,12 @@ export class EstimatedCostService implements OnDestroy {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(
-			true,
-			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-		);
+		if (this.isAccommodationTabVisited) {
+			this.setIsLoading(
+				true,
+				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+			);
+		}
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
 			cities.push({
@@ -228,12 +240,16 @@ export class EstimatedCostService implements OnDestroy {
 			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-			tap(returnedAccommodation => {
-				this.setIsLoading(false, '');
-				this.cachedTabsData.accommodation = returnedAccommodation;
-			},
+			tap(
+				() => {
+					if (this.isAccommodationTabVisited) {
+						this.setIsLoading(false, '');
+					}
+				},
 				error => {
-					this.setIsLoading(false, '');
+					if (this.isAccommodationTabVisited) {
+						this.setIsLoading(false, '');
+					}
 				}
 			)
 		);

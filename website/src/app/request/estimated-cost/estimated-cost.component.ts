@@ -14,9 +14,9 @@ export class EstimatedCostComponent {
 
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
-	isCitiesTabVisited: Observable<boolean>;
-	isFlightsTabVisited: Observable<boolean>;
-	isAccommodationTabVisited: Observable<boolean>;
+	isCitiesTabVisited: boolean;
+	isFlightsTabVisited: boolean;
+	isAccommodationTabVisited: boolean;
 	currentTabIndex: Observable<boolean>;
 	isLoading: boolean;
 	tabIndex: number;
@@ -30,12 +30,17 @@ export class EstimatedCostComponent {
 		this.selectedTab = this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
 
 		service.currentTabIndex.subscribe(n => {
-			this.selectedTab = this.tabIndex || n || 0;
+			this.selectedTab = n;
+
+			this.isCitiesTabVisited = this.isCitiesTabVisited || n === 0;
+			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
+			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
+
+			service.isCitiesTabVisited = this.isCitiesTabVisited;
+			service.isFlightsTabVisited = this.isFlightsTabVisited;
+			service.isAccommodationTabVisited = this.isAccommodationTabVisited;
 		});
 
-		this.isCitiesTabVisited = requestService.isCitiesTabVisited;
-		this.isFlightsTabVisited = requestService.isFlightsTabVisited;
-		this.isAccommodationTabVisited = requestService.isAccommodationTabVisited;
 		this.requestService.isLoading.subscribe(isLoadingObject => {
 			this.isLoading = isLoadingObject.show;
 		});

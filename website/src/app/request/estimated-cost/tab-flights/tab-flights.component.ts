@@ -89,6 +89,7 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 		this.options = {
 			nav: true,
 			dots: false,
+			autoHeight: true,
 			responsive: {
 				0: {
 					items: 1,

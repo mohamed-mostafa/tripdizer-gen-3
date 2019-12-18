@@ -47,13 +47,14 @@
                     </div>
                   </div>
                   <div class="hotel-address">
-                    <p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
+                    <p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address.substring(0, 55) }}<span
+                        *ngIf="hotel.address.length >= 55">...</span></p>
                   </div>
 
                   <div class="row">
                     <div class="col-12">
                       <p class="grey item-text hotel-description">
-                        {{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span>
+                        {{ hotel.description.substring(0, 85) }}<span *ngIf="hotel.description.length >= 85">...</span>
                       </p>
                     </div>
 
