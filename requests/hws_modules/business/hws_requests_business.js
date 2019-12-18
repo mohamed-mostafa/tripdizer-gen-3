@@ -13,6 +13,7 @@ let bookingsDao = require('../dataaccess/hws_bookings_dao');
 let paymentDao = require('../dataaccess/hws_payments_dao');
 var emailBusiness = require('../adapters/hws_email_adapter.js');
 var paymentsService = require('./hws_payments_business');
+const trawexService = require('./hws_trawex_businress');
 var Promise = require('promise');
 var httpRequest = require('request');
 var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
@@ -25,101 +26,6 @@ const MEDIA_STORAGE_BASE_URL =
 	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || 'N';
 
-let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
-	return new Promise(function(resolve, reject) {
-		httpRequest.get(
-			{
-				url: TRAWEX_ADAPTER_ENDPOINT + '/flights/fare/details',
-				json: true,
-				qs: {
-					sessionId,
-					fareSourceCode,
-				},
-			},
-			function(error, response, flights) {
-				if (error) {
-					reject(error);
-				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
-				} else {
-					resolve(flights);
-				}
-			}
-		);
-	});
-};
-
-let validateFlightAPi = function(sessionId, fareSourceCode) {
-	return new Promise(function(resolve, reject) {
-		httpRequest.get(
-			{
-				url: TRAWEX_ADAPTER_ENDPOINT + '/flights/fare/revalidate',
-				json: true,
-				qs: {
-					sessionId,
-					fareSourceCode,
-				},
-			},
-			function(error, response, flights) {
-				if (error) {
-					reject(error);
-				} else if (response.statusCode != 200) {
-					console.log('code is not 200 in validate flights');
-
-					reject(response.statusMessage);
-				} else {
-					console.log('success in flights');
-					resolve(flights);
-				}
-			}
-		);
-	});
-};
-
-let checkHotelOffersAPi = function(data) {
-	return new Promise(function(resolve, reject) {
-		httpRequest.post(
-			{
-				url: TRAWEX_ADAPTER_ENDPOINT + '/hotels/offers',
-				json: true,
-				body: data,
-			},
-			function(error, response, hotels) {
-				if (error) {
-					reject(error);
-				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
-				} else {
-					resolve(hotels);
-				}
-			}
-		);
-	});
-};
-let reValidateHotelAPi = function(data) {
-	return new Promise(function(resolve, reject) {
-		httpRequest.post(
-			{
-				url: TRAWEX_ADAPTER_ENDPOINT + '/hotels/revalidate',
-				json: true,
-				body: data,
-			},
-			function(error, response, hotels) {
-				if (error) {
-					reject(error);
-				} else if (response.statusCode != 200) {
-					console.log('code is not 200 in validate hotels');
-
-					reject(response.statusMessage);
-				} else {
-					console.log('success in hotels');
-
-					resolve(hotels);
-				}
-			}
-		);
-	});
-};
 //calls the onSuccess with a user object if the user was successfully created
 var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
@@ -153,22 +59,31 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	let flightValidation = new Promise((resolve, reject) => {
 		request.flightOffers.map(flight =>
-			getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode).then(data => {
-				validateFlightAPi(flight.sessionId, flight.fareSourceCode)
-					.then(flights => {
-						resolve(true);
-					})
-					.catch(error => {
-						reject(false);
-					});
-			})
+			trawexService
+				.getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode)
+				.then(data => {
+					trawexService
+						.validateFlightAPi(flight.sessionId, flight.fareSourceCode)
+						.then(flights => {
+							resolve(true);
+						})
+						.catch(error => {
+							reject(false);
+						});
+				})
+				.catch(err => {
+					reject(false);
+				})
 		);
 	});
-	let hotelValidation = new Promise((resolve, reject) => {
-		request.selectedHotels.map(hotel => {
+	let hotelValidation;
+	let selectedHotels = [];
+	request.selectedHotels.map(hotel => {
+		hotelValidation = new Promise((resolve, reject) => {
 			let hotelName = hotel.name;
 			let hotelDetails = hotel.moreDetails;
-			checkHotelOffersAPi(hotelDetails)
+			trawexService
+				.checkHotelOffersAPi(hotelDetails)
 				.then(hotelRooms => {
 					let hotelRoom = {
 						boardBasis: hotelRooms[0].boardBasis,
@@ -182,9 +97,20 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					};
 					delete hotelDetails.hotelId;
 					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
-					reValidateHotelAPi(mergedData).then(validatedData => {
-						resolve(true);
-					});
+					hotel.moreDetails = mergedData;
+					selectedHotels.push(hotel);
+					request = {
+						...request,
+						selectedHotels,
+					};
+					trawexService
+						.reValidateHotelAPi(mergedData)
+						.then(validatedData => {
+							resolve(true);
+						})
+						.catch(err => {
+							reject(false);
+						});
 				})
 				.catch(error => {
 					reject(false);
@@ -356,7 +282,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 		})
 		.catch(error => {
-			onUserError('Offers is not valid');
+			onUserError('There is changes in prices, Please choose your flights again ');
 		});
 };
 
