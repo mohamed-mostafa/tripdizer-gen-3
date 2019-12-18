@@ -1,15 +1,17 @@
+import { first } from 'rxjs/operators';
 import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component, ViewChild, DoCheck } from '@angular/core';
+import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
 	templateUrl: './tab-flights.component.html',
 	styleUrls: ['./tab-flights.component.scss'],
 })
-export class TabFlightsComponent implements DoCheck {
+export class TabFlightsComponent implements DoCheck, OnDestroy {
 
 	@ViewChild('owlElement') owlElement: OwlCarousel;
 
@@ -19,23 +21,43 @@ export class TabFlightsComponent implements DoCheck {
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
 	selectedSlide = 1;
+	afterReloadSlideIndex: number;
+	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
-		requestService.setIsFlightsTabVisited(true);
-		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
+
+		this.subscriptions.add(requestService.isFlightsTabVisited.pipe(first())
+			.subscribe(isFlightsTabVisitedState => {
+
+				if (isFlightsTabVisitedState === true) {
+					this.flightOffers = service.cachedTabsData.flightOffers;
+					this.flightOffers.forEach(flightOffer => {
+						if (flightOffer.selected) {
+							this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
+							setTimeout(() => {
+								this.goToSlide(this.flightOffers.indexOf(flightOffer));
+							}, 0);
+						}
+					})
+				} else {
+					requestService.setIsFlightsTabVisited(true);
+					requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
+
+					service.getFlightOffers().subscribe(flightOffers => {
+						if (flightOffers) {
+							this.flightOffers = flightOffers;
+							this.flightOffers[0].selected = true;
+							this.selectedFlightOffers.push(this.flightOffers[0]);
+						}
+					});
+				}
+
+			})
+		);
 
 		service.getSelectedCities().forEach(city => {
 			const cityLatLong = city.coordinates.split(',');
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
-		});
-
-
-		service.getFlightOffers().subscribe(flightOffers => {
-			if (flightOffers) {
-				this.flightOffers = flightOffers;
-				this.flightOffers[0].selected = true;
-				this.selectedFlightOffers.push(this.flightOffers[0]);
-			}
 		});
 
 		this.setSliderOptions();
@@ -54,6 +76,7 @@ export class TabFlightsComponent implements DoCheck {
 	}
 
 	next(): void {
+		this.service.setFlightsOffersInCache(this.flightOffers);
 		this.service.setSelectedFlightOffers(this.selectedFlightOffers);
 		this.service.setCurrentTabIndex(2);
 	}
@@ -99,5 +122,9 @@ export class TabFlightsComponent implements DoCheck {
 		if (this.owlElement && this.owlElement.$owlChild) {
 			this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
 		}
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
 	}
 }

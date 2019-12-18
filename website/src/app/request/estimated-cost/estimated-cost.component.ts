@@ -27,14 +27,10 @@ export class EstimatedCostComponent {
 		private route: ActivatedRoute
 	) {
 		const tabIndexParam = this.route.snapshot.paramMap.get('tabIndex');
-		console.log(tabIndexParam);
 		this.selectedTab = this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
-        console.log(this.tabIndex);
 
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = this.tabIndex || n || 0;
-			console.log(this.selectedTab);
-			console.log(n);
 		});
 
 		this.isCitiesTabVisited = requestService.isCitiesTabVisited;

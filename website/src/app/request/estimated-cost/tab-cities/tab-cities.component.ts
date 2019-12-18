@@ -34,7 +34,6 @@ export class TabCitiesComponent implements OnDestroy {
 
 		this.subscriptions.add(requestService.isCitiesTabVisited.pipe(first())
 			.subscribe(isCitiesTabVisitedState => {
-				console.log('isCitiesTabVisitedState', isCitiesTabVisitedState);
 
 				if (isCitiesTabVisitedState === true) {
 					this.cities = service.cachedTabsData.cities;
@@ -44,9 +43,7 @@ export class TabCitiesComponent implements OnDestroy {
 						if (city.select) { this.selectedCities.push(city); }
 					});
 					this.loadedData = true;
-					console.log('cache cities', this.cities);
 				} else {
-					console.log('cities', this.cities);
 					service.getCities().subscribe(res => {
 						const numberOfNights = this.service.getNumberOfNights();
 						const maxNumberOfCities = Math.ceil(numberOfNights / 1);

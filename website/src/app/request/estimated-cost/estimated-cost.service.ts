@@ -62,7 +62,6 @@ export class EstimatedCostService implements OnDestroy {
 	) {
 
 		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
-		console.log('init estimated service', this.cachedTabsData);
 
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
@@ -129,7 +128,6 @@ export class EstimatedCostService implements OnDestroy {
     
     setCitiesInCache(cities) {
         this.cachedTabsData.cities = cities;
-        console.log(this.cachedTabsData);
     }
 
 	getNumberOfNights(): number {
@@ -167,12 +165,9 @@ export class EstimatedCostService implements OnDestroy {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(returnedFlightOffers => {
+			tap(() => {
 				this.setIsLoading(false, '');
 				this.startSessionTimer();
-				console.log(returnedFlightOffers);
-				this.cachedTabsData.flightOffers = returnedFlightOffers;
-				console.log(this.cachedTabsData);
 			},
 				error => {
 					console.error(JSON.stringify(error));
@@ -180,7 +175,11 @@ export class EstimatedCostService implements OnDestroy {
 				}
 			)
 		);
-	}
+    }
+    
+    setFlightsOffersInCache(flightsOffers) {
+        this.cachedTabsData.flightOffers = flightsOffers;
+    }
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.selectedFlightOffers.next(flightOffers);
@@ -231,9 +230,7 @@ export class EstimatedCostService implements OnDestroy {
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
 			tap(returnedAccommodation => {
 				this.setIsLoading(false, '');
-				console.log(returnedAccommodation);
 				this.cachedTabsData.accommodation = returnedAccommodation;
-				console.log(this.cachedTabsData);
 			},
 				error => {
 					this.setIsLoading(false, '');
@@ -459,6 +456,5 @@ export class EstimatedCostService implements OnDestroy {
 
 	ngOnDestroy() {
 		this.requestService.setProperty('cachedTabsData', this.cachedTabsData);
-		console.log('destroy estimated service', this.cachedTabsData);
 	}
 }
