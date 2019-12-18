@@ -1,23 +1,26 @@
+import { first, take } from 'rxjs/operators';
 import { SummaryService } from './../../summary/summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
 import { RequestService } from '../../request.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-estimated-cost-cities',
 	templateUrl: './tab-cities.component.html',
 	styleUrls: ['./tab-cities.component.scss'],
 })
-export class TabCitiesComponent {
+export class TabCitiesComponent implements OnDestroy {
 	cities: Array<CityDTO> = [];
 	selectedCities: Array<CityDTO> = [];
 	cityPaths: Array<{ lat: number; lng: number }> = [];
 	snackBar: MatSnackBar;
 	currentStepPath: string;
 	loadedData: boolean;
+	private subscriptions = new Subscription();
 
 	constructor(
 		private service: EstimatedCostService,
@@ -25,36 +28,57 @@ export class TabCitiesComponent {
 		private requestService: RequestService,
 		private route: ActivatedRoute,
 		private router: Router,
-		public summaryService: SummaryService
+		public summaryService: SummaryService,
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
-		this.service.setCurrentTabIndex(0);
-		requestService.setIsCitiesTabVisited(true);
-		this.snackBar = snackBar;
-		service.getCities().subscribe(res => {
-			this.loadedData = true;
-			const numberOfNights = this.service.getNumberOfNights();
-			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
-			let numberOfSelectedCities = 0;
-			if (maxNumberOfCities < res.length) {
-				numberOfSelectedCities = maxNumberOfCities;
-			} else {
-				numberOfSelectedCities = res.length;
-			}
-			for (let b = 0; b < res.length; b++) {
-				this.cities.push(res[b]);
-				res[b].select = false;
-				if (b + 1 <= numberOfSelectedCities) {
-					res[b].select = true;
-					this.selectedCities.push(res[b]);
-					const coordinates = res[b].coordinates.split(', ');
-					this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-				}
-			}
 
-			this.requestService.setIsFlightsTabVisited(false);
-			this.requestService.setIsAccommodationTabVisited(false);
-		});
+		this.subscriptions.add(requestService.isCitiesTabVisited.pipe(first())
+			.subscribe(isCitiesTabVisitedState => {
+				console.log('isCitiesTabVisitedState', isCitiesTabVisitedState);
+
+				if (isCitiesTabVisitedState === true) {
+					this.cities = service.cachedTabsData.cities;
+					this.generateCityPaths(this.cities);
+
+					this.cities.forEach(city => {
+						if (city.select) { this.selectedCities.push(city); }
+					});
+					this.loadedData = true;
+					console.log('cache cities', this.cities);
+				} else {
+					console.log('cities', this.cities);
+					service.getCities().subscribe(res => {
+						const numberOfNights = this.service.getNumberOfNights();
+						const maxNumberOfCities = Math.ceil(numberOfNights / 1);
+						let numberOfSelectedCities = 0;
+						if (maxNumberOfCities < res.length) {
+							numberOfSelectedCities = maxNumberOfCities;
+						} else {
+							numberOfSelectedCities = res.length;
+						}
+						for (let b = 0; b < res.length; b++) {
+							this.cities.push(res[b]);
+							res[b].select = false;
+							if (b + 1 <= numberOfSelectedCities) {
+								res[b].select = true;
+								this.selectedCities.push(res[b]);
+							}
+						}
+
+						this.generateCityPaths(this.cities);
+						this.loadedData = true;
+						this.requestService.setIsFlightsTabVisited(false);
+						this.requestService.setIsAccommodationTabVisited(false);
+					});
+
+					requestService.setIsCitiesTabVisited(true);
+				}
+			})
+		);
+
+		this.service.setCurrentTabIndex(0);
+
+		this.snackBar = snackBar;
 	}
 
 	updateSelectedCities(city) {
@@ -121,12 +145,24 @@ export class TabCitiesComponent {
 		}));
 	}
 
+	generateCityPaths(cities) {
+		cities.forEach(city => {
+			const coordinates = city.coordinates.split(', ');
+			this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
+		});
+	}
+
 	next(): void {
+		this.service.setCitiesInCache(this.cities);
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
 	}
 
 	goBack(): void {
 		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
 	}
 }

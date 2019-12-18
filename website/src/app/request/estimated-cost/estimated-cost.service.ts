@@ -120,15 +120,17 @@ export class EstimatedCostService implements OnDestroy {
 		});
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-			tap(returnedCities => {
+			tap(() => {
 				this.setIsLoading(false, '');
 				this.requestService.isLoading.next({ show: false, message: '' });
-				console.log(returnedCities);
-				this.cachedTabsData.cities = returnedCities;
-				console.log(this.cachedTabsData);
 			})
 		);
-	}
+    }
+    
+    setCitiesInCache(cities) {
+        this.cachedTabsData.cities = cities;
+        console.log(this.cachedTabsData);
+    }
 
 	getNumberOfNights(): number {
 		this.departureDate = this.requestService.getProperty('departureDate') as Moment;
