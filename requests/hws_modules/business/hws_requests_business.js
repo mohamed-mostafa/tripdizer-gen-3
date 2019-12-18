@@ -97,7 +97,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 					};
 					delete hotelDetails.hotelId;
 					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
-					hotel.moreDetails = mergedData;
+					hotel.roomDetails = hotelRooms[0];
 					selectedHotels.push(hotel);
 					request = {
 						...request,
@@ -282,7 +282,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 		})
 		.catch(error => {
-			onUserError('There is changes in prices, Please choose your flights again ');
+			onUserError('The prices or availability has changed, please select other offers');
 		});
 };
 
