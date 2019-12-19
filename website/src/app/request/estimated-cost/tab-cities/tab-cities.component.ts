@@ -41,6 +41,7 @@ export class TabCitiesComponent implements OnDestroy {
 			} else {
 				numberOfSelectedCities = res.length;
 			}
+
 			for (let b = 0; b < res.length; b++) {
 				this.cities.push(res[b]);
 				res[b].select = false;
@@ -53,9 +54,6 @@ export class TabCitiesComponent implements OnDestroy {
 			this.cities.forEach(city => {
 				const coordinates = city.coordinates.split(', ');
 				this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-				if (city.select) {
-					this.selectedCities.push(city);
-				}
 			});
 
 			this.loadedData = true;
