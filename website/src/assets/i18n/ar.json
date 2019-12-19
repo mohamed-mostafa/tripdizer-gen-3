@@ -278,7 +278,8 @@
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
 				"proceed_to_payment": "المتابعة إلى الدفع"
-			}
+			},
+			"prices_availability_in_hotels": "لقد تغيرت الأسعار أو توفرها ، يرجى اختيار عروض أخرى"
 		},
 		"form_layout": {
 			"next_label": "التالي",
