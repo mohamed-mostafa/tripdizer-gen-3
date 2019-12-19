@@ -32,46 +32,36 @@ export class TabCitiesComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		this.subscriptions.add(requestService.isCitiesTabVisited.pipe(first())
-			.subscribe(isCitiesTabVisitedState => {
+		requestService.setIsCitiesTabVisited(true);
 
-				if (isCitiesTabVisitedState === true) {
-					this.cities = service.cachedTabsData.cities;
-					this.generateCityPaths(this.cities);
-
-					this.cities.forEach(city => {
-						if (city.select) { this.selectedCities.push(city); }
-					});
-					this.loadedData = true;
-				} else {
-					service.getCities().subscribe(res => {
-						const numberOfNights = this.service.getNumberOfNights();
-						const maxNumberOfCities = Math.ceil(numberOfNights / 1);
-						let numberOfSelectedCities = 0;
-						if (maxNumberOfCities < res.length) {
-							numberOfSelectedCities = maxNumberOfCities;
-						} else {
-							numberOfSelectedCities = res.length;
-						}
-						for (let b = 0; b < res.length; b++) {
-							this.cities.push(res[b]);
-							res[b].select = false;
-							if (b + 1 <= numberOfSelectedCities) {
-								res[b].select = true;
-								this.selectedCities.push(res[b]);
-							}
-						}
-
-						this.generateCityPaths(this.cities);
-						this.loadedData = true;
-						this.requestService.setIsFlightsTabVisited(false);
-						this.requestService.setIsAccommodationTabVisited(false);
-					});
-
-					requestService.setIsCitiesTabVisited(true);
+		service.getCities().subscribe(res => {
+			const numberOfNights = this.service.getNumberOfNights();
+			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
+			let numberOfSelectedCities = 0;
+			if (maxNumberOfCities < res.length) {
+				numberOfSelectedCities = maxNumberOfCities;
+			} else {
+				numberOfSelectedCities = res.length;
+			}
+			for (let b = 0; b < res.length; b++) {
+				this.cities.push(res[b]);
+				res[b].select = false;
+				if (b + 1 <= numberOfSelectedCities) {
+					res[b].select = true;
+					this.selectedCities.push(res[b]);
 				}
-			})
-		);
+			}
+
+			this.cities.forEach(city => {
+				const coordinates = city.coordinates.split(', ');
+				this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
+				if (city.select) { this.selectedCities.push(city); }
+			});
+
+			this.loadedData = true;
+			this.requestService.setIsFlightsTabVisited(false);
+			this.requestService.setIsAccommodationTabVisited(false);
+		});
 
 		this.service.setCurrentTabIndex(0);
 
@@ -125,7 +115,8 @@ export class TabCitiesComponent implements OnDestroy {
 				}
 			}
 		}
-
+		this.service.updateFlightsOffersInCache(null);
+		this.service.updateAccommodationInCache(null);
 		this.requestService.setIsFlightsTabVisited(false);
 		this.requestService.setIsAccommodationTabVisited(false);
 	}
@@ -142,15 +133,8 @@ export class TabCitiesComponent implements OnDestroy {
 		}));
 	}
 
-	generateCityPaths(cities) {
-		cities.forEach(city => {
-			const coordinates = city.coordinates.split(', ');
-			this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-		});
-	}
-
 	next(): void {
-		this.service.setCitiesInCache(this.cities);
+		this.service.updateCitiesInCache(this.cities);
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
 	}
@@ -160,6 +144,6 @@ export class TabCitiesComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-        this.subscriptions.unsubscribe();
+		this.subscriptions.unsubscribe();
 	}
 }

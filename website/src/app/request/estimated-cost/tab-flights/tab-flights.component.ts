@@ -73,7 +73,7 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 	}
 
 	next(): void {
-		this.service.setFlightsOffersInCache(this.flightOffers);
+		this.service.updateFlightsOffersInCache(this.flightOffers);
 		this.service.setSelectedFlightOffers(this.selectedFlightOffers);
 		this.service.setCurrentTabIndex(2);
 	}

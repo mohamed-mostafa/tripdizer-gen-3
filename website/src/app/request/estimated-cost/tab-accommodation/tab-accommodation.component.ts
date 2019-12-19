@@ -14,7 +14,7 @@ export class TabAccommodationComponent {
 
 	@ViewChild('owlElement') owlElement: OwlCarousel;
 
-    accommodationOffers: Array<Accommodation>;
+	accommodationOffers: Array<Accommodation>;
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
@@ -29,8 +29,11 @@ export class TabAccommodationComponent {
 		private router: Router,
 		private route: ActivatedRoute,
 	) {
+
 		this.currentStepPath = this.route.routeConfig.path;
+
 		requestService.setIsAccommodationTabVisited(true);
+
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
 			this.accommodationOffers = res;
@@ -93,7 +96,8 @@ export class TabAccommodationComponent {
 
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
-		this.router.navigate(['/request', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.service.updateAccommodationInCache(this.accommodations);
+		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
 	back(): void {
