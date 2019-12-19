@@ -32,8 +32,6 @@ export class TabCitiesComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		requestService.setIsCitiesTabVisited(true);
-
 		service.getCities().subscribe(res => {
 			const numberOfNights = this.service.getNumberOfNights();
 			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
@@ -61,8 +59,6 @@ export class TabCitiesComponent implements OnDestroy {
 			});
 
 			this.loadedData = true;
-			this.requestService.setIsFlightsTabVisited(false);
-			this.requestService.setIsAccommodationTabVisited(false);
 		});
 
 		this.snackBar = snackBar;
@@ -117,8 +113,6 @@ export class TabCitiesComponent implements OnDestroy {
 		}
 		this.service.updateFlightsOffersInCache(null);
 		this.service.updateAccommodationInCache(null);
-		this.requestService.setIsFlightsTabVisited(false);
-		this.requestService.setIsAccommodationTabVisited(false);
 	}
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {

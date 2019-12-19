@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
 	styleUrls: ['./tab-flights.component.scss'],
 })
 export class TabFlightsComponent implements DoCheck, OnDestroy {
-
 	@ViewChild('owlElement') owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
@@ -25,8 +24,6 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
-
-		requestService.setIsFlightsTabVisited(true);
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
 		service.getFlightOffers().subscribe(flightOffers => {
@@ -92,8 +89,8 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 					items: 1,
 					margin: 10,
 					slideBy: 1,
-				}
-			}
+				},
+			},
 		};
 	}
 

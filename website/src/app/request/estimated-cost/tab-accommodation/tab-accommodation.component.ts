@@ -11,7 +11,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
-
 	@ViewChild('owlElement') owlElement: OwlCarousel;
 
 	accommodationOffers: Array<Accommodation>;
@@ -27,12 +26,9 @@ export class TabAccommodationComponent {
 		private service: EstimatedCostService,
 		public requestService: RequestService,
 		private router: Router,
-		private route: ActivatedRoute,
+		private route: ActivatedRoute
 	) {
-
 		this.currentStepPath = this.route.routeConfig.path;
-
-		requestService.setIsAccommodationTabVisited(true);
 
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
@@ -83,12 +79,12 @@ export class TabAccommodationComponent {
 				600: {
 					items: 2,
 					margin: 10,
-					slideBy: 2
+					slideBy: 2,
 				},
 				1000: {
 					items: 3,
 					margin: 10,
-					slideBy: 3
+					slideBy: 3,
 				},
 			},
 		};
