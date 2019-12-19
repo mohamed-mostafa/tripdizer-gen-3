@@ -28,7 +28,7 @@ export class TabCitiesComponent implements OnDestroy {
 		private requestService: RequestService,
 		private route: ActivatedRoute,
 		private router: Router,
-		public summaryService: SummaryService,
+		public summaryService: SummaryService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
@@ -55,15 +55,15 @@ export class TabCitiesComponent implements OnDestroy {
 			this.cities.forEach(city => {
 				const coordinates = city.coordinates.split(', ');
 				this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-				if (city.select) { this.selectedCities.push(city); }
+				if (city.select) {
+					this.selectedCities.push(city);
+				}
 			});
 
 			this.loadedData = true;
 			this.requestService.setIsFlightsTabVisited(false);
 			this.requestService.setIsAccommodationTabVisited(false);
 		});
-
-		this.service.setCurrentTabIndex(0);
 
 		this.snackBar = snackBar;
 	}

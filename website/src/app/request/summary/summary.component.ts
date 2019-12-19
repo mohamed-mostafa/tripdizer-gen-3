@@ -44,14 +44,13 @@ export class SummaryComponent implements OnDestroy {
 	}
 
 	goBack() {
-		this.estimatedCostService.setCurrentTabIndex(2);
 		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-		
+		setTimeout(() => {
+			this.estimatedCostService.setCurrentTabIndex(2);
+		}, 0);
 	}
 
 	ngOnDestroy() {
 		this.subscriptions.unsubscribe();
 	}
-
-
 }

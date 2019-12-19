@@ -52,9 +52,9 @@ export class EstimatedCostService {
 	finishGetAttractions = new Subject<boolean>();
 
 	cachedTabsData: {
-		cities?: Array<CityDTO>,
-		flightOffers?: Array<FlightOffer>,
-		accommodation?: Array<Accommodation>
+		cities?: Array<CityDTO>;
+		flightOffers?: Array<FlightOffer>;
+		accommodation?: Array<Accommodation>;
 	};
 
 	constructor(
@@ -64,7 +64,7 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
-
+		this.setCurrentTabIndex(0);
 		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
 
 		this.selectedCities.subscribe(citiesSelected => {
@@ -117,11 +117,8 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-
 		if (this.cachedTabsData.cities && this.cachedTabsData.cities.length) {
-
 			return of(this.cachedTabsData.cities);
-
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
@@ -129,7 +126,7 @@ export class EstimatedCostService {
 			});
 			const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 			return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-				tap((returnedCities) => {
+				tap(returnedCities => {
 					this.setIsLoading(false, '');
 					this.requestService.isLoading.next({ show: false, message: '' });
 					this.updateCitiesInCache(returnedCities);
@@ -162,13 +159,9 @@ export class EstimatedCostService {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-
 		if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
-
 			return of(this.cachedTabsData.flightOffers);
-
 		} else {
-
 			if (this.isFlightsTabVisited) {
 				this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 			}
@@ -188,13 +181,14 @@ export class EstimatedCostService {
 			};
 
 			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-				tap((returnedFlightOffers) => {
-					if (this.isFlightsTabVisited) {
-						this.setIsLoading(false, '');
-					}
-					this.startSessionTimer();
-					this.updateFlightsOffersInCache(returnedFlightOffers);
-				},
+				tap(
+					returnedFlightOffers => {
+						if (this.isFlightsTabVisited) {
+							this.setIsLoading(false, '');
+						}
+						this.startSessionTimer();
+						this.updateFlightsOffersInCache(returnedFlightOffers);
+					},
 					error => {
 						if (this.isFlightsTabVisited) {
 							this.setIsLoading(false, '');
@@ -203,7 +197,6 @@ export class EstimatedCostService {
 				)
 			);
 		}
-
 	}
 
 	updateFlightsOffersInCache(flightsOffers) {
@@ -224,13 +217,9 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-
 		if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-
 			return of(this.cachedTabsData.accommodation);
-
 		} else {
-
 			if (this.isAccommodationTabVisited) {
 				this.setIsLoading(
 					true,
@@ -267,12 +256,13 @@ export class EstimatedCostService {
 				desiredCostPerPerson: accommodationDesiredCostPerPerson,
 			};
 			return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-				tap((returnedAccommodation) => {
-					if (this.isAccommodationTabVisited) {
-						this.setIsLoading(false, '');
-					}
-					this.updateAccommodationInCache(returnedAccommodation);
-				},
+				tap(
+					returnedAccommodation => {
+						if (this.isAccommodationTabVisited) {
+							this.setIsLoading(false, '');
+						}
+						this.updateAccommodationInCache(returnedAccommodation);
+					},
 					error => {
 						if (this.isAccommodationTabVisited) {
 							this.setIsLoading(false, '');
@@ -450,9 +440,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_time: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-							'DD/MM HH:mm'
-							// tslint:disable-next-line: indent
-						)
+								'DD/MM HH:mm'
+								// tslint:disable-next-line: indent
+						  )
 						: 'unknown time',
 					carrier_logo: lastStationFlightLeg ? lastStationFlightLeg.segments[0].carrier.squareLogo : null,
 
@@ -467,9 +457,9 @@ export class EstimatedCostService {
 						: 'Unknown time',
 					arrive_hour: lastStationFlightLeg
 						? moment(lastStationFlightLeg.segments[lastStationFlightLeg.segments.length - 1].arrival).format(
-							'HH:mm'
-							// tslint:disable-next-line: indent
-						)
+								'HH:mm'
+								// tslint:disable-next-line: indent
+						  )
 						: 'unknown time',
 
 					arrive_code: lastStationFlightLeg ? lastStationFlightLeg.destination.iataCode : null,
