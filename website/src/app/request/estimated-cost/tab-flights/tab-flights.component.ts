@@ -26,34 +26,31 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 
-		this.subscriptions.add(requestService.isFlightsTabVisited.pipe(first())
-			.subscribe(isFlightsTabVisitedState => {
+		requestService.setIsFlightsTabVisited(true);
+		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
-				if (isFlightsTabVisitedState === true) {
-					this.flightOffers = service.cachedTabsData.flightOffers;
-					this.flightOffers.forEach(flightOffer => {
-						if (flightOffer.selected) {
-							this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
-							setTimeout(() => {
-								this.goToSlide(this.flightOffers.indexOf(flightOffer));
-							}, 0);
-						}
-					})
-				} else {
-					requestService.setIsFlightsTabVisited(true);
-					requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
+		service.getFlightOffers().subscribe(flightOffers => {
+			if (flightOffers) {
+				this.flightOffers = flightOffers;
 
-					service.getFlightOffers().subscribe(flightOffers => {
-						if (flightOffers) {
-							this.flightOffers = flightOffers;
-							this.flightOffers[0].selected = true;
-							this.selectedFlightOffers.push(this.flightOffers[0]);
-						}
-					});
-				}
+				let hasSelectedFlightOffer = false;
 
-			})
-		);
+				this.flightOffers.forEach(flightOffer => {
+					if (flightOffer.selected) {
+						hasSelectedFlightOffer = true;
+						this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
+						setTimeout(() => {
+							this.goToSlide(this.flightOffers.indexOf(flightOffer));
+						}, 0);
+					}
+
+					if (!hasSelectedFlightOffer) {
+						this.flightOffers[0].selected = true;
+						this.selectedFlightOffers.push(this.flightOffers[0]);
+					}
+				});
+			}
+		});
 
 		service.getSelectedCities().forEach(city => {
 			const cityLatLong = city.coordinates.split(',');

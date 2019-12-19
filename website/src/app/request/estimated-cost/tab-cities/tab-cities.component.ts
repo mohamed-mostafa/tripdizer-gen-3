@@ -160,6 +160,6 @@ export class TabCitiesComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
+        this.subscriptions.unsubscribe();
 	}
 }

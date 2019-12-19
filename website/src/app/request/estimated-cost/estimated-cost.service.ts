@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -128,11 +128,13 @@ export class EstimatedCostService implements OnDestroy {
 				this.requestService.isLoading.next({ show: false, message: '' });
 			})
 		);
-    }
-    
-    setCitiesInCache(cities) {
-        this.cachedTabsData.cities = cities;
-    }
+	}
+
+	setCitiesInCache(cities) {
+		if (this.cachedTabsData) {
+			this.cachedTabsData.cities = cities;
+		}
+	}
 
 	getNumberOfNights(): number {
 		this.departureDate = this.requestService.getProperty('departureDate') as Moment;
@@ -153,43 +155,53 @@ export class EstimatedCostService implements OnDestroy {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		if (this.isFlightsTabVisited) {
-			this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
-		}
-		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
-			countryIso: city.countryIsoCode,
-			cityIata: city.iataCode,
-			numberOfNights: city.numberOfNights,
-		}));
-		const flightRequest: FlightRequest = {
-			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-			departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
-			citiesSequence,
-			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
-			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
-			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
-		};
 
-		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(
-				() => {
+		if (this.cachedTabsData && this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
+
+			return of(this.cachedTabsData.flightOffers);
+
+		} else {
+
+			if (this.isFlightsTabVisited) {
+				this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+			}
+
+			const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+				countryIso: city.countryIsoCode,
+				cityIata: city.iataCode,
+				numberOfNights: city.numberOfNights,
+			}));
+			const flightRequest: FlightRequest = {
+				origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
+				departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
+				citiesSequence,
+				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+				numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			};
+
+			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
+				tap((returnedFlightOffers) => {
 					if (this.isFlightsTabVisited) {
 						this.setIsLoading(false, '');
 					}
 					this.startSessionTimer();
+					this.setFlightsOffersInCache(returnedFlightOffers);
 				},
-				error => {
-					if (this.isFlightsTabVisited) {
-						this.setIsLoading(false, '');
+					error => {
+						if (this.isFlightsTabVisited) {
+							this.setIsLoading(false, '');
+						}
 					}
-				}
-			)
-		);
-    }
-    
-    setFlightsOffersInCache(flightsOffers) {
-        this.cachedTabsData.flightOffers = flightsOffers;
-    }
+				)
+			);
+		}
+
+	}
+
+	setFlightsOffersInCache(flightsOffers) {
+		this.cachedTabsData.flightOffers = flightsOffers;
+	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.selectedFlightOffers.next(flightOffers);

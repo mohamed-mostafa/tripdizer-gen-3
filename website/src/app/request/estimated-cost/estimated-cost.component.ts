@@ -47,6 +47,6 @@ export class EstimatedCostComponent {
 	}
 
 	tabChange(e) {
-		this.service.setCurrentTabIndex(e);
+        this.service.setCurrentTabIndex(e);
 	}
 }
