@@ -4,16 +4,14 @@ import { MatSidenav } from '@angular/material/sidenav';
 @Component({
 	selector: 'c-app-user',
 	templateUrl: './user.component.html',
-	styleUrls: ['./user.component.scss']
+	styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
+	@ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
 
-	@ViewChild('sidenav') sidenav: MatSidenav;
+	constructor() {}
 
-	constructor() { }
-
-	ngOnInit() {
-	}
+	ngOnInit() {}
 
 	closeNav() {
 		this.sidenav.close();
@@ -22,5 +20,4 @@ export class UserComponent implements OnInit {
 	openNav() {
 		this.sidenav.open();
 	}
-
 }
