@@ -1,1 +1,1 @@
-<iframe [src]="getSafeIFrameUrl()" class="frame"></iframe>
+<iframe *ngIf="paymentKey" [src]="getSafeIFrameUrl()" class="frame"></iframe>

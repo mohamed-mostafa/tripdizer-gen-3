@@ -7,7 +7,7 @@ const pubSubPublisher = require('./PubSubPublishers');
 // Imports the Google Cloud client library
 const { PubSub } = require('@google-cloud/pubsub');
 // Creates a client
-const projectId = process.env.PROJECT_NAME || 'tripdizer-dev';
+const projectId = process.env.PROJECT_ID || 'tripdizer-dev';
 const keyFileName = './tripdizer-service-account.json';
 process.env.GOOGLE_APPLICATION_CREDENTIALS = keyFileName;
 
@@ -108,7 +108,7 @@ var createBookFlightRequestFromFlightOffer = function (bookingData) {
     fareType: bookingData.flightOffer.fareType,
     adultsPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "adult"),
     childrenPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "kid"),
-    infantPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "infant")
+    infantsPNRInfoList: bookingData.pnrInfoList.choices.filter(pnrInfo => pnrInfo.ageGroup == "infant")
   }
 }
 

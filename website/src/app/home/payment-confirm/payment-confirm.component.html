@@ -9,6 +9,8 @@
         {{ 'payment_confirm.booking_confirmed' | translate }}</p>
       <p [class.title-font]="('dir' | translate) === 'ltr'">
         {{ 'payment_confirm.confirmation_email_sending' | translate }}</p>
+      <!-- <p [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.payment_reference' | translate }}</p> -->
     </div>
 
     <div *ngIf="success === 'false'" class="col-12 text-center fail-response mt-4">
@@ -16,20 +18,25 @@
 
       <h3 class="font-weight-bold mb-4 title-font">{{ 'payment_confirm.process_failed' | translate }}</h3>
 
-      <p *ngIf="responseCode === '1'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_1' | translate }}
+      <p *ngIf="responseCode === '1'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.message_1' | translate }}
       </p>
 
-      <p *ngIf="responseCode === '2'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_2' | translate }}</p>
+      <p *ngIf="responseCode === '2'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.message_2' | translate }}</p>
 
-      <p *ngIf="responseCode === '4'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_4' | translate }}</p>
+      <p *ngIf="responseCode === '4'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.message_4' | translate }}</p>
 
-      <p *ngIf="responseCode === '5'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_5' | translate }}</p>
+      <p *ngIf="responseCode === '5'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.message_5' | translate }}</p>
 
-      <p *ngIf="responseCode === '6'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">{{ 'payment_confirm.message_6' | translate }}</p>
+      <p *ngIf="responseCode === '6'" class="mb-0" [class.title-font]="('dir' | translate) === 'ltr'">
+        {{ 'payment_confirm.message_6' | translate }}</p>
     </div>
 
     <div class="col-12 text-center">
-      <button class="btn btn-primary custom-bs btn-rounded text-uppercase mt-4">
+      <button class="btn btn-primary custom-bs btn-rounded text-uppercase mt-4" routerLink="/">
         Go Home
       </button>
     </div>

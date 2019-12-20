@@ -174,6 +174,17 @@
 				"flights_tab_message": "البحث عن أفضل عروض رحلات الطيران ...",
 				"accommodation_tab_message": "البحث عن أفضل الفنادق ..."
 			},
+			"session_dialog": {
+				"remaining": {
+					"title": "لديك {{minutes}} دقيقة فقط لاستكمال الدفع",
+					"description": "الاسعار تتغير باستمرار نتيجة للاتاحة و الطلب. نريد ان نضمن لك افضل سعر دائماً."
+				},
+				"timeout": {
+					"title": "تم انتهاء الجلسة",
+					"description": "الاسعار تتغير باستمرار نتيجة للاتاحة و الطلب. نريد ان نضمن لك افضل سعر دائماً."
+				},
+				"buttonsLabel": { "ok": "حسناً" }
+			},
 			"tab_cities": {
 				"title": "المدن",
 				"view_choose": "عرض واختيار المدن",
@@ -236,7 +247,7 @@
 				"arrival": "الوصول",
 				"depart": "المغادرة",
 				"nights": "ليالى",
-				"payment_details": "تفاصيل الدفع",
+				"payment_details": "ملخص الرحلة",
 				"flights": "رحلات الطيران",
 				"nights_in": "رحلات فى",
 				"hotels": "الفنادق",
@@ -246,7 +257,8 @@
 					"adult": "البالغ",
 					"kid": "الطفل",
 					"infant": "الرضيع",
-					"hint": "البيانات يجب ان تطابق الجواز"
+					"hint": "البيانات يجب ان تطابق الجواز",
+					"egyptian": "مصرى"
 				},
 				"numbers": {
 					"1": "الاول",
@@ -259,11 +271,13 @@
 					"8": "الثامن",
 					"9": "التاسع",
 					"10": "العاشر"
-				}
+				},
+				"request_call": "طلب مكالمة"
 			},
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
-				"payment": "الدفع"
+				"payment": "الدفع",
+				"proceed_to_payment": "المتابعة إلى الدفع"
 			}
 		},
 		"form_layout": {
@@ -474,22 +488,9 @@
 			"passport_expiry": "تاريخ الإنتهاء",
 			"passport_issue_country": "مصدر الجواز",
 			"titles": {
-				"adult": [
-					"LORD",
-					"MISS",
-					"MR",
-					"MRS",
-					"SIR"
-				],
-				"kid": [
-					"MSTR",
-					"MISS"
-				],
-				"infant": [
-					"MISS",
-					"MSTR",
-					"INF"
-				]
+				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
+				"kid": ["MSTR", "MISS"],
+				"infant": ["MISS", "MSTR", "INF"]
 			}
 		},
 		"user_plans": {
@@ -498,8 +499,9 @@
 	},
 	"payment_confirm": {
 		"confirmation": "تأكيد العملية",
-		"booking_confirmed": "تم تأكيد عملية حجزك",
-		"confirmation_email_sending": "ستصلك رسالة على بريدك الإلكترونى فى أقرب وقت لتأكيد الحجز",
+		"booking_confirmed": "تم قبول عملية الدفع.",
+		"confirmation_email_sending": "سيصلك تأكيد الحجز على بريدك الإلكترونى.",
+		"payment_reference": "رقم عملية الدفع هو",
 		"process_failed": "فشلت عملية الحجز",
 		"message_1": "حدث خطأ أثناء تنفيذ عملية الحجز",
 		"message_2": "يرجى التواصل مع البنك الذى استلمت منه بطاقة الإئتمان",

@@ -16,12 +16,13 @@ const TRAWEX_HOTELS_BOOK = "/hotel_book";
 const TRAWEX_USERNAME = process.env.TRAWEX_USERNAME || "TripdizerAPITest";
 const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
 const TRAWEX_SOURCE_IP_ADDRESS =
-  process.env.TRAWEX_SOURCE_IP_ADDRESS || "34.90.113.143";
+  process.env.TRAWEX_HOTELS_SOURCE_IP_ADDRESS || "35.242.174.95";
 const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
 const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
-  process.env.TRAWEX_PROXY_ENDPOINT || "http://34.90.113.143:3128";
+  process.env.TRAWEX_HOTELS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
+let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
 const config = {
   user_id: TRAWEX_USERNAME,
   user_password: TRAWEX_PASSWORD,
@@ -98,29 +99,35 @@ exports.searchHotels = (language, hotelSearchRequest) => {
 
 exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
   return new Promise((resolve, reject) => {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SPECIFIC_CONTENT;
+    var qs = {
+      ...config,
+      sessionId: sessionId,
+      productId: productId,
+      hotelId: hotelId
+    };
     httpRequest.get(
       {
-        url:
-          TRAWEX_BASE_ENDPOINT +
-          TRAWEX_HOTELS_ROOT +
-          TRAWEX_HOTELS_SPECIFIC_CONTENT,
+        url: url,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
-        qs: {
-          ...config,
-          sessionId: sessionId,
-          productId: productId,
-          hotelId: hotelId
-        }
+        gzip: true,
+        qs: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve(data.hotels.length ? data.hotels[0] : {});
         }
       }
@@ -130,33 +137,43 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
 
 exports.getHotelOffers = (language, hotelOffersRequest) => {
   return new Promise((resolve, reject) => {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES;
+    var qs = {
+      ...config,
+      TraceId: hotelOffersRequest.traceId,
+      propertyid: hotelOffersRequest.propertyId,
+      productId: hotelOffersRequest.productId,
+      TokenId: hotelOffersRequest.tokenId,
+      resultindex: hotelOffersRequest.resultIndex,
+      sessionId: hotelOffersRequest.sessionId,
+      hotelcode: hotelOffersRequest.hotelId
+    };
     httpRequest.post(
       {
-        url:
-          TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES,
+        url: url,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
-        body: {
-          ...config,
-          TraceId: hotelOffersRequest.traceId,
-          propertyid: hotelOffersRequest.propertyId,
-          productId: hotelOffersRequest.productId,
-          TokenId: hotelOffersRequest.tokenId,
-          resultindex: hotelOffersRequest.resultIndex,
-          sessionId: hotelOffersRequest.sessionId,
-          hotelcode: hotelOffersRequest.hotelId
-        }
+        gzip: true,
+        body: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject(reject([data.errors.message]))
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve(data.result.roomRate.perBookingRates.map(mapHotelOffer));
         }
       }
@@ -166,42 +183,52 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
 
 exports.validateHotelOffer = (language, hotelOfferRequest) => {
   return new Promise((resolve, reject) => {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES;
+    var qs = {
+      ...config,
+      TraceId: hotelOfferRequest.traceId,
+      TokenId: hotelOfferRequest.tokenId,
+      allocationDetails: hotelOfferRequest.allocationDetails,
+      boardCode: hotelOfferRequest.boardBasis,
+      booking_token: [hotelOfferRequest.bookingToken],
+      hotel_name: hotelOfferRequest.hotelName,
+      hotelcode: hotelOfferRequest.hotelCode,
+      infosource: hotelOfferRequest.infoSource,
+      meal_code: [hotelOfferRequest.mealCode],
+      productId: hotelOfferRequest.productId,
+      propertyid: hotelOfferRequest.propertyId,
+      rate_basis_id: hotelOfferRequest.rateBasisIds,
+      resultindex: hotelOfferRequest.resultIndex,
+      roomType_runno: hotelOfferRequest.roomTypeRunnos,
+      room_code: hotelOfferRequest.roomCodes,
+      sessionId: hotelOfferRequest.sessionId
+    };
     httpRequest.post(
       {
-        url:
-          TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES,
+        url: url,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
-        body: {
-          ...config,
-          TraceId: hotelOfferRequest.traceId,
-          TokenId: hotelOfferRequest.tokenId,
-          allocationDetails: hotelOfferRequest.allocationDetails,
-          boardCode: hotelOfferRequest.boardBasis,
-          booking_token: [hotelOfferRequest.bookingToken],
-          hotel_name: hotelOfferRequest.hotelName,
-          hotelcode: hotelOfferRequest.hotelCode,
-          infosource: hotelOfferRequest.infoSource,
-          meal_code: [hotelOfferRequest.mealCode],
-          productId: hotelOfferRequest.productId,
-          propertyid: hotelOfferRequest.propertyId,
-          rate_basis_id: hotelOfferRequest.rateBasisIds,
-          resultindex: hotelOfferRequest.resultIndex,
-          roomType_runno: hotelOfferRequest.roomTypeRunnos,
-          room_code: hotelOfferRequest.roomCodes,
-          sessionId: hotelOfferRequest.sessionId
-        }
+        gzip: true,
+        body: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject(reject([data.errors.message]))
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve({ preBookingToken: data.PreBookingToken });
         }
       }
@@ -265,31 +292,40 @@ const searchHotelsAPI = (
 ) => {
   return new Promise((resolve, reject) => {
     const request = { city, country, checkin, checkout };
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH;
+    var qs = {
+      ...config,
+      city_name: city,
+      country_name: country,
+      room_count: room_count,
+      adult: adult,
+      child: child,
+      child_age: child_age,
+      checkin: checkin,
+      checkout: checkout,
+      client_nationality: nationality,
+      requiredCurrency: currency
+    };
     httpRequest.get(
       {
-        url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH,
+        url: url,
         json: true,
+        gzip: true,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
-        body: {
-          ...config,
-          city_name: city,
-          country_name: country,
-          room_count: room_count,
-          adult: adult,
-          child: child,
-          child_age: child_age,
-          checkin: checkin,
-          checkout: checkout,
-          client_nationality: nationality,
-          requiredCurrency: currency
-        }
+        body: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(reject)}`);
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
           if (data.status.moreResults === "true") {
@@ -307,6 +343,7 @@ const searchHotelsAPI = (
               resolve(mapItineraryDetails(request, data));
             });
           } else {
+            if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
             resolve(mapItineraryDetails(request, data));
           }
         }
@@ -317,23 +354,32 @@ const searchHotelsAPI = (
 
 const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
   return new Promise((resolve, reject) => {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE;
+    var qs = {
+      ...config,
+      sessionId: sessionId,
+      nextToken: nextToken
+    };
     httpRequest.get(
       {
-        url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE,
+        url: url,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
-        qs: {
-          ...config,
-          sessionId: sessionId,
-          nextToken: nextToken
-        }
+        gzip: true,
+        qs: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
           if (data.status.moreResults === "true") {
@@ -350,6 +396,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
               reject(err);
             });
           } else {
+            if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
             resolve(mapItineraryDetails(originalReq, data));
           }
         }
@@ -395,48 +442,59 @@ const mapItineraryDetails = (requestData, responseData) => {
 
 const bookHotel = (language, bookHotelRequest) => {
   return new Promise((resolve, reject) => {
+    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK;
+    var qs = {
+      ...config,
+      productId: bookHotelRequest.productId,
+      hotelcode: bookHotelRequest.hotelId,
+      propertyid: bookHotelRequest.propertyId,
+      changedOccupancy: bookHotelRequest.changedOccupancy,
+      extrabeds: bookHotelRequest.extraBeds,
+      guests_details: {
+        title: bookHotelRequest.guestsDetails.titles,
+        first_name: bookHotelRequest.guestsDetails.firstNames,
+        last_name: bookHotelRequest.guestsDetails.lastName,
+        child_title: bookHotelRequest.guestsDetails.childTitles,
+        child_first_name: bookHotelRequest.guestsDetails.childFirstNames,
+        child_last_name: bookHotelRequest.guestsDetails.childLastNames,
+        city: bookHotelRequest.guestsDetails.city,
+        email: bookHotelRequest.guestsDetails.email,
+        address: bookHotelRequest.guestsDetails.address,
+        mobile_no: bookHotelRequest.guestsDetails.phone
+      },
+      refcode: bookHotelRequest.refCode,
+      prebookingtoken: bookHotelRequest.preBookingToken,
+      resultindex: bookHotelRequest.resultIndex,
+      sessionId: bookHotelRequest.sessionId,
+      TraceId: bookHotelRequest.traceId,
+      TokenId: bookHotelRequest.tokenId
+    };
     httpRequest.post(
       {
-        url: TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK,
+        url: url,
         proxy: ENABLE_TRAWEX_PROXY === "Y" ? TRAWEX_PROXY_ENDPOINT : null,
         json: true,
-        body: {
-          ...config,
-          productId: bookHotelRequest.productId,
-          hotelcode: bookHotelRequest.hotelId,
-          propertyid: bookHotelRequest.propertyId,
-          changedOccupancy: bookHotelRequest.changedOccupancy,
-          extrabeds: bookHotelRequest.extraBeds,
-          guests_details: {
-            title: bookHotelRequest.guestsDetails.titles,
-            first_name: bookHotelRequest.guestsDetails.firstNames,
-            last_name: bookHotelRequest.guestsDetails.lastName,
-            child_title: bookHotelRequest.guestsDetails.childTitles,
-            child_first_name: bookHotelRequest.guestsDetails.childFirstNames,
-            child_last_name: bookHotelRequest.guestsDetails.childLastNames,
-            city: bookHotelRequest.guestsDetails.city,
-            email: bookHotelRequest.guestsDetails.email,
-            address: bookHotelRequest.guestsDetails.address,
-            mobile_no: bookHotelRequest.guestsDetails.phone
-          },
-          refcode: bookHotelRequest.refCode,
-          prebookingtoken: bookHotelRequest.preBookingToken,
-          resultindex: bookHotelRequest.resultIndex,
-          sessionId: bookHotelRequest.sessionId,
-          TraceId: bookHotelRequest.traceId,
-          TokenId: bookHotelRequest.tokenId
-        }
+        gzip: true,
+        body: qs
       },
       (error, response, data) => {
         if (error) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
           reject([response.statusMessage]);
+        } else if (!data) {
+          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          reject([`Unknown response recieved - Response body: ${response.body}`])
         } else if (data.status && data.status.errors) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           reject(reject([data.errors.message]))
         } else {
+          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
           resolve({
             bookingStatus: data.status,
             supplierConfirmationNum: data.supplierConfirmationNum,

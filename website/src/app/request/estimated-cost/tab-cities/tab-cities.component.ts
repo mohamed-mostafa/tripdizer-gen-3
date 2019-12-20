@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { SummaryService } from './../../summary/summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,7 +24,8 @@ export class TabCitiesComponent {
 		snackBar: MatSnackBar,
 		private requestService: RequestService,
 		private route: ActivatedRoute,
-		private router: Router
+		private router: Router,
+		public summaryService: SummaryService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.service.setCurrentTabIndex(0);

@@ -108,8 +108,8 @@ var sendHotelBookingInformationEmail = function (travellerName, recepient, booki
         data = data.replace("#confirmation#", confirmationNumber);
         data = data.replace("#destination#", bookingInfo.destinationName);
         data = data.replace("#hotel#", bookingInfo.hotelName);
-        data = data.replace("#checkin#", bookingInfo.checkIn);
-        data = data.replace("#checkout#", bookingInfo.checkOut);
+        data = data.replace("#checkin#", bookingInfo.checkOut);
+        data = data.replace("#checkout#", bookingInfo.checkIn);
         data = data.replace("#address#", bookingInfo.address);
         emailBusiness.sendEmail(
           recepient,
@@ -135,26 +135,43 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
       data = data.replace("#name#", travellerName);
 
       var flightDetailsRows = "";
-      if (bookingConfirmation.reservationDetails && bookingConfirmation.reservationDetails.length > 0) {
-        for (var i = 0; i < bookingConfirmation.reservationDetails.length; i++) {
-          var flightSegment = bookingConfirmation.reservationDetails[i];
+      if (bookingConfirmation.bookingDetails.reservationDetails && bookingConfirmation.bookingDetails.reservationDetails.length > 0) {
+        for (var i = 0; i < bookingConfirmation.bookingDetails.reservationDetails.length; i++) {
+          var flightSegment = bookingConfirmation.bookingDetails.reservationDetails[i];
           flightDetailsRows += "<p>"
-          flightDetailsRows += "<strong>Departure: </strong>" + flightSegment.DepartureAirportLocationName + flightSegment.DepartureTerminal != "" ? "( " + flightSegment.DepartureTerminal + " )" : "" + " at " + moment(flightSegment.DepartureDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<strong>Departure: </strong>"
+            + (
+              flightSegment.DepartureAirportLocationName
+              + (flightSegment.DepartureTerminal != "" ? ("( " + flightSegment.DepartureTerminal + " )") : "")
+              + " at "
+              + moment(flightSegment.DepartureDateTime).format("DD/MM/YYYY hh:mm")
+            );
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Arrival: </strong>" + flightSegment.ArrivalAirportLocationName + flightSegment.ArrivalTerminal != "" ? "( " + flightSegment.ArrivalTerminal + " )" : "" + " at " + moment(flightSegment.ArrivalDateTime).format("dd/MM/yyyy hh:mm");
+          flightDetailsRows += "<strong>Arrival: </strong>"
+            + (
+              flightSegment.ArrivalAirportLocationName
+              + (flightSegment.ArrivalTerminal != "" ? ("( " + flightSegment.ArrivalTerminal + " )") : "")
+              + " at " + moment(flightSegment.ArrivalDateTime).format("DD/MM/YYYY hh:mm"));
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Duration: </strong>" + flightSegment.JourneyDurationInWords;
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Stops: </strong>" + flightSegment.StopQuantity == 0 || flightSegment.StopQuantity == "0" ? "Direct" : flightSegment.StopQuantity;
+          flightDetailsRows += "<strong>Stops: </strong>"
+            + (
+              (flightSegment.StopQuantity == 0 || flightSegment.StopQuantity == "0") ? "Direct" : flightSegment.StopQuantity
+            );
           flightDetailsRows += "<br>"
-          flightDetailsRows += "<strong>Ariline: </strong>" + flightSegment.MarketingAirlineName + flightSegment.MarketingAirlineName == flightSegment.OperatingAirlineName ? "" : "( Operated by: " + flightSegment.OperatingAirlineName + " )";
+          flightDetailsRows += "<strong>Ariline: </strong>"
+            + (
+              flightSegment.MarketingAirlineName
+              + (flightSegment.MarketingAirlineName == flightSegment.OperatingAirlineName ? "" : ("( Operated by: " + flightSegment.OperatingAirlineName + " )"))
+            );
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Baggage: </strong>" + flightSegment.Baggage;
           flightDetailsRows += "<br>"
           flightDetailsRows += "<strong>Confirmation Number: </strong><strong style = 'color:#2989ff' >" + flightSegment.AirlinePNR + "</strong>";
           flightDetailsRows += "</p>"
         }
-        data.replace("#booking_details#", flightDetailsRows);
+        data = data.replace("#booking_details#", flightDetailsRows);
         emailBusiness.sendEmail(
           recepient,
           'bookings@tripdizer.com',
@@ -162,7 +179,7 @@ var sendFlightBookingInformationEmail = function (travellerName, recepient, book
           data
         );
       } else {
-        console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer`)
+        console.error(`FATAL ERROR: Failed to send flight booking confirmation mail to customer. Confirmation: ${JSON.stringify(bookingConfirmation)}`)
         // NOTIFY OPERATIONS TEAM HERE
       }
     }

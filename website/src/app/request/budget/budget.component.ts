@@ -97,6 +97,7 @@ export class BudgetComponent {
 		}
 
 		this.requestService.setProperty('budgetCategoryName', this.selectedBudgetCategory.name);
+		this.requestService.setProperty('budgetCategory', this.selectedBudgetCategory.id);
 		this.trackingService.track('Submit - Budget', {
 			...this.formGroup.value,
 			budgetCategoryName: this.selectedBudgetCategory.name,

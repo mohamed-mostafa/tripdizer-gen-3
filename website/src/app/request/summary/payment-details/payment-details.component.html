@@ -38,7 +38,7 @@
           <img src="{{station.carrier_logo}}" class="carrier-logo align-middle pt-1" alt="carrier logo">
         </div>
         <div>
-            <img src="../../../../assets/img/arrow_2.svg" alt="">
+          <img src="../../../../assets/img/arrow_2.svg" alt="">
         </div>
       </div>
 
@@ -58,7 +58,7 @@
         {{station.from}}</p>
       <p class="mb-0"><span class="font-weight-bold">{{ 'request.estimated_cost.summary.to' | translate }}:</span>
         {{station.to}}</p>
-      <p class="mb-0">Standard double room</p>
+      <!-- <p class="mb-0">Standard double room</p> -->
 
     </div>
   </div>
@@ -67,18 +67,18 @@
   <div class="col-12 card-box pt-2">
     <div class="row">
       <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.hotels' | translate }}</div>
-      <div class="col-6 text-right">{{ totalCost.hotels | currency: 'EGP' }}</div>
+      <div class="col-6 text-right">{{ totalCost.hotels | currency:'EGP':'symbol':'1.0-0' }}</div>
     </div>
     <div class="row">
       <div class="col-6 text-left font-weight-bold">{{ 'request.estimated_cost.summary.flights' | translate }}</div>
-      <div class="col-6 text-right">{{ totalCost.flights | currency: 'EGP' }}</div>
+      <div class="col-6 text-right">{{ totalCost.flights | currency:'EGP':'symbol':'1.0-0' }}</div>
     </div>
   </div>
 
   <div class="col-12 card-box pt-2">
     <div class="row">
       <div class="col-6 text-left font-weight-bold">Total amount</div>
-      <div class="col-6 text-right">{{ totalCost.hotels + totalCost.flights | currency: 'EGP' }}</div>
+      <div class="col-6 text-right">{{ totalCost.hotels + totalCost.flights | currency:'EGP':'symbol':'1.0-0' }}</div>
     </div>
   </div>
 

@@ -1,6 +1,6 @@
 import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, DoCheck } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
 
@@ -9,7 +9,7 @@ import { RequestService } from '../../request.service';
 	templateUrl: './tab-flights.component.html',
 	styleUrls: ['./tab-flights.component.scss'],
 })
-export class TabFlightsComponent {
+export class TabFlightsComponent implements DoCheck {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
@@ -69,6 +69,7 @@ export class TabFlightsComponent {
 		this.options = {
 			nav: true,
 			dots: false,
+			autoHeight: true,
 			responsive: {
 				0: {
 					items: 1,
@@ -96,6 +97,11 @@ export class TabFlightsComponent {
 
 	updateCurrentSlideIndex() {
 		this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
-		console.log(this.selectedSlide);
+	}
+
+	ngDoCheck() {
+		if (this.owlElement && this.owlElement.$owlChild) {
+			this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
+		}
 	}
 }

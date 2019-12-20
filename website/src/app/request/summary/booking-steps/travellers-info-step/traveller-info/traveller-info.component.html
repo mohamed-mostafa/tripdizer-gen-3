@@ -59,9 +59,13 @@
       <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
         <mat-hint>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-hint>
         <mat-error>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
+        <mat-select [formControlName]="controlName + '-nationality'"
+          [placeholder]="'user.user_info.nationality' | translate">
+          <mat-option value="EG">Egyptian</mat-option>
+        </mat-select>
+        <!-- <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
           [placeholder]="'user.user_info.nationality' | translate" [formControlName]="controlName + '-nationality'"
-          maxlength="2" />
+          maxlength="2" /> -->
       </mat-form-field>
     </div>
 
@@ -106,7 +110,7 @@
     </div>
 
     <div class="col-12 col-md-4" *ngIf="getControlVisibility('passportIssueCountry')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4" >
+      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
         <mat-hint>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-hint>
         <mat-error>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-error>
         <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
@@ -118,8 +122,8 @@
   </div>
 
   <div class="row">
-      <div class="col-12">
-          <hr />
-      </div>
+    <div class="col-12">
+      <hr />
+    </div>
   </div>
 </div>

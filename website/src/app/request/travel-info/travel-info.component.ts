@@ -66,11 +66,6 @@ export class TravelInfoComponent {
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
 		}
-		// this.formGroup.controls['destination'].valueChanges.subscribe(destinationId => {
-		// 	if (destinationId === -1 && !destination['triggered']) {
-		// 		this.openDialog();
-		// 	}
-		// });
 		this.formGroup.controls['departureDate'].valueChanges.subscribe(departureDate => {
 			if (!this.formGroup.controls['returnDate'].value) {
 				this.formGroup.controls['returnDate'].setValue(moment(departureDate).add(1, 'days'));
@@ -97,7 +92,7 @@ export class TravelInfoComponent {
 			...this.formGroup.value,
 			departureDate: moment(this.formGroup.get('departureDate').value).format('D / M / Y'),
 			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
-			isFlexibleDates: this.formGroup.get('isFlexibleDates').value,
+			isFlexibleDates: false,
 		});
 	}
 

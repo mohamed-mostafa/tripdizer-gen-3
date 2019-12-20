@@ -174,6 +174,17 @@
 				"flights_tab_message": "Finding the best flight deals ...",
 				"accommodation_tab_message": "Finding the best hotels ..."
 			},
+			"session_dialog": {
+				"remaining": {
+					"title": "You have only {{minutes}} minutes to complete your trip with payment",
+					"description": "Prices change frequently due to availability and demand. We want to make sure you always see the best prices."
+				},
+				"timeout": {
+					"title": "Session timeout",
+					"description": "Prices change frequently due to availability and demand. We want to make sure you always see the best prices."
+				},
+				"buttonsLabel": { "ok": "Okay!" }
+			},
 			"tab_cities": {
 				"title": "Cities",
 				"view_choose": "View and choose your cities",
@@ -231,12 +242,12 @@
 				"hostel": "Hostel",
 				"duration": "Duration",
 				"no_flights": "No flights chosen",
-				"to": "to",
-				"from": "from",
+				"to": "To",
+				"from": "From",
 				"arrival": "Arrival",
 				"depart": "Depart",
 				"nights": "Nights",
-				"payment_details": "Payment details",
+				"payment_details": "Trip summary",
 				"flights": "Flights",
 				"nights_in": "nights in",
 				"hotels": "Hotels",
@@ -246,7 +257,8 @@
 					"adult": "Adult",
 					"kid": "Kid",
 					"infant": "Infant",
-					"hint": "Information must match passport"
+					"hint": "Information must match passport",
+					"egyptian": "Egyptian"
 				},
 				"numbers": {
 					"1": "first",
@@ -259,11 +271,13 @@
 					"8": "eighth",
 					"9": "ninth",
 					"10": "tenth"
-				}
+				},
+				"request_call": "Request a call"
 			},
 			"booking_steps": {
 				"passenger_details": "Passenger details",
-				"payment": "Payment"
+				"payment": "Payment",
+				"proceed_to_payment": "Proceed to payment"
 			}
 		},
 		"form_layout": {
@@ -474,22 +488,9 @@
 			"passport_expiry": "Expiry date",
 			"passport_issue_country": "Issue country",
 			"titles": {
-				"adult": [
-					"LORD",
-					"MISS",
-					"MR",
-					"MRS",
-					"SIR"
-				],
-				"kid": [
-					"MSTR",
-					"MISS"
-				],
-				"infant": [
-					"MISS",
-					"MSTR",
-					"INF"
-				]
+				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
+				"kid": ["MSTR", "MISS"],
+				"infant": ["MISS", "MSTR", "INF"]
 			}
 		},
 		"user_plans": {
@@ -498,8 +499,9 @@
 	},
 	"payment_confirm": {
 		"confirmation": "Confirmation",
-		"booking_confirmed": "Your booking has been confirmed",
-		"confirmation_email_sending": "A confirmation email will be sent soon to your email address",
+		"booking_confirmed": "Your payment has been accepted.",
+		"confirmation_email_sending": "You will receive your booking confirmations in your email.",
+		"payment_reference": "Your payment reference is",
 		"process_failed": "Process failed",
 		"message_1": "There was an error processing the transaction",
 		"message_2": "Contact card issuing bank",

@@ -1,4 +1,4 @@
-<div class="row justify-content-center hotels-tab py-2 py-md-4" *ngIf="loadedData">
+<div class="row justify-content-center hotels-tab py-2 py-md-4" *ngIf="accommodationOffers">
   <div class="col-lg-9 hotels-list">
     <h4 class="list-title font-weight-bold title-font mb-2">
       {{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}
@@ -35,6 +35,7 @@
                       <p class="mb-0">
                         {{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}</p>
                       <p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
+                        <span class="mr-1"><i class="fa fa-star"></i></span>
                         <span class="mr-1" *ngIf="hotel.stars >= 2"><i class="fa fa-star"></i></span>
                         <span class="mr-1" *ngIf="hotel.stars >= 3"><i class="fa fa-star"></i></span>
                         <span class="mr-1" *ngIf="hotel.stars >= 4"><i class="fa fa-star"></i></span>
@@ -46,27 +47,24 @@
                     </div>
                   </div>
                   <div class="hotel-address">
-                    <p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
+                    <p class="mt-1"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address.substring(0, 55) }}<span
+                        *ngIf="hotel.address.length >= 55">...</span></p>
                   </div>
 
                   <div class="row">
                     <div class="col-12">
                       <p class="grey item-text hotel-description">
-                        {{ hotel.description.substring(0, 150) }}<span *ngIf="hotel.description.length > 150">...</span>
+                        {{ hotel.description.substring(0, 85) }}<span *ngIf="hotel.description.length >= 85">...</span>
                       </p>
                     </div>
 
-                    <div class="col-12">
-                      <p class="font-weight-bold">standard double room</p>
-                      <p>breakfast included - free cancellation</p>
-                    </div>
                     <div class="col-12">
                       <div class="row">
                         <div class="col-6">
                           <h6 class="font-weight-bold price-title">
                             {{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
                           </h6>
-                          <p class="item-text price-text">{{ hotel.price | currency: 'EGP' }}</p>
+                          <p class="item-text price-text">{{ hotel.price | currency:'EGP':'symbol':'1.0-0' }}</p>
                         </div>
                         <div class="col-6 justify-content-end">
                           <mat-checkbox class="float-right mr-1" [checked]="hotel.select" [disableRipple]="true"
@@ -78,12 +76,14 @@
                 </div>
               </div>
             </div>
-            <div class="mb-2 mx-1 item" *ngIf="accommodation.hotels.length > 0">
-              <p *ngIf="accommodations.length < 1" class="px-2 text-center">
-                {{ 'request.estimated_cost.tab_flights.no_hotel_offers' | translate }}
-              </p>
-            </div>
+            
           </owl-carousel>
+
+          <div class="mb-2 mx-1 item" *ngIf="accommodation.hotels.length > 0">
+            <p *ngIf="accommodations.length < 1" class="px-2 text-center">
+              {{ 'request.estimated_cost.tab_flights.no_hotel_offers' | translate }}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -91,22 +91,22 @@
 
     </div>
 
-    <p *ngIf="accommodations.length < 1" class="px-2 text-center">
+    <p *ngIf="accommodations.length < 1" class="px-2 mt-4 mb-4 text-center">
       {{ 'request.estimated_cost.tab_accommodations.no_hotel_offers' | translate }}
     </p>
 
-    <div class="row my-2 my-sm-3 my-md-4 my-lg-5">
+    <div *ngIf="accommodations.length > 1" class="row my-2 my-sm-3 my-md-4 my-lg-5">
       <div class="col-12">
         <div class="bg-blue text-white text-center p-1 total-cost-box">
           <span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
           <br />
-          <span>{{ totalCost | currency: 'EGP' }}</span>
+          <span>{{ totalCost | currency:'EGP':'symbol':'1.0-0' }}</span>
         </div>
       </div>
     </div>
 
     <div class="row mt-3">
-      <div class="col-12 text-center">
+      <div class="col-12 mt-4 text-center">
         <a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
           [ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a>
 

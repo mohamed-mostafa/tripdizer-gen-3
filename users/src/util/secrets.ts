@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import logger from "./logger";
-import "./tripdizer-service-account-key.json";
 import "./tripdizer-service-account.json";
 
 if (fs.existsSync(".env")) {
@@ -17,8 +16,7 @@ if (fs.existsSync(".env")) {
   logger.debug("Using .env.dev file to supply config environment variables");
   dotenv.config({ path: "../users/.env.dev" });
 } else {
-  logger.debug("No config environment variables found");
-  process.exit(1);
+  logger.debug("No config environment variables found. Default OS-provided environment variables apply");
 }
 
 export const ENVIRONMENT = process.env.NODE_ENV;
@@ -32,12 +30,11 @@ export const FACEBOOK_CRED = {
   id: process.env.FACEBOOK_ID,
   secret: process.env.FACEBOOK_SECRET
 };
-export const FIRESTORE_CREDENTIALS =
-  ENVIRONMENT === "production"
-    ? require("./tripdizer-service-account-key.json")
-    : require("./tripdizer-service-account.json");
+
+// this file is different on every environment, but has the same name
+export const FIRESTORE_CREDENTIALS = ENVIRONMENT === "production" ? require("./tripdizer-service-account.json") : require("./tripdizer-service-account.json");
 
 if (!FIRESTORE_CREDENTIALS || !FIRESTORE_CREDENTIALS.project_id) {
-  logger.error("Set Firestone config environment variable.");
+  logger.error("Set Firestore config environment variable.");
   process.exit(1);
 }

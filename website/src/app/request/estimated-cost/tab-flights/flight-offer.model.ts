@@ -48,7 +48,7 @@ export class Segment {
 	return: string;
 	totalDurationInWords: string;
 	totalDurationInMinutes: number;
-	carrier: { iataCode: string, name: string };
+	carrier: { iataCode: string, name: string, wideLogo?: string };
 }
 
 export class FlightRequest {
