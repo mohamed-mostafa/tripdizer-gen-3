@@ -13,7 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class TabAccommodationComponent {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
-    accommodationOffers: Array<Accommodation>;
+	accommodationOffers: Array<Accommodation>;
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
@@ -30,23 +30,24 @@ export class TabAccommodationComponent {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		requestService.setIsAccommodationTabVisited(true);
-		service.getAccommodation().subscribe(res => {
-			this.loadedData = true;
-			this.accommodationOffers = res;
-			for (const accommodationOffer of this.accommodationOffers) {
-				if (accommodationOffer.hotels.length > 0) {
-					accommodationOffer.hotels[0].select = true;
-					this.accommodations.push(accommodationOffer);
-					this.selectedHotels.push(accommodationOffer.hotels[0]);
-					this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
+		service.getAccommodation().subscribe(
+			res => {
+				this.loadedData = true;
+				this.accommodationOffers = res;
+				for (const accommodationOffer of this.accommodationOffers) {
+					if (accommodationOffer.hotels.length > 0) {
+						accommodationOffer.hotels[0].select = true;
+						this.accommodations.push(accommodationOffer);
+						this.selectedHotels.push(accommodationOffer.hotels[0]);
+						this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
+					}
 				}
-				this.setSliderOptions();
 			},
 			error => {
 				this.accommodations = [];
 			}
-			this.setSliderOptions();
-		});
+		);
+		this.setSliderOptions();
 	}
 
 	selectHotel(hotel) {
