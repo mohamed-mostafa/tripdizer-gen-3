@@ -78,7 +78,7 @@ export class PlacesSelectBoxComponent implements OnInit {
 		}
 	}
 
-	@ViewChild('placeInput') placeInput: ElementRef<HTMLInputElement>;
+	@ViewChild('placeInput', { static: true }) placeInput: ElementRef<HTMLInputElement>;
 
 	constructor(
 		public translate: TranslateService,

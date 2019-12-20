@@ -12,7 +12,7 @@ export class GoogleMapComponent implements AfterViewChecked {
 	@Input() height = 300;
 	@Input() paths: Array<LatLng>;
 
-	@ViewChild(AgmMap) public agmMap: AgmMap;
+	@ViewChild(AgmMap, { static: true }) public agmMap: AgmMap;
 
 	ngAfterViewChecked() {
 		if (this.isVisible === false && this.agmMap['_elem'].nativeElement.offsetParent !== null) {

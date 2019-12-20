@@ -5,7 +5,6 @@ import {
 	AuthServiceConfig,
 	FacebookLoginProvider,
 	GoogleLoginProvider,
-	LinkedInLoginProvider,
 	SocialUser,
 } from 'angularx-social-login';
 import { Subject } from 'rxjs';
@@ -60,19 +59,6 @@ export class AuthService {
 			});
 	}
 
-	signInWithLinkedIn(): void {
-		this.resetAuthState();
-		this.loading.next(true);
-		this.socialAuthService
-			.signIn(LinkedInLoginProvider.PROVIDER_ID)
-			.then((user: SocialUser) => {
-				this.authenticateUserServerSide(user.provider, user.idToken);
-			})
-			.catch(err => {
-				this.authenticationFailed(err);
-			});
-	}
-
 	continueWithoutLogin(): void {
 		this.trackingService.track('Continue without login');
 	}
@@ -117,9 +103,6 @@ export class AuthService {
 				break;
 			case 'google':
 				this.signInWithGoogle();
-				break;
-			case 'linkedin':
-				this.signInWithLinkedIn();
 				break;
 			default:
 				this.continueWithoutLogin();

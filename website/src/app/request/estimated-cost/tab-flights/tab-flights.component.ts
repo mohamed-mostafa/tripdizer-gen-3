@@ -10,8 +10,7 @@ import { RequestService } from '../../request.service';
 	styleUrls: ['./tab-flights.component.scss'],
 })
 export class TabFlightsComponent implements DoCheck {
-
-	@ViewChild('owlElement') owlElement: OwlCarousel;
+	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
 	selectedFlightOffers = [];
@@ -29,14 +28,18 @@ export class TabFlightsComponent implements DoCheck {
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
 		});
 
-
-		service.getFlightOffers().subscribe(flightOffers => {
-			if (flightOffers) {
-				this.flightOffers = flightOffers;
-				this.flightOffers[0].selected = true;
-				this.selectedFlightOffers.push(this.flightOffers[0]);
+		service.getFlightOffers().subscribe(
+			flightOffers => {
+				if (flightOffers) {
+					this.flightOffers = flightOffers;
+					this.flightOffers[0].selected = true;
+					this.selectedFlightOffers.push(this.flightOffers[0]);
+				}
+			},
+			error => {
+				this.flightOffers = [];
 			}
-		});
+		);
 
 		this.setSliderOptions();
 	}
@@ -72,8 +75,8 @@ export class TabFlightsComponent implements DoCheck {
 					items: 1,
 					margin: 10,
 					slideBy: 1,
-				}
-			}
+				},
+			},
 		};
 	}
 
