@@ -26,6 +26,7 @@ export class TabFlightsComponent implements DoCheck {
 		service.getSelectedCities().forEach(city => {
 			const cityLatLong = city.coordinates.split(',');
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
+			this.flightPaths.push(service.travelingFromCoordinates);
 		});
 
 		service.getFlightOffers().subscribe(

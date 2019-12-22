@@ -55,6 +55,7 @@ export class TabCitiesComponent {
 			this.requestService.setIsFlightsTabVisited(false);
 			this.requestService.setIsAccommodationTabVisited(false);
 		});
+		this.cityPaths.push(service.travelingFromCoordinates);
 	}
 
 	updateSelectedCities(city) {
