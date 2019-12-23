@@ -44,6 +44,16 @@
 	}
 }
 
+.tabs-section {
+	@media (max-width: 576px) {
+		margin-top: 96px;
+	}
+
+	@media (min-width: 576px) {
+		margin-top: 130px;
+	}
+}
+
 .hint-2,
 .hint-3 {
 	color: #2989ff;
