@@ -63,7 +63,7 @@ export class EstimatedCostService {
 	) {
 		this.translate.get('request.traveling_from.airports').subscribe(airports => {
 			Object.keys(airports).forEach(k => {
-				if (airports[k].name === this.requestService.getProperty('travelingFrom').name) {
+				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
 					const cityLocation = { lat: Number(airports[k].lat), lng: Number(airports[k].lng) };
 					this.travelingFromCoordinates = cityLocation;
 				}

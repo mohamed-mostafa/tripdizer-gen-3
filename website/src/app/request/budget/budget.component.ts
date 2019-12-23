@@ -74,11 +74,11 @@ export class BudgetComponent {
 		this.requestService.setProperty('budget', this.formGroup.controls.budget.value);
 		const budgetAmount = this.formGroup.controls.budget.value;
 
-		let budgetRange = this.maximumBudget - this.minimumBudget;
-		let stepRange = budgetRange / 4;
-		let step1 = this.minimumBudget + stepRange;
-		let step2 = step1 + stepRange;
-		let step3 = step2 + stepRange;
+		const budgetRange = this.maximumBudget - this.minimumBudget;
+		const stepRange = budgetRange / 4;
+		const step1 = this.minimumBudget + stepRange;
+		const step2 = step1 + stepRange;
+		const step3 = step2 + stepRange;
 
 		if (budgetAmount > this.minimumBudget && budgetAmount <= step1) {
 			this.selectedBudgetCategory = this.budgetCategories[0];

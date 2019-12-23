@@ -1,4 +1,4 @@
-<agm-map [hidden]="!paths?.length" [fitBounds]="true" [style.height.px]="height">
+<agm-map *ngIf="paths?.length" [fitBounds]="true" [style.height.px]="height">
 	<agm-marker
 		*ngFor="let path of paths"
 		[latitude]="path.lat"
@@ -6,7 +6,7 @@
 		[agmFitBounds]="true"
 	></agm-marker>
 
-	<agm-polyline>
+	<agm-polyline *ngIf="paths?.length">
 		<agm-polyline-point *ngFor="let path of paths" [latitude]="path.lat" [longitude]="path.lng"></agm-polyline-point>
 	</agm-polyline>
 </agm-map>
