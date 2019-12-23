@@ -30,6 +30,8 @@ export class TabFlightsComponent implements DoCheck {
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
 		});
 
+		this.flightPaths.push(service.travelingFromCoordinates);
+
 		service.getFlightOffers().subscribe(
 			flightOffers => {
 				if (flightOffers) {
