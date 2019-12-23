@@ -123,3 +123,11 @@ body {
 .mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-edit {
     background-color: #2989ff;
 }
+
+.mat-chip-list-wrapper {
+  align-items: stretch !important;
+}
+
+.mat-standard-chip .mat-chip-remove, .mat-standard-chip .mat-chip-trailing-icon {
+  margin-left: auto !important;
+}
