@@ -13,11 +13,14 @@ export class FlightRouteComponent implements OnInit {
 	@Input() flightOffers: FlightOffer;
 	selectedCities: Array<CityDTO>;
 	travelFrom: string;
+	returnTo: string;
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
 		this.selectedCities = service.getSelectedCities();
-		this.travelFrom = requestService.getProperty('travelingFrom');
+		this.travelFrom = requestService.getProperty('travelingFrom').name;
+		this.returnTo = requestService.getProperty('travelingFrom').name;
+
 	}
 
-	ngOnInit() {}
+	ngOnInit() { }
 }
