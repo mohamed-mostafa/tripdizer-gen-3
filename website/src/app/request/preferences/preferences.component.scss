@@ -5,13 +5,28 @@
 .other-preference {
 	&,
 	input {
-		width: 85%;
+		width: 63%;
 		font-weight: 600;
+		top: 43%;
+		position: absolute;
 	}
 }
 
-.mat-checkbox:not(:hover) {
+.mat-checkbox:not(:hover),
+.mat-checkbox:hover {
+	.label-content-img {
+		position: relative;
+
+		.label-text {
+			top: 41%;
+			position: absolute;
+			width: 100%;
+		}
+	}
+
 	.other-preference {
+		right: 0%;
+
 		input {
 			border: 0;
 			color: #fff;

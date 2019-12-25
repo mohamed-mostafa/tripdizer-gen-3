@@ -43,6 +43,8 @@ export class BudgetComponent {
 		this.minimumBudget = firstDestination.minimumTravelBudget + (firstDestination.minimumDailyBudget * numberOfDays);
 		this.maximumBudget = firstDestination.minimumTravelBudget + (firstDestination.maximumDailyBudget * numberOfDays);
 
+		this.formGroup.controls['budget'].setValue(this.minimumBudget);
+
 
 		this.isOwnBudget = this.formGroup.controls['budgetCategory'].value === LUTBudgetCategory.OwnBudget;
 		this.formGroup.controls['budgetCategory'].valueChanges.subscribe(data => {
