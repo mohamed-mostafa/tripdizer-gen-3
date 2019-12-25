@@ -31,6 +31,7 @@ export class TabCitiesComponent {
 		this.service.setCurrentTabIndex(0);
 		requestService.setIsCitiesTabVisited(true);
 		this.snackBar = snackBar;
+		this.cityPaths.push(service.travelingFromCoordinates);
 		service.getCities().subscribe(res => {
 			this.loadedData = true;
 			const numberOfNights = this.service.getNumberOfNights();
@@ -55,6 +56,7 @@ export class TabCitiesComponent {
 			this.requestService.setIsFlightsTabVisited(false);
 			this.requestService.setIsAccommodationTabVisited(false);
 		});
+		this.cityPaths.push(service.travelingFromCoordinates);
 	}
 
 	updateSelectedCities(city) {

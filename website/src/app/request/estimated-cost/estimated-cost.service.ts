@@ -1,3 +1,4 @@
+import { TravelingFrom } from './../traveling-from/traveling-from.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
@@ -10,7 +11,6 @@ import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
-import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { AttractionsRequest, CityAttractions } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
@@ -40,6 +40,8 @@ export class EstimatedCostService {
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
 
+	travelingFromCoordinates: { lat: number; lng: number };
+
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
 	selectedCities = new Subject<CityDTO[]>();
@@ -59,6 +61,15 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+		this.translate.get('request.traveling_from.airports').subscribe(airports => {
+			Object.keys(airports).forEach(k => {
+				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
+					const cityLocation = { lat: Number(airports[k].lat), lng: Number(airports[k].lng) };
+					this.travelingFromCoordinates = cityLocation;
+				}
+			});
+		});
+
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
 			this.requestService.setProperty('selectedCities', citiesSelected);

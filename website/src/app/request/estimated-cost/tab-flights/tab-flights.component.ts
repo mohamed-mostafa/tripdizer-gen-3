@@ -23,10 +23,14 @@ export class TabFlightsComponent implements DoCheck {
 		requestService.setIsFlightsTabVisited(true);
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
+		this.flightPaths.push(service.travelingFromCoordinates);
+
 		service.getSelectedCities().forEach(city => {
 			const cityLatLong = city.coordinates.split(',');
 			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
 		});
+
+		this.flightPaths.push(service.travelingFromCoordinates);
 
 		service.getFlightOffers().subscribe(
 			flightOffers => {
