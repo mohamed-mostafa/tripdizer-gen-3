@@ -9,7 +9,7 @@
     </div>
     <div class="budget-container">
       <img src="../../../assets/img/budget.svg" class="budget-svg" alt="">
-      <mat-slider min="{{minimumBudget}}" max="{{maximumBudget}}" step="100" class="col-12" thumbLabel
+      <mat-slider [(ngModel)]="minimumBudget" min="{{minimumBudget}}" max="{{maximumBudget}}" step="100" class="col-12" thumbLabel
         formControlName="budget" width="100%">
       </mat-slider>
       <div class="budget-categories">
