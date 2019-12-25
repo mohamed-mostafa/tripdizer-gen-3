@@ -10,9 +10,9 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 # host: "localhost:8084"
-host: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+host: "tripdizer-package-options-dot-tripdizer-stg.appspot.com"
 x-google-endpoints:
-- name: "tripdizer-package-options-dot-tripdizer-dev.appspot.com"
+- name: "tripdizer-package-options-dot-tripdizer-stg.appspot.com"
   allowCors: True
 basePath: "/package-options/1.0.0"
 schemes:
