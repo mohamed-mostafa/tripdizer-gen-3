@@ -3,31 +3,30 @@
  * Some methods are just 1-to-1 mapping for the dataaccess methods. If you want to interrupt the call to them, replace the callback function sent to them
  */
 
-var requestsDao = require('../dataaccess/hws_requests_dao.js');
-let transportationDao = require('../dataaccess/hws_request_transporation_dao');
-let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
-let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
-let pnrDao = require('../dataaccess/hws_request_PNR_dao');
-let citiesDao = require('../dataaccess/hws_request_cities_dao');
-let bookingsDao = require('../dataaccess/hws_bookings_dao');
-let paymentDao = require('../dataaccess/hws_payments_dao');
-var emailBusiness = require('../adapters/hws_email_adapter.js');
-var paymentsService = require('./hws_payments_business');
+const requestsDao = require('../dataaccess/hws_requests_dao.js');
+const transportationDao = require('../dataaccess/hws_request_transporation_dao');
+const accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
+const attractionsDao = require('../dataaccess/hws_request_attractions_dao');
+const pnrDao = require('../dataaccess/hws_request_PNR_dao');
+const citiesDao = require('../dataaccess/hws_request_cities_dao');
+const bookingsDao = require('../dataaccess/hws_bookings_dao');
+const paymentDao = require('../dataaccess/hws_payments_dao');
+const emailBusiness = require('../adapters/hws_email_adapter.js');
+const paymentsService = require('./hws_payments_business');
 const trawexService = require('./hws_trawex_businress');
-var Promise = require('promise');
-var httpRequest = require('request');
-var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
-let googlePubSubAdapter = require('../adapters/PubSubPublishers');
-let moment = require('moment');
+const Promise = require('promise');
+const httpRequest = require('request');
+const googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+const googlePubSubAdapter = require('../adapters/PubSubPublishers');
+const moment = require('moment');
 
-const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.242.174.95:8085/trawex-adapter/1.0.0';
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 const MEDIA_STORAGE_BASE_URL =
 	process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
 const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || 'N';
 
 //calls the onSuccess with a user object if the user was successfully created
-var placeRequest = function(request, onSuccess, onFailure, onUserError) {
+let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
 		status: request.isFromWebsite ? 1 : request.status,
@@ -57,8 +56,8 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		referralType: request.referralType || 1,
 	};
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
-	let flightValidation = new Promise((resolve, reject) => {
-		request.flightOffers.map(flight =>
+	let flightValidation = request.flightOffers.map(flight => {
+		return new Promise((resolve, reject) => {
 			trawexService
 				.getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode)
 				.then(data => {
@@ -73,13 +72,13 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 				})
 				.catch(err => {
 					reject(false);
-				})
-		);
+				});
+		});
 	});
-	let hotelValidation;
+
 	let selectedHotels = [];
-	request.selectedHotels.map(hotel => {
-		hotelValidation = new Promise((resolve, reject) => {
+	let hotelValidation = request.selectedHotels.map(hotel => {
+		return new Promise((resolve, reject) => {
 			let hotelName = hotel.name;
 			let hotelDetails = hotel.moreDetails;
 			trawexService
@@ -95,7 +94,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						roomTypeRunnos: hotelRooms[0].roomTypeRunnos,
 						hotelCode: hotelDetails.hotelId,
 					};
-					delete hotelDetails.hotelId;
+					// delete hotelDetails.hotelId;
 					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
 					hotel.roomDetails = hotelRooms[0];
 
@@ -119,7 +118,10 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 				});
 		});
 	});
-	Promise.all([flightValidation, hotelValidation])
+	let allPromises = [];
+	allPromises.push(...flightValidation);
+	allPromises.push(...hotelValidation);
+	Promise.all(allPromises)
 		.then(function(valid) {
 			if (Array.isArray(request.preferences)) {
 				request.preferences = request.preferences.map(ri => ({
@@ -288,7 +290,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		});
 };
 
-var updateRequest = function(request, onSuccess, onFailure) {
+let updateRequest = function(request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
@@ -304,7 +306,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 	);
 };
 
-var notifyCustomer = function(to, customerName, requestId) {
+let notifyCustomer = function(to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
@@ -328,7 +330,7 @@ var notifyCustomer = function(to, customerName, requestId) {
 		emailBody
 	);
 };
-var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
+let sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
 	} else if (email.type === 'request') {
@@ -350,7 +352,7 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	}
 };
 
-var sendMails = function(emails, email, onSuccess) {
+let sendMails = function(emails, email, onSuccess) {
 	responses = [];
 	for (var i = 0; i < emails.length; ++i)
 		responses.push(
@@ -377,7 +379,7 @@ var sendMails = function(emails, email, onSuccess) {
 	});
 };
 
-var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+let validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(
 			promoCode,
@@ -395,7 +397,7 @@ var validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	}
 };
 
-var sendDailyReportOfRequestsCount = function() {
+let sendDailyReportOfRequestsCount = function() {
 	requestsDao.getRequestCounts(
 		function(counts) {
 			// prepare email body
@@ -437,7 +439,7 @@ var sendDailyReportOfRequestsCount = function() {
 	);
 };
 
-var getPackage = function(
+let getPackage = function(
 	requestId,
 	accessToken,
 	onSuccess,
@@ -681,14 +683,14 @@ var getPackage = function(
 		}
 	);
 };
-var getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
+let getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	return cost;
 };
 
-var getPackageDetailsOfCountry = function(isoCode) {
+let getPackageDetailsOfCountry = function(isoCode) {
 	return new Promise((resolve, reject) => {
 		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function(
 			error,
@@ -709,7 +711,7 @@ var getPackageDetailsOfCountry = function(isoCode) {
 	});
 };
 
-var sendPackageByMail = function(requestId, onSuccess, onFailure) {
+let sendPackageByMail = function(requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
 		function(request) {
@@ -893,7 +895,7 @@ function getRequestById(requestId, onSuccess, onFailure) {
 	);
 }
 
-var publishRequestChoicesForBooking = function(requestId) {
+let publishRequestChoicesForBooking = function(requestId) {
 	return new Promise((resolve, reject) => {
 		getRequestById(
 			requestId,
@@ -930,7 +932,7 @@ var publishRequestChoicesForBooking = function(requestId) {
 	});
 };
 
-var handlePaidRequest = function(requestId) {
+let handlePaidRequest = function(requestId) {
 	requestsDao.modifyRequestStatusById(
 		requestId,
 		18,
@@ -965,19 +967,20 @@ var handlePaidRequest = function(requestId) {
 			});
 	}
 };
-
-exports.placeRequest = placeRequest;
-exports.getRequestById = getRequestById;
-exports.assignRequestToUser = requestsDao.assignRequestToUser;
-exports.updateRequest = updateRequest;
-exports.getRequestSummaries = requestsDao.getRequestSummariesByStatus;
-exports.getRequestSummariesCount = requestsDao.getRequestSummariesCountByStatus;
-exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
-exports.changeRequestStatus = requestsDao.modifyRequestStatusById;
-exports.sendDailyReportOfRequestsCount = sendDailyReportOfRequestsCount;
-exports.toggleOptions = requestsDao.toggleOptions;
-exports.getPackage = getPackage;
-exports.sendPackageByMail = sendPackageByMail;
-exports.validatePromoCode = validatePromoCode;
-exports.getTravelerEmails = requestsDao.getTravelerEmails;
-exports.handlePaidRequest = handlePaidRequest;
+module.exports = {
+	placeRequest,
+	getRequestById,
+	assignRequestToUser: requestsDao.assignRequestToUser,
+	updateRequest,
+	getRequestSummaries: requestsDao.getRequestSummariesByStatus,
+	getRequestSummariesCount: requestsDao.getRequestSummariesCountByStatus,
+	sendMailsToRequestTraveler,
+	changeRequestStatus: requestsDao.modifyRequestStatusById,
+	sendDailyReportOfRequestsCount,
+	toggleOptions: requestsDao.toggleOptions,
+	getPackage,
+	sendPackageByMail,
+	validatePromoCode,
+	getTravelerEmails: requestsDao.getTravelerEmails,
+	handlePaidRequest,
+};

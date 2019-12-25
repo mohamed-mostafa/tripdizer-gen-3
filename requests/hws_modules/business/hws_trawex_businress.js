@@ -1,6 +1,6 @@
 const httpRequest = require('request');
 
-const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.242.174.95:8085/trawex-adapter/1.0.0';
+const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.235.53.114:8085/trawex-adapter/1.0.0';
 
 let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
 	return new Promise(function(resolve, reject) {
@@ -41,11 +41,8 @@ let validateFlightAPi = function(sessionId, fareSourceCode) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					console.log('code is not 200 in validate flights');
-
 					reject(response.statusMessage);
 				} else {
-					console.log('success in flights');
 					resolve(flights);
 				}
 			}
@@ -85,12 +82,8 @@ let reValidateHotelAPi = function(data) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					console.log('code is not 200 in validate hotels');
-
 					reject(response.statusMessage);
 				} else {
-					console.log('success in hotels');
-
 					resolve(hotels);
 				}
 			}
