@@ -211,7 +211,7 @@ export class EstimatedCostService {
 		for (const sc of this.citiesSelected) {
 			cities.push({
 				cityName: sc.name,
-				countryName: sc.countryDisplayName,
+				countryName: sc.country,
 				cityIata: sc.iataCode,
 				numberOfNights: sc.numberOfNights,
 			});
