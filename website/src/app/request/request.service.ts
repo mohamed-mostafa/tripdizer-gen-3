@@ -38,9 +38,6 @@ export class RequestService {
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
 
-	isCitiesTabVisited = new BehaviorSubject<boolean>(false);
-	isFlightsTabVisited = new BehaviorSubject<boolean>(false);
-	isAccommodationTabVisited = new BehaviorSubject<boolean>(false);
 	endSessionTimerSubject = new Subject();
 
 	constructor(
@@ -77,17 +74,6 @@ export class RequestService {
 		return path.split('/')[0];
 	}
 
-	setIsCitiesTabVisited(value: boolean): void {
-		this.isCitiesTabVisited.next(value);
-	}
-
-	setIsFlightsTabVisited(value: boolean): void {
-		this.isFlightsTabVisited.next(value);
-	}
-
-	setIsAccommodationTabVisited(value: boolean): void {
-		this.isAccommodationTabVisited.next(value);
-	}
 
 	resetSessionTimer(): void {
 		this.endSessionTimerSubject.next();

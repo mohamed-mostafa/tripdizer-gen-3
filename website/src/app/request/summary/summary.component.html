@@ -140,19 +140,25 @@
       </div>
 
       <div class="row py-2" *ngIf="stations.length > 0">
-        <div class="col-12 col-md-4 text-center mb-3">
+        <div class="col-12 col-md-3 text-center mb-3">
           <button (click)="prev()" [disabled]="false"
             class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
             {{ 'request.estimated_cost.summary.modify' | translate }}
           </button>
         </div>
-        <div class="col-12 col-md-4 text-center mb-3">
+        <div class="col-12 col-md-3 text-center mb-3">
+          <button (click)="goBack()" [disabled]="false"
+            class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
+            {{ 'request.estimated_cost.summary.go_back' | translate }}
+          </button>
+        </div>
+        <div class="col-12 col-md-3 text-center mb-3">
           <button routerLink="/request/booking" [disabled]="false"
             class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
             {{ 'request.estimated_cost.summary.proceed_booking' | translate }}
           </button>
         </div>
-        <div class="col-12 col-md-4 text-center mb-3">
+        <div class="col-12 col-md-3 text-center mb-3">
           <button (click)="goToNextStep()" [disabled]="false"
             class="btn btn-primary custom-bs btn-rounded text-uppercase px-3 py-2">
             {{ 'request.estimated_cost.summary.request_call' | translate }}

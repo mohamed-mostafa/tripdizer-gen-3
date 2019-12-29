@@ -21,6 +21,7 @@ export class SummaryComponent implements OnDestroy {
 		private route: ActivatedRoute,
 		private router: Router,
 		service: SummaryService,
+		private estimatedCostService: EstimatedCostService,
 		private requestService: RequestService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
@@ -28,17 +29,25 @@ export class SummaryComponent implements OnDestroy {
 		this.subscriptions.add(
 			service.stations.subscribe(stations => {
 				this.stations = stations ? stations : null;
+				console.log(this.stations);
 			})
 		);
 	}
 
 	prev() {
-		this.router.navigate(['/request/estimated-cost']);
+		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
 	goToNextStep() {
 		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 		this.requestService.resetSessionTimer();
+	}
+
+	goBack() {
+		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+		setTimeout(() => {
+			this.estimatedCostService.setCurrentTabIndex(2);
+		}, 0);
 	}
 
 	ngOnDestroy() {
