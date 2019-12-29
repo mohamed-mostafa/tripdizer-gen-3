@@ -5,6 +5,7 @@ import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
 import { Subscription } from 'rxjs';
+import { isArray } from 'util';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -21,13 +22,16 @@ export class TabFlightsComponent implements DoCheck {
 	options: any;
 	selectedSlide = 1;
 	afterReloadSlideIndex: number;
+	hasFlightOffers: boolean;
 	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
+		this.hasFlightOffers = false;
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
 		service.getFlightOffers().subscribe(flightOffers => {
-			if (flightOffers) {
+			if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
+				this.hasFlightOffers = true;
 				this.flightOffers = flightOffers;
 
 				let hasSelectedFlightOffer = false;
@@ -55,6 +59,8 @@ export class TabFlightsComponent implements DoCheck {
 		});
 
 		this.setSliderOptions();
+
+		console.log(this.hasFlightOffers);
 	}
 
 	selectOffer(offer) {
