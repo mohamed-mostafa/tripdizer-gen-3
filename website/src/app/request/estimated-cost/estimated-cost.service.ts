@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -54,6 +54,12 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
+	cachedTabsData: {
+		cities?: Array<CityDTO>;
+		flightOffers?: Array<FlightOffer>;
+		accommodation?: Array<Accommodation>;
+	};
+
 	constructor(
 		private http: HttpClient,
 		private router: Router,
@@ -61,6 +67,8 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+		this.setCurrentTabIndex(0);
+		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
 		this.translate.get('request.traveling_from.airports').subscribe(airports => {
 			Object.keys(airports).forEach(k => {
 				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
@@ -120,17 +128,27 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		this.requestService.isLoading.next({
-			show: true,
-			message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
-		});
-		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
-		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-			tap(() => {
-				this.setIsLoading(false, '');
-				this.requestService.isLoading.next({ show: false, message: '' });
-			})
-		);
+		if (this.cachedTabsData.cities && this.cachedTabsData.cities.length) {
+			return of(this.cachedTabsData.cities);
+		} else {
+			this.requestService.isLoading.next({
+				show: true,
+				message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
+			});
+			const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
+			return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
+				tap(returnedCities => {
+					this.setIsLoading(false, '');
+					this.requestService.isLoading.next({ show: false, message: '' });
+					this.updateCitiesInCache(returnedCities);
+				})
+			);
+		}
+	}
+
+	updateCitiesInCache(cities) {
+		this.cachedTabsData.cities = cities;
+		console.log(this.cachedTabsData);
 	}
 
 	getNumberOfNights(): number {
@@ -152,38 +170,49 @@ export class EstimatedCostService {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		if (this.isFlightsTabVisited) {
-			this.flightsLoading();
-		}
-		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
-			countryIso: city.countryIsoCode,
-			cityIata: city.iataCode,
-			numberOfNights: city.numberOfNights,
-		}));
-		const flightRequest: FlightRequest = {
-			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-			departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
-			citiesSequence,
-			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
-			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
-			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
-		};
+		if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
+			return of(this.cachedTabsData.flightOffers);
+		} else {
+			if (this.isFlightsTabVisited) {
+				this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+			}
 
-		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(
-				() => {
-					if (this.isFlightsTabVisited) {
-						this.setIsLoading(false, '');
+			const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+				countryIso: city.countryIsoCode,
+				cityIata: city.iataCode,
+				numberOfNights: city.numberOfNights,
+			}));
+			const flightRequest: FlightRequest = {
+				origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
+				departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
+				citiesSequence,
+				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+				numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			};
+
+			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
+				tap(
+					returnedFlightOffers => {
+						if (this.isFlightsTabVisited) {
+							this.setIsLoading(false, '');
+						}
+						this.startSessionTimer();
+						this.updateFlightsOffersInCache(returnedFlightOffers);
+					},
+					error => {
+						if (this.isFlightsTabVisited) {
+							this.setIsLoading(false, '');
+						}
 					}
-					this.startSessionTimer();
-				},
-				error => {
-					if (this.isFlightsTabVisited) {
-						this.setIsLoading(false, '');
-					}
-				}
-			)
-		);
+				)
+			);
+		}
+	}
+
+	updateFlightsOffersInCache(flightsOffers) {
+		this.cachedTabsData.flightOffers = flightsOffers;
+		console.log(this.cachedTabsData);
 	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
@@ -203,56 +232,65 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.isAccommodationProcessing = true;
-		if (this.isAccommodationTabVisited) {
-			this.accommodationLoading();
-		}
-		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
-		for (const sc of this.citiesSelected) {
-			cities.push({
-				cityName: sc.name,
-				countryName: sc.country,
-				cityIata: sc.iataCode,
-				numberOfNights: sc.numberOfNights,
-			});
-		}
+		if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
+			return of(this.cachedTabsData.accommodation);
+		} else {
+			if (this.isAccommodationTabVisited) {
+				this.setIsLoading(
+					true,
+					this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+				);
+			}
+			const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
+			for (const sc of this.citiesSelected) {
+				cities.push({
+					cityName: sc.name,
+					countryName: sc.countryDisplayName,
+					cityIata: sc.iataCode,
+					numberOfNights: sc.numberOfNights,
+				});
+			}
 
-		this.budgetCategory = this.requestService.getProperty('budgetCategory');
-		let accommodationDesiredCostPerPerson = 0;
-		if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
-			const flightCost = this.getFlightsTotalCost();
-			const numberOfPayingCustomers =
-				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
-			const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
-			const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
-			accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
+			this.budgetCategory = this.requestService.getProperty('budgetCategory');
+			let accommodationDesiredCostPerPerson = 0;
+			if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
+				const flightCost = this.getFlightsTotalCost();
+				const numberOfPayingCustomers =
+					this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
+				const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
+				const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
+				accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
+			}
+			const accommodationRequest: AccommodationRequest = {
+				arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
+				budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
+				cities,
+				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+				numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+				desiredCostPerPerson: accommodationDesiredCostPerPerson,
+			};
+			return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
+				tap(
+					returnedAccommodation => {
+						if (this.isAccommodationTabVisited) {
+							this.setIsLoading(false, '');
+						}
+						this.updateAccommodationInCache(returnedAccommodation);
+					},
+					error => {
+						if (this.isAccommodationTabVisited) {
+							this.setIsLoading(false, '');
+						}
+					}
+				)
+			);
 		}
-		const accommodationRequest: AccommodationRequest = {
-			arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
-			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
-			cities,
-			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
-			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
-			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
-			desiredCostPerPerson: accommodationDesiredCostPerPerson,
-		};
+	}
 
-		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-			tap(
-				() => {
-					this.isAccommodationProcessing = false;
-					if (this.isAccommodationTabVisited) {
-						this.setIsLoading(false, '');
-					}
-				},
-				error => {
-					this.isAccommodationProcessing = false;
-					if (this.isAccommodationTabVisited) {
-						this.setIsLoading(false, '');
-					}
-				}
-			)
-		);
+	updateAccommodationInCache(accommodation) {
+		this.cachedTabsData.accommodation = accommodation;
+		console.log(this.cachedTabsData);
 	}
 
 	setSelectedHotels(selectedHotels) {
@@ -467,6 +505,7 @@ export class EstimatedCostService {
 				this.summaryStations.push(lastStation);
 			}
 		});
+		console.log(this.summaryStations);
 		return this.summaryStations;
 	}
 

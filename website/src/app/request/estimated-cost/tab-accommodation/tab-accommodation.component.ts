@@ -29,24 +29,19 @@ export class TabAccommodationComponent {
 		private route: ActivatedRoute
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
-		requestService.setIsAccommodationTabVisited(true);
-		service.getAccommodation().subscribe(
-			res => {
-				this.loadedData = true;
-				this.accommodationOffers = res;
-				for (const accommodationOffer of this.accommodationOffers) {
-					if (accommodationOffer.hotels.length > 0) {
-						accommodationOffer.hotels[0].select = true;
-						this.accommodations.push(accommodationOffer);
-						this.selectedHotels.push(accommodationOffer.hotels[0]);
-						this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
-					}
+
+		service.getAccommodation().subscribe(res => {
+			this.loadedData = true;
+			this.accommodationOffers = res;
+			for (const accommodationOffer of this.accommodationOffers) {
+				if (accommodationOffer.hotels.length > 0) {
+					accommodationOffer.hotels[0].select = true;
+					this.accommodations.push(accommodationOffer);
+					this.selectedHotels.push(accommodationOffer.hotels[0]);
+					this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
 				}
-			},
-			error => {
-				this.accommodations = [];
 			}
-		);
+		});
 		this.setSliderOptions();
 	}
 
@@ -97,6 +92,7 @@ export class TabAccommodationComponent {
 
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
+		this.service.updateAccommodationInCache(this.accommodations);
 		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
