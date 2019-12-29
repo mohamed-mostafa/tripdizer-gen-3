@@ -16,7 +16,7 @@ module.exports.searchAttractions = function searchAttractions(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response, 500);
+      utils.writeJson(res, response, 200);
     });
 };
 
@@ -47,7 +47,7 @@ module.exports.searchCities = function searchCities(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response, 500);
+      utils.writeJson(res, response, 200);
     });
 };
 
@@ -65,6 +65,6 @@ module.exports.searchTransportation = function searchTransportation(
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response, 500);
+      utils.writeJson(res, response, 200);
     });
 };
