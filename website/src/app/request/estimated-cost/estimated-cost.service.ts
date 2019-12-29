@@ -40,7 +40,7 @@ export class EstimatedCostService {
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
 
-	travelingFromCoordinates: { lat: number; lng: number };
+	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
