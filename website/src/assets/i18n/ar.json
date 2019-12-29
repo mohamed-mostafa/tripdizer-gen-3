@@ -234,7 +234,8 @@
 				"view_details": "إظهار تفاصيل الرحلة",
 				"accommodation": "الإقامة",
 				"activities": "الأنشطة",
-				"modify": "تعديل",
+                "modify": "تعديل",
+                "go_back": "رجوع",
 				"total_cost": "اجمالى التكلفة",
 				"day": "يوم",
 				"no_accommodation": "لم يتم اختيار اى فنادق",
@@ -277,7 +278,8 @@
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
-				"proceed_to_payment": "المتابعة إلى الدفع"
+                "proceed_to_payment": "المتابعة إلى الدفع",
+                "back": "رجوع"
 			}
 		},
 		"form_layout": {

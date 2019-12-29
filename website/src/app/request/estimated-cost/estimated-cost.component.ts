@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RequestService } from '../request.service';
@@ -10,6 +11,7 @@ import { EstimatedCostService } from './estimated-cost.service';
 	styleUrls: ['./estimated-cost.component.scss'],
 })
 export class EstimatedCostComponent {
+
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	isCitiesTabVisited: boolean;
@@ -17,8 +19,16 @@ export class EstimatedCostComponent {
 	isAccommodationTabVisited: boolean;
 	currentTabIndex: Observable<boolean>;
 	isLoading: boolean;
-	constructor(private service: EstimatedCostService, private requestService: RequestService) {
-		this.selectedTab = 0;
+	tabIndex: number;
+
+	constructor(
+		private service: EstimatedCostService,
+		private requestService: RequestService,
+		private route: ActivatedRoute
+	) {
+		const tabIndexParam = this.route.snapshot.paramMap.get('tabIndex');
+		this.selectedTab = this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
+
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
 
@@ -37,6 +47,6 @@ export class EstimatedCostComponent {
 	}
 
 	tabChange(e) {
-		this.service.setCurrentTabIndex(e);
+        this.service.setCurrentTabIndex(e);
 	}
 }

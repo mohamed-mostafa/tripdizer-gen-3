@@ -15,7 +15,7 @@ export class FlightRouteComponent implements OnInit {
 	travelFrom: string;
 	returnTo: string;
 
-	constructor(private service: EstimatedCostService, requestService: RequestService) {
+	constructor(service: EstimatedCostService, requestService: RequestService) {
 		this.selectedCities = service.getSelectedCities();
 		this.travelFrom = requestService.getProperty('travelingFrom').name;
 		this.returnTo = requestService.getProperty('travelingFrom').name;

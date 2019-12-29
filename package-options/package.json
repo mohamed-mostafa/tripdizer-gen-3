@@ -22,5 +22,8 @@
     "js-yaml": "^3.3.0",
     "swagger-tools": "0.10.1",
     "@google-cloud/trace-agent": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
