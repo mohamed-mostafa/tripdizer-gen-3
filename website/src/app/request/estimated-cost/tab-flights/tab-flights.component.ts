@@ -11,8 +11,8 @@ import { Subscription } from 'rxjs';
 	templateUrl: './tab-flights.component.html',
 	styleUrls: ['./tab-flights.component.scss'],
 })
-export class TabFlightsComponent implements DoCheck, OnDestroy {
-	@ViewChild('owlElement') owlElement: OwlCarousel;
+export class TabFlightsComponent implements DoCheck {
+	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
 	selectedFlightOffers = [];

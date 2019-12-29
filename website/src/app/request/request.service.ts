@@ -74,6 +74,7 @@ export class RequestService {
 		return path.split('/')[0];
 	}
 
+
 	resetSessionTimer(): void {
 		this.endSessionTimerSubject.next();
 	}
@@ -325,16 +326,18 @@ export class RequestService {
 	}
 
 	validatePromoCode(promoCode: string): Observable<boolean> {
-		return this.http.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode } }).pipe(
-			map(isValid => {
-				if (isValid) {
-					this.setProperty('promoCode', promoCode);
-				} else {
-					this.setProperty('promoCode', null);
-				}
-				return isValid;
-			})
-		);
+		return this.http
+			.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode } })
+			.pipe(
+				map(isValid => {
+					if (isValid) {
+						this.setProperty('promoCode', promoCode);
+					} else {
+						this.setProperty('promoCode', null);
+					}
+					return isValid;
+				})
+			);
 	}
 
 	getProfessions(): Observable<Array<DropDownItem> | null> {
@@ -353,16 +356,18 @@ export class RequestService {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, false);
-			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
-				map(requestResponse => {
-					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
-					this.lastRequestId = ticket.id;
-					this.trackingService.track('Submit Request', { requestId: ticket.id });
-					this.resetRequestState();
-					this.isLoading.next({ show: false, message: '' });
-					return ticket;
-				})
-			);
+			return this.http
+				.put<RequestResponse>(`${this.endPoint}/website/place`, { request })
+				.pipe(
+					map(requestResponse => {
+						const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
+						this.lastRequestId = ticket.id;
+						this.trackingService.track('Submit Request', { requestId: ticket.id });
+						this.resetRequestState();
+						this.isLoading.next({ show: false, message: '' });
+						return ticket;
+					})
+				);
 		}
 		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
@@ -370,16 +375,18 @@ export class RequestService {
 	submitRequestWithPayment(): Observable<PaymentInfo | null> {
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, true);
-			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
-				map(requestResponse => {
-					const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
-					this.lastRequestId = paymentInfo.id;
-					this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
-					this.resetRequestState();
-					this.isLoading.next({ show: false, message: '' });
-					return paymentInfo;
-				})
-			);
+			return this.http
+				.put<RequestResponse>(`${this.endPoint}/website/place`, { request })
+				.pipe(
+					map(requestResponse => {
+						const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
+						this.lastRequestId = paymentInfo.id;
+						this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
+						this.resetRequestState();
+						this.isLoading.next({ show: false, message: '' });
+						return paymentInfo;
+					})
+				);
 		}
 		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}

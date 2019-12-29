@@ -32,6 +32,8 @@ export class TabCitiesComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
+		this.snackBar = snackBar;
+		this.cityPaths.push(service.travelingFromCoordinates);
 		service.getCities().subscribe(res => {
 			const numberOfNights = this.service.getNumberOfNights();
 			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
@@ -60,6 +62,7 @@ export class TabCitiesComponent implements OnDestroy {
 		});
 
 		this.snackBar = snackBar;
+		this.cityPaths.push(service.travelingFromCoordinates);
 	}
 
 	updateSelectedCities(city) {

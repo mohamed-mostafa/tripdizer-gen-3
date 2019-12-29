@@ -1,3 +1,4 @@
+import { TravelingFrom } from './../traveling-from/traveling-from.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
@@ -10,7 +11,6 @@ import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
-import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { AttractionsRequest, CityAttractions } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
@@ -30,6 +30,7 @@ export class EstimatedCostService {
 	isCitiesTabVisited: boolean;
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
+	isAccommodationProcessing: boolean;
 
 	notificationTimer: any;
 	expirationTimer: any;
@@ -38,6 +39,8 @@ export class EstimatedCostService {
 	returnDate = this.requestService.getProperty('returnDate') as Moment;
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
+
+	travelingFromCoordinates: { lat: number; lng: number };
 
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
@@ -66,6 +69,14 @@ export class EstimatedCostService {
 	) {
 		this.setCurrentTabIndex(0);
 		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
+		this.translate.get('request.traveling_from.airports').subscribe(airports => {
+			Object.keys(airports).forEach(k => {
+				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
+					const cityLocation = { lat: Number(airports[k].lat), lng: Number(airports[k].lng) };
+					this.travelingFromCoordinates = cityLocation;
+				}
+			});
+		});
 
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
@@ -214,6 +225,10 @@ export class EstimatedCostService {
 
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
+
+		if (index === 2 && this.isAccommodationProcessing) {
+			this.accommodationLoading();
+		}
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
@@ -296,6 +311,17 @@ export class EstimatedCostService {
 
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message });
+	}
+
+	flightsLoading(): void {
+		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+	}
+
+	accommodationLoading(): void {
+		this.setIsLoading(
+			true,
+			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+		);
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {

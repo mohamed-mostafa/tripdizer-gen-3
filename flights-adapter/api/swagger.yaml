@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "tripdizer-flights-adapter-dot-tripdizer-dev.appspot.com" 
+host: "tripdizer-flights-adapter-dot-tripdizer-stg.appspot.com" 
 # host: "localhost:8085"
 basePath: "/flights/1.0.0"
 schemes:

@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
-	@ViewChild('owlElement') owlElement: OwlCarousel;
+	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	accommodationOffers: Array<Accommodation>;
 	accommodations: Array<Accommodation> = [];
@@ -41,8 +41,8 @@ export class TabAccommodationComponent {
 					this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
 				}
 			}
-			this.setSliderOptions();
 		});
+		this.setSliderOptions();
 	}
 
 	selectHotel(hotel) {

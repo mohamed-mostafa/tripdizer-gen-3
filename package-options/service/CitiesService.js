@@ -30,7 +30,7 @@ exports.searchCities = function(language, citiesSearchRequest) {
             description:
               language == "ar" ? city.arDescription : city.enDescription,
             iataCode: city.iataCode,
-            country: city.countryName,
+            country: city.countryEnName,
             countryDisplayName:
               language == "ar" ? city.countryArName : city.countryEnName,
             countryIsoCode: city.countryIsoCode,

@@ -5,12 +5,25 @@
 .other-purpose {
 	&,
 	input {
-		width: 85%;
+		width: 63%;
 		font-weight: 600;
+		top: 43%;
+		position: absolute;
 	}
 }
 
-.mat-radio-button:not(:hover) {
+.mat-radio-button:not(:hover),
+.mat-radio-button:hover {
+	.label-content-img {
+		position: relative;
+
+		.label-text {
+			top: 41%;
+			position: absolute;
+			width: 100%;
+		}
+	}
+
 	.other-purpose {
 		input {
 			border: 0;

@@ -442,19 +442,31 @@
 			"airports": [
 				{
 					"iataCode": "CAI",
-					"name": "القاهرة"
+					"name": "القاهرة",
+					"en_name": "Cairo",
+					"lat": "30.0444",
+					"lng": "31.2357"
 				},
 				{
 					"iataCode": "HBE",
-					"name": "الإسكندرية"
+					"name": "الإسكندرية",
+					"en_name": "Alexandria",
+					"lat": "31.2001",
+					"lng": "29.9187"
 				},
 				{
 					"iataCode": "HRG",
-					"name": "الغردقة"
+					"name": "الغردقة",
+					"en_name": "Hurghada",
+					"lat": "27.2579",
+					"lng": "33.8116"
 				},
 				{
 					"iataCode": "SSH",
-					"name": "شرم الشيخ"
+					"name": "شرم الشيخ",
+					"en_name": "Sharm El-Sheikh",
+					"lat": "27.9654",
+					"lng": "34.3618"
 				}
 			]
 		}

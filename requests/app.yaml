@@ -15,7 +15,7 @@ runtime: nodejs
 env: flex
 service: tripdizer-requests
 beta_settings:
-  cloud_sql_instances: tripdizer-dev:europe-west2:tripdizer-dev
+  cloud_sql_instances: tripdizer-dev:europe-west2:master-data
 
 manual_scaling:
   instances: 1
