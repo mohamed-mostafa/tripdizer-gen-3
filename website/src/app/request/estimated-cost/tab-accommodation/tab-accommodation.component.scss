@@ -72,6 +72,10 @@
 .hotel-name {
   font-size: 1.1rem;
   min-height: 60px;
+
+  span {
+    font-size: 16px;
+  }
 }
 
 .rating {
@@ -80,6 +84,7 @@
 
 .rating-stars .fa {
   color: #d5b40d;
+  font-size: 9px;
 }
 
 .destination-name {
