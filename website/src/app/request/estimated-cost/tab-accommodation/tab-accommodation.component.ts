@@ -40,10 +40,13 @@ export class TabAccommodationComponent {
 						this.accommodations.push(accommodationOffer);
 						this.selectedHotels.push(accommodationOffer.hotels[0]);
 						this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
+					} else {
+						this.accommodations.push(accommodationOffer);
 					}
 				}
 			},
 			error => {
+				this.loadedData = true;
 				this.accommodations = [];
 			}
 		);
