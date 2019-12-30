@@ -1,11 +1,9 @@
-import { first } from 'rxjs/operators';
 import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
+import { Component, ViewChild, DoCheck } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
 import { Subscription } from 'rxjs';
-import { isArray } from 'util';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
@@ -59,8 +57,6 @@ export class TabFlightsComponent implements DoCheck {
 		});
 
 		this.setSliderOptions();
-
-		console.log(this.hasFlightOffers);
 	}
 
 	selectOffer(offer) {
