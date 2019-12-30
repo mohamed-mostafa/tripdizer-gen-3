@@ -14,7 +14,7 @@ let searchAttractions = function searchAttractions(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 500);
     });
 };
 
@@ -28,7 +28,8 @@ let searchAccomodations = function searchAccomodations(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 502); // Bad Gateway: This error response means that the server,
+      //while working as a gateway to get a response needed to handle the request, got an invalid response.
     });
 };
 
@@ -41,7 +42,7 @@ let searchCities = function searchCities(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 500);
     });
 };
 
@@ -55,7 +56,7 @@ let searchTransportation = function searchTransportation(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 500);
     });
 };
 
