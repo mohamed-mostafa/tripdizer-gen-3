@@ -14,8 +14,8 @@ export class TravellerInfoComponent implements OnInit {
 	@Input() controlName;
 	controls: any = {
 		title: new FormControl('', [Validators.required]),
-		firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{4,10}$')]),
-		lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{4,10}$')]),
+		firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{0,14}$')]),
+		lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{0,14}$')]),
 		gender: new FormControl('', [Validators.required]),
 		dateOfBirth: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		nationality: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
