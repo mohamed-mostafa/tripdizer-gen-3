@@ -1,105 +1,105 @@
-<div *ngIf="flightOffers">
-  <div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5">
+<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5">
+	<div class="col-12 col-lg-3 d-none d-lg-block">
+		<c-app-flight-route [flightOffers]="flightOffers"></c-app-flight-route>
+	</div>
 
-    <div class="col-12 col-lg-3 d-none d-lg-block">
-      <c-app-flight-route [flightOffers]="flightOffers"></c-app-flight-route>
-    </div>
+	<div class="col-12 col-lg-6">
+		<div class="flights-box">
+			<div class="flights-title p-1">
+				<h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.choose_flights' | translate }}</h6>
+			</div>
 
+			<div class="mt-3">
+				<owl-carousel class="carousel" #owlElement [options]="options" [carouselClasses]="['row']">
+					<div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
+						<div *ngFor="let flightLeg of offer.flightLegs">
+							<div *ngFor="let segment of flightLeg.segments" class="mb-1">
+								<div class="row">
+									<div class="col-3 text-center">
+										<div class="carrier-logo d-inline-block">
+											<img src="{{ segment.carrier.wideLogo }}" class="mt-1 mx-auto" alt="" />
+										</div>
+									</div>
+									<div class="col-3 text-center">
+										<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
+										<p class="mb-0 font-weight-bold">{{ segment.departure | date: 'dd/MM HH:mm' }}</p>
+										<p class="mb-0">{{ segment.origin }}</p>
+									</div>
+									<div class="col-3 text-center">
+										<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.duration' | translate }}</p>
+										<p class="mb-0 font-weight-bold">{{ segment.totalDurationInWords }}</p>
+										<p class="mb-0">
+											<img src="../../../../assets/img/arrow_2.svg" alt="" />
+										</p>
+									</div>
+									<div class="col-3 text-center">
+										<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
+										<p class="mb-0 font-weight-bold">{{ segment.arrival | date: 'dd/MM HH:mm' }}</p>
+										<p class="mb-0">{{ segment.destination }}</p>
+									</div>
+								</div>
+							</div>
+							<hr />
+						</div>
 
-    <div class="col-12 col-lg-6">
-      <div class="flights-box">
-        <div class="flights-title p-1">
-          <h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.choose_flights' | translate }}</h6>
-        </div>
+						<div class="row mx-2">
+							<div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP':'symbol':'1.0-0' }}</div>
+							<div class="col-6 text-right text-blue font-weight-bold" (click)="selectOffer(offer)">
+								<span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+								<mat-checkbox
+									class="float-right mr-1"
+									[checked]="offer.selected"
+									[disableRipple]="true"
+									(click)="$event.preventDefault()"
+								></mat-checkbox>
+							</div>
+						</div>
+						<hr />
+					</div>
+				</owl-carousel>
 
-        <div class="mt-3">
+				<p *ngIf="!hasFlightOffers" class="px-2 text-center">
+					{{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
+				</p>
+			</div>
 
-          <owl-carousel *ngIf="flightOffers?.length > 0" class="carousel" #owlElement [options]="options"
-            [carouselClasses]="['row']">
-            <div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
+			<div *ngIf="flightOffers?.length > 1" class="row mb-2">
+				<div class="col-12 text-center slider-pagination">
+					<span (click)="previousSlide()">‹</span>
+					<span
+						*ngFor="let offer of flightOffers; let i = index"
+						class="mx-1"
+						(click)="goToSlide(i)"
+						[class.selected-slide-index]="i + 1 === selectedSlide"
+						>{{ i + 1 }}</span
+					>
+					<span (click)="nextSlide()">›</span>
+				</div>
+			</div>
+		</div>
+	</div>
 
-              <div *ngFor="let flightLeg of offer.flightLegs">
-                <div *ngFor="let segment of flightLeg.segments" class="mb-1">
-                  <div class="row">
-                    <div class="col-3 text-center">
-                      <div class="carrier-logo d-inline-block">
-                        <img src="{{segment.carrier.wideLogo}}" class="mt-1 mx-auto" alt="">
-                      </div>
-                    </div>
-                    <div class="col-3 text-center">
-                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
-                      <p class="mb-0 font-weight-bold">{{segment.departure | date:'dd/MM HH:mm'}}</p>
-                      <p class="mb-0">{{segment.origin}}</p>
-                    </div>
-                    <div class="col-3 text-center">
-                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.duration' | translate }}</p>
-                      <p class="mb-0 font-weight-bold">{{segment.totalDurationInWords}}</p>
-                      <p class="mb-0">
-                        <img src="../../../../assets/img/arrow_2.svg" alt="">
-                      </p>
-                    </div>
-                    <div class="col-3 text-center">
-                      <p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
-                      <p class="mb-0 font-weight-bold">{{segment.arrival | date:'dd/MM HH:mm'}}</p>
-                      <p class="mb-0">{{segment.destination}}</p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-              </div>
+	<div class="col-12 col-lg-3">
+		<div *ngIf="flightPaths?.length" class="row d-lg-block">
+			<div class="col-12">
+				<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
+			</div>
+		</div>
+	</div>
+</div>
 
-              <div class="row mx-2">
-                <div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP':'symbol':'1.0-0' }}</div>
-                <div class="col-6 text-right text-blue font-weight-bold" (click)="selectOffer(offer)">
-                  <span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
-                  <mat-checkbox class="float-right mr-1" [checked]="offer.selected" [disableRipple]="true"
-                    (click)="$event.preventDefault()"></mat-checkbox>
-                </div>
-              </div>
-              <hr />
+<div class="row">
+	<div class="col-12 text-center">
+		<a
+			href="javascript:void(0)"
+			(click)="back()"
+			class="back-btn position-relative"
+			[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'"
+			>{{ 'request.estimated_cost.tab_flights.back_label' | translate }}</a
+		>
 
-            </div>
-
-
-
-          </owl-carousel>
-
-          <p *ngIf="flightOffers.length < 1" class="px-2 text-center">
-            {{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
-          </p>
-
-        </div>
-
-        <div *ngIf="flightOffers.length > 1" class="row mb-2">
-          <div class="col-12 text-center slider-pagination">
-            <span (click)="previousSlide()">‹</span>
-            <span *ngFor="let offer of flightOffers; let i = index" class="mx-1" (click)="goToSlide(i)"
-              [class.selected-slide-index]="i+1 === selectedSlide">{{ i + 1 }}</span>
-            <span (click)="nextSlide()">›</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-12 col-lg-3">
-      <div *ngIf="flightPaths?.length" class="row d-lg-block">
-        <div class="col-12">
-          <c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12 text-center">
-      <a href="javascript:void(0)" (click)="back()" class="back-btn position-relative"
-        [ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'">{{ 'request.estimated_cost.tab_flights.back_label' | translate }}</a>
-
-      <button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
-        {{ 'request.estimated_cost.tab_flights.next_label' | translate }}
-      </button>
-    </div>
-  </div>
+		<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+			{{ 'request.estimated_cost.tab_flights.next_label' | translate }}
+		</button>
+	</div>
 </div>

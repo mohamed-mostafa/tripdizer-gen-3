@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Observable, Subject, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
@@ -40,7 +40,7 @@ export class EstimatedCostService {
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
 
-	travelingFromCoordinates: { lat: number; lng: number };
+	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
@@ -199,13 +199,14 @@ export class EstimatedCostService {
 						}
 						this.startSessionTimer();
 						this.updateFlightsOffersInCache(returnedFlightOffers);
-					},
-					error => {
-						if (this.isFlightsTabVisited) {
-							this.setIsLoading(false, '');
-						}
 					}
-				)
+				),
+				catchError((err: any, caught: Observable<any>) => {
+					if (this.isFlightsTabVisited) {
+						this.setIsLoading(false, '');
+					}
+					return err;
+				})
 			);
 		}
 	}
@@ -271,19 +272,15 @@ export class EstimatedCostService {
 				desiredCostPerPerson: accommodationDesiredCostPerPerson,
 			};
 			return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-				tap(
-					returnedAccommodation => {
-						if (this.isAccommodationTabVisited) {
-							this.setIsLoading(false, '');
-						}
-						this.updateAccommodationInCache(returnedAccommodation);
-					},
-					error => {
-						if (this.isAccommodationTabVisited) {
-							this.setIsLoading(false, '');
-						}
+				tap(returnedAccommodation => {
+					if (this.isAccommodationTabVisited) {
+						this.setIsLoading(false, '');
 					}
-				)
+					this.updateAccommodationInCache(returnedAccommodation);
+				}),
+				catchError((err: any, caught: Observable<any>) => {
+					return err;
+				})
 			);
 		}
 	}
