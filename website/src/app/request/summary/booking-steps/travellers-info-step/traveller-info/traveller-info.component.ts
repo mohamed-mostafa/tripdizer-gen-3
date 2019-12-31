@@ -19,10 +19,7 @@ export class TravellerInfoComponent implements OnInit {
 		gender: new FormControl('', [Validators.required]),
 		dateOfBirth: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		nationality: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
-		email: new FormControl('', [
-			Validators.required,
-			CustomValidators.isEmail()
-		]),
+		email: new FormControl('', [Validators.required, CustomValidators.validEmail()]),
 		phone: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		passportNumber: new FormControl('', [Validators.required]),
 		passportExpiry: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
@@ -70,8 +67,7 @@ export class TravellerInfoComponent implements OnInit {
 		return date;
 	};
 
-	constructor(private translate: TranslateService) {
-	}
+	constructor(private translate: TranslateService) {}
 
 	ngOnInit() {
 		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);

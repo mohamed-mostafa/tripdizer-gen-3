@@ -91,13 +91,13 @@ export class CustomValidators {
 			return Boolean(param()) ? null : { required: true };
 		};
 	}
-	static isEmail(errorMessage?: string): ValidatorFn {
+	static validEmail(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
 			if (!text || /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(text)) {
 				return null;
 			}
-			return { isEmail: errorMessage || true };
+			return { validEmail: errorMessage || true };
 		};
 	}
 }
