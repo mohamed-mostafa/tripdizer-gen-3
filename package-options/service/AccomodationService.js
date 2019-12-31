@@ -76,7 +76,7 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
       .catch(err => {
         console.error("Failed to retrieve accomodation offers for: " + JSON.stringify(accomomdationSearchRequest));
         console.error(err);
-        reject(accomodationOffers);
+        reject(err);
       });
   });
 };
