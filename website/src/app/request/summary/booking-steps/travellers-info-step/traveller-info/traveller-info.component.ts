@@ -1,8 +1,8 @@
+import { CustomValidators } from './../../../../../shared/utils/custom.validators';
+import { Gender } from './../../../../../shared/models/gender.enum';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { Gender } from 'src/app/shared/models/gender.enum';
-import { CustomValidators } from 'src/app/shared/utils';
 
 @Component({
 	selector: 'c-request-traveller-info',
@@ -19,7 +19,10 @@ export class TravellerInfoComponent implements OnInit {
 		gender: new FormControl('', [Validators.required]),
 		dateOfBirth: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		nationality: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
-		email: new FormControl('', [Validators.required, Validators.email]),
+		email: new FormControl('', [
+			Validators.required,
+			CustomValidators.isEmail()
+		]),
 		phone: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		passportNumber: new FormControl('', [Validators.required]),
 		passportExpiry: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
@@ -67,7 +70,8 @@ export class TravellerInfoComponent implements OnInit {
 		return date;
 	};
 
-	constructor(private translate: TranslateService) {}
+	constructor(private translate: TranslateService) {
+	}
 
 	ngOnInit() {
 		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);
