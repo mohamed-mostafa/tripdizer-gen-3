@@ -28,8 +28,7 @@ let searchAccomodations = function searchAccomodations(req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response, 502); // Bad Gateway: This error response means that the server,
-      //while working as a gateway to get a response needed to handle the request, got an invalid response.
+      utils.writeJson(res, response, 500);
     });
 };
 
