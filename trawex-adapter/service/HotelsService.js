@@ -23,14 +23,8 @@ const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_HOTELS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
-const config = {
-  user_id: TRAWEX_USERNAME,
-  user_password: TRAWEX_PASSWORD,
-  access: TRAWEX_ENVIRONMENT,
-  ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-  trackingId: makeTrackingId(13)
-};
-function makeTrackingId(length) {
+
+let createTrackingId = function(length) {
   var result = "";
   var characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -39,7 +33,16 @@ function makeTrackingId(length) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+};
+
+const config = {
+  user_id: TRAWEX_USERNAME,
+  user_password: TRAWEX_PASSWORD,
+  access: TRAWEX_ENVIRONMENT,
+  ip_address: TRAWEX_SOURCE_IP_ADDRESS,
+  trackingId: createTrackingId(13)
+};
+
 const ADULT_AGE = 20;
 const KID_AGE = 5;
 const INFANT_AGE = 0;
