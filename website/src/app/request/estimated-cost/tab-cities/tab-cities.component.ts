@@ -1,4 +1,3 @@
-import { first, take } from 'rxjs/operators';
 import { SummaryService } from './../../summary/summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
@@ -15,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class TabCitiesComponent implements OnDestroy {
 	cities: Array<CityDTO> = [];
-	selectedCities: Array<CityDTO> = [];
+	// selectedCities: Array<CityDTO> = [];
 	cityPaths: Array<{ lat: number; lng: number }> = [];
 	snackBar: MatSnackBar;
 	currentStepPath: string;
@@ -31,25 +30,27 @@ export class TabCitiesComponent implements OnDestroy {
 		public summaryService: SummaryService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
-
 		this.snackBar = snackBar;
 		this.cityPaths.push(service.travelingFromCoordinates);
-		service.getCities().subscribe(res => {
+		service.getCities().subscribe(citiesResult => {
 			const numberOfNights = this.service.getNumberOfNights();
 			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
 			let numberOfSelectedCities = 0;
-			if (maxNumberOfCities < res.length) {
+			if (maxNumberOfCities < citiesResult.length) {
 				numberOfSelectedCities = maxNumberOfCities;
 			} else {
-				numberOfSelectedCities = res.length;
+				numberOfSelectedCities = citiesResult.length;
 			}
 
-			for (let b = 0; b < res.length; b++) {
-				this.cities.push(res[b]);
-				res[b].select = false;
+			// getCitiesResult.forEach(city => {
+			// 	this.cities.push(city);
+			// 	city.select = false;
+			// });
+			for (let b = 0; b < citiesResult.length; b++) {
+				this.cities.push(citiesResult[b]);
+				citiesResult[b].select = false;
 				if (b + 1 <= numberOfSelectedCities) {
-					res[b].select = true;
-					this.selectedCities.push(res[b]);
+					citiesResult[b].select = true;
 				}
 			}
 
@@ -67,9 +68,9 @@ export class TabCitiesComponent implements OnDestroy {
 
 	updateSelectedCities(city) {
 		if (city.select === true) {
-			for (let r = 0; r < this.selectedCities.length; r++) {
-				if (this.selectedCities[r].iataCode === city.iataCode) {
-					this.selectedCities.splice(r, 1);
+			for (let r = 0; r < this.cities.length; r++) {
+				if (this.cities[r].iataCode === city.iataCode) {
+					this.cities.splice(r, 1);
 				}
 			}
 			for (const c of this.cities) {
@@ -87,25 +88,25 @@ export class TabCitiesComponent implements OnDestroy {
 			// check if no more cities should be selected
 			const numberOfNights = this.service.getNumberOfNights();
 			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
-			if (this.selectedCities.length >= maxNumberOfCities) {
+			if (this.cities.length >= maxNumberOfCities) {
 				// prevent more selections
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
 					duration: 3000,
 				});
 			} else {
 				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
-				this.selectedCities.splice(0, this.selectedCities.length); // clear list
+				this.cities.splice(0, this.cities.length); // clear list
 				this.cityPaths.splice(0, this.cityPaths.length);
 				for (const c of this.cities) {
 					// add all selected cities again
 					if (c.select) {
-						this.selectedCities.push(c);
+						this.cities.push(c);
 						const coordinates = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
 					if (c.iataCode === city.iataCode) {
 						c.select = true;
-						this.selectedCities.push(c); // add this newly selected city
+						this.cities.push(c); // add this newly selected city
 						const coordinates2 = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates2[0]), lng: Number(coordinates2[1]) });
 					}
@@ -129,8 +130,8 @@ export class TabCitiesComponent implements OnDestroy {
 	}
 
 	next(): void {
-		this.service.updateCitiesInCache(this.cities);
-		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
+		this.service.setCities(this.cities);
+		// this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
 	}
 

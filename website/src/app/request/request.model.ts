@@ -55,7 +55,8 @@ export class Request extends CommonFunctions {
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
 	private _flightOffers: Array<FlightOffer>;
-	private _selectedCities: Array<CityDTO>;
+	private _cities: Array<CityDTO>;
+	// private _selectedCities: Array<CityDTO>;
 	private _selectedHotels: Array<Hotel>;
 	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
@@ -169,12 +170,18 @@ export class Request extends CommonFunctions {
 	get destination(): Destination {
 		return this._destination;
 	}
-	get selectedCities(): Array<CityDTO> {
-		return this._selectedCities;
+	get cities(): Array<CityDTO> {
+		return this._cities;
 	}
-	set selectedCities(value: Array<CityDTO>) {
-		this._selectedCities = value;
+	set cities(value: Array<CityDTO>) {
+		this._cities = value;
 	}
+	// get selectedCities(): Array<CityDTO> {
+	// 	return this._selectedCities;
+	// }
+	// set selectedCities(value: Array<CityDTO>) {
+	// 	this._selectedCities = value;
+	// }
 	get flightOffers(): Array<FlightOffer> {
 		return this._flightOffers;
 	}

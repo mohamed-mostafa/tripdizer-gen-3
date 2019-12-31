@@ -71,7 +71,7 @@
 					<div class="col-12">
 						<a href="javascript:void(0)" (click)="goBack()" class="back-btn position-relative"
 							[ngClass]="('dir' | translate) === 'ltr' ? 'ml-4 ml-lg-5 mr-2' : 'mr-4 mr-lg-5 ml-2'">{{ 'request.estimated_cost.tab_cities.back_label' | translate }}</a>
-						<button (click)="next()" [disabled]="selectedCities.length < 1"
+						<button (click)="next()" [disabled]="cities.length < 1"
 							class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
 							{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
 						</button>

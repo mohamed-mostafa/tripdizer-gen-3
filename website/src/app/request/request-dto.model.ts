@@ -58,7 +58,7 @@ export class RequestRequest {
 			destination: request.destination ? request.destination.id : null,
 			flightOffers: request.flightOffers,
 			selectedHotels: request.selectedHotels,
-			selectedCities: request.selectedCities,
+			selectedCities: request.cities.filter(c => c.select),
 			selectedAttractions: request.selectedAttractions,
 			estimatedCost: request.estimatedCost,
 			visaAssistanceNeeded: request.visaAssistanceNeeded,
