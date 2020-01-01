@@ -15,10 +15,9 @@ import { Subscription } from 'rxjs';
 export class TabCitiesComponent implements OnDestroy {
 	cities: Array<CityDTO> = [];
 	// selectedCities: Array<CityDTO> = [];
-	cityPaths: Array<{ lat: number; lng: number }> = [];
+	cityPaths: any = [];
 	snackBar: MatSnackBar;
 	currentStepPath: string;
-	loadedData: boolean;
 	private subscriptions = new Subscription();
 
 	constructor(
@@ -31,43 +30,25 @@ export class TabCitiesComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 		this.snackBar = snackBar;
-		this.cityPaths.push(service.travelingFromCoordinates);
+
 		service.getCities().subscribe(citiesResult => {
-			const numberOfNights = this.service.getNumberOfNights();
-			const maxNumberOfCities = Math.ceil(numberOfNights / 1);
-			let numberOfSelectedCities = 0;
-			if (maxNumberOfCities < citiesResult.length) {
-				numberOfSelectedCities = maxNumberOfCities;
-			} else {
-				numberOfSelectedCities = citiesResult.length;
-			}
-
-			// getCitiesResult.forEach(city => {
-			// 	this.cities.push(city);
-			// 	city.select = false;
-			// });
-			for (let b = 0; b < citiesResult.length; b++) {
-				this.cities.push(citiesResult[b]);
-				citiesResult[b].select = false;
-				if (b + 1 <= numberOfSelectedCities) {
-					citiesResult[b].select = true;
-				}
-			}
-
-			this.cities.forEach(city => {
-				const coordinates = city.coordinates.split(', ');
-				this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
+			console.log(citiesResult);
+			this.cities = citiesResult;
+			this.cityPaths = citiesResult.map(city => {
+				return {
+					lat: Number(city.coordinates.split(', ')[0]),
+					lng: Number(city.coordinates.split(', ')[1]),
+				};
 			});
-
-			this.loadedData = true;
 		});
 
-		this.snackBar = snackBar;
-		this.cityPaths.push(service.travelingFromCoordinates);
+		const travelingFromCoordinates = service.travelingFromCoordinates;
+		this.cityPaths.unshift(travelingFromCoordinates);
+		this.cityPaths.push(travelingFromCoordinates);
 	}
 
-	updateSelectedCities(city) {
-		if (city.select === true) {
+	updateSelectedCities(city: CityDTO) {
+		if (city.selected === true) {
 			for (let r = 0; r < this.cities.length; r++) {
 				if (this.cities[r].iataCode === city.iataCode) {
 					this.cities.splice(r, 1);
@@ -75,7 +56,7 @@ export class TabCitiesComponent implements OnDestroy {
 			}
 			for (const c of this.cities) {
 				if (c.iataCode === city.iataCode) {
-					c.select = false;
+					c.selected = false;
 				}
 			}
 			for (let m = 0; m < this.cityPaths.length; m++) {
@@ -84,7 +65,7 @@ export class TabCitiesComponent implements OnDestroy {
 					this.cityPaths.splice(m, 1);
 				}
 			}
-		} else if (city.select === false) {
+		} else if (city.selected === false) {
 			// check if no more cities should be selected
 			const numberOfNights = this.service.getNumberOfNights();
 			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
@@ -99,13 +80,13 @@ export class TabCitiesComponent implements OnDestroy {
 				this.cityPaths.splice(0, this.cityPaths.length);
 				for (const c of this.cities) {
 					// add all selected cities again
-					if (c.select) {
+					if (c.selected) {
 						this.cities.push(c);
 						const coordinates = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
 					}
 					if (c.iataCode === city.iataCode) {
-						c.select = true;
+						c.selected = true;
 						this.cities.push(c); // add this newly selected city
 						const coordinates2 = c.coordinates.split(', ');
 						this.cityPaths.push({ lat: Number(coordinates2[0]), lng: Number(coordinates2[1]) });
@@ -113,8 +94,8 @@ export class TabCitiesComponent implements OnDestroy {
 				}
 			}
 		}
-		this.service.updateFlightsOffersInCache(null);
-		this.service.updateAccommodationInCache(null);
+		// this.service.updateFlightsOffersInCache(null);
+		// this.service.updateAccommodationInCache(null);
 	}
 
 	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {

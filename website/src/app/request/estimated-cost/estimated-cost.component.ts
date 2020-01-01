@@ -14,7 +14,7 @@ export class EstimatedCostComponent {
 
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
-	isCitiesTabVisited: boolean;
+	hasCities: boolean;
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
 	currentTabIndex: Observable<boolean>;
@@ -32,11 +32,10 @@ export class EstimatedCostComponent {
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
 
-			this.isCitiesTabVisited = this.isCitiesTabVisited || n === 0;
+			this.hasCities = service.cities.getValue()  || n === 0 ? true : false;
 			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
 			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
 
-			service.isCitiesTabVisited = this.isCitiesTabVisited;
 			service.isFlightsTabVisited = this.isFlightsTabVisited;
 			service.isAccommodationTabVisited = this.isAccommodationTabVisited;
 		});

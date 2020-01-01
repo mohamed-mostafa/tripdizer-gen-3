@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
@@ -27,7 +27,6 @@ export class EstimatedCostService {
 	accommodations = 'package-options/1.0.0/accomodationOffers';
 	attractionsEndPoint = 'package-options/1.0.0/cityAttractions';
 
-	// isCitiesTabVisited: boolean;
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
 	isAccommodationProcessing: boolean;
@@ -35,31 +34,25 @@ export class EstimatedCostService {
 	notificationTimer: any;
 	expirationTimer: any;
 
-	departureDate = this.requestService.getProperty('departureDate') as Moment;
-	returnDate = this.requestService.getProperty('returnDate') as Moment;
+	// departureDate = this.requestService.getProperty('departureDate') as Moment;
+	// returnDate = this.requestService.getProperty('returnDate') as Moment;
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
 
 	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
-	selectedFlightOffers = new Subject<FlightOffer[]>();
-	flightOffersSelected: Array<FlightOffer> = [];
-	// selectedCities = new Subject<CityDTO[]>();
-	// citiesSelected: Array<CityDTO> = [];new BehaviorSubject<CityDTO[]>(null);
+	// selectedFlightOffers = new Subject<FlightOffer[]>();
+	// flightOffersSelected: Array<FlightOffer> = [];
 	cities: BehaviorSubject<CityDTO[]>;
-	selectedHotels = new Subject<Hotel[]>();
-	hotelsSelected: Array<Hotel> = [];
+	flightOffers: BehaviorSubject<FlightOffer[]>;
+	accommodationOffers: BehaviorSubject<Accommodation[]>;
+	// selectedHotels = new Subject<Hotel[]>();
+	// hotelsSelected: Array<Hotel> = [];
 	summaryStations: Array<Station> = [];
 	cityAttractionsList: Array<CityAttractions> = [];
 
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
-
-	cachedTabsData: {
-		// cities?: Array<CityDTO>;
-		flightOffers?: Array<FlightOffer>;
-		accommodation?: Array<Accommodation>;
-	};
 
 	constructor(
 		private http: HttpClient,
@@ -68,9 +61,14 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+		console.log('init estimated cost');
 		this.setCurrentTabIndex(0);
 		this.cities = new BehaviorSubject<CityDTO[]>(this.requestService.getProperty('cities') || []);
-		// this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
+		this.flightOffers = new BehaviorSubject<FlightOffer[]>(this.requestService.getProperty('flightOffers') || []);
+		this.accommodationOffers = new BehaviorSubject<Accommodation[]>(
+			this.requestService.getProperty('accommodationOffers') || []
+		);
+
 		this.translate.get('request.traveling_from.airports').subscribe(airports => {
 			Object.keys(airports).forEach(k => {
 				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
@@ -80,20 +78,16 @@ export class EstimatedCostService {
 			});
 		});
 
-		// this.selectedCities.subscribe(citiesSelected => {
-		// 	this.citiesSelected = citiesSelected;
-		// 	this.requestService.setProperty('selectedCities', citiesSelected);
+		// this.selectedFlightOffers.subscribe(flightOffersSelected => {
+		// 	this.flightOffersSelected = flightOffersSelected;
+		// 	this.requestService.setProperty('flightOffers', flightOffersSelected);
 		// });
 
-		this.selectedFlightOffers.subscribe(flightOffersSelected => {
-			this.flightOffersSelected = flightOffersSelected;
-			this.requestService.setProperty('flightOffers', flightOffersSelected);
-		});
+		// this.selectedHotels.subscribe(hotelsSelected => {
+		// 	this.hotelsSelected = hotelsSelected;
+		// 	this.requestService.setProperty('selectedHotels', hotelsSelected);
+		// });
 
-		this.selectedHotels.subscribe(hotelsSelected => {
-			this.hotelsSelected = hotelsSelected;
-			this.requestService.setProperty('selectedHotels', hotelsSelected);
-		});
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
 		});
@@ -122,11 +116,19 @@ export class EstimatedCostService {
 	}
 
 	getDepartureDate(): Moment {
-		return this.departureDate;
+		return this.requestService.getProperty('departureDate') as Moment;
 	}
 
 	getReturnDate(): Moment {
-		return this.returnDate;
+		return this.requestService.getProperty('returnDate') as Moment;
+	}
+
+	getNumberOfNights(): number {
+		return this.getReturnDate().diff(this.getDepartureDate(), 'days');
+	}
+
+	getMaxNumberOfCities(): number {
+		return Math.ceil(this.getNumberOfNights() / 1);
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
@@ -140,25 +142,17 @@ export class EstimatedCostService {
 			});
 			const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 			return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-				tap(returnedCities => {
+				map(citiesResponse => {
+					return citiesResponse.map((city, i) => ({ ...city, selected: i < this.getMaxNumberOfCities() }));
+				}),
+				tap(citiesResponse => {
+					console.log(citiesResponse);
 					this.setIsLoading(false, '');
 					this.requestService.isLoading.next({ show: false, message: '' });
-					// this.updateCitiesInCache(returnedCities);
-					this.setCities(returnedCities);
+					this.setCities(citiesResponse);
 				})
 			);
 		}
-	}
-
-	// updateCitiesInCache(cities) {
-	// 	this.cachedTabsData.cities = cities;
-	// 	console.log(this.cachedTabsData);
-	// }
-
-	getNumberOfNights(): number {
-		this.departureDate = this.requestService.getProperty('departureDate') as Moment;
-		this.returnDate = this.requestService.getProperty('returnDate') as Moment;
-		return this.returnDate.diff(this.departureDate, 'days');
 	}
 
 	getSelectedCountries(): Array<Country> {
@@ -174,26 +168,32 @@ export class EstimatedCostService {
 		this.requestService.setProperty('cities', cities);
 	}
 
-	// getSelectedCities(): Array<CityDTO> {
-	// 	return this.citiesSelected;
-	// }
+	getSelectedCities() {
+		return this.cities.getValue().filter(c => c.selected);
+	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
-			return of(this.cachedTabsData.flightOffers);
+		// if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
+		// 	return of(this.cachedTabsData.flightOffers);
+
+		const flights = this.flightOffers.getValue();
+		if (flights && flights.length > 0) {
+			return of(flights);
 		} else {
 			if (this.isFlightsTabVisited) {
 				this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 			}
 
-			const citiesSequence: Array<CitySequence> = this.cities.getValue().filter(c => c.select).map(city => ({
+			const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 				countryIso: city.countryIsoCode,
 				cityIata: city.iataCode,
 				numberOfNights: city.numberOfNights,
 			}));
 			const flightRequest: FlightRequest = {
 				origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-				departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
+				departure: this.getDepartureDate()
+					.locale('en')
+					.format('YYYY-MM-DD'),
 				citiesSequence,
 				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
 				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
@@ -201,12 +201,13 @@ export class EstimatedCostService {
 			};
 
 			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-				tap(returnedFlightOffers => {
+				tap(flightResponse => {
 					if (this.isFlightsTabVisited) {
 						this.setIsLoading(false, '');
 					}
 					this.startSessionTimer();
-					this.updateFlightsOffersInCache(returnedFlightOffers);
+					// this.updateFlightsOffersInCache(returnedFlightOffers);
+					this.setFlights(flightResponse);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
 					if (this.isFlightsTabVisited) {
@@ -218,17 +219,28 @@ export class EstimatedCostService {
 		}
 	}
 
-	updateFlightsOffersInCache(flightsOffers) {
-		this.cachedTabsData.flightOffers = flightsOffers;
-		console.log(this.cachedTabsData);
+	// updateFlightsOffersInCache(flightsOffers) {
+	// 	this.cachedTabsData.flightOffers = flightsOffers;
+	// }
+
+	setFlights(flights: Array<FlightOffer>): void {
+		this.flightOffers.next(flights);
+		this.requestService.setProperty('flights', flights);
 	}
 
-	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
-		this.selectedFlightOffers.next(flightOffers);
+	getSelectedFlightOffers() {
+		return this.flightOffers.getValue().filter(c => c.selected);
 	}
+
+	// setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
+	// 	this.selectedFlightOffers.next(flightOffers);
+	// }
 
 	getFlightsTotalCost(): number {
-		return Object.keys(this.flightOffersSelected).reduce((pv, cv) => pv + +this.flightOffersSelected[cv].price, 0);
+		return Object.keys(this.getSelectedFlightOffers()).reduce(
+			(pv, cv) => pv + +this.getSelectedFlightOffers()[cv].price,
+			0
+		);
 	}
 
 	setCurrentTabIndex(index) {
@@ -240,8 +252,12 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-			return of(this.cachedTabsData.accommodation);
+		const accommodationOffers = this.accommodationOffers.getValue();
+		if (accommodationOffers && accommodationOffers.length > 0) {
+			console.log(accommodationOffers);
+			return of(accommodationOffers);
+			// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
+			// 	return of(this.cachedTabsData.accommodation);
 		} else {
 			if (this.isAccommodationTabVisited) {
 				this.setIsLoading(
@@ -250,7 +266,7 @@ export class EstimatedCostService {
 				);
 			}
 			const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
-			for (const sc of this.cities.getValue().filter(c => c.select)) {
+			for (const sc of this.getSelectedCities()) {
 				cities.push({
 					cityName: sc.name,
 					countryName: sc.countryDisplayName,
@@ -270,7 +286,9 @@ export class EstimatedCostService {
 				accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
 			}
 			const accommodationRequest: AccommodationRequest = {
-				arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
+				arrival: this.getDepartureDate()
+					.locale('en')
+					.format('YYYY-MM-DD'),
 				budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
 				cities,
 				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
@@ -283,7 +301,7 @@ export class EstimatedCostService {
 					if (this.isAccommodationTabVisited) {
 						this.setIsLoading(false, '');
 					}
-					this.updateAccommodationInCache(returnedAccommodation);
+					// this.updateAccommodationInCache(returnedAccommodation);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
 					return err;
@@ -292,26 +310,25 @@ export class EstimatedCostService {
 		}
 	}
 
-	updateAccommodationInCache(accommodation) {
-		this.cachedTabsData.accommodation = accommodation;
-		console.log(this.cachedTabsData);
-	}
+	// updateAccommodationInCache(accommodation) {
+	// 	this.cachedTabsData.accommodation = accommodation;
+	// }
 
-	setSelectedHotels(selectedHotels) {
-		this.selectedHotels.next(selectedHotels);
-	}
+	// setSelectedHotels(selectedHotels) {
+	// 	this.selectedHotels.next(selectedHotels);
+	// }
 
-	getSelectedHotels() {
-		return this.hotelsSelected;
-	}
+	// getSelectedHotels() {
+	// 	return this.hotelsSelected;
+	// }
 
-	getHotelsTotalCost() {
-		let totalCost = 0;
-		for (const sh of this.hotelsSelected) {
-			totalCost = sh.price + totalCost;
-		}
-		return totalCost;
-	}
+	// getHotelsTotalCost() {
+	// 	let totalCost = 0;
+	// 	for (const sh of this.hotelsSelected) {
+	// 		totalCost = sh.price + totalCost;
+	// 	}
+	// 	return totalCost;
+	// }
 
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message });
@@ -331,7 +348,7 @@ export class EstimatedCostService {
 	getAttractions(): Observable<Array<CityAttractions>> {
 		this.setIsLoading(true, '');
 		const cities: Array<{ cityIata: string; numberOfNights: number }> = [];
-		const selectedCities = this.cities.getValue().filter(c => c.select);
+		const selectedCities = this.getSelectedCities();
 		if (selectedCities && selectedCities.length > 0) {
 			for (const selectedCity of selectedCities) {
 				cities.push({ cityIata: selectedCity.iataCode, numberOfNights: selectedCity.numberOfNights });
@@ -346,9 +363,9 @@ export class EstimatedCostService {
 		);
 	}
 
-	getSelectedFlightOffers(): Array<FlightOffer> {
-		return this.flightOffersSelected;
-	}
+	// getSelectedFlightOffers(): Array<FlightOffer> {
+	// 	return this.flightOffersSelected;
+	// }
 
 	getSummaryStations(): Array<Station> {
 		this.getAttractions().subscribe(cityAttractionsList => {
@@ -356,8 +373,8 @@ export class EstimatedCostService {
 			this.requestService.setProperty('selectedAttractions', cityAttractionsList);
 
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
-			const selectedCities: Array<CityDTO> = this.cities.getValue().filter(c => c.select);
-			const selectedHotels: Array<Hotel> = this.getSelectedHotels();
+			const selectedCities: Array<CityDTO> = this.getSelectedCities();
+			const selectedHotels: Array<Hotel> = [] /* this.getSelectedHotels()*/;
 
 			// then construct the corresponding 'stations' objects
 			this.summaryStations.splice(0, this.summaryStations.length);
@@ -512,13 +529,12 @@ export class EstimatedCostService {
 				this.summaryStations.push(lastStation);
 			}
 		});
-		console.log(this.summaryStations);
 		return this.summaryStations;
 	}
 
 	public get summaryTotalCost() {
 		return {
-			hotels: this.getHotelsTotalCost(),
+			// hotels: this.getHotelsTotalCost(),
 			flights: this.getFlightsTotalCost(),
 		};
 	}

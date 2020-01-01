@@ -72,8 +72,8 @@ export class TabFlightsComponent implements DoCheck {
 	}
 
 	next(): void {
-		this.service.updateFlightsOffersInCache(this.flightOffers);
-		this.service.setSelectedFlightOffers(this.selectedFlightOffers);
+		// this.service.updateFlightsOffersInCache(this.flightOffers);
+		// this.service.setSelectedFlightOffers(this.selectedFlightOffers);
 		this.service.setCurrentTabIndex(2);
 	}
 

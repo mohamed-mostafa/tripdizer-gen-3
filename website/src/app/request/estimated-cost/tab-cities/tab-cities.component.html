@@ -1,4 +1,4 @@
-<div class="row justify-content-center" *ngIf="loadedData">
+<div class="row justify-content-center" *ngIf="cities.length">
 	<div class="col-lg-11">
 		<div class="row cities-tab py-2 py-md-4">
 			<div class="col-lg-8 cities-list">
@@ -7,7 +7,7 @@
 				</h4>
 
 				<div class="row city-item my-4 selected-city" *ngFor="let city of cities"
-					[class.selected-city]="city.select" (click)="updateSelectedCities(city)">
+					[class.selected-city]="city.selected" (click)="updateSelectedCities(city)">
 					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
 						<div class="item-img-container p-2 p-md-0">
 							<img [src]="city.thumbnail" alt="" />
@@ -44,7 +44,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
-								<mat-checkbox [checked]="city.select" [disableRipple]="true"
+								<mat-checkbox [checked]="city.selected" [disableRipple]="true"
 									(click)="$event.preventDefault()"></mat-checkbox>
 							</div>
 						</div>

@@ -91,8 +91,8 @@ export class TabAccommodationComponent {
 	}
 
 	next() {
-		this.service.setSelectedHotels(this.selectedHotels);
-		this.service.updateAccommodationInCache(this.accommodations);
+		// this.service.setSelectedHotels(this.selectedHotels);
+		// this.service.updateAccommodationInCache(this.accommodations);
 		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 
