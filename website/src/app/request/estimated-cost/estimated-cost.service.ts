@@ -95,6 +95,9 @@ export class EstimatedCostService {
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
 		});
+		this.requestService.clearEstimatedCostData.subscribe(() => {
+			this.cachedTabsData = { cities: [], flightOffers: [], accommodation: [] };
+		});
 	}
 
 	startSessionTimer(): void {
@@ -192,15 +195,13 @@ export class EstimatedCostService {
 			};
 
 			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-				tap(
-					returnedFlightOffers => {
-						if (this.isFlightsTabVisited) {
-							this.setIsLoading(false, '');
-						}
-						this.startSessionTimer();
-						this.updateFlightsOffersInCache(returnedFlightOffers);
+				tap(returnedFlightOffers => {
+					if (this.isFlightsTabVisited) {
+						this.setIsLoading(false, '');
 					}
-				),
+					this.startSessionTimer();
+					this.updateFlightsOffersInCache(returnedFlightOffers);
+				}),
 				catchError((err: any, caught: Observable<any>) => {
 					if (this.isFlightsTabVisited) {
 						this.setIsLoading(false, '');
