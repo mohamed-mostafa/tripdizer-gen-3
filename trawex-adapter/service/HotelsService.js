@@ -18,7 +18,7 @@ const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
 const TRAWEX_SOURCE_IP_ADDRESS =
   process.env.TRAWEX_HOTELS_SOURCE_IP_ADDRESS || "35.242.174.95";
 const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-// const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
+const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_HOTELS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
@@ -40,7 +40,7 @@ const config = {
   user_password: TRAWEX_PASSWORD,
   access: TRAWEX_ENVIRONMENT,
   ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-  trackingId: createTrackingId(13)
+  trackingId: TRAWEX_TRACKING_ID // createTrackingId(13)
 };
 
 const ADULT_AGE = 20;
