@@ -61,9 +61,7 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
-		console.log('init estimated cost');
 		this.setCurrentTabIndex(0);
-		this.cities = new BehaviorSubject<CityDTO[]>(this.requestService.getProperty('cities') || []);
 		this.flightOffers = new BehaviorSubject<FlightOffer[]>(this.requestService.getProperty('flightOffers') || []);
 		this.accommodationOffers = new BehaviorSubject<Accommodation[]>(
 			this.requestService.getProperty('accommodationOffers') || []
@@ -132,7 +130,8 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		const cities = this.cities.getValue();
+		const cities = this.requestService.getProperty('cities');
+		this.cities = new BehaviorSubject<CityDTO[]>(cities || []);
 		if (cities && cities.length > 0) {
 			return of(cities);
 		} else {
@@ -146,7 +145,6 @@ export class EstimatedCostService {
 					return citiesResponse.map((city, i) => ({ ...city, selected: i < this.getMaxNumberOfCities() }));
 				}),
 				tap(citiesResponse => {
-					console.log(citiesResponse);
 					this.setIsLoading(false, '');
 					this.requestService.isLoading.next({ show: false, message: '' });
 					this.setCities(citiesResponse);
@@ -169,7 +167,9 @@ export class EstimatedCostService {
 	}
 
 	getSelectedCities() {
-		return this.cities.getValue().filter(c => c.selected);
+		if (this.cities) {
+			return this.cities.getValue().filter(c => c.selected);
+		}
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
@@ -254,7 +254,6 @@ export class EstimatedCostService {
 	getAccommodation(): Observable<Array<Accommodation>> {
 		const accommodationOffers = this.accommodationOffers.getValue();
 		if (accommodationOffers && accommodationOffers.length > 0) {
-			console.log(accommodationOffers);
 			return of(accommodationOffers);
 			// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
 			// 	return of(this.cachedTabsData.accommodation);

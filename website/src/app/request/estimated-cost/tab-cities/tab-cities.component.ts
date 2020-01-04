@@ -32,92 +32,70 @@ export class TabCitiesComponent implements OnDestroy {
 		this.snackBar = snackBar;
 
 		service.getCities().subscribe(citiesResult => {
-			console.log(citiesResult);
 			this.cities = citiesResult;
-			this.cityPaths = citiesResult.map(city => {
-				return {
-					lat: Number(city.coordinates.split(', ')[0]),
-					lng: Number(city.coordinates.split(', ')[1]),
-				};
-			});
+			this.updateCitiesPaths();
+			this.service.setCities(this.cities);
 		});
-
-		const travelingFromCoordinates = service.travelingFromCoordinates;
-		this.cityPaths.unshift(travelingFromCoordinates);
-		this.cityPaths.push(travelingFromCoordinates);
 	}
 
 	updateSelectedCities(city: CityDTO) {
-		if (city.selected === true) {
-			for (let r = 0; r < this.cities.length; r++) {
-				if (this.cities[r].iataCode === city.iataCode) {
-					this.cities.splice(r, 1);
-				}
-			}
-			for (const c of this.cities) {
+		if (city.selected) {
+			this.cities.forEach(c => {
 				if (c.iataCode === city.iataCode) {
 					c.selected = false;
 				}
-			}
-			for (let m = 0; m < this.cityPaths.length; m++) {
-				const coordinates = city.coordinates.split(', ');
-				if (Number(coordinates[0]) === this.cityPaths[m].lat && Number(coordinates[1]) === this.cityPaths[m].lng) {
-					this.cityPaths.splice(m, 1);
-				}
-			}
-		} else if (city.selected === false) {
-			// check if no more cities should be selected
+			});
+			this.updateCitiesPaths();
+		} else {
 			const numberOfNights = this.service.getNumberOfNights();
-			const maxNumberOfCities = Math.ceil(numberOfNights / 2);
-			if (this.cities.length >= maxNumberOfCities) {
-				// prevent more selections
+			if (this.getSelectedCities().length >= this.service.getMaxNumberOfCities()) {
 				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
 					duration: 3000,
 				});
 			} else {
-				// this.selectedCities.push(city); // this shouldn't be just 'push' because now cities order is not correct !!
-				this.cities.splice(0, this.cities.length); // clear list
-				this.cityPaths.splice(0, this.cityPaths.length);
-				for (const c of this.cities) {
-					// add all selected cities again
-					if (c.selected) {
-						this.cities.push(c);
-						const coordinates = c.coordinates.split(', ');
-						this.cityPaths.push({ lat: Number(coordinates[0]), lng: Number(coordinates[1]) });
-					}
+				this.cities.forEach(c => {
 					if (c.iataCode === city.iataCode) {
 						c.selected = true;
-						this.cities.push(c); // add this newly selected city
-						const coordinates2 = c.coordinates.split(', ');
-						this.cityPaths.push({ lat: Number(coordinates2[0]), lng: Number(coordinates2[1]) });
 					}
-				}
+				});
+				this.updateCitiesPaths();
 			}
 		}
-		// this.service.updateFlightsOffersInCache(null);
-		// this.service.updateAccommodationInCache(null);
+		this.service.setCities(this.cities);
 	}
 
-	calculateCitiesNights(cities: Array<CityDTO>): Array<CityDTO> {
-		const numberOfNights = this.service.getNumberOfNights();
-		const citiesLength = cities.length;
+	getSelectedCities(): Array<CityDTO> {
+		return this.cities.filter(c => c.selected);
+	}
 
-		const floorDivision = Math.floor(numberOfNights / citiesLength);
-		const modulus = numberOfNights % citiesLength;
-		return cities.map((city: CityDTO, index) => ({
+	calculateCitiesNights(): Array<CityDTO> {
+		const numberOfNights = this.service.getNumberOfNights();
+		const floorDivision = Math.floor(numberOfNights / this.getSelectedCities().length);
+		const modulus = numberOfNights % this.getSelectedCities().length;
+		return this.getSelectedCities().map((city: CityDTO, index) => ({
 			...city,
 			numberOfNights: index === 0 ? floorDivision + modulus : floorDivision,
 		}));
 	}
 
 	next(): void {
-		this.service.setCities(this.cities);
+		// this.service.setCities(this.calculateCitiesNights());
 		// this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
 	}
 
 	goBack(): void {
 		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+	}
+
+	updateCitiesPaths() {
+		this.cityPaths = this.getSelectedCities()
+			.map(city => {
+				return { lat: Number(city.coordinates.split(', ')[0]), lng: Number(city.coordinates.split(', ')[1]) };
+			});
+		const travelingFromCoordinates = this.service.travelingFromCoordinates;
+		this.cityPaths.unshift(travelingFromCoordinates);
+		this.cityPaths.push(travelingFromCoordinates);
 	}
 
 	ngOnDestroy() {

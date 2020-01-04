@@ -38,7 +38,7 @@
 						<div class="col-12">
 							<div class="p-2 p-md-0 mt-3 mt-md-0">
 								<c-estimated-cost-flights
-									*ngIf="selectedTab === 1 || (isFlightsTabVisited && selectedTab !== 0 && selectedTab !== 2)"
+									*ngIf="selectedTab === 1"
 								></c-estimated-cost-flights>
 							</div>
 						</div>
@@ -55,7 +55,7 @@
 						<div class="col-12">
 							<div class="p-2 p-md-0 mt-3 mt-md-0">
 								<c-estimated-cost-accommodation
-									*ngIf="selectedTab === 1 || selectedTab === 2 || (isAccommodationTabVisited && selectedTab !== 0)"
+									*ngIf="selectedTab === 2"
 								></c-estimated-cost-accommodation>
 							</div>
 						</div>
