@@ -39,6 +39,7 @@ export class RequestService {
 	lastRequestId: number;
 
 	endSessionTimerSubject = new Subject();
+	clearEstimatedCostData = new Subject(); // TODO: remove this line after refactoring
 
 	constructor(
 		private http: HttpClient,
@@ -73,7 +74,6 @@ export class RequestService {
 	private refineStepPath(path: string): string {
 		return path.split('/')[0];
 	}
-
 
 	resetSessionTimer(): void {
 		this.endSessionTimerSubject.next();
@@ -187,6 +187,23 @@ export class RequestService {
 	}
 
 	setProperty(key: string, value: any): void {
+		// TODO: START --- remove this after refactoring
+		const estimatedCostPreRequisites = [
+			'travelingFrom',
+			'destination',
+			'departureDate',
+			'returnDate',
+			'purpose',
+			'adultsNumber',
+			'kidsNumber',
+			'infantsNumber',
+			'budget',
+			'selectedAttractions',
+		];
+		if (estimatedCostPreRequisites.some(p => p === key) && this.getProperty(key) !== value) {
+			this.clearEstimatedCostData.next(value);
+		}
+		// TODO: END --- remove this after refactoring
 		this.requestData[key] = value;
 		this.requestDataChanged.next({
 			key,

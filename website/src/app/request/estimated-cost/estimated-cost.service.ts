@@ -95,6 +95,9 @@ export class EstimatedCostService {
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
 		});
+		this.requestService.clearEstimatedCostData.subscribe(() => {
+			this.cachedTabsData = { cities: [], flightOffers: [], accommodation: [] };
+		});
 	}
 
 	startSessionTimer(): void {
@@ -128,22 +131,22 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
-		if (this.cachedTabsData.cities && this.cachedTabsData.cities.length) {
-			return of(this.cachedTabsData.cities);
-		} else {
-			this.requestService.isLoading.next({
-				show: true,
-				message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
-			});
-			const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
-			return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-				tap(returnedCities => {
-					this.setIsLoading(false, '');
-					this.requestService.isLoading.next({ show: false, message: '' });
-					this.updateCitiesInCache(returnedCities);
-				})
-			);
-		}
+		// if (this.cachedTabsData.cities && this.cachedTabsData.cities.length) {
+		// 	return of(this.cachedTabsData.cities);
+		// } else {
+		this.requestService.isLoading.next({
+			show: true,
+			message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
+		});
+		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
+		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
+			tap(returnedCities => {
+				this.setIsLoading(false, '');
+				this.requestService.isLoading.next({ show: false, message: '' });
+				this.updateCitiesInCache(returnedCities);
+			})
+		);
+		// }
 	}
 
 	updateCitiesInCache(cities) {
@@ -170,45 +173,43 @@ export class EstimatedCostService {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
-			return of(this.cachedTabsData.flightOffers);
-		} else {
-			if (this.isFlightsTabVisited) {
-				this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
-			}
-
-			const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
-				countryIso: city.countryIsoCode,
-				cityIata: city.iataCode,
-				numberOfNights: city.numberOfNights,
-			}));
-			const flightRequest: FlightRequest = {
-				origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
-				departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
-				citiesSequence,
-				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
-				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
-				numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
-			};
-
-			return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-				tap(
-					returnedFlightOffers => {
-						if (this.isFlightsTabVisited) {
-							this.setIsLoading(false, '');
-						}
-						this.startSessionTimer();
-						this.updateFlightsOffersInCache(returnedFlightOffers);
-					}
-				),
-				catchError((err: any, caught: Observable<any>) => {
-					if (this.isFlightsTabVisited) {
-						this.setIsLoading(false, '');
-					}
-					return err;
-				})
-			);
+		// if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
+		// 	return of(this.cachedTabsData.flightOffers);
+		// } else {
+		if (this.isFlightsTabVisited) {
+			this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 		}
+
+		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
+			countryIso: city.countryIsoCode,
+			cityIata: city.iataCode,
+			numberOfNights: city.numberOfNights,
+		}));
+		const flightRequest: FlightRequest = {
+			origin: (this.requestService.getProperty('travelingFrom') as TravelingFrom).iataCode,
+			departure: this.departureDate.locale('en').format('YYYY-MM-DD'),
+			citiesSequence,
+			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+		};
+
+		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
+			tap(returnedFlightOffers => {
+				if (this.isFlightsTabVisited) {
+					this.setIsLoading(false, '');
+				}
+				this.startSessionTimer();
+				this.updateFlightsOffersInCache(returnedFlightOffers);
+			}),
+			catchError((err: any, caught: Observable<any>) => {
+				if (this.isFlightsTabVisited) {
+					this.setIsLoading(false, '');
+				}
+				return err;
+			})
+		);
+		// }
 	}
 
 	updateFlightsOffersInCache(flightsOffers) {
@@ -233,56 +234,56 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-			return of(this.cachedTabsData.accommodation);
-		} else {
-			if (this.isAccommodationTabVisited) {
-				this.setIsLoading(
-					true,
-					this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-				);
-			}
-			const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
-			for (const sc of this.citiesSelected) {
-				cities.push({
-					cityName: sc.name,
-					countryName: sc.countryDisplayName,
-					cityIata: sc.iataCode,
-					numberOfNights: sc.numberOfNights,
-				});
-			}
-
-			this.budgetCategory = this.requestService.getProperty('budgetCategory');
-			let accommodationDesiredCostPerPerson = 0;
-			if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
-				const flightCost = this.getFlightsTotalCost();
-				const numberOfPayingCustomers =
-					this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
-				const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
-				const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
-				accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
-			}
-			const accommodationRequest: AccommodationRequest = {
-				arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
-				budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
-				cities,
-				numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
-				numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
-				numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
-				desiredCostPerPerson: accommodationDesiredCostPerPerson,
-			};
-			return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-				tap(returnedAccommodation => {
-					if (this.isAccommodationTabVisited) {
-						this.setIsLoading(false, '');
-					}
-					this.updateAccommodationInCache(returnedAccommodation);
-				}),
-				catchError((err: any, caught: Observable<any>) => {
-					return err;
-				})
+		// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
+		// 	return of(this.cachedTabsData.accommodation);
+		// } else {
+		if (this.isAccommodationTabVisited) {
+			this.setIsLoading(
+				true,
+				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
 			);
 		}
+		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
+		for (const sc of this.citiesSelected) {
+			cities.push({
+				cityName: sc.name,
+				countryName: sc.countryDisplayName,
+				cityIata: sc.iataCode,
+				numberOfNights: sc.numberOfNights,
+			});
+		}
+
+		this.budgetCategory = this.requestService.getProperty('budgetCategory');
+		let accommodationDesiredCostPerPerson = 0;
+		if (this.budgetCategory === LUTBudgetCategory.OwnBudget) {
+			const flightCost = this.getFlightsTotalCost();
+			const numberOfPayingCustomers =
+				this.requestService.getProperty('adultsNumber') + this.requestService.getProperty('kidsNumber');
+			const flightCostPerPerson = Math.ceil(flightCost / numberOfPayingCustomers);
+			const totalDesiredCostPerPerson = this.requestService.getProperty('budget');
+			accommodationDesiredCostPerPerson = totalDesiredCostPerPerson - flightCostPerPerson;
+		}
+		const accommodationRequest: AccommodationRequest = {
+			arrival: this.departureDate.locale('en').format('YYYY-MM-DD'),
+			budgetCategory: this.budgetCategory.toString(), // 'SUPER ECONOMY',
+			cities,
+			numberOfAdults: this.requestService.getProperty('adultsNumber') as number,
+			numberOfChildren: this.requestService.getProperty('kidsNumber') as number,
+			numberOfInfants: this.requestService.getProperty('infantsNumber') as number,
+			desiredCostPerPerson: accommodationDesiredCostPerPerson,
+		};
+		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
+			tap(returnedAccommodation => {
+				if (this.isAccommodationTabVisited) {
+					this.setIsLoading(false, '');
+				}
+				this.updateAccommodationInCache(returnedAccommodation);
+			}),
+			catchError((err: any, caught: Observable<any>) => {
+				return err;
+			})
+		);
+		// }
 	}
 
 	updateAccommodationInCache(accommodation) {

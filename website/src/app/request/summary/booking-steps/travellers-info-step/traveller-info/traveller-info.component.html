@@ -1,129 +1,173 @@
 <div [formGroup]="formGroup" class="mt-4">
-  <h3 class="text-capitalize">{{ getTravellerTitle() }}</h3>
-  <h6 class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">{{ 'request.estimated_cost.summary.traveller_info.hint' | translate }}</h6>
+	<h3 class="text-capitalize">{{ getTravellerTitle() }}</h3>
+	<h6 class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">{{ 'request.estimated_cost.summary.traveller_info.hint' | translate }}</h6>
 
-  <div class="row">
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('title')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-error>
-        <mat-select [formControlName]="controlName + '-title'" [placeholder]="'user.user_info.title' | translate">
-          <mat-option *ngFor="let title of getTitles()" [value]="title">{{ title }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+	<div class="row">
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('title')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-title').errors | errorMessage }}</mat-error>
+				<mat-select [formControlName]="controlName + '-title'" [placeholder]="'user.user_info.title' | translate">
+					<mat-option *ngFor="let title of getTitles()" [value]="title">{{ title }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('firstName')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.first_name' | translate" [formControlName]="controlName + '-firstName'"
-          maxlength="14" />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('lastName')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.last_name' | translate" [formControlName]="controlName + '-lastName'"
-          maxlength="14" />
-      </mat-form-field>
-    </div>
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('gender')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-error>
-        <mat-select [formControlName]="controlName + '-gender'" [placeholder]="'user.user_info.gender' | translate">
-          <mat-option [value]="gender.Male">{{ 'request.information.male' | translate }}</mat-option>
-          <mat-option [value]="gender.Female">{{ 'request.information.female' | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('firstName')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-firstName').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.first_name' | translate"
+					[formControlName]="controlName + '-firstName'"
+					maxlength="14"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('lastName')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-lastName').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.last_name' | translate"
+					[formControlName]="controlName + '-lastName'"
+					maxlength="14"
+				/>
+			</mat-form-field>
+		</div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('gender')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-gender').errors | errorMessage }}</mat-error>
+				<mat-select [formControlName]="controlName + '-gender'" [placeholder]="'user.user_info.gender' | translate">
+					<mat-option [value]="gender.Male">{{ 'request.information.male' | translate }}</mat-option>
+					<mat-option [value]="gender.Female">{{ 'request.information.female' | translate }}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
 
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('dateOfBirth')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					[max]="travellerMaxDate()"
+					[min]="travellerMinDate()"
+					[matDatepicker]="dateOfBirthPicker"
+					id="traveler-birthday"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.birth_date' | translate"
+					(click)="dateOfBirthPicker.open()"
+					(focus)="dateOfBirthPicker.open()"
+					[formControlName]="controlName + '-dateOfBirth'"
+				/>
+				<mat-datepicker #dateOfBirthPicker [touchUi]="true"></mat-datepicker>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('dateOfBirth')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-dateOfBirth').errors | errorMessage }}</mat-error>
-        <input matInput [max]="travellerMaxDate()" [min]="travellerMinDate()" [matDatepicker]="dateOfBirthPicker"
-          id="traveler-birthday" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.birth_date' | translate" (click)="dateOfBirthPicker.open()"
-          (focus)="dateOfBirthPicker.open()" [formControlName]="controlName + '-dateOfBirth'" />
-        <mat-datepicker #dateOfBirthPicker [touchUi]="true"></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('nationality')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-error>
-        <mat-select [formControlName]="controlName + '-nationality'"
-          [placeholder]="'user.user_info.nationality' | translate">
-          <mat-option value="EG">Egyptian</mat-option>
-        </mat-select>
-        <!-- <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('nationality')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-nationality').errors | errorMessage }}</mat-error>
+				<mat-select
+					[formControlName]="controlName + '-nationality'"
+					[placeholder]="'user.user_info.nationality' | translate"
+				>
+					<mat-option value="EG">Egyptian</mat-option>
+				</mat-select>
+				<!-- <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
           [placeholder]="'user.user_info.nationality' | translate" [formControlName]="controlName + '-nationality'"
           maxlength="2" /> -->
-      </mat-form-field>
-    </div>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('email')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.email' | translate" [formControlName]="controlName + '-email'" />
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('email')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-email').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.email' | translate"
+					[formControlName]="controlName + '-email'"
+				/>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('phone')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.mobile' | translate" [formControlName]="controlName + '-phone'" />
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('phone')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-phone').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.mobile' | translate"
+					[formControlName]="controlName + '-phone'"
+				/>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('passportNumber')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.passport_number' | translate"
-          [formControlName]="controlName + '-passportNumber'" />
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('passportNumber')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-passportNumber').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.passport_number' | translate"
+					[formControlName]="controlName + '-passportNumber'"
+				/>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('passportExpiry')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-error>
-        <input matInput [min]="currentDate" [matDatepicker]="passportExpiryPicker" id="traveler-passport_expiry"
-          class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.passport_expiry' | translate" (click)="passportExpiryPicker.open()"
-          (focus)="passportExpiryPicker.open()" [formControlName]="controlName + '-passportExpiry'" />
-        <mat-datepicker #passportExpiryPicker [touchUi]="true"></mat-datepicker>
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('passportExpiry')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-passportExpiry').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					[min]="currentDate"
+					[matDatepicker]="passportExpiryPicker"
+					id="traveler-passport_expiry"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.passport_expiry' | translate"
+					(click)="passportExpiryPicker.open()"
+					(focus)="passportExpiryPicker.open()"
+					[formControlName]="controlName + '-passportExpiry'"
+				/>
+				<mat-datepicker #passportExpiryPicker [touchUi]="true"></mat-datepicker>
+			</mat-form-field>
+		</div>
 
-    <div class="col-12 col-md-4" *ngIf="getControlVisibility('passportIssueCountry')">
-      <mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-        <mat-hint>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-hint>
-        <mat-error>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-error>
-        <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
-          [placeholder]="'user.user_info.passport_issue_country' | translate"
-          [formControlName]="controlName + '-passportIssueCountry'" maxlength="2" />
-      </mat-form-field>
-    </div>
+		<div class="col-12 col-md-4" *ngIf="getControlVisibility('passportIssueCountry')">
+			<mat-form-field class="form-control-md mb-1 mb-sm-2 mb-md-3 mb-lg-4">
+				<mat-hint>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-hint>
+				<mat-error>{{ formGroup.get(controlName + '-passportIssueCountry').errors | errorMessage }}</mat-error>
+				<input
+					matInput
+					type="text"
+					class="text-yellow text-uppercase font-weight-bold"
+					[placeholder]="'user.user_info.passport_issue_country' | translate"
+					[formControlName]="controlName + '-passportIssueCountry'"
+					maxlength="2"
+				/>
+			</mat-form-field>
+		</div>
+	</div>
 
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <hr />
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
 </div>

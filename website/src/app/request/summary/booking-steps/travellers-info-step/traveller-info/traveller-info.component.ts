@@ -14,12 +14,27 @@ export class TravellerInfoComponent implements OnInit {
 	@Input() controlName;
 	controls: any = {
 		title: new FormControl('', [Validators.required]),
-		firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{0,14}$')]),
-		lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]{0,14}$')]),
+		firstName: new FormControl('', [
+			Validators.required,
+			Validators.pattern('^[a-zA-Z0-9]{0,14}$'),
+			CustomValidators.leadingSpaceValidator(),
+			CustomValidators.trailingSpaceValidator(),
+		]),
+		lastName: new FormControl('', [
+			Validators.required,
+			Validators.pattern('^[a-zA-Z0-9]{0,14}$'),
+			CustomValidators.leadingSpaceValidator(),
+			CustomValidators.trailingSpaceValidator(),
+		]),
 		gender: new FormControl('', [Validators.required]),
 		dateOfBirth: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		nationality: new FormControl('', [Validators.required, Validators.pattern('^([A-Z][A-Z])$')]),
-		email: new FormControl('', [Validators.required, CustomValidators.validEmail()]),
+		email: new FormControl('', [
+			Validators.required,
+			CustomValidators.validEmail(),
+			CustomValidators.leadingSpaceValidator(),
+			CustomValidators.trailingSpaceValidator(),
+		]),
 		phone: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
 		passportNumber: new FormControl('', [Validators.required]),
 		passportExpiry: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
