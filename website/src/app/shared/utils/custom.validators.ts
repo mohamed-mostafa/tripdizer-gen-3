@@ -105,12 +105,18 @@ export class CustomValidators {
 			return { validEmail: errorMessage || true };
 		};
 	}
-	static trimValidator(errorMessage?: string): ValidatorFn {
+	static leadingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
 			if (text.startsWith(' ')) {
 				return { leadingWhiteSpace: errorMessage || true };
 			}
+			return null;
+		};
+	}
+	static trailingSpaceValidator(errorMessage?: string): ValidatorFn {
+		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
+			const text = c.value;
 			if (text.endsWith(' ')) {
 				return { trailingWhiteSpace: errorMessage || true };
 			}
