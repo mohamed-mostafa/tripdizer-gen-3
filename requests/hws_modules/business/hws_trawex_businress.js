@@ -1,6 +1,7 @@
 const httpRequest = require('request');
 
 const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.235.53.114:8085/trawex-adapter/1.0.0';
+// const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://localhost:8085/trawex-adapter/1.0.0';
 
 let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
 	return new Promise(function(resolve, reject) {

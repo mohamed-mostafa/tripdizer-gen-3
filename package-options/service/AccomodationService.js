@@ -7,7 +7,9 @@ const TRAWEX_ADAPTER_ENDPOINT =
 const MASTER_DATA_ENDPOINT =
   process.env.MASTER_DATA_ENDPOINT || "http://localhost:8083/master-data";
 
-const MEDIA_STORAGE_BASE_URL = process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com';
+const MEDIA_STORAGE_BASE_URL =
+  process.env.MEDIA_STORAGE_BASE_URL ||
+  "https://storage.cloud.google.com/tripdizer-dev.appspot.com";
 
 const MAX_NUMBER_OF_HOTELS_PER_CITY = 9;
 
@@ -15,7 +17,7 @@ const ADULT = { type: "adult", age: 20 };
 const KID = { type: "child", age: 5 };
 const INFANT = { type: "child", age: 1 };
 
-exports.searchAccomodations = function (language, accomomdationSearchRequest) {
+exports.searchAccomodations = function(language, accomomdationSearchRequest) {
   return new Promise(async (resolve, reject) => {
     const {
       arrival,
@@ -66,15 +68,20 @@ exports.searchAccomodations = function (language, accomomdationSearchRequest) {
       .then(hotels => {
         // group the hotels into accomodation offers, one per city
         hotels.forEach(hotel => {
-          var accomodationOffer = accomodationOffers.find(accomodationOffer => accomodationOffer.city.name == hotel.city);
+          var accomodationOffer = accomodationOffers.find(
+            accomodationOffer => accomodationOffer.city.name == hotel.city
+          );
           if (accomodationOffer) {
             accomodationOffer.hotels.push(hotel);
           }
-        })
+        });
         resolve(accomodationOffers);
       })
       .catch(err => {
-        console.error("Failed to retrieve accomodation offers for: " + JSON.stringify(accomomdationSearchRequest));
+        console.error(
+          "Failed to retrieve accomodation offers for: " +
+            JSON.stringify(accomomdationSearchRequest)
+        );
         console.error(err);
         reject(err);
       });
@@ -91,7 +98,7 @@ const getHotelsOfMultipleCities = (
   nationality = "EG",
   currency = "EGP"
 ) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     httpRequest.post(
       {
         url: TRAWEX_ADAPTER_ENDPOINT + "/hotels/search",
@@ -106,12 +113,14 @@ const getHotelsOfMultipleCities = (
           currency
         }
       },
-      function (error, response, hotels) {
+      function(error, response, hotels) {
         if (error) {
           reject(error);
         } else if (response.statusCode != 200) {
           reject(response.statusMessage);
         } else {
+          console.log(hotels);
+
           resolve(
             hotels.map(h => ({
               id: h.id,
@@ -193,12 +202,12 @@ const getRangeOfStarsByBudgetCategory = budgetCategory => {
 };
 
 function getCityByIata(cityIata, language) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     var cityUrl = MASTER_DATA_ENDPOINT + "/city/" + cityIata;
 
     httpRequest.get(
       { url: cityUrl, json: true, qs: { lang: language } },
-      function (error, response, city) {
+      function(error, response, city) {
         if (error) {
           reject(error);
         } else if (response.statusCode != 200) {

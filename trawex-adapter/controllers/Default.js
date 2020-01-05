@@ -10,10 +10,10 @@ module.exports.bookFlight = function bookFlight(req, res, next) {
   var bookFlightRequest = req.swagger.params["bookFlightRequest"].value;
   flightsService
     .bookFlight(language, bookFlightRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -24,10 +24,10 @@ module.exports.getFareDetails = function getFareDetails(req, res, next) {
   var fareSourceCode = req.swagger.params["fareSourceCode"].value;
   flightsService
     .getFareDetails(language, sessionId, fareSourceCode)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -38,10 +38,10 @@ module.exports.issueTicket = function issueTicket(req, res, next) {
   var bookingUniqueId = req.swagger.params["bookingUniqueId"].value;
   flightsService
     .issueTicket(language, sessionId, bookingUniqueId)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -52,10 +52,10 @@ module.exports.revalidateFare = function revalidateFare(req, res, next) {
   var fareSourceCode = req.swagger.params["fareSourceCode"].value;
   flightsService
     .revalidateFare(language, sessionId, fareSourceCode)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -70,10 +70,10 @@ module.exports.searchMultiCityFlights = function searchMultiCityFlights(
     req.swagger.params["multiCityFlightsSearchRequest"].value;
   flightsService
     .searchMultiCityFlights(language, multiCityFlightsSearchRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -88,10 +88,10 @@ module.exports.searchOneWayFlights = function searchOneWayFlights(
     req.swagger.params["oneWayFlightsSearchRequest"].value;
   flightsService
     .searchOneWayFlights(language, oneWayFlightsSearchRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
@@ -106,79 +106,80 @@ module.exports.searchReturnFlights = function searchReturnFlights(
     req.swagger.params["returnFlightsSearchRequest"].value;
   flightsService
     .searchReturnFlights(language, returnFlightsSearchRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
 
-module.exports.searchHotels = function (req, res, next) {
+module.exports.searchHotels = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var hotelSearchRequest = req.swagger.params["HotelSearchRequest"].value;
 
   hotelsService
     .searchHotels(language, hotelSearchRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
 
-module.exports.getHotelDetails = function (req, res, next) {
+module.exports.getHotelDetails = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var sessionId = req.swagger.params["sessionId"].value;
+  var trackingId = req.swagger.params["trackingId"].value;
   var productId = req.swagger.params["productId"].value;
   var hotelId = req.swagger.params["hotelId"].value;
   hotelsService
-    .getHotelDetails(language, sessionId, productId, hotelId)
-    .then(function (response) {
+    .getHotelDetails(language, sessionId, trackingId, productId, hotelId)
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
 
-module.exports.getHotelOffers = function (req, res, next) {
+module.exports.getHotelOffers = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var hotelOffersRequest = req.swagger.params["HotelOffersRequest"].value;
   hotelsService
     .getHotelOffers(language, hotelOffersRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
 
-module.exports.validateHotelOffer = function (req, res, next) {
+module.exports.validateHotelOffer = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var hotelOfferRequest = req.swagger.params["HotelOfferRequest"].value;
   hotelsService
     .validateHotelOffer(language, hotelOfferRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
 
-module.exports.bookHotel = function (req, res, next) {
+module.exports.bookHotel = function(req, res, next) {
   var language = req.swagger.params["language"].value;
   var bookHotelRequest = req.swagger.params["BookHotelRequest"].value;
 
   hotelsService
     .bookHotel(language, bookHotelRequest)
-    .then(function (response) {
+    .then(function(response) {
       utils.writeJson(res, response);
     })
-    .catch(function (response) {
+    .catch(function(response) {
       utils.writeJson(res, response, 500);
     });
 };
