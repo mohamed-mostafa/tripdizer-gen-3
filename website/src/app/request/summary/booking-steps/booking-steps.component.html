@@ -9,6 +9,12 @@
 
         <div class="row">
           <div class="col-12">
+
+            <button (click)="goToSummary()"
+              class="btn btn-primary custom-bs btn-rounded mr-4 text-uppercase">
+              {{ 'request.estimated_cost.booking_steps.back' | translate }}
+            </button>
+
             <button (click)="goToPaymentStep(stepper)" [disabled]="formGroup.invalid"
               class="btn btn-primary custom-bs btn-rounded text-uppercase">
               {{ 'request.estimated_cost.booking_steps.proceed_to_payment' | translate }}

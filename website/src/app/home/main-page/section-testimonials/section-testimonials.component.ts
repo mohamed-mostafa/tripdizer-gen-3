@@ -13,8 +13,7 @@ import { SectionTestimonialService } from './section-testimonials.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class SectionTestimonialsComponent {
-
-	@ViewChild('owlElement') owlElement: OwlCarousel;
+	@ViewChild('owlElement', { static: true }) owlElement: OwlCarousel;
 
 	testimonials: Array<any> = [];
 	sponsors: Array<any> = [];
@@ -33,7 +32,6 @@ export class SectionTestimonialsComponent {
 				this.testimonials = testimonials;
 			});
 		});
-
 	}
 
 	setOptions() {

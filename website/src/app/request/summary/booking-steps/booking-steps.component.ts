@@ -1,10 +1,10 @@
-import { Router } from '@angular/router';
-import { Component, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { SharedDialogComponent } from '../../../shared/components/shared-dialog/shared-dialog.component';
 import { RequestService } from '../../request.service';
 import { PaymentInfo } from './payment-step/payment.model';
-import { SharedDialogComponent } from '../../../shared/components/shared-dialog/shared-dialog.component';
-import { MatDialog } from '@angular/material';
 
 @Component({
 	selector: 'c-booking-steps',
@@ -16,7 +16,7 @@ export class BookingStepsComponent implements AfterViewInit {
 	formGroup = new FormGroup({});
 	paymentKey: string;
 
-	constructor(private requestService: RequestService, private dialog: MatDialog) {
+	constructor(private requestService: RequestService, private router: Router, private dialog: MatDialog) {
 		this.requestService.setProperty('requiresPayment', true);
 	}
 
@@ -24,9 +24,11 @@ export class BookingStepsComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		window.scrollTo(0, 0);
 	}
+
 	openSessionDialog(message, url): void {
 		this.dialog.open(SharedDialogComponent, { autoFocus: true, maxWidth: 600, data: { message, url } });
 	}
+
 	goToPaymentStep(stepper) {
 		this.requestService.isLoading.next({ show: true, message: 'Re-validating prices and availability' });
 		const travellers = { adults: {}, kids: {}, infants: {} };
@@ -62,11 +64,12 @@ export class BookingStepsComponent implements AfterViewInit {
 					show: false,
 					message: '',
 				});
-				this.openSessionDialog(
-					'request.estimated_cost.prices_availability_in_hotels',
-					'/request/estimated-cost'
-				);
+				this.openSessionDialog('request.estimated_cost.prices_availability_in_hotels', '/request/estimated-cost');
 			}
 		);
+	}
+
+	goToSummary() {
+		this.router.navigate(['/request/summary']);
 	}
 }

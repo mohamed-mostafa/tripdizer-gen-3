@@ -42,10 +42,6 @@ export class LoginDialogComponent implements OnInit {
 		this.authService.signInWithFacebook();
 	}
 
-	signInWithLinkedIn(): void {
-		this.authService.signInWithLinkedIn();
-	}
-
 	continueWithoutLogin(): void {
 		this.close();
 		this.authService.continueWithoutLogin();

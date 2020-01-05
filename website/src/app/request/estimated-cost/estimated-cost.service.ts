@@ -1,3 +1,4 @@
+import { TravelingFrom } from './../traveling-from/traveling-from.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
@@ -5,12 +6,11 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
 import { RequestService } from '../request.service';
-import { TravelingFrom } from '../traveling-from/traveling-from.model';
 import { LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { AttractionsRequest, CityAttractions } from './../summary/attraction.model';
 import { Station } from './../summary/station.model';
@@ -27,6 +27,11 @@ export class EstimatedCostService {
 	accommodations = 'package-options/1.0.0/accomodationOffers';
 	attractionsEndPoint = 'package-options/1.0.0/cityAttractions';
 
+	isCitiesTabVisited: boolean;
+	isFlightsTabVisited: boolean;
+	isAccommodationTabVisited: boolean;
+	isAccommodationProcessing: boolean;
+
 	notificationTimer: any;
 	expirationTimer: any;
 
@@ -34,6 +39,8 @@ export class EstimatedCostService {
 	returnDate = this.requestService.getProperty('returnDate') as Moment;
 
 	budgetCategory = this.requestService.getProperty('budgetCategory');
+
+	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
@@ -47,6 +54,12 @@ export class EstimatedCostService {
 	currentTabIndex = new Subject<number>();
 	finishGetAttractions = new Subject<boolean>();
 
+	cachedTabsData: {
+		cities?: Array<CityDTO>;
+		flightOffers?: Array<FlightOffer>;
+		accommodation?: Array<Accommodation>;
+	};
+
 	constructor(
 		private http: HttpClient,
 		private router: Router,
@@ -54,6 +67,17 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+		this.setCurrentTabIndex(0);
+		this.cachedTabsData = this.requestService.getProperty('cachedTabsData') || {};
+		this.translate.get('request.traveling_from.airports').subscribe(airports => {
+			Object.keys(airports).forEach(k => {
+				if (airports[k].en_name === this.requestService.getProperty('travelingFrom').name) {
+					const cityLocation = { lat: Number(airports[k].lat), lng: Number(airports[k].lng) };
+					this.travelingFromCoordinates = cityLocation;
+				}
+			});
+		});
+
 		this.selectedCities.subscribe(citiesSelected => {
 			this.citiesSelected = citiesSelected;
 			this.requestService.setProperty('selectedCities', citiesSelected);
@@ -70,6 +94,9 @@ export class EstimatedCostService {
 		});
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
+		});
+		this.requestService.clearEstimatedCostData.subscribe(() => {
+			this.cachedTabsData = { cities: [], flightOffers: [], accommodation: [] };
 		});
 	}
 
@@ -104,17 +131,27 @@ export class EstimatedCostService {
 	}
 
 	getCities(): Observable<Array<CityDTO>> {
+		// if (this.cachedTabsData.cities && this.cachedTabsData.cities.length) {
+		// 	return of(this.cachedTabsData.cities);
+		// } else {
 		this.requestService.isLoading.next({
 			show: true,
 			message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
 		});
 		const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 		return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
-			tap(() => {
+			tap(returnedCities => {
 				this.setIsLoading(false, '');
 				this.requestService.isLoading.next({ show: false, message: '' });
+				this.updateCitiesInCache(returnedCities);
 			})
 		);
+		// }
+	}
+
+	updateCitiesInCache(cities) {
+		this.cachedTabsData.cities = cities;
+		console.log(this.cachedTabsData);
 	}
 
 	getNumberOfNights(): number {
@@ -136,7 +173,13 @@ export class EstimatedCostService {
 	}
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+		// if (this.cachedTabsData.flightOffers && this.cachedTabsData.flightOffers.length) {
+		// 	return of(this.cachedTabsData.flightOffers);
+		// } else {
+		if (this.isFlightsTabVisited) {
+			this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+		}
+
 		const citiesSequence: Array<CitySequence> = this.getSelectedCities().map(city => ({
 			countryIso: city.countryIsoCode,
 			cityIata: city.iataCode,
@@ -152,17 +195,26 @@ export class EstimatedCostService {
 		};
 
 		return this.http.post<Array<FlightOffer>>(`${this.transportationEndPoint}/search`, flightRequest).pipe(
-			tap(
-				() => {
-					this.setIsLoading(false, '');
-					this.startSessionTimer();
-				},
-				error => {
-					console.error(JSON.stringify(error));
+			tap(returnedFlightOffers => {
+				if (this.isFlightsTabVisited) {
 					this.setIsLoading(false, '');
 				}
-			)
+				this.startSessionTimer();
+				this.updateFlightsOffersInCache(returnedFlightOffers);
+			}),
+			catchError((err: any, caught: Observable<any>) => {
+				if (this.isFlightsTabVisited) {
+					this.setIsLoading(false, '');
+				}
+				return err;
+			})
 		);
+		// }
+	}
+
+	updateFlightsOffersInCache(flightsOffers) {
+		this.cachedTabsData.flightOffers = flightsOffers;
+		console.log(this.cachedTabsData);
 	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
@@ -175,13 +227,22 @@ export class EstimatedCostService {
 
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
+
+		if (index === 2 && this.isAccommodationProcessing) {
+			this.accommodationLoading();
+		}
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		this.setIsLoading(
-			true,
-			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-		);
+		// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
+		// 	return of(this.cachedTabsData.accommodation);
+		// } else {
+		if (this.isAccommodationTabVisited) {
+			this.setIsLoading(
+				true,
+				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+			);
+		}
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
 			cities.push({
@@ -212,15 +273,22 @@ export class EstimatedCostService {
 			desiredCostPerPerson: accommodationDesiredCostPerPerson,
 		};
 		return this.http.post<Array<Accommodation>>(`${this.accommodations}/search`, accommodationRequest).pipe(
-			tap(
-				() => {
-					this.setIsLoading(false, '');
-				},
-				error => {
+			tap(returnedAccommodation => {
+				if (this.isAccommodationTabVisited) {
 					this.setIsLoading(false, '');
 				}
-			)
+				this.updateAccommodationInCache(returnedAccommodation);
+			}),
+			catchError((err: any, caught: Observable<any>) => {
+				return err;
+			})
 		);
+		// }
+	}
+
+	updateAccommodationInCache(accommodation) {
+		this.cachedTabsData.accommodation = accommodation;
+		console.log(this.cachedTabsData);
 	}
 
 	setSelectedHotels(selectedHotels) {
@@ -241,6 +309,17 @@ export class EstimatedCostService {
 
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message });
+	}
+
+	flightsLoading(): void {
+		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
+	}
+
+	accommodationLoading(): void {
+		this.setIsLoading(
+			true,
+			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
+		);
 	}
 
 	getAttractions(): Observable<Array<CityAttractions>> {
@@ -424,6 +503,7 @@ export class EstimatedCostService {
 				this.summaryStations.push(lastStation);
 			}
 		});
+		console.log(this.summaryStations);
 		return this.summaryStations;
 	}
 

@@ -27,7 +27,9 @@
 			"equalTo": "غير متطابقين",
 			"copyPaste": "رجاء عدم النسخ",
 			"notEmpty": "القيمة غير صحيحة",
-			"invalidPromoCode": "البروموكود غير فعال"
+			"invalidPromoCode": "البروموكود غير فعال",
+			"leadingWhiteSpace": "يبدأ الحقل بمسافة بيضاء",
+			"trailingWhiteSpace": "ينتهى الحقل بمسافة بيضاء"
 		},
 		"login_dialog": {
 			"sign_out": "تسجيل الخروج",
@@ -235,6 +237,7 @@
 				"accommodation": "الإقامة",
 				"activities": "الأنشطة",
 				"modify": "تعديل",
+				"go_back": "رجوع",
 				"total_cost": "اجمالى التكلفة",
 				"day": "يوم",
 				"no_accommodation": "لم يتم اختيار اى فنادق",
@@ -277,7 +280,8 @@
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
-				"proceed_to_payment": "المتابعة إلى الدفع"
+				"proceed_to_payment": "المتابعة إلى الدفع",
+				"back": "رجوع"
 			},
 			"prices_availability_in_hotels": "لقد تغيرت الأسعار أو توفرها ، يرجى اختيار عروض أخرى"
 		},
@@ -441,19 +445,31 @@
 			"airports": [
 				{
 					"iataCode": "CAI",
-					"name": "القاهرة"
+					"name": "القاهرة",
+					"en_name": "Cairo",
+					"lat": "30.0444",
+					"lng": "31.2357"
 				},
 				{
 					"iataCode": "HBE",
-					"name": "الإسكندرية"
+					"name": "الإسكندرية",
+					"en_name": "Alexandria",
+					"lat": "31.2001",
+					"lng": "29.9187"
 				},
 				{
 					"iataCode": "HRG",
-					"name": "الغردقة"
+					"name": "الغردقة",
+					"en_name": "Hurghada",
+					"lat": "27.2579",
+					"lng": "33.8116"
 				},
 				{
 					"iataCode": "SSH",
-					"name": "شرم الشيخ"
+					"name": "شرم الشيخ",
+					"en_name": "Sharm El-Sheikh",
+					"lat": "27.9654",
+					"lng": "34.3618"
 				}
 			]
 		}

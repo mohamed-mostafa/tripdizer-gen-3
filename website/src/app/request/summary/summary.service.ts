@@ -14,9 +14,11 @@ export class SummaryService {
 		public estimatedCostService: EstimatedCostService,
 	) {
 		this.stations = new BehaviorSubject(this.estimatedCostService.getSummaryStations());
+		this.stations.subscribe(results => console.log(results));
 		this.totalCost = new BehaviorSubject(this.estimatedCostService.summaryTotalCost);
 		this.estimatedCostService.selectedHotels.subscribe(() => {
 			this.stations.next(this.estimatedCostService.getSummaryStations());
+			console.log(this.estimatedCostService.getSummaryStations());
 			this.totalCost.next(this.estimatedCostService.summaryTotalCost);
 		});
 	}

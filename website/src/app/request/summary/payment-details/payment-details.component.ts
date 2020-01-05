@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-payment-details',
-	templateUrl: './payment-details.component.html',
+    templateUrl: './payment-details.component.html',
 	styleUrls: ['./payment-details.component.scss']
 })
 export class PaymentDetailsComponent implements OnDestroy {

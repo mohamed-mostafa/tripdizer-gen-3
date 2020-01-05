@@ -11,10 +11,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
 export class TabAccommodationComponent {
+	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
-	@ViewChild('owlElement') owlElement: OwlCarousel;
-
-    accommodationOffers: Array<Accommodation>;
+	accommodationOffers: Array<Accommodation>;
 	accommodations: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost = 0;
@@ -27,23 +26,23 @@ export class TabAccommodationComponent {
 		private service: EstimatedCostService,
 		public requestService: RequestService,
 		private router: Router,
-		private route: ActivatedRoute,
+		private route: ActivatedRoute
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
-		requestService.setIsAccommodationTabVisited(true);
+
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
 			this.accommodationOffers = res;
 			for (const accommodationOffer of this.accommodationOffers) {
-				if (accommodationOffer.hotels.length > 0) {
+				if (accommodationOffer && accommodationOffer.hotels && accommodationOffer.hotels.length > 0) {
 					accommodationOffer.hotels[0].select = true;
 					this.accommodations.push(accommodationOffer);
 					this.selectedHotels.push(accommodationOffer.hotels[0]);
 					this.totalCost = this.totalCost + accommodationOffer.hotels[0].price;
 				}
 			}
-			this.setSliderOptions();
 		});
+		this.setSliderOptions();
 	}
 
 	selectHotel(hotel) {
@@ -80,12 +79,12 @@ export class TabAccommodationComponent {
 				600: {
 					items: 2,
 					margin: 10,
-					slideBy: 2
+					slideBy: 2,
 				},
 				1000: {
 					items: 3,
 					margin: 10,
-					slideBy: 3
+					slideBy: 3,
 				},
 			},
 		};
@@ -93,6 +92,7 @@ export class TabAccommodationComponent {
 
 	next() {
 		this.service.setSelectedHotels(this.selectedHotels);
+		this.service.updateAccommodationInCache(this.accommodations);
 		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 

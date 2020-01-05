@@ -1,4 +1,4 @@
-/deep/ #body-container {
+::ng-deep #body-container {
 	// TODO:Fix other tabs
 	height: 100%;
 }
@@ -41,6 +41,16 @@
 	.far,
 	.fas {
 		font-size: 1.25em;
+	}
+}
+
+.tabs-section {
+	@media (max-width: 576px) {
+		margin-top: 96px;
+	}
+
+	@media (min-width: 576px) {
+		margin-top: 130px;
 	}
 }
 

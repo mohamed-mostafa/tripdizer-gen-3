@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RequestService } from '../request.service';
@@ -10,28 +11,42 @@ import { EstimatedCostService } from './estimated-cost.service';
 	styleUrls: ['./estimated-cost.component.scss'],
 })
 export class EstimatedCostComponent {
+
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
-	isCitiesTabVisited: Observable<boolean>;
-	isFlightsTabVisited: Observable<boolean>;
-	isAccommodationTabVisited: Observable<boolean>;
+	isCitiesTabVisited: boolean;
+	isFlightsTabVisited: boolean;
+	isAccommodationTabVisited: boolean;
 	currentTabIndex: Observable<boolean>;
 	isLoading: boolean;
-	constructor(private service: EstimatedCostService, private requestService: RequestService) {
-		this.selectedTab = 0;
+	tabIndex: number;
+
+	constructor(
+		private service: EstimatedCostService,
+		private requestService: RequestService,
+		private route: ActivatedRoute
+	) {
+		const tabIndexParam = this.route.snapshot.paramMap.get('tabIndex');
+		this.selectedTab = this.tabIndex = tabIndexParam ? parseInt(tabIndexParam, 10) : 0;
+
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
+
+			this.isCitiesTabVisited = this.isCitiesTabVisited || n === 0;
+			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
+			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
+
+			service.isCitiesTabVisited = this.isCitiesTabVisited;
+			service.isFlightsTabVisited = this.isFlightsTabVisited;
+			service.isAccommodationTabVisited = this.isAccommodationTabVisited;
 		});
 
-		this.isCitiesTabVisited = requestService.isCitiesTabVisited;
-		this.isFlightsTabVisited = requestService.isFlightsTabVisited;
-		this.isAccommodationTabVisited = requestService.isAccommodationTabVisited;
 		this.requestService.isLoading.subscribe(isLoadingObject => {
 			this.isLoading = isLoadingObject.show;
 		});
 	}
 
 	tabChange(e) {
-		this.service.setCurrentTabIndex(e);
+        this.service.setCurrentTabIndex(e);
 	}
 }

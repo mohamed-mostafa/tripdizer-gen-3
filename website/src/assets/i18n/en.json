@@ -27,7 +27,9 @@
 			"equalTo": "Value doesn't match",
 			"copyPaste": "Please, Don't copy and paste me",
 			"notEmpty": "Invalid value",
-			"invalidPromoCode": "Invalid promo code"
+			"invalidPromoCode": "Invalid promo code",
+			"leadingWhiteSpace": "Field has leading whitespace",
+			"trailingWhiteSpace": "Field has trailing whitespace"
 		},
 		"login_dialog": {
 			"sign_out": "Sign Out",
@@ -235,6 +237,7 @@
 				"accommodation": "Accommodation",
 				"activities": "Activities",
 				"modify": "Modify",
+				"go_back": "Back",
 				"total_cost": "Total Itinerary Cost",
 				"day": "Day",
 				"no_accommodation": "No accommodation chosen",
@@ -277,7 +280,8 @@
 			"booking_steps": {
 				"passenger_details": "Passenger details",
 				"payment": "Payment",
-				"proceed_to_payment": "Proceed to payment"
+				"proceed_to_payment": "Proceed to payment",
+				"back": "Back"
 			},
 			"prices_availability_in_hotels": "The prices or availability has changed, please select other offers"
 		},
@@ -441,19 +445,31 @@
 			"airports": [
 				{
 					"iataCode": "CAI",
-					"name": "Cairo"
+					"name": "Cairo",
+					"en_name": "Cairo",
+					"lat": "30.0444",
+					"lng": "31.2357"
 				},
 				{
 					"iataCode": "HBE",
-					"name": "Alexandria"
+					"name": "Alexandria",
+					"en_name": "Alexandria",
+					"lat": "31.2001",
+					"lng": "29.9187"
 				},
 				{
 					"iataCode": "HRG",
-					"name": "Hurghada"
+					"name": "Hurghada",
+					"en_name": "Hurghada",
+					"lat": "27.2579",
+					"lng": "33.8116"
 				},
 				{
 					"iataCode": "SSH",
-					"name": "Sharm El-Sheikh"
+					"name": "Sharm El-Sheikh",
+					"en_name": "Sharm El-Sheikh",
+					"lat": "27.9654",
+					"lng": "34.3618"
 				}
 			]
 		}

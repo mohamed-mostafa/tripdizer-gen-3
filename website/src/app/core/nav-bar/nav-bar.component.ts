@@ -16,7 +16,7 @@ export class NavBarComponent implements OnInit {
 
 	@Input() height = new Subject<number>();
 
-	@ViewChild('navBar') navBar: ElementRef;
+	@ViewChild('navBar', { static: true }) navBar: ElementRef;
 
 	@HostListener('window:resize', ['$event'])
 	onResize() {

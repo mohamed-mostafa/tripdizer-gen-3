@@ -189,7 +189,7 @@
 											<label for="lat" ng-show="latMissing==false">Latitude</label>
 											<input type="number" required class="form-control" id="lat"
 												ng-model="newCity.lat" placeholder="Enter latitude (eg: 123.123456)"
-												required min="0.0" max="999.999999" />
+												required min="-999.999999" max="999.999999" />
 										</div>
 										<div class="form-group-6" ng-show="saving==false">
 											<label class="control-label text-red" for="lng" ng-show="lngMissing==true">
@@ -198,7 +198,7 @@
 											<label for="lng" ng-show="lngMissing==false">Longitude</label>
 											<input type="number" required class="form-control" id="lng"
 												ng-model="newCity.lng" placeholder="Enter longitude (eg: 123.123456)"
-												required min="0.0" max="999.999999" />
+												required min="-999.999999" max="999.999999" />
 										</div>
 
 										<div class="form-group" ng-show="saving==false">

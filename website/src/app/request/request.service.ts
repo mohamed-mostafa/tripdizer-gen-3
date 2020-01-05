@@ -38,10 +38,8 @@ export class RequestService {
 	requestNavBarDataChanged = new Subject<{ key: string; value: any; navBar: Array<Step> }>();
 	lastRequestId: number;
 
-	isCitiesTabVisited = new BehaviorSubject<boolean>(false);
-	isFlightsTabVisited = new BehaviorSubject<boolean>(false);
-	isAccommodationTabVisited = new BehaviorSubject<boolean>(false);
 	endSessionTimerSubject = new Subject();
+	clearEstimatedCostData = new Subject(); // TODO: remove this line after refactoring
 
 	constructor(
 		private http: HttpClient,
@@ -75,22 +73,6 @@ export class RequestService {
 
 	private refineStepPath(path: string): string {
 		return path.split('/')[0];
-	}
-
-	getRequestTravelFromCity() {
-		return this.requestData.getPureRequest().travelingFrom;
-	}
-
-	setIsCitiesTabVisited(value: boolean): void {
-		this.isCitiesTabVisited.next(value);
-	}
-
-	setIsFlightsTabVisited(value: boolean): void {
-		this.isFlightsTabVisited.next(value);
-	}
-
-	setIsAccommodationTabVisited(value: boolean): void {
-		this.isAccommodationTabVisited.next(value);
 	}
 
 	resetSessionTimer(): void {
@@ -205,6 +187,23 @@ export class RequestService {
 	}
 
 	setProperty(key: string, value: any): void {
+		// TODO: START --- remove this after refactoring
+		const estimatedCostPreRequisites = [
+			'travelingFrom',
+			'destination',
+			'departureDate',
+			'returnDate',
+			'purpose',
+			'adultsNumber',
+			'kidsNumber',
+			'infantsNumber',
+			'budget',
+			'selectedAttractions',
+		];
+		if (estimatedCostPreRequisites.some(p => p === key) && this.getProperty(key) !== value) {
+			this.clearEstimatedCostData.next(value);
+		}
+		// TODO: END --- remove this after refactoring
 		this.requestData[key] = value;
 		this.requestDataChanged.next({
 			key,
@@ -344,16 +343,18 @@ export class RequestService {
 	}
 
 	validatePromoCode(promoCode: string): Observable<boolean> {
-		return this.http.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode } }).pipe(
-			map(isValid => {
-				if (isValid) {
-					this.setProperty('promoCode', promoCode);
-				} else {
-					this.setProperty('promoCode', null);
-				}
-				return isValid;
-			})
-		);
+		return this.http
+			.get<boolean>(`${this.endPoint}/promo-code-validity`, { params: { promoCode } })
+			.pipe(
+				map(isValid => {
+					if (isValid) {
+						this.setProperty('promoCode', promoCode);
+					} else {
+						this.setProperty('promoCode', null);
+					}
+					return isValid;
+				})
+			);
 	}
 
 	getProfessions(): Observable<Array<DropDownItem> | null> {
@@ -372,16 +373,18 @@ export class RequestService {
 		this.isLoading.next({ show: true, message: 'Submitting your request ...' });
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, false);
-			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
-				map(requestResponse => {
-					const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
-					this.lastRequestId = ticket.id;
-					this.trackingService.track('Submit Request', { requestId: ticket.id });
-					this.resetRequestState();
-					this.isLoading.next({ show: false, message: '' });
-					return ticket;
-				})
-			);
+			return this.http
+				.put<RequestResponse>(`${this.endPoint}/website/place`, { request })
+				.pipe(
+					map(requestResponse => {
+						const ticket = Ticket.getTicketFromRequestResponse(this.requestData, requestResponse);
+						this.lastRequestId = ticket.id;
+						this.trackingService.track('Submit Request', { requestId: ticket.id });
+						this.resetRequestState();
+						this.isLoading.next({ show: false, message: '' });
+						return ticket;
+					})
+				);
 		}
 		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
@@ -389,16 +392,18 @@ export class RequestService {
 	submitRequestWithPayment(): Observable<PaymentInfo | null> {
 		if (this.isValid()) {
 			const request = RequestRequest.getRequestRequestFromRequest(this.requestData, true);
-			return this.http.put<RequestResponse>(`${this.endPoint}/website/place`, { request }).pipe(
-				map(requestResponse => {
-					const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
-					this.lastRequestId = paymentInfo.id;
-					this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
-					this.resetRequestState();
-					this.isLoading.next({ show: false, message: '' });
-					return paymentInfo;
-				})
-			);
+			return this.http
+				.put<RequestResponse>(`${this.endPoint}/website/place`, { request })
+				.pipe(
+					map(requestResponse => {
+						const paymentInfo = PaymentInfo.getPaymentInfoFromRequestResponse(this.requestData, requestResponse);
+						this.lastRequestId = paymentInfo.id;
+						this.trackingService.track('Submit Request', { requestId: paymentInfo.id });
+						this.resetRequestState();
+						this.isLoading.next({ show: false, message: '' });
+						return paymentInfo;
+					})
+				);
 		}
 		return of(null).pipe(finalize(() => this.isLoading.next({ show: false, message: '' })));
 	}
