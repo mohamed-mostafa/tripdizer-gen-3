@@ -54,8 +54,8 @@ export class Request extends CommonFunctions {
 	private _purposeName: string;
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
-	private _flightOffers: Array<FlightOffer>;
 	private _cities: Array<CityDTO>;
+	private _flightOffers: Array<FlightOffer>;
 	private _selectedHotels: Array<Hotel>;
 	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
@@ -175,6 +175,7 @@ export class Request extends CommonFunctions {
 	}
 	set cities(value: Array<CityDTO>) {
 		this._cities = value;
+		this._flightOffers = [];
 	}
 	get flightOffers(): Array<FlightOffer> {
 		return this._flightOffers;

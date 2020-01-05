@@ -191,7 +191,9 @@
 				"things_to_do": "Things to do in",
 				"view_map": "View map",
 				"next_label": "Continue",
-				"back_label": "Back"
+				"back_label": "Back",
+				"too_many_cities_message": "Too many cities for {{numberOfNights}} nights",
+				"ok": "OK"
 			},
 			"tab_flights": {
 				"title": "Flights",

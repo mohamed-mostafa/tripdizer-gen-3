@@ -11,12 +11,12 @@ import { FlightOffer } from './../flight-offer.model';
 })
 export class FlightRouteComponent implements OnInit {
 	@Input() flightOffers: FlightOffer;
-	selectedCities: Array<CityDTO>;
+	citiesWithNights: Array<CityDTO>;
 	travelFrom: string;
 	returnTo: string;
 
 	constructor(service: EstimatedCostService, requestService: RequestService) {
-		this.selectedCities = service.getSelectedCities();
+		this.citiesWithNights = service.getCitiesWithNights();
 		this.travelFrom = requestService.getProperty('travelingFrom').name;
 		this.returnTo = requestService.getProperty('travelingFrom').name;
 

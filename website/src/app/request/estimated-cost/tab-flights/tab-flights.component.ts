@@ -1,6 +1,6 @@
 import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component, ViewChild, DoCheck } from '@angular/core';
+import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
 import { RequestService } from '../../request.service';
 import { Subscription } from 'rxjs';
@@ -10,51 +10,53 @@ import { Subscription } from 'rxjs';
 	templateUrl: './tab-flights.component.html',
 	styleUrls: ['./tab-flights.component.scss'],
 })
-export class TabFlightsComponent implements DoCheck {
+export class TabFlightsComponent implements DoCheck, OnDestroy {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
-	selectedFlightOffers = [];
+	// selectedFlightOffers = [];
 	isLoading: boolean;
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
 	selectedSlide = 1;
 	afterReloadSlideIndex: number;
-	hasFlightOffers: boolean;
 	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
-		this.hasFlightOffers = false;
-		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
+		// requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
-		service.getFlightOffers().subscribe(flightOffers => {
-			if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
-				this.hasFlightOffers = true;
-				this.flightOffers = flightOffers;
+		this.flightPaths = service.getCityPaths();
 
-				let hasSelectedFlightOffer = false;
+		this.subscriptions.add(
+			service.getFlightOffers().subscribe(flightOffersResult => {
+				this.flightOffers = flightOffersResult;
+				// if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
+				// 	this.flightOffers = flightOffers;
 
-				this.flightOffers.forEach(flightOffer => {
-					if (flightOffer.selected) {
-						hasSelectedFlightOffer = true;
-						this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
-						setTimeout(() => {
-							this.goToSlide(this.flightOffers.indexOf(flightOffer));
-						}, 0);
-					}
+				// 	let hasSelectedFlightOffer = false;
 
-					if (!hasSelectedFlightOffer) {
-						this.flightOffers[0].selected = true;
-						this.selectedFlightOffers.push(this.flightOffers[0]);
-					}
-				});
-			}
-		});
+				// 	this.flightOffers.forEach(flightOffer => {
+				// 		if (flightOffer.selected) {
+				// 			hasSelectedFlightOffer = true;
+				// 			this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
+				// 			setTimeout(() => {
+				// 				this.goToSlide(this.flightOffers.indexOf(flightOffer));
+				// 			}, 0);
+				// 		}
 
-		service.getSelectedCities().forEach(city => {
-			const cityLatLong = city.coordinates.split(',');
-			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
-		});
+				// 		if (!hasSelectedFlightOffer) {
+				// 			this.flightOffers[0].selected = true;
+				// 			// this.selectedFlightOffers.push(this.flightOffers[0]);
+				// 		}
+				// 	});
+				// }
+			})
+		);
+
+		// service.getSelectedCities().forEach(city => {
+		// 	const cityLatLong = city.coordinates.split(',');
+		// 	this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
+		// });
 
 		this.setSliderOptions();
 	}
@@ -66,8 +68,8 @@ export class TabFlightsComponent implements DoCheck {
 			} else {
 				flightOffer.selected = false;
 			}
-			this.selectedFlightOffers = [];
-			this.selectedFlightOffers.push(offer);
+			// this.selectedFlightOffers = [];
+			// this.selectedFlightOffers.push(offer);
 		});
 	}
 

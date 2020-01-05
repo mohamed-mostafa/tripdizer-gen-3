@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import { SummaryService } from './../../summary/summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
@@ -14,10 +15,8 @@ import { Subscription } from 'rxjs';
 })
 export class TabCitiesComponent implements OnDestroy {
 	cities: Array<CityDTO> = [];
-	// selectedCities: Array<CityDTO> = [];
 	cityPaths: any = [];
 	snackBar: MatSnackBar;
-	currentStepPath: string;
 	private subscriptions = new Subscription();
 
 	constructor(
@@ -26,16 +25,16 @@ export class TabCitiesComponent implements OnDestroy {
 		private requestService: RequestService,
 		private route: ActivatedRoute,
 		private router: Router,
-		public summaryService: SummaryService
+		public summaryService: SummaryService,
+		public translate: TranslateService
 	) {
-		this.currentStepPath = this.route.routeConfig.path;
 		this.snackBar = snackBar;
-
-		service.getCities().subscribe(citiesResult => {
-			this.cities = citiesResult;
-			this.updateCitiesPaths();
-			this.service.setCities(this.cities);
-		});
+		this.subscriptions.add(
+			service.getCities().subscribe(citiesResult => {
+				this.cities = citiesResult;
+				this.updateCitiesPaths();
+			})
+		);
 	}
 
 	updateSelectedCities(city: CityDTO) {
@@ -49,9 +48,15 @@ export class TabCitiesComponent implements OnDestroy {
 		} else {
 			const numberOfNights = this.service.getNumberOfNights();
 			if (this.getSelectedCities().length >= this.service.getMaxNumberOfCities()) {
-				this.snackBar.open('Too many cities for ' + numberOfNights + ' nights', 'Ok', {
-					duration: 3000,
-				});
+				this.subscriptions.add(
+					this.translate
+						.get('request.estimated_cost.tab_cities.too_many_cities_message', { numberOfNights })
+						.subscribe((message: string) => {
+							this.snackBar.open(message, this.translate.instant('request.estimated_cost.tab_cities.ok'), {
+								duration: 3000,
+							});
+						})
+				);
 			} else {
 				this.cities.forEach(c => {
 					if (c.iataCode === city.iataCode) {
@@ -68,34 +73,27 @@ export class TabCitiesComponent implements OnDestroy {
 		return this.cities.filter(c => c.selected);
 	}
 
-	calculateCitiesNights(): Array<CityDTO> {
-		const numberOfNights = this.service.getNumberOfNights();
-		const floorDivision = Math.floor(numberOfNights / this.getSelectedCities().length);
-		const modulus = numberOfNights % this.getSelectedCities().length;
-		return this.getSelectedCities().map((city: CityDTO, index) => ({
-			...city,
-			numberOfNights: index === 0 ? floorDivision + modulus : floorDivision,
-		}));
-	}
-
-	next(): void {
-		// this.service.setCities(this.calculateCitiesNights());
-		// this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
-		this.service.setCurrentTabIndex(1);
-	}
-
-	goBack(): void {
-		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-	}
-
 	updateCitiesPaths() {
-		this.cityPaths = this.getSelectedCities()
-			.map(city => {
-				return { lat: Number(city.coordinates.split(', ')[0]), lng: Number(city.coordinates.split(', ')[1]) };
-			});
+		this.cityPaths = this.getSelectedCities().map(city => {
+			return { lat: Number(city.coordinates.split(', ')[0]), lng: Number(city.coordinates.split(', ')[1]) };
+		});
 		const travelingFromCoordinates = this.service.travelingFromCoordinates;
 		this.cityPaths.unshift(travelingFromCoordinates);
 		this.cityPaths.push(travelingFromCoordinates);
+	}
+
+	goNext(): void {
+		this.service.setCities(this.cities);
+		this.service.setCurrentTabIndex(1);
+		this.service.setCityPaths(this.cityPaths);
+	}
+
+	goBack(): void {
+		this.service.setCities(this.cities);
+		this.router.navigate(['../', this.requestService.getPrevStep(this.route.routeConfig.path)], {
+			relativeTo: this.route,
+		});
+		this.service.setCityPaths(this.cityPaths);
 	}
 
 	ngOnDestroy() {
