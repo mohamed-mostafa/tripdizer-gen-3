@@ -38,6 +38,7 @@ const isAuthenticated = (req, res, next) => {
 				if (error || response.statusCode != 200) {
 					res.send(401);
 				} else {
+					req.user = mapUser(body.user);
 					next();
 				}
 			}
@@ -59,6 +60,7 @@ const isAuthenticatedAsAdmin = (req, res, next) => {
 					res.send(401);
 				} else {
 					if (user.admin) {
+						req.user = mapUser(body.user);
 						next();
 					} else {
 						res.send(401);
@@ -68,6 +70,8 @@ const isAuthenticatedAsAdmin = (req, res, next) => {
 		);
 	} else res.send(401);
 };
+
+const mapUser = user => ({ id: user.id, username: user.username, fullName: user.fullName, isAdmin: !!user.admin });
 
 exports.getToken = getToken;
 exports.getDecodedToken = getDecodedToken;
