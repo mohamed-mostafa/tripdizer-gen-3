@@ -4,9 +4,11 @@ g2gControlCenterApplication.controller('PaymentsController', [
 	'$http',
 	function($rootScope, $scope, $http) {
 		// fields
+		$scope.iframeURL = 'https://accept.paymobsolutions.com/api/acceptance/iframes/12312?payment_token=';
 		$scope.amount = 1000;
 		$scope.paymentKey = '';
 		$scope.loading = false;
+		$scope.showCopied = false;
 
 		$scope.getPaymentKey = function() {
 			$scope.paymentKey = '';
@@ -16,6 +18,7 @@ g2gControlCenterApplication.controller('PaymentsController', [
 					.get($rootScope.requestsServerUrl + '/payments/key/' + $scope.amount)
 					.success(function(response) {
 						$scope.loading = false;
+						$scope.showCopied = false;
 						$scope.paymentKey = response.paymentKey;
 					})
 					.error(function(err) {
@@ -24,6 +27,16 @@ g2gControlCenterApplication.controller('PaymentsController', [
 						$scope.serverErrorMessage = 'An error occurred at the server side: ' + err;
 					});
 			}
+		};
+
+		$scope.copyToClipboard = () => {
+			const el = document.createElement('textarea');
+			el.value = $scope.iframeURL + $scope.paymentKey;
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+			$scope.showCopied = true;
 		};
 	},
 ]);

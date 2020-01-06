@@ -19,8 +19,8 @@
 			</form>
 
 			<div ng-if="paymentKey">
-				Payment URL:
-				<textarea class="form-control" rows="5" readonly>https://accept.paymobsolutions.com/api/acceptance/iframes/12312?payment_token={{ paymentKey }}</textarea>
+				Payment URL: <span class="text-red" ng-if="showCopied">Copied!</span>
+			<textarea class="form-control" rows="5" ng-click="copyToClipboard()" readonly>{{ iframeURL }}{{ paymentKey }}</textarea>
 			</div>
 		</div>
 	</div>
