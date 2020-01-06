@@ -1,0 +1,31 @@
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">
+			<%= title %>
+		</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<div class="overlay" ng-show="loading == true">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+		<div class="box-body table-responsive no-padding">
+			<form>
+				<div class="form-group form-group-2">
+					<label for="amount">Amount</label>
+					<input type="number" class="form-control" id="amount" ng-model="amount" placeholder="Enter the amount" required>
+				</div>
+				<button class="btn btn-default" ng-click="getPaymentKey()">Generate</button>
+			</form>
+
+			<div ng-if="paymentKey">
+				Payment URL:
+				<textarea class="form-control" rows="5" readonly>https://accept.paymobsolutions.com/api/acceptance/iframes/12312?payment_token={{ paymentKey }}</textarea>
+			</div>
+		</div>
+	</div>
+	<!-- /.box-body -->
+</div>
+<!-- /.box -->
+<!-- Main row -->
+</div>
