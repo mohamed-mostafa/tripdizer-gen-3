@@ -3,6 +3,27 @@ const paymentsBusiness = require('../business/hws_payments_business');
 
 const WE_ACCEPT_HMAC_KEY = process.env.WE_ACCEPT_HMAC_KEY || '09C1F04FCDF328E2184BF25B87F78A3C';
 
+var generatePaymentKeyWithoutRegistration = function(req, res) {
+	try {
+		var user = req.body.user;
+		var amount = req.body.amount;
+		paymentsBusiness.generatePaymentKeyWithoutRegistration(
+			{ user, estimatedCost: amount },
+			data => res.send(data),
+			() =>
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.")
+		);
+	} catch (error) {
+		console.error('An error occurred in /payments/key');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 var notificationCallback = function(req, res) {
 	try {
 		var type = req.body.type;
@@ -106,5 +127,6 @@ const flatten = (obj, includePrototype, into, prefix) => {
 	return into;
 };
 
+exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;
