@@ -20,6 +20,7 @@ g2gControlCenterApplication.controller('PaymentsController', [
 						$scope.loading = false;
 						$scope.showCopied = false;
 						$scope.paymentKey = response.paymentKey;
+						$scope.copyToClipboard();
 					})
 					.error(function(err) {
 						$scope.loading = false;
