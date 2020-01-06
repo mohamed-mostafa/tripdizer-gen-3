@@ -5,10 +5,9 @@ const WE_ACCEPT_HMAC_KEY = process.env.WE_ACCEPT_HMAC_KEY || '09C1F04FCDF328E218
 
 var generatePaymentKeyWithoutRegistration = function(req, res) {
 	try {
-		var user = req.body.user;
-		var amount = req.body.amount;
+		var amount = req.params.amount;
 		paymentsBusiness.generatePaymentKeyWithoutRegistration(
-			{ user, estimatedCost: amount },
+			{ agentName: (req.user || {}).fullName, estimatedCost: amount },
 			data => res.send(data),
 			() =>
 				res

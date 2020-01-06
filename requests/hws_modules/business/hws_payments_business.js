@@ -82,10 +82,10 @@ var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
 	authenticate(({ authToken }) => {
 		const payload = {
 			auth_token: authToken,
-			amount_cents: request.estimatedCost,
+			amount_cents: request.estimatedCost * 100,
 			currency: CURRENCY,
 			integration_id: WE_ACCEPT_INTEGRATION_ID,
-			order: { ...request, amount_cents: request.estimatedCost },
+			order: { ...request, amount_cents: request.estimatedCost * 100 },
 		};
 		httpRequest.post(
 			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
@@ -102,7 +102,7 @@ var notificationCallback = (type, payload, onSuccess, onFailure) => {
 	if (type === 'TRANSACTION' && payload.success) {
 		requestBusiness.handlePaidRequest(payload.order.merchant_order_id);
 	} else {
-		console.error("Recieved failed payment callback");
+		console.error('Recieved failed payment callback');
 	}
 	onSuccess();
 };
