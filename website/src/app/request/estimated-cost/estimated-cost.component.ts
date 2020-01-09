@@ -11,7 +11,6 @@ import { EstimatedCostService } from './estimated-cost.service';
 	styleUrls: ['./estimated-cost.component.scss'],
 })
 export class EstimatedCostComponent {
-
 	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	hasCities: boolean;
@@ -32,7 +31,7 @@ export class EstimatedCostComponent {
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
 
-			this.hasCities = service.cities  || n === 0 ? true : false;
+			this.hasCities = service.cities || n === 0 ? true : false;
 			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
 			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
 
@@ -46,6 +45,6 @@ export class EstimatedCostComponent {
 	}
 
 	tabChange(e) {
-        this.service.setCurrentTabIndex(e);
+		this.service.setCurrentTabIndex(e);
 	}
 }

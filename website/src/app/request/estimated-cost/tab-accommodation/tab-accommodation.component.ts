@@ -83,7 +83,7 @@ export class TabAccommodationComponent implements OnDestroy {
 			offer.hotels
 				.filter(hotel => hotel.selected)
 				.map(h => {
-					this.totalCost = this.totalCost + h.price;
+					this.totalCost = +h.price;
 				});
 		});
 	}

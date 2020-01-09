@@ -26,11 +26,7 @@ export class SummaryComponent implements OnDestroy {
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		this.subscriptions.add(
-			service.stations.subscribe(stations => {
-				this.stations = stations ? stations : null;
-			})
-		);
+		this.stations = service.getSummaryStations() || null;
 	}
 
 	prev() {
