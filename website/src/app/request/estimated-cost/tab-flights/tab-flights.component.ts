@@ -14,72 +14,43 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
-	// selectedFlightOffers = [];
-	isLoading: boolean;
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
 	selectedSlide = 1;
-	afterReloadSlideIndex: number;
 	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
-		// requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
 		this.flightPaths = service.getCityPaths();
 
 		this.subscriptions.add(
 			service.getFlightOffers().subscribe(flightOffersResult => {
 				this.flightOffers = flightOffersResult;
-				// if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
-				// 	this.flightOffers = flightOffers;
 
-				// 	let hasSelectedFlightOffer = false;
-
-				// 	this.flightOffers.forEach(flightOffer => {
-				// 		if (flightOffer.selected) {
-				// 			hasSelectedFlightOffer = true;
-				// 			this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
-				// 			setTimeout(() => {
-				// 				this.goToSlide(this.flightOffers.indexOf(flightOffer));
-				// 			}, 0);
-				// 		}
-
-				// 		if (!hasSelectedFlightOffer) {
-				// 			this.flightOffers[0].selected = true;
-				// 			// this.selectedFlightOffers.push(this.flightOffers[0]);
-				// 		}
-				// 	});
-				// }
+				this.flightOffers.forEach((flightOffer, i) => {
+					if (flightOffer.selected) {
+						setTimeout(() => {
+							this.goToSlide(i);
+						}, 0);
+					}
+				});
 			})
 		);
-
-		// service.getSelectedCities().forEach(city => {
-		// 	const cityLatLong = city.coordinates.split(',');
-		// 	this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
-		// });
 
 		this.setSliderOptions();
 	}
 
-	selectOffer(offer) {
+	updateSelectedFlightOffer(offer) {
 		this.flightOffers.forEach(flightOffer => {
-			if (offer.fareSourceCode === flightOffer.fareSourceCode) {
-				flightOffer.selected = true;
-			} else {
-				flightOffer.selected = false;
-			}
-			// this.selectedFlightOffers = [];
-			// this.selectedFlightOffers.push(offer);
+			flightOffer.selected = offer.fareSourceCode === flightOffer.fareSourceCode ? true : false;
 		});
 	}
 
-	next(): void {
-		// this.service.updateFlightsOffersInCache(this.flightOffers);
-		// this.service.setSelectedFlightOffers(this.selectedFlightOffers);
+	goNext(): void {
 		this.service.setCurrentTabIndex(2);
 	}
 
-	back(): void {
+	goBack(): void {
 		this.service.setCurrentTabIndex(0);
 	}
 
