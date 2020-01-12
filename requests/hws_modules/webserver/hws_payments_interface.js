@@ -3,10 +3,10 @@ const paymentsBusiness = require('../business/hws_payments_business');
 
 const WE_ACCEPT_HMAC_KEY = process.env.WE_ACCEPT_HMAC_KEY || '09C1F04FCDF328E2184BF25B87F78A3C';
 
-var generatePaymentKeyWithoutRegistration = function(req, res) {
+var generatePaymentKeyWithoutOrderRegistration = function(req, res) {
 	try {
 		var amount = req.params.amount;
-		paymentsBusiness.generatePaymentKeyWithoutRegistration(
+		paymentsBusiness.generatePaymentKeyWithoutOrderRegistration(
 			{ agentName: (req.user || {}).fullName, estimatedCost: amount },
 			data => res.send(data),
 			() =>
@@ -126,6 +126,6 @@ const flatten = (obj, includePrototype, into, prefix) => {
 	return into;
 };
 
-exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
+exports.generatePaymentKeyWithoutOrderRegistration = generatePaymentKeyWithoutOrderRegistration;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;

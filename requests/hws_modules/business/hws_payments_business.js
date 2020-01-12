@@ -78,7 +78,7 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 	);
 };
 
-var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
+var generatePaymentKeyWithoutOrderRegistration = (request, onSuccess, onFailure) => {
 	authenticate(({ authToken }) => {
 		const payload = {
 			auth_token: authToken,
@@ -111,7 +111,7 @@ var responseCallback = (payload, onSuccess, onFailure) => {
 	onSuccess(payload['data.message']);
 };
 
-exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
-exports.registeredOrderAndGeneratePaymentKey = registeredOrderAndGeneratePaymentKey;
+exports.generatePaymentKeyWithoutOrderRegistration = generatePaymentKeyWithoutOrderRegistration;
+exports.generatePaymentKeyWithOrderRegistration = registeredOrderAndGeneratePaymentKey;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;
