@@ -20,19 +20,17 @@ var generatePaymentKeyWithOrderRegistration = function(req, res) {
 			agentName: (req.user || {}).fullName,
 		};
 		paymentsBusiness.generatePaymentKeyWithOrderRegistration(
+			false,
 			order,
 			data => res.send(data),
-			() =>
-				res
-					.status(500)
-					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.")
+			err => res.status(500).send(err)
 		);
 	} catch (error) {
 		console.error('An error occurred in /payments/key');
 		console.error(error);
 		res
 			.status(500)
-			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence1." + error);
 	}
 };
 
@@ -40,6 +38,7 @@ var generatePaymentKeyWithoutOrderRegistration = function(req, res) {
 	try {
 		var amount = req.params.amount;
 		paymentsBusiness.generatePaymentKeyWithoutOrderRegistration(
+			false,
 			{ agentName: (req.user || {}).fullName, estimatedCost: amount },
 			data => res.send(data),
 			() =>

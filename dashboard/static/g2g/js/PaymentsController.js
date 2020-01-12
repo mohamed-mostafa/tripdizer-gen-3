@@ -4,7 +4,9 @@ g2gControlCenterApplication.controller('PaymentsController', [
 	'$http',
 	function($rootScope, $scope, $http) {
 		// fields
-		$scope.iframeURL = 'https://accept.paymobsolutions.com/api/acceptance/iframes/12312?payment_token=';
+		$scope.iframeURL = `https://accept.paymobsolutions.com/api/acceptance/iframes/${
+			$rootScope.weAcceptIframeKey
+		}?payment_token=`;
 		$scope.amount = 1000;
 		$scope.paymentKey = '';
 		$scope.loading = false;

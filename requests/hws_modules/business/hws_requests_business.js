@@ -116,6 +116,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 				// at this point, we've saved the request to the database. let's generate a payment key
 				request.paymentKey = await new Promise(resolve => {
 					paymentsService.generatePaymentKeyWithOrderRegistration(
+						true,
 						request,
 						({ paymentKey }) => {
 							requestsDao.modifyRequestStatusById(

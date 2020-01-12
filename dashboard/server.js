@@ -16,6 +16,7 @@ var start = () => {
 		serverURL: process.env.SERVICES_URL || 'http://localhost:8080', // remote test backend server
 		MEDIA_STORAGE_BASE_URL:
 			process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com',
+		WE_ACCEPT_IFRAME_KEY: process.env.WE_ACCEPT_IFRAME_KEY || 15693,
 	};
 
 	// your express configuration here
