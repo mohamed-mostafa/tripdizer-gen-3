@@ -13,8 +13,10 @@ var start = () => {
 	var bodyParser = require('body-parser');
 	var flash = require('express-flash');
 	var locals = {
-		serverURL: process.env.SERVICES_URL || 'http://localhost:8083', // remote test backend server
-		MEDIA_STORAGE_BASE_URL: process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com'
+		serverURL: process.env.SERVICES_URL || 'http://localhost:8080', // remote test backend server
+		MEDIA_STORAGE_BASE_URL:
+			process.env.MEDIA_STORAGE_BASE_URL || 'https://storage.cloud.google.com/tripdizer-dev.appspot.com',
+		WE_ACCEPT_IFRAME_KEY: process.env.WE_ACCEPT_IFRAME_KEY || 15693,
 	};
 
 	// your express configuration here
@@ -67,8 +69,8 @@ var start = () => {
 		req.logout();
 		var match = req.headers.referer
 			? req.headers.referer.match(
-				/^(?:[a-z][a-z0-9+\-.]*:(?:\/\/([^/?#]+))?)?(\/?[a-z0-9\-._~%!$&'()*+,;=@]+(?:\/[a-z0-9\-._~%!$&'()*+,;=:@]+)*\/?|\/)(?:[#?]|$)/
-			)
+					/^(?:[a-z][a-z0-9+\-.]*:(?:\/\/([^/?#]+))?)?(\/?[a-z0-9\-._~%!$&'()*+,;=@]+(?:\/[a-z0-9\-._~%!$&'()*+,;=:@]+)*\/?|\/)(?:[#?]|$)/
+			  )
 			: null;
 		if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
 			req.originalUrl = match[2];
@@ -230,10 +232,22 @@ var start = () => {
 			user: req.user,
 		});
 	});
+
+	app.get('/admin/payment', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Generate Payment URI',
+			controller: 'Payments',
+		};
+		res.render('pages/payment', {
+			user: req.user,
+		});
+	});
+
 	app.get('*', auth.isAuthenticated, auth.renderTo404);
 
 	// routes end
-	var port = process.env.PORT || 8081;
+	var port = process.env.PORT || 8090;
 	app.listen(port, () => {
 		console.log('%s: ControlCenter Node server started on %d ...', Date(Date.now()), port);
 	});
