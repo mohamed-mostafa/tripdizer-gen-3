@@ -11,7 +11,7 @@ const WE_ACCEPT_INTEGRATION_ID = process.env.WE_ACCEPT_INTEGRATION_ID || 4361;
 
 var authenticate = (onSuccess, onFailure) => {
 	httpRequest.post(
-		{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/auth/tokens`, json: true, body: { api_key: WE_ACCEPT_PAYMENT_API_KEY } },
+		{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}auth/tokens`, json: true, body: { api_key: WE_ACCEPT_PAYMENT_API_KEY } },
 		(error, response, data) => {
 			if (!data || !data.token) onFailure('Authentication failed', error);
 			else onSuccess({ merchantId: data.profile.id, authToken: data.token });
@@ -30,7 +30,7 @@ var registerRequestOrder = (request, onSuccess, onFailure) => {
 			merchant_order_id: request.id,
 		};
 		httpRequest.post(
-			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/ecommerce/orders`, json: true, body: payload },
+			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}ecommerce/orders`, json: true, body: payload },
 			(error, response, data) => {
 				if (!data || !data.id) onFailure('Order registration failed', error);
 				else onSuccess({ authToken, orderId: data.id, amountCents: data.amount_cents, currency: data.currency });
@@ -67,7 +67,7 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 				},
 			};
 			httpRequest.post(
-				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
+				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}acceptance/payment_keys`, json: true, body: payload },
 				(error, response, data) => {
 					if (!data || !data.token) onFailure('Payment key generation failed', error);
 					else onSuccess({ paymentKey: data.token });
@@ -88,7 +88,7 @@ var generatePaymentKeyWithoutOrderRegistration = (request, onSuccess, onFailure)
 			order: { ...request, amount_cents: request.estimatedCost * 100 },
 		};
 		httpRequest.post(
-			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
+			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}acceptance/payment_keys`, json: true, body: payload },
 			(error, response, data) => {
 				if (!data || !data.token) onFailure('Payment key generation failed', error);
 				else onSuccess({ paymentKey: data.token });

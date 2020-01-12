@@ -3,6 +3,39 @@ const paymentsBusiness = require('../business/hws_payments_business');
 
 const WE_ACCEPT_HMAC_KEY = process.env.WE_ACCEPT_HMAC_KEY || '09C1F04FCDF328E2184BF25B87F78A3C';
 
+var generatePaymentKeyWithOrderRegistration = function(req, res) {
+	try {
+		const order = {
+			id: getRandomInt(1000000000000, 9999999999999),
+			estimatedCost: req.params.amount,
+			pnrInfoList: [
+				{
+					firstName: 'First Name',
+					lastName: 'Last Name',
+					phone: '01000000000',
+					email: 'email@domain.com',
+					nationality: 'Egypt',
+				},
+			],
+			agentName: (req.user || {}).fullName,
+		};
+		paymentsBusiness.generatePaymentKeyWithOrderRegistration(
+			order,
+			data => res.send(data),
+			() =>
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.")
+		);
+	} catch (error) {
+		console.error('An error occurred in /payments/key');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 var generatePaymentKeyWithoutOrderRegistration = function(req, res) {
 	try {
 		var amount = req.params.amount;
@@ -126,6 +159,13 @@ const flatten = (obj, includePrototype, into, prefix) => {
 	return into;
 };
 
+const getRandomInt = (min, max) => {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+};
+
+exports.generatePaymentKeyWithOrderRegistration = generatePaymentKeyWithOrderRegistration;
 exports.generatePaymentKeyWithoutOrderRegistration = generatePaymentKeyWithoutOrderRegistration;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;

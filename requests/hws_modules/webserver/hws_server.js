@@ -59,11 +59,7 @@ var start = function() {
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
 
 	// Payments
-	router.get(
-		'/payments/key/:amount',
-		auth.isAuthenticated,
-		paymentsInterface.generatePaymentKeyWithoutOrderRegistration
-	);
+	router.get('/payments/key/:amount', auth.isAuthenticated, paymentsInterface.generatePaymentKeyWithOrderRegistration);
 	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
 	router.get('/payments/response-callback', paymentsInterface.responseCallback);
 
