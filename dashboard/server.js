@@ -236,7 +236,7 @@ var start = () => {
 	app.get('/admin/payment', auth.isAuthenticated, (req, res) => {
 		res.locals = {
 			...locals,
-			title: 'Generate Payment',
+			title: 'Generate Payment URI',
 			controller: 'Payments',
 		};
 		res.render('pages/payment', {
