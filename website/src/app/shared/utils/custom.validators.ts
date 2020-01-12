@@ -102,9 +102,10 @@ export class CustomValidators {
 			) {
 				return null;
 			}
-			return { validEmail: errorMessage || true };
+			return { email: errorMessage || true };
 		};
 	}
+
 	static leadingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;

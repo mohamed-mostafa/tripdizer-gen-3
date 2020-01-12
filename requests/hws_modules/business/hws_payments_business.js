@@ -7,13 +7,18 @@ const WE_ACCEPT_PAYMENT_BASE_URL = 'https://accept.paymobsolutions.com/api/';
 const WE_ACCEPT_PAYMENT_API_KEY =
 	process.env.WE_ACCEPT_PAYMENT_API_KEY ||
 	'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SndjbTltYVd4bFgzQnJJam95T0RRNExDSnVZVzFsSWpvaWFXNXBkR2xoYkNJc0ltTnNZWE56SWpvaVRXVnlZMmhoYm5RaWZRLnRRclNhZXpnMWtqbDd2MEx0alAxbWl4eFVXT3R4aHBOSDFkeDdFOWQzN3RaTjBNWGtrMmYzLTZBdlhrWmxBMHBLdTFEdzJ3UElqQmVwNEFzQnF6STlR';
-const WE_ACCEPT_INTEGRATION_ID = process.env.WE_ACCEPT_INTEGRATION_ID || 4361;
+const WE_ACCEPT_CC_INTEGRATION_ID = process.env.WE_ACCEPT_CC_INTEGRATION_ID || 4361;
+const WE_ACCEPT_valU_INTEGRATION_ID = process.env.WE_ACCEPT_valU_INTEGRATION_ID || 7644;
 
 var authenticate = (onSuccess, onFailure) => {
 	httpRequest.post(
-		{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/auth/tokens`, json: true, body: { api_key: WE_ACCEPT_PAYMENT_API_KEY } },
+		{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}auth/tokens`, json: true, body: { api_key: WE_ACCEPT_PAYMENT_API_KEY } },
 		(error, response, data) => {
-			if (!data || !data.token) onFailure('Authentication failed', error);
+			if (!data || !data.token)
+				onFailure({
+					message: 'Authentication failed.',
+					error: JSON.stringify(error || data),
+				});
 			else onSuccess({ merchantId: data.profile.id, authToken: data.token });
 		}
 	);
@@ -30,16 +35,20 @@ var registerRequestOrder = (request, onSuccess, onFailure) => {
 			merchant_order_id: request.id,
 		};
 		httpRequest.post(
-			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/ecommerce/orders`, json: true, body: payload },
+			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}ecommerce/orders`, json: true, body: payload },
 			(error, response, data) => {
-				if (!data || !data.id) onFailure('Order registration failed', error);
+				if (!data || !data.id)
+					onFailure({
+						message: 'Order registration failed.',
+						error: JSON.stringify(error || data),
+					});
 				else onSuccess({ authToken, orderId: data.id, amountCents: data.amount_cents, currency: data.currency });
 			}
 		);
 	}, onFailure);
 };
 
-var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
+var generatePaymentKeyWithOrderRegistration = (isCash, request, onSuccess, onFailure) => {
 	registerRequestOrder(
 		request,
 		({ authToken, orderId, amountCents, currency }) => {
@@ -49,7 +58,7 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 				expiration: 3600,
 				order_id: orderId,
 				currency: currency,
-				integration_id: WE_ACCEPT_INTEGRATION_ID,
+				integration_id: isCash ? WE_ACCEPT_CC_INTEGRATION_ID : WE_ACCEPT_valU_INTEGRATION_ID,
 				billing_data: {
 					first_name: request.pnrInfoList[0].firstName,
 					last_name: request.pnrInfoList[0].lastName,
@@ -67,9 +76,13 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 				},
 			};
 			httpRequest.post(
-				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
+				{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}acceptance/payment_keys`, json: true, body: payload },
 				(error, response, data) => {
-					if (!data || !data.token) onFailure('Payment key generation failed', error);
+					if (!data || !data.token)
+						onFailure({
+							message: 'Payment key generation failed.',
+							error: JSON.stringify(error || data),
+						});
 					else onSuccess({ paymentKey: data.token });
 				}
 			);
@@ -78,19 +91,23 @@ var registeredOrderAndGeneratePaymentKey = (request, onSuccess, onFailure) => {
 	);
 };
 
-var generatePaymentKeyWithoutRegistration = (request, onSuccess, onFailure) => {
+var generatePaymentKeyWithoutOrderRegistration = (isCash, request, onSuccess, onFailure) => {
 	authenticate(({ authToken }) => {
 		const payload = {
 			auth_token: authToken,
-			amount_cents: request.estimatedCost,
+			amount_cents: request.estimatedCost * 100,
 			currency: CURRENCY,
-			integration_id: WE_ACCEPT_INTEGRATION_ID,
-			order: { ...request, amount_cents: request.estimatedCost },
+			integration_id: isCash ? WE_ACCEPT_CC_INTEGRATION_ID : WE_ACCEPT_valU_INTEGRATION_ID,
+			order: { ...request, amount_cents: request.estimatedCost * 100 },
 		};
 		httpRequest.post(
-			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}/acceptance/payment_keys`, json: true, body: payload },
+			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}acceptance/payment_keys`, json: true, body: payload },
 			(error, response, data) => {
-				if (!data || !data.token) onFailure('Payment key generation failed', error);
+				if (!data || !data.token)
+					onFailure({
+						message: 'Payment key generation failed.',
+						error: JSON.stringify(error || data),
+					});
 				else onSuccess({ paymentKey: data.token });
 			}
 		);
@@ -102,7 +119,7 @@ var notificationCallback = (type, payload, onSuccess, onFailure) => {
 	if (type === 'TRANSACTION' && payload.success) {
 		requestBusiness.handlePaidRequest(payload.order.merchant_order_id);
 	} else {
-		console.error("Recieved failed payment callback");
+		console.error('Recieved failed payment callback');
 	}
 	onSuccess();
 };
@@ -111,7 +128,7 @@ var responseCallback = (payload, onSuccess, onFailure) => {
 	onSuccess(payload['data.message']);
 };
 
-exports.generatePaymentKeyWithoutRegistration = generatePaymentKeyWithoutRegistration;
-exports.registeredOrderAndGeneratePaymentKey = registeredOrderAndGeneratePaymentKey;
+exports.generatePaymentKeyWithoutOrderRegistration = generatePaymentKeyWithoutOrderRegistration;
+exports.generatePaymentKeyWithOrderRegistration = generatePaymentKeyWithOrderRegistration;
 exports.notificationCallback = notificationCallback;
 exports.responseCallback = responseCallback;
