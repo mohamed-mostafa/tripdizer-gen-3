@@ -34,7 +34,7 @@ export class TabAccommodationComponent {
 			this.loadedData = true;
 			this.accommodationOffers = res;
 			for (const accommodationOffer of this.accommodationOffers) {
-				if (accommodationOffer.hotels.length > 0) {
+				if (accommodationOffer && accommodationOffer.hotels && accommodationOffer.hotels.length > 0) {
 					accommodationOffer.hotels[0].select = true;
 					this.accommodations.push(accommodationOffer);
 					this.selectedHotels.push(accommodationOffer.hotels[0]);
