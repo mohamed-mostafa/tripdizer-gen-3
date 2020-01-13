@@ -2,8 +2,7 @@ import { OwlCarousel } from 'ngx-owl-carousel';
 import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
-import { RequestService } from '../../request.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -24,8 +23,6 @@ export class TabAccommodationComponent implements OnDestroy {
 
 	constructor(
 		private service: EstimatedCostService,
-		public requestService: RequestService,
-		private router: Router,
 		private route: ActivatedRoute
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
@@ -88,12 +85,12 @@ export class TabAccommodationComponent implements OnDestroy {
 		});
 	}
 
-	next() {
-		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+	goNext() {
+		this.service.tabsNavigate('accommodation', 'next', this.currentStepPath, this.route);
 	}
 
-	back(): void {
-		this.service.setCurrentTabIndex(1);
+	goBack(): void {
+		this.service.tabsNavigate('accommodation', 'back');
 	}
 
 	ngOnDestroy() {

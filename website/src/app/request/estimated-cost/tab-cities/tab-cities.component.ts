@@ -1,11 +1,10 @@
 import { TranslateService } from '@ngx-translate/core';
 import { SummaryService } from './../../summary/summary.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { CityDTO } from './city-dto.model';
-import { RequestService } from '../../request.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -22,9 +21,7 @@ export class TabCitiesComponent implements OnDestroy {
 	constructor(
 		private service: EstimatedCostService,
 		snackBar: MatSnackBar,
-		private requestService: RequestService,
 		private route: ActivatedRoute,
-		private router: Router,
 		public summaryService: SummaryService,
 		public translate: TranslateService
 	) {
@@ -83,14 +80,12 @@ export class TabCitiesComponent implements OnDestroy {
 	}
 
 	goNext(): void {
-		this.service.setCurrentTabIndex(1);
+		this.service.tabsNavigate('cities', 'next');
 		this.service.setCityPaths(this.cityPaths);
 	}
 
 	goBack(): void {
-		this.router.navigate(['../', this.requestService.getPrevStep(this.route.routeConfig.path)], {
-			relativeTo: this.route,
-		});
+		this.service.tabsNavigate('cities', 'back', this.route.routeConfig.path, this.route);
 		this.service.setCityPaths(this.cityPaths);
 	}
 

@@ -2,7 +2,6 @@ import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
 import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
-import { RequestService } from '../../request.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +18,7 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 	selectedSlide = 1;
 	private subscriptions = new Subscription();
 
-	constructor(private service: EstimatedCostService, requestService: RequestService) {
+	constructor(private service: EstimatedCostService) {
 
 		this.flightPaths = service.getCityPaths();
 
@@ -47,11 +46,11 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 	}
 
 	goNext(): void {
-		this.service.setCurrentTabIndex(2);
+		this.service.tabsNavigate('flights', 'next');
 	}
 
 	goBack(): void {
-		this.service.setCurrentTabIndex(0);
+		this.service.tabsNavigate('flights', 'back');
 	}
 
 	setSliderOptions() {

@@ -322,4 +322,44 @@ export class EstimatedCostService {
 			this.accommodationLoading();
 		}
 	}
+
+	/* navigation logic */
+	tabsNavigate(source, action, routeConfigPath?, route?) {
+		if (source === 'cities' && action === 'back') {
+			this.stepNavigate(routeConfigPath, route, 'back');
+		} else if (source === 'cities' && action === 'next') {
+			if (this.cities && this.cities.length) {
+				this.currentTabIndex.next(1);
+			}
+		} else if (source === 'flights' && action === 'back') {
+			this.currentTabIndex.next(0);
+		} else if (source === 'flights' && action === 'next') {
+			if (this.cities && this.cities.length) {
+				this.currentTabIndex.next(2);
+			}
+		} else if (source === 'accommodation' && action === 'back') {
+			this.currentTabIndex.next(1);
+		} else if (source === 'accommodation' && action === 'next') {
+			this.stepNavigate(routeConfigPath, route, 'next');
+		} else if (source === 'summary' && action === 'back') {
+			this.stepNavigate(routeConfigPath, route, 'back');
+			setTimeout(() => this.setCurrentTabIndex(2), 0);
+		} else if (source === 'summary' && action === 'modify') {
+			this.stepNavigate(routeConfigPath, route, 'back');
+		} else if (source === 'summary' && action === 'next') {
+			this.stepNavigate(routeConfigPath, route, 'next');
+		}
+	}
+
+	stepNavigate(routeConfigPath, route, direction) {
+		if (direction === 'next') {
+			this.router.navigate(['../', this.requestService.getNextStep(routeConfigPath)], {
+				relativeTo: route,
+			});
+		} else if (direction === 'back') {
+			this.router.navigate(['../', this.requestService.getPrevStep(routeConfigPath)], {
+				relativeTo: route,
+			});
+		}
+	}
 }

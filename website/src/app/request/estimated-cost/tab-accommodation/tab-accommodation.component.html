@@ -138,13 +138,13 @@
 		<div class="col-12 mt-4 text-center">
 			<a
 				href="javascript:void(0)"
-				(click)="back()"
+				(click)="goBack()"
 				class="back-btn position-relative"
 				[ngClass]="('dir' | translate) === 'ltr' ? 'mr-4 mr-lg-5' : 'ml-4 ml-lg-5'"
 				>{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a
 			>
 
-			<button (click)="next()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+			<button (click)="goNext()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
 				{{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
 			</button>
 		</div>
