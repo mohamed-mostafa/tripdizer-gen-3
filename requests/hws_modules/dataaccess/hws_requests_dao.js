@@ -30,7 +30,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 						[
 							request.date,
 							request.status || 1,
-							request.traveler.email,
+							request.traveler.email || '',
 							request.traveler.name,
 							request.traveler.mobile,
 							request.traveler.gender,
