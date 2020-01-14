@@ -57,7 +57,12 @@ export class RequestRequest {
 			otherPreferenceName: request.getPreferenceName(LUTPreference.Other),
 			destination: request.destination ? request.destination.id : null,
 			flightOffers: request.citiesFlightsAccommodations.flightOffers.filter(f => f.selected),
-			selectedHotels: [], // to be refactored
+			selectedHotels: [].concat.apply(
+				[],
+				request.citiesFlightsAccommodations.accommodationOffers.map(offer =>
+					offer.hotels.filter(hotel => hotel.selected)
+				)
+			),
 			selectedCities: request.citiesFlightsAccommodations.cities.filter(c => c.selected),
 			selectedAttractions: request.selectedAttractions,
 			estimatedCost: request.estimatedCost,
