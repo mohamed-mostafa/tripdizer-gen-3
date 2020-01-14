@@ -34,8 +34,8 @@ export class EstimatedCostService {
 	cityPaths: any;
 
 	cities: Array<CityDTO> = [];
-	flightOffers: Array<FlightOffer>;
-	accommodationOffers: Array<Accommodation>;
+	flightOffers: Array<FlightOffer> = [];
+	accommodationOffers: Array<Accommodation> = [];
 
 	currentTabIndex = new Subject<number>();
 

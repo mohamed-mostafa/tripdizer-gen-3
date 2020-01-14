@@ -221,7 +221,7 @@ export class SummaryService {
 	}
 
 	getSelectedFlightOffers() {
-		return this.requestService.getProperty('flightOffers');
+		return this.requestService.getProperty('flightOffers').filter(offer => offer.selected);
 	}
 
 	getTotalCost() {
