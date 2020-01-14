@@ -56,9 +56,9 @@ export class RequestRequest {
 			preferences: request.preferences,
 			otherPreferenceName: request.getPreferenceName(LUTPreference.Other),
 			destination: request.destination ? request.destination.id : null,
-			flightOffers: request.flightOffers,
+			flightOffers: request.citiesFlightsAccommodations.flightOffers.filter(f => f.selected),
 			selectedHotels: [], // to be refactored
-			selectedCities: request.cities.filter(c => c.selected),
+			selectedCities: request.citiesFlightsAccommodations.cities.filter(c => c.selected),
 			selectedAttractions: request.selectedAttractions,
 			estimatedCost: request.estimatedCost,
 			visaAssistanceNeeded: request.visaAssistanceNeeded,

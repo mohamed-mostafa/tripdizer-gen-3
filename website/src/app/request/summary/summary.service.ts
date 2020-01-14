@@ -205,7 +205,7 @@ export class SummaryService {
 	}
 
 	getCitiesWithNights(): Array<CityDTO> {
-		const cities = this.requestService.getProperty('cities');
+		const cities = this.requestService.getProperty('citiesFlightsAccommodations').cities;
 		if (cities.length > 0) {
 			const selectedCities = cities.filter(c => c.selected);
 			const returnDate = this.requestService.getProperty('returnDate') as Moment;
@@ -221,12 +221,12 @@ export class SummaryService {
 	}
 
 	getSelectedFlightOffers() {
-		return this.requestService.getProperty('flightOffers').filter(offer => offer.selected);
+		return this.requestService.getProperty('citiesFlightsAccommodations').flightOffers.filter(offer => offer.selected);
 	}
 
 	getTotalCost() {
 		let hotelsCosts = 0;
-		this.requestService.getProperty('accommodationOffers').map(offer => {
+		this.requestService.getProperty('citiesFlightsAccommodations').accommodationOffers.map(offer => {
 			offer.hotels
 				.filter(hotel => hotel.selected)
 				.map(h => {

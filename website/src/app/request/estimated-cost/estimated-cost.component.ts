@@ -31,7 +31,7 @@ export class EstimatedCostComponent {
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
 
-			this.hasCities = service.cities || n === 0 ? true : false;
+			this.hasCities = service.citiesFlightsAccommodations.cities || n === 0 ? true : false;
 			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
 			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
 

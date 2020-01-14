@@ -8,7 +8,7 @@ export class Ticket extends RequestResponse {
 	destinationName: string;
 
 	static getTicketFromRequestResponse(request: Request, requestResponse: RequestResponse): Ticket {
-		const selectedCities = request.cities.filter(c => c.selected);
+		const selectedCities = request.citiesFlightsAccommodations.cities.filter(c => c.selected);
 
 		return {
 			...requestResponse,

@@ -8,7 +8,7 @@ import { Preference } from '../shared/models/preference.model';
 import { LUTPurpose } from '../shared/models/purpose.model';
 import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
-import { Hotel, Accommodation } from './estimated-cost/tab-accommodation/accommodation.model';
+import { Accommodation } from './estimated-cost/tab-accommodation/accommodation.model';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { RequestType } from './request-type.enum';
@@ -54,9 +54,11 @@ export class Request extends CommonFunctions {
 	private _purposeName: string;
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
-	private _cities: Array<CityDTO>;
-	private _flightOffers: Array<FlightOffer>;
-	private _accommodationOffers: Array<Accommodation>;
+	private _citiesFlightsAccommodations: {
+		cities: Array<CityDTO>;
+		flightOffers: Array<FlightOffer>;
+		accommodationOffers: Array<Accommodation>;
+	};
 	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
@@ -74,7 +76,7 @@ export class Request extends CommonFunctions {
 	}
 	set countries(value: Array<Country>) {
 		this._countries = value;
-		this._cities = [];
+		this._citiesFlightsAccommodations = { cities: [], flightOffers: [], accommodationOffers: [] };
 	}
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
@@ -170,24 +172,11 @@ export class Request extends CommonFunctions {
 	get destination(): Destination {
 		return this._destination;
 	}
-	get cities(): Array<CityDTO> {
-		return this._cities;
+	get citiesFlightsAccommodations() {
+		return this._citiesFlightsAccommodations;
 	}
-	set cities(value: Array<CityDTO>) {
-		this._cities = value;
-		this._flightOffers = this._accommodationOffers = [];
-	}
-	get flightOffers(): Array<FlightOffer> {
-		return this._flightOffers;
-	}
-	set flightOffers(value: Array<FlightOffer>) {
-		this._flightOffers = value;
-	}
-	get accommodationOffers(): Array<Accommodation> {
-		return this._accommodationOffers;
-	}
-	set accommodationOffers(value: Array<Accommodation>) {
-		this._accommodationOffers = value;
+	set citiesFlightsAccommodations(value) {
+		this._citiesFlightsAccommodations = value;
 	}
 	get selectedAttractions(): Array<Attraction> {
 		return this._selectedAttractions;

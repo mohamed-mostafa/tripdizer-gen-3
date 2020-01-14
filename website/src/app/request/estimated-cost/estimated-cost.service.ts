@@ -33,9 +33,11 @@ export class EstimatedCostService {
 	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 	cityPaths: any;
 
-	cities: Array<CityDTO> = [];
-	flightOffers: Array<FlightOffer> = [];
-	accommodationOffers: Array<Accommodation> = [];
+	citiesFlightsAccommodations: {
+		cities: Array<CityDTO>;
+		flightOffers: Array<FlightOffer>;
+		accommodationOffers: Array<Accommodation>;
+	} = { cities: [], flightOffers: [], accommodationOffers: [] };
 
 	currentTabIndex = new Subject<number>();
 
@@ -58,7 +60,7 @@ export class EstimatedCostService {
 	// }
 
 	getFlightsTotalCost(): number {
-		const selectedFlightOffers = this.flightOffers.filter(offer => offer.selected);
+		const selectedFlightOffers = this.citiesFlightsAccommodations.flightOffers.filter(offer => offer.selected);
 		return Object.keys(selectedFlightOffers).reduce((pv, cv) => pv + +selectedFlightOffers[cv].price, 0);
 	}
 
@@ -80,10 +82,9 @@ export class EstimatedCostService {
 	/* cities logic */
 
 	getCities(): Observable<Array<CityDTO>> {
-		const cities = this.requestService.getProperty('cities');
-		this.cities = cities;
-		if (cities.length > 0) {
-			return of(cities);
+		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
+		if (this.citiesFlightsAccommodations.cities.length > 0) {
+			return of(this.citiesFlightsAccommodations.cities);
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
@@ -107,8 +108,9 @@ export class EstimatedCostService {
 	}
 
 	setCities(cities: Array<CityDTO>): void {
-		this.cities = cities;
-		this.requestService.setProperty('cities', cities);
+		this.citiesFlightsAccommodations.cities = cities;
+		this.citiesFlightsAccommodations.flightOffers = this.citiesFlightsAccommodations.accommodationOffers = [];
+		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
 	}
 
 	getNumberOfNights(): number {
@@ -120,7 +122,7 @@ export class EstimatedCostService {
 	}
 
 	getCitiesWithNights(): Array<CityDTO> {
-		const cities = this.cities;
+		const cities = this.citiesFlightsAccommodations.cities;
 		if (cities.length > 0) {
 			const selectedCities = cities.filter(c => c.selected);
 			const numberOfNights = this.getNumberOfNights();
@@ -140,9 +142,9 @@ export class EstimatedCostService {
 	/* flightOffers logic */
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		const flightOffers = this.requestService.getProperty('flightOffers');
-		if (flightOffers && flightOffers.length > 0) {
-			return of(flightOffers);
+		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
+		if (this.citiesFlightsAccommodations.flightOffers && this.citiesFlightsAccommodations.flightOffers.length > 0) {
+			return of(this.citiesFlightsAccommodations.flightOffers);
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
@@ -188,16 +190,19 @@ export class EstimatedCostService {
 	}
 
 	setFlightOffers(flightOffers: Array<FlightOffer>): void {
-		this.flightOffers = flightOffers;
-		this.requestService.setProperty('flightOffers', flightOffers);
+		this.citiesFlightsAccommodations.flightOffers = flightOffers;
+		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
 	}
 
 	/* accommodationOffers logic */
 
 	getAccommodationOffers(): Observable<Array<Accommodation>> {
-		const accommodationOffers = this.requestService.getProperty('accommodationOffers');
-		if (accommodationOffers && accommodationOffers.length > 0) {
-			return of(accommodationOffers);
+		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
+		if (
+			this.citiesFlightsAccommodations.accommodationOffers &&
+			this.citiesFlightsAccommodations.accommodationOffers.length > 0
+		) {
+			return of(this.citiesFlightsAccommodations.accommodationOffers);
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
@@ -256,8 +261,8 @@ export class EstimatedCostService {
 	}
 
 	setAccommodationOffers(accommodationOffers: Array<Accommodation>): void {
-		this.accommodationOffers = accommodationOffers;
-		this.requestService.setProperty('accommodationOffers', accommodationOffers);
+		this.citiesFlightsAccommodations.accommodationOffers = accommodationOffers;
+		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
 	}
 
 	/* Session management logic */
@@ -328,13 +333,13 @@ export class EstimatedCostService {
 		if (source === 'cities' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
 		} else if (source === 'cities' && action === 'next') {
-			if (this.cities && this.cities.length) {
+			if (this.citiesFlightsAccommodations.cities && this.citiesFlightsAccommodations.cities.length) {
 				this.currentTabIndex.next(1);
 			}
 		} else if (source === 'flights' && action === 'back') {
 			this.currentTabIndex.next(0);
 		} else if (source === 'flights' && action === 'next') {
-			if (this.cities && this.cities.length) {
+			if (this.citiesFlightsAccommodations.cities && this.citiesFlightsAccommodations.cities.length) {
 				this.currentTabIndex.next(2);
 			}
 		} else if (source === 'accommodation' && action === 'back') {
