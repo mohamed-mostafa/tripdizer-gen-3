@@ -10,10 +10,10 @@ var generatePaymentKeyWithOrderRegistration = function(req, res) {
 			estimatedCost: req.params.amount,
 			pnrInfoList: [
 				{
-					firstName: 'First Name',
-					lastName: 'Last Name',
-					phone: '01000000000',
-					email: 'email@domain.com',
+					firstName: req.query.firstName,
+					lastName: req.query.lastName,
+					phone: req.query.phone,
+					email: req.query.email,
 					nationality: 'Egypt',
 				},
 			],

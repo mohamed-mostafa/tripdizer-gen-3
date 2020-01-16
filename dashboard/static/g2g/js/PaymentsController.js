@@ -7,17 +7,26 @@ g2gControlCenterApplication.controller('PaymentsController', [
 		$scope.iframeURL = `https://accept.paymobsolutions.com/api/acceptance/iframes/${
 			$rootScope.weAcceptIframeKey
 		}?payment_token=`;
-		$scope.amount = 1000;
+		$scope.obj = {
+			amount: 1000,
+			firstName: '',
+			lastName: '',
+			phone: '',
+			email: '',
+		};
 		$scope.paymentKey = '';
 		$scope.loading = false;
 		$scope.showCopied = false;
 
 		$scope.getPaymentKey = function() {
 			$scope.paymentKey = '';
-			if ($scope.amount) {
+			if ($scope.obj.amount) {
 				$scope.loading = true;
-				$http
-					.get($rootScope.requestsServerUrl + '/payments/key/' + $scope.amount)
+				$http({
+					url: $rootScope.requestsServerUrl + '/payments/key/' + $scope.obj.amount,
+					method: 'GET',
+					params: $scope.obj,
+				})
 					.success(function(response) {
 						$scope.loading = false;
 						$scope.showCopied = false;
