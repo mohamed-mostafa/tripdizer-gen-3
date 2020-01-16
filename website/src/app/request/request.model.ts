@@ -76,10 +76,15 @@ export class Request extends CommonFunctions {
 	}
 	set countries(value: Array<Country>) {
 		this._countries = value;
-		this._citiesFlightsAccommodations = { cities: [], flightOffers: [], accommodationOffers: [] };
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.cities = [];
+		}
 	}
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+		}
 	}
 	get travelingFrom(): TravelingFrom {
 		return this._travelingFrom;
@@ -87,6 +92,9 @@ export class Request extends CommonFunctions {
 	set departureDate(value: moment.Moment) {
 		this.resetEstimatedCost();
 		this._departureDate = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+		}
 	}
 	get departureDate(): moment.Moment {
 		return this._departureDate ? moment(this._departureDate) : null;
@@ -94,6 +102,9 @@ export class Request extends CommonFunctions {
 	set returnDate(value: moment.Moment) {
 		this.resetEstimatedCost();
 		this._returnDate = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get returnDate(): moment.Moment {
 		return this._returnDate ? moment(this._returnDate) : null;
@@ -110,6 +121,10 @@ export class Request extends CommonFunctions {
 		this.translate
 			.get('request.nav_bar.travelers.value', { adultsNumber: this._adultsNumber })
 			.subscribe(label => this.setAdultsNavBarLabel(label));
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get adultsNumber(): number {
 		return this._adultsNumber;
@@ -117,6 +132,10 @@ export class Request extends CommonFunctions {
 	set kidsNumber(value) {
 		this.resetEstimatedCost();
 		this._kidsNumber = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get kidsNumber(): number {
 		return this._kidsNumber || 0;
@@ -124,6 +143,10 @@ export class Request extends CommonFunctions {
 	set infantsNumber(value) {
 		this.resetEstimatedCost();
 		this._infantsNumber = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get infantsNumber(): number {
 		return this._infantsNumber || 0;
@@ -137,6 +160,9 @@ export class Request extends CommonFunctions {
 	set budgetCategory(value) {
 		this.resetEstimatedCost();
 		this._budgetCategory = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get budgetCategory(): number {
 		return this._budgetCategory || 1;
