@@ -27,7 +27,9 @@
 			"equalTo": "غير متطابقين",
 			"copyPaste": "رجاء عدم النسخ",
 			"notEmpty": "القيمة غير صحيحة",
-			"invalidPromoCode": "البروموكود غير فعال"
+			"invalidPromoCode": "البروموكود غير فعال",
+			"leadingWhiteSpace": "يبدأ الحقل بمسافة بيضاء",
+			"trailingWhiteSpace": "ينتهى الحقل بمسافة بيضاء"
 		},
 		"login_dialog": {
 			"sign_out": "تسجيل الخروج",
@@ -236,8 +238,8 @@
 				"view_details": "إظهار تفاصيل الرحلة",
 				"accommodation": "الإقامة",
 				"activities": "الأنشطة",
-                "modify": "تعديل",
-                "go_back": "رجوع",
+				"modify": "تعديل",
+				"go_back": "رجوع",
 				"total_cost": "اجمالى التكلفة",
 				"day": "يوم",
 				"no_accommodation": "لم يتم اختيار اى فنادق",
@@ -280,8 +282,8 @@
 			"booking_steps": {
 				"passenger_details": "بيانات المسافر",
 				"payment": "الدفع",
-                "proceed_to_payment": "المتابعة إلى الدفع",
-                "back": "رجوع"
+				"proceed_to_payment": "المتابعة إلى الدفع",
+				"back": "رجوع"
 			}
 		},
 		"form_layout": {

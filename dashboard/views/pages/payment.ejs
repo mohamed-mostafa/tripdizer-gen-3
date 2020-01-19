@@ -1,0 +1,49 @@
+<div class="box">
+	<div class="box-header">
+		<h3 class="box-title">
+			<%= title %>
+		</h3>
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<div class="overlay" ng-show="loading == true">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+		<div class="box-body" style="display: flex">
+			<form class="form-group form-control-3">
+				<div class="form-group form-group-6">
+					<label for="firstName">First name</label>
+					<input class="form-control" id="firstName" ng-model="obj.firstName" placeholder="Enter the first name" required>
+				</div>
+				<div class="form-group form-group-6">
+					<label for="lastName">Last name</label>
+					<input class="form-control" id="lastName" ng-model="obj.lastName" placeholder="Enter the last name" required>
+				</div>
+				<br>
+				<div class="form-group form-group-6">
+					<label for="phone">Phone</label>
+					<input class="form-control" id="phone" ng-model="obj.phone" placeholder="Enter the phone" required>
+				</div>
+				<div class="form-group form-group-6">
+					<label for="email">Email</label>
+					<input class="form-control" id="email" ng-model="obj.email" placeholder="Enter the email" required>
+				</div>
+				<br>
+				<div class="form-group form-group-6">
+					<label for="amount">Amount</label>
+					<input type="number" class="form-control" id="amount" ng-model="obj.amount" placeholder="Enter the amount" required>
+				</div>
+				<button class="btn btn-default" ng-click="getPaymentKey()">Generate URI</button>
+			</form>
+
+			<div ng-if="paymentKey" class="form-group form-control-9" style="padding-left: 20px">
+				<label>Payment URL: <span class="text-red" ng-if="showCopied">Copied!</span></label>
+				<textarea class="form-control" rows="8" ng-click="copyToClipboard()" readonly>{{ iframeURL }}{{ paymentKey }}</textarea>
+			</div>
+		</div>
+	</div>
+	<!-- /.box-body -->
+</div>
+<!-- /.box -->
+<!-- Main row -->
+</div>

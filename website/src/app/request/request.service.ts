@@ -74,7 +74,6 @@ export class RequestService {
 		return path.split('/')[0];
 	}
 
-
 	resetSessionTimer(): void {
 		this.endSessionTimerSubject.next();
 	}

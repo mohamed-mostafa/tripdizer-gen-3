@@ -2,7 +2,7 @@
 
 const httpRequest = require("request");
 let moment = require("moment");
-let writer = require('../utils/writer');
+let writer = require("../utils/writer");
 const TRAWEX_BASE_ENDPOINT =
   process.env.TRAWEX_BASE_ENDPOINT || "https://trawex.biz/api";
 const TRAWEX_HOTELS_ROOT = "/hotel_trawexv5";
@@ -23,12 +23,24 @@ const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_HOTELS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
 let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
 let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
+
+let createTrackingId = function(length) {
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 const config = {
   user_id: TRAWEX_USERNAME,
   user_password: TRAWEX_PASSWORD,
   access: TRAWEX_ENVIRONMENT,
   ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-  trackingId: TRAWEX_TRACKING_ID
+  trackingId: TRAWEX_TRACKING_ID // createTrackingId(13)
 };
 
 const ADULT_AGE = 20;
@@ -99,7 +111,10 @@ exports.searchHotels = (language, hotelSearchRequest) => {
 
 exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
   return new Promise((resolve, reject) => {
-    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SPECIFIC_CONTENT;
+    var url =
+      TRAWEX_BASE_ENDPOINT +
+      TRAWEX_HOTELS_ROOT +
+      TRAWEX_HOTELS_SPECIFIC_CONTENT;
     var qs = {
       ...config,
       sessionId: sessionId,
@@ -116,18 +131,37 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           resolve(data.hotels.length ? data.hotels[0] : {});
         }
       }
@@ -137,7 +171,8 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
 
 exports.getHotelOffers = (language, hotelOffersRequest) => {
   return new Promise((resolve, reject) => {
-    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES;
+    var url =
+      TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES;
     var qs = {
       ...config,
       TraceId: hotelOffersRequest.traceId,
@@ -158,22 +193,51 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          reject(reject([data.errors.message]))
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
+          reject(reject([data.errors.message]));
         } else {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           resolve(data.result.roomRate.perBookingRates.map(mapHotelOffer));
         }
       }
@@ -183,7 +247,8 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
 
 exports.validateHotelOffer = (language, hotelOfferRequest) => {
   return new Promise((resolve, reject) => {
-    var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES;
+    var url =
+      TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES;
     var qs = {
       ...config,
       TraceId: hotelOfferRequest.traceId,
@@ -213,22 +278,51 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          reject(reject([data.errors.message]))
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
+          reject(reject([data.errors.message]));
         } else {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           resolve({ preBookingToken: data.PreBookingToken });
         }
       }
@@ -270,7 +364,9 @@ exports.bookHotel = (language, bookHotelRequest) => {
       ),
       city: bookHotelRequest.rooms[0][0].areaCode,
       email: bookHotelRequest.rooms[0][0].email,
-      address: `${bookHotelRequest.rooms[0][0].areaCode} ${bookHotelRequest.rooms[0][0].countryCode}`,
+      address: `${bookHotelRequest.rooms[0][0].areaCode} ${
+        bookHotelRequest.rooms[0][0].countryCode
+      }`,
       phone: bookHotelRequest.rooms[0][0].phone
     }
   };
@@ -316,16 +412,35 @@ const searchHotelsAPI = (
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(reject)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(reject)}`
+            );
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
           if (data.status.moreResults === "true") {
@@ -333,17 +448,28 @@ const searchHotelsAPI = (
               request,
               data.status.sessionId,
               data.status.nextToken
-            ).then(moreItineraries => {
-              resolve([
-                ...mapItineraryDetails(request, data),
-                ...moreItineraries
-              ]);
-            }).catch(err => {
-              console.log(`Failed to retrieve more hotels even though data.status.moreResults was true. Using hotels from first request only. Request: ${JSON.stringify(request)}, Error: ${JSON.stringify(err)}`)
-              resolve(mapItineraryDetails(request, data));
-            });
+            )
+              .then(moreItineraries => {
+                resolve([
+                  ...mapItineraryDetails(request, data),
+                  ...moreItineraries
+                ]);
+              })
+              .catch(err => {
+                console.log(
+                  `Failed to retrieve more hotels even though data.status.moreResults was true. Using hotels from first request only. Request: ${JSON.stringify(
+                    request
+                  )}, Error: ${JSON.stringify(err)}`
+                );
+                resolve(mapItineraryDetails(request, data));
+              });
           } else {
-            if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+            if (ENABLE_API_LOGGING)
+              console.info(
+                `URL:  ${url} - Request:  ${JSON.stringify(
+                  qs
+                )} + " - Response:  ${JSON.stringify(data)}`
+              );
             resolve(mapItineraryDetails(request, data));
           }
         }
@@ -370,16 +496,35 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else {
           if (data.status.moreResults === "true") {
@@ -387,16 +532,23 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
               originalReq,
               data.status.sessionId,
               data.status.nextToken
-            ).then(moreItineraries => {
-              resolve([
-                ...mapItineraryDetails(originalReq, data),
-                ...moreItineraries
-              ]);
-            }).catch(err => {
-              reject(err);
-            });
+            )
+              .then(moreItineraries => {
+                resolve([
+                  ...mapItineraryDetails(originalReq, data),
+                  ...moreItineraries
+                ]);
+              })
+              .catch(err => {
+                reject(err);
+              });
           } else {
-            if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+            if (ENABLE_API_LOGGING)
+              console.info(
+                `URL:  ${url} - Request:  ${JSON.stringify(
+                  qs
+                )} + " - Response:  ${JSON.stringify(data)}`
+              );
             resolve(mapItineraryDetails(originalReq, data));
           }
         }
@@ -479,22 +631,51 @@ const bookHotel = (language, bookHotelRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(error)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(error)}`
+          );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
           reject([response.statusMessage]);
         } else if (!data) {
-          console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(response)}`);
-          reject([`Unknown response recieved - Response body: ${response.body}`])
+          console.info(
+            `URL:  ${url} - Request:  ${JSON.stringify(
+              qs
+            )} + " - Response:  ${JSON.stringify(response)}`
+          );
+          reject([
+            `Unknown response recieved - Response body: ${response.body}`
+          ]);
         } else if (data.status && data.status.errors) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           reject([data.status.errors.map(e => e.errorMessage)]);
         } else if (!data.status && !data.isRateAvailable) {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
-          reject(reject([data.errors.message]))
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
+          reject(reject([data.errors.message]));
         } else {
-          if (ENABLE_API_LOGGING) console.info(`URL:  ${url} - Request:  ${JSON.stringify(qs)} + " - Response:  ${JSON.stringify(data)}`);
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(data)}`
+            );
           resolve({
             bookingStatus: data.status,
             supplierConfirmationNum: data.supplierConfirmationNum,
@@ -502,9 +683,9 @@ const bookHotel = (language, bookHotelRequest) => {
             clientReference: data.clientReference,
             bookingDetails: data.booking
               ? {
-                ...data.booking.roomBookingDetails,
-                roomCount: data.booking.roomBookingDetails.room_count
-              }
+                  ...data.booking.roomBookingDetails,
+                  roomCount: data.booking.roomBookingDetails.room_count
+                }
               : null
           });
         }
