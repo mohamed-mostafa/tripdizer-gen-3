@@ -11,6 +11,7 @@ let isPublicUserAuthenticated = (req, res, next) => {
 			if (error || response.statusCode != 200) {
 				res.sendStatus(401);
 			} else {
+				req.user = body;
 				next();
 			}
 		}

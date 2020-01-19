@@ -1,10 +1,9 @@
 /**
  * The dataaccess methods of hws
  */
+const daoUtilities = require('./hws_dao_utilities.js');
 
-var daoUtilities = require('./hws_dao_utilities.js');
-
-var createNewRequest = function(request, onSuccess, onFailure) {
+let createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -137,7 +136,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 	});
 };
 
-var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFailure) {
+let getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -248,7 +247,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 	});
 };
 
-var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onFailure) {
+let getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -308,7 +307,7 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 	});
 };
 
-var getRequestById = function(requestId, onSuccess, onFailure) {
+let getRequestById = function(requestId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -449,7 +448,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var updateRequest = function(request, onSuccess, onFailure) {
+let updateRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -520,7 +519,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
+let modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -555,7 +554,7 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
+let modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -591,7 +590,7 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFailure) {
+let modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -627,7 +626,7 @@ var modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFail
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
+let assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -659,7 +658,7 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	});
 };
 
-var addNewMailHistory = function(object, onSuccess, onFailure) {
+let addNewMailHistory = function(object, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -710,7 +709,7 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCounts = function(onSuccess, onFailure) {
+let getRequestCounts = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -756,7 +755,7 @@ var getRequestCounts = function(onSuccess, onFailure) {
 	});
 };
 
-var toggleOptions = function(requestId, option, onSuccess, onFailure) {
+let toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -803,7 +802,7 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
+let getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -850,7 +849,7 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
-var getTravelerEmails = function(onSuccess, onFailure) {
+let getTravelerEmails = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -895,18 +894,111 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 		}
 	});
 };
+let getRequestByMail = function(email, onSuccess, onFailure) {
+	// get a connection and open it
+	let connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query(
+				'SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.Traveler_Email_Address = ? AND tr.Archived = 0',
+				[email],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
+						console.error('An error occurred while trying to find a request with email ' + email);
+						console.error(err);
+						connection.end();
+						onFailure(err);
+					} else {
+						// no error is thrown
+						if (rows.length != 0) {
+							var request = {
+								id: rows[0].Id,
+								date: new Date(rows[0].Date).toString(),
+								status: rows[0].Status,
+								revenue: rows[0].Revenue,
+								profit: rows[0].Profit,
+								specialRequests: rows[0].Comments,
+								traveler: {
+									name: rows[0].Traveler_Name,
+									mobile: rows[0].Traveler_Mobile,
+									emailAddress: rows[0].Traveler_Email_Address,
+									gender: rows[0].Traveler_Gender,
+									dateOfBirth: new Date(rows[0].Traveler_Birth_Date).toString(),
+									profession: rows[0].Traveler_Profession,
+								},
+								userFullName: rows[0].full_name,
+								departureDate: new Date(rows[0].Departure_Date).toString(),
+								returnDate: new Date(rows[0].Return_Date).toString(),
+								isFlexibleDates: rows[0].Flexible_Dates,
+								travelingFrom: rows[0].Leaving_Country,
+								firstCountry: rows[0].First_Country,
+								otherCountry: rows[0].Other_Country,
+								secondCountry: rows[0].Second_Country,
+								thirdCountry: rows[0].Third_Country,
+								purpose: rows[0].Travel_Purpose,
+								otherPurposeName: rows[0].Other_Purpose_Name,
+								otherInterestName: rows[0].Other_Interest_Name,
+								adultsNumber: rows[0].Number_Of_Adults,
+								kidsNumber: rows[0].Number_Of_Kids,
+								infantsNumber: rows[0].Number_Of_Infants,
+								budgetCategory: rows[0].Budget_Category,
+								budget: rows[0].Budget,
+								visaAssistanceNeeded: rows[0].Visa_Assistance_Needed,
+								tourGuideNeeded: rows[0].Tour_Guide_Needed,
+								destination: rows[0].itinerary_id,
+								itineraryId: rows[0].itinerary_id,
+								actualDestination: rows[0].Actual_Destination,
+								otherActualDestination: rows[0].Other_Actual_Destination,
+								estimatedCost: rows[0].Estimated_Cost,
+								edit: rows[0].Edit,
+								reachable: rows[0].Reachable,
+								packageSent: rows[0].Package_Sent,
+								referralType: rows[0].Referral_Type,
+								travelHistory: rows[0].Travel_History,
+								promoCode: rows[0].Promo_Code,
+								score: rows[0].Score,
+								channel: rows[0].Channel,
+								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
+								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
+								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
+									rows[0].Pdf_Id
+								}&export=download`,
+								interests: [],
+								mailsHistory: [],
+							};
+							connection.end();
+							onSuccess(request);
+						} else {
+							connection.end();
+							onSuccess(null);
+						}
+					}
+				}
+			);
+		}
+	});
+};
 
-exports.assignRequestToUser = assignRequestToUser;
-exports.updateRequest = updateRequest;
-exports.createNewRequest = createNewRequest;
-exports.getRequestSummariesByStatus = getRequestSummariesByStatus;
-exports.getRequestSummariesCountByStatus = getRequestSummariesCountByStatus;
-exports.modifyRequestStatusById = modifyRequestStatusById;
-exports.getRequestById = getRequestById;
-exports.addNewMailHistory = addNewMailHistory;
-exports.getRequestCounts = getRequestCounts;
-exports.toggleOptions = toggleOptions;
-exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
-exports.modifyRequestPaymentInfo = modifyRequestPaymentInfo;
-exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
-exports.getTravelerEmails = getTravelerEmails;
+module.exports = {
+	assignRequestToUser,
+	updateRequest,
+	createNewRequest,
+	getRequestSummariesByStatus,
+	getRequestSummariesCountByStatus,
+	modifyRequestStatusById,
+	getRequestById,
+	addNewMailHistory,
+	getRequestCounts,
+	toggleOptions,
+	modifyRequestPackageInfo,
+	modifyRequestPaymentInfo,
+	getRequestCountsByPromoCode,
+	getTravelerEmails,
+	getRequestByMail,
+};

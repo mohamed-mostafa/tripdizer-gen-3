@@ -185,9 +185,22 @@ let changeRequestStatus = function(req, res) {
 	}
 };
 
-let getRequestsByMail = function(req, res) {
+let getRequestByMail = function(req, res) {
 	try {
-		console.log('hello from interface');
+		let user = req.user;
+		// call the business function and give it a callback function
+		requestsBusiness.getRequestByMail(
+			user,
+			function(request) {
+				res.json(request);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
 	} catch (error) {
 		console.error('An error occurred');
 		console.error(error);
@@ -517,7 +530,7 @@ module.exports = {
 	getRequestSummariesCount,
 	sendMailsToRequestTraveler,
 	changeRequestStatus,
-	getRequestsByMail,
+	getRequestByMail,
 	markRequestBeingPrepared,
 	markRequestDelivered,
 	markRequestPlaced,
