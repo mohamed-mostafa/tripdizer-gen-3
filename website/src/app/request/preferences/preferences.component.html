@@ -10,6 +10,7 @@
 						[placeholder]="'request.preferences.other' | translate"
 						(change)="otherPreferenceName = $event.target.value"
 						(focus)="otherPreferenceFocused()"
+						[style.right]="('dir' | translate) === 'rtl' ? 'auto' : '46%'"
 					/>
 				</span>
 			</ng-template>

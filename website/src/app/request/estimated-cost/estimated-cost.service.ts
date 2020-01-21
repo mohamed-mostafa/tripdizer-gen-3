@@ -42,6 +42,8 @@ export class EstimatedCostService {
 
 	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
+	cityPaths: any;
+
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
 	selectedCities = new Subject<CityDTO[]>();
@@ -115,6 +117,14 @@ export class EstimatedCostService {
 				this.router.navigate(['request', 'estimated-cost']);
 			});
 		}, expirationInMinutes * 60 * 1000);
+	}
+
+	setCityPaths(paths) {
+		this.cityPaths = paths;
+	}
+
+	getCityPaths() {
+		return this.cityPaths;
 	}
 
 	endSessionTimer(): void {
