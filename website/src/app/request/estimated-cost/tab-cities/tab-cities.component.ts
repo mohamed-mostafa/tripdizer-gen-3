@@ -127,12 +127,14 @@ export class TabCitiesComponent implements OnDestroy {
 	}
 
 	next(): void {
+		this.service.setCityPaths(this.cityPaths);
 		this.service.updateCitiesInCache(this.cities);
 		this.service.setSelectedCities(this.calculateCitiesNights(this.selectedCities));
 		this.service.setCurrentTabIndex(1);
 	}
 
 	goBack(): void {
+		this.service.setCityPaths(this.cityPaths);
 		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
 	}
 

@@ -24,6 +24,8 @@ export class TabFlightsComponent implements DoCheck {
 	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService, requestService: RequestService) {
+		this.flightPaths = service.getCityPaths();
+
 		this.hasFlightOffers = false;
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
@@ -51,10 +53,10 @@ export class TabFlightsComponent implements DoCheck {
 			}
 		});
 
-		service.getSelectedCities().forEach(city => {
-			const cityLatLong = city.coordinates.split(',');
-			this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
-		});
+		// service.getSelectedCities().forEach(city => {
+		// 	const cityLatLong = city.coordinates.split(',');
+		// 	this.flightPaths.push({ lat: Number(cityLatLong[0]), lng: Number(cityLatLong[1]) });
+		// });
 
 		this.setSliderOptions();
 	}
