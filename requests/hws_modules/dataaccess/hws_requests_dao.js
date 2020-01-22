@@ -2,6 +2,7 @@
  * The dataaccess methods of hws
  */
 const daoUtilities = require('./hws_dao_utilities.js');
+const pnrDao = require('../dataaccess/hws_request_PNR_dao');
 
 let createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
@@ -894,95 +895,101 @@ let getTravelerEmails = function(onSuccess, onFailure) {
 		}
 	});
 };
-let getRequestByMail = function(email, onSuccess, onFailure) {
-	// get a connection and open it
-	let connection = daoUtilities.createConnection();
-	connection.connect(function(err) {
-		if (err) {
-			console.error('An error occurred while trying to open a database connection');
-			console.error(err);
-			onFailure(err);
-		} else {
-			// execute the query
-			connection.query(
-				'SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.Traveler_Email_Address = ? AND tr.Archived = 0',
-				[email],
-				function(err, rows) {
-					// if an error is thrown, end the connection and throw an error
-					if (err) {
-						console.error('An error occurred while trying to find a request with email ' + email);
-						console.error(err);
-						connection.end();
-						onFailure(err);
-					} else {
-						// no error is thrown
-						if (rows.length != 0) {
-							var request = {
-								id: rows[0].Id,
-								date: new Date(rows[0].Date).toString(),
-								status: rows[0].Status,
-								revenue: rows[0].Revenue,
-								profit: rows[0].Profit,
-								specialRequests: rows[0].Comments,
-								traveler: {
-									name: rows[0].Traveler_Name,
-									mobile: rows[0].Traveler_Mobile,
-									emailAddress: rows[0].Traveler_Email_Address,
-									gender: rows[0].Traveler_Gender,
-									dateOfBirth: new Date(rows[0].Traveler_Birth_Date).toString(),
-									profession: rows[0].Traveler_Profession,
-								},
-								userFullName: rows[0].full_name,
-								departureDate: new Date(rows[0].Departure_Date).toString(),
-								returnDate: new Date(rows[0].Return_Date).toString(),
-								isFlexibleDates: rows[0].Flexible_Dates,
-								travelingFrom: rows[0].Leaving_Country,
-								firstCountry: rows[0].First_Country,
-								otherCountry: rows[0].Other_Country,
-								secondCountry: rows[0].Second_Country,
-								thirdCountry: rows[0].Third_Country,
-								purpose: rows[0].Travel_Purpose,
-								otherPurposeName: rows[0].Other_Purpose_Name,
-								otherInterestName: rows[0].Other_Interest_Name,
-								adultsNumber: rows[0].Number_Of_Adults,
-								kidsNumber: rows[0].Number_Of_Kids,
-								infantsNumber: rows[0].Number_Of_Infants,
-								budgetCategory: rows[0].Budget_Category,
-								budget: rows[0].Budget,
-								visaAssistanceNeeded: rows[0].Visa_Assistance_Needed,
-								tourGuideNeeded: rows[0].Tour_Guide_Needed,
-								destination: rows[0].itinerary_id,
-								itineraryId: rows[0].itinerary_id,
-								actualDestination: rows[0].Actual_Destination,
-								otherActualDestination: rows[0].Other_Actual_Destination,
-								estimatedCost: rows[0].Estimated_Cost,
-								edit: rows[0].Edit,
-								reachable: rows[0].Reachable,
-								packageSent: rows[0].Package_Sent,
-								referralType: rows[0].Referral_Type,
-								travelHistory: rows[0].Travel_History,
-								promoCode: rows[0].Promo_Code,
-								score: rows[0].Score,
-								channel: rows[0].Channel,
-								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
-								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
-								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
-									rows[0].Pdf_Id
-								}&export=download`,
-								interests: [],
-								mailsHistory: [],
-							};
-							connection.end();
-							onSuccess(request);
-						} else {
-							connection.end();
-							onSuccess(null);
-						}
-					}
-				}
-			);
-		}
+let getRequestsByMail = function(email, onSuccess, onFailure) {
+	// get requests from firestore
+	pnrDao.getUserId(email, (err, res) => {
+		if (err) console.log(err);
+		else console.log(res);
 	});
+	// // get requests from mysql
+	// // get a connection and open it
+	// let connection = daoUtilities.createConnection();
+	// connection.connect(function(err) {
+	// 	if (err) {
+	// 		console.error('An error occurred while trying to open a database connection');
+	// 		console.error(err);
+	// 		onFailure(err);
+	// 	} else {
+	// 		// execute the query
+	// 		connection.query(
+	// 			'SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.Traveler_Email_Address = ? AND tr.Archived = 0',
+	// 			[email],
+	// 			function(err, rows) {
+	// 				// if an error is thrown, end the connection and throw an error
+	// 				if (err) {
+	// 					console.error('An error occurred while trying to find a request with email ' + email);
+	// 					console.error(err);
+	// 					connection.end();
+	// 					onFailure(err);
+	// 				} else {
+	// 					// no error is thrown
+	// 					if (rows.length != 0) {
+	// 						var request = {
+	// 							id: rows[0].Id,
+	// 							date: new Date(rows[0].Date).toString(),
+	// 							status: rows[0].Status,
+	// 							revenue: rows[0].Revenue,
+	// 							profit: rows[0].Profit,
+	// 							specialRequests: rows[0].Comments,
+	// 							traveler: {
+	// 								name: rows[0].Traveler_Name,
+	// 								mobile: rows[0].Traveler_Mobile,
+	// 								emailAddress: rows[0].Traveler_Email_Address,
+	// 								gender: rows[0].Traveler_Gender,
+	// 								dateOfBirth: new Date(rows[0].Traveler_Birth_Date).toString(),
+	// 								profession: rows[0].Traveler_Profession,
+	// 							},
+	// 							userFullName: rows[0].full_name,
+	// 							departureDate: new Date(rows[0].Departure_Date).toString(),
+	// 							returnDate: new Date(rows[0].Return_Date).toString(),
+	// 							isFlexibleDates: rows[0].Flexible_Dates,
+	// 							travelingFrom: rows[0].Leaving_Country,
+	// 							firstCountry: rows[0].First_Country,
+	// 							otherCountry: rows[0].Other_Country,
+	// 							secondCountry: rows[0].Second_Country,
+	// 							thirdCountry: rows[0].Third_Country,
+	// 							purpose: rows[0].Travel_Purpose,
+	// 							otherPurposeName: rows[0].Other_Purpose_Name,
+	// 							otherInterestName: rows[0].Other_Interest_Name,
+	// 							adultsNumber: rows[0].Number_Of_Adults,
+	// 							kidsNumber: rows[0].Number_Of_Kids,
+	// 							infantsNumber: rows[0].Number_Of_Infants,
+	// 							budgetCategory: rows[0].Budget_Category,
+	// 							budget: rows[0].Budget,
+	// 							visaAssistanceNeeded: rows[0].Visa_Assistance_Needed,
+	// 							tourGuideNeeded: rows[0].Tour_Guide_Needed,
+	// 							destination: rows[0].itinerary_id,
+	// 							itineraryId: rows[0].itinerary_id,
+	// 							actualDestination: rows[0].Actual_Destination,
+	// 							otherActualDestination: rows[0].Other_Actual_Destination,
+	// 							estimatedCost: rows[0].Estimated_Cost,
+	// 							edit: rows[0].Edit,
+	// 							reachable: rows[0].Reachable,
+	// 							packageSent: rows[0].Package_Sent,
+	// 							referralType: rows[0].Referral_Type,
+	// 							travelHistory: rows[0].Travel_History,
+	// 							promoCode: rows[0].Promo_Code,
+	// 							score: rows[0].Score,
+	// 							channel: rows[0].Channel,
+	// 							docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
+	// 							pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
+	// 							PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
+	// 								rows[0].Pdf_Id
+	// 							}&export=download`,
+	// 							interests: [],
+	// 							mailsHistory: [],
+	// 						};
+	// 						connection.end();
+	// 						onSuccess(request);
+	// 					} else {
+	// 						connection.end();
+	// 						onSuccess(null);
+	// 					}
+	// 				}
+	// 			}
+	// 		);
+	// 	}
+	// });
 };
 
 module.exports = {
@@ -1000,5 +1007,5 @@ module.exports = {
 	modifyRequestPaymentInfo,
 	getRequestCountsByPromoCode,
 	getTravelerEmails,
-	getRequestByMail,
+	getRequestsByMail,
 };

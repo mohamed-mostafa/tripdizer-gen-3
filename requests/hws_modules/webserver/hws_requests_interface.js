@@ -185,11 +185,11 @@ let changeRequestStatus = function(req, res) {
 	}
 };
 
-let getRequestByMail = function(req, res) {
+let getRequestsByMail = function(req, res) {
 	try {
 		let user = req.user;
 		// call the business function and give it a callback function
-		requestsBusiness.getRequestByMail(
+		requestsBusiness.getRequestsByMail(
 			user,
 			function(request) {
 				res.json(request);
@@ -530,7 +530,7 @@ module.exports = {
 	getRequestSummariesCount,
 	sendMailsToRequestTraveler,
 	changeRequestStatus,
-	getRequestByMail,
+	getRequestsByMail,
 	markRequestBeingPrepared,
 	markRequestDelivered,
 	markRequestPlaced,

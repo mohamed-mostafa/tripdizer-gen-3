@@ -896,10 +896,10 @@ var handlePaidRequest = function(requestId) {
 	}
 };
 
-let getRequestByMail = (user, onSuccess, onFailure) => {
+let getRequestsByMail = (user, onSuccess, onFailure) => {
 	let userObj = JSON.parse(user);
 	let email = userObj.email;
-	requestsDao.getRequestByMail(
+	requestsDao.getRequestsByMail(
 		email,
 		async function(request) {
 			try {
@@ -933,4 +933,4 @@ exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
 exports.handlePaidRequest = handlePaidRequest;
-exports.getRequestByMail = getRequestByMail;
+exports.getRequestsByMail = getRequestsByMail;

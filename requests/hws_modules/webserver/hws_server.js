@@ -35,7 +35,7 @@ let start = function() {
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
-	router.get('/getRequestByMail', publicUserAuth.isPublicUserAuthenticated, requestsInterface.getRequestByMail);
+	router.get('/getRequestByMail', publicUserAuth.isPublicUserAuthenticated, requestsInterface.getRequestsByMail);
 	router.get('/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	router.put('/', auth.isAuthenticated, requestsInterface.updateRequest);
 	router.post('/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
