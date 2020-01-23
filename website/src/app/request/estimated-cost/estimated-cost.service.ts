@@ -31,7 +31,6 @@ export class EstimatedCostService {
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
 	isAccommodationProcessing: boolean;
-	isLoadedAccommodationData: boolean;
 
 	notificationTimer: any;
 	expirationTimer: any;
@@ -243,22 +242,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		// this.isAccommodationProcessing = true;
-		// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-		// 	return of(this.cachedTabsData.accommodation);
-		// } else {
-
-		// if (this.isAccommodationTabVisited) {
-		// 	this.setIsLoading(
-		// 		true,
-		// 		this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-		// 	);
-		// } else {
-		// 	this.isAccommodationProcessing = true;
-		// }
-		if (!this.isLoadedAccommodationData) {
-			this.isAccommodationProcessing = true;
-		}
+		this.isAccommodationProcessing = true;
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
 			cities.push({
