@@ -29,29 +29,36 @@ export class TabFlightsComponent implements DoCheck {
 		this.hasFlightOffers = false;
 		requestService.isLoading.subscribe(isLoadingObject => (this.isLoading = isLoadingObject.show));
 
-		service.getFlightOffers().subscribe(flightOffers => {
-			if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
-				this.hasFlightOffers = true;
-				this.flightOffers = flightOffers;
+		service.getFlightOffers().subscribe(
+			flightOffers => {
+				if (flightOffers && Array.isArray(flightOffers) && flightOffers.length > 0) {
+					this.hasFlightOffers = true;
+					this.flightOffers = flightOffers;
 
-				let hasSelectedFlightOffer = false;
+					let hasSelectedFlightOffer = false;
 
-				this.flightOffers.forEach(flightOffer => {
-					if (flightOffer.selected) {
-						hasSelectedFlightOffer = true;
-						this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
-						setTimeout(() => {
-							this.goToSlide(this.flightOffers.indexOf(flightOffer));
-						}, 0);
-					}
+					this.flightOffers.forEach(flightOffer => {
+						if (flightOffer.selected) {
+							hasSelectedFlightOffer = true;
+							this.afterReloadSlideIndex = this.flightOffers.indexOf(flightOffer) + 1;
+							setTimeout(() => {
+								this.goToSlide(this.flightOffers.indexOf(flightOffer));
+							}, 0);
+						}
 
-					if (!hasSelectedFlightOffer) {
-						this.flightOffers[0].selected = true;
-						this.selectedFlightOffers.push(this.flightOffers[0]);
-					}
-				});
+						if (!hasSelectedFlightOffer) {
+							this.flightOffers[0].selected = true;
+							this.selectedFlightOffers.push(this.flightOffers[0]);
+						}
+					});
+				} else {
+					this.hasFlightOffers = false;
+				}
+			},
+			err => {
+				this.hasFlightOffers = false;
 			}
-		});
+		);
 
 		// service.getSelectedCities().forEach(city => {
 		// 	const cityLatLong = city.coordinates.split(',');
