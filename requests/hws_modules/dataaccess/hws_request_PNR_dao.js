@@ -21,8 +21,9 @@ let get = function(requestId) {
 	return document.get();
 };
 
-let getUserId = function(email, callback) {
+let getUserIds = function(email, callback) {
 	let firestore = daoUtilities.getFireStoreClient();
+	let foundData = [];
 	const document = firestore
 		.collection('request-pnr')
 		.get()
@@ -34,9 +35,10 @@ let getUserId = function(email, callback) {
 			snapshot.forEach(doc => {
 				// console.log(doc.id, '=>', doc.data());
 				doc.data().choices.forEach(res => {
-					if (res.email == email) callback(doc.id);
+					if (res.email == email) foundData.push(doc.id);
 				});
 			});
+			callback(foundData);
 		})
 		.catch(err => {
 			callback('Error getting documents', err);
@@ -45,5 +47,5 @@ let getUserId = function(email, callback) {
 module.exports = {
 	save,
 	get,
-	getUserId,
+	getUserIds,
 };
