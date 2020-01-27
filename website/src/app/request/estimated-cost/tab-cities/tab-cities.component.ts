@@ -96,7 +96,11 @@ export class TabCitiesComponent implements OnDestroy {
 				}
 			}
 		}
-		this.updateCitiesPaths();
+		if (this.selectedCities.length > 0) {
+			this.updateCitiesPaths();
+		} else {
+			this.cityPaths = [];
+		}
 		this.service.updateFlightsOffersInCache(null);
 		this.service.updateAccommodationInCache(null);
 	}
