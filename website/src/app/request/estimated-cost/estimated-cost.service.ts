@@ -242,15 +242,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-		// 	return of(this.cachedTabsData.accommodation);
-		// } else {
-		if (this.isAccommodationTabVisited) {
-			this.setIsLoading(
-				true,
-				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-			);
-		}
+		this.isAccommodationProcessing = true;
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
 			cities.push({
@@ -288,6 +280,7 @@ export class EstimatedCostService {
 				this.updateAccommodationInCache(returnedAccommodation);
 			}),
 			catchError((err: any, caught: Observable<any>) => {
+				this.setIsLoading(false, '');
 				return err;
 			})
 		);
