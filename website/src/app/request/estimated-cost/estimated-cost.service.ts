@@ -161,7 +161,6 @@ export class EstimatedCostService {
 
 	updateCitiesInCache(cities) {
 		this.cachedTabsData.cities = cities;
-		console.log(this.cachedTabsData);
 	}
 
 	getNumberOfNights(): number {
@@ -224,7 +223,6 @@ export class EstimatedCostService {
 
 	updateFlightsOffersInCache(flightsOffers) {
 		this.cachedTabsData.flightOffers = flightsOffers;
-		console.log(this.cachedTabsData);
 	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
@@ -298,7 +296,6 @@ export class EstimatedCostService {
 
 	updateAccommodationInCache(accommodation) {
 		this.cachedTabsData.accommodation = accommodation;
-		console.log(this.cachedTabsData);
 	}
 
 	setSelectedHotels(selectedHotels) {
@@ -513,7 +510,6 @@ export class EstimatedCostService {
 				this.summaryStations.push(lastStation);
 			}
 		});
-		console.log(this.summaryStations);
 		return this.summaryStations;
 	}
 
