@@ -29,7 +29,6 @@ export class SummaryComponent implements OnDestroy {
 		this.subscriptions.add(
 			service.stations.subscribe(stations => {
 				this.stations = stations ? stations : null;
-				console.log(this.stations);
 			})
 		);
 	}
