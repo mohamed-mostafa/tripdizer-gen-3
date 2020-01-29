@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -7,9 +8,8 @@ import {
 	GoogleLoginProvider,
 	SocialUser,
 } from 'angularx-social-login';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { User } from '../../user/user.model';
 import { TrackingService } from './tracking.service';
 
@@ -20,7 +20,7 @@ export class AuthService {
 	private endPoint = 'users/auth';
 	loading = new Subject<boolean>();
 	authenticatedUser = new Subject<User>();
-	isAuthenticated = new Subject<boolean>();
+	isAuthenticated = new BehaviorSubject<boolean>(false);
 	errorMsg = new Subject<string>();
 
 	constructor(
