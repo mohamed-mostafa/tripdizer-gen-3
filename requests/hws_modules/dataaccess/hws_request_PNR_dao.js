@@ -21,7 +21,7 @@ let get = function(requestId) {
 	return document.get();
 };
 
-let getUserIds = function(email, callback) {
+let getUserIdsBYMail = function(email, callback) {
 	let firestore = daoUtilities.getFireStoreClient();
 	let foundData = [];
 	const document = firestore
@@ -47,5 +47,5 @@ let getUserIds = function(email, callback) {
 module.exports = {
 	save,
 	get,
-	getUserIds,
+	getUserIdsBYMail,
 };

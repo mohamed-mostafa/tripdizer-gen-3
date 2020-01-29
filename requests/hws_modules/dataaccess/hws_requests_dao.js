@@ -897,7 +897,7 @@ let getTravelerEmails = function(onSuccess, onFailure) {
 };
 let getRequestsByMail = function(email, onSuccess, onFailure) {
 	// get requests from firestore
-	pnrDao.getUserIds(email, (err, res) => {
+	pnrDao.getUserIdsBYMail(email, (err, res) => {
 		if (err) console.log(err);
 		else console.log(res);
 	});
