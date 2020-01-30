@@ -3,6 +3,7 @@
  */
 const daoUtilities = require('./hws_dao_utilities.js');
 const pnrDao = require('../dataaccess/hws_request_PNR_dao');
+let citiesDao = require('../dataaccess/hws_request_cities_dao');
 
 let createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
@@ -897,9 +898,18 @@ let getTravelerEmails = function(onSuccess, onFailure) {
 };
 let getRequestsByMail = function(email, onSuccess, onFailure) {
 	// get requests from firestore
-	pnrDao.getUserIdsBYMail(email, (err, res) => {
-		if (err) console.log(err);
-		else console.log(res);
+	let request = {};
+	pnrDao.getUserIdsBYMail(email, async function(result) {
+		try {
+			result.forEach(res => {
+				let cities = citiesDao.get(res);
+				if (cities.exists) request.selectedCities = cities.data();
+			});
+		} catch (err) {
+			console.log('Failed to retrieve data for email: ' + email);
+			console.error(err);
+			onFailure(err);
+		}
 	});
 	// // get requests from mysql
 	// // get a connection and open it
