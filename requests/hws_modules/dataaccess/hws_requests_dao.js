@@ -981,6 +981,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 	// 							promoCode: rows[0].Promo_Code,
 	// 							score: rows[0].Score,
 	// 							channel: rows[0].Channel,
+	//							clickable:N,
 	// 							docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 	// 							pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 	// 							PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
