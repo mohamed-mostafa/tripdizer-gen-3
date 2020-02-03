@@ -88,13 +88,18 @@
                         <input type="text" disabled class="form-control" id="score"
                             ng-model="currentOrder.score"></input>
                     </div>
-                    <div>
+                    <div class="form-control-6">
                         <label for="channel">Channel</label>
                         <select class="form-control" id="channel" ng-model="currentOrder.channel">
                             <option ng-repeat="channel in channels" ng-if="!channel.isHiddenOnDashboard"
                                 ng-value="channel.id" ng-selected="channel.id == currentOrder.channel">
                                 {{channel.enName}}</option>
                         </select>
+                    </div>
+                      <div ng-if="!isCreate" class="form-control-6">
+                        <label for="paymentStatus">Payment Status</label>
+                        <input type="text" disabled class="form-control" id="paymentStatus"
+                            ng-model="currentOrder.paymentStatus"></input>
                     </div>
                     <div>
                         <label for="specialRequests">Comments</label>

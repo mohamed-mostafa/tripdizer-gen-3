@@ -379,6 +379,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								promoCode: rows[0].Promo_Code,
 								score: rows[0].Score,
 								channel: rows[0].Channel,
+								paymentStatus: rows[0].Payment_Status,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -522,7 +523,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestStatusById = function (orderId, status, onSuccess, onFailure) {	
+var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -532,26 +533,25 @@ var modifyRequestStatusById = function (orderId, status, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
-			connection.query(
-				'UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?',
-				[status, orderId],
-				function(err, rows) {
-					// if an error is thrown, end the connection and throw an error
-					//				connection.end();
-					if (err) {
-						console.error('An error occurred while trying to update a request with id ' + orderId);
-						console.error(err);
-						connection.rollback();
-						connection.end();
-						onFailure(err);
-					} else {
-						// no error is thrown
-						connection.commit();
-						connection.end();
-						onSuccess();
-					}
+			connection.query('UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?', [status, orderId], function(
+				err,
+				rows
+			) {
+				// if an error is thrown, end the connection and throw an error
+				//				connection.end();
+				if (err) {
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
+					connection.rollback();
+					connection.end();
+					onFailure(err);
+				} else {
+					// no error is thrown
+					connection.commit();
+					connection.end();
+					onSuccess();
 				}
-			);
+			});
 		}
 	});
 };
