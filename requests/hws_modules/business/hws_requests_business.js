@@ -121,7 +121,7 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						({ paymentKey }) => {
 							requestsDao.modifyRequestStatusById(
 								request.id,
-								'paid',
+								'pending-payment',
 								() => {
 									requestsDao.modifyRequestPaymentInfo(
 										request.id,
