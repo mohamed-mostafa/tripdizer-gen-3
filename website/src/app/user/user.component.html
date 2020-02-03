@@ -1,98 +1,106 @@
 <mat-sidenav-container (backdropClick)="closeNav()">
+	<mat-sidenav #sidenav fixedInViewport="true" autoFocus="false" (keydown.escape)="closeNav()" disablecloseNav>
+		<mat-toolbar class="sidenav-toolbar mt-4">
+			<mat-toolbar-row>
+				<span routerLink="/">
+					<img class="logo-sm" src="../../assets/img/icon-white.png" alt="" />
+				</span>
 
-  <mat-sidenav #sidenav fixedInViewport="true" autoFocus="false" (keydown.escape)="closeNav()" disablecloseNav>
-    <mat-toolbar class="sidenav-toolbar mt-4">
-      <mat-toolbar-row>
+				<span class="fill-remaining-space"></span>
 
-        <span routerLink="/">
-          <img class="logo-sm" src="../../assets/img/icon-white.png" alt="">
-        </span>
+				<span (click)="closeNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
+					<i class="fa fa-times menu-icon mt-0"></i>
+				</span>
+			</mat-toolbar-row>
+		</mat-toolbar>
 
-        <span class="fill-remaining-space"></span>
+		<div class="row justify-content-center">
+			<div class="col-10 py-3">
+				<mat-list class="side-menu" role="list">
+					<mat-list-item
+						role="listitem"
+						class="font-weight-bold list-item"
+						routerLinkActive="active-item"
+						[routerLinkActiveOptions]="{ exact: true }"
+						routerLink="/user"
+						(click)="closeNav()"
+						><i class="fa fa-user mr-3"></i>
+						{{ 'user.user_core.my_profile' | translate }}
+					</mat-list-item>
+					<mat-list-item
+						role="listitem"
+						class="font-weight-bold list-item"
+						routerLinkActive="active-item"
+						routerLink="/user/plans"
+						(click)="closeNav()"
+						><i class="fa fa-paper-plane mr-3"></i>
+						{{ 'user.user_core.my_plans' | translate }}
+					</mat-list-item>
+					<mat-list-item
+						role="listitem"
+						class="font-weight-bold list-item"
+						routerLinkActive="active-item"
+						routerLink="/user/bookings"
+						(click)="closeNav()"
+						><i class="fa fa-bookmark mr-3"></i>
+						{{ 'user.user_core.my_booking' | translate }}
+					</mat-list-item>
+					<mat-list-item role="listitem" class="font-weight-bold list-item" routerLinkActive="active-item"
+						><i class="fa fa-sign-out mr-3"></i>
+						{{ 'user.user_core.log_out' | translate }}
+					</mat-list-item>
+				</mat-list>
 
-        <span (click)="closeNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
-          <i class="fa fa-times menu-icon mt-0"></i>
-        </span>
+				<hr />
 
-      </mat-toolbar-row>
-    </mat-toolbar>
+				<div class="row title-font font-weight-bold">
+					<div class="col-6">{{ 'user.user_core.language' | translate }}</div>
+					<div class="col-6 text-right">{{ 'user.user_core.language_label' | translate }}</div>
+				</div>
+			</div>
+		</div>
+	</mat-sidenav>
 
-    <div class="row justify-content-center">
-      <div class="col-10 py-3">
-        <mat-list class="side-menu" role="list">
-          <mat-list-item role="listitem" class="font-weight-bold list-item active-item"><i class="fa fa-user mr-3"></i>
-              {{ 'user.user_core.my_profile' | translate }}
-            </mat-list-item>
-          <mat-list-item role="listitem" class="font-weight-bold list-item"><i class="fa fa-paper-plane mr-3"></i>
-            {{ 'user.user_core.my_plans' | translate }}
-          </mat-list-item>
-          <mat-list-item role="listitem" class="font-weight-bold list-item"><i class="fa fa-bookmark mr-3"></i>
-            {{ 'user.user_core.my_booking' | translate }}
-          </mat-list-item>
-          <mat-list-item role="listitem" class="font-weight-bold list-item"><i class="fa fa-sign-out mr-3"></i>
-            {{ 'user.user_core.log_out' | translate }}
-          </mat-list-item>
-        </mat-list>
+	<mat-sidenav-content>
+		<mat-toolbar class="tool-bar mt-4 mt-sm-0">
+			<mat-toolbar-row>
+				<span routerLink="/" class="d-none d-sm-block">
+					<img class="text-logo" src="../../assets/img/tripdizer_text_logo.png" alt="" />
+				</span>
 
-        <hr />
+				<span routerLink="/" class="d-block d-sm-none">
+					<img class="logo-sm" src="../../assets/img/icon-white.png" alt="" />
+				</span>
 
-        <div class="row title-font font-weight-bold">
-            <div class="col-6">{{ 'user.user_core.language' | translate }}</div>
-            <div class="col-6 text-right">{{ 'user.user_core.language_label' | translate }}</div>
-        </div>
-      </div>
-    </div>
+				<span class="fill-remaining-space"></span>
+				<span class="title-font d-none d-sm-block">
+					<a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.blog' | translate }}</a>
+					<a mat-button class="mx-3" routerLink="/">Mohamed</a>
+					<a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.language_label' | translate }}</a>
+				</span>
+				<span (click)="openNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
+					<i class="fa fa-bars menu-icon mt-0"></i>
+				</span>
+			</mat-toolbar-row>
+		</mat-toolbar>
 
+		<div class="main-container">
+			<div class="row justify-content-center">
+				<div class="col-10">
+					<div class="row">
+						<div class="col-sm-6 col-lg-4 d-none d-sm-block">
+							<c-user-side-bar></c-user-side-bar>
+						</div>
+						<div class="col-12 col-sm-6 col-lg-8 ">
+							<router-outlet></router-outlet>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-
-    <mat-toolbar class="tool-bar mt-4 mt-sm-0">
-      <mat-toolbar-row>
-        <span routerLink="/" class="d-none d-sm-block">
-          <img class="text-logo" src="../../assets/img/tripdizer_text_logo.png" alt="">
-        </span>
-
-        <span routerLink="/" class="d-block d-sm-none">
-          <img class="logo-sm" src="../../assets/img/icon-white.png" alt="">
-        </span>
-
-        <span class="fill-remaining-space"></span>
-        <span class="title-font d-none d-sm-block">
-          <a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.blog' | translate }}</a>
-          <a mat-button class="mx-3" routerLink="/">Mohamed</a>
-          <a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.language_label' | translate }}</a>
-        </span>
-        <span (click)="openNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
-          <i class="fa fa-bars menu-icon mt-0"></i>
-        </span>
-
-      </mat-toolbar-row>
-    </mat-toolbar>
-
-    <div class="main-container">
-
-
-      <div class="row justify-content-center">
-        <div class="col-10">
-          <div class="row">
-            <div class="col-sm-6 col-lg-4 d-none d-sm-block">
-              <c-user-side-bar></c-user-side-bar>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-8 ">
-              <router-outlet></router-outlet>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-    </div>
-
-    <footer id="footer">
-      <c-shared-footer></c-shared-footer>
-    </footer>
-  </mat-sidenav-content>
+		<footer id="footer">
+			<c-shared-footer></c-shared-footer>
+		</footer>
+	</mat-sidenav-content>
 </mat-sidenav-container>
