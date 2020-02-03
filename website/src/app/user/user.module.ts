@@ -1,3 +1,5 @@
+import { UserBookingComponent } from './user-booking/user-booking.component';
+import { SideBarComponent } from './side-bar/side-bar.component';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from './../shared/shared.module';
 import { CoreModule } from './../core/core.module';
@@ -11,7 +13,6 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { SideBarComponent } from './core/side-bar/side-bar.component';
 import { UserPlansComponent } from './user-plans/user-plans.component';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { UserPlansComponent } from './user-plans/user-plans.component';
 		UserComponent,
 		UserInfoComponent,
 		SideBarComponent,
-		UserPlansComponent
+		UserPlansComponent,
+		UserBookingComponent
 	],
 	imports: [
 		CommonModule,

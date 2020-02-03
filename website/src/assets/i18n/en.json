@@ -511,6 +511,9 @@
 		},
 		"user_plans": {
 			"my_plans": "My Plans"
+		},
+		"user_bookings": {
+			"my_bookings": "My Bookings"
 		}
 	},
 	"payment_confirm": {

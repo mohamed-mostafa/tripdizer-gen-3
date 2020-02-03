@@ -77,11 +77,9 @@ export class AuthService {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.pipe(
-				catchError(
-					(err: any): any => {
-						this.authenticationFailed(err);
-					}
-				)
+				catchError((err: any): any => {
+					this.authenticationFailed(err);
+				})
 			)
 			.subscribe((user: User) => {
 				this.storeAuthenticatedUser(user);

@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { User } from './user.model';
+import { AuthService } from './../shared/services/auth.service';
+import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
@@ -6,12 +8,13 @@ import { MatSidenav } from '@angular/material/sidenav';
 	templateUrl: './user.component.html',
 	styleUrls: ['./user.component.scss'],
 })
-export class UserComponent implements OnInit {
+export class UserComponent {
 	@ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
+	user: User;
 
-	constructor() {}
-
-	ngOnInit() {}
+	constructor(private authService: AuthService) {
+		this.authService.authenticatedUser.subscribe(user => (this.user = user));
+	}
 
 	closeNav() {
 		this.sidenav.close();

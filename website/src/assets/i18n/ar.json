@@ -511,6 +511,9 @@
 		},
 		"user_plans": {
 			"my_plans": "رحلاتى"
+		},
+		"user_bookings": {
+			"my_bookings": "حجوزاتى"
 		}
 	},
 	"payment_confirm": {
