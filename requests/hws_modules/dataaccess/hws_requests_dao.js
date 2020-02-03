@@ -533,6 +533,38 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
+			connection.query('UPDATE `traveler_request` SET `Status` = ? WHERE `Id` = ?', [status, orderId], function(
+				err,
+				rows
+			) {
+				// if an error is thrown, end the connection and throw an error
+				//				connection.end();
+				if (err) {
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
+					connection.rollback();
+					connection.end();
+					onFailure(err);
+				} else {
+					// no error is thrown
+					connection.commit();
+					connection.end();
+					onSuccess();
+				}
+			});
+		}
+	});
+};
+let updatePaymentStatusById = function(orderId, status, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
 			connection.query('UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?', [status, orderId], function(
 				err,
 				rows
@@ -555,7 +587,6 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 		}
 	});
 };
-
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
 var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
@@ -913,3 +944,4 @@ exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
 exports.modifyRequestPaymentInfo = modifyRequestPaymentInfo;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
 exports.getTravelerEmails = getTravelerEmails;
+exports.updatePaymentStatusById = updatePaymentStatusById;
