@@ -19,7 +19,7 @@ declare const FB: any;
 export class AuthService {
 	private endPoint = 'users/auth';
 	loading = new Subject<boolean>();
-	authenticatedUser = new Subject<User>();
+	authenticatedUser = new BehaviorSubject<User>(null);
 	isAuthenticated = new BehaviorSubject<boolean>(false);
 	errorMsg = new Subject<string>();
 

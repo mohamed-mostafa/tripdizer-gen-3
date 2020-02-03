@@ -1,3 +1,5 @@
+import { User } from './../user.model';
+import { AuthService } from './../../shared/services/auth.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,7 +8,10 @@ import { Component } from '@angular/core';
 	styleUrls: ['./side-bar.component.scss'],
 })
 export class SideBarComponent {
-	constructor() {
-		console.log('init sideNav');
+	user: User;
+	constructor(private authService: AuthService) {
+		this.authService.authenticatedUser.subscribe($user => {
+			this.user = $user;
+		});
 	}
 }
