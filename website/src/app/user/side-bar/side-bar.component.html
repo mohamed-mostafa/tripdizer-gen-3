@@ -4,7 +4,7 @@
 	</div>
 
 	<div class="text-center mb-4">
-		<h5 class="title-font text-blue">Mohamed Adel</h5>
+		<h5 class="title-font text-blue">{{ user.firstName }} {{ user.lastName }}</h5>
 	</div>
 
 	<mat-list class="side-menu" role="list">
@@ -24,9 +24,11 @@
 			><i class="fa fa-paper-plane mr-3"></i>
 			{{ 'user.side_bar.my_plans' | translate }}
 		</mat-list-item>
-    <mat-list-item routerLinkActive="active-item" role="listitem" 
-    routerLink="/user/bookings"
-    class="font-weight-bold list-item"
+		<mat-list-item
+			routerLinkActive="active-item"
+			role="listitem"
+			routerLink="/user/bookings"
+			class="font-weight-bold list-item"
 			><i class="fa fa-bookmark mr-3"></i>
 			{{ 'user.side_bar.my_booking' | translate }}
 		</mat-list-item>
