@@ -11,7 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
 	styleUrls: ['./traveller-info.component.scss'],
 })
 export class TravellerInfoComponent implements OnInit {
-	passengerDetailsFromRequest: any;
 	@Input() formGroup: FormGroup;
 	@Input() controlName;
 	controls: any = {
@@ -115,47 +114,17 @@ export class TravellerInfoComponent implements OnInit {
 			this.effectiveControls = infantsControls;
 		}
 
-		this.passengerDetailsFromRequest = this.requestService.getProperty('travellers');
-		console.log(this.passengerDetailsFromRequest);
+		const passengerDetailsFromRequest = this.requestService.getProperty('travellers');
+		console.log(passengerDetailsFromRequest);
 
 		for (const controlName in this.controls) {
 			if (this.effectiveControls.find(item => controlName === item)) {
 				if (this.controls.hasOwnProperty(controlName)) {
 					this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
-					this.passengerDetailsFromRequest.forEach((el, i) => {
-						// console.log(Object.keys(el)[i]);
-						// console.log(controlName);
-						if (Object.keys(el)[i] === controlName) {
-							this.formGroup.get(`${this.controlName}-${controlName}`).setValue(el[controlName]);
-						}
-					});
-
-					// for (const nameOfControl in this.passengerDetailsFromRequest) {
-					// 	console.log(nameOfControl);
-					// }
-					// console.log(this.formGroup.get(`${this.controlName}-${controlName}`));
-					// console.log(this.controls[controlName]);
-					// console.log(this.controls);
-					// if (
-					// 	this.passengerDetailsFromRequest.find(el => {
-					// 		// this.controls === el
-					// 		console.log(el);
-					// 		console.log(controlName);
-					// 	})
-					// ) {
-
-					// }
-					// console.log(this.formGroup.controls[`${this.controlName}-${controlName}`].value);
-					// this.passengerDetailsFromRequest.forEach((element, i) => {
-					// console.log(element);
-
-					// });
-					// this.passengerDetailsFromRequest.find(element => controlName === element);
-					// console.log(
-
-					// );
-
-					// this.formGroup.get(`${this.controlName}-${controlName}`).setValue(element[controlName]);
+					passengerDetailsFromRequest.filter((el, i) => el.flag === this.controlName);
+					console.log(this.formGroup.get(`${this.controlName}-${controlName}`));
+					console.log(passengerDetailsFromRequest);
+					this.formGroup.get(`${this.controlName}-${controlName}`).setValue(passengerDetailsFromRequest[controlName]);
 				}
 			}
 		}
