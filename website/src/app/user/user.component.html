@@ -1,64 +1,7 @@
 <mat-sidenav-container (backdropClick)="closeNav()">
 	<mat-sidenav #sidenav fixedInViewport="true" autoFocus="false" (keydown.escape)="closeNav()" disablecloseNav>
-		<mat-toolbar class="sidenav-toolbar mt-4">
-			<mat-toolbar-row>
-				<span routerLink="/">
-					<img class="logo-sm" src="../../assets/img/icon-white.png" alt="" />
-				</span>
-
-				<span class="fill-remaining-space"></span>
-
-				<span (click)="closeNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
-					<i class="fa fa-times menu-icon mt-0"></i>
-				</span>
-			</mat-toolbar-row>
-		</mat-toolbar>
-
-		<div class="row justify-content-center">
-			<div class="col-10 py-3">
-				<mat-list class="side-menu" role="list">
-					<mat-list-item
-						role="listitem"
-						class="font-weight-bold list-item"
-						routerLinkActive="active-item"
-						[routerLinkActiveOptions]="{ exact: true }"
-						routerLink="/user"
-						(click)="closeNav()"
-						><i class="fa fa-user mr-3"></i>
-						{{ 'user.user_core.my_profile' | translate }}
-					</mat-list-item>
-					<mat-list-item
-						role="listitem"
-						class="font-weight-bold list-item"
-						routerLinkActive="active-item"
-						routerLink="/user/plans"
-						(click)="closeNav()"
-						><i class="fa fa-paper-plane mr-3"></i>
-						{{ 'user.user_core.my_plans' | translate }}
-					</mat-list-item>
-					<mat-list-item
-						role="listitem"
-						class="font-weight-bold list-item"
-						routerLinkActive="active-item"
-						routerLink="/user/bookings"
-						(click)="closeNav()"
-						><i class="fa fa-bookmark mr-3"></i>
-						{{ 'user.user_core.my_booking' | translate }}
-					</mat-list-item>
-					<mat-list-item role="listitem" class="font-weight-bold list-item" routerLinkActive="active-item"
-						><i class="fa fa-sign-out mr-3"></i>
-						{{ 'user.user_core.log_out' | translate }}
-					</mat-list-item>
-				</mat-list>
-
-				<hr />
-
-				<div class="row title-font font-weight-bold">
-					<div class="col-6">{{ 'user.user_core.language' | translate }}</div>
-					<div class="col-6 text-right">{{ 'user.user_core.language_label' | translate }}</div>
-				</div>
-			</div>
-		</div>
+		<c-app-side-menu *ngIf="navContent === 'side_menu'"></c-app-side-menu>
+		<c-app-plan-details *ngIf="navContent === 'plan_details'"></c-app-plan-details>
 	</mat-sidenav>
 
 	<mat-sidenav-content>
@@ -78,7 +21,7 @@
 					<a mat-button class="mx-3" routerLink="/">Mohamed</a>
 					<a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.language_label' | translate }}</a>
 				</span>
-				<span (click)="openNav()" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
+				<span (click)="openNavPage('side_menu')" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">
 					<i class="fa fa-bars menu-icon mt-0"></i>
 				</span>
 			</mat-toolbar-row>

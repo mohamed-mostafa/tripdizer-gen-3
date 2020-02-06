@@ -14,6 +14,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { UserPlansComponent } from './user-plans/user-plans.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
+import { PlanDetailsComponent } from './plan-details/plan-details.component';
 
 @NgModule({
 	declarations: [
@@ -21,7 +23,9 @@ import { UserPlansComponent } from './user-plans/user-plans.component';
 		UserInfoComponent,
 		SideBarComponent,
 		UserPlansComponent,
-		UserBookingComponent
+		UserBookingComponent,
+		SideMenuComponent,
+		PlanDetailsComponent
 	],
 	imports: [
 		CommonModule,
