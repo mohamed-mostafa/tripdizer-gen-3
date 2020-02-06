@@ -34,12 +34,16 @@ g2gControlCenterApplication.controller('HomePageContentController', [
 		// fields
 		$scope.isCreate = false;
 		$scope.statuses = [];
-		$scope.paymentsStatus = [{ id: 0, name: 'Pending Payment' }, { id: 1, name: 'Paid' }, { id: 2, name: 'Un Paid' }];
-		$scope.getPaymentName = function(id) {
-			console.log(id);
+		$scope.paymentsStatus = [];
+		$http
+			.get($rootScope.requestsServerUrl + '/paymentStatus')
+			.success(function(response) {
+				$scope.paymentsStatus = response;
+			})
+			.error(function(err) {
+				$scope.paymentsStatus = [];
+			});
 
-			$scope.paymentsStatus.find(pay => pay.id == id);
-		};
 		$scope.currentOrders = [];
 		$scope.total = {
 			statusIds: '',

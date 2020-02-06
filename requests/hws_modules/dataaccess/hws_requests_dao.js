@@ -883,7 +883,45 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 		}
 	});
 };
-
+let getPaymentStatus = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the mail history
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
+					onFailure(err);
+				} else {
+					connection.query('SELECT * from Payment_Status', function(err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							// end the connection
+							connection.end();
+							console.error('An error occurred while trying to get payment status');
+							console.error(err);
+							connection.rollback(); // rollback the transaction
+							onFailure(err);
+						} else {
+							// end the connection
+							onSuccess(result);
+						}
+					});
+				}
+			});
+		}
+	});
+};
 var getTravelerEmails = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
@@ -943,5 +981,6 @@ exports.toggleOptions = toggleOptions;
 exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
 exports.modifyRequestPaymentInfo = modifyRequestPaymentInfo;
 exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
+exports.getPaymentStatus = getPaymentStatus;
 exports.getTravelerEmails = getTravelerEmails;
 exports.updatePaymentStatusById = updatePaymentStatusById;

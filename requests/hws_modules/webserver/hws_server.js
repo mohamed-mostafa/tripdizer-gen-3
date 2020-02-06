@@ -35,6 +35,7 @@ var start = function() {
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
+	router.get('/paymentStatus', auth.isAuthenticated, requestsInterface.getPaymentStatus);
 	router.get('/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	router.put('/', auth.isAuthenticated, requestsInterface.updateRequest);
 	router.post('/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
@@ -44,7 +45,6 @@ var start = function() {
 	router.get('/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 	router.post('/send-package', requestsInterface.sendPackageByMail);
 	router.get('/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
-
 	// 		set status and options
 	router.put('/toggle-options', auth.isAuthenticated, requestsInterface.toggleOptions);
 	router.post('/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);

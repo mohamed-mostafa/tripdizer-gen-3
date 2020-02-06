@@ -98,12 +98,10 @@
                     </div>
                       <div ng-if="!isCreate" class="form-control-6">
                         <label for="paymentStatus">Payment Status</label>
-                        <!-- <input type="text" disabled class="form-control" id="paymentStatus"
-                            ng-model="getPaymentName(currentOrder.paymentStatus"></input> -->
                             <select class="form-control" id="paymentStatus" ng-model="currentOrder.paymentStatus" disabled>
                             <option ng-repeat="pay in paymentsStatus" ng-value="pay.id"
-                                ng-selected="pay.id == currentOrder.paymentStatus">
-                                {{pay.name}}</option>
+                                ng-selected="pay.Id == currentOrder.paymentStatus">
+                                {{pay.EN_Name}}</option>
                         </select>
                     </div>
                     <div>

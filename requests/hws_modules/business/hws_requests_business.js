@@ -915,4 +915,5 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
+exports.getPaymentStatus = requestsDao.getPaymentStatus;
 exports.handlePaidRequest = handlePaidRequest;
