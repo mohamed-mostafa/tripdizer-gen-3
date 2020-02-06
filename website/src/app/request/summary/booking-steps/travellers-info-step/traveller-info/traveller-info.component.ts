@@ -121,10 +121,11 @@ export class TravellerInfoComponent implements OnInit {
 			if (this.effectiveControls.find(item => controlName === item)) {
 				if (this.controls.hasOwnProperty(controlName)) {
 					this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
-					passengerDetailsFromRequest.filter((el, i) => el.flag === this.controlName);
-					console.log(this.formGroup.get(`${this.controlName}-${controlName}`));
-					console.log(passengerDetailsFromRequest);
-					this.formGroup.get(`${this.controlName}-${controlName}`).setValue(passengerDetailsFromRequest[controlName]);
+					if (passengerDetailsFromRequest && passengerDetailsFromRequest.length > 0) {
+						const passenger = passengerDetailsFromRequest.find(p => p.id === this.controlName);
+						console.log(this.formGroup.controls);
+						this.formGroup.get(`${this.controlName}-${controlName}`).setValue((passenger || {})[controlName]);
+					}
 				}
 			}
 		}

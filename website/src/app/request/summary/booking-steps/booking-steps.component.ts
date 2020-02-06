@@ -43,13 +43,13 @@ export class BookingStepsComponent implements AfterViewInit {
 		const adults = Object.values(travellers.adults).map((adult, i) => ({
 			...adult,
 			ageGroup: 'adult',
-			flag: `adult-${i + 1}`,
+			id: `adult-${i + 1}`,
 		}));
-		const kids = Object.values(travellers.kids).map((kid, i) => ({ ...kid, ageGroup: 'kid', flag: `kid-${i + 1}` }));
+		const kids = Object.values(travellers.kids).map((kid, i) => ({ ...kid, ageGroup: 'kid', id: `kid-${i + 1}` }));
 		const infants = Object.values(travellers.infants).map((infant, i) => ({
 			...infant,
 			ageGroup: 'infant',
-			flag: `infant-${i + 1}`,
+			id: `infant-${i + 1}`,
 		}));
 		this.requestService.setProperty('travellers', adults.concat(kids).concat(infants));
 		this.requestService.submitRequestWithPayment().subscribe((paymentInfo: PaymentInfo) => {
