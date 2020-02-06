@@ -510,10 +510,16 @@
 			}
 		},
 		"user_plans": {
-			"my_plans": "My Plans"
+			"my_plans": "My Plans",
+			"days_in": "Days in",
+			"from": "From",
+			"to": "To"
 		},
 		"user_bookings": {
-			"my_bookings": "My Bookings"
+			"my_bookings": "My Bookings",
+			"days_in": "Days in",
+			"from": "From",
+			"to": "To"
 		}
 	},
 	"payment_confirm": {

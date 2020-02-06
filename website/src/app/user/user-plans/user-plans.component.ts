@@ -1,3 +1,4 @@
+import { UserService } from './../user.service';
 import { SideNavService } from './../side-nav.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./user-plans.component.scss'],
 })
 export class UserPlansComponent implements OnInit {
-	constructor(public nav: SideNavService) {}
+	userPlans: Array<any> = [];
+	constructor(public nav: SideNavService, public userService: UserService) {
+		this.userService.getUserPlans().subscribe($userPlans => {
+			this.userPlans = $userPlans;
+		});
+	}
 
 	ngOnInit() {}
 

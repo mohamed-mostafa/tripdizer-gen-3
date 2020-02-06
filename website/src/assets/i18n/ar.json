@@ -510,10 +510,16 @@
 			}
 		},
 		"user_plans": {
-			"my_plans": "رحلاتى"
+			"my_plans": "رحلاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
 		},
 		"user_bookings": {
-			"my_bookings": "حجوزاتى"
+			"my_bookings": "حجوزاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
 		}
 	},
 	"payment_confirm": {
