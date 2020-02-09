@@ -4,6 +4,8 @@
 const daoUtilities = require('./hws_dao_utilities.js');
 const pnrDao = require('../dataaccess/hws_request_PNR_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
+let transportationDao = require('../dataaccess/hws_request_transporation_dao');
+let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 
 let createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
@@ -921,16 +923,44 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 							let request = [];
 							let promises = rows.map(async row => {
 								let found = false;
-								let country, img;
-								let cities = await citiesDao.get(row.Id);
-								if (cities.exists) {
-									country = cities.data().choices[0].countryDisplayName;
-									img = cities.data().choices[0].thumbnail;
+								let cities = [],
+									hotelsTotalCost,
+									flightsTotalCost;
+								let allCities = await citiesDao.get(row.Id);
+								if (allCities.exists) {
+									allCities.data().choices.forEach(city => {
+										let eachCity = {
+											country: city.countryDisplayName,
+											city: city.displayName,
+											img: city.thumbnail,
+											numberOfNights: city.numberOfNights,
+										};
+										cities.push(eachCity);
+									});
+									let accomodationOffers = await accomodationDao.get(row.Id);
+									if (accomodationOffers.exists) {
+										let totalCost = 0;
+										accomodationOffers.data().choices.forEach(offer => {
+											totalCost = offer.price + totalCost;
+										});
+										hotelsTotalCost = totalCost;
+									}
+									let flightOffers = await transportationDao.get(row.Id);
+									if (flightOffers.exists) {
+										let total = 0;
+										flightOffers.data().choices.forEach(offer => {
+											total = offer.price + total;
+										});
+										flightsTotalCost = total;
+									}
 								} else if (row.itinerary_id != null) {
 									let itinerary = await getItineraryById(row.itinerary_id);
 									if (itinerary) {
-										country = itinerary[0].country;
-										img = itinerary[0].img;
+										let eachCountry = {
+											country: itinerary[0].country,
+											img: itinerary[0].img,
+										};
+										cities.push(eachCountry);
 									}
 								} else found = true;
 								if (!found) {
@@ -939,9 +969,9 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 										name: row.Traveler_Name,
 										departureDate: new Date(row.Departure_Date).toString(),
 										returnDate: new Date(row.Return_Date).toString(),
-										clickable: cities.exists ? true : false,
-										country,
-										img,
+										clickable: allCities.exists ? true : false,
+										cities,
+										totalCost: hotelsTotalCost + flightsTotalCost,
 									};
 									request.push(req);
 								}
