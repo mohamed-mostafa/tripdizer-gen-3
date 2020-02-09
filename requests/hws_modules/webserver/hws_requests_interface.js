@@ -494,7 +494,28 @@ var getTravelerEmails = function(req, res) {
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
-
+let getPaymentStatus = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getPaymentStatus(
+			function(status) {
+				res.send(status);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /payment status');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
 exports.placeWebsiteRequest = placeWebsiteRequest;
 exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
@@ -516,3 +537,4 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = getTravelerEmails;
+exports.getPaymentStatus = getPaymentStatus;

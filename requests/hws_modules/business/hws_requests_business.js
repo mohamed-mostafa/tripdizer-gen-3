@@ -119,9 +119,9 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						true,
 						request,
 						({ paymentKey }) => {
-							requestsDao.modifyRequestStatusById(
+							requestsDao.updatePaymentStatusById(
 								request.id,
-								17,
+								0, //pending payment
 								() => {
 									requestsDao.modifyRequestPaymentInfo(
 										request.id,
@@ -175,7 +175,12 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						{ choices: request.selectedAttractions }
 					);
 				});
-
+				requestsDao.updatePaymentStatusById(
+					request.id,
+					2, // unpaid
+					() => console.log('Traveler request payment status updated successfully '),
+					err => console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err))
+				);
 				request = { ...request, ...package };
 			}
 
@@ -861,9 +866,9 @@ var publishRequestChoicesForBooking = function(requestId) {
 };
 
 var handlePaidRequest = function(requestId) {
-	requestsDao.modifyRequestStatusById(
+	requestsDao.updatePaymentStatusById(
 		requestId,
-		18,
+		1, // paid
 		() => {},
 		() => {
 			console.error(
@@ -910,4 +915,5 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
+exports.getPaymentStatus = requestsDao.getPaymentStatus;
 exports.handlePaidRequest = handlePaidRequest;
