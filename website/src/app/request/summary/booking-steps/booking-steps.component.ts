@@ -51,6 +51,7 @@ export class BookingStepsComponent implements AfterViewInit {
 			ageGroup: 'infant',
 			id: `infant-${i + 1}`,
 		}));
+
 		this.requestService.setProperty('travellers', adults.concat(kids).concat(infants));
 		this.requestService.submitRequestWithPayment().subscribe((paymentInfo: PaymentInfo) => {
 			if (paymentInfo) {

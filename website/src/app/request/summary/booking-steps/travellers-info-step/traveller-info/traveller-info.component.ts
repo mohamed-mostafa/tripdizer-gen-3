@@ -4,6 +4,7 @@ import { Gender } from './../../../../../shared/models/gender.enum';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'c-request-traveller-info',
@@ -123,19 +124,10 @@ export class TravellerInfoComponent implements OnInit {
 					this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
 					if (passengerDetailsFromRequest && passengerDetailsFromRequest.length > 0) {
 						const passenger = passengerDetailsFromRequest.find(p => p.id === this.controlName);
-						// console.log(this.formGroup.controls);
 						let newValue = (passenger || {})[controlName];
 						if (new Date(newValue).getMonth() >= 0) {
-							// console.log(newDate.getMonth());
-							// newValue = new Date(newValue).toISOString().substring(0, 10);
-							newValue = this.getFormattedDate(new Date(newValue));
-							console.log(newValue);
+							newValue = moment(newValue);
 						}
-
-						// console.log(typeof newDate.getMonth === 'function');
-						// if (newValue && newValue.getMonth()) {
-						// 	console.log(newValue, 'true');
-						// }
 						this.formGroup.get(`${this.controlName}-${controlName}`).setValue(newValue);
 					}
 				}
@@ -160,17 +152,5 @@ export class TravellerInfoComponent implements OnInit {
 
 	getControlVisibility(controlName): boolean {
 		return this.effectiveControls.includes(controlName);
-	}
-
-	getFormattedDate(date) {
-		// const year = date.getFullYear();
-		// const month = (1 + date.getMonth()).toString().padStart(2, '0');
-		// const day = date
-		// 	.getDate()
-		// 	.toString()
-		// 	.padStart(2, '0');
-
-		// return month + '/' + day + '/' + year;
-		return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 	}
 }
