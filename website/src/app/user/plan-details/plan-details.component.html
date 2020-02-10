@@ -1,7 +1,7 @@
-<div class="container p-4">
+<div class="container p-4 plan_details">
 	<div class="row">
 		<div class="col-9">
-			<h4 class="font-weight-bold details-title">Itinerary Cost</h4>
+			<h4 class="details-title">{{ 'user.plan_details.itinerary_cost' | translate }}</h4>
 		</div>
 		<div class="col-3 text-right">
 			<span (click)="closeNav()" class="close-icon">
@@ -10,14 +10,20 @@
 		</div>
 	</div>
 
-	<div class="row mt-4">
+	<div class="row mt-6">
 		<div class="col-6">
-			<h4>ITALY</h4>
-			<p><span class="mr-4">Date From</span><span>6 Dec 2019</span></p>
+			<h4 class="title-font">ITALY</h4>
+			<p>
+				<span class="mr-4 title-font">{{ 'user.plan_details.date_from' | translate }}</span
+				><span>6 Dec 2019</span>
+			</p>
 		</div>
 		<div class="col-6">
-			<h4>6 Nights</h4>
-			<p><span class="mr-4">Date To</span><span>12 Dec 2019</span></p>
+			<h4>6 {{ 'user.plan_details.nights' | translate }}</h4>
+			<p>
+				<span class="mr-4 title-font">{{ 'user.plan_details.date_to' | translate }}</span
+				><span>12 Dec 2019</span>
+			</p>
 		</div>
 	</div>
 	<div class="row">
@@ -26,12 +32,12 @@
 		</div>
 	</div>
 
-	<div class="row mt-4">
+	<div class="row">
 		<div class="col-6">
-			<h4>ROME</h4>
+			<p class="title-font">ROME</p>
 		</div>
 		<div class="col-6">
-			<h4>2 Nights</h4>
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -40,12 +46,12 @@
 		</div>
 	</div>
 
-	<div class="row mt-4">
+	<div class="row">
 		<div class="col-6">
-			<h4>FLORENCE</h4>
+			<p class="title-font">FLORENCE</p>
 		</div>
 		<div class="col-6">
-			<h4>2 Nights</h4>
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -54,12 +60,12 @@
 		</div>
 	</div>
 
-	<div class="row mt-4">
+	<div class="row">
 		<div class="col-6">
-			<h4>VENICE</h4>
+			<p class="title-font">VENICE</p>
 		</div>
 		<div class="col-6">
-			<h4>2 Nights</h4>
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
 		</div>
 	</div>
 	<div class="row">
@@ -68,9 +74,75 @@
 		</div>
 	</div>
 
-	<div class="row mt-4 blue-text">
+
+
+	<div class="row mt-6">
 		<div class="col-6">
-			<h4>TOTAL COST</h4>
+			<h4 class="title-font">ITALY</h4>
+			<p>
+				<span class="mr-4 title-font">{{ 'user.plan_details.date_from' | translate }}</span
+				><span>6 Dec 2019</span>
+			</p>
+		</div>
+		<div class="col-6">
+			<h4>6 {{ 'user.plan_details.nights' | translate }}</h4>
+			<p>
+				<span class="mr-4 title-font">{{ 'user.plan_details.date_to' | translate }}</span
+				><span>12 Dec 2019</span>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-6">
+			<p class="title-font">ROME</p>
+		</div>
+		<div class="col-6">
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-6">
+			<p class="title-font">FLORENCE</p>
+		</div>
+		<div class="col-6">
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-6">
+			<p class="title-font">VENICE</p>
+		</div>
+		<div class="col-6">
+			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
+
+	<div class="row blue-text mt-6">
+		<div class="col-6">
+			<h4 class="title-font">{{ 'user.plan_details.total_cost' | translate }}</h4>
 		</div>
 		<div class="col-6">
 			<h4>36,200 EGP</h4>

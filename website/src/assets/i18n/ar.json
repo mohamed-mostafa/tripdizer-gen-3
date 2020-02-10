@@ -520,6 +520,13 @@
 			"days_in": "أيام فى",
 			"from": "من",
 			"to": "إلى"
+		},
+		"plan_details": {
+			"itinerary_cost": "تكلفة الرحلة",
+			"date_from": "تاريخ البداية",
+			"date_to": "تاريخ النهاية",
+			"nights": "ليالى",
+			"total_cost": "إجمالى التكلفة"
 		}
 	},
 	"payment_confirm": {
