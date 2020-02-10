@@ -925,6 +925,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 								let found = false;
 								let cities = [],
 									hotelsTotalCost,
+									estimatedCost,
 									flightsTotalCost;
 								let allCities = await citiesDao.get(row.Id);
 								if (allCities.exists) {
@@ -962,6 +963,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 										};
 										cities.push(eachCountry);
 									}
+									estimatedCost = row.Estimated_Cost;
 								} else found = true;
 								if (!found) {
 									let req = {
@@ -971,7 +973,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 										returnDate: new Date(row.Return_Date).toString(),
 										clickable: allCities.exists ? true : false,
 										cities,
-										totalCost: hotelsTotalCost + flightsTotalCost,
+										totalCost: allCities.exists ? hotelsTotalCost + flightsTotalCost : estimatedCost,
 									};
 									request.push(req);
 								}
