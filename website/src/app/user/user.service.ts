@@ -8,66 +8,74 @@ export class UserService {
 	private endPoint = 'users';
 	private userPlansEndPoint = '';
 
-	private userPlans: Array<any> = [
-		{
-			days_count: 10,
-			country_name: 'GREEK',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/greek.jpg'
-		},
-		{
-			days_count: 10,
-			country_name: 'FRANCE',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/france.jpg'
-		},
-		{
-			days_count: 10,
-			country_name: 'ITALY',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/italy.jpg'
-		},
-		{
-			days_count: 10,
-			country_name: 'SPAIN',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/spain.jpg'
-		},
-	];
-
+	private userPlans: any = [];
 
 	private userBookings: Array<any> = [
 		{
-			days_count: 10,
-			country_name: 'GREEK',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/greek.jpg'
+			id: 6561,
+			name: 'France, Greece',
+			departureDate: 'Thu Feb 20 2020 00:00:00 GMT+0200 (Eastern European Standard Time)',
+			returnDate: 'Fri Feb 28 2020 00:00:00 GMT+0200 (Eastern European Standard Time)',
+			clickable: true,
+			countries: [
+				{
+					name: 'France',
+					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+					cities: [
+						{
+							name: 'Paris',
+							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+							numberOfNights: 2,
+						},
+					],
+				},
+				{
+					name: 'Greece',
+					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+					cities: [
+						{
+							name: 'Athens',
+							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+							numberOfNights: 2,
+						},
+					],
+				},
+			],
+			totalCost: 424401,
+			numberOfNights: 9,
 		},
 		{
-			days_count: 10,
-			country_name: 'FRANCE',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/france.jpg'
-		},
-		{
-			days_count: 10,
-			country_name: 'ITALY',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/italy.jpg'
-		},
-		{
-			days_count: 10,
-			country_name: 'SPAIN',
-			from: '22-6-2019',
-			to: '1-7-2019',
-			image: '../../../assets/img/towns/spain.jpg'
+			id: 6561,
+			name: 'France, Greece',
+			departureDate: 'Thu Feb 20 2020 00:00:00 GMT+0200 (Eastern European Standard Time)',
+			returnDate: 'Fri Feb 28 2020 00:00:00 GMT+0200 (Eastern European Standard Time)',
+			clickable: true,
+			countries: [
+				{
+					name: 'France',
+					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+					cities: [
+						{
+							name: 'Paris',
+							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+							numberOfNights: 2,
+						},
+					],
+				},
+				{
+					name: 'Greece',
+					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+					cities: [
+						{
+							name: 'Athens',
+							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
+							numberOfNights: 2,
+						},
+					],
+				},
+			],
+			totalCost: 424401,
+			numberOfNights: 9,
 		},
 	];
 

@@ -1,4 +1,4 @@
-<div class="py-5">
+<div class="py-5" *ngIf="userBookings.length">
 	<h3 class="title-font page-title text-blue mb-5">
 		<i class="fa fa-paper-plane mr-3"></i
 		><span class="font-weight-bold">{{ 'user.user_bookings.my_bookings' | translate }}</span>
@@ -9,15 +9,16 @@
 			<div
 				class="town-item mx-auto"
 				(click)="openDetails('plan_details')"
-				[ngStyle]="{ 'background-image': 'url(' + booking.image + ')' }"
+				[ngStyle]="{ 'background-image': 'url(' + booking.countries['0']?.image + ')' }"
 			>
 				<div class="dark-container">
 					<div class="town-text title-font">
-						<p class="mb-0">{{ booking.days_count }} {{ 'user.user_bookings.days_in' | translate }}</p>
-						<h3 class="mb-0 font-weight-bold">{{ booking.country_name }}</h3>
+						<p class="mb-0">{{ booking.numberOfNights }} {{ 'user.user_bookings.days_in' | translate }}</p>
+						<h3 class="mb-0 font-weight-bold">{{ booking.name }}</h3>
 						<p class="mb-0">
-							{{ 'user.user_bookings.from' | translate }} {{ booking.from }} {{ 'user.user_bookings.to' | translate }}
-							{{ booking.to }}
+							{{ 'user.user_bookings.from' | translate }} {{ booking.departureDate | date: 'd-M-y' }}
+							{{ 'user.user_bookings.to' | translate }}
+							{{ booking.returnDate | date: 'd-M-y' }}
 						</p>
 					</div>
 				</div>

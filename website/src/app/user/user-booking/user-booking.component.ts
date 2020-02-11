@@ -12,6 +12,7 @@ export class UserBookingComponent implements OnInit {
 	constructor(public nav: SideNavService, public userService: UserService) {
 		this.userService.getUserBookings().subscribe($userPlans => {
 			this.userBookings = $userPlans;
+			console.log(this.userBookings);
 		});
 	}
 
