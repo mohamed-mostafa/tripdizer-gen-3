@@ -923,26 +923,57 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 							let request = [];
 							let promises = rows.map(async row => {
 								let found = false;
-								let cities = [],
+								let countries = [],
 									hotelsTotalCost,
+									numberOfNights,
 									estimatedCost,
 									flightsTotalCost;
 								let allCities = await citiesDao.get(row.Id);
 								if (allCities.exists) {
+									let totalNumberOfNights = 0;
 									allCities.data().choices.forEach(city => {
-										let eachCity = {
-											country: city.countryDisplayName,
-											city: city.displayName,
-											img: city.thumbnail,
-											numberOfNights: city.numberOfNights,
-										};
-										cities.push(eachCity);
+										totalNumberOfNights += city.numberOfNights;
+										countries.push({
+											name: city.countryDisplayName,
+											image: city.thumbnail,
+											cities: [
+												{
+													name: city.displayName,
+													numberOfNights: city.numberOfNights,
+												},
+											],
+										});
 									});
+									countries = countries.reduce(function(o, cur) {
+										// Get the index of the key-value pair.
+										var occurs = o.reduce(function(n, item, i) {
+											return item.name === cur.name ? i : n;
+										}, -1);
+
+										// If the name is found,
+										if (occurs >= 0) {
+											// append the current value to its list of values.
+											o[occurs].cities = o[occurs].cities.concat(cur.cities);
+
+											// Otherwise,
+										} else {
+											// add the current item to o (but make sure the cities is an array).
+											var obj = {
+												name: cur.name,
+												image: cur.image,
+												cities: [cur.cities],
+											};
+											o = o.concat([obj]);
+										}
+
+										return o;
+									}, []);
+									numberOfNights = totalNumberOfNights;
 									let accomodationOffers = await accomodationDao.get(row.Id);
 									if (accomodationOffers.exists) {
 										let totalCost = 0;
 										accomodationOffers.data().choices.forEach(offer => {
-											totalCost = offer.price + totalCost;
+											totalCost += offer.price;
 										});
 										hotelsTotalCost = totalCost;
 									}
@@ -950,18 +981,17 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 									if (flightOffers.exists) {
 										let total = 0;
 										flightOffers.data().choices.forEach(offer => {
-											total = offer.price + total;
+											total += offer.price;
 										});
 										flightsTotalCost = total;
 									}
 								} else if (row.itinerary_id != null) {
 									let itinerary = await getItineraryById(row.itinerary_id);
 									if (itinerary) {
-										let eachCountry = {
-											country: itinerary[0].country,
-											img: itinerary[0].img,
-										};
-										cities.push(eachCountry);
+										countries.push({
+											name: itinerary[0].country,
+											image: itinerary[0].image,
+										});
 									}
 									estimatedCost = row.Estimated_Cost;
 								} else found = true;
@@ -972,8 +1002,9 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 										departureDate: new Date(row.Departure_Date).toString(),
 										returnDate: new Date(row.Return_Date).toString(),
 										clickable: allCities.exists ? true : false,
-										cities,
+										countries,
 										totalCost: allCities.exists ? hotelsTotalCost + flightsTotalCost : estimatedCost,
+										numberOfNights,
 									};
 									request.push(req);
 								}
@@ -1000,7 +1031,7 @@ let getItineraryById = async function(id) {
 				console.error(err);
 			} else {
 				// execute the query
-				connection.query('SELECT EN_Name As country,Image1 As img FROM iternary WHERE Id = ? ', [id], function(
+				connection.query('SELECT EN_Name As country,Image1 As image FROM iternary WHERE Id = ? ', [id], function(
 					err,
 					data
 				) {
