@@ -14,7 +14,7 @@
 		<button
 			(click)="goToNextStep()"
 			[disabled]="formGroup.invalid || isNextDisabled"
-			class="btn btn-lg btn-primary custom-bs btn-rounded text-uppercase"
+			class="btn btn-primary custom-button custom-bs btn-rounded"
 		>
 			{{ nextLabel }}
 			<i class="fas" [ngClass]="('dir' | translate) === 'ltr' ? 'fa-chevron-right' : 'fa-chevron-left'"></i>

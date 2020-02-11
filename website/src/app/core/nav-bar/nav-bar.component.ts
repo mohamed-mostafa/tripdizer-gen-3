@@ -35,4 +35,8 @@ export class NavBarComponent implements OnInit {
 			this.onResize();
 		}, 0);
 	}
+	scrollTop() {
+		alert('aaaa');
+		window.scroll(0, 0);
+	}
 }

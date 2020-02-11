@@ -1,7 +1,7 @@
 <section id="landing" class="row d-block">
 	<div class="col-12 text-center">
-        <img [src]="'home.landing.lets_go_traveller' | translate" class="main-logo" alt="" />
-    </div>
+		<img [src]="'home.landing.lets_go_traveller' | translate" class="main-logo" alt="" />
+	</div>
 
 	<div class="col-12 text-center">
 		<h1 class="text-white landing-question" [class.title-font]="('dir' | translate) === 'rtl'">
@@ -16,17 +16,14 @@
 			></c-shared-places-select-box>
 		</div>
 		<div class="mt-3">
-			<a
-				class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1 text-uppercase"
-				(click)="havePlan()"
-				role="button"
-				>{{ 'home.landing.have_plan' | translate }}</a
-			>
-			<a class="btn custom-bs btn-rounded btn-light mx-2 mt-1 text-uppercase" (click)="surpriseMe()" role="button">{{
-				'home.landing.surprise_me' | translate
+			<a class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1" (click)="havePlan()" role="button">{{
+				'home.landing.have_plan' | translate
+			}}</a>
+			<a class="btn custom-bs btn-rounded btn-light mx-2 mt-1" (click)="surpriseMe()" role="button">{{
+				'home.landing.help_me_decide' | translate
 			}}</a>
 		</div>
 	</div>
-    
-    <a href="#why-us" class='icon-scroll'></a>
+
+	<a href="#why-us" class="icon-scroll"></a>
 </section>

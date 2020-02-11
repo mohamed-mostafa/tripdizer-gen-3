@@ -50,9 +50,9 @@
 		"landing": {
 			"lets_go_traveller": "../../assets/img/icon-white.png",
 			"landing_question": "The new way to plan your next trip",
-			"destination_place_holder": "Enter Destination ( italy, spain, france... )",
+			"destination_place_holder": "Enter Destination ( Greece, France... )",
 			"have_plan": "Start my plan",
-			"surprise_me": "Surprise me"
+			"help_me_decide": "Help me decide"
 		},
 		"why_us": {
 			"why_us_title": "Why we're the best",
@@ -505,9 +505,9 @@
 			"passport_expiry": "Expiry date",
 			"passport_issue_country": "Issue country",
 			"titles": {
-				"adult": ["LORD", "MISS", "MR", "MRS", "SIR"],
-				"kid": ["MSTR", "MISS"],
-				"infant": ["MISS", "MSTR", "INF"]
+				"adult": ["Lord", "Miss", "Mr", "Mrs", "Sir"],
+				"kid": ["Mstr", "Miss"],
+				"infant": ["Miss", "Mstr", "Inf"]
 			}
 		},
 		"user_plans": {

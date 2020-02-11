@@ -5,7 +5,7 @@ import { PathResolveService } from './core/not-found/path-resolve.service';
 
 const routes: Routes = [
 	{ path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-    { path: 'request', loadChildren: () => import('./request/request.module').then(m => m.RequestModule) },
+	{ path: 'request', loadChildren: () => import('./request/request.module').then(m => m.RequestModule) },
 	{ path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
 	{
 		path: '**',
@@ -15,7 +15,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
+	imports: [
+		RouterModule.forRoot(routes, {
+			enableTracing: false,
+			scrollPositionRestoration: 'enabled',
+		}),
+	],
 	exports: [RouterModule],
-	imports: [RouterModule.forRoot(routes)],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
