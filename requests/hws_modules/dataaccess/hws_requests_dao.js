@@ -924,6 +924,8 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 							let promises = rows.map(async row => {
 								let found = false;
 								let countries = [],
+									countriesName,
+									allCountriesNames = [],
 									hotelsTotalCost,
 									numberOfNights,
 									estimatedCost,
@@ -933,6 +935,9 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 									let totalNumberOfNights = 0;
 									allCities.data().choices.forEach(city => {
 										totalNumberOfNights += city.numberOfNights;
+										allCountriesNames.push(city.countryDisplayName);
+										let uniqueCountriesName = allCountriesNames.filter((item, i, ar) => ar.indexOf(item) === i);
+										countriesName = uniqueCountriesName.toString();
 										countries.push({
 											name: city.countryDisplayName,
 											image: city.thumbnail,
@@ -988,6 +993,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 								} else if (row.itinerary_id != null) {
 									let itinerary = await getItineraryById(row.itinerary_id);
 									if (itinerary) {
+										countriesName = itinerary[0].country;
 										countries.push({
 											name: itinerary[0].country,
 											image: itinerary[0].image,
@@ -999,6 +1005,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 									let req = {
 										id: row.Id,
 										name: row.Traveler_Name,
+										countriesName,
 										departureDate: new Date(row.Departure_Date).toString(),
 										returnDate: new Date(row.Return_Date).toString(),
 										clickable: allCities.exists ? true : false,
