@@ -961,7 +961,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 											var obj = {
 												name: cur.name,
 												image: cur.image,
-												cities: [cur.cities],
+												cities: cur.cities,
 											};
 											o = o.concat([obj]);
 										}
