@@ -20,22 +20,22 @@ export class UserService {
 			countries: [
 				{
 					name: 'France',
+					numberOfNights: 2,
 					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 					cities: [
 						{
 							name: 'Paris',
-							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 							numberOfNights: 2,
 						},
 					],
 				},
 				{
 					name: 'Greece',
+					numberOfNights: 2,
 					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 					cities: [
 						{
 							name: 'Athens',
-							image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 							numberOfNights: 2,
 						},
 					],
@@ -53,6 +53,7 @@ export class UserService {
 			countries: [
 				{
 					name: 'France',
+					numberOfNights: 2,
 					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 					cities: [
 						{
@@ -64,6 +65,7 @@ export class UserService {
 				},
 				{
 					name: 'Greece',
+					numberOfNights: 2,
 					image: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com/cities/ATH.png',
 					cities: [
 						{

@@ -524,8 +524,6 @@
 		},
 		"plan_details": {
 			"itinerary_cost": "Itinerary Cost",
-			"date_from": "Date From",
-			"date_to": "Date to",
 			"nights": "Nights",
 			"total_cost": "Total cost"
 		}

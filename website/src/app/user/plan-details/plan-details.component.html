@@ -1,4 +1,4 @@
-<div class="container p-4 plan_details">
+<div class="container p-4 plan_details" *ngIf="bookingDetails">
 	<div class="row">
 		<div class="col-9">
 			<h4 class="details-title">{{ 'user.plan_details.itinerary_cost' | translate }}</h4>
@@ -10,133 +10,35 @@
 		</div>
 	</div>
 
-	<div class="row mt-6">
-		<div class="col-6">
-			<h4 class="title-font">ITALY</h4>
-			<p>
-				<span class="mr-4 title-font">{{ 'user.plan_details.date_from' | translate }}</span
-				><span>6 Dec 2019</span>
-			</p>
+	<div *ngFor="let country of bookingDetails.countries">
+		<div class="row mt-6">
+			<div class="col-6">
+				<h4 class="title-font">{{ country.name }}</h4>
+			</div>
+			<div class="col-6">
+				<h4>{{ country.numberOfNights }} {{ 'user.plan_details.nights' | translate }}</h4>
+			</div>
 		</div>
-		<div class="col-6">
-			<h4>6 {{ 'user.plan_details.nights' | translate }}</h4>
-			<p>
-				<span class="mr-4 title-font">{{ 'user.plan_details.date_to' | translate }}</span
-				><span>12 Dec 2019</span>
-			</p>
+		<div class="row">
+			<div class="col-12">
+				<hr />
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">ROME</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">FLORENCE</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">VENICE</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-
-
-	<div class="row mt-6">
-		<div class="col-6">
-			<h4 class="title-font">ITALY</h4>
-			<p>
-				<span class="mr-4 title-font">{{ 'user.plan_details.date_from' | translate }}</span
-				><span>6 Dec 2019</span>
-			</p>
-		</div>
-		<div class="col-6">
-			<h4>6 {{ 'user.plan_details.nights' | translate }}</h4>
-			<p>
-				<span class="mr-4 title-font">{{ 'user.plan_details.date_to' | translate }}</span
-				><span>12 Dec 2019</span>
-			</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">ROME</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">FLORENCE</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-6">
-			<p class="title-font">VENICE</p>
-		</div>
-		<div class="col-6">
-			<p>2 {{ 'user.plan_details.nights' | translate }}</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<hr />
+		<div *ngFor="let city of country.cities">
+			<div class="row">
+				<div class="col-6">
+					<p class="title-font">{{ city.name }}</p>
+				</div>
+				<div class="col-6">
+					<p>{{ city.numberOfNights }} {{ 'user.plan_details.nights' | translate }}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<hr />
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -145,7 +47,7 @@
 			<h4 class="title-font">{{ 'user.plan_details.total_cost' | translate }}</h4>
 		</div>
 		<div class="col-6">
-			<h4>36,200 EGP</h4>
+			<h4>{{ bookingDetails.totalCost | currency:'EGP':'symbol':'1.0-0' }}</h4>
 		</div>
 	</div>
 </div>

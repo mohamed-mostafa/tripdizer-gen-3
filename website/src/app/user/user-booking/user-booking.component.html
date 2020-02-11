@@ -8,7 +8,7 @@
 		<div *ngFor="let booking of userBookings" class="col-lg-6 text-center mb-5">
 			<div
 				class="town-item mx-auto"
-				(click)="openDetails('plan_details')"
+				(click)="openDetails(booking)"
 				[ngStyle]="{ 'background-image': 'url(' + booking.countries['0']?.image + ')' }"
 			>
 				<div class="dark-container">

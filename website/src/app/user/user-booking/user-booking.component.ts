@@ -1,13 +1,13 @@
 import { UserService } from './../user.service';
 import { SideNavService } from './../side-nav.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'c-app-booking-plans',
 	templateUrl: './user-booking.component.html',
 	styleUrls: ['./user-booking.component.scss'],
 })
-export class UserBookingComponent implements OnInit {
+export class UserBookingComponent {
 	userBookings: Array<any> = [];
 	constructor(public nav: SideNavService, public userService: UserService) {
 		this.userService.getUserBookings().subscribe($userPlans => {
@@ -16,9 +16,7 @@ export class UserBookingComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {}
-
-	openDetails(page) {
-		this.nav.openNav(page);
+	openDetails(bookingData) {
+		this.nav.openNav('plan_details', bookingData);
 	}
 }
