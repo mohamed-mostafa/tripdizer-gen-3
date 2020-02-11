@@ -1,6 +1,5 @@
 const jwt = require('jwt-simple');
-
-var httpRequest = require('request');
+const httpRequest = require('request');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8080';
 
@@ -73,7 +72,9 @@ const isAuthenticatedAsAdmin = (req, res, next) => {
 
 const mapUser = user => ({ id: user.id, username: user.username, fullName: user.fullName, isAdmin: !!user.admin });
 
-exports.getToken = getToken;
-exports.getDecodedToken = getDecodedToken;
-exports.isAuthenticated = isAuthenticated;
-exports.isAuthenticatedAsAdmin = isAuthenticatedAsAdmin;
+module.exports = {
+	getToken,
+	getDecodedToken,
+	isAuthenticated,
+	isAuthenticatedAsAdmin,
+};
