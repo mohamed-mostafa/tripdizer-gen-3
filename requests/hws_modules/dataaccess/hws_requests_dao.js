@@ -29,11 +29,11 @@ let createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`,`Payment_Status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
 						[
 							request.date,
 							request.status || 1,
-							request.traveler.email,
+							request.traveler.email || '',
 							request.traveler.name,
 							request.traveler.mobile,
 							request.traveler.gender,
@@ -67,6 +67,7 @@ let createNewRequest = function(request, onSuccess, onFailure) {
 							request.promoCode,
 							request.score,
 							request.channel,
+							request.paymentStatus,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -381,6 +382,7 @@ let getRequestById = function(requestId, onSuccess, onFailure) {
 								promoCode: rows[0].Promo_Code,
 								score: rows[0].Score,
 								channel: rows[0].Channel,
+								paymentStatus: rows[0].Payment_Status,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -465,7 +467,7 @@ let updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? , `Payment_Status` = ?  WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
@@ -498,6 +500,7 @@ let updateRequest = function(request, onSuccess, onFailure) {
 					request.travelHistory,
 					request.score,
 					request.channel,
+					request.paymentStatus,
 					request.id,
 				],
 				function(err, rows) {
@@ -555,7 +558,38 @@ let modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 		}
 	});
 };
-
+let updatePaymentStatusById = function(orderId, status, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query('UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?', [status, orderId], function(
+				err,
+				rows
+			) {
+				// if an error is thrown, end the connection and throw an error
+				//				connection.end();
+				if (err) {
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
+					connection.rollback();
+					connection.end();
+					onFailure(err);
+				} else {
+					// no error is thrown
+					connection.commit();
+					connection.end();
+					onSuccess();
+				}
+			});
+		}
+	});
+};
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
 let modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
@@ -853,7 +887,46 @@ let getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
-let getTravelerEmails = function(onSuccess, onFailure) {
+let getPaymentStatus = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the mail history
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
+					onFailure(err);
+				} else {
+					connection.query('SELECT * from Payment_Status', function(err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							// end the connection
+							connection.end();
+							console.error('An error occurred while trying to get payment status');
+							console.error(err);
+							connection.rollback(); // rollback the transaction
+							onFailure(err);
+						} else {
+							// end the connection
+							onSuccess(result);
+						}
+					});
+				}
+			});
+		}
+	});
+};
+var getTravelerEmails = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -1029,6 +1102,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 		}
 	});
 };
+
 let getItineraryById = async function(id) {
 	return new Promise((resolve, reject) => {
 		let connection = daoUtilities.createConnection();
@@ -1061,6 +1135,7 @@ let getItineraryById = async function(id) {
 		});
 	});
 };
+
 module.exports = {
 	assignRequestToUser,
 	updateRequest,
@@ -1077,4 +1152,5 @@ module.exports = {
 	getRequestCountsByPromoCode,
 	getTravelerEmails,
 	getRequestsByMail,
+	getPaymentStatus,
 };

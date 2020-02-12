@@ -42,6 +42,8 @@ export class EstimatedCostService {
 
 	travelingFromCoordinates: { lat: number; lng: number } = {} as any;
 
+	cityPaths: any;
+
 	selectedFlightOffers = new Subject<FlightOffer[]>();
 	flightOffersSelected: Array<FlightOffer> = [];
 	selectedCities = new Subject<CityDTO[]>();
@@ -117,6 +119,14 @@ export class EstimatedCostService {
 		}, expirationInMinutes * 60 * 1000);
 	}
 
+	setCityPaths(paths) {
+		this.cityPaths = paths;
+	}
+
+	getCityPaths() {
+		return this.cityPaths;
+	}
+
 	endSessionTimer(): void {
 		clearTimeout(this.notificationTimer);
 		clearTimeout(this.expirationTimer);
@@ -151,7 +161,6 @@ export class EstimatedCostService {
 
 	updateCitiesInCache(cities) {
 		this.cachedTabsData.cities = cities;
-		console.log(this.cachedTabsData);
 	}
 
 	getNumberOfNights(): number {
@@ -214,7 +223,6 @@ export class EstimatedCostService {
 
 	updateFlightsOffersInCache(flightsOffers) {
 		this.cachedTabsData.flightOffers = flightsOffers;
-		console.log(this.cachedTabsData);
 	}
 
 	setSelectedFlightOffers(flightOffers: Array<FlightOffer>): void {
@@ -234,15 +242,7 @@ export class EstimatedCostService {
 	}
 
 	getAccommodation(): Observable<Array<Accommodation>> {
-		// if (this.cachedTabsData.accommodation && this.cachedTabsData.accommodation.length) {
-		// 	return of(this.cachedTabsData.accommodation);
-		// } else {
-		if (this.isAccommodationTabVisited) {
-			this.setIsLoading(
-				true,
-				this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-			);
-		}
+		this.isAccommodationProcessing = true;
 		const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 		for (const sc of this.citiesSelected) {
 			cities.push({
@@ -280,6 +280,7 @@ export class EstimatedCostService {
 				this.updateAccommodationInCache(returnedAccommodation);
 			}),
 			catchError((err: any, caught: Observable<any>) => {
+				this.setIsLoading(false, '');
 				return err;
 			})
 		);
@@ -288,7 +289,6 @@ export class EstimatedCostService {
 
 	updateAccommodationInCache(accommodation) {
 		this.cachedTabsData.accommodation = accommodation;
-		console.log(this.cachedTabsData);
 	}
 
 	setSelectedHotels(selectedHotels) {
@@ -503,7 +503,6 @@ export class EstimatedCostService {
 				this.summaryStations.push(lastStation);
 			}
 		});
-		console.log(this.summaryStations);
 		return this.summaryStations;
 	}
 
