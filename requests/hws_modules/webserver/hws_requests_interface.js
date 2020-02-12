@@ -547,6 +547,7 @@ exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = assignRequestToUser;
 exports.updateRequest = updateRequest;
+exports.getRequestsByMail = getRequestsByMail;
 
 exports.getRequestSummaries = getRequestSummaries;
 exports.getRequestSummariesCount = getRequestSummariesCount;
