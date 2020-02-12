@@ -48,5 +48,6 @@ env_variables:
   HOTEL_BOOKING_CONFIRMATION_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-confirmation-subscription #SUBSCRIPTION
   FLIGHT_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: flight-booking-error-subscription #SUBSCRIPTION
   HOTEL_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-error-subscription #SUBSCRIPTION
-  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com,ahmed.essawy@tripdizer.com,ramy.ahmed@tripdizer.com
+  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com,ahmed.essawy@tripdizer.com,ramy.ahmed@tripdizer.com,alaa.darwish@tripdizer.com
   BYPASS_PAYMENT: 'N'
+  BASE_MERCHANT_ID: 3000000
