@@ -563,4 +563,5 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = getTravelerEmails;
+exports.getRequestsByMail = getRequestsByMail;
 exports.getPaymentStatus = getPaymentStatus;
