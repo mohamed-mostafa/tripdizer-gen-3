@@ -896,28 +896,6 @@ var handlePaidRequest = function(requestId) {
 	}
 };
 
-let getRequestsByMail = (user, onSuccess, onFailure) => {
-	let userObj = JSON.parse(user);
-	let email = userObj.email;
-	requestsDao.getRequestsByMail(
-		email,
-		async function(request) {
-			try {
-				onSuccess(request);
-			} catch (err) {
-				console.log('Failed to retrieve data for email: ' + email);
-				console.error(err);
-				onFailure(err);
-			}
-		},
-		function(err) {
-			console.log('Failed to retrieve data for : ' + email);
-			console.error(err);
-			onFailure(err);
-		}
-	);
-};
-
 exports.placeRequest = placeRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = requestsDao.assignRequestToUser;
@@ -933,4 +911,3 @@ exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = requestsDao.getTravelerEmails;
 exports.handlePaidRequest = handlePaidRequest;
-exports.getRequestsByMail = getRequestsByMail;

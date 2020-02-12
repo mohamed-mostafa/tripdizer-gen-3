@@ -2,21 +2,21 @@
  * The hws server exposing the REST services
  */
 
-let start = function() {
+var start = function() {
 	// initialize express
-	const express = require('express');
-	const cors = require('cors');
-	const bodyParser = require('body-parser');
-	const auth = require('../app/auth/index');
-	const publicUserAuth = require('../app/auth/publicUserAuth');
+	var express = require('express');
+	var cors = require('cors');
+	var bodyParser = require('body-parser');
+	var auth = require('../app/auth/index');
+
 	// interfaces
 	require('../app/cron/index');
-	const requestsInterface = require('./hws_requests_interface.js');
-	const grouptripsInterface = require('./hws_grouptrips_interface.js');
-	const paymentsInterface = require('./hws_payments_interface');
+	var requestsInterface = require('./hws_requests_interface.js');
+	var grouptripsInterface = require('./hws_grouptrips_interface.js');
+	var paymentsInterface = require('./hws_payments_interface');
 
-	const json2xls = require('json2xls');
-	const app = express();
+	var json2xls = require('json2xls');
+	var app = express();
 	// your express configuration here
 
 	app.use(cors()); // add CORS middleware (to enable cross-domain requests from clients.)
@@ -35,7 +35,6 @@ let start = function() {
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
-	router.get('/getRequestsByMail', publicUserAuth.isPublicUserAuthenticated, requestsInterface.getRequestsByMail);
 	router.get('/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	router.put('/', auth.isAuthenticated, requestsInterface.updateRequest);
 	router.post('/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);

@@ -109,7 +109,7 @@ export class CustomValidators {
 	static leadingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
-			if (text && text.startsWith(' ')) {
+			if (text.startsWith(' ')) {
 				return { leadingWhiteSpace: errorMessage || true };
 			}
 			return null;
@@ -118,7 +118,7 @@ export class CustomValidators {
 	static trailingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
-			if (text && text.endsWith(' ')) {
+			if (text.endsWith(' ')) {
 				return { trailingWhiteSpace: errorMessage || true };
 			}
 			return null;
