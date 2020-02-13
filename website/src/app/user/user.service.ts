@@ -1,3 +1,4 @@
+import { UserPlan } from './user-models/user-plan.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from './user.model';
@@ -6,9 +7,9 @@ import { Observable, of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 	private endPoint = 'users';
-	private userPlansEndPoint = 'requests/users/requests';
+	private userBookingsEndpoint = 'requests/users/requests';
 
-	private userPlans: any = [];
+	private userPlans: Array<UserPlan> = [];
 
 	constructor(private http: HttpClient) {}
 
@@ -22,6 +23,6 @@ export class UserService {
 	}
 
 	getUserBookings(): Observable<Array<any>> {
-		return this.http.get<Array<any>>(`${this.userPlansEndPoint}`);
+		return this.http.get<Array<any>>(`${this.userBookingsEndpoint}`);
 	}
 }
