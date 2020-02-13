@@ -283,7 +283,8 @@
 				"proceed_to_payment": "Proceed to payment",
 				"back_to_passengers_details": "Edit passengers details",
 				"back": "Back"
-			}
+			},
+			"prices_availability_in_hotels": "The prices or availability has changed, please select other offers"
 		},
 		"form_layout": {
 			"next_label": "Continue",

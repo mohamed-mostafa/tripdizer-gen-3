@@ -3,21 +3,22 @@
  * Some methods are just 1-to-1 mapping for the dataaccess methods. If you want to interrupt the call to them, replace the callback function sent to them
  */
 
-var requestsDao = require('../dataaccess/hws_requests_dao.js');
-let transportationDao = require('../dataaccess/hws_request_transporation_dao');
-let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
-let attractionsDao = require('../dataaccess/hws_request_attractions_dao');
-let pnrDao = require('../dataaccess/hws_request_PNR_dao');
-let citiesDao = require('../dataaccess/hws_request_cities_dao');
-let bookingsDao = require('../dataaccess/hws_bookings_dao');
-let paymentDao = require('../dataaccess/hws_payments_dao');
-var emailBusiness = require('../adapters/hws_email_adapter.js');
-var paymentsService = require('./hws_payments_business');
-var Promise = require('promise');
-var httpRequest = require('request');
-var googlePeopleAdapter = require('../adapters/google_people_adapter.js');
-let googlePubSubAdapter = require('../adapters/PubSubPublishers');
-let moment = require('moment');
+const requestsDao = require('../dataaccess/hws_requests_dao.js');
+const transportationDao = require('../dataaccess/hws_request_transporation_dao');
+const accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
+const attractionsDao = require('../dataaccess/hws_request_attractions_dao');
+const pnrDao = require('../dataaccess/hws_request_PNR_dao');
+const citiesDao = require('../dataaccess/hws_request_cities_dao');
+const bookingsDao = require('../dataaccess/hws_bookings_dao');
+const paymentDao = require('../dataaccess/hws_payments_dao');
+const emailBusiness = require('../adapters/hws_email_adapter.js');
+const paymentsService = require('./hws_payments_business');
+const trawexService = require('./hws_trawex_businress');
+const Promise = require('promise');
+const httpRequest = require('request');
+const googlePeopleAdapter = require('../adapters/google_people_adapter.js');
+const googlePubSubAdapter = require('../adapters/PubSubPublishers');
+const moment = require('moment');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8083';
 const MEDIA_STORAGE_BASE_URL =
@@ -25,7 +26,7 @@ const MEDIA_STORAGE_BASE_URL =
 const BYPASS_PAYMENT = process.env.BYPASS_PAYMENT || 'N';
 
 //calls the onSuccess with a user object if the user was successfully created
-var placeRequest = function(request, onSuccess, onFailure, onUserError) {
+let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request = {
 		...request,
 		status: request.isFromWebsite ? 1 : request.status,
@@ -55,170 +56,242 @@ var placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		referralType: request.referralType || 1,
 	};
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
-	if (Array.isArray(request.preferences)) {
-		request.preferences = request.preferences.map(ri => ({
-			id: ri.id || ri,
-			percentage: ri.percentage || 100,
-		}));
-	}
-	if (typeof request.preferences === 'object') {
-		const preferences = [];
-		for (const key in request.preferences) {
-			if (request.preferences.hasOwnProperty(key)) {
-				preferences.push({
-					id: key,
-					percentage: 100,
+	let flightValidation = request.flightOffers.map(flight => {
+		return new Promise((resolve, reject) => {
+			trawexService
+				.getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode)
+				.then(data => {
+					trawexService
+						.validateFlightAPi(flight.sessionId, flight.fareSourceCode)
+						.then(flights => {
+							resolve(true);
+						})
+						.catch(error => {
+							reject(false);
+						});
+				})
+				.catch(err => {
+					reject(false);
 				});
+		});
+	});
+
+	let selectedHotels = [];
+	let hotelValidation = request.selectedHotels.map(hotel => {
+		return new Promise((resolve, reject) => {
+			let hotelName = hotel.name;
+			let hotelDetails = hotel.moreDetails;
+			trawexService
+				.checkHotelOffersAPi(hotelDetails)
+				.then(hotelRooms => {
+					let hotelRoom = {
+						boardBasis: hotelRooms[0].boardBasis,
+						infoSource: hotelRooms[0].infoSource,
+						mealCode: hotelRooms[0].mealCode,
+						allocationDetails: hotelRooms[0].allocationDetails,
+						rateBasisIds: hotelRooms[0].rateBasisIds,
+						roomCodes: hotelRooms[0].roomCodes,
+						roomTypeRunnos: hotelRooms[0].roomTypeRunnos,
+						hotelCode: hotelDetails.hotelId,
+					};
+					// delete hotelDetails.hotelId;
+					let mergedData = { ...hotelDetails, ...hotelRoom, hotelName };
+					hotel.roomDetails = hotelRooms[0];
+
+					trawexService
+						.reValidateHotelAPi(mergedData)
+						.then(validatedData => {
+							hotel.preBookingToken = validatedData.preBookingToken;
+							selectedHotels.push(hotel);
+							request = {
+								...request,
+								selectedHotels,
+							};
+							resolve(true);
+						})
+						.catch(err => {
+							reject(false);
+						});
+				})
+				.catch(error => {
+					reject(false);
+				});
+		});
+	});
+	let allPromises = [];
+	allPromises.push(...flightValidation);
+	allPromises.push(...hotelValidation);
+	Promise.all(allPromises)
+		.then(function(valid) {
+			if (Array.isArray(request.preferences)) {
+				request.preferences = request.preferences.map(ri => ({
+					id: ri.id || ri,
+					percentage: ri.percentage || 100,
+				}));
 			}
-		}
-		request.preferences = preferences;
-	}
-	// insert the request in our database
-	request.date = new Date(new Date().setHours(0, 0, 0, 0));
-	request.departureDate = new Date(request.departureDate);
-	request.returnDate = new Date(request.returnDate);
-	if (!request.budget) request.budget = 0;
-	if (request.destination) {
-		request.first_country = 1;
-		// delete request.other_country
-		delete request.second_country;
-		delete request.third_country;
-	}
-	request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
-	request.score = calculateRequestScore(request);
-	requestsDao.createNewRequest(
-		request,
-		async function(request) {
-			// request is created. now persist the cities/accomodation/transportation/attractions
-			var requestSelectedHotels = { choices: request.selectedHotels };
-			var requestSelectedCities = { choices: request.selectedCities };
-			var requestSelectedAttractions = { choices: request.selectedAttractions };
-			var requestFlightOffers = { choices: request.flightOffers };
-			accomodationDao.save(request.id, requestSelectedHotels);
-			transportationDao.save(request.id, requestFlightOffers);
-			citiesDao.save(request.id, requestSelectedCities);
-			attractionsDao.save(request.id, requestSelectedAttractions);
-
-			if (request.requiresPayment) {
-				// if (BYPASS_PAYMENT == "Y") {
-				// 	request.pnrInfoList = require('../../test-data/pnr.json');
-				// }
-				// save PNR info
-				var requestPNRInfo = { choices: request.pnrInfoList };
-				pnrDao.save(request.id, requestPNRInfo);
-
-				if (BYPASS_PAYMENT == 'Y') {
-					await new Promise((resolve, reject) => {
-						setTimeout(() => resolve(), 10000);
-					});
-					publishRequestChoicesForBooking(request.id);
+			if (typeof request.preferences === 'object') {
+				const preferences = [];
+				for (const key in request.preferences) {
+					if (request.preferences.hasOwnProperty(key)) {
+						preferences.push({
+							id: key,
+							percentage: 100,
+						});
+					}
 				}
-				// at this point, we've saved the request to the database. let's generate a payment key
-				request.paymentKey = await new Promise(resolve => {
-					paymentsService.generatePaymentKeyWithOrderRegistration(
-						true,
-						request,
-						({ paymentKey }) => {
-							requestsDao.modifyRequestStatusById(
-								request.id,
-								17,
-								() => {
-									requestsDao.modifyRequestPaymentInfo(
+				request.preferences = preferences;
+			}
+			// insert the request in our database
+			request.date = new Date(new Date().setHours(0, 0, 0, 0));
+			request.departureDate = new Date(request.departureDate);
+			request.returnDate = new Date(request.returnDate);
+			if (!request.budget) request.budget = 0;
+			if (request.destination) {
+				request.first_country = 1;
+				// delete request.other_country
+				delete request.second_country;
+				delete request.third_country;
+			}
+			request.estimatedCost = getItineraryCostFromRequest(request.flightOffers, request.selectedHotels);
+			request.score = calculateRequestScore(request);
+			requestsDao.createNewRequest(
+				request,
+				async function(request) {
+					// request is created. now persist the cities/accomodation/transportation/attractions
+					var requestSelectedHotels = { choices: request.selectedHotels };
+					var requestSelectedCities = { choices: request.selectedCities };
+					var requestSelectedAttractions = { choices: request.selectedAttractions };
+					var requestFlightOffers = { choices: request.flightOffers };
+					accomodationDao.save(request.id, requestSelectedHotels);
+					transportationDao.save(request.id, requestFlightOffers);
+					citiesDao.save(request.id, requestSelectedCities);
+					attractionsDao.save(request.id, requestSelectedAttractions);
+
+					if (request.requiresPayment) {
+						// if (BYPASS_PAYMENT == "Y") {
+						// 	request.pnrInfoList = require('../../test-data/pnr.json');
+						// }
+						// save PNR info
+						var requestPNRInfo = { choices: request.pnrInfoList };
+						pnrDao.save(request.id, requestPNRInfo);
+
+						if (BYPASS_PAYMENT == 'Y') {
+							await new Promise((resolve, reject) => {
+								setTimeout(() => resolve(), 10000);
+							});
+							publishRequestChoicesForBooking(request.id);
+						}
+						// at this point, we've saved the request to the database. let's generate a payment key
+						request.paymentKey = await new Promise(resolve => {
+							paymentsService.generatePaymentKeyWithOrderRegistration(
+								true,
+								request,
+								({ paymentKey }) => {
+									requestsDao.modifyRequestStatusById(
 										request.id,
-										paymentKey,
+										17,
 										() => {
-											resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
+											requestsDao.modifyRequestPaymentInfo(
+												request.id,
+												paymentKey,
+												() => {
+													resolve(paymentKey); // only when persisting the request status, and the payment info in the database, we return the payment key to the front-end, to start the payment process
+												},
+												err => {
+													console.log(
+														'Failed to update payment info of the request in the database. Reason: ' +
+															JSON.stringify(err)
+													);
+													resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+												}
+											);
 										},
 										err => {
-											console.log(
-												'Failed to update payment info of the request in the database. Reason: ' + JSON.stringify(err)
-											);
+											console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
 											resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
 										}
 									);
 								},
 								err => {
-									console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err));
-									resolve(); // if we failed, we won't proceed with payment. we need to make sure all the request data in the database is accurate before payment proceeds
+									console.error('An error occurred while generating a payment key');
+									console.error(err);
+									resolve();
 								}
 							);
-						},
-						err => {
-							console.error('An error occurred while generating a payment key');
-							console.error(err);
-							resolve();
-						}
-					);
-				});
-			} else {
-				const package = await new Promise(resolve => {
-					getPackage(
-						request.id,
-						null,
-						data => {
-							console.log('Package creation succeeded. Now responding to caller');
-							resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-						},
-						data => {
-							if (data && data.pdfUrl) {
-								console.log('Package creation partially succeeded. Now responding to caller');
-								resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
-							} else {
-								console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
-								resolve({});
-							}
-							// onSuccess(request);
-						},
-						{ choices: request.flightOffers },
-						{ choices: request.selectedCities },
-						{ choices: request.selectedHotels },
-						{ choices: request.selectedAttractions }
-					);
-				});
+						});
+					} else {
+						const package = await new Promise(resolve => {
+							getPackage(
+								request.id,
+								null,
+								data => {
+									console.log('Package creation succeeded. Now responding to caller');
+									resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+								},
+								data => {
+									if (data && data.pdfUrl) {
+										console.log('Package creation partially succeeded. Now responding to caller');
+										resolve({ packageUrl: data.pdfUrl, packageDownloadUrl: data.pdfDownloadUrl });
+									} else {
+										console.error('Package creation failed. Reason: ' + data + ', Responding to caller anyway');
+										resolve({});
+									}
+									// onSuccess(request);
+								},
+								{ choices: request.flightOffers },
+								{ choices: request.selectedCities },
+								{ choices: request.selectedHotels },
+								{ choices: request.selectedAttractions }
+							);
+						});
 
-				request = { ...request, ...package };
-			}
+						request = { ...request, ...package };
+					}
 
-			onSuccess(request);
+					onSuccess(request);
 
-			// notify creation
-			if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
-				emailBusiness.sendEmail(
-					'bookings@tripdizer.com',
-					'notifications@tripdizer.com',
-					'Request #' + request.id + ' is placed at Tripdizer',
-					request.traveler.name +
-						' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
-				);
+					// notify creation
+					if (process.env.ENABLE_AGENTS_NOTIFICATION_EMAIL == 'TRUE')
+						emailBusiness.sendEmail(
+							'bookings@tripdizer.com',
+							'notifications@tripdizer.com',
+							'Request #' + request.id + ' is placed at Tripdizer',
+							request.traveler.name +
+								' has just placed a new request at Tripdizer. Visit the Dashboard to view its details.'
+						);
 
-			if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && !request.requiresPayment)
-				notifyCustomer(request.traveler.email, request.traveler.name, request.id);
+					if (process.env.ENABLE_END_USER_CONFIRMATION_EMAIL == 'TRUE' && !request.requiresPayment)
+						notifyCustomer(request.traveler.email, request.traveler.name, request.id);
 
-			if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
-				googlePeopleAdapter.createNewContact(
-					request.traveler.email,
-					request.traveler.name,
-					request.traveler.mobile,
-					'(' + request.id.toString() + ')'
-				);
-		},
-		function(err) {
-			// respond to caller
-			console.error('An error occurred while saving a new request');
-			console.error(err);
-			onFailure(err);
-			// });
-			// }
-		},
-		function(err) {
-			console.error('An error occurred while checking if traveler exists before');
-			console.error(err);
-			onFailure(err);
-		}
-	);
+					if (process.env.ENABLE_GOOGLE_PEOPLE_CONTACT_CREATION == 'TRUE')
+						googlePeopleAdapter.createNewContact(
+							request.traveler.email,
+							request.traveler.name,
+							request.traveler.mobile,
+							'(' + request.id.toString() + ')'
+						);
+				},
+				function(err) {
+					// respond to caller
+					console.error('An error occurred while saving a new request');
+					console.error(err);
+					onFailure(err);
+					// });
+					// }
+				},
+				function(err) {
+					console.error('An error occurred while checking if traveler exists before');
+					console.error(err);
+					onFailure(err);
+				}
+			);
+		})
+		.catch(error => {
+			onUserError('The prices or availability has changed, please select other offers');
+		});
 };
 
-var updateRequest = function(request, onSuccess, onFailure) {
+let updateRequest = function(request, onSuccess, onFailure) {
 	request.score = calculateRequestScore(request);
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	requestsDao.updateRequest(
@@ -234,7 +307,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 	);
 };
 
-var notifyCustomer = function(to, customerName, requestId) {
+let notifyCustomer = function(to, customerName, requestId) {
 	// prepare email body
 	var emailBody = '';
 	emailBody += '<html>';
@@ -258,7 +331,7 @@ var notifyCustomer = function(to, customerName, requestId) {
 		emailBody
 	);
 };
-var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
+let sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
 	} else if (email.type === 'request') {
@@ -280,7 +353,7 @@ var sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	}
 };
 
-var sendMails = function(emails, email, onSuccess) {
+let sendMails = function(emails, email, onSuccess) {
 	responses = [];
 	for (var i = 0; i < emails.length; ++i)
 		responses.push(
@@ -307,7 +380,7 @@ var sendMails = function(emails, email, onSuccess) {
 	});
 };
 
-var validatePromoCode = function(promoCode, onSuccess, onFailure) {
+let validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	if (promoCode != null && promoCode.toLowerCase() == 'tripdizer10') {
 		requestsDao.getRequestCountsByPromoCode(
 			promoCode,
@@ -325,7 +398,7 @@ var validatePromoCode = function(promoCode, onSuccess, onFailure) {
 	}
 };
 
-var sendDailyReportOfRequestsCount = function() {
+let sendDailyReportOfRequestsCount = function() {
 	requestsDao.getRequestCounts(
 		function(counts) {
 			// prepare email body
@@ -367,7 +440,7 @@ var sendDailyReportOfRequestsCount = function() {
 	);
 };
 
-var getPackage = function(
+let getPackage = function(
 	requestId,
 	accessToken,
 	onSuccess,
@@ -611,14 +684,14 @@ var getPackage = function(
 		}
 	);
 };
-var getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
+let getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	if (accomodationOffers) cost += accomodationOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
 	return cost;
 };
 
-var getPackageDetailsOfCountry = function(isoCode) {
+let getPackageDetailsOfCountry = function(isoCode) {
 	return new Promise((resolve, reject) => {
 		httpRequest.get({ url: MASTER_DATA_ENDPOINT + '/master-data/country/' + isoCode, json: true }, function(
 			error,
@@ -639,7 +712,7 @@ var getPackageDetailsOfCountry = function(isoCode) {
 	});
 };
 
-var sendPackageByMail = function(requestId, onSuccess, onFailure) {
+let sendPackageByMail = function(requestId, onSuccess, onFailure) {
 	requestsDao.getRequestById(
 		requestId,
 		function(request) {
@@ -823,7 +896,7 @@ function getRequestById(requestId, onSuccess, onFailure) {
 	);
 }
 
-var publishRequestChoicesForBooking = function(requestId) {
+let publishRequestChoicesForBooking = function(requestId) {
 	return new Promise((resolve, reject) => {
 		getRequestById(
 			requestId,
@@ -860,7 +933,7 @@ var publishRequestChoicesForBooking = function(requestId) {
 	});
 };
 
-var handlePaidRequest = function(requestId) {
+let handlePaidRequest = function(requestId) {
 	requestsDao.modifyRequestStatusById(
 		requestId,
 		18,
@@ -918,19 +991,20 @@ let getRequestsByMail = (user, onSuccess, onFailure) => {
 	);
 };
 
-exports.placeRequest = placeRequest;
-exports.getRequestById = getRequestById;
-exports.assignRequestToUser = requestsDao.assignRequestToUser;
-exports.updateRequest = updateRequest;
-exports.getRequestSummaries = requestsDao.getRequestSummariesByStatus;
-exports.getRequestSummariesCount = requestsDao.getRequestSummariesCountByStatus;
-exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
-exports.changeRequestStatus = requestsDao.modifyRequestStatusById;
-exports.sendDailyReportOfRequestsCount = sendDailyReportOfRequestsCount;
-exports.toggleOptions = requestsDao.toggleOptions;
-exports.getPackage = getPackage;
-exports.sendPackageByMail = sendPackageByMail;
-exports.validatePromoCode = validatePromoCode;
-exports.getTravelerEmails = requestsDao.getTravelerEmails;
-exports.handlePaidRequest = handlePaidRequest;
-exports.getRequestsByMail = getRequestsByMail;
+module.exports = {
+	placeRequest,
+	getRequestById,
+	assignRequestToUser,
+	updateRequest,
+	getRequestSummaries: requestsDao.getRequestSummariesByStatus,
+	getRequestSummariesCount: requestsDao.getRequestSummariesCountByStatus,
+	sendMailsToRequestTraveler,
+	changeRequestStatus: requestsDao.modifyRequestStatusById,
+	sendDailyReportOfRequestsCount,
+	toggleOptions,
+	getPackage,
+	sendPackageByMail,
+	validatePromoCode,
+	handlePaidRequest,
+	getRequestsByMail,
+};
