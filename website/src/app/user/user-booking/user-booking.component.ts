@@ -1,8 +1,8 @@
-import { UserPlan } from './../user-models/user-plan.model';
-import { UserService } from './../user.service';
-import { SideNavService } from './../side-nav.service';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SideNavService } from './../side-nav.service';
+import { UserService } from './../user.service';
+import { UserBooking } from './user-booking.model';
 
 @Component({
 	selector: 'c-app-booking-plans',
@@ -10,7 +10,8 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./user-booking.component.scss'],
 })
 export class UserBookingComponent {
-	userBookings: Observable<Array<UserPlan>>;
+	userBookings: Observable<Array<UserBooking>>;
+
 	constructor(private sideNavService: SideNavService, private userService: UserService) {
 		this.userBookings = this.userService.getUserBookings();
 	}

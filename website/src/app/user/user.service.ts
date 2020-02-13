@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { UserBooking } from './user-booking/user-booking.model';
 import { UserPlan } from './user-plans/user-plan.model';
 import { User } from './user.model';
 
@@ -22,7 +23,7 @@ export class UserService {
 		// return this.http.get<Array<any>>(`${this.endPoint}s`);
 	}
 
-	getUserBookings(): Observable<Array<any>> {
+	getUserBookings(): Observable<Array<UserBooking>> {
 		return this.http.get<Array<any>>(`${this.userBookingsEndpoint}`);
 	}
 }
