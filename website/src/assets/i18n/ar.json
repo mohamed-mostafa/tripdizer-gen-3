@@ -511,7 +511,26 @@
 			}
 		},
 		"user_plans": {
-			"my_plans": "رحلاتى"
+			"my_plans": "رحلاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
+		},
+		"user_bookings": {
+			"my_bookings": "حجوزاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
+		},
+		"plan_details": {
+			"itinerary_cost": "تكلفة الرحلة",
+			"nights": "ليالى",
+			"total_cost": "إجمالى التكلفة"
+		},
+		"booking_details": {
+			"itinerary_cost": "تكلفة الرحلة",
+			"nights": "ليالى",
+			"total_cost": "إجمالى التكلفة"
 		}
 	},
 	"payment_confirm": {
