@@ -17,6 +17,6 @@ export class UserBookingComponent {
 	}
 
 	openDetails(bookingData) {
-		this.sideNavService.openNav('plan_details', bookingData);
+		this.sideNavService.openNav('booking_details', bookingData);
 	}
 }

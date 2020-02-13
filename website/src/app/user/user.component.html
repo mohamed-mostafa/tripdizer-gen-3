@@ -1,7 +1,7 @@
 <mat-sidenav-container (backdropClick)="closeNav()">
 	<mat-sidenav #sidenav fixedInViewport="true" autoFocus="false" (keydown.escape)="closeNav()" disablecloseNav>
 		<c-app-side-menu *ngIf="navContent === 'side_menu'"></c-app-side-menu>
-		<c-app-plan-details *ngIf="navContent === 'plan_details'"></c-app-plan-details>
+		<c-app-booking-details *ngIf="navContent === 'booking_details'"></c-app-booking-details>
 	</mat-sidenav>
 
 	<mat-sidenav-content>

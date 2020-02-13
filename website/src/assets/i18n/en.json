@@ -526,6 +526,11 @@
 			"itinerary_cost": "Itinerary Cost",
 			"nights": "Nights",
 			"total_cost": "Total cost"
+		},
+		"booking_details": {
+			"itinerary_cost": "Itinerary Cost",
+			"nights": "Nights",
+			"total_cost": "Total cost"
 		}
 	},
 	"payment_confirm": {

@@ -1,3 +1,4 @@
+import { BookingDetailsComponent } from './user-booking/booking-details/booking-details.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
@@ -25,6 +26,7 @@ import { UserComponent } from './user.component';
 		UserBookingComponent,
 		SideMenuComponent,
 		PlanDetailsComponent,
+		BookingDetailsComponent
 	],
 	imports: [
 		CommonModule,
