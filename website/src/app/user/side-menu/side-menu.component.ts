@@ -1,6 +1,6 @@
 import { AuthService } from './../../shared/services/auth.service';
 import { SideNavService } from './../side-nav.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,13 +8,11 @@ import { Router } from '@angular/router';
 	templateUrl: './side-menu.component.html',
 	styleUrls: ['./side-menu.component.scss'],
 })
-export class SideMenuComponent implements OnInit {
-	constructor(public nav: SideNavService, private authService: AuthService, private router: Router) {}
-
-	ngOnInit() {}
+export class SideMenuComponent {
+	constructor(private sideNavService: SideNavService, private authService: AuthService, private router: Router) {}
 
 	closeNav() {
-		this.nav.closeNav();
+		this.sideNavService.closeNav();
 	}
 
 	logOut() {

@@ -1,6 +1,7 @@
 import { UserService } from './../user.service';
 import { SideNavService } from './../side-nav.service';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'c-app-user-plans',
@@ -8,16 +9,14 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./user-plans.component.scss'],
 })
 export class UserPlansComponent implements OnInit {
-	userPlans: Array<any> = [];
-	constructor(public nav: SideNavService, public userService: UserService) {
-		this.userService.getUserPlans().subscribe($userPlans => {
-			this.userPlans = $userPlans;
-		});
+	userPlans: Observable<Array<any>>;
+	constructor(private sideNavService: SideNavService, public userService: UserService) {
+		this.userPlans = this.userService.getUserPlans();
 	}
 
 	ngOnInit() {}
 
 	openDetails(page) {
-		this.nav.openNav(page);
+		this.sideNavService.openNav(page);
 	}
 }

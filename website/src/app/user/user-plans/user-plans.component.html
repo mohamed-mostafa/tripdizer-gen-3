@@ -5,7 +5,7 @@
 	</h3>
 
 	<div class="row">
-		<div *ngFor="let plan of userPlans" class="col-lg-6 text-center mb-5">
+		<div *ngFor="let plan of (userPlans | async)" class="col-lg-6 text-center mb-5">
 			<div
 				class="town-item mx-auto"
 				(click)="openDetails('plan_details')"

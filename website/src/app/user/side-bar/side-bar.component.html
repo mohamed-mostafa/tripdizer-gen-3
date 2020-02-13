@@ -1,10 +1,10 @@
 <div class="side-bar mx-auto py-4 mb-4">
 	<div class="user-avatar mx-auto p-3 mb-3">
-		<img [src]="user?.picture" alt="" />
+		<img [src]="(user | async)?.picture" alt="" />
 	</div>
 
 	<div class="text-center mb-4">
-		<h5 class="title-font text-blue">{{ user?.firstName }} {{ user?.lastName }}</h5>
+		<h5 class="title-font text-blue">{{ (user | async)?.firstName }} {{ (user | async)?.lastName }}</h5>
 	</div>
 
 	<mat-list class="side-menu" role="list">

@@ -1,11 +1,11 @@
-<div class="py-5" *ngIf="userBookings.length">
+<div class="py-5" *ngIf="(userBookings | async).length">
 	<h3 class="title-font page-title text-blue mb-5">
 		<i class="fa fa-paper-plane mr-3"></i
 		><span class="font-weight-bold">{{ 'user.user_bookings.my_bookings' | translate }}</span>
 	</h3>
 
 	<div class="row">
-		<div *ngFor="let booking of userBookings" class="col-lg-6 text-center mb-5">
+		<div *ngFor="let booking of (userBookings | async)" class="col-lg-6 text-center mb-5">
 			<div
 				class="town-item mx-auto"
 				(click)="openDetails(booking)"

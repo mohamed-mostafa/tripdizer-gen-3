@@ -11,17 +11,12 @@ export class PlanDetailsComponent implements OnDestroy {
 	private subscriptions = new Subscription();
 	bookingDetails: any;
 
-	constructor(public nav: SideNavService) {
-		this.subscriptions.add(
-			this.nav.navContent.subscribe($navContent => {
-				this.bookingDetails = $navContent.data;
-				console.log(this.bookingDetails);
-			})
-		);
+	constructor(private sideNavService: SideNavService) {
+		this.bookingDetails = this.sideNavService.navContent;
 	}
 
 	closeNav() {
-		this.nav.closeNav();
+		this.sideNavService.closeNav();
 	}
 
 	ngOnDestroy() {

@@ -1,33 +1,23 @@
-import { User } from './../user.model';
-import { AuthService } from './../../shared/services/auth.service';
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthService } from './../../shared/services/auth.service';
+import { User } from './../user.model';
 
 @Component({
 	selector: 'c-user-side-bar',
 	templateUrl: './side-bar.component.html',
 	styleUrls: ['./side-bar.component.scss'],
 })
-export class SideBarComponent implements OnDestroy {
-	private subscriptions = new Subscription();
+export class SideBarComponent {
+	user: Observable<User>;
 
-	user: User;
 	constructor(private authService: AuthService, private router: Router) {
-		this.subscriptions.add(
-			this.authService.authenticatedUser.subscribe($user => {
-				this.user = $user;
-				console.log(this.user);
-			})
-		);
+		this.user = this.authService.authenticatedUser;
 	}
 
 	logOut() {
 		this.authService.signOut();
 		this.router.navigate(['/']);
-	}
-
-	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
 	}
 }

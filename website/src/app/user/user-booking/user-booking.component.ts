@@ -1,6 +1,7 @@
 import { UserService } from './../user.service';
 import { SideNavService } from './../side-nav.service';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'c-app-booking-plans',
@@ -8,15 +9,12 @@ import { Component } from '@angular/core';
 	styleUrls: ['./user-booking.component.scss'],
 })
 export class UserBookingComponent {
-	userBookings: Array<any> = [];
-	constructor(public nav: SideNavService, public userService: UserService) {
-		this.userService.getUserBookings().subscribe($userPlans => {
-			this.userBookings = $userPlans;
-			console.log(this.userBookings);
-		});
+	userBookings: Observable<Array<any>>;
+	constructor(private sideNavService: SideNavService, public userService: UserService) {
+		this.userBookings = this.userService.getUserBookings();
 	}
 
 	openDetails(bookingData) {
-		this.nav.openNav('plan_details', bookingData);
+		this.sideNavService.openNav('plan_details', bookingData);
 	}
 }

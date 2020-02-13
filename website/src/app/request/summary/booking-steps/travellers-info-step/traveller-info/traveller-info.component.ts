@@ -116,7 +116,6 @@ export class TravellerInfoComponent implements OnInit {
 		}
 
 		const passengerDetailsFromRequest = this.requestService.getProperty('travellers');
-		console.log(passengerDetailsFromRequest);
 
 		for (const controlName in this.controls) {
 			if (this.effectiveControls.find(item => controlName === item)) {
