@@ -1153,4 +1153,5 @@ module.exports = {
 	getTravelerEmails,
 	getRequestsByMail,
 	getPaymentStatus,
+	updatePaymentStatusById,
 };
