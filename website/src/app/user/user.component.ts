@@ -3,6 +3,7 @@ import { User } from './user.model';
 import { AuthService } from './../shared/services/auth.service';
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'c-app-user',
@@ -11,11 +12,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 })
 export class UserComponent {
 	@ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
-	user: User;
+	user: Observable<User>;
 	navContent: string;
 
 	constructor(private authService: AuthService, private sideNavService: SideNavService) {
-		this.authService.authenticatedUser.subscribe(user => (this.user = user));
+		this.user = this.authService.authenticatedUser;
 
 		this.sideNavService.navContent.subscribe(navContentResult => {
 			if (navContentResult && navContentResult.page) {

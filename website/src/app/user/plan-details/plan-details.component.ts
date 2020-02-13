@@ -1,14 +1,12 @@
 import { SideNavService } from './../side-nav.service';
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'c-app-plan-details',
 	templateUrl: './plan-details.component.html',
 	styleUrls: ['./plan-details.component.scss'],
 })
-export class PlanDetailsComponent implements OnDestroy {
-	private subscriptions = new Subscription();
+export class PlanDetailsComponent {
 	bookingDetails: any;
 
 	constructor(private sideNavService: SideNavService) {
@@ -17,9 +15,5 @@ export class PlanDetailsComponent implements OnDestroy {
 
 	closeNav() {
 		this.sideNavService.closeNav();
-	}
-
-	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
 	}
 }
