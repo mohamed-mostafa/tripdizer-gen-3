@@ -183,7 +183,8 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 						}
 						// at this point, we've saved the request to the database. let's generate a payment key
 						request.paymentKey = await new Promise(resolve => {
-							paymentsService.registeredOrderAndGeneratePaymentKey(
+							paymentsService.generatePaymentKeyWithOrderRegistration(
+								true,
 								request,
 								({ paymentKey }) => {
 									requestsDao.modifyRequestStatusById(
@@ -967,6 +968,29 @@ let handlePaidRequest = function(requestId) {
 			});
 	}
 };
+
+let getRequestsByMail = (user, onSuccess, onFailure) => {
+	let userObj = JSON.parse(user);
+	let email = userObj.email;
+	requestsDao.getRequestsByMail(
+		email,
+		async function(request) {
+			try {
+				onSuccess(request);
+			} catch (err) {
+				console.log('Failed to retrieve data for email: ' + email);
+				console.error(err);
+				onFailure(err);
+			}
+		},
+		function(err) {
+			console.log('Failed to retrieve data for : ' + email);
+			console.error(err);
+			onFailure(err);
+		}
+	);
+};
+
 module.exports = {
 	placeRequest,
 	getRequestById,
@@ -981,6 +1005,7 @@ module.exports = {
 	getPackage,
 	sendPackageByMail,
 	validatePromoCode,
-	getTravelerEmails: requestsDao.getTravelerEmails,
+	getTravelerEmails,
 	handlePaidRequest,
+	getRequestsByMail,
 };

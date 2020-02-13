@@ -102,13 +102,14 @@ export class CustomValidators {
 			) {
 				return null;
 			}
-			return { validEmail: errorMessage || true };
+			return { email: errorMessage || true };
 		};
 	}
+
 	static leadingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
-			if (text.startsWith(' ')) {
+			if (text && text.startsWith(' ')) {
 				return { leadingWhiteSpace: errorMessage || true };
 			}
 			return null;
@@ -117,7 +118,7 @@ export class CustomValidators {
 	static trailingSpaceValidator(errorMessage?: string): ValidatorFn {
 		return (c: AbstractControl): { [key: string]: string | boolean } | null => {
 			const text = c.value;
-			if (text.endsWith(' ')) {
+			if (text && text.endsWith(' ')) {
 				return { trailingWhiteSpace: errorMessage || true };
 			}
 			return null;

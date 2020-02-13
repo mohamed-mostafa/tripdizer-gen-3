@@ -2,21 +2,21 @@
  * The hws server exposing the REST services
  */
 
-var start = function() {
+let start = function() {
 	// initialize express
-	var express = require('express');
-	var cors = require('cors');
-	var bodyParser = require('body-parser');
-	var auth = require('../app/auth/index');
-
+	const express = require('express');
+	const cors = require('cors');
+	const bodyParser = require('body-parser');
+	const auth = require('../app/auth/index');
+	const publicUserAuth = require('../app/auth/publicUserAuth');
 	// interfaces
 	require('../app/cron/index');
-	var requestsInterface = require('./hws_requests_interface.js');
-	var grouptripsInterface = require('./hws_grouptrips_interface.js');
-	var paymentsInterface = require('./hws_payments_interface');
+	const requestsInterface = require('./hws_requests_interface.js');
+	const grouptripsInterface = require('./hws_grouptrips_interface.js');
+	const paymentsInterface = require('./hws_payments_interface');
 
-	var json2xls = require('json2xls');
-	var app = express();
+	const json2xls = require('json2xls');
+	const app = express();
 	// your express configuration here
 
 	app.use(cors()); // add CORS middleware (to enable cross-domain requests from clients.)
@@ -35,6 +35,7 @@ var start = function() {
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
+	router.get('/getRequestsByMail', publicUserAuth.isPublicUserAuthenticated, requestsInterface.getRequestsByMail);
 	router.get('/:requestId', auth.isAuthenticated, requestsInterface.getRequestById);
 	router.put('/', auth.isAuthenticated, requestsInterface.updateRequest);
 	router.post('/assign', auth.isAuthenticated, requestsInterface.assignRequestToUser);
@@ -59,6 +60,7 @@ var start = function() {
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
 
 	// Payments
+	router.get('/payments/key/:amount', auth.isAuthenticated, paymentsInterface.generatePaymentKeyWithOrderRegistration);
 	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
 	router.get('/payments/response-callback', paymentsInterface.responseCallback);
 
