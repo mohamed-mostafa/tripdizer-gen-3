@@ -547,7 +547,6 @@ exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
 exports.assignRequestToUser = assignRequestToUser;
 exports.updateRequest = updateRequest;
-exports.getRequestsByMail = getRequestsByMail;
 
 exports.getRequestSummaries = getRequestSummaries;
 exports.getRequestSummariesCount = getRequestSummariesCount;
@@ -564,4 +563,5 @@ exports.getPackage = getPackage;
 exports.sendPackageByMail = sendPackageByMail;
 exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = getTravelerEmails;
+exports.getRequestsByMail = getRequestsByMail;
 exports.getPaymentStatus = getPaymentStatus;
