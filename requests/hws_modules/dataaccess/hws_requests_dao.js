@@ -1083,7 +1083,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 										returnDate: new Date(row.Return_Date).toString(),
 										clickable: allCities.exists ? true : false,
 										countries,
-										totalCost: allCities.exists ? hotelsTotalCost + flightsTotalCost : estimatedCost,
+										totalCost: allCities.exists ? +hotelsTotalCost + +flightsTotalCost : estimatedCost,
 										numberOfNights,
 									};
 									request.push(req);
