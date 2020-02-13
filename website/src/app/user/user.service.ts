@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 	private endPoint = 'users';
-	private userPlansEndPoint = '';
+	private userPlansEndPoint = 'requests/users/requests';
 
 	private userPlans: any = [];
 
@@ -93,7 +93,7 @@ export class UserService {
 	}
 
 	getUserBookings(): Observable<Array<any>> {
-		return of(this.userBookings);
-		// return this.http.get<Array<any>>(`${this.endPoint}s`);
+		// return of(this.userBookings);
+		return this.http.get<Array<any>>(`${this.userPlansEndPoint}`);
 	}
 }
