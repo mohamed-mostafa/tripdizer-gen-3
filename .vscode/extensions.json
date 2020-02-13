@@ -6,7 +6,6 @@
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-tslint-plugin",
-    "shinnn.stylelint",
     "streetsidesoftware.code-spell-checker"
   ]
 }
