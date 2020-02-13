@@ -520,25 +520,48 @@ let getTravelerEmails = function(req, res) {
 	}
 };
 
-module.exports = {
-	placeWebsiteRequest,
-	placeDashboardRequest,
-	getRequestById,
-	assignRequestToUser,
-	updateRequest,
-	getRequestSummaries,
-	getRequestSummariesCount,
-	sendMailsToRequestTraveler,
-	changeRequestStatus,
-	getRequestsByMail,
-	markRequestBeingPrepared,
-	markRequestDelivered,
-	markRequestPlaced,
-	budgetCalculation,
-	recommendation,
-	toggleOptions,
-	getPackage,
-	sendPackageByMail,
-	validatePromoCode,
-	getTravelerEmails,
+let getPaymentStatus = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getPaymentStatus(
+			function(status) {
+				res.send(status);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /payment status');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
 };
+exports.placeWebsiteRequest = placeWebsiteRequest;
+exports.placeDashboardRequest = placeDashboardRequest;
+exports.getRequestById = getRequestById;
+exports.assignRequestToUser = assignRequestToUser;
+exports.updateRequest = updateRequest;
+
+exports.getRequestSummaries = getRequestSummaries;
+exports.getRequestSummariesCount = getRequestSummariesCount;
+exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
+exports.changeRequestStatus = changeRequestStatus;
+
+exports.markRequestBeingPrepared = markRequestBeingPrepared;
+exports.markRequestDelivered = markRequestDelivered;
+exports.markRequestPlaced = markRequestPlaced;
+exports.budgetCalculation = budgetCalculation;
+exports.recommendation = recommendation;
+exports.toggleOptions = toggleOptions;
+exports.getPackage = getPackage;
+exports.sendPackageByMail = sendPackageByMail;
+exports.validatePromoCode = validatePromoCode;
+exports.getTravelerEmails = getTravelerEmails;
+exports.getRequestsByMail = getRequestsByMail;
+exports.getPaymentStatus = getPaymentStatus;

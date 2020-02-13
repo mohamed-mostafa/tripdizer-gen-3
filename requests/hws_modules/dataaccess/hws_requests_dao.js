@@ -4,6 +4,8 @@
 const daoUtilities = require('./hws_dao_utilities.js');
 const pnrDao = require('../dataaccess/hws_request_PNR_dao');
 let citiesDao = require('../dataaccess/hws_request_cities_dao');
+let transportationDao = require('../dataaccess/hws_request_transporation_dao');
+let accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 
 let createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
@@ -27,7 +29,7 @@ let createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`,`Payment_Status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
 						[
 							request.date,
 							request.status || 1,
@@ -65,6 +67,7 @@ let createNewRequest = function(request, onSuccess, onFailure) {
 							request.promoCode,
 							request.score,
 							request.channel,
+							request.paymentStatus,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -379,6 +382,7 @@ let getRequestById = function(requestId, onSuccess, onFailure) {
 								promoCode: rows[0].Promo_Code,
 								score: rows[0].Score,
 								channel: rows[0].Channel,
+								paymentStatus: rows[0].Payment_Status,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -463,7 +467,7 @@ let updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? , `Payment_Status` = ?  WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
@@ -496,6 +500,7 @@ let updateRequest = function(request, onSuccess, onFailure) {
 					request.travelHistory,
 					request.score,
 					request.channel,
+					request.paymentStatus,
 					request.id,
 				],
 				function(err, rows) {
@@ -553,7 +558,38 @@ let modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 		}
 	});
 };
-
+let updatePaymentStatusById = function(orderId, status, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query('UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?', [status, orderId], function(
+				err,
+				rows
+			) {
+				// if an error is thrown, end the connection and throw an error
+				//				connection.end();
+				if (err) {
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
+					connection.rollback();
+					connection.end();
+					onFailure(err);
+				} else {
+					// no error is thrown
+					connection.commit();
+					connection.end();
+					onSuccess();
+				}
+			});
+		}
+	});
+};
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
 let modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
@@ -851,7 +887,46 @@ let getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
-let getTravelerEmails = function(onSuccess, onFailure) {
+let getPaymentStatus = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the mail history
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
+					onFailure(err);
+				} else {
+					connection.query('SELECT * from Payment_Status', function(err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							// end the connection
+							connection.end();
+							console.error('An error occurred while trying to get payment status');
+							console.error(err);
+							connection.rollback(); // rollback the transaction
+							onFailure(err);
+						} else {
+							// end the connection
+							onSuccess(result);
+						}
+					});
+				}
+			});
+		}
+	});
+};
+var getTravelerEmails = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -921,27 +996,95 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 							let request = [];
 							let promises = rows.map(async row => {
 								let found = false;
-								let country, img;
-								let cities = await citiesDao.get(row.Id);
-								if (cities.exists) {
-									country = cities.data().choices[0].countryDisplayName;
-									img = cities.data().choices[0].thumbnail;
+								let countries = [],
+									countriesName,
+									allCountriesNames = [],
+									hotelsTotalCost,
+									numberOfNights,
+									estimatedCost,
+									flightsTotalCost;
+								let allCities = await citiesDao.get(row.Id);
+								if (allCities.exists) {
+									let totalNumberOfNights = 0;
+									allCities.data().choices.forEach(city => {
+										totalNumberOfNights += city.numberOfNights;
+										allCountriesNames.push(city.countryDisplayName);
+										let uniqueCountriesName = allCountriesNames.filter((item, i, ar) => ar.indexOf(item) === i);
+										countriesName = uniqueCountriesName.toString();
+										countries.push({
+											name: city.countryDisplayName,
+											image: city.thumbnail,
+											cities: [
+												{
+													name: city.displayName,
+													numberOfNights: city.numberOfNights,
+												},
+											],
+										});
+									});
+									countries = countries.reduce(function(o, cur) {
+										// Get the index of the key-value pair.
+										var occurs = o.reduce(function(n, item, i) {
+											return item.name === cur.name ? i : n;
+										}, -1);
+
+										// If the name is found,
+										if (occurs >= 0) {
+											// append the current value to its list of values.
+											o[occurs].cities = o[occurs].cities.concat(cur.cities);
+
+											// Otherwise,
+										} else {
+											// add the current item to o (but make sure the cities is an array).
+											var obj = {
+												name: cur.name,
+												image: cur.image,
+												cities: cur.cities,
+											};
+											o = o.concat([obj]);
+										}
+
+										return o;
+									}, []);
+									numberOfNights = totalNumberOfNights;
+									let accomodationOffers = await accomodationDao.get(row.Id);
+									if (accomodationOffers.exists) {
+										let totalCost = 0;
+										accomodationOffers.data().choices.forEach(offer => {
+											totalCost += offer.price;
+										});
+										hotelsTotalCost = totalCost;
+									}
+									let flightOffers = await transportationDao.get(row.Id);
+									if (flightOffers.exists) {
+										let total = 0;
+										flightOffers.data().choices.forEach(offer => {
+											total += offer.price;
+										});
+										flightsTotalCost = total;
+									}
 								} else if (row.itinerary_id != null) {
 									let itinerary = await getItineraryById(row.itinerary_id);
 									if (itinerary) {
-										country = itinerary[0].country;
-										img = itinerary[0].img;
+										countriesName = itinerary[0].country;
+										countries.push({
+											name: itinerary[0].country,
+											image: itinerary[0].image,
+										});
 									}
+									estimatedCost = row.Estimated_Cost;
 								} else found = true;
 								if (!found) {
 									let req = {
 										id: row.Id,
 										name: row.Traveler_Name,
+										countriesName,
 										departureDate: new Date(row.Departure_Date).toString(),
 										returnDate: new Date(row.Return_Date).toString(),
-										clickable: cities.exists ? true : false,
-										country,
-										img,
+										clickable: allCities.exists ? true : false,
+										countries,
+										totalCost: allCities.exists ? +hotelsTotalCost + +flightsTotalCost : estimatedCost,
+										numberOfNights,
 									};
 									request.push(req);
 								}
@@ -959,6 +1102,7 @@ let getRequestsByMail = function(email, onSuccess, onFailure) {
 		}
 	});
 };
+
 let getItineraryById = async function(id) {
 	return new Promise((resolve, reject) => {
 		let connection = daoUtilities.createConnection();
@@ -968,7 +1112,7 @@ let getItineraryById = async function(id) {
 				console.error(err);
 			} else {
 				// execute the query
-				connection.query('SELECT EN_Name As country,Image1 As img FROM iternary WHERE Id = ? ', [id], function(
+				connection.query('SELECT EN_Name As country,Image1 As image FROM iternary WHERE Id = ? ', [id], function(
 					err,
 					data
 				) {
@@ -991,6 +1135,7 @@ let getItineraryById = async function(id) {
 		});
 	});
 };
+
 module.exports = {
 	assignRequestToUser,
 	updateRequest,
@@ -1007,4 +1152,6 @@ module.exports = {
 	getRequestCountsByPromoCode,
 	getTravelerEmails,
 	getRequestsByMail,
+	getPaymentStatus,
+	updatePaymentStatusById,
 };

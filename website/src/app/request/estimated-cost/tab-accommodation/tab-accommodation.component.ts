@@ -33,7 +33,6 @@ export class TabAccommodationComponent {
 		service.getAccommodation().subscribe(res => {
 			this.loadedData = true;
 			this.accommodationOffers = res;
-			console.log(res);
 			if (this.accommodationOffers && this.accommodationOffers.length) {
 				service.isAccommodationProcessing = false;
 			}

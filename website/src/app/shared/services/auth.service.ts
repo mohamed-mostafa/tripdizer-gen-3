@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
@@ -7,9 +8,8 @@ import {
 	GoogleLoginProvider,
 	SocialUser,
 } from 'angularx-social-login';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { User } from '../../user/user.model';
 import { TrackingService } from './tracking.service';
 
@@ -19,8 +19,8 @@ declare const FB: any;
 export class AuthService {
 	private endPoint = 'users/auth';
 	loading = new Subject<boolean>();
-	authenticatedUser = new Subject<User>();
-	isAuthenticated = new Subject<boolean>();
+	authenticatedUser = new BehaviorSubject<User>(null);
+	isAuthenticated = new BehaviorSubject<boolean>(false);
 	errorMsg = new Subject<string>();
 
 	constructor(
@@ -77,11 +77,9 @@ export class AuthService {
 				headers: { Authorization: `Bearer ${token}` },
 			})
 			.pipe(
-				catchError(
-					(err: any): any => {
-						this.authenticationFailed(err);
-					}
-				)
+				catchError((err: any): any => {
+					this.authenticationFailed(err);
+				})
 			)
 			.subscribe((user: User) => {
 				this.storeAuthenticatedUser(user);
@@ -118,15 +116,8 @@ export class AuthService {
 
 	private setAuthenticatedUserInLocalStorage(user: User): void {
 		localStorage.setItem('cred', JSON.stringify({ token: user.token }));
-		localStorage.setItem(
-			'user',
-			JSON.stringify({
-				firstName: user.firstName,
-				lastName: user.lastName,
-				picture: user.picture,
-				provider: user.provider,
-			})
-		);
+		delete user.token;
+		localStorage.setItem('user', JSON.stringify(user));
 	}
 
 	private initAuthenticationState(): void {

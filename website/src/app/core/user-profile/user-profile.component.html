@@ -27,11 +27,13 @@
 					[src]="user.picture"
 					alt=""
 					class="user-img rounded-circle"
+					routerLink="/user"
 					[ngClass]="('dir' | translate) === 'rtl' ? 'ml-2' : 'mr-2'"
 				/>
 			</td>
 			<td
 				class="text-body text-capitalize"
+				routerLink="/user"
 				[ngClass]="('dir' | translate) === 'rtl' ? 'text-right pl-3' : 'text-left pr-3'"
 			>
 				{{ user.firstName }} {{ user.lastName }}

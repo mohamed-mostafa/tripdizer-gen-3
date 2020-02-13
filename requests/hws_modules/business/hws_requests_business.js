@@ -187,9 +187,9 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 								true,
 								request,
 								({ paymentKey }) => {
-									requestsDao.modifyRequestStatusById(
+									requestsDao.updatePaymentStatusById(
 										request.id,
-										17,
+										0, //pending payment
 										() => {
 											requestsDao.modifyRequestPaymentInfo(
 												request.id,
@@ -244,6 +244,13 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 								{ choices: request.selectedAttractions }
 							);
 						});
+
+						requestsDao.updatePaymentStatusById(
+							request.id,
+							2, // unpaid
+							() => console.log('Traveler request payment status updated successfully '),
+							err => console.log('Failed to update request status in the database. Reason: ' + JSON.stringify(err))
+						);
 
 						request = { ...request, ...package };
 					}
@@ -331,6 +338,7 @@ let notifyCustomer = function(to, customerName, requestId) {
 		emailBody
 	);
 };
+
 let sendMailsToRequestTraveler = function(email, onSuccess, onFailure) {
 	if (email.type === 'traveler') {
 		sendMails(email.recipients, email, onSuccess);
@@ -684,6 +692,7 @@ let getPackage = function(
 		}
 	);
 };
+
 let getItineraryCostFromRequest = function(flightOffers, accomodationOffers) {
 	var cost = 0;
 	if (flightOffers) cost += flightOffers.reduce((cost, offer) => parseInt(cost) + parseInt(offer.price), 0);
@@ -934,9 +943,9 @@ let publishRequestChoicesForBooking = function(requestId) {
 };
 
 let handlePaidRequest = function(requestId) {
-	requestsDao.modifyRequestStatusById(
+	requestsDao.updatePaymentStatusById(
 		requestId,
-		18,
+		1, // paid
 		() => {},
 		() => {
 			console.error(
@@ -994,17 +1003,19 @@ let getRequestsByMail = (user, onSuccess, onFailure) => {
 module.exports = {
 	placeRequest,
 	getRequestById,
-	assignRequestToUser,
+	assignRequestToUser: requestsDao.assignRequestToUser,
 	updateRequest,
 	getRequestSummaries: requestsDao.getRequestSummariesByStatus,
 	getRequestSummariesCount: requestsDao.getRequestSummariesCountByStatus,
 	sendMailsToRequestTraveler,
 	changeRequestStatus: requestsDao.modifyRequestStatusById,
 	sendDailyReportOfRequestsCount,
-	toggleOptions,
+	toggleOptions: requestsDao.toggleOptions,
 	getPackage,
 	sendPackageByMail,
 	validatePromoCode,
+	getTravelerEmails: requestsDao.getTravelerEmails,
+	getPaymentStatus: requestsDao.getPaymentStatus,
 	handlePaidRequest,
 	getRequestsByMail,
 };

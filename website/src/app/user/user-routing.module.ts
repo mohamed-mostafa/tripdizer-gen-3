@@ -1,3 +1,4 @@
+import { UserBookingComponent } from './user-booking/user-booking.component';
 import { AuthGuard } from './../shared/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -11,6 +12,7 @@ const routes: Routes = [
 		component: UserComponent,
 		canActivate: [AuthGuard],
 		children: [
+			{ path: 'bookings', component: UserBookingComponent },
 			{ path: 'plans', component: UserPlansComponent },
 			{ path: '', component: UserInfoComponent },
 		],
