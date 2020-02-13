@@ -119,8 +119,6 @@ const getHotelsOfMultipleCities = (
         } else if (response.statusCode != 200) {
           reject(response.statusMessage);
         } else {
-          console.log(hotels);
-
           resolve(
             hotels.map(h => ({
               id: h.id,
