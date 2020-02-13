@@ -1,16 +1,14 @@
-import { AuthService } from './../services/auth.service';
-import { CanActivate } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { CanActivate } from '@angular/router';
+import { of } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
+import { AuthService } from './../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-	isAuthenticated: boolean;
-
-	constructor(private auth: AuthService) {
-		this.isAuthenticated = this.auth.isAuthenticated.getValue();
-	}
+	constructor(private auth: AuthService) {}
 
 	canActivate() {
-		return this.isAuthenticated;
+		return !!this.auth.isAuthenticated;
 	}
 }

@@ -18,7 +18,7 @@
 				<span class="fill-remaining-space"></span>
 				<span class="title-font d-none d-sm-block">
 					<a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.blog' | translate }}</a>
-					<a mat-button class="mx-3" routerLink="/">Mohamed</a>
+					<a mat-button class="mx-3" routerLink="/">{{ user?.firstName }}</a>
 					<a mat-button class="mx-3" routerLink="/">{{ 'user.user_core.language_label' | translate }}</a>
 				</span>
 				<span (click)="openNavPage('side_menu')" class="d-block d-sm-none" style="cursor: pointer; margin-top: 8px">

@@ -1,22 +1,21 @@
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { AuthService } from './../shared/services/auth.service';
 import { SideNavService } from './side-nav.service';
 import { User } from './user.model';
-import { AuthService } from './../shared/services/auth.service';
-import { Component, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'c-app-user',
 	templateUrl: './user.component.html',
 	styleUrls: ['./user.component.scss'],
 })
-export class UserComponent {
+export class UserComponent implements OnDestroy {
 	@ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
-	user: Observable<User>;
+	user: User;
 	navContent: string;
 
 	constructor(private authService: AuthService, private sideNavService: SideNavService) {
-		this.user = this.authService.authenticatedUser;
+		this.authService.authenticatedUser.subscribe(user => (this.user = user));
 
 		this.sideNavService.navContent.subscribe(navContentResult => {
 			if (navContentResult && navContentResult.page) {
@@ -45,5 +44,9 @@ export class UserComponent {
 		} else if (this.sidenav) {
 			this.sidenav.open();
 		}
+	}
+
+	ngOnDestroy() {
+		this.authService.authenticatedUser.unsubscribe();
 	}
 }

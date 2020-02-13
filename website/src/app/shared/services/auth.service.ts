@@ -116,15 +116,8 @@ export class AuthService {
 
 	private setAuthenticatedUserInLocalStorage(user: User): void {
 		localStorage.setItem('cred', JSON.stringify({ token: user.token }));
-		localStorage.setItem(
-			'user',
-			JSON.stringify({
-				firstName: user.firstName,
-				lastName: user.lastName,
-				picture: user.picture,
-				provider: user.provider,
-			})
-		);
+		delete user.token;
+		localStorage.setItem('user', JSON.stringify(user));
 	}
 
 	private initAuthenticationState(): void {
