@@ -5,18 +5,18 @@ export class UserPlan {
 	departureDate: string;
 	returnDate: string;
 	clickable: boolean;
-	countries: Array<Country>;
+	countries: Array<UserPlanCountry>;
 	totalCost: number;
 	numberOfNights: number;
 }
 
-export class Country {
+class UserPlanCountry {
 	name: string;
 	image: string;
-	cities: Array<City>;
+	cities: Array<UserPlanCity>;
 }
 
-export class City {
+class UserPlanCity {
 	name: string;
 	numberOfNights: number;
 }

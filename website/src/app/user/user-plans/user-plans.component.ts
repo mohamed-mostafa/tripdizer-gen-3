@@ -1,7 +1,8 @@
-import { UserService } from './../user.service';
-import { SideNavService } from './../side-nav.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SideNavService } from './../side-nav.service';
+import { UserService } from './../user.service';
+import { UserPlan } from './user-plan.model';
 
 @Component({
 	selector: 'c-app-user-plans',
@@ -9,8 +10,9 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./user-plans.component.scss'],
 })
 export class UserPlansComponent implements OnInit {
-	userPlans: Observable<Array<any>>;
-	constructor(private sideNavService: SideNavService, public userService: UserService) {
+	userPlans: Observable<Array<UserPlan>>;
+
+	constructor(private sideNavService: SideNavService, private userService: UserService) {
 		this.userPlans = this.userService.getUserPlans();
 	}
 

@@ -1,8 +1,8 @@
-import { UserPlan } from './user-models/user-plan.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from './user.model';
 import { Observable, of } from 'rxjs';
+import { UserPlan } from './user-plans/user-plan.model';
+import { User } from './user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -17,7 +17,7 @@ export class UserService {
 		this.http.put(this.endPoint, user);
 	}
 
-	getUserPlans(): Observable<Array<any>> {
+	getUserPlans(): Observable<Array<UserPlan>> {
 		return of(this.userPlans);
 		// return this.http.get<Array<any>>(`${this.endPoint}s`);
 	}
