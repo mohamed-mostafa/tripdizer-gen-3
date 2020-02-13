@@ -1,4 +1,4 @@
-<div class="container p-4 plan_details" *ngIf="bookingDetails | async">
+<div class="container p-4 plan_details" *ngIf="planDetails | async">
 	<div class="row">
 		<div class="col-9">
 			<h4 class="details-title">{{ 'user.plan_details.itinerary_cost' | translate }}</h4>
@@ -10,7 +10,7 @@
 		</div>
 	</div>
 
-	<div *ngFor="let country of (bookingDetails | async)['countries']">
+	<div *ngFor="let country of (planDetails | async)['countries']">
 		<div class="row mt-6">
 			<div class="col-6">
 				<h4 class="title-font">{{ country.name }}</h4>
@@ -47,7 +47,7 @@
 			<h4 class="title-font">{{ 'user.plan_details.total_cost' | translate }}</h4>
 		</div>
 		<div class="col-6">
-			<h4>{{ (bookingDetails | async)['totalCost'] | currency: 'EGP':'symbol':'1.0-0' }}</h4>
+			<h4>{{ (planDetails | async)['totalCost'] | currency: 'EGP':'symbol':'1.0-0' }}</h4>
 		</div>
 	</div>
 </div>
