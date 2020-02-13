@@ -5,7 +5,7 @@ let isPublicUserAuthenticated = (req, res, next) => {
 	httpRequest.get(
 		{
 			url: USERS_ENDPOINT + '/users/info',
-			headers: req.headers,
+			headers: { authorization: (req.headers || {}).authorization },
 		},
 		function(error, response, body) {
 			if (error || response.statusCode != 200) {
