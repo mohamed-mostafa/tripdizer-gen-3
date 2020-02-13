@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserPlan } from '../user-plans/user-plan.model';
-import { SideNavService } from './../side-nav.service';
+import { SideNavService } from '../../side-nav.service';
+import { UserPlan } from '../user-plan.model';
 
 @Component({
 	selector: 'c-app-plan-details',
