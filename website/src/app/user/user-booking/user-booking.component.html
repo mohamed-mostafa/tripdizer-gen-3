@@ -1,0 +1,28 @@
+<div class="py-5" *ngIf="(userBookings | async)?.length">
+	<h3 class="title-font page-title text-blue mb-5">
+		<i class="fa fa-paper-plane mr-3"></i
+		><span class="font-weight-bold">{{ 'user.user_bookings.my_bookings' | translate }}</span>
+	</h3>
+
+	<div class="row">
+		<div *ngFor="let booking of userBookings | async" class="col-lg-6 text-center mb-5">
+			<div
+				class="town-item mx-auto"
+				(click)="openDetails(booking)"
+				[ngStyle]="{ 'background-image': 'url(' + booking.countries['0']?.image + ')' }"
+			>
+				<div class="dark-container">
+					<div class="town-text title-font">
+						<p class="mb-0">{{ booking.numberOfNights }} {{ 'user.user_bookings.days_in' | translate }}</p>
+						<h3 class="mb-0 font-weight-bold">{{ booking.countriesName }}</h3>
+						<p class="mb-0">
+							{{ 'user.user_bookings.from' | translate }} {{ booking.departureDate | date: 'd-M-y' }}
+							{{ 'user.user_bookings.to' | translate }}
+							{{ booking.returnDate | date: 'd-M-y' }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

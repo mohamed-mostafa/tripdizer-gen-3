@@ -1,0 +1,53 @@
+<div class="container p-4 plan_details" *ngIf="planDetails | async">
+	<div class="row">
+		<div class="col-9">
+			<h4 class="details-title">{{ 'user.plan_details.itinerary_cost' | translate }}</h4>
+		</div>
+		<div class="col-3 text-right">
+			<span (click)="closeNav()" class="close-icon">
+				<i class="fa fa-times menu-icon mt-0"></i>
+			</span>
+		</div>
+	</div>
+
+	<div *ngFor="let country of (planDetails | async)['countries']">
+		<div class="row mt-6">
+			<div class="col-6">
+				<h4 class="title-font">{{ country.name }}</h4>
+			</div>
+			<div class="col-6">
+				<h4>{{ country.numberOfNights }} {{ 'user.plan_details.nights' | translate }}</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<hr />
+			</div>
+		</div>
+
+		<div *ngFor="let city of country.cities">
+			<div class="row">
+				<div class="col-6">
+					<p class="title-font">{{ city.name }}</p>
+				</div>
+				<div class="col-6">
+					<p>{{ city.numberOfNights }} {{ 'user.plan_details.nights' | translate }}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<hr />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row blue-text mt-6">
+		<div class="col-6">
+			<h4 class="title-font">{{ 'user.plan_details.total_cost' | translate }}</h4>
+		</div>
+		<div class="col-6">
+			<h4>{{ (planDetails | async)['totalCost'] | currency: 'EGP':'symbol':'1.0-0' }}</h4>
+		</div>
+	</div>
+</div>

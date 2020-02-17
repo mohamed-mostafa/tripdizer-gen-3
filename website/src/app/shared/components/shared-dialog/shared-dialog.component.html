@@ -1,0 +1,16 @@
+<img
+	src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
+	(click)="onCancel()"
+	[ngClass]="('dir' | translate) === 'rtl' ? 'close-btn-left' : 'close-btn-right'"
+/>
+<span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
+	<h5 class="text-primary" mat-dialog-title>
+		<i class="fas fa-info-circle"></i>
+		{{ message | translate }}
+	</h5>
+	<div mat-dialog-actions class="d-block text-center">
+		<button mat-button (click)="onOK()" class="btn custom-bs btn-rounded btn-outline-blue mx-2">
+			{{ 'request.estimated_cost.session_dialog.buttonsLabel.ok' | translate }}
+		</button>
+	</div>
+</span>

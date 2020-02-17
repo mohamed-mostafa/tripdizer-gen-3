@@ -1,6 +1,9 @@
 <c-request-form-layout [formGroup]="formGroup" (next)="save()">
 	<div class="mat-checkbox-group mat-checkbox-rounded form-control-xl row">
 		<mat-checkbox *ngFor="let preference of preferences" [formControlName]="preference.id" class="m-auto">
+			<span *ngIf="preference.id !== LUTPreference.Other; else otherPreference">
+				{{ preference.name }}
+			</span>
 			<ng-template #otherPreference>
 				<span class="other-preference">
 					<input
@@ -13,14 +16,10 @@
 					/>
 				</span>
 			</ng-template>
-			<div
+			<span
 				class="label-content-img full-size-background"
 				[style.background]="preference.image ? 'url(' + preference.image + ')' : null"
-			>
-				<div *ngIf="preference.id !== LUTPreference.Other; else otherPreference" class="label-text text-center">
-					{{ preference.name }}
-				</div>
-			</div>
+			></span>
 		</mat-checkbox>
 	</div>
 </c-request-form-layout>

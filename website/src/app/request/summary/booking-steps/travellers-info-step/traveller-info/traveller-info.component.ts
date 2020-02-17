@@ -1,8 +1,10 @@
+import { RequestService } from './../../../../request.service';
 import { CustomValidators } from './../../../../../shared/utils/custom.validators';
 import { Gender } from './../../../../../shared/models/gender.enum';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'c-request-traveller-info',
@@ -82,7 +84,7 @@ export class TravellerInfoComponent implements OnInit {
 		return date;
 	};
 
-	constructor(private translate: TranslateService) {}
+	constructor(private translate: TranslateService, private requestService: RequestService) {}
 
 	ngOnInit() {
 		const info = this.controlName.match(/(adult|kid|infant)-([0-9]+)/);
@@ -113,10 +115,20 @@ export class TravellerInfoComponent implements OnInit {
 			this.effectiveControls = infantsControls;
 		}
 
+		const passengerDetailsFromRequest = this.requestService.getProperty('travellers');
+
 		for (const controlName in this.controls) {
 			if (this.effectiveControls.find(item => controlName === item)) {
 				if (this.controls.hasOwnProperty(controlName)) {
 					this.formGroup.addControl(`${this.controlName}-${controlName}`, this.controls[controlName]);
+					if (passengerDetailsFromRequest && passengerDetailsFromRequest.length > 0) {
+						const passenger = passengerDetailsFromRequest.find(p => p.id === this.controlName);
+						let newValue = (passenger || {})[controlName];
+						if (new Date(newValue).getMonth() >= 0) {
+							newValue = moment(newValue);
+						}
+						this.formGroup.get(`${this.controlName}-${controlName}`).setValue(newValue);
+					}
 				}
 			}
 		}

@@ -25,7 +25,9 @@ resources:
   disk_size_gb: 10
 env_variables:
   MASTER_DATA_ENDPOINT: https://tripdizer-master-data-dot-tripdizer-dev.appspot.com
+  USERS_ENDPOINT: https://tripdizer-users-dot-tripdizer-dev.appspot.com
   MEDIA_STORAGE_BASE_URL: https://storage.cloud.google.com/tripdizer-dev.appspot.com
+  TRAWEX_ADAPTER_ENDPOINT: http://35.242.174.95:8085/trawex-adapter/1.0.0
   DATA_BACKEND: 'cloudsql'
   MYSQL_USER: 'application'
   MYSQL_PASSWORD: 'tripdizer'
@@ -48,5 +50,6 @@ env_variables:
   HOTEL_BOOKING_CONFIRMATION_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-confirmation-subscription #SUBSCRIPTION
   FLIGHT_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: flight-booking-error-subscription #SUBSCRIPTION
   HOTEL_BOOKING_ERROR_PUBSUB_SUBSCRIPTION_NAME: hotel-booking-error-subscription #SUBSCRIPTION
-  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com,ahmed.essawy@tripdizer.com,ramy.ahmed@tripdizer.com
+  BOOKING_ERROR_NOTIFICATION_EMAIL: mohamed@tripdizer.com,ahmed.essawy@tripdizer.com,ramy.ahmed@tripdizer.com,alaa.darwish@tripdizer.com
   BYPASS_PAYMENT: 'N'
+  BASE_MERCHANT_ID: 3000000

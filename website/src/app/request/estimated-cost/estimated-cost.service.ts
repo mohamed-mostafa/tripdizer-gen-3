@@ -37,7 +37,7 @@ export class EstimatedCostService {
 		cities: Array<CityDTO>;
 		flightOffers: Array<FlightOffer>;
 		accommodationOffers: Array<Accommodation>;
-	} = { cities: [], flightOffers: [], accommodationOffers: [] };
+	};
 
 	currentTabIndex = new Subject<number>();
 
@@ -48,16 +48,14 @@ export class EstimatedCostService {
 		private requestService: RequestService,
 		public translate: TranslateService
 	) {
+		this.citiesFlightsAccommodations = { cities: [], flightOffers: [], accommodationOffers: [] };
+		console.log(this.citiesFlightsAccommodations);
 		this.setCurrentTabIndex(0);
 		this.getTravelingFromCoordinates();
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
 		});
 	}
-
-	// getSelectedFlightOffers() {
-	// 	return this.flightOffers;
-	// }
 
 	getFlightsTotalCost(): number {
 		const selectedFlightOffers = this.citiesFlightsAccommodations.flightOffers.filter(offer => offer.selected);
@@ -82,8 +80,13 @@ export class EstimatedCostService {
 	/* cities logic */
 
 	getCities(): Observable<Array<CityDTO>> {
-		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
-		if (this.citiesFlightsAccommodations.cities.length > 0) {
+		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations') || {
+			cities: [],
+			flightOffers: [],
+			accommodationOffers: [],
+		};
+		console.log(this.citiesFlightsAccommodations);
+		if (this.citiesFlightsAccommodations && this.citiesFlightsAccommodations.cities.length > 0) {
 			return of(this.citiesFlightsAccommodations.cities);
 		} else {
 			this.requestService.isLoading.next({
@@ -108,9 +111,12 @@ export class EstimatedCostService {
 	}
 
 	setCities(cities: Array<CityDTO>): void {
-		this.citiesFlightsAccommodations.cities = cities;
-		this.citiesFlightsAccommodations.flightOffers = this.citiesFlightsAccommodations.accommodationOffers = [];
-		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
+		console.log(this.citiesFlightsAccommodations);
+		if (this.citiesFlightsAccommodations) {
+			this.citiesFlightsAccommodations.cities = cities;
+			this.citiesFlightsAccommodations.flightOffers = this.citiesFlightsAccommodations.accommodationOffers = [];
+			this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
+		}
 	}
 
 	getNumberOfNights(): number {
@@ -330,16 +336,26 @@ export class EstimatedCostService {
 
 	/* navigation logic */
 	tabsNavigate(source, action, routeConfigPath?, route?) {
+		console.log(this.citiesFlightsAccommodations);
+		// console.log(this.citiesFlightsAccommodations.cities);
 		if (source === 'cities' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
 		} else if (source === 'cities' && action === 'next') {
-			if (this.citiesFlightsAccommodations.cities && this.citiesFlightsAccommodations.cities.length) {
+			if (
+				this.citiesFlightsAccommodations &&
+				this.citiesFlightsAccommodations.cities &&
+				this.citiesFlightsAccommodations.cities.length
+			) {
 				this.currentTabIndex.next(1);
 			}
 		} else if (source === 'flights' && action === 'back') {
 			this.currentTabIndex.next(0);
 		} else if (source === 'flights' && action === 'next') {
-			if (this.citiesFlightsAccommodations.cities && this.citiesFlightsAccommodations.cities.length) {
+			if (
+				this.citiesFlightsAccommodations &&
+				this.citiesFlightsAccommodations.cities &&
+				this.citiesFlightsAccommodations.cities.length
+			) {
 				this.currentTabIndex.next(2);
 			}
 		} else if (source === 'accommodation' && action === 'back') {

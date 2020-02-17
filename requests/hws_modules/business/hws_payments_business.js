@@ -9,6 +9,7 @@ const WE_ACCEPT_PAYMENT_API_KEY =
 	'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SndjbTltYVd4bFgzQnJJam95T0RRNExDSnVZVzFsSWpvaWFXNXBkR2xoYkNJc0ltTnNZWE56SWpvaVRXVnlZMmhoYm5RaWZRLnRRclNhZXpnMWtqbDd2MEx0alAxbWl4eFVXT3R4aHBOSDFkeDdFOWQzN3RaTjBNWGtrMmYzLTZBdlhrWmxBMHBLdTFEdzJ3UElqQmVwNEFzQnF6STlR';
 const WE_ACCEPT_CC_INTEGRATION_ID = process.env.WE_ACCEPT_CC_INTEGRATION_ID || 4361;
 const WE_ACCEPT_valU_INTEGRATION_ID = process.env.WE_ACCEPT_valU_INTEGRATION_ID || 7644;
+const BASE_MERCHANT_ID = process.env.BASE_MERCHANT_ID || 3000000;
 
 var authenticate = (onSuccess, onFailure) => {
 	httpRequest.post(
@@ -32,7 +33,7 @@ var registerRequestOrder = (request, onSuccess, onFailure) => {
 			merchant_id: merchantId,
 			amount_cents: request.estimatedCost * 100, // cost in the request is in EGP, gateway requires cost in cents (1 EGP = 100 piasters)
 			currency: CURRENCY,
-			merchant_order_id: request.id,
+			merchant_order_id: request.id + BASE_MERCHANT_ID,
 		};
 		httpRequest.post(
 			{ url: `${WE_ACCEPT_PAYMENT_BASE_URL}ecommerce/orders`, json: true, body: payload },
