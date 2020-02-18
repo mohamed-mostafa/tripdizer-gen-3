@@ -1,21 +1,42 @@
 <c-request-form-layout class="budget-section" [formGroup]="formGroup" (next)="save()">
-  <mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
-    <div class="mat-radio-group-label-wrapper text-capitalize col-12"
-      [class.mat-error]="formGroup.controls['budget'].invalid">
-      <span class="mat-radio-group-label budget-title title-font">{{
-				'request.budget.budget' | translate
-			}}</span>
-      <span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
-    </div>
-    <div class="budget-container">
-      <img src="../../../assets/img/budget.svg" class="budget-svg" [class.budget-svg-rtl]="('dir' | translate) === 'rtl'" alt="">
-      <mat-slider [min]="minimumBudget" max="{{maximumBudget}}" step="100" class="col-12" thumbLabel
-        formControlName="budget" width="100%">
-      </mat-slider>
-      <div class="budget-categories">
-        <div *ngFor="let budgetCategory of budgetCategories" [hidden]="budgetCategory.id == 1"
-          class="budget-category text-center title-font font-weight-bold" [style.float]="('dir' | translate) === 'rtl' ? 'right' : 'left'">{{ budgetCategory.name }}</div>
-      </div>
-    </div>
-  </mat-radio-group>
+	<mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
+		<div
+			class="mat-radio-group-label-wrapper text-capitalize col-12"
+			[class.mat-error]="formGroup.controls['budget'].invalid"
+		>
+			<span class="mat-radio-group-label budget-title title-font">{{ 'request.budget.budget' | translate }}</span>
+			<span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
+		</div>
+		<div class="budget-container">
+			<img
+				src="../../../assets/img/budget.svg"
+				class="budget-svg"
+				[class.budget-svg-rtl]="('dir' | translate) === 'rtl'"
+				alt=""
+			/>
+			<mat-slider
+				[min]="minimumBudget"
+				max="{{ maximumBudget }}"
+				step="100"
+				class="col-12"
+				thumbLabel
+				formControlName="budget"
+				width="100%"
+			>
+			</mat-slider>
+			<div class="budget-categories">
+				<div
+					*ngFor="let budgetCategory of budgetCategories"
+					[hidden]="budgetCategory.id == 1"
+					class="budget-category text-center title-font font-weight-bold"
+					[style.float]="('dir' | translate) === 'rtl' ? 'right' : 'left'"
+				>
+					{{ budgetCategory.name }}
+				</div>
+			</div>
+		</div>
+	</mat-radio-group>
 </c-request-form-layout>
+<footer style="margin-top: 41px;">
+	<c-shared-footer></c-shared-footer>
+</footer>
