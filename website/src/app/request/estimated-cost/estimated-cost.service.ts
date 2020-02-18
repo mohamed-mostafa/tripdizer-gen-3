@@ -49,7 +49,6 @@ export class EstimatedCostService {
 		public translate: TranslateService
 	) {
 		this.citiesFlightsAccommodations = { cities: [], flightOffers: [], accommodationOffers: [] };
-		console.log(this.citiesFlightsAccommodations);
 		this.setCurrentTabIndex(0);
 		this.getTravelingFromCoordinates();
 		this.requestService.endSessionTimerSubject.subscribe(() => {
@@ -64,10 +63,6 @@ export class EstimatedCostService {
 
 	setIsLoading(isLoading: boolean, message: string) {
 		this.requestService.isLoading.next({ show: isLoading, message });
-	}
-
-	flightsLoading(): void {
-		this.setIsLoading(true, this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'));
 	}
 
 	accommodationLoading(): void {
@@ -85,7 +80,6 @@ export class EstimatedCostService {
 			flightOffers: [],
 			accommodationOffers: [],
 		};
-		console.log(this.citiesFlightsAccommodations);
 		if (this.citiesFlightsAccommodations && this.citiesFlightsAccommodations.cities.length > 0) {
 			return of(this.citiesFlightsAccommodations.cities);
 		} else {
@@ -111,7 +105,6 @@ export class EstimatedCostService {
 	}
 
 	setCities(cities: Array<CityDTO>): void {
-		console.log(this.citiesFlightsAccommodations);
 		if (this.citiesFlightsAccommodations) {
 			this.citiesFlightsAccommodations.cities = cities;
 			this.citiesFlightsAccommodations.flightOffers = this.citiesFlightsAccommodations.accommodationOffers = [];
@@ -336,8 +329,6 @@ export class EstimatedCostService {
 
 	/* navigation logic */
 	tabsNavigate(source, action, routeConfigPath?, route?) {
-		console.log(this.citiesFlightsAccommodations);
-		// console.log(this.citiesFlightsAccommodations.cities);
 		if (source === 'cities' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
 		} else if (source === 'cities' && action === 'next') {

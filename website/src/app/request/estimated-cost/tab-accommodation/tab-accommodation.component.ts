@@ -3,17 +3,14 @@ import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { EstimatedCostService } from './../estimated-cost.service';
 import { Accommodation, Hotel } from './accommodation.model';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-estimated-cost-accommodation',
 	templateUrl: './tab-accommodation.component.html',
 	styleUrls: ['./tab-accommodation.component.scss'],
 })
-export class TabAccommodationComponent implements OnDestroy {
+export class TabAccommodationComponent {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
-
-	private subscriptions = new Subscription();
 	accommodationOffers: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
 	totalCost: number;
@@ -21,18 +18,13 @@ export class TabAccommodationComponent implements OnDestroy {
 	options: any;
 	carousel: OwlCarousel;
 
-	constructor(
-		private service: EstimatedCostService,
-		private route: ActivatedRoute
-	) {
+	constructor(private service: EstimatedCostService, private route: ActivatedRoute) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		this.subscriptions.add(
-			service.getAccommodationOffers().subscribe(accommodationOffersResult => {
-				this.accommodationOffers = accommodationOffersResult;
-				this.updateTotalCostOfSelected();
-			})
-		);
+		service.getAccommodationOffers().subscribe(accommodationOffersResult => {
+			this.accommodationOffers = accommodationOffersResult;
+			this.updateTotalCostOfSelected();
+		});
 		this.setSliderOptions();
 	}
 
@@ -91,9 +83,5 @@ export class TabAccommodationComponent implements OnDestroy {
 
 	goBack(): void {
 		this.service.tabsNavigate('accommodation', 'back');
-	}
-
-	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
 	}
 }

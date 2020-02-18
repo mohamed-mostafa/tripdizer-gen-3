@@ -1,40 +1,35 @@
 import { OwlCarousel } from 'ngx-owl-carousel';
 import { FlightOffer } from './flight-offer.model';
-import { Component, ViewChild, DoCheck, OnDestroy } from '@angular/core';
+import { Component, ViewChild, DoCheck } from '@angular/core';
 import { EstimatedCostService } from '../estimated-cost.service';
-import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-estimated-cost-flights',
 	templateUrl: './tab-flights.component.html',
 	styleUrls: ['./tab-flights.component.scss'],
 })
-export class TabFlightsComponent implements DoCheck, OnDestroy {
+export class TabFlightsComponent implements DoCheck {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 
 	flightOffers: Array<FlightOffer>;
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
 	selectedSlide = 1;
-	private subscriptions = new Subscription();
 
 	constructor(private service: EstimatedCostService) {
-
 		this.flightPaths = service.getCityPaths();
 
-		this.subscriptions.add(
-			service.getFlightOffers().subscribe(flightOffersResult => {
-				this.flightOffers = flightOffersResult;
+		service.getFlightOffers().subscribe(flightOffersResult => {
+			this.flightOffers = flightOffersResult;
 
-				this.flightOffers.forEach((flightOffer, i) => {
-					if (flightOffer.selected) {
-						setTimeout(() => {
-							this.goToSlide(i);
-						}, 0);
-					}
-				});
-			})
-		);
+			this.flightOffers.forEach((flightOffer, i) => {
+				if (flightOffer.selected) {
+					setTimeout(() => {
+						this.goToSlide(i);
+					}, 0);
+				}
+			});
+		});
 
 		this.setSliderOptions();
 	}
@@ -91,9 +86,5 @@ export class TabFlightsComponent implements DoCheck, OnDestroy {
 		if (this.owlElement && this.owlElement.$owlChild) {
 			this.selectedSlide = this.owlElement.$owlChild.currentSlideIndex + 1;
 		}
-	}
-
-	ngOnDestroy() {
-		this.subscriptions.unsubscribe();
 	}
 }

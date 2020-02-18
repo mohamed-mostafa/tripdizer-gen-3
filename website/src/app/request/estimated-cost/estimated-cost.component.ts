@@ -2,7 +2,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RequestService } from '../request.service';
-import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
 
 @Component({
@@ -11,7 +10,6 @@ import { EstimatedCostService } from './estimated-cost.service';
 	styleUrls: ['./estimated-cost.component.scss'],
 })
 export class EstimatedCostComponent {
-	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
 	hasCities: boolean;
 	isFlightsTabVisited: boolean;

@@ -1,20 +1,16 @@
 import { FlightOffer, FlightLeg } from './../../../flight-offer.model';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'c-estimated-cost-change-flight',
 	templateUrl: './change-flight.component.html',
 	styleUrls: ['./change-flight.component.scss'],
 })
-export class ChangeFlightComponent implements OnInit {
+export class ChangeFlightComponent {
 	@Input() flightOffers: FlightOffer;
 	@Input() selectedOffer: FlightOffer;
 
 	@Output() offerChanged = new EventEmitter<FlightOffer>();
-
-	ngOnInit() {
-		// this.selectOffer(this.getFirstFlightOfferIfExists());
-	}
 
 	getFirstFlightOfferIfExists(): FlightLeg {
 		if (!this.flightOffers || !this.flightOffers || !this.flightOffers.flightLegs.length) {
