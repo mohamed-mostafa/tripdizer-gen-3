@@ -173,11 +173,11 @@ export class EstimatedCostService {
 				}),
 				tap(flightOffersResponse => {
 					this.setIsLoading(false, '');
-					this.requestService.isLoading.next({ show: false, message: '' });
 					this.startSessionTimer();
 					this.setFlightOffers(flightOffersResponse);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
+					this.setIsLoading(false, '');
 					return err;
 				})
 			);
@@ -249,10 +249,10 @@ export class EstimatedCostService {
 				}),
 				tap(accommodationOffersResponse => {
 					this.setIsLoading(false, '');
-					this.requestService.isLoading.next({ show: false, message: '' });
 					this.setAccommodationOffers(accommodationOffersResponse);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
+					this.setIsLoading(false, '');
 					return err;
 				})
 			);

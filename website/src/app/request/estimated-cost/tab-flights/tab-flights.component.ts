@@ -20,15 +20,17 @@ export class TabFlightsComponent implements DoCheck {
 		this.flightPaths = service.getCityPaths();
 
 		service.getFlightOffers().subscribe(flightOffersResult => {
-			this.flightOffers = flightOffersResult;
+			if (flightOffersResult && Array.isArray(flightOffersResult)) {
+				this.flightOffers = flightOffersResult;
 
-			this.flightOffers.forEach((flightOffer, i) => {
-				if (flightOffer.selected) {
-					setTimeout(() => {
-						this.goToSlide(i);
-					}, 0);
-				}
-			});
+				this.flightOffers.forEach((flightOffer, i) => {
+					if (flightOffer.selected) {
+						setTimeout(() => {
+							this.goToSlide(i);
+						}, 0);
+					}
+				});
+			}
 		});
 
 		this.setSliderOptions();

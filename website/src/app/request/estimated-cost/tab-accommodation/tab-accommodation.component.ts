@@ -22,8 +22,10 @@ export class TabAccommodationComponent {
 		this.currentStepPath = this.route.routeConfig.path;
 
 		service.getAccommodationOffers().subscribe(accommodationOffersResult => {
-			this.accommodationOffers = accommodationOffersResult;
-			this.updateTotalCostOfSelected();
+			if (accommodationOffersResult && Array.isArray(accommodationOffersResult)) {
+				this.accommodationOffers = accommodationOffersResult;
+				this.updateTotalCostOfSelected();
+			}
 		});
 		this.setSliderOptions();
 	}
