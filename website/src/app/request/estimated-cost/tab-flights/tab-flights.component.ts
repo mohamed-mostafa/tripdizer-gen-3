@@ -15,11 +15,13 @@ export class TabFlightsComponent implements DoCheck {
 	flightPaths: Array<{ lat: number; lng: number }> = [];
 	options: any;
 	selectedSlide = 1;
+	loadedApiData: boolean;
 
 	constructor(private service: EstimatedCostService) {
 		this.flightPaths = service.getCityPaths();
 
 		service.getFlightOffers().subscribe(flightOffersResult => {
+			this.loadedApiData = true;
 			if (flightOffersResult && Array.isArray(flightOffersResult)) {
 				this.flightOffers = flightOffersResult;
 

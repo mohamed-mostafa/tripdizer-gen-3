@@ -17,11 +17,13 @@ export class TabAccommodationComponent {
 	currentStepPath: string;
 	options: any;
 	carousel: OwlCarousel;
+	loadedApiData: boolean;
 
 	constructor(private service: EstimatedCostService, private route: ActivatedRoute) {
 		this.currentStepPath = this.route.routeConfig.path;
 
 		service.getAccommodationOffers().subscribe(accommodationOffersResult => {
+			this.loadedApiData = true;
 			if (accommodationOffersResult && Array.isArray(accommodationOffersResult)) {
 				this.accommodationOffers = accommodationOffersResult;
 				this.updateTotalCostOfSelected();
