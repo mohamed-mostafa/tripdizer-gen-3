@@ -44,7 +44,8 @@ export class SummaryService {
 
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const citiesWithNights: Array<CityDTO> = this.getCitiesWithNights();
-			const selectedHotels: Array<Hotel> = [] /* this.getSelectedHotels()*/;
+			const selectedHotels: Array<Hotel> = this.getSelectedHotels();
+			console.log(selectedHotels);
 
 			// then construct the corresponding 'stations' objects
 			this.summaryStations.splice(0, this.summaryStations.length);
@@ -222,6 +223,15 @@ export class SummaryService {
 
 	getSelectedFlightOffers() {
 		return this.requestService.getProperty('citiesFlightsAccommodations').flightOffers.filter(offer => offer.selected);
+	}
+
+	getSelectedHotels() {
+		return [].concat.apply(
+			[],
+			this.requestService
+				.getProperty('citiesFlightsAccommodations')
+				.accommodationOffers.map(offer => offer.hotels.filter(hotel => hotel.selected))
+		);
 	}
 
 	getTotalCost() {
