@@ -13,7 +13,12 @@ export class UserInfoComponent implements OnDestroy {
 	subUser: Subscription;
 
 	constructor(private authService: AuthService) {
-		this.subUser = this.authService.authenticatedUser.subscribe(user => (this.user = user));
+		this.subUser = this.authService.authenticatedUser.subscribe(user => {
+			if (user) {
+				this.user = user;
+				console.log(this.user);
+			}
+		});
 	}
 
 	ngOnDestroy() {
