@@ -1,17 +1,18 @@
 .sections-container {
-	&:after {
-		content: '';
-		background-image: url('../../assets/img/bg.jpg');
-		background-color: #1e90ff;
-		position: absolute;
-		left: 0;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		z-index: -1;
-		background-attachment: cover;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center;
-	}
+    &:after {
+        content: '';
+        background-image: url('../../assets/img/bg.jpg');
+        background-color: #1e90ff;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        height: 100%;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
 }

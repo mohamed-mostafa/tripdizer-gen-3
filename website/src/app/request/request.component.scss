@@ -1,41 +1,42 @@
 .main-container {
-	height: 100%;
+    height: 100%;
 
-	> div:after {
-		content: '';
-		background-image: url('../../assets/img/request-bg.png');
-		width: 100%;
-		height: 100%;
-		position: fixed;
-		opacity: 0.1;
-		z-index: -9;
-	}
+    >div:after {
+        content: '';
+        // background-image: url('../../assets/img/request-bg.png');
+        background-color: #2e2d2d;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 0.1;
+        z-index: -9;
+    }
 }
 
 /* START Extend Bootstrap */
 .custom-bs {
-	&.btn {
-		&.btn-lg {
-			padding: 1.5rem 2.25rem;
-			font-size: 1.25rem;
+    &.btn {
+        &.btn-lg {
+            padding: 1.5rem 2.25rem;
+            font-size: 1.25rem;
 
-			@media (min-width: 576px) {
-				padding: 1.63rem 2.44rem;
-			}
+            @media (min-width: 576px) {
+                padding: 1.63rem 2.44rem;
+            }
 
-			@media (min-width: 768px) {
-				padding: 1.75rem 2.63rem;
-			}
+            @media (min-width: 768px) {
+                padding: 1.75rem 2.63rem;
+            }
 
-			@media (min-width: 992px) {
-				padding: 1.88rem 2.81rem;
-			}
+            @media (min-width: 992px) {
+                padding: 1.88rem 2.81rem;
+            }
 
-			@media (min-width: 1200px) {
-				padding: 2rem 3rem;
-			}
-		}
-	}
+            @media (min-width: 1200px) {
+                padding: 2rem 3rem;
+            }
+        }
+    }
 }
 
 /* END Extend Bootstrap */

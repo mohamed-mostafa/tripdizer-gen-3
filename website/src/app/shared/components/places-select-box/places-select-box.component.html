@@ -18,8 +18,8 @@
 				(matChipInputTokenEnd)="!matAutocomplete.isOpen ? addFromInput($event) : false"
 			/>
 		</mat-chip-list>
-		<mat-autocomplete #matAutocomplete (optionSelected)="addFromAutocomplete($event)">
-			<mat-option *ngFor="let place of (filteredPlaces | async)" [value]="place[property]">{{ place.name }}</mat-option>
+		<mat-autocomplete #matAutocomplete autoActiveFirstOption (optionSelected)="addFromAutocomplete($event)">
+			<mat-option *ngFor="let place of filteredPlaces | async" [value]="place[property]">{{ place.name }}</mat-option>
 		</mat-autocomplete>
 	</mat-form-field>
 </form>

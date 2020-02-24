@@ -19,10 +19,7 @@ export class HomeComponent implements OnDestroy {
 	navBarHeight: number;
 	navBarHeightSubject = new Subject<number>();
 
-	constructor(
-		router: Router,
-		translate: TranslateService
-	) {
+	constructor(router: Router, translate: TranslateService) {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
 
 		// setTimeout(() => {
