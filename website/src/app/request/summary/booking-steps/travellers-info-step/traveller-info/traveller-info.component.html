@@ -20,7 +20,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.first_name' | translate"
 					[formControlName]="controlName + '-firstName'"
 					maxlength="14"
@@ -34,7 +34,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.last_name' | translate"
 					[formControlName]="controlName + '-lastName'"
 					maxlength="14"
@@ -62,7 +62,7 @@
 					[min]="travellerMinDate()"
 					[matDatepicker]="dateOfBirthPicker"
 					id="traveler-birthday"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.birth_date' | translate"
 					(click)="dateOfBirthPicker.open()"
 					(focus)="dateOfBirthPicker.open()"
@@ -82,7 +82,7 @@
 				>
 					<mat-option value="EG">Egyptian</mat-option>
 				</mat-select>
-				<!-- <input matInput type="text" class="text-yellow text-uppercase font-weight-bold"
+				<!-- <input matInput type="text" class="text-yellow  font-weight-bold"
           [placeholder]="'user.user_info.nationality' | translate" [formControlName]="controlName + '-nationality'"
           maxlength="2" /> -->
 			</mat-form-field>
@@ -95,7 +95,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.email' | translate"
 					[formControlName]="controlName + '-email'"
 				/>
@@ -109,7 +109,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.mobile' | translate"
 					[formControlName]="controlName + '-phone'"
 				/>
@@ -123,7 +123,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.passport_number' | translate"
 					[formControlName]="controlName + '-passportNumber'"
 				/>
@@ -139,7 +139,7 @@
 					[min]="currentDate"
 					[matDatepicker]="passportExpiryPicker"
 					id="traveler-passport_expiry"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.passport_expiry' | translate"
 					(click)="passportExpiryPicker.open()"
 					(focus)="passportExpiryPicker.open()"
@@ -156,7 +156,7 @@
 				<input
 					matInput
 					type="text"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow  font-weight-bold"
 					[placeholder]="'user.user_info.passport_issue_country' | translate"
 					[formControlName]="controlName + '-passportIssueCountry'"
 					maxlength="2"

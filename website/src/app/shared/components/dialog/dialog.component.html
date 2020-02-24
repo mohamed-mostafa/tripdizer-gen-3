@@ -1,4 +1,8 @@
-<img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' (click)="onCancel()" [ngClass]="(('dir' | translate) === 'rtl')?'close-btn-left':'close-btn-right'"/>
+<img
+	src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
+	(click)="onCancel()"
+	[ngClass]="('dir' | translate) === 'rtl' ? 'close-btn-left' : 'close-btn-right'"
+/>
 <span [dir]="'dir' | translate" [ngClass]="{ 'text-right rtl': ('dir' | translate) === 'rtl' }">
 	<h1 *ngIf="data.title" mat-dialog-title>{{ data.title }}</h1>
 	<div mat-dialog-content>
@@ -11,7 +15,7 @@
 					matInput
 					[type]="input.type"
 					[id]="input.id"
-					class="text-yellow text-uppercase font-weight-bold"
+					class="text-yellow font-weight-bold"
 					[placeholder]="input.placeHolder"
 					[formControlName]="input.id"
 				/>

@@ -1,6 +1,6 @@
 import { SummaryService } from './summary.service';
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Station } from './station.model';
 import { EstimatedCostService } from '../estimated-cost/estimated-cost.service';
 import { RequestService } from '../request.service';
@@ -19,34 +19,26 @@ export class SummaryComponent implements OnDestroy {
 
 	constructor(
 		private route: ActivatedRoute,
-		private router: Router,
 		service: SummaryService,
 		private estimatedCostService: EstimatedCostService,
 		private requestService: RequestService
 	) {
 		this.currentStepPath = this.route.routeConfig.path;
 
-		this.subscriptions.add(
-			service.stations.subscribe(stations => {
-				this.stations = stations ? stations : null;
-			})
-		);
+		this.stations = service.getSummaryStations() || null;
 	}
 
-	prev() {
-		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
+	modify() {
+		this.estimatedCostService.tabsNavigate('summary', 'modify', this.currentStepPath, this.route);
 	}
 
 	goToNextStep() {
-		this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+		this.estimatedCostService.tabsNavigate('summary', 'next', this.currentStepPath, this.route);
 		this.requestService.resetSessionTimer();
 	}
 
 	goBack() {
-		this.router.navigate(['../', this.requestService.getPrevStep(this.currentStepPath)], { relativeTo: this.route });
-		setTimeout(() => {
-			this.estimatedCostService.setCurrentTabIndex(2);
-		}, 0);
+		this.estimatedCostService.tabsNavigate('summary', 'back', this.currentStepPath, this.route);
 	}
 
 	ngOnDestroy() {

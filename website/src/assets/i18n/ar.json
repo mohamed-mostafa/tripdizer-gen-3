@@ -50,9 +50,9 @@
 		"landing": {
 			"lets_go_traveller": "../../assets/img/icon-white.png",
 			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
-			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
+			"destination_place_holder": "ادخل وجهتك ( اليونان, فرنسا... )",
 			"have_plan": "ابدأ التخطيط",
-			"surprise_me": "ساعدنى"
+			"help_me_decide": "ساعدني في اتخاذ القرار"
 		},
 		"why_us": {
 			"why_us_title": "لماذا نحن الأفضل",
@@ -193,7 +193,9 @@
 				"things_to_do": "أنشطة يمكن القيام بها فى",
 				"view_map": "عرض الخريطة",
 				"next_label": "التالي",
-				"back_label": "رجوع"
+				"back_label": "رجوع",
+				"too_many_cities_message": "عدد مدن كبير بالنسبة إلى {{numberOfNights}} ليالى",
+				"ok": "موافق"
 			},
 			"tab_flights": {
 				"title": "الطيران",

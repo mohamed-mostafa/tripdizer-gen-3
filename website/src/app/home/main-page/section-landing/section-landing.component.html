@@ -1,13 +1,12 @@
 <section id="landing" class="row d-block">
 	<div class="col-12 text-center">
-        <img [src]="'home.landing.lets_go_traveller' | translate" class="main-logo" alt="" />
-    </div>
-
+		<img [src]="'home.landing.lets_go_traveller' | translate" class="main-logo" alt="" />
+	</div>
 	<div class="col-12 text-center">
 		<h1 class="text-white landing-question" [class.title-font]="('dir' | translate) === 'rtl'">
 			{{ 'home.landing.landing_question' | translate }}
 		</h1>
-		<div class="m-auto mt-1 countries-select-box">
+		<div class="m-auto mt-1 countries-select-box" style="display:inline-block;">
 			<c-shared-places-select-box
 				classes="w-100 p-2 bg-white border-blue"
 				[places]="countries | async"
@@ -15,18 +14,26 @@
 				hidePlaceHolderConditionally="true"
 			></c-shared-places-select-box>
 		</div>
-		<div class="mt-3">
+		<div style="display:inline-block;">
 			<a
-				class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1 text-uppercase"
+				class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1 "
 				(click)="havePlan()"
 				role="button"
+				style=" padding: 0.5rem !important;margin-top: 0rem !important;"
 				>{{ 'home.landing.have_plan' | translate }}</a
 			>
-			<a class="btn custom-bs btn-rounded btn-light mx-2 mt-1 text-uppercase" (click)="surpriseMe()" role="button">{{
-				'home.landing.surprise_me' | translate
-			}}</a>
+		</div>
+		<div class="mt-1">
+			<a
+				class="btn custom-bs btn-rounded btn-light mx-2 mt-1"
+				style="margin-right: 7rem !important;margin-top: 1rem !important;"
+				(click)="surpriseMe()"
+				role="button"
+				>{{ 'home.landing.help_me_decide' | translate }}</a
+			>
 		</div>
 	</div>
-    
-    <a href="#why-us" class='icon-scroll'></a>
+
+	<a href="#why-us" class="icon-scroll"></a>
 </section>
+<!-- style="width: 100%;margin-right: 8.5rem !important;max-width: 25rem;border-radius: 5px;" -->
