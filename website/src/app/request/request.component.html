@@ -1,11 +1,16 @@
-<div class="container-fluid main-container">
-	<div class="row h-100">
-		<div id="nav-bar" class="col-12">
-			<c-request-nav-bar></c-request-nav-bar>
-		</div>
-		<div id="body-container" class="col-12">
-			<c-request-loading></c-request-loading>
-			<router-outlet></router-outlet>
+<div>
+	<div class="container-fluid main-container">
+		<div class="row h-100">
+			<div id="nav-bar" class="col-12">
+				<c-request-nav-bar></c-request-nav-bar>
+			</div>
+			<div id="body-container" class="col-12">
+				<c-request-loading></c-request-loading>
+				<router-outlet></router-outlet>
+			</div>
 		</div>
 	</div>
+	<footer style="overflow-x: hidden;">
+		<c-shared-footer></c-shared-footer>
+	</footer>
 </div>

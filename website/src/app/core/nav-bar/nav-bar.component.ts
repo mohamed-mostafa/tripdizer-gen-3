@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -26,6 +27,7 @@ export class NavBarComponent implements OnInit {
 	constructor(public translate: TranslateService) {
 		this.langs = translate.langs.filter(lang => lang !== translate.currentLang);
 		translate.onLangChange.subscribe(event => {
+			// window.location.reload();
 			this.langs = translate.langs.filter(lang => lang !== event.lang);
 		});
 	}
@@ -34,5 +36,8 @@ export class NavBarComponent implements OnInit {
 		setTimeout(() => {
 			this.onResize();
 		}, 0);
+	}
+	scrollTop() {
+		window.scroll(0, 0);
 	}
 }

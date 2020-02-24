@@ -9,14 +9,14 @@
 
 				<div class="row">
 					<div class="col-12">
-						<button (click)="goToSummary()" class="btn btn-primary custom-bs btn-rounded mr-4 text-uppercase">
+						<button (click)="goToSummary()" class="btn btn-primary custom-bs btn-rounded mr-4">
 							{{ 'request.estimated_cost.booking_steps.back' | translate }}
 						</button>
 
 						<button
 							(click)="goToPaymentStep(stepper)"
 							[disabled]="formGroup.invalid"
-							class="btn btn-primary custom-bs btn-rounded text-uppercase"
+							class="btn btn-primary custom-bs btn-rounded"
 						>
 							{{ 'request.estimated_cost.booking_steps.proceed_to_payment' | translate }}
 						</button>
@@ -29,10 +29,7 @@
 
 				<div class="row">
 					<div class="col-12">
-						<button
-              class="btn btn-primary custom-bs btn-rounded text-uppercase"
-              matStepperPrevious
-						>
+						<button class="btn btn-primary custom-bs btn-rounded" matStepperPrevious>
 							{{ 'request.estimated_cost.booking_steps.back_to_passengers_details' | translate }}
 						</button>
 					</div>

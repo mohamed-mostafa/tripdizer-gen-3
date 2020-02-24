@@ -21,64 +21,67 @@
 								(click)="selectAccommodationOffer(hotel)"
 								[class.can-select]="!hotel.selected"
 							>
-								<div class="hotel-item p-1" [class.selected-hotel]="hotel.selected">
-									<div class="item-img-container">
-										<img
-											[src]="hotel.thumbnail"
-											alt=""
-											onerror="this.onerror=null; this.src='https://static.tripdizer.com/hotels/anonymoys-hotel-room.png'"
-										/>
-									</div>
-
-									<div class="mt-2">
-										<div class="row">
-											<div class="col-9 pr-0">
-												<p class="dark-grey hotel-name mb-1">
-													<span class="font-weight-bold truncate">{{ hotel.displayName }}</span>
-												</p>
-											</div>
-											<div class="col-3 rating pl-1">
-												<p class="mb-0">
-													{{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}
-												</p>
-												<p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
-													<span class="mr-1"><i class="fa fa-star"></i></span>
-													<span class="mr-1" *ngIf="hotel.stars >= 2"><i class="fa fa-star"></i></span>
-													<span class="mr-1" *ngIf="hotel.stars >= 3"><i class="fa fa-star"></i></span>
-													<span class="mr-1" *ngIf="hotel.stars >= 4"><i class="fa fa-star"></i></span>
-													<span class="mr-1" *ngIf="hotel.stars == 5"><i class="fa fa-star"></i></span>
-												</p>
-												<p class="mb-0 rating-stars" *ngIf="hotel.stars < 2">
-													{{ 'request.estimated_cost.tab_accommodations.hostel' | translate }}
-												</p>
-											</div>
-										</div>
-										<div class="hotel-address">
-											<p class="mt-1 mb-3 truncate"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
+								<div class="hotel-item p-1" [class.selected-hotel]="hotel.selected" style="border-radius: 5px;">
+									<div style="margin: 15px;">
+										<div class="item-img-container">
+											<img
+												[src]="hotel.thumbnail"
+												alt=""
+												style="border-radius: 5px;"
+												onerror="this.onerror=null; this.src='https://static.tripdizer.com/hotels/anonymoys-hotel-room.png'"
+											/>
 										</div>
 
-										<div class="row">
-											<div class="col-12">
-												<p class="grey item-text hotel-description truncate truncate-description">
-													{{ hotel.description }}
-												</p>
+										<div class="mt-2">
+											<div class="row">
+												<div class="col-9 pr-0">
+													<p class="dark-grey hotel-name mb-1">
+														<span class="font-weight-bold truncate">{{ hotel.displayName }}</span>
+													</p>
+												</div>
+												<div class="col-3 rating pl-1">
+													<p class="mb-0">
+														{{ 'request.estimated_cost.tab_accommodations.star_rating' | translate }}
+													</p>
+													<p class="mb-0 rating-stars" *ngIf="hotel.stars >= 2">
+														<span class="mr-1"><i class="fa fa-star"></i></span>
+														<span class="mr-1" *ngIf="hotel.stars >= 2"><i class="fa fa-star"></i></span>
+														<span class="mr-1" *ngIf="hotel.stars >= 3"><i class="fa fa-star"></i></span>
+														<span class="mr-1" *ngIf="hotel.stars >= 4"><i class="fa fa-star"></i></span>
+														<span class="mr-1" *ngIf="hotel.stars == 5"><i class="fa fa-star"></i></span>
+													</p>
+													<p class="mb-0 rating-stars" *ngIf="hotel.stars < 2">
+														{{ 'request.estimated_cost.tab_accommodations.hostel' | translate }}
+													</p>
+												</div>
+											</div>
+											<div class="hotel-address">
+												<p class="mt-1 mb-3 truncate"><i class="fa fa-map-marker mr-1"></i>{{ hotel.address }}</p>
 											</div>
 
-											<div class="col-12">
-												<div class="row">
-													<div class="col-6">
-														<h6 class="font-weight-bold price-title">
-															{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
-														</h6>
-														<p class="item-text price-text">{{ hotel.price | currency: 'EGP':'symbol':'1.0-0' }}</p>
-													</div>
-													<div class="col-6 justify-content-end">
-														<mat-checkbox
-															class="float-right mr-1"
-															[checked]="hotel.selected"
-															[disableRipple]="true"
-															(click)="$event.preventDefault()"
-														></mat-checkbox>
+											<div class="row">
+												<div class="col-12">
+													<p class="grey item-text hotel-description truncate truncate-description">
+														{{ hotel.description }}
+													</p>
+												</div>
+
+												<div class="col-12">
+													<div class="row">
+														<div class="col-6">
+															<h6 class="font-weight-bold price-title">
+																{{ 'request.estimated_cost.tab_accommodations.total_price' | translate }}
+															</h6>
+															<p class="item-text price-text">{{ hotel.price | currency: 'EGP':'symbol':'1.0-0' }}</p>
+														</div>
+														<div class="col-6 justify-content-end">
+															<mat-checkbox
+																class="float-right mr-1"
+																[checked]="hotel.selected"
+																[disableRipple]="true"
+																(click)="$event.preventDefault()"
+															></mat-checkbox>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -88,7 +91,7 @@
 							</div>
 						</owl-carousel>
 
-						<div class="mb-2 mx-1 item" *ngIf="accommodationOffers &&  offer?.hotels.length < 1">
+						<div class="mb-2 mx-1 item" *ngIf="accommodationOffers && offer?.hotels.length < 1">
 							<div class="hotels-box">
 								<div class="hotels-title p-1">
 									<h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_accommodations.choose_hotel' | translate }}</h6>
@@ -137,7 +140,7 @@
 				>{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a
 			>
 
-			<button (click)="goNext()" class="btn btn-primary custom-bs btn-rounded text-uppercase px-4 py-2">
+			<button (click)="goNext()" [disabled]="false" class="btn btn-primary custom-bs btn-rounded px-4 py-2">
 				{{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
 			</button>
 		</div>
