@@ -2,7 +2,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RequestService } from '../request.service';
-import { EstimatedCostResponse } from './estimated-cost.model';
 import { EstimatedCostService } from './estimated-cost.service';
 
 @Component({
@@ -11,10 +10,8 @@ import { EstimatedCostService } from './estimated-cost.service';
 	styleUrls: ['./estimated-cost.component.scss'],
 })
 export class EstimatedCostComponent {
-
-	estimatedCost: EstimatedCostResponse;
 	selectedTab: number;
-	isCitiesTabVisited: boolean;
+	hasCities: boolean;
 	isFlightsTabVisited: boolean;
 	isAccommodationTabVisited: boolean;
 	currentTabIndex: Observable<boolean>;
@@ -31,11 +28,11 @@ export class EstimatedCostComponent {
 
 		service.currentTabIndex.subscribe(n => {
 			this.selectedTab = n;
-			this.isCitiesTabVisited = this.isCitiesTabVisited || n === 0;
+
+			this.hasCities = service.citiesFlightsAccommodations.cities || n === 0 ? true : false;
 			this.isFlightsTabVisited = this.isFlightsTabVisited || n === 1;
 			this.isAccommodationTabVisited = this.isAccommodationTabVisited || n === 2;
 
-			service.isCitiesTabVisited = this.isCitiesTabVisited;
 			service.isFlightsTabVisited = this.isFlightsTabVisited;
 			service.isAccommodationTabVisited = this.isAccommodationTabVisited;
 		});
@@ -46,6 +43,6 @@ export class EstimatedCostComponent {
 	}
 
 	tabChange(e) {
-        this.service.setCurrentTabIndex(e);
+		this.service.setCurrentTabIndex(e);
 	}
 }

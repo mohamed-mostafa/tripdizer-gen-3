@@ -17,6 +17,6 @@ export class CityDTO {
 	iataCode: string;
 	name: string;
 	interests: Array<string>;
-	select?: boolean;
+	selected?: boolean;
 	coordinates: string;
 }

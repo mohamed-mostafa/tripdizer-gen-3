@@ -68,7 +68,6 @@ export class BookingStepsComponent implements AfterViewInit {
 				}
 			},
 			error => {
-				console.log(error);
 				this.requestService.isLoading.next({
 					show: false,
 					message: '',

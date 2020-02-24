@@ -1,4 +1,4 @@
-<div class="row justify-content-center" *ngIf="loadedData">
+<div class="row justify-content-center" *ngIf="cities.length">
 	<div class="col-lg-11">
 		<div class="row cities-tab py-2 py-md-4">
 			<div class="col-lg-8 cities-list">
@@ -9,7 +9,7 @@
 				<div
 					class="row city-item my-4 selected-city"
 					*ngFor="let city of cities"
-					[class.selected-city]="city.select"
+					[class.selected-city]="city.selected"
 					(click)="updateSelectedCities(city)"
 				>
 					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
@@ -19,8 +19,8 @@
 					</div>
 					<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
 						<p class="dark-grey country-name mb-1">
-							<span class="font-weight-bold">{{ city.name }}</span
-							><br class="d-none d-md-inline-block" />
+							<span class="font-weight-bold">{{ city.name }}</span>
+							<br class="d-none d-md-inline-block" />
 							<span class="town-name-sm d-inline-block ml-2 ml-md-0">{{ city.countryDisplayName }}</span>
 						</p>
 						<p class="grey item-text font-italic">
@@ -34,11 +34,11 @@
 										{{ city.countryDisplayName }}
 									</h6>
 									<p class="grey item-text font-italic activities-text">
-										<span *ngFor="let interest of city.interests; let i = index"
-											>{{ interest }} <span *ngIf="i < city.interests.length - 1">- </span></span
-										>
+										<span *ngFor="let interest of city.interests; let i = index">
+											{{ interest }} <span *ngIf="i < city.interests.length - 1">- </span>
+										</span>
 										<!-- <img
-											*ngFor="let icon of city.icons"
+											ngFor="let icon of city.icons"
 											[src]="icon.link"
 											class="custom-icon d-none d-md-inline-block"
 											width="16px"
@@ -50,7 +50,7 @@
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
 								<mat-checkbox
-									[checked]="city.select"
+									[checked]="city.selected"
 									[disableRipple]="true"
 									(click)="$event.preventDefault()"
 								></mat-checkbox>
@@ -84,8 +84,8 @@
 							>{{ 'request.estimated_cost.tab_cities.back_label' | translate }}</a
 						>
 						<button
-							(click)="next()"
-							[disabled]="selectedCities.length < 1"
+							(click)="goNext()"
+							[disabled]="getSelectedCities().length < 1"
 							class="btn btn-primary custom-bs btn-rounded  px-4 py-2"
 						>
 							{{ 'request.estimated_cost.tab_cities.next_label' | translate }}
