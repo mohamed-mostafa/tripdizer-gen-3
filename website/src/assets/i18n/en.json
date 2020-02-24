@@ -283,7 +283,8 @@
 				"proceed_to_payment": "Proceed to payment",
 				"back_to_passengers_details": "Edit passengers details",
 				"back": "Back"
-			}
+			},
+			"prices_availability_in_hotels": "The prices or availability has changed, please select other offers"
 		},
 		"form_layout": {
 			"next_label": "Continue",
@@ -511,7 +512,26 @@
 			}
 		},
 		"user_plans": {
-			"my_plans": "My Plans"
+			"my_plans": "My Plans",
+			"days_in": "Days in",
+			"from": "From",
+			"to": "To"
+		},
+		"user_bookings": {
+			"my_bookings": "My Bookings",
+			"days_in": "Days in",
+			"from": "From",
+			"to": "To"
+		},
+		"plan_details": {
+			"itinerary_cost": "Itinerary Cost",
+			"nights": "Nights",
+			"total_cost": "Total cost"
+		},
+		"booking_details": {
+			"itinerary_cost": "Itinerary Cost",
+			"nights": "Nights",
+			"total_cost": "Total cost"
 		}
 	},
 	"payment_confirm": {

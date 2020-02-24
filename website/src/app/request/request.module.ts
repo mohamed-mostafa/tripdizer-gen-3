@@ -1,3 +1,4 @@
+import { SharedDialogComponent } from '../shared/components/shared-dialog/shared-dialog.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -72,8 +73,9 @@ import { SummaryService } from './summary/summary.service';
 		PaymentDetailsComponent,
 		FlightRouteComponent,
 		SessionDialogComponent,
+		SharedDialogComponent,
 	],
 	providers: [EstimatedCostService, SummaryService],
-	entryComponents: [SessionDialogComponent],
+	entryComponents: [SessionDialogComponent, SharedDialogComponent],
 })
 export class RequestModule {}

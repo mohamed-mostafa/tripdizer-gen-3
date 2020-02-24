@@ -18,13 +18,13 @@ const TRAWEX_PASSWORD = process.env.TRAWEX_PASSWORD || "TripdizerAPI@2019";
 const TRAWEX_SOURCE_IP_ADDRESS =
   process.env.TRAWEX_HOTELS_SOURCE_IP_ADDRESS || "35.242.174.95";
 const TRAWEX_ENVIRONMENT = process.env.TRAWEX_ENVIRONMENT || "Test";
-const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
+// const TRAWEX_TRACKING_ID = process.env.TRAWEX_TRACKING_ID || "t83uqrhdf98ig";
 const TRAWEX_PROXY_ENDPOINT =
   process.env.TRAWEX_HOTELS_PROXY_ENDPOINT || "http://35.242.174.95:3128";
-let ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
-let ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
+const ENABLE_TRAWEX_PROXY = process.env.ENABLE_TRAWEX_PROXY || "Y";
+const ENABLE_API_LOGGING = process.env.ENABLE_API_LOGGING || false;
 
-let createTrackingId = function(length) {
+const createTrackingId = length => {
   var result = "";
   var characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -35,14 +35,12 @@ let createTrackingId = function(length) {
   return result;
 };
 
-const config = {
+let config = {
   user_id: TRAWEX_USERNAME,
   user_password: TRAWEX_PASSWORD,
   access: TRAWEX_ENVIRONMENT,
-  ip_address: TRAWEX_SOURCE_IP_ADDRESS,
-  trackingId: TRAWEX_TRACKING_ID // createTrackingId(13)
+  ip_address: TRAWEX_SOURCE_IP_ADDRESS
 };
-
 const ADULT_AGE = 20;
 const KID_AGE = 5;
 const INFANT_AGE = 0;
@@ -109,7 +107,13 @@ exports.searchHotels = (language, hotelSearchRequest) => {
   });
 };
 
-exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
+exports.getHotelDetails = (
+  language,
+  sessionId,
+  trackingId,
+  productId,
+  hotelId
+) => {
   return new Promise((resolve, reject) => {
     var url =
       TRAWEX_BASE_ENDPOINT +
@@ -118,6 +122,7 @@ exports.getHotelDetails = (language, sessionId, productId, hotelId) => {
     var qs = {
       ...config,
       sessionId: sessionId,
+      trackingId,
       productId: productId,
       hotelId: hotelId
     };
@@ -175,6 +180,7 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
       TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_ROOM_RATES;
     var qs = {
       ...config,
+      trackingId: hotelOffersRequest.trackingId,
       TraceId: hotelOffersRequest.traceId,
       propertyid: hotelOffersRequest.propertyId,
       productId: hotelOffersRequest.productId,
@@ -230,6 +236,7 @@ exports.getHotelOffers = (language, hotelOffersRequest) => {
                 qs
               )} + " - Response:  ${JSON.stringify(data)}`
             );
+
           reject(reject([data.errors.message]));
         } else {
           if (ENABLE_API_LOGGING)
@@ -251,6 +258,7 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
       TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_CHECK_RATES;
     var qs = {
       ...config,
+      trackingId: hotelOfferRequest.trackingId,
       TraceId: hotelOfferRequest.traceId,
       TokenId: hotelOfferRequest.tokenId,
       allocationDetails: hotelOfferRequest.allocationDetails,
@@ -333,6 +341,7 @@ exports.validateHotelOffer = (language, hotelOfferRequest) => {
 exports.bookHotel = (language, bookHotelRequest) => {
   const request = {
     sessionId: bookHotelRequest.sessionId,
+    trackingId: bookHotelRequest.trackingId,
     traceId: bookHotelRequest.traceId,
     tokenId: bookHotelRequest.tokenId,
     productId: bookHotelRequest.productId,
@@ -389,8 +398,10 @@ const searchHotelsAPI = (
   return new Promise((resolve, reject) => {
     const request = { city, country, checkin, checkout };
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_SEARCH;
+    const trackingId = createTrackingId(13);
     var qs = {
       ...config,
+      trackingId,
       city_name: city,
       country_name: country,
       room_count: room_count,
@@ -412,18 +423,20 @@ const searchHotelsAPI = (
       },
       (error, response, data) => {
         if (error) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(error)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(error)}`
+            );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(response)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(response)}`
+            );
           reject([response.statusMessage]);
         } else if (!data) {
           console.info(
@@ -447,11 +460,12 @@ const searchHotelsAPI = (
             getMoreHotelsAPI(
               request,
               data.status.sessionId,
-              data.status.nextToken
+              data.status.nextToken,
+              trackingId
             )
               .then(moreItineraries => {
                 resolve([
-                  ...mapItineraryDetails(request, data),
+                  ...mapItineraryDetails(request, data, trackingId),
                   ...moreItineraries
                 ]);
               })
@@ -461,7 +475,7 @@ const searchHotelsAPI = (
                     request
                   )}, Error: ${JSON.stringify(err)}`
                 );
-                resolve(mapItineraryDetails(request, data));
+                resolve(mapItineraryDetails(request, data, trackingId));
               });
           } else {
             if (ENABLE_API_LOGGING)
@@ -470,7 +484,7 @@ const searchHotelsAPI = (
                   qs
                 )} + " - Response:  ${JSON.stringify(data)}`
               );
-            resolve(mapItineraryDetails(request, data));
+            resolve(mapItineraryDetails(request, data, trackingId));
           }
         }
       }
@@ -478,13 +492,14 @@ const searchHotelsAPI = (
   });
 };
 
-const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
+const getMoreHotelsAPI = (originalReq, sessionId, nextToken, trackingId) => {
   return new Promise((resolve, reject) => {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_MORE;
     var qs = {
       ...config,
       sessionId: sessionId,
-      nextToken: nextToken
+      nextToken: nextToken,
+      trackingId
     };
     httpRequest.get(
       {
@@ -496,18 +511,20 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(error)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(error)}`
+            );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(response)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(response)}`
+            );
           reject([response.statusMessage]);
         } else if (!data) {
           console.info(
@@ -535,7 +552,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
             )
               .then(moreItineraries => {
                 resolve([
-                  ...mapItineraryDetails(originalReq, data),
+                  ...mapItineraryDetails(originalReq, data, trackingId),
                   ...moreItineraries
                 ]);
               })
@@ -549,7 +566,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
                   qs
                 )} + " - Response:  ${JSON.stringify(data)}`
               );
-            resolve(mapItineraryDetails(originalReq, data));
+            resolve(mapItineraryDetails(originalReq, data, trackingId));
           }
         }
       }
@@ -557,7 +574,7 @@ const getMoreHotelsAPI = (originalReq, sessionId, nextToken) => {
   });
 };
 
-const mapItineraryDetails = (requestData, responseData) => {
+const mapItineraryDetails = (requestData, responseData, trackingId) => {
   const { moreResults, nextToken, ...moreDetails } = responseData.status;
   if (responseData && responseData.itineraries) {
     return responseData.itineraries.map(i => ({
@@ -578,6 +595,7 @@ const mapItineraryDetails = (requestData, responseData) => {
       facilities: i.facilities,
       moreDetails: {
         sessionId: moreDetails.sessionId,
+        trackingId,
         bookingToken: i.BookingToken,
         hotelId: i.hotelId,
         productId: i.productId,
@@ -597,6 +615,7 @@ const bookHotel = (language, bookHotelRequest) => {
     var url = TRAWEX_BASE_ENDPOINT + TRAWEX_HOTELS_ROOT + TRAWEX_HOTELS_BOOK;
     var qs = {
       ...config,
+      trackingId: bookHotelRequest.trackingId,
       productId: bookHotelRequest.productId,
       hotelcode: bookHotelRequest.hotelId,
       propertyid: bookHotelRequest.propertyId,
@@ -631,18 +650,20 @@ const bookHotel = (language, bookHotelRequest) => {
       },
       (error, response, data) => {
         if (error) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(error)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(error)}`
+            );
           reject([error.toString()]);
         } else if (response.statusCode != 200) {
-          console.info(
-            `URL:  ${url} - Request:  ${JSON.stringify(
-              qs
-            )} + " - Response:  ${JSON.stringify(response)}`
-          );
+          if (ENABLE_API_LOGGING)
+            console.info(
+              `URL:  ${url} - Request:  ${JSON.stringify(
+                qs
+              )} + " - Response:  ${JSON.stringify(response)}`
+            );
           reject([response.statusMessage]);
         } else if (!data) {
           console.info(
