@@ -45,7 +45,6 @@ export class SummaryService {
 			const selectedFlightOffers: Array<FlightOffer> = this.getSelectedFlightOffers();
 			const citiesWithNights: Array<CityDTO> = this.getCitiesWithNights();
 			const selectedHotels: Array<Hotel> = this.getSelectedHotels();
-			console.log(selectedHotels);
 
 			// then construct the corresponding 'stations' objects
 			this.summaryStations.splice(0, this.summaryStations.length);
