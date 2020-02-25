@@ -48,6 +48,10 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		tourGuideNeeded: request.tourGuideNeeded || request.tour_guide_needed,
 		specialRequests: request.comments || request.specialRequests,
 		channel: request.isFromWebsite ? 1 : request.channel,
+		flightOffers: request.flightOffers ? request.flightOffers : [],
+		selectedCities: request.selectedCities ? request.selectedCities : [],
+		selectedHotels: request.selectedHotels ? request.selectedHotels : [],
+		selectedAttractions: request.selectedAttractions ? request.selectedAttractions : [],
 		traveler: {
 			...request.traveler,
 			email: request.traveler.email || request.traveler.emailAddress,
