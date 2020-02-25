@@ -22,7 +22,7 @@
 				matInput
 				type="text"
 				id="promo-code"
-				class="text-yellow text-uppercase font-weight-bold"
+				class="text-yellow  font-weight-bold"
 				[class.text-success]="isValidPromoCode"
 				[placeholder]="'request.travel_assistance.promo_code' | translate"
 				formControlName="promoCode"
@@ -34,7 +34,7 @@
 				[innerText]="'request.travel_assistance.apply' | translate"
 				[disabled]="isCheckingPromoCode"
 				(click)="applyPromoCode()"
-				class="btn btn-primary text-uppercase"
+				class="btn btn-primary "
 			></button>
 		</mat-form-field>
 		<mat-form-field class="form-control-lg">
@@ -43,7 +43,7 @@
 			<textarea
 				matInput
 				id="special-requests"
-				class="text-yellow text-uppercase font-weight-bold"
+				class="text-yellow  font-weight-bold"
 				[placeholder]="'request.travel_assistance.special_request' | translate"
 				formControlName="specialRequests"
 			></textarea>

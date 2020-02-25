@@ -1,10 +1,12 @@
 /**
  * The dataaccess methods of hws
  */
+const daoUtilities = require('./hws_dao_utilities.js');
+const citiesDao = require('../dataaccess/hws_request_cities_dao');
+const transportationDao = require('../dataaccess/hws_request_transporation_dao');
+const accomodationDao = require('../dataaccess/hws_request_accomodation_dao');
 
-var daoUtilities = require('./hws_dao_utilities.js');
-
-var createNewRequest = function(request, onSuccess, onFailure) {
+const createNewRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -26,7 +28,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 					request.departureDate = new Date(new Date(request.departureDate).setHours(0, 0, 0, 0));
 					request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 					connection.query(
-						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						'INSERT INTO `traveler_request` (`Date`, `Status`, `Traveler_Email_Address`, `Traveler_Name`, `Traveler_Mobile`, `Traveler_Gender`, `Traveler_Birth_Date`, `Traveler_Profession`, `Departure_Date`, `Return_Date`, `Flexible_Dates`, `Leaving_Country`, `First_Country`, `Other_Country`, `Second_Country`, `Third_Country`, `Travel_Purpose`, `Other_Purpose_Name`, `Other_Interest_Name`, `Number_Of_Adults`, `Number_Of_Kids`, `Number_Of_Infants`, `Budget_Category`, `Budget`, `Visa_Assistance_Needed`, `Tour_Guide_Needed`, `Itinerary_id`, `Actual_Destination`, `Other_Actual_Destination`, `Comments`, `Estimated_Cost`, `Referral_Type`, `Travel_History`, `Promo_Code`, `Score`, `Channel`,`Payment_Status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)',
 						[
 							request.date,
 							request.status || 1,
@@ -64,6 +66,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 							request.promoCode,
 							request.score,
 							request.channel,
+							request.paymentStatus,
 						],
 						function(err, result) {
 							// if an error is thrown, end the connection and throw an error
@@ -137,7 +140,7 @@ var createNewRequest = function(request, onSuccess, onFailure) {
 	});
 };
 
-var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFailure) {
+const getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -248,7 +251,7 @@ var getRequestSummariesByStatus = function(statuses, page, size, onSuccess, onFa
 	});
 };
 
-var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onFailure) {
+const getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -308,7 +311,7 @@ var getRequestSummariesCountByStatus = function(statuses, filter, onSuccess, onF
 	});
 };
 
-var getRequestById = function(requestId, onSuccess, onFailure) {
+const getRequestById = function(requestId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -378,6 +381,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 								promoCode: rows[0].Promo_Code,
 								score: rows[0].Score,
 								channel: rows[0].Channel,
+								paymentStatus: rows[0].Payment_Status,
 								docUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Doc_Id}`,
 								pdfUrl: `https://docs.google.com/a/tripdizer.com/open?id=${rows[0].Pdf_Id}`,
 								PdfDownloadUrl: `https://drive.google.com/a/tripdizer.com/uc?authuser=1&id=${
@@ -449,7 +453,7 @@ var getRequestById = function(requestId, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var updateRequest = function(request, onSuccess, onFailure) {
+const updateRequest = function(request, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -462,7 +466,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 			request.returnDate = new Date(new Date(request.returnDate).setHours(0, 0, 0, 0));
 			// execute the query
 			connection.query(
-				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? WHERE Id = ?',
+				'UPDATE `traveler_request` SET `Status` = ?, `Departure_Date` = ?, `Return_Date` = ?, `Flexible_Dates` = ?, `Leaving_Country` = ?, `First_Country` = ?, `Other_Country` = ?, `Second_Country` = ?, `Third_Country` = ?, `Travel_Purpose` = ?, `Other_Purpose_Name` = ?, `Other_Interest_Name` = ?, `Number_Of_Adults` = ?, `Number_Of_Kids` = ?, `Number_Of_Infants` = ?, `Budget_Category` = ?, `Budget` = ?, `Visa_Assistance_Needed` = ?, `Tour_Guide_Needed` = ?, `Itinerary_id` = ?, `Actual_Destination` = ?, `Other_Actual_Destination` = ?, `Comments` = ?, Revenue = ?, Profit = ?, Edit = ?, Reachable = ?, `Referral_Type` = ?, `Travel_History` = ?, `Score` = ?, `Channel` = ? , `Payment_Status` = ?  WHERE Id = ?',
 				[
 					request.status,
 					request.departureDate,
@@ -495,6 +499,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 					request.travelHistory,
 					request.score,
 					request.channel,
+					request.paymentStatus,
 					request.id,
 				],
 				function(err, rows) {
@@ -520,7 +525,7 @@ var updateRequest = function(request, onSuccess, onFailure) {
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
+const modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -553,9 +558,42 @@ var modifyRequestStatusById = function(orderId, status, onSuccess, onFailure) {
 	});
 };
 
+const updatePaymentStatusById = function(orderId, status, onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query('UPDATE `traveler_request` SET `Payment_Status` = ? WHERE `Id` = ?', [status, orderId], function(
+				err,
+				rows
+			) {
+				// if an error is thrown, end the connection and throw an error
+				//				connection.end();
+				if (err) {
+					console.error('An error occurred while trying to update a request with id ' + orderId);
+					console.error(err);
+					connection.rollback();
+					connection.end();
+					onFailure(err);
+				} else {
+					// no error is thrown
+					connection.commit();
+					connection.end();
+					onSuccess();
+				}
+			});
+		}
+	});
+};
+
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
+const modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -591,7 +629,7 @@ var modifyRequestPackageInfo = function(requestId, docId, pdfId, onSuccess, onFa
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFailure) {
+const modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -627,7 +665,7 @@ var modifyRequestPaymentInfo = function(requestId, paymentKey, onSuccess, onFail
 
 //calls the onSuccess
 //calls the onFailure with an err object in case of technical error
-var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
+const assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -659,7 +697,7 @@ var assignRequestToUser = function(requestId, userId, onSuccess, onFailure) {
 	});
 };
 
-var addNewMailHistory = function(object, onSuccess, onFailure) {
+const addNewMailHistory = function(object, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -710,7 +748,7 @@ var addNewMailHistory = function(object, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCounts = function(onSuccess, onFailure) {
+const getRequestCounts = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -756,7 +794,7 @@ var getRequestCounts = function(onSuccess, onFailure) {
 	});
 };
 
-var toggleOptions = function(requestId, option, onSuccess, onFailure) {
+const toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -803,7 +841,7 @@ var toggleOptions = function(requestId, option, onSuccess, onFailure) {
 	});
 };
 
-var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
+const getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -850,7 +888,47 @@ var getRequestCountsByPromoCode = function(promoCode, onSuccess, onFailure) {
 	});
 };
 
-var getTravelerEmails = function(onSuccess, onFailure) {
+const getPaymentStatus = function(onSuccess, onFailure) {
+	// get a connection and open it
+	var connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the mail history
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
+					onFailure(err);
+				} else {
+					connection.query('SELECT * from Payment_Status', function(err, result) {
+						// if an error is thrown, end the connection and throw an error
+						if (err) {
+							// if the first insert statement fails
+							// end the connection
+							connection.end();
+							console.error('An error occurred while trying to get payment status');
+							console.error(err);
+							connection.rollback(); // rollback the transaction
+							onFailure(err);
+						} else {
+							// end the connection
+							onSuccess(result);
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
+const getTravelerEmails = function(onSuccess, onFailure) {
 	// get a connection and open it
 	var connection = daoUtilities.createConnection();
 	connection.connect(function(err) {
@@ -896,17 +974,187 @@ var getTravelerEmails = function(onSuccess, onFailure) {
 	});
 };
 
-exports.assignRequestToUser = assignRequestToUser;
-exports.updateRequest = updateRequest;
-exports.createNewRequest = createNewRequest;
-exports.getRequestSummariesByStatus = getRequestSummariesByStatus;
-exports.getRequestSummariesCountByStatus = getRequestSummariesCountByStatus;
-exports.modifyRequestStatusById = modifyRequestStatusById;
-exports.getRequestById = getRequestById;
-exports.addNewMailHistory = addNewMailHistory;
-exports.getRequestCounts = getRequestCounts;
-exports.toggleOptions = toggleOptions;
-exports.modifyRequestPackageInfo = modifyRequestPackageInfo;
-exports.modifyRequestPaymentInfo = modifyRequestPaymentInfo;
-exports.getRequestCountsByPromoCode = getRequestCountsByPromoCode;
-exports.getTravelerEmails = getTravelerEmails;
+const getRequestsByMail = function(email, onSuccess, onFailure) {
+	let connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// execute the query
+			connection.query(
+				'SELECT tr.*, u.* FROM traveler_request tr LEFT OUTER JOIN user u on tr.Assigned_User = u.id WHERE tr.Traveler_Email_Address = ? AND tr.Archived = 0',
+				[email],
+				function(err, rows) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
+						console.error('An error occurred while trying to find a request with email ' + email);
+						console.error(err);
+						connection.end();
+						onFailure(err);
+					} else {
+						// no error is thrown
+						if (rows.length != 0) {
+							let request = [];
+							let promises = rows.map(async row => {
+								let found = false;
+								let countries = [],
+									countriesName,
+									allCountriesNames = [],
+									hotelsTotalCost,
+									numberOfNights,
+									estimatedCost,
+									flightsTotalCost;
+								let allCities = await citiesDao.get(row.Id);
+								if (allCities.exists) {
+									let totalNumberOfNights = 0;
+									allCities.data().choices.forEach(city => {
+										totalNumberOfNights += city.numberOfNights;
+										allCountriesNames.push(city.countryDisplayName);
+										let uniqueCountriesName = allCountriesNames.filter((item, i, ar) => ar.indexOf(item) === i);
+										countriesName = uniqueCountriesName.toString();
+										countries.push({
+											name: city.countryDisplayName,
+											image: city.thumbnail,
+											cities: [
+												{
+													name: city.displayName,
+													numberOfNights: city.numberOfNights,
+												},
+											],
+										});
+									});
+									countries = countries.reduce(function(o, cur) {
+										// Get the index of the key-value pair.
+										var occurs = o.reduce(function(n, item, i) {
+											return item.name === cur.name ? i : n;
+										}, -1);
+
+										// If the name is found,
+										if (occurs >= 0) {
+											// append the current value to its list of values.
+											o[occurs].cities = o[occurs].cities.concat(cur.cities);
+
+											// Otherwise,
+										} else {
+											// add the current item to o (but make sure the cities is an array).
+											var obj = {
+												name: cur.name,
+												image: cur.image,
+												cities: cur.cities,
+											};
+											o = o.concat([obj]);
+										}
+
+										return o;
+									}, []);
+									numberOfNights = totalNumberOfNights;
+									let accomodationOffers = await accomodationDao.get(row.Id);
+									if (accomodationOffers.exists) {
+										let totalCost = 0;
+										accomodationOffers.data().choices.forEach(offer => {
+											totalCost += offer.price;
+										});
+										hotelsTotalCost = totalCost;
+									}
+									let flightOffers = await transportationDao.get(row.Id);
+									if (flightOffers.exists) {
+										let total = 0;
+										flightOffers.data().choices.forEach(offer => {
+											total += offer.price;
+										});
+										flightsTotalCost = total;
+									}
+								} else if (row.itinerary_id != null) {
+									let itinerary = await getItineraryById(row.itinerary_id);
+									if (itinerary) {
+										countriesName = itinerary[0].country;
+										countries.push({
+											name: itinerary[0].country,
+											image: itinerary[0].image,
+										});
+									}
+									estimatedCost = row.Estimated_Cost;
+								} else found = true;
+								if (!found) {
+									let req = {
+										id: row.Id,
+										name: row.Traveler_Name,
+										countriesName,
+										departureDate: new Date(row.Departure_Date).toString(),
+										returnDate: new Date(row.Return_Date).toString(),
+										clickable: allCities.exists ? true : false,
+										countries,
+										totalCost: allCities.exists ? +hotelsTotalCost + +flightsTotalCost : estimatedCost,
+										numberOfNights,
+									};
+									request.push(req);
+								}
+							});
+							Promise.all(promises).then(() => {
+								onSuccess(request);
+							});
+						} else {
+							connection.end();
+							onSuccess(null);
+						}
+					}
+				}
+			);
+		}
+	});
+};
+
+const getItineraryById = async function(id) {
+	return new Promise((resolve, reject) => {
+		let connection = daoUtilities.createConnection();
+		connection.connect(function(err) {
+			if (err) {
+				console.error('An error occurred while trying to open a database connection');
+				console.error(err);
+			} else {
+				// execute the query
+				connection.query('SELECT EN_Name As country,Image1 As image FROM iternary WHERE Id = ? ', [id], function(
+					err,
+					data
+				) {
+					// if an error is thrown, end the connection and throw an error
+					if (err) {
+						console.error('An error occurred while trying to find a itinerary with id ' + id);
+						console.error(err);
+						connection.end();
+					} else {
+						// no error is thrown
+						if (data.length != 0) {
+							resolve(data);
+						} else {
+							connection.end();
+							resolve(null);
+						}
+					}
+				});
+			}
+		});
+	});
+};
+
+module.exports = {
+	assignRequestToUser,
+	updateRequest,
+	createNewRequest,
+	getRequestSummariesByStatus,
+	getRequestSummariesCountByStatus,
+	modifyRequestStatusById,
+	getRequestById,
+	addNewMailHistory,
+	getRequestCounts,
+	toggleOptions,
+	modifyRequestPackageInfo,
+	modifyRequestPaymentInfo,
+	getRequestCountsByPromoCode,
+	getTravelerEmails,
+	getRequestsByMail,
+	getPaymentStatus,
+	updatePaymentStatusById,
+};

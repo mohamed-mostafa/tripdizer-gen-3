@@ -25,7 +25,9 @@ resources:
   disk_size_gb: 10
 env_variables:
   MASTER_DATA_ENDPOINT: https://tripdizer-master-data-dot-tripdizer-stg.appspot.com
+  USERS_ENDPOINT: https://tripdizer-users-dot-tripdizer-dev.appspot.com
   MEDIA_STORAGE_BASE_URL: https://storage.cloud.google.com/tripdizer-stg.appspot.com
+  TRAWEX_ADAPTER_ENDPOINT: http://35.246.36.185:8085/trawex-adapter/1.0.0
   DATA_BACKEND: 'cloudsql'
   MYSQL_USER: 'application'
   MYSQL_PASSWORD: 'tripdizer'
@@ -39,7 +41,7 @@ env_variables:
   GOOGLE_PEOPLE_CONTACTS_ACCOUNT: 'test@tripdizer.com'
   PROJECT_NAME: 'tripdizer-stg'
   WE_ACCEPT_PAYMENT_API_KEY: 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SndjbTltYVd4bFgzQnJJam95T0RRNExDSnVZVzFsSWpvaWFXNXBkR2xoYkNJc0ltTnNZWE56SWpvaVRXVnlZMmhoYm5RaWZRLnRRclNhZXpnMWtqbDd2MEx0alAxbWl4eFVXT3R4aHBOSDFkeDdFOWQzN3RaTjBNWGtrMmYzLTZBdlhrWmxBMHBLdTFEdzJ3UElqQmVwNEFzQnF6STlR'
-  WE_ACCEPT_INTEGRATION_ID: 4361
+  WE_ACCEPT_CC_INTEGRATION_ID: 4361
   WE_ACCEPT_valU_INTEGRATION_ID: 7644
   WE_ACCEPT_HMAC_KEY: '09C1F04FCDF328E2184BF25B87F78A3C'
   FLIGHT_BOOKING_PUBSUB_TOPIC_NAME: flight-booking-topic #TOPIC

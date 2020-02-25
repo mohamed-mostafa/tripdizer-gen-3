@@ -12,7 +12,7 @@ info:
 host: "tripdizer-trawex-adapter-dot-tripdizer-stg.appspot.com"
 basePath: "/trawex-adapter/1.0.0"
 schemes:
-  - "https"
+  - "http"
 paths:
   /flights/search/multi-city:
     post:
@@ -314,6 +314,10 @@ paths:
           in: "query"
           required: true
           type: "string"
+        - name: "trackingId"
+          in: "query"
+          required: true
+          type: "string"
         - name: "productId"
           in: "query"
           required: true
@@ -363,6 +367,8 @@ paths:
               resultIndex:
                 type: string
               sessionId:
+                type: string
+              trackingId:
                 type: string
               hotelId:
                 type: string
@@ -1279,6 +1285,8 @@ definitions:
     properties:
       sessionId:
         type: string
+      trackingId:
+        type: string
       traceId:
         type: string
       tokenId:
@@ -1332,6 +1340,8 @@ definitions:
         type: string
       sessionId:
         type: string
+      trackingId:
+        type: string
       tokenId:
         type: string
       traceId:
@@ -1366,7 +1376,12 @@ definitions:
       hotelCode: "2894498"
       infoSource: "OpenCombination"
       mealCode: ""
-      allocationDetails: ["1345673204000001B1008B0","1345673204000001B1008B4","1345673204000001B1008B8"]
+      allocationDetails:
+        [
+          "1345673204000001B1008B0",
+          "1345673204000001B1008B4",
+          "1345673204000001B1008B8",
+        ]
       rateBasisIds: ["1293", "1293", "1293"]
       roomCodes: ["1764838", "1764838", "1764838"]
       roomTypeRunnos: ["0", "1", "2"]

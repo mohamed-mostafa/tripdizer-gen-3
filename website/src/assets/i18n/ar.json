@@ -50,9 +50,9 @@
 		"landing": {
 			"lets_go_traveller": "../../assets/img/icon-white.png",
 			"landing_question": "الطريقة الجديدة لتخطيط رحلتك القادمة",
-			"destination_place_holder": "ادخل وجهتك ( ايطاليا, اسبانيا, فرنسا... )",
+			"destination_place_holder": "ادخل وجهتك ( اليونان, فرنسا... )",
 			"have_plan": "ابدأ التخطيط",
-			"surprise_me": "ساعدنى"
+			"help_me_decide": "ساعدني في اتخاذ القرار"
 		},
 		"why_us": {
 			"why_us_title": "لماذا نحن الأفضل",
@@ -193,7 +193,9 @@
 				"things_to_do": "أنشطة يمكن القيام بها فى",
 				"view_map": "عرض الخريطة",
 				"next_label": "التالي",
-				"back_label": "رجوع"
+				"back_label": "رجوع",
+				"too_many_cities_message": "عدد مدن كبير بالنسبة إلى {{numberOfNights}} ليالى",
+				"ok": "موافق"
 			},
 			"tab_flights": {
 				"title": "الطيران",
@@ -283,7 +285,8 @@
 				"proceed_to_payment": "المتابعة إلى الدفع",
 				"back_to_passengers_details": "تعديل بيانات المسافرين",
 				"back": "رجوع"
-			}
+			},
+			"prices_availability_in_hotels": "لقد تغيرت الأسعار أو توفرها ، يرجى اختيار عروض أخرى"
 		},
 		"form_layout": {
 			"next_label": "التالي",
@@ -511,7 +514,26 @@
 			}
 		},
 		"user_plans": {
-			"my_plans": "رحلاتى"
+			"my_plans": "رحلاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
+		},
+		"user_bookings": {
+			"my_bookings": "حجوزاتى",
+			"days_in": "أيام فى",
+			"from": "من",
+			"to": "إلى"
+		},
+		"plan_details": {
+			"itinerary_cost": "تكلفة الرحلة",
+			"nights": "ليالى",
+			"total_cost": "إجمالى التكلفة"
+		},
+		"booking_details": {
+			"itinerary_cost": "تكلفة الرحلة",
+			"nights": "ليالى",
+			"total_cost": "إجمالى التكلفة"
 		}
 	},
 	"payment_confirm": {

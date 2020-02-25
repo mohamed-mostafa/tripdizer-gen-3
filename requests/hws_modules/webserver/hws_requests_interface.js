@@ -1,6 +1,6 @@
-var requestsBusiness = require('../business/hws_requests_business.js');
+const requestsBusiness = require('../business/hws_requests_business.js');
 
-var placeWebsiteRequest = function(req, res) {
+const placeWebsiteRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		request.isFromWebsite = true;
@@ -28,7 +28,7 @@ var placeWebsiteRequest = function(req, res) {
 	}
 };
 
-var placeDashboardRequest = function(req, res) {
+const placeDashboardRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		request.isFromDashboard = true;
@@ -56,7 +56,7 @@ var placeDashboardRequest = function(req, res) {
 	}
 };
 
-var getRequestById = function(req, res) {
+const getRequestById = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
 		// call the business function and give it a callback function
@@ -81,7 +81,7 @@ var getRequestById = function(req, res) {
 	}
 };
 
-var getRequestSummaries = function(req, res) {
+const getRequestSummaries = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
@@ -109,7 +109,7 @@ var getRequestSummaries = function(req, res) {
 	}
 };
 
-var getRequestSummariesCount = function(req, res) {
+const getRequestSummariesCount = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
@@ -135,7 +135,7 @@ var getRequestSummariesCount = function(req, res) {
 	}
 };
 
-var sendMailsToRequestTraveler = function(req, res) {
+const sendMailsToRequestTraveler = function(req, res) {
 	try {
 		var email = req.body.email;
 		// call the business function and give it a callback function
@@ -159,7 +159,7 @@ var sendMailsToRequestTraveler = function(req, res) {
 	}
 };
 
-var changeRequestStatus = function(req, res) {
+const changeRequestStatus = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var status = req.body.status;
@@ -185,9 +185,34 @@ var changeRequestStatus = function(req, res) {
 	}
 };
 
+const getRequestsByMail = function(req, res) {
+	try {
+		let user = req.user;
+		// call the business function and give it a callback function
+		requestsBusiness.getRequestsByMail(
+			user,
+			function(request) {
+				res.json(request);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 //-------------------------------------- SET STATUS ------------------------------
 
-var markRequestBeingPrepared = function(req, res) {
+const markRequestBeingPrepared = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -211,7 +236,7 @@ var markRequestBeingPrepared = function(req, res) {
 	}
 };
 
-var markRequestDelivered = function(req, res) {
+const markRequestDelivered = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -235,7 +260,7 @@ var markRequestDelivered = function(req, res) {
 	}
 };
 
-var markRequestPlaced = function(req, res) {
+const markRequestPlaced = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -259,7 +284,7 @@ var markRequestPlaced = function(req, res) {
 	}
 };
 
-var assignRequestToUser = function(req, res) {
+const assignRequestToUser = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var userId = req.body.userId;
@@ -285,7 +310,7 @@ var assignRequestToUser = function(req, res) {
 	}
 };
 
-var updateRequest = function(req, res) {
+const updateRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		// call the business function and give it a callback function
@@ -311,7 +336,7 @@ var updateRequest = function(req, res) {
 
 //-------------------------------------- SEARCH ------------------------------
 
-var budgetCalculation = function(req, res) {
+const budgetCalculation = function(req, res) {
 	try {
 		var request = req.body.request;
 		// call the business function and give it a callback function
@@ -338,7 +363,7 @@ var budgetCalculation = function(req, res) {
 	}
 };
 
-var recommendation = function(req, res) {
+const recommendation = function(req, res) {
 	try {
 		var request = req.body.request;
 		var lang = req.query.lang;
@@ -367,7 +392,7 @@ var recommendation = function(req, res) {
 	}
 };
 
-var toggleOptions = function(req, res) {
+const toggleOptions = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var option = req.body.option;
@@ -396,7 +421,7 @@ var toggleOptions = function(req, res) {
 	}
 };
 
-var getPackage = function(req, res) {
+const getPackage = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
 		// call the business function and give it a callback function
@@ -422,7 +447,7 @@ var getPackage = function(req, res) {
 	}
 };
 
-var sendPackageByMail = function(req, res) {
+const sendPackageByMail = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -447,7 +472,7 @@ var sendPackageByMail = function(req, res) {
 	}
 };
 
-var validatePromoCode = function(req, res) {
+const validatePromoCode = function(req, res) {
 	try {
 		var promoCode = req.query.promoCode;
 		// call the business function and give it a callback function
@@ -472,7 +497,7 @@ var validatePromoCode = function(req, res) {
 	}
 };
 
-var getTravelerEmails = function(req, res) {
+const getTravelerEmails = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		requestsBusiness.getTravelerEmails(
@@ -495,24 +520,49 @@ var getTravelerEmails = function(req, res) {
 	}
 };
 
-exports.placeWebsiteRequest = placeWebsiteRequest;
-exports.placeDashboardRequest = placeDashboardRequest;
-exports.getRequestById = getRequestById;
-exports.assignRequestToUser = assignRequestToUser;
-exports.updateRequest = updateRequest;
+const getPaymentStatus = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getPaymentStatus(
+			function(status) {
+				res.send(status);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /payment status');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
 
-exports.getRequestSummaries = getRequestSummaries;
-exports.getRequestSummariesCount = getRequestSummariesCount;
-exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
-exports.changeRequestStatus = changeRequestStatus;
-
-exports.markRequestBeingPrepared = markRequestBeingPrepared;
-exports.markRequestDelivered = markRequestDelivered;
-exports.markRequestPlaced = markRequestPlaced;
-exports.budgetCalculation = budgetCalculation;
-exports.recommendation = recommendation;
-exports.toggleOptions = toggleOptions;
-exports.getPackage = getPackage;
-exports.sendPackageByMail = sendPackageByMail;
-exports.validatePromoCode = validatePromoCode;
-exports.getTravelerEmails = getTravelerEmails;
+module.exports = {
+	placeWebsiteRequest,
+	placeDashboardRequest,
+	getRequestById,
+	assignRequestToUser,
+	updateRequest,
+	getRequestSummaries,
+	getRequestSummariesCount,
+	sendMailsToRequestTraveler,
+	changeRequestStatus,
+	markRequestBeingPrepared,
+	markRequestDelivered,
+	markRequestPlaced,
+	budgetCalculation,
+	recommendation,
+	toggleOptions,
+	getPackage,
+	sendPackageByMail,
+	validatePromoCode,
+	getTravelerEmails,
+	getRequestsByMail,
+	getPaymentStatus,
+};

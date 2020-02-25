@@ -38,7 +38,10 @@ export class RequestNavBarComponent implements AfterViewInit {
 				if (this.currentPath && splittedUrl) {
 					this.currentPath = splittedUrl[splittedUrl.length - 1];
 				}
-				setTimeout(() => this.scrollIntoView(), 0);
+				setTimeout(() => {
+					this.scrollIntoView(), 0;
+					window.scrollTo(0, 0);
+				});
 			}
 		});
 	}

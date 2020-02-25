@@ -8,15 +8,17 @@ export class Ticket extends RequestResponse {
 	destinationName: string;
 
 	static getTicketFromRequestResponse(request: Request, requestResponse: RequestResponse): Ticket {
+		const selectedCities = request.citiesFlightsAccommodations.cities.filter(c => c.selected);
+
 		return {
 			...requestResponse,
 			packageUrl: requestResponse.packageUrl,
 			packageDownloadUrl: requestResponse.packageDownloadUrl,
 			travelingFrom: request.travelingFrom.iataCode,
 			preferenceNames: request.preferenceNames,
-			destinationName: request.selectedCities
-				? request.selectedCities.length === 1
-					? request.selectedCities[0].countryIsoCode
+			destinationName: selectedCities
+				? selectedCities.length === 1
+					? selectedCities[0].countryIsoCode
 					: 'WORLD'
 				: request.destination['iataCode'],
 		};

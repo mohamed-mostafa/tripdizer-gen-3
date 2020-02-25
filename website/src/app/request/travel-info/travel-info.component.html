@@ -6,9 +6,9 @@
 			formControlName="travelingFrom"
 			[placeholder]="'request.travel_info.traveling_from' | translate"
 			[compareWith]="compareObjects"
-			class="text-yellow text-uppercase font-weight-bold"
+			class="text-yellow font-weight-bold"
 		>
-			<mat-option *ngFor="let airport of ('request.travel_info.airports' | translate)" [value]="airport">{{
+			<mat-option *ngFor="let airport of 'request.travel_info.airports' | translate" [value]="airport">{{
 				airport.name
 			}}</mat-option>
 		</mat-select>
@@ -30,7 +30,7 @@
 			[min]="minDate"
 			[matDatepicker]="departureDatePicker"
 			id="departure-date"
-			class="text-yellow text-uppercase font-weight-bold"
+			class="text-yellow font-weight-bold"
 			[placeholder]="'request.travel_info.departure' | translate"
 			(click)="departureDatePicker.open()"
 			(focus)="departureDatePicker.open()"
@@ -46,7 +46,7 @@
 			[min]="minDate"
 			[matDatepicker]="returnDatePicker"
 			id="return-date"
-			class="text-yellow text-uppercase font-weight-bold"
+			class="text-yellow font-weight-bold"
 			[placeholder]="'request.travel_info.return' | translate"
 			(click)="returnDatePicker.open()"
 			(focus)="returnDatePicker.open()"

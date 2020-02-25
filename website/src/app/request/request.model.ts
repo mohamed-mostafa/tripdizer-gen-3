@@ -8,7 +8,7 @@ import { Preference } from '../shared/models/preference.model';
 import { LUTPurpose } from '../shared/models/purpose.model';
 import { CommonFunctions } from '../shared/utils';
 import { Destination } from './destinations/destination.model';
-import { Hotel } from './estimated-cost/tab-accommodation/accommodation.model';
+import { Accommodation } from './estimated-cost/tab-accommodation/accommodation.model';
 import { CityDTO } from './estimated-cost/tab-cities/city-dto.model';
 import { FlightOffer } from './estimated-cost/tab-flights/flight-offer.model';
 import { RequestType } from './request-type.enum';
@@ -54,9 +54,11 @@ export class Request extends CommonFunctions {
 	private _purposeName: string;
 	private _preferences: Array<Preference>;
 	private _destination: Destination;
-	private _flightOffers: Array<FlightOffer>;
-	private _selectedCities: Array<CityDTO>;
-	private _selectedHotels: Array<Hotel>;
+	private _citiesFlightsAccommodations: {
+		cities: Array<CityDTO>;
+		flightOffers: Array<FlightOffer>;
+		accommodationOffers: Array<Accommodation>;
+	};
 	private _selectedAttractions: Array<Attraction>;
 	private _estimatedCost: number;
 	private _visaAssistanceNeeded: boolean;
@@ -74,9 +76,15 @@ export class Request extends CommonFunctions {
 	}
 	set countries(value: Array<Country>) {
 		this._countries = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.cities = [];
+		}
 	}
 	set travelingFrom(value: TravelingFrom) {
 		this._travelingFrom = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+		}
 	}
 	get travelingFrom(): TravelingFrom {
 		return this._travelingFrom;
@@ -84,6 +92,9 @@ export class Request extends CommonFunctions {
 	set departureDate(value: moment.Moment) {
 		this.resetEstimatedCost();
 		this._departureDate = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+		}
 	}
 	get departureDate(): moment.Moment {
 		return this._departureDate ? moment(this._departureDate) : null;
@@ -91,6 +102,9 @@ export class Request extends CommonFunctions {
 	set returnDate(value: moment.Moment) {
 		this.resetEstimatedCost();
 		this._returnDate = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get returnDate(): moment.Moment {
 		return this._returnDate ? moment(this._returnDate) : null;
@@ -107,6 +121,10 @@ export class Request extends CommonFunctions {
 		this.translate
 			.get('request.nav_bar.travelers.value', { adultsNumber: this._adultsNumber })
 			.subscribe(label => this.setAdultsNavBarLabel(label));
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get adultsNumber(): number {
 		return this._adultsNumber;
@@ -114,6 +132,10 @@ export class Request extends CommonFunctions {
 	set kidsNumber(value) {
 		this.resetEstimatedCost();
 		this._kidsNumber = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get kidsNumber(): number {
 		return this._kidsNumber || 0;
@@ -121,6 +143,10 @@ export class Request extends CommonFunctions {
 	set infantsNumber(value) {
 		this.resetEstimatedCost();
 		this._infantsNumber = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.flightOffers = [];
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get infantsNumber(): number {
 		return this._infantsNumber || 0;
@@ -134,6 +160,9 @@ export class Request extends CommonFunctions {
 	set budgetCategory(value) {
 		this.resetEstimatedCost();
 		this._budgetCategory = parseInt(value.toString(), 10);
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.accommodationOffers = [];
+		}
 	}
 	get budgetCategory(): number {
 		return this._budgetCategory || 1;
@@ -165,27 +194,18 @@ export class Request extends CommonFunctions {
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
 		this._destination = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.cities = [];
+		}
 	}
 	get destination(): Destination {
 		return this._destination;
 	}
-	get selectedCities(): Array<CityDTO> {
-		return this._selectedCities;
+	get citiesFlightsAccommodations() {
+		return this._citiesFlightsAccommodations;
 	}
-	set selectedCities(value: Array<CityDTO>) {
-		this._selectedCities = value;
-	}
-	get flightOffers(): Array<FlightOffer> {
-		return this._flightOffers;
-	}
-	set flightOffers(value: Array<FlightOffer>) {
-		this._flightOffers = value;
-	}
-	get selectedHotels(): Array<Hotel> {
-		return this._selectedHotels;
-	}
-	set selectedHotels(value: Array<Hotel>) {
-		this._selectedHotels = value;
+	set citiesFlightsAccommodations(value) {
+		this._citiesFlightsAccommodations = value;
 	}
 	get selectedAttractions(): Array<Attraction> {
 		return this._selectedAttractions;

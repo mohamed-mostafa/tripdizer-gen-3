@@ -65,13 +65,14 @@ registerLocaleData(localeAr, 'ar');
 	bootstrap: [AppComponent],
 })
 export class AppModule {
-	constructor(translate: TranslateService) {
+	constructor(translate: TranslateService, dateAdapter: DateAdapter<any>) {
 		const defaultLang = translate.getBrowserLang() || 'en';
 		translate.addLangs(['en', 'ar']);
 		translate.setDefaultLang(defaultLang);
 		translate.use(localStorage.getItem('localization-lang') || defaultLang);
 		translate.onLangChange.subscribe((event: LangChangeEvent) => {
 			localStorage.setItem('localization-lang', event.lang);
+			dateAdapter.setLocale(event.lang);
 		});
 	}
 }
