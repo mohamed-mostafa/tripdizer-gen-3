@@ -1,32 +1,32 @@
 <div class="py-5">
 	<h3 class="title-font page-title text-blue mb-5">
 		<i class="fa fa-user mr-3"></i>
-		<span class="font-weight-bold" translate="user.user_info.my_profile"></span>
+		<span class="font-weight-bold">{{ 'user.user_info.my_profile' | translate }}</span>
 	</h3>
 
 	<form class="example row">
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.first_name' | translate" [value]="user.firstName" disabled />
+			<input matInput [placeholder]="'user.user_info.first_name' | translate" value="{{ user.firstName }}" disabled />
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.last_name' | translate" [value]="user.lastName" disabled />
+			<input matInput [placeholder]="'user.user_info.last_name' | translate" value="{{ user.lastName }}" disabled />
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.email' | translate" [value]="user.email" disabled />
+			<input matInput [placeholder]="'user.user_info.email' | translate" value="{{ user.email }}" disabled />
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.mobile' | translate" [value]="user.phone" />
+			<input matInput [placeholder]="'user.user_info.mobile' | translate" value="{{ user.phone }}" />
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.birth_date' | translate" [value]="user.birthday" />
+			<input matInput [placeholder]="'user.user_info.birth_date' | translate" value="{{ user.birthday }}" />
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.location' | translate" [value]="user.location" />
+			<input matInput [placeholder]="'user.user_info.location' | translate" value="{{ user.location }}" />
 		</mat-form-field>
 	</form>
 

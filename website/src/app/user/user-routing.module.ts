@@ -13,7 +13,7 @@ const routes: Routes = [
 		canActivate: [AuthGuard],
 		children: [
 			{ path: 'bookings', component: UserBookingComponent },
-			{ path: 'plans', component: UserPlansComponent },
+			// { path: 'plans', component: UserPlansComponent }, TODO --> when plans page active
 			{ path: '', component: UserInfoComponent },
 		],
 	},

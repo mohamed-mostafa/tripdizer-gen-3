@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { User } from '../../user/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-app-user-info',
@@ -9,12 +10,18 @@ import { User } from '../../user/user.model';
 })
 export class UserInfoComponent implements OnDestroy {
 	user: User = {} as User;
+	subUser: Subscription;
 
 	constructor(private authService: AuthService) {
-		this.authService.authenticatedUser.subscribe(user => (this.user = user));
+		this.subUser = this.authService.authenticatedUser.subscribe(user => {
+			if (user) {
+				this.user = user;
+				console.log(this.user);
+			}
+		});
 	}
 
 	ngOnDestroy() {
-		this.authService.authenticatedUser.unsubscribe();
+		this.subUser.unsubscribe();
 	}
 }

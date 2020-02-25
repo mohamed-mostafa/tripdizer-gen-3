@@ -19,6 +19,10 @@ $color-blue: #2989ff;
     caret-color: $color-blue !important;
 }
 
+.mat-form-field-disabled {
+    opacity: 0.5;
+}
+
 .mat-form-field-underline {
     display: none;
 }
