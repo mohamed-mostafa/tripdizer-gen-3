@@ -62,20 +62,21 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	let flightValidation = request.flightOffers.map(flight => {
 		return new Promise((resolve, reject) => {
+			const requestData = { sessionId: flight.sessionId, fareSourceCode: flight.fareSourceCode };
 			trawexService
-				.getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode)
+				.getFlightFareDetailsAPi(requestData.sessionId, requestData.fareSourceCode)
 				.then(data => {
 					trawexService
-						.validateFlightAPi(flight.sessionId, flight.fareSourceCode)
+						.validateFlightAPi(requestData.sessionId, requestData.fareSourceCode)
 						.then(flights => {
 							resolve(true);
 						})
 						.catch(error => {
-							reject(false);
+							reject('Error happened while validating flight: ' + error + '\nData: ' + JSON.stringify(requestData));
 						});
 				})
 				.catch(err => {
-					reject(false);
+					reject('Error happened while getting flight fare: ' + err + '\nData: ' + JSON.stringify(requestData));
 				});
 		});
 	});
@@ -114,11 +115,11 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 							resolve(true);
 						})
 						.catch(err => {
-							reject(false);
+							reject('Error happened while re-validating hotel: ' + err + '\nData: ' + JSON.stringify(mergedData));
 						});
 				})
 				.catch(error => {
-					reject(false);
+					reject('Error happened while checking hotel offer: ' + error + '\nData: ' + JSON.stringify(hotelDetails));
 				});
 		});
 	});
@@ -127,6 +128,7 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	allPromises.push(...hotelValidation);
 	Promise.all(allPromises)
 		.then(function(valid) {
+			console.log('test');
 			if (Array.isArray(request.preferences)) {
 				request.preferences = request.preferences.map(ri => ({
 					id: ri.id || ri,
@@ -298,7 +300,7 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 		})
 		.catch(error => {
-			onUserError('The prices or availability has changed, please select other offers');
+			onUserError('The prices or availability has changed, please select other offers.\n' + error);
 		});
 };
 
