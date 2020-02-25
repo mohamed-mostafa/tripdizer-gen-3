@@ -377,7 +377,6 @@ export class EstimatedCostService {
 	}
 
 	getLoadingMessage() {
-		console.log(this.currentTabIndex.getValue());
 		const currentTab = this.currentTabIndex.getValue();
 		if (currentTab === 1) {
 			return this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message');

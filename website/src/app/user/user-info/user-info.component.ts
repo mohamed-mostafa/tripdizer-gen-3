@@ -16,7 +16,6 @@ export class UserInfoComponent implements OnDestroy {
 		this.subUser = this.authService.authenticatedUser.subscribe(user => {
 			if (user) {
 				this.user = user;
-				console.log(this.user);
 			}
 		});
 	}
