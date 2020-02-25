@@ -1,0 +1,33 @@
+<div mat-dialog-content>
+	<h5 class="center">{{ 'request.information.enterInfo' | translate }}</h5>
+	<mat-form-field>
+		<mat-label>{{ 'request.information.name' | translate }}</mat-label>
+		<input matInput [(ngModel)]="data.name" required placeholder="mohamed" />
+		<mat-error *ngIf="controls.name.invalid">{{ getErrorMessage('name') }}</mat-error>
+	</mat-form-field>
+	<mat-form-field>
+		<mat-label>{{ 'request.information.mobile' | translate }}</mat-label>
+		<input matInput [(ngModel)]="data.mobile" type="number" required placeholder="01020406080" />
+		<mat-error *ngIf="controls.email.invalid">{{ getErrorMessage('mobile') }}</mat-error>
+	</mat-form-field>
+	<mat-form-field>
+		<mat-label>{{ 'request.information.email' | translate }}</mat-label>
+		<input
+			matInput
+			[(ngModel)]="data.email"
+			type="email"
+			[formControl]="controls.email"
+			required
+			placeholder="alaa@gmail.com"
+		/>
+		<mat-error *ngIf="controls.email.invalid">{{ getErrorMessage('email') }}</mat-error>
+	</mat-form-field>
+</div>
+<div mat-dialog-actions>
+	<button mat-button (click)="onNoClick()" class="btn custom-bs btn-rounded btn-outline-secondary mx-2">
+		{{ 'home.dialog.buttonsLabel.cancel' | translate }}
+	</button>
+	<button mat-button (click)="save(data)" class="btn custom-bs btn-rounded btn-outline-blue mx-2">
+		{{ 'request.estimated_cost.session_dialog.buttonsLabel.ok' | translate }}
+	</button>
+</div>

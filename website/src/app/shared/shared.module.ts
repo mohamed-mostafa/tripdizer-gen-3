@@ -16,6 +16,8 @@ import { OwlCarouselComponent } from './components/owl-carousel/owl-carousel.com
 import { PlacesSelectBoxComponent } from './components/places-select-box/places-select-box.component';
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
 import { FooterComponent } from './components/footer/footer.component';
+import { LetMeDecideComponent } from './components/let-me-decide/let-me-decide.component';
+import { RequestACallComponent } from './components/request-a-call/request-a-call.component';
 
 @NgModule({
 	imports: [
@@ -38,7 +40,9 @@ import { FooterComponent } from './components/footer/footer.component';
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
 		TranslateModule,
-		FooterComponent
+		FooterComponent,
+		LetMeDecideComponent,
+		RequestACallComponent,
 	],
 	declarations: [
 		DialogComponent,
@@ -47,8 +51,10 @@ import { FooterComponent } from './components/footer/footer.component';
 		LoginDialogComponent,
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
-		FooterComponent
+		FooterComponent,
+		LetMeDecideComponent,
+		RequestACallComponent,
 	],
-	entryComponents: [DialogComponent, LoginDialogComponent],
+	entryComponents: [DialogComponent, LoginDialogComponent, LetMeDecideComponent, RequestACallComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

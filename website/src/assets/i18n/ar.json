@@ -44,6 +44,10 @@
 			"submit": "ارسال",
 			"back": "رجوع",
 			"suggest_country_adding": "اقتراح اضافة دولة"
+		},
+		"request_a_call_modal": {
+			"thanksForFillingData": "شكرا لملء المعلومات الخاصة بك",
+			"agentWillCallYou": "سيقوم أحد عملائنا بالاتصال بك في أقرب وقت ممكن"
 		}
 	},
 	"home": {
@@ -307,7 +311,8 @@
 			"travel_history": "تاريخ السفر",
 			"traveled_before": "سافرت من قبل",
 			"never_traveled": "لم تسافر",
-			"equal_to": "البريد الإلكتروني غير متطابق"
+			"equal_to": "البريد الإلكتروني غير متطابق",
+			"enterInfo": "الرجاء إدخال المعلومات الخاصة بك"
 		},
 		"nav_bar": {
 			"travel_info": "معلومات الرحلة",

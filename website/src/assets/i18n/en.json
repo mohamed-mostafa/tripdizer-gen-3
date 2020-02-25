@@ -44,6 +44,10 @@
 			"submit": "Submit",
 			"back": "Back",
 			"suggest_country_adding": "Suggest country adding"
+		},
+		"request_a_call_modal": {
+			"thanksForFillingData": "Thanks for filling your information",
+			"agentWillCallYou": "One of our agents will call you as soon as possible"
 		}
 	},
 	"home": {
@@ -307,7 +311,8 @@
 			"travel_history": "Travel History",
 			"traveled_before": "Traveled Before",
 			"never_traveled": "Never Traveled",
-			"equal_to": "Email doesn't match"
+			"equal_to": "Email doesn't match",
+			"enterInfo": "Please enter your information"
 		},
 		"nav_bar": {
 			"travel_info": "Trip Details",
