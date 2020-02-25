@@ -27,4 +27,4 @@ env_variables:
   GOOGLE_CLIENT_SECRET: 6JHHgsA15a8TzJW1-f57cmti
   FACEBOOK_ID: 734243320376855
   FACEBOOK_SECRET: 8d91f0bd678fe909704d000be4d0a01c
-  LOGGING_CRED: logging-user-stg:Tr1pd1zerP@ssw0rd1
+  LOGGING_CRED: logging-user-dev:Tr1pd1zerP@ssw0rd1

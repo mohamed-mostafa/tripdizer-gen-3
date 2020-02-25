@@ -9,7 +9,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "tripdizer-trawex-adapter-dot-tripdizer-stg.appspot.com"
+host: "35.242.174.95:8085"
 basePath: "/trawex-adapter/1.0.0"
 schemes:
   - "http"
@@ -1376,12 +1376,7 @@ definitions:
       hotelCode: "2894498"
       infoSource: "OpenCombination"
       mealCode: ""
-      allocationDetails:
-        [
-          "1345673204000001B1008B0",
-          "1345673204000001B1008B4",
-          "1345673204000001B1008B8",
-        ]
+      allocationDetails: ["1345673204000001B1008B0","1345673204000001B1008B4","1345673204000001B1008B8"]
       rateBasisIds: ["1293", "1293", "1293"]
       roomCodes: ["1764838", "1764838", "1764838"]
       roomTypeRunnos: ["0", "1", "2"]

@@ -22,7 +22,7 @@ resources:
   memory_gb: 0.6
   disk_size_gb: 10
 env_variables:
-  SERVICES_URL: 'https://staging-services.tripdizer.com'
+  SERVICES_URL: 'https://development-services.tripdizer.com'
   SECRET: 'TRIPDIZER-JWT-SECRET'
-  MEDIA_STORAGE_BASE_URL: 'https://storage.cloud.google.com/tripdizer-stg.appspot.com'
+  MEDIA_STORAGE_BASE_URL: 'https://storage.cloud.google.com/tripdizer-dev.appspot.com'
   WE_ACCEPT_IFRAME_KEY: 15693
