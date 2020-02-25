@@ -130,6 +130,8 @@ export class EstimatedCostService {
 				...city,
 				numberOfNights: index === 0 ? floorDivision + modulus : floorDivision,
 			}));
+		} else {
+			return [];
 		}
 	}
 
