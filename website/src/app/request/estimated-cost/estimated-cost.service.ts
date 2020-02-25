@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -39,7 +39,7 @@ export class EstimatedCostService {
 		accommodationOffers: Array<Accommodation>;
 	};
 
-	currentTabIndex = new Subject<number>();
+	currentTabIndex = new BehaviorSubject<number>(0);
 
 	constructor(
 		private http: HttpClient,
@@ -49,7 +49,6 @@ export class EstimatedCostService {
 		public translate: TranslateService
 	) {
 		this.citiesFlightsAccommodations = { cities: [], flightOffers: [], accommodationOffers: [] };
-		this.setCurrentTabIndex(0);
 		this.getTravelingFromCoordinates();
 		this.requestService.endSessionTimerSubject.subscribe(() => {
 			this.endSessionTimer();
@@ -141,13 +140,14 @@ export class EstimatedCostService {
 	/* flightOffers logic */
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
+		this.getAccommodationOffers();
 		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
 		if (this.citiesFlightsAccommodations.flightOffers && this.citiesFlightsAccommodations.flightOffers.length > 0) {
 			return of(this.citiesFlightsAccommodations.flightOffers);
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
-				message: this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message'),
+				message: this.getLoadingMessage(),
 			});
 
 			const citiesSequence: Array<CitySequence> = this.getCitiesWithNights().map(city => ({
@@ -205,7 +205,7 @@ export class EstimatedCostService {
 		} else {
 			this.requestService.isLoading.next({
 				show: true,
-				message: this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message'),
+				message: this.getLoadingMessage(),
 			});
 
 			const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
@@ -329,6 +329,7 @@ export class EstimatedCostService {
 
 	/* navigation logic */
 	tabsNavigate(source, action, routeConfigPath?, route?) {
+		this.getLoadingMessage();
 		if (source === 'cities' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
 		} else if (source === 'cities' && action === 'next') {
@@ -372,6 +373,16 @@ export class EstimatedCostService {
 			this.router.navigate(['../', this.requestService.getPrevStep(routeConfigPath)], {
 				relativeTo: route,
 			});
+		}
+	}
+
+	getLoadingMessage() {
+		console.log(this.currentTabIndex.getValue());
+		const currentTab = this.currentTabIndex.getValue();
+		if (currentTab === 1) {
+			return this.translate.instant('request.estimated_cost.loading_messages.flights_tab_message');
+		} else if (currentTab === 2) {
+			return this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message');
 		}
 	}
 }
