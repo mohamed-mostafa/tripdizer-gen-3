@@ -6,7 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-	@Input() isFooterHidden = false;
+	@Input() isPlanTripBtnHidden = false;
+
 	menuItems: Array<string> = [
 		//  'FAQ',
 		//  'Careers',
