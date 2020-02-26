@@ -43,14 +43,14 @@
 
             .mat-form-field-wrapper {
                 padding: 0;
-                line-height: 40px;
+                line-height: 25px;
 
                 .mat-form-field-infix {
                     padding: 0;
                     border: 0;
 
                     .mat-form-field-label {
-                        font-size: 10px;
+                        font-size: 12px;
                         border: 0;
                     }
                 }
@@ -114,4 +114,17 @@
             transform: translateY(1.4375rem);
         }
     }
+}
+
+.helpMeDecideButton {
+    width: 100%;
+    max-width: 33.1rem;
+    border-radius: 6px;
+    padding: 0.55rem;
+}
+
+.startMyPlanButton {
+    padding: 0.8rem !important;
+    margin-top: 0rem !important;
+    border-radius: 6px;
 }

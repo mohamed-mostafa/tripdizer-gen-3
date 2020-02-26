@@ -3,7 +3,12 @@
 		<mat-hint>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-hint>
 		<mat-error>{{ formGroup.controls[controlName].errors | errorMessage }}</mat-error>
 		<mat-chip-list #chipList>
-			<mat-chip *ngFor="let place of _selectedPlaces" [removable]="true" (removed)="remove(place[property])">
+			<mat-chip
+				style="border-radius: 6px;"
+				*ngFor="let place of _selectedPlaces"
+				[removable]="true"
+				(removed)="remove(place[property])"
+			>
 				{{ place.name }}
 				<i matChipRemove class="far fa-times-circle h-auto w-auto"></i>
 			</mat-chip>
