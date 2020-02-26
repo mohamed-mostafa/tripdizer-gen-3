@@ -6,7 +6,7 @@
 		<h1 class="text-white landing-question" [class.title-font]="('dir' | translate) === 'rtl'">
 			{{ 'home.landing.landing_question' | translate }}
 		</h1>
-		<div class="m-auto mt-1 countries-select-box" style="display:inline-block;">
+		<div class="countries-select-box inline">
 			<c-shared-places-select-box
 				classes="w-100 p-2 bg-white border-blue"
 				[places]="countries | async"
@@ -14,21 +14,15 @@
 				hidePlaceHolderConditionally="true"
 			></c-shared-places-select-box>
 		</div>
-		<div style="display:inline-block;">
-			<a
-				class="btn btn-green custom-bs btn-rounded border-white mx-2 mt-1 startMyPlanButton"
-				(click)="havePlan()"
-				role="button"
-				>{{ 'home.landing.have_plan' | translate }}</a
-			>
+		<div class="inline">
+			<a class="btn btn-green custom-bs border-white ml-1 startMyPlanButton" (click)="havePlan()" role="button">{{
+				'home.landing.have_plan' | translate
+			}}</a>
 		</div>
-		<div class="mt-1">
-			<a
-				class="btn custom-bs btn-rounded btn-light mx-2 mt-1 helpMeDecideButton"
-				(click)="surpriseMe()"
-				role="button"
-				>{{ 'home.landing.help_me_decide' | translate }}</a
-			>
+		<div>
+			<a class="btn custom-bs btn-rounded btn-light mt-2 helpMeDecideButton" (click)="surpriseMe()" role="button">{{
+				'home.landing.help_me_decide' | translate
+			}}</a>
 		</div>
 	</div>
 

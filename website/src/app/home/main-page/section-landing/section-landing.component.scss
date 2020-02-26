@@ -35,7 +35,7 @@
 
     .countries-select-box {
         width: 100%;
-        max-width: 25rem;
+        max-width: 22rem;
 
         ::ng-deep .mat-form-field {
             border: 1px solid;
@@ -118,13 +118,26 @@
 
 .helpMeDecideButton {
     width: 100%;
-    max-width: 33.1rem;
+    max-width: 29.2rem;
     border-radius: 6px;
-    padding: 0.55rem;
 }
 
 .startMyPlanButton {
     padding: 0.8rem !important;
     margin-top: 0rem !important;
     border-radius: 6px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+@media (max-width: 480px) {
+    .helpMeDecideButton {
+        width: 91%;
+    }
+
+    .countries-select-box {
+        width: 60% !important;
+    }
 }
