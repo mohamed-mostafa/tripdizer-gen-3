@@ -124,11 +124,11 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		});
 	});
 	let allPromises = [];
-	allPromises.push(...flightValidation);
-	allPromises.push(...hotelValidation);
+	// Disable revalidate
+	// allPromises.push(...flightValidation);
+	// allPromises.push(...hotelValidation);
 	Promise.all(allPromises)
 		.then(function(valid) {
-			console.log('test');
 			if (Array.isArray(request.preferences)) {
 				request.preferences = request.preferences.map(ri => ({
 					id: ri.id || ri,
