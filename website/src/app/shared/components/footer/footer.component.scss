@@ -27,7 +27,7 @@
     }
 
     >a {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       background-color: #fff;
       color: #2680eb;
     }
@@ -42,11 +42,11 @@
 
   // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
-    padding: 1rem 4rem !important;
+    padding: 0rem 4rem !important;
   }
 
   // Extra large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
-    padding: 1rem 6rem !important;
+    padding: 0rem 6rem !important;
   }
 }
