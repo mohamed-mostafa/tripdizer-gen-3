@@ -280,6 +280,7 @@ export class EstimatedCostService {
 			this.openSessionDialog(0);
 			this.router.navigate(['request']).then(() => {
 				this.router.navigate(['request', 'estimated-cost']);
+				this.currentTabIndex.next(0);
 			});
 		}, expirationInMinutes * 60 * 1000);
 	}
