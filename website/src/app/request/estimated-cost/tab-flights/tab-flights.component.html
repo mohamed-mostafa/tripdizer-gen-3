@@ -69,7 +69,7 @@
 						</div>
 					</owl-carousel>
 
-					<p *ngIf="flightOffers && flightOffers.length < 1" class="px-2 text-center">
+					<p *ngIf="loadedApiData && flightOffers?.length < 1" class="px-2 text-center">
 						{{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
 					</p>
 				</div>
