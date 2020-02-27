@@ -1,8 +1,12 @@
-<div mat-dialog-content>
-	<h6>{{ 'shared.request_a_call_modal.thanksForFillingData' | translate }}</h6>
-	<h6>{{ 'shared.request_a_call_modal.agentWillCallYou' | translate }}</h6>
+<div mat-dialog-content class="d-block text-center" *ngIf="data.success">
+	<h5>{{ 'shared.request_a_call_modal.thanksForFillingData' | translate }}</h5>
+	<h5>{{ 'shared.request_a_call_modal.agentWillCallYou' | translate }}</h5>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-content class="d-block text-center" *ngIf="data.fail">
+	<h5>{{ 'shared.request_a_call_modal.somethingWrong' | translate }}</h5>
+	<h5>{{ 'shared.request_a_call_modal.tryAgain' | translate }}</h5>
+</div>
+<div mat-dialog-actions class="d-block text-center">
 	<button mat-button (click)="onNoClick()" class="btn custom-bs btn-rounded btn-outline-primary mx-2 right-align">
 		{{ 'request.estimated_cost.session_dialog.buttonsLabel.ok' | translate }}
 	</button>

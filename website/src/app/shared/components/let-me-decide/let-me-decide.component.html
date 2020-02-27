@@ -1,33 +1,57 @@
-<div mat-dialog-content>
-	<h5 class="center">{{ 'request.information.enterInfo' | translate }}</h5>
-	<mat-form-field>
-		<mat-label>{{ 'request.information.name' | translate }}</mat-label>
-		<input matInput [(ngModel)]="data.name" required placeholder="mohamed" />
-		<mat-error *ngIf="controls.name.invalid">{{ getErrorMessage('name') }}</mat-error>
-	</mat-form-field>
-	<mat-form-field>
-		<mat-label>{{ 'request.information.mobile' | translate }}</mat-label>
-		<input matInput [(ngModel)]="data.mobile" type="number" required placeholder="01020406080" />
-		<mat-error *ngIf="controls.email.invalid">{{ getErrorMessage('mobile') }}</mat-error>
-	</mat-form-field>
-	<mat-form-field>
-		<mat-label>{{ 'request.information.email' | translate }}</mat-label>
-		<input
-			matInput
-			[(ngModel)]="data.email"
-			type="email"
-			[formControl]="controls.email"
-			required
-			placeholder="alaa@gmail.com"
-		/>
-		<mat-error *ngIf="controls.email.invalid">{{ getErrorMessage('email') }}</mat-error>
-	</mat-form-field>
-</div>
-<div mat-dialog-actions>
-	<button mat-button (click)="onNoClick()" class="btn custom-bs btn-rounded btn-outline-secondary mx-2">
-		{{ 'home.dialog.buttonsLabel.cancel' | translate }}
-	</button>
-	<button mat-button (click)="save(data)" class="btn custom-bs btn-rounded btn-outline-blue mx-2">
-		{{ 'request.estimated_cost.session_dialog.buttonsLabel.ok' | translate }}
-	</button>
+<div>
+	<h5>{{ 'request.information.enterInfo' | translate }}</h5>
+	<div>
+		<form [formGroup]="userModal" (ngSubmit)="onSubmit()">
+			<div class="form-row">
+				<div class="form-group col-12">
+					<label>{{ 'request.information.name' | translate }}</label>
+					<input
+						type="text"
+						formControlName="name"
+						class="form-control"
+						[ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+					/>
+					<div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+						<div *ngIf="f.name.errors.required">{{ 'shared.error_messages.required' | translate }}</div>
+						<div *ngIf="f.name.errors && !f.name.errors.required">
+							{{ 'shared.error_messages.notEmpty' | translate }}
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-12">
+					<label>{{ 'request.information.mobile' | translate }}</label>
+					<input
+						type="number"
+						formControlName="mobile"
+						class="form-control"
+						[ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
+					/>
+					<div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+						<div *ngIf="f.mobile.errors.required">{{ 'shared.error_messages.required' | translate }}</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ 'request.information.email' | translate }}</label>
+				<input
+					type="text"
+					formControlName="email"
+					class="form-control"
+					[ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+				/>
+				<div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+					<div *ngIf="f.email.errors.required">{{ 'shared.error_messages.required' | translate }}</div>
+					<div *ngIf="f.email.errors.email">{{ 'shared.error_messages.email' | translate }}</div>
+				</div>
+			</div>
+			<div class="text-center">
+				<button class="btn btn-secondary mr-1" type="reset" (click)="onReset()">
+					{{ 'home.dialog.buttonsLabel.cancel' | translate }}
+				</button>
+				<button class="btn btn-primary">
+					{{ 'request.estimated_cost.session_dialog.buttonsLabel.ok' | translate }}
+				</button>
+			</div>
+		</form>
+	</div>
 </div>

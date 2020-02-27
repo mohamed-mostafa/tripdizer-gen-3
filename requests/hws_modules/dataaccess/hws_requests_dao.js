@@ -1136,6 +1136,47 @@ let getItineraryById = async function(id) {
 	});
 };
 
+let requestACall = function(request, onSuccess, onFailure) {
+	// get a connection and open it
+	let connection = daoUtilities.createConnection();
+	connection.connect(function(err) {
+		if (err) {
+			console.error('An error occurred while trying to open a database connection');
+			console.error(err);
+			onFailure(err);
+		} else {
+			// begin a transaction to insert the request
+			connection.beginTransaction(function(err) {
+				// execute the query
+				if (err) {
+					// end the connection
+					connection.end();
+					console.error('An error occurred while trying to begin a database transaction');
+					console.error(err);
+					onFailure(err);
+				} else {
+					connection.query(
+						'INSERT INTO Let_Me_Decide (Name, Mobile, Email) values (?, ?, ?)',
+						[request.name, request.mobile, request.email],
+						function(err, result) {
+							// if an error is thrown, end the connection and throw an error
+							if (err) {
+								// if the first insert statement fails
+								console.error('An error occurred while trying to create the new request: ' + JSON.stringify(request));
+								console.error(err);
+								connection.rollback(); // rollback the transaction
+								// end the connection
+								connection.end();
+								onFailure(err);
+							} else onSuccess(result);
+						}
+					);
+				}
+			});
+		}
+	});
+};
+
 module.exports = {
 	assignRequestToUser,
 	updateRequest,
@@ -1154,4 +1195,5 @@ module.exports = {
 	getRequestsByMail,
 	getPaymentStatus,
 	updatePaymentStatusById,
+	requestACall,
 };

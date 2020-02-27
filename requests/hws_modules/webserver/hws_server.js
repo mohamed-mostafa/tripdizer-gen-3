@@ -58,6 +58,8 @@ let start = function() {
 	router.post('/group-trips/register', grouptripsInterface.register);
 	router.put('/group-trips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
+	//request a call from let me decide
+	router.post('/requestACall', requestsInterface.requestACall);
 
 	// Payments
 	router.get('/payments/key/:amount', auth.isAuthenticated, paymentsInterface.generatePaymentKeyWithOrderRegistration);

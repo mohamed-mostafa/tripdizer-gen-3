@@ -1,66 +1,80 @@
-import { RequestACallComponent } from './../request-a-call/request-a-call.component';
+import { SuccessResponse } from './../../../../../../users/src/models/response';
+import { HttpClient } from '@angular/common/http';
 import { CustomValidators } from './../../utils/custom.validators';
+import { RequestACallComponent } from './../request-a-call/request-a-call.component';
 import { DialogData } from './dialog.model';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 @Component({
 	selector: 'c-let-me-decide',
 	templateUrl: './let-me-decide.component.html',
 	styleUrls: ['./let-me-decide.component.scss'],
 })
 export class LetMeDecideComponent implements OnInit {
+	userModal: FormGroup;
+	submitted = false;
 	constructor(
 		public dialogRef: MatDialogRef<LetMeDecideComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: DialogData,
-		public dialog: MatDialog
+		public dialog: MatDialog,
+		private formBuilder: FormBuilder,
+		private http: HttpClient
 	) {}
-	controls: any = {
-		name: new FormControl('', [
-			Validators.required,
-			Validators.pattern('^[a-zA-Z0-9]{0,14}$'),
-			CustomValidators.leadingSpaceValidator(),
-			CustomValidators.trailingSpaceValidator(),
-		]),
-		email: new FormControl('', [
-			Validators.required,
-			CustomValidators.validEmail(),
-			CustomValidators.leadingSpaceValidator(),
-			CustomValidators.trailingSpaceValidator(),
-		]),
-		mobile: new FormControl('', [Validators.required, CustomValidators.numericOnly()]),
-	};
-
-	onNoClick(): void {
+	ngOnInit() {
+		this.userModal = this.formBuilder.group({
+			name: [
+				'',
+				[
+					Validators.required,
+					Validators.pattern('^[a-zA-Z0-9]{0,14}$'),
+					CustomValidators.leadingSpaceValidator(),
+					CustomValidators.trailingSpaceValidator(),
+				],
+			],
+			mobile: ['', [Validators.required, CustomValidators.numericOnly()]],
+			email: [
+				'',
+				[
+					Validators.required,
+					CustomValidators.validEmail(),
+					CustomValidators.leadingSpaceValidator(),
+					CustomValidators.trailingSpaceValidator(),
+				],
+			],
+		});
+	}
+	get f() {
+		return this.userModal.controls;
+	}
+	onReset() {
+		this.submitted = false;
+		this.userModal.reset();
 		this.dialogRef.close();
 	}
-	getErrorMessage(val) {
-		if (val === 'name') {
-			return this.controls.name.hasError('required')
-				? 'You must enter a value'
-				: this.controls.name.hasError('name')
-				? 'Not a valid name'
-				: '';
-		} else if (val === 'mobile') {
-			return this.controls.mobile.hasError('required')
-				? 'You must enter a value'
-				: this.controls.mobile.hasError('mobile')
-				? 'Not a valid mobile'
-				: '';
-		} else {
-			return this.controls.email.hasError('required')
-				? 'You must enter a value'
-				: this.controls.email.hasError('email')
-				? 'Not a valid email'
-				: '';
+	onSubmit() {
+		this.submitted = true;
+		if (this.userModal.invalid) {
+			return;
 		}
+		const result = this.userModal.value;
+		return this.http.post<void>(`requests/requestACall`, result).subscribe(
+			() => {
+				this.dialogRef.close();
+				this.dialog.open(RequestACallComponent, {
+					data: {
+						success: true,
+					},
+				});
+			},
+			error => {
+				this.dialogRef.close();
+				this.dialog.open(RequestACallComponent, {
+					data: {
+						fail: true,
+					},
+				});
+			}
+		);
 	}
-	save(data) {
-		if (data.email && data.name && data.mobile && !this.controls.email.hasError('email')) {
-			let res = data;
-			this.dialogRef.close();
-			this.dialog.open(RequestACallComponent);
-		}
-	}
-	ngOnInit() {}
 }

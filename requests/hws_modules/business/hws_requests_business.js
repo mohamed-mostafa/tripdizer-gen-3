@@ -1000,6 +1000,26 @@ let getRequestsByMail = (user, onSuccess, onFailure) => {
 	);
 };
 
+let requestACall = function(request, onSuccess, onFailure) {
+	try {
+		requestsDao.requestACall(
+			request,
+			function(data) {
+				onSuccess(data);
+			},
+			function(err) {
+				console.error('An error occurred while saving a new request');
+				console.error(err);
+				onFailure(err);
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /request a call /');
+		console.error(error);
+		onFailure(error);
+	}
+};
+
 module.exports = {
 	placeRequest,
 	getRequestById,
@@ -1018,4 +1038,5 @@ module.exports = {
 	getPaymentStatus: requestsDao.getPaymentStatus,
 	handlePaidRequest,
 	getRequestsByMail,
+	requestACall,
 };

@@ -542,6 +542,38 @@ let getPaymentStatus = function(req, res) {
 			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
 	}
 };
+
+let requestACall = function(req, res) {
+	try {
+		let request = {
+			name: req.body.name,
+			mobile: req.body.mobile,
+			email: req.body.email,
+		};
+		// call the business function and give it a callback function
+		requestsBusiness.requestACall(
+			request,
+			function(data) {
+				res.json(data);
+			},
+			function(error) {
+				res
+					.status(500)
+					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			},
+			function(businessError) {
+				res.status(500).send(businessError);
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /request a call /');
+		console.error(error);
+		res
+			.status(500)
+			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 exports.placeWebsiteRequest = placeWebsiteRequest;
 exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
@@ -565,3 +597,4 @@ exports.validatePromoCode = validatePromoCode;
 exports.getTravelerEmails = getTravelerEmails;
 exports.getRequestsByMail = getRequestsByMail;
 exports.getPaymentStatus = getPaymentStatus;
+exports.requestACall = requestACall;

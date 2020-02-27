@@ -47,7 +47,9 @@
 		},
 		"request_a_call_modal": {
 			"thanksForFillingData": "شكرا لملء المعلومات الخاصة بك",
-			"agentWillCallYou": "سيقوم أحد عملائنا بالاتصال بك في أقرب وقت ممكن"
+			"agentWillCallYou": "سيقوم أحد عملائنا بالاتصال بك في أقرب وقت ممكن",
+			"somethingWrong": "حدث خطا ما",
+			"tryAgain": "الرجاء حاول مرة اخرى"
 		}
 	},
 	"home": {

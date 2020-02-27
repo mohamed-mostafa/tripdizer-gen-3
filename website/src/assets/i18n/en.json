@@ -47,7 +47,9 @@
 		},
 		"request_a_call_modal": {
 			"thanksForFillingData": "Thanks for filling your information",
-			"agentWillCallYou": "One of our agents will call you as soon as possible"
+			"agentWillCallYou": "One of our agents will call you as soon as possible",
+			"somethingWrong": "Something went wrong",
+			"tryAgain": "Please try again"
 		}
 	},
 	"home": {
