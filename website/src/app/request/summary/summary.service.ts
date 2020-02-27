@@ -239,7 +239,7 @@ export class SummaryService {
 			offer.hotels
 				.filter(hotel => hotel.selected)
 				.map(h => {
-					hotelsCosts = +h.price;
+					hotelsCosts += h.price;
 				});
 		});
 		const flightsCosts = Object.keys(this.getSelectedFlightOffers()).reduce(
