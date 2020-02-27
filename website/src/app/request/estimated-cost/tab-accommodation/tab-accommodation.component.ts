@@ -76,7 +76,7 @@ export class TabAccommodationComponent {
 			offer.hotels
 				.filter(hotel => hotel.selected)
 				.map(h => {
-					this.totalCost = +h.price;
+					this.totalCost += h.price;
 				});
 		});
 	}
