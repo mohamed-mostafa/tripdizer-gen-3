@@ -40,8 +40,8 @@ export class BudgetComponent {
 
 		let firstDestination = this.selectedCountries[0];
 		let numberOfDays = this.returnDate.diff(this.departureDate, 'days');
-		this.minimumBudget = firstDestination.minimumTravelBudget + (firstDestination.minimumDailyBudget * numberOfDays);
-		this.maximumBudget = firstDestination.minimumTravelBudget + (firstDestination.maximumDailyBudget * numberOfDays);
+		this.minimumBudget = firstDestination ? firstDestination.minimumTravelBudget + (firstDestination.minimumDailyBudget * numberOfDays) : 10000;
+		this.maximumBudget = firstDestination ? firstDestination.minimumTravelBudget + (firstDestination.maximumDailyBudget * numberOfDays) : 100000;
 
 		this.formGroup.controls['budget'].setValue(this.minimumBudget);
 
