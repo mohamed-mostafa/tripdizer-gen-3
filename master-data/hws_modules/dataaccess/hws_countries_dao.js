@@ -205,8 +205,15 @@ var getAll = function (lang, onSuccess, onFailure) {
 			onFailure(err);
 		} else {
 			// execute the query
+			var query = 'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id';
+			if (lang) {
+				var language = lang.toUpperCase();
+				query += " ORDER BY " + language + "_Name";
+			} else {
+				query += " ORDER BY C.EN_Name";
+			}
 			connection.query(
-				'SELECT C.*, VT.EN_Name as EN_Visa_Type_Name, VT.AR_Name as AR_Visa_Type_Name FROM Countries C LEFT JOIN Visa_Types VT ON C.Visa_Type = VT.Id',
+				query,
 				[],
 				function (err, rows) {
 					// if an error is thrown, end the connection and throw an error
