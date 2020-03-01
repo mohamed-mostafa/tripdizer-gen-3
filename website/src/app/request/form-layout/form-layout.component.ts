@@ -53,7 +53,6 @@ export class RequestFormLayoutComponent {
 		setTimeout(() => {
 			if (this.estimatedCostService && this.estimatedCostService.currentTabIndex) {
 				this.estimatedCostService.currentTabIndex.next(0);
-				console.log('hi');
 			}
 		}, 0);
 	}
