@@ -1020,6 +1020,25 @@ let requestACall = function(request, onSuccess, onFailure) {
 	}
 };
 
+let getAllRequestsACall = function(onSuccess, onFailure) {
+	try {
+		requestsDao.getAllRequestsACall(
+			function(data) {
+				onSuccess(data);
+			},
+			function(err) {
+				console.error('An error occurred while getting all requests a call');
+				console.error(err);
+				onFailure(err);
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /request a call /');
+		console.error(error);
+		onFailure(error);
+	}
+};
+
 module.exports = {
 	placeRequest,
 	getRequestById,
@@ -1039,4 +1058,5 @@ module.exports = {
 	handlePaidRequest,
 	getRequestsByMail,
 	requestACall,
+	getAllRequestsACall,
 };

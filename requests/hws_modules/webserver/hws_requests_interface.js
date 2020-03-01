@@ -574,6 +574,29 @@ let requestACall = function(req, res) {
 	}
 };
 
+let getAllRequestsACall = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getAllRequestsACall(
+			function(status) {
+				res.send(status);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /get all requests a call');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
 exports.placeWebsiteRequest = placeWebsiteRequest;
 exports.placeDashboardRequest = placeDashboardRequest;
 exports.getRequestById = getRequestById;
@@ -598,3 +621,4 @@ exports.getTravelerEmails = getTravelerEmails;
 exports.getRequestsByMail = getRequestsByMail;
 exports.getPaymentStatus = getPaymentStatus;
 exports.requestACall = requestACall;
+exports.getAllRequestsACall = getAllRequestsACall;

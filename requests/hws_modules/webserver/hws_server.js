@@ -32,6 +32,8 @@ let start = function() {
 	// routing - Start
 
 	// requests
+	router.get('/getAllRequestsACall', requestsInterface.getAllRequestsACall);
+
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);
@@ -59,8 +61,8 @@ let start = function() {
 	router.put('/group-trips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
 	//request a call from let me decide
+	router.get('/getAllRequestsACall', requestsInterface.getAllRequestsACall);
 	router.post('/requestACall', requestsInterface.requestACall);
-
 	// Payments
 	router.get('/payments/key/:amount', auth.isAuthenticated, paymentsInterface.generatePaymentKeyWithOrderRegistration);
 	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
