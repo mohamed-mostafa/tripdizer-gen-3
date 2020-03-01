@@ -198,7 +198,6 @@ export class EstimatedCostService {
 
 	callGetAccommodationOffers() {
 		this.getAccommodationOffers().subscribe(accommodationOffersResult => {
-			console.log(accommodationOffersResult);
 			this.accommodationOffersResult.next(accommodationOffersResult);
 		});
 	}
