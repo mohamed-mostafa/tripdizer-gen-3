@@ -43,11 +43,8 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		PlacesSelectBoxComponent,
 		TranslateModule,
 		FooterComponent,
-<<<<<<< HEAD
 		LetMeDecideComponent,
 		RequestACallComponent,
-=======
->>>>>>> development
 	],
 	declarations: [
 		DialogComponent,
@@ -57,11 +54,8 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
 		FooterComponent,
-<<<<<<< HEAD
 		LetMeDecideComponent,
 		RequestACallComponent,
-=======
->>>>>>> development
 	],
 	entryComponents: [DialogComponent, LoginDialogComponent, LetMeDecideComponent, RequestACallComponent],
 })
