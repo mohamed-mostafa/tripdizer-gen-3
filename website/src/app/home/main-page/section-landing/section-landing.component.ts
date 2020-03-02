@@ -1,3 +1,5 @@
+import { LetMeDecideComponent } from './../../../shared/components/let-me-decide/let-me-decide.component';
+import { MatDialog } from '@angular/material/dialog';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SectionLandingComponent {
 	selectedCountries: Array<Country> = [];
-
+	name: string;
 	countries: Observable<Array<Country>>;
 
 	get selectedCountriesISO(): Array<string> {
@@ -22,6 +24,7 @@ export class SectionLandingComponent {
 
 	constructor(
 		private router: Router,
+		public dialog: MatDialog,
 		private trackingService: TrackingService,
 		lutService: LookupsService,
 		public translate: TranslateService
@@ -38,8 +41,11 @@ export class SectionLandingComponent {
 	}
 
 	surpriseMe() {
-		this.trackingService.track('Submit - NO, Surprise me');
-
-		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO, surprise: true } });
+		// this.trackingService.track('Submit - NO, Surprise me');
+		// this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO, surprise: true } });
+		const dialogRef = this.dialog.open(LetMeDecideComponent, {
+			width: '300px',
+			data: { name: this.name },
+		});
 	}
 }

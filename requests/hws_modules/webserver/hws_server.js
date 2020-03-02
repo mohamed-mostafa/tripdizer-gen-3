@@ -33,6 +33,10 @@ const start = function() {
 	// routing - Start
 
 	// requests
+	//request a call from let me decide
+	router.get('/getAllRequestsACall', requestsInterface.getAllRequestsACall);
+	router.post('/requestACall', requestsInterface.requestACall);
+
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
 	router.get('/promo-code-validity', requestsInterface.validatePromoCode);

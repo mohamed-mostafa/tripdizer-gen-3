@@ -347,6 +347,23 @@ var g2gControlCenterApplication = angular
 			}
 		},
 	])
+	.factory('requestACallService', [
+		'$rootScope',
+		'$http',
+		function requestACallService($rootScope, $http) {
+			var prefix = $rootScope.requestsServerUrl;
+
+			return {
+				getAll: getAll,
+			};
+
+			function getAll() {
+				return $http.get(prefix + '/getAllRequestsACall', {}).then(function(response) {
+					return response.data;
+				});
+			}
+		},
+	])
 	.factory('GroupTripsService', [
 		'$rootScope',
 		'$http',
