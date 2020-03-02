@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from './../shared/services/auth.service';
 import { SideNavService } from './side-nav.service';
 import { User } from './user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'c-app-user',
@@ -13,11 +14,13 @@ export class UserComponent implements OnDestroy {
 	@ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
 	user: User;
 	navContent: string;
+	subUser: Subscription;
+	subNavContent: Subscription;
 
 	constructor(private authService: AuthService, private sideNavService: SideNavService) {
-		this.authService.authenticatedUser.subscribe(user => (this.user = user));
+		this.subUser = this.authService.authenticatedUser.subscribe(user => (this.user = user));
 
-		this.sideNavService.navContent.subscribe(navContentResult => {
+		this.subNavContent = this.sideNavService.navContent.subscribe(navContentResult => {
 			if (navContentResult && navContentResult.page) {
 				this.navContent = navContentResult.page;
 				this.openNav();
@@ -47,6 +50,7 @@ export class UserComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.authService.authenticatedUser.unsubscribe();
+		this.subUser.unsubscribe();
+		this.subNavContent.unsubscribe();
 	}
 }

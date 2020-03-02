@@ -31,5 +31,9 @@ export class TrackingService {
 
 	trackConversion(): void {
 		gtag('event', 'conversion', { send_to: environment.google.conversionTrackingTarget });
+		fbq('track', 'Purchase', {
+			value: 40.00,
+			currency: 'EGP'
+		});
 	}
 }

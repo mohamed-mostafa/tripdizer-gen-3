@@ -48,6 +48,10 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 		tourGuideNeeded: request.tourGuideNeeded || request.tour_guide_needed,
 		specialRequests: request.comments || request.specialRequests,
 		channel: request.isFromWebsite ? 1 : request.channel,
+		flightOffers: request.flightOffers ? request.flightOffers : [],
+		selectedCities: request.selectedCities ? request.selectedCities : [],
+		selectedHotels: request.selectedHotels ? request.selectedHotels : [],
+		selectedAttractions: request.selectedAttractions ? request.selectedAttractions : [],
 		traveler: {
 			...request.traveler,
 			email: request.traveler.email || request.traveler.emailAddress,
@@ -58,20 +62,21 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 	request.otherPurposeName = request.purpose == 1 ? request.otherPurposeName : null;
 	let flightValidation = request.flightOffers.map(flight => {
 		return new Promise((resolve, reject) => {
+			const requestData = { sessionId: flight.sessionId, fareSourceCode: flight.fareSourceCode };
 			trawexService
-				.getFlightFareDetailsAPi(flight.sessionId, flight.fareSourceCode)
+				.getFlightFareDetailsAPi(requestData.sessionId, requestData.fareSourceCode)
 				.then(data => {
 					trawexService
-						.validateFlightAPi(flight.sessionId, flight.fareSourceCode)
+						.validateFlightAPi(requestData.sessionId, requestData.fareSourceCode)
 						.then(flights => {
 							resolve(true);
 						})
 						.catch(error => {
-							reject(false);
+							reject('Error happened while validating flight: ' + error + '\nData: ' + JSON.stringify(requestData));
 						});
 				})
 				.catch(err => {
-					reject(false);
+					reject('Error happened while getting flight fare: ' + err + '\nData: ' + JSON.stringify(requestData));
 				});
 		});
 	});
@@ -110,17 +115,18 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 							resolve(true);
 						})
 						.catch(err => {
-							reject(false);
+							reject('Error happened while re-validating hotel: ' + err + '\nData: ' + JSON.stringify(mergedData));
 						});
 				})
 				.catch(error => {
-					reject(false);
+					reject('Error happened while checking hotel offer: ' + error + '\nData: ' + JSON.stringify(hotelDetails));
 				});
 		});
 	});
 	let allPromises = [];
-	allPromises.push(...flightValidation);
-	allPromises.push(...hotelValidation);
+	// Disable revalidate
+	// allPromises.push(...flightValidation);
+	// allPromises.push(...hotelValidation);
 	Promise.all(allPromises)
 		.then(function(valid) {
 			if (Array.isArray(request.preferences)) {
@@ -294,7 +300,7 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 		})
 		.catch(error => {
-			onUserError('The prices or availability has changed, please select other offers');
+			onUserError('The prices or availability has changed, please select other offers.\n' + error);
 		});
 };
 

@@ -1376,7 +1376,12 @@ definitions:
       hotelCode: "2894498"
       infoSource: "OpenCombination"
       mealCode: ""
-      allocationDetails: ["1345673204000001B1008B0","1345673204000001B1008B4","1345673204000001B1008B8"]
+      allocationDetails:
+        [
+          "1345673204000001B1008B0",
+          "1345673204000001B1008B4",
+          "1345673204000001B1008B8",
+        ]
       rateBasisIds: ["1293", "1293", "1293"]
       roomCodes: ["1764838", "1764838", "1764838"]
       roomTypeRunnos: ["0", "1", "2"]

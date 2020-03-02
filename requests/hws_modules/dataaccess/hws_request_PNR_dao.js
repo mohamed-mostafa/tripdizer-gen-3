@@ -1,6 +1,6 @@
 let daoUtilities = require('./hws_dao_utilities');
 
-let save = async function(requestId, pnrInfo) {
+exports.save = async function(requestId, pnrInfo) {
 	let firestore = daoUtilities.getFireStoreClient();
 	// Obtain a document reference.
 	const document = firestore.doc('request-pnr/' + requestId);
@@ -13,39 +13,10 @@ let save = async function(requestId, pnrInfo) {
 	}
 };
 
-let get = function(requestId) {
+exports.get = function(requestId) {
 	let firestore = daoUtilities.getFireStoreClient();
 	// Obtain a document reference.
 	const document = firestore.doc('request-pnr/' + requestId);
 	// Read data fro the document.
 	return document.get();
-};
-
-let getUserIdsBYMail = function(email, onSuccess, onFailure) {
-	let firestore = daoUtilities.getFireStoreClient();
-	let foundData = [];
-	const document = firestore
-		.collection('request-pnr')
-		.get()
-		.then(snapshot => {
-			if (snapshot.empty) {
-				onFailure('No matching documents.');
-				return;
-			}
-			snapshot.forEach(doc => {
-				// console.log(doc.id, '=>', doc.data());
-				doc.data().choices.forEach(res => {
-					if (res.email == email) foundData.push(doc.id);
-				});
-			});
-			onSuccess(foundData);
-		})
-		.catch(err => {
-			onFailure('Error getting documents', err);
-		});
-};
-module.exports = {
-	save,
-	get,
-	getUserIdsBYMail,
 };

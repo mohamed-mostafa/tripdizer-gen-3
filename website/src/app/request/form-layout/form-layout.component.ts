@@ -1,3 +1,4 @@
+import { EstimatedCostService } from './../estimated-cost/estimated-cost.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,7 +28,8 @@ export class RequestFormLayoutComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		translate: TranslateService,
-		requestService: RequestService
+		requestService: RequestService,
+		public estimatedCostService: EstimatedCostService
 	) {
 		const currentStepPath = route.routeConfig.path;
 		requestService.redirectIfShouldBeRedirected(currentStepPath);
@@ -48,5 +50,10 @@ export class RequestFormLayoutComponent {
 	goToNextStep() {
 		this.next.emit();
 		this.router.navigate(['../', this.nextStepPath], { relativeTo: this.route });
+		setTimeout(() => {
+			if (this.estimatedCostService && this.estimatedCostService.currentTabIndex) {
+				this.estimatedCostService.currentTabIndex.next(0);
+			}
+		}, 0);
 	}
 }

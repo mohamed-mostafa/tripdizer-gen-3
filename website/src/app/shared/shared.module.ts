@@ -6,6 +6,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../environments/environment';
 import { CoreModule } from '../core/core.module';
@@ -25,6 +26,7 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		CommonModule,
 		CoreModule,
 		FormsModule,
+		RouterModule,
 		MatAutocompleteModule,
 		MatChipsModule,
 		MatDialogModule,
@@ -41,8 +43,11 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		PlacesSelectBoxComponent,
 		TranslateModule,
 		FooterComponent,
+<<<<<<< HEAD
 		LetMeDecideComponent,
 		RequestACallComponent,
+=======
+>>>>>>> development
 	],
 	declarations: [
 		DialogComponent,
@@ -52,8 +57,11 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
 		FooterComponent,
+<<<<<<< HEAD
 		LetMeDecideComponent,
 		RequestACallComponent,
+=======
+>>>>>>> development
 	],
 	entryComponents: [DialogComponent, LoginDialogComponent, LetMeDecideComponent, RequestACallComponent],
 })

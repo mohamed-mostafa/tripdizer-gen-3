@@ -1,6 +1,6 @@
 const requestsBusiness = require('../business/hws_requests_business.js');
 
-let placeWebsiteRequest = function(req, res) {
+const placeWebsiteRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		request.isFromWebsite = true;
@@ -28,7 +28,7 @@ let placeWebsiteRequest = function(req, res) {
 	}
 };
 
-let placeDashboardRequest = function(req, res) {
+const placeDashboardRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		request.isFromDashboard = true;
@@ -56,7 +56,7 @@ let placeDashboardRequest = function(req, res) {
 	}
 };
 
-let getRequestById = function(req, res) {
+const getRequestById = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
 		// call the business function and give it a callback function
@@ -81,7 +81,7 @@ let getRequestById = function(req, res) {
 	}
 };
 
-let getRequestSummaries = function(req, res) {
+const getRequestSummaries = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
@@ -109,7 +109,7 @@ let getRequestSummaries = function(req, res) {
 	}
 };
 
-let getRequestSummariesCount = function(req, res) {
+const getRequestSummariesCount = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		var statuses = req.query.statuses;
@@ -135,7 +135,7 @@ let getRequestSummariesCount = function(req, res) {
 	}
 };
 
-let sendMailsToRequestTraveler = function(req, res) {
+const sendMailsToRequestTraveler = function(req, res) {
 	try {
 		var email = req.body.email;
 		// call the business function and give it a callback function
@@ -159,7 +159,7 @@ let sendMailsToRequestTraveler = function(req, res) {
 	}
 };
 
-let changeRequestStatus = function(req, res) {
+const changeRequestStatus = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var status = req.body.status;
@@ -185,7 +185,7 @@ let changeRequestStatus = function(req, res) {
 	}
 };
 
-let getRequestsByMail = function(req, res) {
+const getRequestsByMail = function(req, res) {
 	try {
 		let user = req.user;
 		// call the business function and give it a callback function
@@ -212,7 +212,7 @@ let getRequestsByMail = function(req, res) {
 
 //-------------------------------------- SET STATUS ------------------------------
 
-let markRequestBeingPrepared = function(req, res) {
+const markRequestBeingPrepared = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -236,7 +236,7 @@ let markRequestBeingPrepared = function(req, res) {
 	}
 };
 
-let markRequestDelivered = function(req, res) {
+const markRequestDelivered = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -260,7 +260,7 @@ let markRequestDelivered = function(req, res) {
 	}
 };
 
-let markRequestPlaced = function(req, res) {
+const markRequestPlaced = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -284,7 +284,7 @@ let markRequestPlaced = function(req, res) {
 	}
 };
 
-let assignRequestToUser = function(req, res) {
+const assignRequestToUser = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var userId = req.body.userId;
@@ -310,7 +310,7 @@ let assignRequestToUser = function(req, res) {
 	}
 };
 
-let updateRequest = function(req, res) {
+const updateRequest = function(req, res) {
 	try {
 		var request = req.body.request;
 		// call the business function and give it a callback function
@@ -336,7 +336,7 @@ let updateRequest = function(req, res) {
 
 //-------------------------------------- SEARCH ------------------------------
 
-let budgetCalculation = function(req, res) {
+const budgetCalculation = function(req, res) {
 	try {
 		var request = req.body.request;
 		// call the business function and give it a callback function
@@ -363,7 +363,7 @@ let budgetCalculation = function(req, res) {
 	}
 };
 
-let recommendation = function(req, res) {
+const recommendation = function(req, res) {
 	try {
 		var request = req.body.request;
 		var lang = req.query.lang;
@@ -392,7 +392,7 @@ let recommendation = function(req, res) {
 	}
 };
 
-let toggleOptions = function(req, res) {
+const toggleOptions = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		var option = req.body.option;
@@ -421,7 +421,7 @@ let toggleOptions = function(req, res) {
 	}
 };
 
-let getPackage = function(req, res) {
+const getPackage = function(req, res) {
 	try {
 		var requestId = req.params.requestId;
 		// call the business function and give it a callback function
@@ -447,7 +447,7 @@ let getPackage = function(req, res) {
 	}
 };
 
-let sendPackageByMail = function(req, res) {
+const sendPackageByMail = function(req, res) {
 	try {
 		var requestId = req.body.requestId;
 		// call the business function and give it a callback function
@@ -472,7 +472,7 @@ let sendPackageByMail = function(req, res) {
 	}
 };
 
-let validatePromoCode = function(req, res) {
+const validatePromoCode = function(req, res) {
 	try {
 		var promoCode = req.query.promoCode;
 		// call the business function and give it a callback function
@@ -497,7 +497,7 @@ let validatePromoCode = function(req, res) {
 	}
 };
 
-let getTravelerEmails = function(req, res) {
+const getTravelerEmails = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		requestsBusiness.getTravelerEmails(
@@ -520,7 +520,7 @@ let getTravelerEmails = function(req, res) {
 	}
 };
 
-let getPaymentStatus = function(req, res) {
+const getPaymentStatus = function(req, res) {
 	try {
 		// call the business function and give it a callback function
 		requestsBusiness.getPaymentStatus(

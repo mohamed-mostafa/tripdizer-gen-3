@@ -35,7 +35,7 @@
 
     .countries-select-box {
         width: 100%;
-        max-width: 25rem;
+        max-width: 22rem;
 
         ::ng-deep .mat-form-field {
             border: 1px solid;
@@ -43,14 +43,14 @@
 
             .mat-form-field-wrapper {
                 padding: 0;
-                line-height: 40px;
+                line-height: 25px;
 
                 .mat-form-field-infix {
                     padding: 0;
                     border: 0;
 
                     .mat-form-field-label {
-                        font-size: 10px;
+                        font-size: 12px;
                         border: 0;
                     }
                 }
@@ -113,5 +113,31 @@
             -webkit-transform: translateY(1.4375rem);
             transform: translateY(1.4375rem);
         }
+    }
+}
+
+.helpMeDecideButton {
+    width: 100%;
+    max-width: 29.2rem;
+    border-radius: 6px;
+}
+
+.startMyPlanButton {
+    padding: 0.8rem !important;
+    margin-top: 0rem !important;
+    border-radius: 6px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+@media (max-width: 480px) {
+    .helpMeDecideButton {
+        width: 91%;
+    }
+
+    .countries-select-box {
+        width: 60% !important;
     }
 }

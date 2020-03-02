@@ -122,7 +122,6 @@ export class PlacesSelectBoxComponent implements OnInit {
 
 	addFromAutocomplete(event: MatAutocompleteSelectedEvent): void {
 		const place = this._places.find(p => p[this.property] === event.option.value);
-
 		if (place) {
 			if (place.id !== 0) {
 				this._selectedPlaces.push(place);

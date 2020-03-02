@@ -2,13 +2,14 @@
  * The hws server exposing the REST services
  */
 
-let start = function() {
+const start = function() {
 	// initialize express
 	const express = require('express');
 	const cors = require('cors');
 	const bodyParser = require('body-parser');
 	const auth = require('../app/auth/index');
 	const publicUserAuth = require('../app/auth/publicUserAuth');
+
 	// interfaces
 	require('../app/cron/index');
 	const requestsInterface = require('./hws_requests_interface.js');
@@ -28,7 +29,7 @@ let start = function() {
 	app.use(bodyParser.json()); // for parsing application/json
 	app.use(json2xls.middleware); // middleware to return contenttype xls
 
-	var router = express.Router();
+	const router = express.Router();
 	// routing - Start
 
 	// requests
@@ -50,6 +51,7 @@ let start = function() {
 	router.get('/package/:requestId', auth.isAuthenticated, requestsInterface.getPackage);
 	router.post('/send-package', requestsInterface.sendPackageByMail);
 	router.get('/statuses/emails', auth.isAuthenticatedAsAdmin, requestsInterface.getTravelerEmails);
+
 	// 		set status and options
 	router.put('/toggle-options', auth.isAuthenticated, requestsInterface.toggleOptions);
 	router.post('/status', auth.isAuthenticated, requestsInterface.changeRequestStatus);
@@ -71,7 +73,7 @@ let start = function() {
 	// routing - end
 	app.use('/requests', router);
 
-	var port = process.env.PORT || 8082;
+	const port = process.env.PORT || 8082;
 
 	app.listen(port, function() {
 		console.log('%s: "requests" Node server started on %d ...', Date(Date.now()), port);

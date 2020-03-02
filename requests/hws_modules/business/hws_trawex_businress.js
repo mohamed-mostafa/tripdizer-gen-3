@@ -1,6 +1,6 @@
 const httpRequest = require('request');
 
-const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.235.53.114:8085/trawex-adapter/1.0.0';
+const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://35.242.174.95:8085/trawex-adapter/1.0.0';
 // const TRAWEX_ADAPTER_ENDPOINT = process.env.TRAWEX_ADAPTER_ENDPOINT || 'http://localhost:8085/trawex-adapter/1.0.0';
 
 let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
@@ -18,7 +18,7 @@ let getFlightFareDetailsAPi = function(sessionId, fareSourceCode) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
+					reject(response.statusMessage + ': ' + JSON.stringify(flights));
 				} else {
 					resolve(flights);
 				}
@@ -42,7 +42,7 @@ let validateFlightAPi = function(sessionId, fareSourceCode) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
+					reject(response.statusMessage + ': ' + JSON.stringify(flights));
 				} else {
 					resolve(flights);
 				}
@@ -63,7 +63,7 @@ let checkHotelOffersAPi = function(data) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
+					reject(response.statusMessage + ': ' + JSON.stringify(hotels));
 				} else {
 					resolve(hotels);
 				}
@@ -83,7 +83,7 @@ let reValidateHotelAPi = function(data) {
 				if (error) {
 					reject(error);
 				} else if (response.statusCode != 200) {
-					reject(response.statusMessage);
+					reject(response.statusMessage + ': ' + JSON.stringify(hotels));
 				} else {
 					resolve(hotels);
 				}

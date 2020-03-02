@@ -194,6 +194,9 @@ export class Request extends CommonFunctions {
 	set destination(value: Destination) {
 		this.resetEstimatedCost();
 		this._destination = value;
+		if (this._citiesFlightsAccommodations) {
+			this._citiesFlightsAccommodations.cities = [];
+		}
 	}
 	get destination(): Destination {
 		return this._destination;

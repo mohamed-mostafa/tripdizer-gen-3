@@ -125,7 +125,7 @@
 			<div class="bg-blue text-white text-center p-1 total-cost-box">
 				<span>{{ 'request.estimated_cost.tab_accommodations.total_cost' | translate }}</span>
 				<br />
-				<span>{{ totalCost | currency: 'EGP':'symbol':'1.0-0' }}</span>
+				<span>{{ totalCostOfSelectedHotels() | currency: 'EGP':'symbol':'1.0-0' }}</span>
 			</div>
 		</div>
 	</div>

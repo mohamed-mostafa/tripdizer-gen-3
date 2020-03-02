@@ -49,7 +49,7 @@ export class RecommendedDestinationsComponent {
 
 	goToNextStep(destination: RecommendedDestinationsResponse) {
 		if (this.save(destination)) {
-			this.router.navigate(['../', this.requestService.getNextStep(this.currentStepPath)], { relativeTo: this.route });
+			this.router.navigate(['../', this.requestService.getNextStep('summary')], { relativeTo: this.route });
 		}
 	}
 }

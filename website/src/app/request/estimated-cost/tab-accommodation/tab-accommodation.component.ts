@@ -13,7 +13,6 @@ export class TabAccommodationComponent {
 	@ViewChild('owlElement', { static: false }) owlElement: OwlCarousel;
 	accommodationOffers: Array<Accommodation> = [];
 	selectedHotels: Array<Hotel> = [];
-	totalCost: number;
 	currentStepPath: string;
 	options: any;
 	carousel: OwlCarousel;
@@ -26,7 +25,6 @@ export class TabAccommodationComponent {
 			this.loadedApiData = true;
 			if (accommodationOffersResult && Array.isArray(accommodationOffersResult)) {
 				this.accommodationOffers = accommodationOffersResult;
-				this.updateTotalCostOfSelected();
 			}
 		});
 		this.setSliderOptions();
@@ -42,7 +40,6 @@ export class TabAccommodationComponent {
 				}
 			}
 		}
-		this.updateTotalCostOfSelected();
 		this.service.setAccommodationOffers(this.accommodationOffers);
 	}
 
@@ -70,15 +67,13 @@ export class TabAccommodationComponent {
 		};
 	}
 
-	updateTotalCostOfSelected() {
-		this.totalCost = 0;
-		this.accommodationOffers.map(offer => {
-			offer.hotels
-				.filter(hotel => hotel.selected)
-				.map(h => {
-					this.totalCost = +h.price;
-				});
-		});
+	totalCostOfSelectedHotels() {
+		return [].concat
+			.apply(
+				[],
+				this.accommodationOffers.map(offer => offer.hotels.filter(hotel => hotel.selected))
+			)
+			.reduce((pv, cv) => pv + cv.price, 0);
 	}
 
 	goNext() {

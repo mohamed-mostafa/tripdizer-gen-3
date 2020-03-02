@@ -1,4 +1,5 @@
 const jwt = require('jwt-simple');
+
 const httpRequest = require('request');
 
 const MASTER_DATA_ENDPOINT = process.env.MASTER_DATA_ENDPOINT || 'http://localhost:8080';

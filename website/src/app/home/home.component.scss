@@ -16,3 +16,11 @@
         background-position: center;
     }
 }
+
+@media (max-width: 480px) {
+    .sections-container {
+        &:after {
+            background-attachment: scroll;
+        }
+    }
+}
