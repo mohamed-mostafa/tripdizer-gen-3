@@ -32,7 +32,9 @@ let start = function() {
 	// routing - Start
 
 	// requests
+	//request a call from let me decide
 	router.get('/getAllRequestsACall', requestsInterface.getAllRequestsACall);
+	router.post('/requestACall', requestsInterface.requestACall);
 
 	router.put('/website/place', requestsInterface.placeWebsiteRequest);
 	router.put('/dashboard/place', requestsInterface.placeDashboardRequest);
@@ -60,9 +62,7 @@ let start = function() {
 	router.post('/group-trips/register', grouptripsInterface.register);
 	router.put('/group-trips/toggle', auth.isAuthenticated, grouptripsInterface.toggle);
 	router.put('/group-trips', auth.isAuthenticated, grouptripsInterface.update);
-	//request a call from let me decide
-	router.get('/getAllRequestsACall', requestsInterface.getAllRequestsACall);
-	router.post('/requestACall', requestsInterface.requestACall);
+
 	// Payments
 	router.get('/payments/key/:amount', auth.isAuthenticated, paymentsInterface.generatePaymentKeyWithOrderRegistration);
 	router.post('/payments/notification-callback', paymentsInterface.notificationCallback);
