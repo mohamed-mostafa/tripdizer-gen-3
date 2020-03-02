@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -339,39 +339,45 @@ export class EstimatedCostService {
 
 	/* navigation logic */
 	tabsNavigate(source, action, routeConfigPath?, route?) {
+		let tabIndex = 0;
 		this.getLoadingMessage();
 		if (source === 'cities' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
+			tabIndex = 0;
 		} else if (source === 'cities' && action === 'next') {
 			if (
 				this.citiesFlightsAccommodations &&
 				this.citiesFlightsAccommodations.cities &&
 				this.citiesFlightsAccommodations.cities.length
 			) {
-				this.currentTabIndex.next(1);
+				tabIndex = 1;
 			}
 		} else if (source === 'flights' && action === 'back') {
-			this.currentTabIndex.next(0);
+			tabIndex = 0;
 		} else if (source === 'flights' && action === 'next') {
 			if (
 				this.citiesFlightsAccommodations &&
 				this.citiesFlightsAccommodations.cities &&
 				this.citiesFlightsAccommodations.cities.length
 			) {
-				this.currentTabIndex.next(2);
+				tabIndex = 2;
 			}
 		} else if (source === 'accommodation' && action === 'back') {
-			this.currentTabIndex.next(1);
+			tabIndex = 1;
 		} else if (source === 'accommodation' && action === 'next') {
 			this.stepNavigate(routeConfigPath, route, 'next');
+			tabIndex = 0;
 		} else if (source === 'summary' && action === 'back') {
 			this.stepNavigate(routeConfigPath, route, 'back');
-			setTimeout(() => this.setCurrentTabIndex(2), 0);
+			tabIndex = 2;
 		} else if (source === 'summary' && action === 'modify') {
 			this.stepNavigate(routeConfigPath, route, 'back');
+			tabIndex = 0;
 		} else if (source === 'summary' && action === 'next') {
 			this.stepNavigate(routeConfigPath, route, 'next');
+			tabIndex = 0;
 		}
+		setTimeout(() => this.setCurrentTabIndex(tabIndex), 0);
 	}
 
 	stepNavigate(routeConfigPath, route, direction) {
