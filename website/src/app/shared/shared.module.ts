@@ -11,12 +11,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../environments/environment';
 import { CoreModule } from '../core/core.module';
 import { DialogComponent } from './components/dialog/dialog.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { GoogleMapComponent } from './components/google-map/google-map.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 import { OwlCarouselComponent } from './components/owl-carousel/owl-carousel.component';
 import { PlacesSelectBoxComponent } from './components/places-select-box/places-select-box.component';
 import { ErrorMessagePipe } from './pipes/error-message.pipe';
+import { FooterComponent } from './components/footer/footer.component';
+import { LetMeDecideComponent } from './components/let-me-decide/let-me-decide.component';
+import { RequestACallComponent } from './components/request-a-call/request-a-call.component';
 
 @NgModule({
 	imports: [
@@ -41,6 +43,8 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
 		PlacesSelectBoxComponent,
 		TranslateModule,
 		FooterComponent,
+		LetMeDecideComponent,
+		RequestACallComponent,
 	],
 	declarations: [
 		DialogComponent,
@@ -50,7 +54,9 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
 		OwlCarouselComponent,
 		PlacesSelectBoxComponent,
 		FooterComponent,
+		LetMeDecideComponent,
+		RequestACallComponent,
 	],
-	entryComponents: [DialogComponent, LoginDialogComponent],
+	entryComponents: [DialogComponent, LoginDialogComponent, LetMeDecideComponent, RequestACallComponent],
 })
 export class SharedModule {}

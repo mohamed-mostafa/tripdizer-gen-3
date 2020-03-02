@@ -244,6 +244,17 @@ var start = () => {
 		});
 	});
 
+	app.get('/admin/requestACall', auth.isAuthenticated, (req, res) => {
+		res.locals = {
+			...locals,
+			title: 'Request A Call',
+			controller: 'RequestACall',
+		};
+		res.render('pages/request-a-call', {
+			user: req.user,
+		});
+	});
+
 	app.get('*', auth.isAuthenticated, auth.renderTo404);
 
 	// routes end
