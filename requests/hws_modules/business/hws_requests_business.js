@@ -300,7 +300,7 @@ let placeRequest = function(request, onSuccess, onFailure, onUserError) {
 			);
 		})
 		.catch(error => {
-			onUserError('The prices or availability has changed, please select other offers.\n' + error);
+			onUserError(error);
 		});
 };
 
