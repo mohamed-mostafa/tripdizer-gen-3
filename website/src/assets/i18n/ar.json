@@ -197,7 +197,6 @@
 				"title": "المدن",
 				"view_choose": "عرض واختيار المدن",
 				"things_to_do": "أنشطة يمكن القيام بها فى",
-				"view_map": "عرض الخريطة",
 				"next_label": "التالي",
 				"back_label": "رجوع",
 				"too_many_cities_message": "عدد مدن كبير بالنسبة إلى {{numberOfNights}} ليالى",
