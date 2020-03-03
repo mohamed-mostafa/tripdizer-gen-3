@@ -143,16 +143,11 @@ export class EstimatedCostService {
 	/* flightOffers logic */
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.callGetAccommodationOffers()
+		this.callGetAccommodationOffers();
 		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
 		if (this.citiesFlightsAccommodations.flightOffers && this.citiesFlightsAccommodations.flightOffers.length > 0) {
 			return of(this.citiesFlightsAccommodations.flightOffers);
 		} else {
-			// this.requestService.isLoading.next({
-			// 	show: true,
-			// 	message: this.getLoadingMessage(),
-			// });
-
 			const citiesSequence: Array<CitySequence> = this.getCitiesWithNights().map(city => ({
 				countryIso: city.countryIsoCode,
 				cityIata: city.iataCode,
@@ -175,12 +170,10 @@ export class EstimatedCostService {
 					return flightResponse.map((flightOffer, i) => ({ ...flightOffer, selected: i === 0 }));
 				}),
 				tap(flightOffersResponse => {
-					// this.setIsLoading(false, '');
 					this.startSessionTimer();
 					this.setFlightOffers(flightOffersResponse);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
-					// this.setIsLoading(false, '');
 					return err;
 				})
 			);
@@ -212,11 +205,6 @@ export class EstimatedCostService {
 		) {
 			return of(this.citiesFlightsAccommodations.accommodationOffers);
 		} else {
-			// this.requestService.isLoading.next({
-			// 	show: true,
-			// 	message: this.getLoadingMessage(),
-			// });
-
 			const cities: Array<{ cityName: string; numberOfNights: number; cityIata: string; countryName: string }> = [];
 			for (const cityWithNights of this.getCitiesWithNights()) {
 				cities.push({
@@ -257,11 +245,9 @@ export class EstimatedCostService {
 					}));
 				}),
 				tap(accommodationOffersResponse => {
-					// this.setIsLoading(false, '');
 					this.setAccommodationOffers(accommodationOffersResponse);
 				}),
 				catchError((err: any, caught: Observable<any>) => {
-					// this.setIsLoading(false, '');
 					return err;
 				})
 			);
