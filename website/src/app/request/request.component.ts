@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { LoginDialogComponent } from '../shared/components/login-dialog/login-dialog.component';
 import { Country } from '../shared/models/country.model';
 import { AuthService } from '../shared/services/auth.service';
+import { User } from '../user/user.model';
 import { RequestService } from './request.service';
 
 @Component({
@@ -38,11 +39,19 @@ export class RequestComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.authService.authenticatedUser.subscribe(user => {
+		this.authService.authenticatedUser.subscribe((user: User) => {
 			if (user) {
+				user = new User(user);
 				this.requestService.setProperty('socialSigning', true);
-				this.requestService.setProperty('travelerName', user.name);
-				this.requestService.setProperty('travelerEmail', user.email);
+				if (user.name) {
+					this.requestService.setProperty('travelerName', user.name);
+				}
+				if (user.phone) {
+					this.requestService.setProperty('travelerMobile', user.phone);
+				}
+				if (user.email) {
+					this.requestService.setProperty('travelerEmail', user.email);
+				}
 			} else {
 				if (environment.showSigningPopup && this.firstTimeLogin) {
 					this.openLoginDialog();

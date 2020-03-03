@@ -1,5 +1,3 @@
-import { SocialUser } from 'angularx-social-login';
-
 export class User {
 	email: string;
 	firstName: string;
@@ -15,11 +13,11 @@ export class User {
 		return `${this.firstName} ${this.lastName}`;
 	}
 
-	constructor(socialUser: SocialUser) {
-		this.email = socialUser.email;
-		this.firstName = socialUser.firstName;
-		this.lastName = socialUser.lastName;
-		this.picture = socialUser.photoUrl;
-		this.provider = socialUser.provider;
+	constructor(user: User) {
+		this.email = user.email;
+		this.firstName = user.firstName;
+		this.lastName = user.lastName;
+		this.picture = user.picture;
+		this.provider = user.provider;
 	}
 }
