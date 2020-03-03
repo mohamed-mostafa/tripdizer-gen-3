@@ -543,26 +543,82 @@ const getPaymentStatus = function(req, res) {
 	}
 };
 
-module.exports = {
-	placeWebsiteRequest,
-	placeDashboardRequest,
-	getRequestById,
-	assignRequestToUser,
-	updateRequest,
-	getRequestSummaries,
-	getRequestSummariesCount,
-	sendMailsToRequestTraveler,
-	changeRequestStatus,
-	markRequestBeingPrepared,
-	markRequestDelivered,
-	markRequestPlaced,
-	budgetCalculation,
-	recommendation,
-	toggleOptions,
-	getPackage,
-	sendPackageByMail,
-	validatePromoCode,
-	getTravelerEmails,
-	getRequestsByMail,
-	getPaymentStatus,
+let requestACall = function(req, res) {
+	try {
+		let request = {
+			name: req.body.name,
+			mobile: req.body.mobile,
+			email: req.body.email,
+		};
+		// call the business function and give it a callback function
+		requestsBusiness.requestACall(
+			request,
+			function(data) {
+				res.json(data);
+			},
+			function(error) {
+				res
+					.status(500)
+					.send("Tripdizer servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			},
+			function(businessError) {
+				res.status(500).send(businessError);
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /request a call /');
+		console.error(error);
+		res
+			.status(500)
+			.send("Tripdizer servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
 };
+
+let getAllRequestsACall = function(req, res) {
+	try {
+		// call the business function and give it a callback function
+		requestsBusiness.getAllRequestsACall(
+			function(status) {
+				res.send(status);
+			},
+			function(error) {
+				console.error(error);
+				res
+					.status(500)
+					.send("HWS servers are unable to serve your request at this time. We're sorry for the inconvinence.");
+			}
+		);
+	} catch (error) {
+		console.error('An error occurred in /get all requests a call');
+		console.error(error);
+		res
+			.status(500)
+			.send("HWS servers are unable to serve your request at this time. We're sorry for any inconvinence.");
+	}
+};
+
+exports.placeWebsiteRequest = placeWebsiteRequest;
+exports.placeDashboardRequest = placeDashboardRequest;
+exports.getRequestById = getRequestById;
+exports.assignRequestToUser = assignRequestToUser;
+exports.updateRequest = updateRequest;
+
+exports.getRequestSummaries = getRequestSummaries;
+exports.getRequestSummariesCount = getRequestSummariesCount;
+exports.sendMailsToRequestTraveler = sendMailsToRequestTraveler;
+exports.changeRequestStatus = changeRequestStatus;
+
+exports.markRequestBeingPrepared = markRequestBeingPrepared;
+exports.markRequestDelivered = markRequestDelivered;
+exports.markRequestPlaced = markRequestPlaced;
+exports.budgetCalculation = budgetCalculation;
+exports.recommendation = recommendation;
+exports.toggleOptions = toggleOptions;
+exports.getPackage = getPackage;
+exports.sendPackageByMail = sendPackageByMail;
+exports.validatePromoCode = validatePromoCode;
+exports.getTravelerEmails = getTravelerEmails;
+exports.getRequestsByMail = getRequestsByMail;
+exports.getPaymentStatus = getPaymentStatus;
+exports.requestACall = requestACall;
+exports.getAllRequestsACall = getAllRequestsACall;

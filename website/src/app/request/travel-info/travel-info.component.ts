@@ -23,7 +23,9 @@ export class TravelInfoComponent {
 	controls: any = {
 		travelingFrom: new FormControl('', [Validators.required]),
 		destination: new FormControl('', [
-			CustomValidators.conditionallyRequired(() => Boolean(!this.isHavePlan || (this.selectedCountries && this.selectedCountries.length))),
+			CustomValidators.conditionallyRequired(() =>
+				Boolean(!this.isHavePlan || (this.selectedCountries && this.selectedCountries.length))
+			),
 		]),
 		departureDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		returnDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
@@ -72,10 +74,10 @@ export class TravelInfoComponent {
 			}
 		});
 		this.countries = requestService.getCountries();
-		setTimeout(() => {
-			this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
-			this.formGroup.get('destination').reset();
-		}, 0);
+		// setTimeout(() => {
+		this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
+		this.formGroup.get('destination').reset();
+		// }, 0);
 	}
 
 	save(): void {
@@ -133,7 +135,7 @@ export class TravelInfoComponent {
 					visaTypeName: null,
 					minimumTravelBudget: 0,
 					minimumDailyBudget: 0,
-					maximumDailyBudget: 0
+					maximumDailyBudget: 0,
 				};
 				this.formGroup.get('destination').setValue({ ...destination, triggered: true });
 				this.trackingService.track('Submit - Destination', {

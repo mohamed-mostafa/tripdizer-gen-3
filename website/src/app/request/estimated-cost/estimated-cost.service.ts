@@ -40,6 +40,7 @@ export class EstimatedCostService {
 	};
 
 	currentTabIndex = new BehaviorSubject<number>(0);
+	accommodationOffersResult = new BehaviorSubject<Array<Accommodation>>(null);
 
 	constructor(
 		private http: HttpClient,
@@ -142,7 +143,7 @@ export class EstimatedCostService {
 	/* flightOffers logic */
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.getAccommodationOffers();
+		this.callGetAccommodationOffers()
 		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
 		if (this.citiesFlightsAccommodations.flightOffers && this.citiesFlightsAccommodations.flightOffers.length > 0) {
 			return of(this.citiesFlightsAccommodations.flightOffers);
@@ -193,6 +194,12 @@ export class EstimatedCostService {
 	setFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.citiesFlightsAccommodations.flightOffers = flightOffers;
 		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
+	}
+
+	callGetAccommodationOffers() {
+		this.getAccommodationOffers().subscribe(accommodationOffersResult => {
+			this.accommodationOffersResult.next(accommodationOffersResult);
+		});
 	}
 
 	/* accommodationOffers logic */
