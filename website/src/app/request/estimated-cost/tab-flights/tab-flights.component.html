@@ -6,11 +6,17 @@
 
 				<div *ngIf="!loadedApiData">
 					<!-- <div class="routes-title-loading loading-gradient"></div> -->
-					<c-app-loading-gradient [elementHeight]="35"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="35" [loadingWidth]="100"></c-app-loading-gradient>
 
-					<div class="mt-4"><c-app-loading-gradient [elementHeight]="20"></c-app-loading-gradient></div>
-					<div class="mt-4"><c-app-loading-gradient [elementHeight]="20"></c-app-loading-gradient></div>
-					<div class="mt-4"><c-app-loading-gradient [elementHeight]="20"></c-app-loading-gradient></div>
+					<div class="mt-4">
+						<c-app-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-app-loading-gradient>
+					</div>
+					<div class="mt-4">
+						<c-app-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-app-loading-gradient>
+					</div>
+					<div class="mt-4">
+						<c-app-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-app-loading-gradient>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -102,13 +108,13 @@
 				</div>
 
 				<div *ngIf="!loadedApiData" class="p-2">
-					<c-app-loading-gradient [elementHeight]="60"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-app-loading-gradient>
 					<hr />
-					<c-app-loading-gradient [elementHeight]="60"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-app-loading-gradient>
 					<hr />
-					<c-app-loading-gradient [elementHeight]="60"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-app-loading-gradient>
 					<hr />
-					<c-app-loading-gradient [elementHeight]="60"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-app-loading-gradient>
 				</div>
 			</div>
 		</div>
@@ -122,7 +128,7 @@
 				</div>
 
 				<div *ngIf="!loadedApiData">
-					<c-app-loading-gradient [elementHeight]="300"></c-app-loading-gradient>
+					<c-app-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-app-loading-gradient>
 				</div>
 			</div>
 		</div>
