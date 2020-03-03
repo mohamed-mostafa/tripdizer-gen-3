@@ -5,11 +5,12 @@
 				<c-app-flight-route *ngIf="loadedApiData" [flightOffers]="flightOffers"></c-app-flight-route>
 
 				<div *ngIf="!loadedApiData">
-					<div class="routes-title-loading loading-gradient"></div>
+					<!-- <div class="routes-title-loading loading-gradient"></div> -->
+					<c-app-loading-gradient [elementHeight]="'35px'"></c-app-loading-gradient>
 
-					<div class="routes-element-loading loading-gradient mt-4"></div>
-					<div class="routes-element-loading loading-gradient mt-4"></div>
-					<div class="routes-element-loading loading-gradient mt-4"></div>
+					<div class="mt-4"><c-app-loading-gradient [elementHeight]="'20px'"></c-app-loading-gradient></div>
+					<div class="mt-4"><c-app-loading-gradient [elementHeight]="'20px'"></c-app-loading-gradient></div>
+					<div class="mt-4"><c-app-loading-gradient [elementHeight]="'20px'"></c-app-loading-gradient></div>
 				</div>
 			</div>
 		</div>
@@ -101,13 +102,13 @@
 				</div>
 
 				<div *ngIf="!loadedApiData" class="p-2">
-					<div class="flight-offer-element-loading loading-gradient"></div>
+					<c-app-loading-gradient [elementHeight]="'60px'"></c-app-loading-gradient>
 					<hr />
-					<div class="flight-offer-element-loading loading-gradient"></div>
+					<c-app-loading-gradient [elementHeight]="'60px'"></c-app-loading-gradient>
 					<hr />
-					<div class="flight-offer-element-loading loading-gradient"></div>
+					<c-app-loading-gradient [elementHeight]="'60px'"></c-app-loading-gradient>
 					<hr />
-					<div class="flight-offer-element-loading loading-gradient"></div>
+					<c-app-loading-gradient [elementHeight]="'60px'"></c-app-loading-gradient>
 				</div>
 			</div>
 		</div>
@@ -121,7 +122,7 @@
 				</div>
 
 				<div *ngIf="!loadedApiData">
-					<div class="map-loading loading-gradient"></div>
+					<c-app-loading-gradient [elementHeight]="'300px'"></c-app-loading-gradient>
 				</div>
 			</div>
 		</div>
