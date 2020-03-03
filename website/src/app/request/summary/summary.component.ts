@@ -33,6 +33,7 @@ export class SummaryComponent implements OnDestroy {
 	}
 
 	goToNextStep() {
+		this.requestService.setProperty('requiresPayment', false);
 		this.estimatedCostService.tabsNavigate('summary', 'next', this.currentStepPath, this.route);
 		this.requestService.resetSessionTimer();
 	}
