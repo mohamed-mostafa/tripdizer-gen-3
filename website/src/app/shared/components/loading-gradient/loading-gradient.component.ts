@@ -6,8 +6,5 @@ import { Component, Input } from '@angular/core';
 	styleUrls: ['./loading-gradient.component.scss'],
 })
 export class LoadingGradientComponent {
-	@Input() elementHeight: string;
-	constructor() {
-		this.elementHeight = '20px';
-	}
+	@Input() elementHeight: number;
 }
