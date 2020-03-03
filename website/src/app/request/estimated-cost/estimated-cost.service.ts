@@ -83,17 +83,12 @@ export class EstimatedCostService {
 		if (this.citiesFlightsAccommodations && this.citiesFlightsAccommodations.cities.length > 0) {
 			return of(this.citiesFlightsAccommodations.cities);
 		} else {
-			this.requestService.isLoading.next({
-				show: true,
-				message: this.translate.instant('request.estimated_cost.loading_messages.cities_tab_message'),
-			});
 			const citiesRequest: CitiesRequest = { countries: this.getSelectedCountries().map(c => c.ISOCode) };
 			return this.http.post<Array<CityDTO>>(`${this.countryCities}/search`, citiesRequest).pipe(
 				map(citiesResponse => {
 					return citiesResponse.map((city, i) => ({ ...city, selected: i < this.getMaxNumberOfCities() }));
 				}),
 				tap(citiesResponse => {
-					this.setIsLoading(false, '');
 					this.requestService.isLoading.next({ show: false, message: '' });
 					this.setCities(citiesResponse);
 				}),

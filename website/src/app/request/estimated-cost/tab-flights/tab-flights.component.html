@@ -102,7 +102,7 @@
 				</div>
 
 				<div *ngIf="!loadedApiData" class="p-2">
-					<div *ngFor="let x of [].constructor(4); let i = index">
+					<div *ngFor="let x of [].constructor(4); let i = index;">
 						<c-shared-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-shared-loading-gradient>
 						<hr *ngIf="i < 3" />
 					</div>
@@ -125,7 +125,7 @@
 		</div>
 	</div>
 
-	<div *ngIf="loadedApiData" class="row">
+	<div class="row">
 		<div class="col-12 text-center">
 			<a
 				href="javascript:void(0)"
