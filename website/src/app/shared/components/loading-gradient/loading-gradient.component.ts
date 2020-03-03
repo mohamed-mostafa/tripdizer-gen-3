@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'c-app-loading-gradient',
+	selector: 'c-shared-loading-gradient',
 	templateUrl: './loading-gradient.component.html',
 	styleUrls: ['./loading-gradient.component.scss'],
 })

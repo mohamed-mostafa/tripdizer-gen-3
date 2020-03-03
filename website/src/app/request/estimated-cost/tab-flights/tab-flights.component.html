@@ -6,10 +6,10 @@
 
 				<div *ngIf="!loadedApiData">
 					<!-- <div class="routes-title-loading loading-gradient"></div> -->
-					<c-app-loading-gradient [loadingHeight]="35" [loadingWidth]="100"></c-app-loading-gradient>
+					<c-shared-loading-gradient [loadingHeight]="35" [loadingWidth]="100"></c-shared-loading-gradient>
 
 					<div class="mt-4" *ngFor="let x of [].constructor(3); let i = index">
-						<c-app-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-app-loading-gradient>
+						<c-shared-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-shared-loading-gradient>
 					</div>
 				</div>
 			</div>
@@ -103,7 +103,7 @@
 
 				<div *ngIf="!loadedApiData" class="p-2">
 					<div *ngFor="let x of [].constructor(4); let i = index">
-						<c-app-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-app-loading-gradient>
+						<c-shared-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-shared-loading-gradient>
 						<hr *ngIf="i < 3" />
 					</div>
 				</div>
@@ -119,7 +119,7 @@
 				</div>
 
 				<div *ngIf="!loadedApiData">
-					<c-app-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-app-loading-gradient>
+					<c-shared-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-shared-loading-gradient>
 				</div>
 			</div>
 		</div>
