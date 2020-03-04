@@ -161,7 +161,7 @@
 				>{{ 'request.estimated_cost.tab_accommodations.back_label' | translate }}</a
 			>
 
-			<button (click)="goNext()" [disabled]="false" class="btn btn-primary custom-bs btn-rounded px-4 py-2">
+			<button (click)="goNext()" [disabled]="!loadedApiData" class="btn btn-primary custom-bs btn-rounded px-4 py-2">
 				{{ 'request.estimated_cost.tab_accommodations.next_label' | translate }}
 			</button>
 		</div>
