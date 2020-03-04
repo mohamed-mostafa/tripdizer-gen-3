@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject, zip, Subject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -40,7 +40,9 @@ export class EstimatedCostService {
 	};
 
 	currentTabIndex = new BehaviorSubject<number>(0);
-	accommodationOffersResult = new BehaviorSubject<Array<Accommodation>>(null);
+
+	flightOffersData = new Subject<Array<FlightOffer>>();
+	accommodationOffersData = new Subject<Array<Accommodation>>();
 
 	constructor(
 		private http: HttpClient,
@@ -56,20 +58,29 @@ export class EstimatedCostService {
 		});
 	}
 
+	getFlightsAndAccommodation() {
+		this.flightOffersData.next(null);
+		this.accommodationOffersData.next(null);
+
+		const obs1 = this.getFlightOffers();
+		const obs2 = this.getAccommodationOffers();
+
+		const results = zip(obs1, obs2);
+		results.subscribe(val => {
+			if (val) {
+				if (val[0]) {
+					this.flightOffersData.next(val[0]);
+				}
+				if (val[1]) {
+					this.accommodationOffersData.next(val[1]);
+				}
+			}
+		});
+	}
+
 	getFlightsTotalCost(): number {
 		const selectedFlightOffers = this.citiesFlightsAccommodations.flightOffers.filter(offer => offer.selected);
 		return Object.keys(selectedFlightOffers).reduce((pv, cv) => pv + +selectedFlightOffers[cv].price, 0);
-	}
-
-	setIsLoading(isLoading: boolean, message: string) {
-		this.requestService.isLoading.next({ show: isLoading, message });
-	}
-
-	accommodationLoading(): void {
-		this.setIsLoading(
-			true,
-			this.translate.instant('request.estimated_cost.loading_messages.accommodation_tab_message')
-		);
 	}
 
 	/* cities logic */
@@ -138,7 +149,6 @@ export class EstimatedCostService {
 	/* flightOffers logic */
 
 	getFlightOffers(): Observable<Array<FlightOffer>> {
-		this.callGetAccommodationOffers();
 		this.citiesFlightsAccommodations = this.requestService.getProperty('citiesFlightsAccommodations');
 		if (this.citiesFlightsAccommodations.flightOffers && this.citiesFlightsAccommodations.flightOffers.length > 0) {
 			return of(this.citiesFlightsAccommodations.flightOffers);
@@ -182,12 +192,6 @@ export class EstimatedCostService {
 	setFlightOffers(flightOffers: Array<FlightOffer>): void {
 		this.citiesFlightsAccommodations.flightOffers = flightOffers;
 		this.requestService.setProperty('citiesFlightsAccommodations', this.citiesFlightsAccommodations);
-	}
-
-	callGetAccommodationOffers() {
-		this.getAccommodationOffers().subscribe(accommodationOffersResult => {
-			this.accommodationOffersResult.next(accommodationOffersResult);
-		});
 	}
 
 	/* accommodationOffers logic */
@@ -312,10 +316,6 @@ export class EstimatedCostService {
 
 	setCurrentTabIndex(index) {
 		this.currentTabIndex.next(index);
-
-		if (index === 2 && this.isAccommodationProcessing) {
-			this.accommodationLoading();
-		}
 	}
 
 	/* navigation logic */

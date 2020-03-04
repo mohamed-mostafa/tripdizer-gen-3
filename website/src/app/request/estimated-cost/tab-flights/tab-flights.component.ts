@@ -20,7 +20,9 @@ export class TabFlightsComponent implements DoCheck {
 	constructor(private service: EstimatedCostService) {
 		this.flightPaths = service.getCityPaths();
 
-		service.getFlightOffers().subscribe(flightOffersResult => {
+		service.getFlightsAndAccommodation();
+
+		service.flightOffersData.subscribe(flightOffersResult => {
 			this.loadedApiData = true;
 			if (flightOffersResult && Array.isArray(flightOffersResult)) {
 				this.flightOffers = flightOffersResult;
@@ -68,8 +70,10 @@ export class TabFlightsComponent implements DoCheck {
 	}
 
 	goToSlide(i) {
-		this.owlElement.to([i]);
-		this.updateCurrentSlideIndex();
+		if (this.owlElement) {
+			this.owlElement.to([i]);
+			this.updateCurrentSlideIndex();
+		}
 	}
 
 	nextSlide() {

@@ -22,10 +22,6 @@ export class HomeComponent implements OnDestroy {
 	constructor(router: Router, translate: TranslateService) {
 		translate.get('home.dialog').subscribe(labels => (this.dialogLabels = labels));
 
-		// setTimeout(() => {
-		// 	this.openDialog();
-		// }, 5000);
-
 		router.events.subscribe(() => {
 			this.resizeFirstElement();
 		});

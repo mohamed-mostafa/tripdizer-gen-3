@@ -20,8 +20,7 @@ export class TabAccommodationComponent {
 
 	constructor(private service: EstimatedCostService, private route: ActivatedRoute) {
 		this.currentStepPath = this.route.routeConfig.path;
-
-		service.accommodationOffersResult.subscribe(accommodationOffersResultValue => {
+		service.accommodationOffersData.subscribe(accommodationOffersResultValue => {
 			this.loadedApiData = true;
 			if (accommodationOffersResultValue && Array.isArray(accommodationOffersResultValue)) {
 				this.accommodationOffers = accommodationOffersResultValue;
