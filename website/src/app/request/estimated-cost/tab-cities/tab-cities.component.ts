@@ -60,6 +60,7 @@ export class TabCitiesComponent {
 			}
 		}
 		this.service.setCities(this.cities);
+		this.service.flightAndAccommodationOffersData.next(null);
 	}
 
 	getSelectedCities(): Array<CityDTO> {

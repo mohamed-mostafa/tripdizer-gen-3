@@ -41,8 +41,7 @@ export class EstimatedCostService {
 
 	currentTabIndex = new BehaviorSubject<number>(0);
 
-	flightOffersData = new Subject<Array<FlightOffer>>();
-	accommodationOffersData = new Subject<Array<Accommodation>>();
+	flightAndAccommodationOffersData = new BehaviorSubject<Array<any>>(null);
 
 	constructor(
 		private http: HttpClient,
@@ -59,21 +58,13 @@ export class EstimatedCostService {
 	}
 
 	getFlightsAndAccommodation() {
-		this.flightOffersData.next(null);
-		this.accommodationOffersData.next(null);
-
 		const obs1 = this.getFlightOffers();
 		const obs2 = this.getAccommodationOffers();
 
 		const results = zip(obs1, obs2);
 		results.subscribe(val => {
 			if (val) {
-				if (val[0]) {
-					this.flightOffersData.next(val[0]);
-				}
-				if (val[1]) {
-					this.accommodationOffersData.next(val[1]);
-				}
+				this.flightAndAccommodationOffersData.next(val);
 			}
 		});
 	}

@@ -22,18 +22,21 @@ export class TabFlightsComponent implements DoCheck {
 
 		service.getFlightsAndAccommodation();
 
-		service.flightOffersData.subscribe(flightOffersResult => {
-			this.loadedApiData = true;
-			if (flightOffersResult && Array.isArray(flightOffersResult)) {
-				this.flightOffers = flightOffersResult;
+		service.flightAndAccommodationOffersData.subscribe(result => {
+			if (result && result.length) {
+				this.loadedApiData = true;
 
-				this.flightOffers.forEach((flightOffer, i) => {
-					if (flightOffer.selected) {
-						setTimeout(() => {
-							this.goToSlide(i);
-						}, 0);
-					}
-				});
+				if (Array.isArray(result[0])) {
+					this.flightOffers = result[0];
+
+					this.flightOffers.forEach((flightOffer, i) => {
+						if (flightOffer.selected) {
+							setTimeout(() => {
+								this.goToSlide(i);
+							}, 0);
+						}
+					});
+				}
 			}
 		});
 
