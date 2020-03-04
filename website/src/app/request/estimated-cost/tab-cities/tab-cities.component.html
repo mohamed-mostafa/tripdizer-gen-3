@@ -1,4 +1,4 @@
-<div class="row justify-content-center" *ngIf="cities.length">
+<div class="row justify-content-center">
 	<div class="col-lg-11">
 		<div class="row cities-tab py-2 py-md-4">
 			<div class="col-lg-8 cities-list">
@@ -6,54 +6,66 @@
 					{{ 'request.estimated_cost.tab_cities.view_choose' | translate }}
 				</h4>
 
-				<div
-					class="row city-item my-4 selected-city"
-					*ngFor="let city of cities"
-					[class.selected-city]="city.selected"
-					(click)="updateSelectedCities(city)"
-				>
-					<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
-						<div class="item-img-container p-2 p-md-0">
-							<img [src]="city.thumbnail" alt="" />
+				<div *ngIf="!loadedApiData">
+					<div
+						class="row city-item my-4 selected-city loading-city-item"
+						*ngFor="let y of [].constructor(3); let i = index"
+					>
+						<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
+							<div class="item-img-container p-2 p-md-0">
+								<c-shared-loading-gradient [loadingHeight]="195" [loadingWidth]="100"></c-shared-loading-gradient>
+							</div>
+						</div>
+						<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
+							<div class="mt-3" *ngFor="let x of [].constructor(5); let i = index">
+								<c-shared-loading-gradient [loadingHeight]="15" [loadingWidth]="100"></c-shared-loading-gradient>
+							</div>
 						</div>
 					</div>
-					<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
-						<p class="dark-grey country-name mb-1">
-							<span class="font-weight-bold">{{ city.name }}</span>
-							<br class="d-none d-md-inline-block" />
-							<span class="town-name-sm d-inline-block ml-2 ml-md-0">{{ city.countryDisplayName }}</span>
-						</p>
-						<p class="grey item-text font-italic">
-							{{ city.description.substring(0, 200) }} <span *ngIf="city.description.length > 200">...</span>
-						</p>
-						<div class="row">
-							<div class="col-md-8">
-								<div *ngIf="city.interests.length > 0">
-									<h6 class="font-weight-bold activities-title mt-2 mt-md-0">
-										{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }}
-										{{ city.countryDisplayName }}
-									</h6>
-									<p class="grey item-text font-italic activities-text">
-										<span *ngFor="let interest of city.interests; let i = index">
-											{{ interest }} <span *ngIf="i < city.interests.length - 1">- </span>
-										</span>
-										<!-- <img
-											ngFor="let icon of city.icons"
-											[src]="icon.link"
-											class="custom-icon d-none d-md-inline-block"
-											width="16px"
-											height="16px"
-											[alt]="icon.alt"
-										/>  -->
-									</p>
-								</div>
+				</div>
+
+				<div *ngIf="loadedApiData">
+					<div
+						class="row city-item my-4 selected-city"
+						*ngFor="let city of cities"
+						[class.selected-city]="city.selected"
+						(click)="updateSelectedCities(city)"
+					>
+						<div class="col-md-4 item-image pl-0 pr-md-0 image-column">
+							<div class="item-img-container p-2 p-md-0">
+								<img [src]="city.thumbnail" alt="" />
 							</div>
-							<div class="col-md-4 d-flex justify-content-end">
-								<mat-checkbox
-									[checked]="city.selected"
-									[disableRipple]="true"
-									(click)="$event.preventDefault()"
-								></mat-checkbox>
+						</div>
+						<div class="col-md-8 item-content py-2 mx-3 mx-md-0">
+							<p class="dark-grey country-name mb-1">
+								<span class="font-weight-bold">{{ city.name }}</span>
+								<br class="d-none d-md-inline-block" />
+								<span class="town-name-sm d-inline-block ml-2 ml-md-0">{{ city.countryDisplayName }}</span>
+							</p>
+							<p class="grey item-text font-italic">
+								{{ city.description.substring(0, 200) }} <span *ngIf="city.description.length > 200">...</span>
+							</p>
+							<div class="row">
+								<div class="col-md-8">
+									<div *ngIf="city.interests.length > 0">
+										<h6 class="font-weight-bold activities-title mt-2 mt-md-0">
+											{{ 'request.estimated_cost.tab_cities.things_to_do' | translate }}
+											{{ city.countryDisplayName }}
+										</h6>
+										<p class="grey item-text font-italic activities-text">
+											<span *ngFor="let interest of city.interests; let i = index">
+												{{ interest }} <span *ngIf="i < city.interests.length - 1">- </span>
+											</span>
+										</p>
+									</div>
+								</div>
+								<div class="col-md-4 d-flex justify-content-end">
+									<mat-checkbox
+										[checked]="city.selected"
+										[disableRipple]="true"
+										(click)="$event.preventDefault()"
+									></mat-checkbox>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -63,12 +75,15 @@
 				<div class="row mb-4">
 					<div class="col-12">
 						<hr class="d-lg-none" />
-						<h6 class="font-weight-bold font-italic view-map title-font">
-							{{ 'request.estimated_cost.tab_cities.view_map' | translate }}
-						</h6>
-						<div *ngIf="cityPaths?.length" class="row d-lg-block">
-							<div class="col-12">
-								<c-shared-google-map [paths]="cityPaths"></c-shared-google-map>
+						<div class="map-box p-2">
+							<div *ngIf="loadedApiData && cityPaths?.length" class="row d-lg-block">
+								<div class="col-12">
+									<c-shared-google-map [paths]="cityPaths"></c-shared-google-map>
+								</div>
+							</div>
+
+							<div *ngIf="!loadedApiData">
+								<c-shared-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-shared-loading-gradient>
 							</div>
 						</div>
 					</div>

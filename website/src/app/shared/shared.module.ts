@@ -19,6 +19,7 @@ import { ErrorMessagePipe } from './pipes/error-message.pipe';
 import { FooterComponent } from './components/footer/footer.component';
 import { LetMeDecideComponent } from './components/let-me-decide/let-me-decide.component';
 import { RequestACallComponent } from './components/request-a-call/request-a-call.component';
+import { LoadingGradientComponent } from './components/loading-gradient/loading-gradient.component';
 
 @NgModule({
 	imports: [
@@ -45,6 +46,7 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		FooterComponent,
 		LetMeDecideComponent,
 		RequestACallComponent,
+		LoadingGradientComponent,
 	],
 	declarations: [
 		DialogComponent,
@@ -56,6 +58,7 @@ import { RequestACallComponent } from './components/request-a-call/request-a-cal
 		FooterComponent,
 		LetMeDecideComponent,
 		RequestACallComponent,
+		LoadingGradientComponent,
 	],
 	entryComponents: [DialogComponent, LoginDialogComponent, LetMeDecideComponent, RequestACallComponent],
 })

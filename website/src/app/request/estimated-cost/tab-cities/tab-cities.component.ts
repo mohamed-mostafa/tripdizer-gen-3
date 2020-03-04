@@ -15,6 +15,7 @@ export class TabCitiesComponent {
 	cities: Array<CityDTO> = [];
 	cityPaths: any = [];
 	snackBar: MatSnackBar;
+	loadedApiData: boolean;
 
 	constructor(
 		private service: EstimatedCostService,
@@ -25,6 +26,7 @@ export class TabCitiesComponent {
 	) {
 		this.snackBar = snackBar;
 		service.getCities().subscribe(citiesResult => {
+			this.loadedApiData = true;
 			this.cities = citiesResult;
 			this.updateCitiesPaths();
 		});
@@ -58,6 +60,7 @@ export class TabCitiesComponent {
 			}
 		}
 		this.service.setCities(this.cities);
+		this.service.flightAndAccommodationOffersData.next(null);
 	}
 
 	getSelectedCities(): Array<CityDTO> {

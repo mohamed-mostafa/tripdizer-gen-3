@@ -1,99 +1,125 @@
-<div *ngIf="loadedApiData">
+<div>
 	<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5">
 		<div class="col-12 col-lg-3 d-none d-lg-block">
-			<c-app-flight-route [flightOffers]="flightOffers"></c-app-flight-route>
+			<div class="flights-route p-2">
+				<c-app-flight-route *ngIf="loadedApiData" [flightOffers]="flightOffers"></c-app-flight-route>
+
+				<div *ngIf="!loadedApiData">
+					<!-- <div class="routes-title-loading loading-gradient"></div> -->
+					<c-shared-loading-gradient [loadingHeight]="35" [loadingWidth]="100"></c-shared-loading-gradient>
+
+					<div class="mt-4" *ngFor="let x of [].constructor(3)">
+						<c-shared-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-shared-loading-gradient>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="col-12 col-lg-6">
 			<div class="flights-box">
-				<div class="flights-title p-1">
-					<h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.choose_flights' | translate }}</h6>
-				</div>
+				<div *ngIf="loadedApiData">
+					<div class="flights-title p-1">
+						<h6 class="mt-1 ml-2">{{ 'request.estimated_cost.tab_flights.choose_flights' | translate }}</h6>
+					</div>
 
-				<div class="mt-3">
-					<owl-carousel
-						*ngIf="flightOffers?.length > 0"
-						class="carousel"
-						#owlElement
-						[options]="options"
-						[carouselClasses]="['row']"
-					>
-						<div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
-							<div *ngFor="let flightLeg of offer.flightLegs">
-								<div *ngFor="let segment of flightLeg.segments" class="mb-1">
-									<div class="row">
-										<div class="col-3 text-center">
-											<div class="carrier-logo d-inline-block">
-												<img
-													src="{{ segment.carrier.wideLogo }}"
-													class="mt-1 mx-auto"
-													alt="{{ segment.carrier.name }}"
-												/>
+					<div class="mt-3">
+						<owl-carousel
+							*ngIf="flightOffers?.length > 0"
+							class="carousel"
+							#owlElement
+							[options]="options"
+							[carouselClasses]="['row']"
+						>
+							<div class="mb-2 mx-1 item flight-offer-slide" *ngFor="let offer of flightOffers">
+								<div *ngFor="let flightLeg of offer.flightLegs">
+									<div *ngFor="let segment of flightLeg.segments" class="mb-1">
+										<div class="row">
+											<div class="col-3 text-center">
+												<div class="carrier-logo d-inline-block">
+													<img
+														src="{{ segment.carrier.wideLogo }}"
+														class="mt-1 mx-auto"
+														alt="{{ segment.carrier.name }}"
+													/>
+												</div>
+											</div>
+											<div class="col-3 text-center">
+												<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
+												<p class="mb-0 font-weight-bold">{{ segment.departure | date: 'dd/MM HH:mm' }}</p>
+												<p class="mb-0">{{ segment.origin }}</p>
+											</div>
+											<div class="col-3 text-center">
+												<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.duration' | translate }}</p>
+												<p class="mb-0 font-weight-bold">{{ segment.totalDurationInWords }}</p>
+												<p class="mb-0">
+													<img src="../../../../assets/img/arrow_2.svg" alt="" />
+												</p>
+											</div>
+											<div class="col-3 text-center">
+												<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
+												<p class="mb-0 font-weight-bold">{{ segment.arrival | date: 'dd/MM HH:mm' }}</p>
+												<p class="mb-0">{{ segment.destination }}</p>
 											</div>
 										</div>
-										<div class="col-3 text-center">
-											<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.departure' | translate }}</p>
-											<p class="mb-0 font-weight-bold">{{ segment.departure | date: 'dd/MM HH:mm' }}</p>
-											<p class="mb-0">{{ segment.origin }}</p>
-										</div>
-										<div class="col-3 text-center">
-											<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.duration' | translate }}</p>
-											<p class="mb-0 font-weight-bold">{{ segment.totalDurationInWords }}</p>
-											<p class="mb-0">
-												<img src="../../../../assets/img/arrow_2.svg" alt="" />
-											</p>
-										</div>
-										<div class="col-3 text-center">
-											<p class="mb-1 text-blue">{{ 'request.estimated_cost.tab_flights.arrival' | translate }}</p>
-											<p class="mb-0 font-weight-bold">{{ segment.arrival | date: 'dd/MM HH:mm' }}</p>
-											<p class="mb-0">{{ segment.destination }}</p>
-										</div>
+									</div>
+									<hr />
+								</div>
+
+								<div class="row mx-2">
+									<div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP':'symbol':'1.0-0' }}</div>
+									<div class="col-6 text-right text-blue font-weight-bold" (click)="updateSelectedFlightOffer(offer)">
+										<span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
+										<mat-checkbox
+											class="float-right mr-1"
+											[checked]="offer.selected"
+											[disableRipple]="true"
+											(click)="$event.preventDefault()"
+										></mat-checkbox>
 									</div>
 								</div>
 								<hr />
 							</div>
+						</owl-carousel>
 
-							<div class="row mx-2">
-								<div class="col-6 font-weight-bold">{{ offer.price | currency: 'EGP':'symbol':'1.0-0' }}</div>
-								<div class="col-6 text-right text-blue font-weight-bold" (click)="updateSelectedFlightOffer(offer)">
-									<span class="mr-2 choose-btn">{{ 'request.estimated_cost.tab_flights.choose' | translate }} </span>
-									<mat-checkbox
-										class="float-right mr-1"
-										[checked]="offer.selected"
-										[disableRipple]="true"
-										(click)="$event.preventDefault()"
-									></mat-checkbox>
-								</div>
-							</div>
-							<hr />
+						<p *ngIf="loadedApiData && flightOffers?.length < 1" class="px-2 text-center">
+							{{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
+						</p>
+					</div>
+
+					<div *ngIf="flightOffers?.length > 1" class="row mb-2">
+						<div class="col-12 text-center slider-pagination">
+							<span (click)="previousSlide()">‹</span>
+							<span
+								*ngFor="let offer of flightOffers; let i = index"
+								class="mx-1"
+								(click)="goToSlide(i)"
+								[class.selected-slide-index]="i + 1 === selectedSlide"
+								>{{ i + 1 }}</span
+							>
+							<span (click)="nextSlide()">›</span>
 						</div>
-					</owl-carousel>
-
-					<p *ngIf="loadedApiData && flightOffers?.length < 1" class="px-2 text-center">
-						{{ 'request.estimated_cost.tab_flights.no_flight_offers' | translate }}
-					</p>
+					</div>
 				</div>
 
-				<div *ngIf="flightOffers?.length > 1" class="row mb-2">
-					<div class="col-12 text-center slider-pagination">
-						<span (click)="previousSlide()">‹</span>
-						<span
-							*ngFor="let offer of flightOffers; let i = index"
-							class="mx-1"
-							(click)="goToSlide(i)"
-							[class.selected-slide-index]="i + 1 === selectedSlide"
-							>{{ i + 1 }}</span
-						>
-						<span (click)="nextSlide()">›</span>
+				<div *ngIf="!loadedApiData" class="p-2">
+					<div *ngFor="let x of [].constructor(4); let i = index">
+						<c-shared-loading-gradient [loadingHeight]="60" [loadingWidth]="100"></c-shared-loading-gradient>
+						<hr *ngIf="i < 3" />
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="col-12 col-lg-3">
-			<div *ngIf="flightPaths?.length" class="row d-lg-block">
-				<div class="col-12">
-					<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
+			<div class="map-box p-2">
+				<div *ngIf="loadedApiData && flightPaths?.length" class="row d-lg-block">
+					<div class="col-12">
+						<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
+					</div>
+				</div>
+
+				<div *ngIf="!loadedApiData">
+					<c-shared-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-shared-loading-gradient>
 				</div>
 			</div>
 		</div>

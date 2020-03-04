@@ -20,18 +20,23 @@ export class TabFlightsComponent implements DoCheck {
 	constructor(private service: EstimatedCostService) {
 		this.flightPaths = service.getCityPaths();
 
-		service.getFlightOffers().subscribe(flightOffersResult => {
-			this.loadedApiData = true;
-			if (flightOffersResult && Array.isArray(flightOffersResult)) {
-				this.flightOffers = flightOffersResult;
+		service.getFlightsAndAccommodation();
 
-				this.flightOffers.forEach((flightOffer, i) => {
-					if (flightOffer.selected) {
-						setTimeout(() => {
-							this.goToSlide(i);
-						}, 0);
-					}
-				});
+		service.flightAndAccommodationOffersData.subscribe(result => {
+			if (result && result.length) {
+				this.loadedApiData = true;
+
+				if (Array.isArray(result[0])) {
+					this.flightOffers = result[0];
+
+					this.flightOffers.forEach((flightOffer, i) => {
+						if (flightOffer.selected) {
+							setTimeout(() => {
+								this.goToSlide(i);
+							}, 0);
+						}
+					});
+				}
 			}
 		});
 
@@ -68,8 +73,10 @@ export class TabFlightsComponent implements DoCheck {
 	}
 
 	goToSlide(i) {
-		this.owlElement.to([i]);
-		this.updateCurrentSlideIndex();
+		if (this.owlElement) {
+			this.owlElement.to([i]);
+			this.updateCurrentSlideIndex();
+		}
 	}
 
 	nextSlide() {

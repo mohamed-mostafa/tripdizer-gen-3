@@ -20,11 +20,13 @@ export class TabAccommodationComponent {
 
 	constructor(private service: EstimatedCostService, private route: ActivatedRoute) {
 		this.currentStepPath = this.route.routeConfig.path;
+		service.flightAndAccommodationOffersData.subscribe(result => {
+			if (result && result.length) {
+				this.loadedApiData = true;
 
-		service.accommodationOffersResult.subscribe(accommodationOffersResultValue => {
-			this.loadedApiData = true;
-			if (accommodationOffersResultValue && Array.isArray(accommodationOffersResultValue)) {
-				this.accommodationOffers = accommodationOffersResultValue;
+				if (Array.isArray(result[1])) {
+					this.accommodationOffers = result[1];
+				}
 			}
 		});
 		this.setSliderOptions();
@@ -68,12 +70,22 @@ export class TabAccommodationComponent {
 	}
 
 	totalCostOfSelectedHotels() {
-		return [].concat
-			.apply(
-				[],
-				this.accommodationOffers.map(offer => offer.hotels.filter(hotel => hotel.selected))
-			)
-			.reduce((pv, cv) => pv + cv.price, 0);
+		if (this.accommodationOffers && this.accommodationOffers.length) {
+			return [].concat
+				.apply(
+					[],
+					this.accommodationOffers.map(offer => {
+						if (offer && offer.hotels) {
+							return offer.hotels.filter(hotel => hotel.selected);
+						}
+					})
+				)
+				.reduce((pv, cv) => {
+					if (cv) {
+						return pv + cv.price;
+					}
+				}, 0);
+		}
 	}
 
 	goNext() {

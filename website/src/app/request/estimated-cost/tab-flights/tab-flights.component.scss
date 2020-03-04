@@ -1,65 +1,66 @@
-.flights-box {
-  border: 1px solid #e4e1e1;
-  background-color: #fff;
-  -webkit-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
-  -moz-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
-  box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
-  margin-bottom: 20px;
+.flights-box,
+.map-box,
+.flights-route {
+	border: 1px solid #e4e1e1;
+	background-color: #fff;
+	-webkit-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+	-moz-box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+	box-shadow: 0px 0px 5px 2px rgba(173, 173, 173, 1);
+	margin-bottom: 20px;
 
-  .flights-title {
-    background-color: #2989ff;
-    color: #fff;
-    // text-transform: uppercase;
-  }
+	.flights-title {
+		background-color: #2989ff;
+		color: #fff;
+		// text-transform: uppercase;
+	}
 
-  .selected-slide-index {
-      color: #2989ff;
-      text-decoration: underline;
-  }
+	.selected-slide-index {
+		color: #2989ff;
+		text-decoration: underline;
+	}
 
-  .flight-offer-slide {
-    min-height: 6.25rem;
+	.flight-offer-slide {
+		min-height: 6.25rem;
 
-    .carrier-logo {
-        height: 100%;
-        vertical-align: middle;
+		.carrier-logo {
+			height: 100%;
+			vertical-align: middle;
 
-      img {
-        max-width: 100%;
-        width: auto;
-      }
+			img {
+				max-width: 100%;
+				width: auto;
+			}
+		}
 
-    }
+		p {
+			font-size: 0.8rem;
+		}
 
-    p {
-      font-size: .8rem;
-    }
+		.choose-btn {
+			cursor: pointer;
+		}
+	}
 
-    .choose-btn {
-        cursor: pointer;
-    }
-  }
+	.slider-pagination {
+		font-size: 1rem;
 
-  .slider-pagination {
-      font-size: 1rem;
-
-      span {
-          cursor: pointer;
-      }
-  }
+		span {
+			cursor: pointer;
+		}
+	}
 }
 
 .routes {
-  $line-width: 2px;
-  $bullet-margin: 2rem;
+	$line-width: 2px;
+	$bullet-margin: 2rem;
 
-  &:before {
-    content: '';
-    position: absolute;
-    background-color: #6c757d;
-    width: $line-width;
-    height: calc(100% - #{$bullet-margin});
-    top: calc(#{$bullet-margin} / 2);
-    left: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
-  }
+	&:before {
+		content: '';
+		position: absolute;
+		background-color: #6c757d;
+		width: $line-width;
+		height: calc(100% - #{$bullet-margin});
+		top: calc(#{$bullet-margin} / 2);
+		left: calc(#{$bullet-margin} / 2 - #{$line-width} / 2);
+	}
 }
