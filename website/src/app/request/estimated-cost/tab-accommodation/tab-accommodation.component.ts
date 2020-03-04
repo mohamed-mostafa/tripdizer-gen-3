@@ -24,8 +24,8 @@ export class TabAccommodationComponent {
 			if (result && result.length) {
 				this.loadedApiData = true;
 
-				if (Array.isArray(result[0])) {
-					this.accommodationOffers = result[0];
+				if (Array.isArray(result[1])) {
+					this.accommodationOffers = result[1];
 				}
 			}
 		});
@@ -70,12 +70,22 @@ export class TabAccommodationComponent {
 	}
 
 	totalCostOfSelectedHotels() {
-		return [].concat
-			.apply(
-				[],
-				this.accommodationOffers.map(offer => offer.hotels.filter(hotel => hotel.selected))
-			)
-			.reduce((pv, cv) => pv + cv.price, 0);
+		if (this.accommodationOffers && this.accommodationOffers.length) {
+			return [].concat
+				.apply(
+					[],
+					this.accommodationOffers.map(offer => {
+						if (offer && offer.hotels) {
+							return offer.hotels.filter(hotel => hotel.selected);
+						}
+					})
+				)
+				.reduce((pv, cv) => {
+					if (cv) {
+						return pv + cv.price;
+					}
+				}, 0);
+		}
 	}
 
 	goNext() {
