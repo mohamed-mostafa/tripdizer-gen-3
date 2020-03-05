@@ -1,3 +1,5 @@
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
 import { BookingDetailsComponent } from './user-booking/booking-details/booking-details.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -16,6 +18,7 @@ import { PlanDetailsComponent } from './user-plans/plan-details/plan-details.com
 import { UserPlansComponent } from './user-plans/user-plans.component';
 import { UserRoutingModule } from './user-routing.module';
 import { UserComponent } from './user.component';
+import { MatNativeDateModule } from '@angular/material';
 
 @NgModule({
 	declarations: [
@@ -26,7 +29,7 @@ import { UserComponent } from './user.component';
 		UserBookingComponent,
 		SideMenuComponent,
 		PlanDetailsComponent,
-		BookingDetailsComponent
+		BookingDetailsComponent,
 	],
 	imports: [
 		CommonModule,
@@ -38,6 +41,9 @@ import { UserComponent } from './user.component';
 		TranslateModule,
 		MatListModule,
 		MatInputModule,
+		FormsModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
 	],
 })
 export class UserModule {}

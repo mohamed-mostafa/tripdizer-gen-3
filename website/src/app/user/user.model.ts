@@ -3,7 +3,7 @@ export class User {
 	firstName: string;
 	lastName: string;
 	picture: string;
-	birthday: string;
+	birthday: Date;
 	phone: string;
 	location: string;
 	provider: string;
@@ -19,5 +19,8 @@ export class User {
 		this.lastName = user.lastName;
 		this.picture = user.picture;
 		this.provider = user.provider;
+		this.phone = user.phone;
+		this.birthday = user.birthday;
+		this.location = user.location;
 	}
 }

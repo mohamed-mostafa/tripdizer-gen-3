@@ -10,7 +10,9 @@ export type User = {
   facebook?: string;
   google?: string;
   lastLoginProvider?: string;
-
+  birthday?: Date;
+  phone?: string;
+  location?: string;
   tokens: AuthToken[];
   token?: string;
 };

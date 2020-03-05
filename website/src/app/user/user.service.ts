@@ -15,7 +15,7 @@ export class UserService {
 	constructor(private http: HttpClient) {}
 
 	update(user: User) {
-		this.http.put(this.endPoint, user);
+		return this.http.put(this.endPoint, user);
 	}
 
 	getUserPlans(): Observable<Array<UserPlan>> {

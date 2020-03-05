@@ -18,17 +18,33 @@
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.mobile' | translate" value="{{ user.phone }}" />
+			<input
+				type="number"
+				matInput
+				[placeholder]="'user.user_info.mobile' | translate"
+				[(ngModel)]="user.phone"
+				name="phone"
+				value="{{ user.phone }}"
+			/>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.birth_date' | translate" value="{{ user.birthday }}" />
+			<mat-label>Choose a date</mat-label>
+			<input matInput [matDatepicker]="picker" [(ngModel)]="user.birthday" name="birthday" />
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.location' | translate" value="{{ user.location }}" />
+			<input
+				matInput
+				[placeholder]="'user.user_info.location' | translate"
+				[(ngModel)]="user.location"
+				name="location"
+				value="{{ user.location }}"
+			/>
 		</mat-form-field>
 	</form>
 
-	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3">Save changes</button>
+	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3" (click)="save(user)">Save changes</button>
 </div>
