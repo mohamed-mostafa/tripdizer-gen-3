@@ -58,6 +58,9 @@ export class TravelInfoComponent {
 	purposes: Array<Purpose>;
 	LUTPurpose = LUTPurpose;
 	otherPurposeName = '';
+	//header
+	selectedCountryImage: string;
+	selectedCountriesName: string;
 
 	constructor(
 		private requestService: RequestService,
@@ -96,6 +99,10 @@ export class TravelInfoComponent {
 		this.countries = requestService.getCountries();
 		// setTimeout(() => {
 		this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
+		const selected = [...this.requestService.getProperty<Array<Country>>('countries')];
+		const selected2 = selected;
+		this.selectedCountriesName = selected.map(c => c.name).join(' - ');
+		this.selectedCountryImage = selected2.shift().thumbnail;
 		this.formGroup.get('destination').reset();
 		// }, 0);
 		const departureDate = this.formGroup.get('departureDate').value;

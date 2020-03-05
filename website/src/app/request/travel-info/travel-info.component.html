@@ -1,3 +1,12 @@
+<div class="row tabs-section">
+	<div class="col-12 p-0 mt-n2 mt-sm-n3">
+		<div class="header" [style.background-image]="'url(' + selectedCountryImage + ')'">
+			<div class="center font-weight-bold text-center text-white">
+				<div *ngIf="selectedCountriesName" class="m-0  text-nowrap country">{{ selectedCountriesName }}</div>
+			</div>
+		</div>
+	</div>
+</div>
 <c-request-form-layout [formGroup]="formGroup" [isBackHidden]="true" (next)="save()">
 	<div class="container containerCss">
 		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
