@@ -36,7 +36,6 @@ export class SectionLandingComponent {
 
 	havePlan() {
 		this.trackingService.track('Submit - Yes, I have a plan');
-
 		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO } });
 	}
 
