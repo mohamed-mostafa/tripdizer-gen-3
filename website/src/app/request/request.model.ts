@@ -331,7 +331,7 @@ export class Request extends CommonFunctions {
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
+							// this._travelingFrom.name &&
 							this._departureDate &&
 							this._returnDate
 						)
@@ -358,7 +358,7 @@ export class Request extends CommonFunctions {
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
+							// this._travelingFrom.name &&
 							this._departureDate &&
 							this._returnDate
 						)
@@ -458,6 +458,26 @@ export class Request extends CommonFunctions {
 				},
 			},
 			{
+				key: 'preferences',
+				title: this._localeLabels.preferences,
+				path: 'preferences',
+				order: this.getStepOrder('preferences'),
+				requiredForRecommendation: true,
+				value: ((): string => {
+					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
+						return null;
+					}
+					return this.preferenceNames.join(', ');
+				})(),
+				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
+				isValid: (): boolean => {
+					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
+						return false;
+					}
+					return true;
+				},
+			},
+			{
 				key: 'travelers',
 				title: this._localeLabels.travelers.title,
 				path: 'travelers',
@@ -485,81 +505,62 @@ export class Request extends CommonFunctions {
 					return true;
 				},
 			},
-			{
-				key: 'budget',
-				title: this._localeLabels.budget,
-				path: 'budget',
-				order: this.getStepOrder('budget'),
-				requiredForRecommendation: true,
-				requiredForEstimateCalc: true,
-				value: ((): string => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
-						return null;
-					}
-					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
-						return null;
-					}
-					return this.budgetCategory === LUTBudgetCategory.OwnBudget
-						? this.currencyPipe.transform(this.budget, 'EGP')
-						: this.budgetCategoryName;
-				})(),
-				isClickable: (): boolean => this.isNavBarItemClickable('budget'),
-				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
-						return false;
-					}
-					if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
-						return false;
-					}
-					return true;
-				},
-			},
-			{
-				key: 'purpose',
-				title: this._localeLabels.purpose,
-				path: 'purpose',
-				order: this.getStepOrder('purpose'),
-				requiredForRecommendation: true,
-				value: ((): string => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
-						return null;
-					}
-					if (!this._purpose) {
-						return null;
-					}
-					return this.purposeName;
-				})(),
-				isClickable: (): boolean => this.isNavBarItemClickable('purpose'),
-				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
-						return false;
-					}
-					if (!this._purpose) {
-						return false;
-					}
-					return true;
-				},
-			},
-			{
-				key: 'preferences',
-				title: this._localeLabels.preferences,
-				path: 'preferences',
-				order: this.getStepOrder('preferences'),
-				requiredForRecommendation: true,
-				value: ((): string => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
-						return null;
-					}
-					return this.preferenceNames.join(', ');
-				})(),
-				isClickable: (): boolean => this.isNavBarItemClickable('preferences'),
-				isValid: (): boolean => {
-					if (this._touchedSteps.indexOf(this.getStepOrder('preferences')) === -1) {
-						return false;
-					}
-					return true;
-				},
-			},
+			// {
+			// 	key: 'budget',
+			// 	title: this._localeLabels.budget,
+			// 	path: 'budget',
+			// 	order: this.getStepOrder('budget'),
+			// 	requiredForRecommendation: true,
+			// 	requiredForEstimateCalc: true,
+			// 	value: ((): string => {
+			// 		if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
+			// 			return null;
+			// 		}
+			// 		if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
+			// 			return null;
+			// 		}
+			// 		return this.budgetCategory === LUTBudgetCategory.OwnBudget
+			// 			? this.currencyPipe.transform(this.budget, 'EGP')
+			// 			: this.budgetCategoryName;
+			// 	})(),
+			// 	isClickable: (): boolean => this.isNavBarItemClickable('budget'),
+			// 	isValid: (): boolean => {
+			// 		if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
+			// 			return false;
+			// 		}
+			// 		if (!this.budgetCategory || (this.budgetCategory === LUTBudgetCategory.OwnBudget && !this._budget)) {
+			// 			return false;
+			// 		}
+			// 		return true;
+			// 	},
+			// },
+			// {
+			// 	key: 'purpose',
+			// 	title: this._localeLabels.purpose,
+			// 	path: 'purpose',
+			// 	order: this.getStepOrder('purpose'),
+			// 	requiredForRecommendation: true,
+			// 	value: ((): string => {
+			// 		if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
+			// 			return null;
+			// 		}
+			// 		if (!this._purpose) {
+			// 			return null;
+			// 		}
+			// 		return this.purposeName;
+			// 	})(),
+			// 	isClickable: (): boolean => this.isNavBarItemClickable('purpose'),
+			// 	isValid: (): boolean => {
+			// 		if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
+			// 			return false;
+			// 		}
+			// 		if (!this._purpose) {
+			// 			return false;
+			// 		}
+			// 		return true;
+			// 	},
+			// },
+
 			{
 				key: 'destinations',
 				title: this._localeLabels.destinations,
@@ -750,15 +751,15 @@ export class Request extends CommonFunctions {
 			travelingFrom: 1,
 			travelingTo: 2,
 			departureReturn: 3,
-			purpose: 4,
-			budget: 5,
-			travelers: 6,
-			preferences: this.getOrderByRequestType(8, 7),
-			destinations: this.getOrderByRequestType(7, 8),
-			estimatedCost: this.getOrderByRequestType(9, 9),
-			summary: 10,
-			travelAssistance: 11,
-			information: 12,
+			// purpose: 4,
+			// budget: 5,
+			preferences: 4,
+			travelers: this.getOrderByRequestType(6, 5),
+			destinations: this.getOrderByRequestType(5, 6),
+			estimatedCost: this.getOrderByRequestType(7, 7),
+			summary: 8,
+			travelAssistance: 9,
+			information: 10,
 			ticket: 99,
 		};
 		return steps[stepKey];

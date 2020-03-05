@@ -1,17 +1,19 @@
+import { Purpose, LUTPurpose } from './../../shared/models/purpose.model';
+import { BudgetCategory, LUTBudgetCategory } from './../../shared/models/budget-category.model';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+// import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { Country } from '../../shared/models/country.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
 import { Destination } from '../destinations/destination.model';
 import { RequestType } from '../request-type.enum';
 import { RequestService } from '../request.service';
-import { TravelingFrom } from '../traveling-from/traveling-from.model';
+// import { TravelingFrom } from '../traveling-from/traveling-from.model';
 
 @Component({
 	selector: 'c-request-travel-info',
@@ -21,7 +23,7 @@ import { TravelingFrom } from '../traveling-from/traveling-from.model';
 export class TravelInfoComponent {
 	formGroup: FormGroup;
 	controls: any = {
-		travelingFrom: new FormControl('', [Validators.required]),
+		// travelingFrom: new FormControl('', [Validators.required]),
 		destination: new FormControl('', [
 			CustomValidators.conditionallyRequired(() =>
 				Boolean(!this.isHavePlan || (this.selectedCountries && this.selectedCountries.length))
@@ -30,17 +32,32 @@ export class TravelInfoComponent {
 		departureDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		returnDate: new FormControl('', [Validators.required, CustomValidators.dateValid()]),
 		isFlexibleDates: new FormControl(),
+		//budget
+		budgetCategory: new FormControl(),
+		budget: new FormControl('', [Validators.required]),
+		//purpose
+		purpose: new FormControl('', [Validators.required]),
 	};
 	countries: Observable<Array<Country>>;
 	selectedCountries: Array<Country> = [];
 	minDate = new Date();
-	dialogLabels: {
-		title: string;
-		description: string;
-		inputs: { input0: string };
-		buttonsLabel: { ok: string; cancel: string };
-	};
+	// dialogLabels: {
+	// 	title: string;
+	// 	description: string;
+	// 	inputs: { input0: string };
+	// 	buttonsLabel: { ok: string; cancel: string };
+	// };
 	isHavePlan: boolean;
+	//budget
+	budgetCategories: Array<BudgetCategory>;
+	isOwnBudget;
+	selectedBudgetCategory: any;
+	minimumBudget: number;
+	maximumBudget: number;
+	//purpose
+	purposes: Array<Purpose>;
+	LUTPurpose = LUTPurpose;
+	otherPurposeName = '';
 
 	constructor(
 		private requestService: RequestService,
@@ -52,7 +69,7 @@ export class TravelInfoComponent {
 		translate
 			.stream('request.travel_info.compare_dates')
 			.subscribe(validationMsg => (compareDatesValidationMsg = validationMsg));
-		translate.get('request.travel_info.dialog').subscribe(labels => (this.dialogLabels = labels));
+		// translate.get('request.travel_info.dialog').subscribe(labels => (this.dialogLabels = labels));
 		this.formGroup = new FormGroup(
 			{},
 			{
@@ -64,6 +81,9 @@ export class TravelInfoComponent {
 			if (this.controls.hasOwnProperty(controlName)) {
 				if (controlName !== 'destination') {
 					(this.controls[controlName] as FormControl).setValue(this.requestService.getProperty(controlName));
+				}
+				if (this.requestService.getProperty(controlName) === LUTPurpose.Other) {
+					this.otherPurposeName = this.requestService.getProperty('purposeName');
 				}
 				this.formGroup.addControl(controlName, this.controls[controlName]);
 			}
@@ -78,8 +98,51 @@ export class TravelInfoComponent {
 		this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
 		this.formGroup.get('destination').reset();
 		// }, 0);
+		const departureDate = this.formGroup.get('departureDate').value;
+		if (departureDate) {
+			this.calculateBudget();
+		}
+		requestService.getPurposes().subscribe((purposes: Array<Purpose>) => (this.purposes = purposes));
 	}
+	calculateBudget() {
+		const departureDate = this.formGroup.get('departureDate').value;
+		const returnDate = this.formGroup.get('returnDate').value;
+		const firstDestination = this.selectedCountries[0];
+		const numberOfDays = returnDate.diff(departureDate, 'days');
+		this.minimumBudget = firstDestination
+			? firstDestination.minimumTravelBudget + firstDestination.minimumDailyBudget * numberOfDays
+			: 10000;
+		this.maximumBudget = firstDestination
+			? firstDestination.minimumTravelBudget + firstDestination.maximumDailyBudget * numberOfDays
+			: 100000;
 
+		this.formGroup.controls['budget'].setValue(this.minimumBudget);
+
+		this.isOwnBudget = this.formGroup.controls['budgetCategory'].value === LUTBudgetCategory.OwnBudget;
+		this.formGroup.controls['budgetCategory'].valueChanges.subscribe(data => {
+			this.isOwnBudget = data === LUTBudgetCategory.OwnBudget;
+			if (!this.isOwnBudget) {
+				this.formGroup.controls['budget'].setValue(0);
+			}
+		});
+		this.formGroup.controls['budget'].valueChanges.subscribe(data => {
+			this.isOwnBudget = data > 0;
+			if (this.isOwnBudget) {
+				this.formGroup.controls['budgetCategory'].setValue(1);
+			}
+		});
+		this.requestService.getBudgetCategories().subscribe((budgetCategories: Array<BudgetCategory>) => {
+			if (budgetCategories.length > 4) {
+				budgetCategories.splice(budgetCategories.length - 1, 1);
+				this.budgetCategories = budgetCategories.reverse();
+			} else {
+				this.budgetCategories = budgetCategories;
+			}
+		});
+	}
+	otherPurposeFocused(): void {
+		this.formGroup.get('purpose').setValue(LUTPurpose.Other);
+	}
 	save(): void {
 		for (const controlName in this.formGroup.controls) {
 			if (this.formGroup.controls.hasOwnProperty(controlName)) {
@@ -90,59 +153,100 @@ export class TravelInfoComponent {
 				}
 			}
 		}
+		//budget
+		this.requestService.setProperty('budget', this.formGroup.controls.budget.value);
+		const budgetAmount = this.formGroup.controls.budget.value;
+
+		const budgetRange = this.maximumBudget - this.minimumBudget;
+		const stepRange = budgetRange / 4;
+		const step1 = this.minimumBudget + stepRange;
+		const step2 = step1 + stepRange;
+		const step3 = step2 + stepRange;
+
+		if (budgetAmount > this.minimumBudget && budgetAmount <= step1) {
+			this.selectedBudgetCategory = this.budgetCategories[0];
+		}
+
+		if (budgetAmount > step1 && budgetAmount <= step2) {
+			this.selectedBudgetCategory = this.budgetCategories[1];
+		}
+
+		if (budgetAmount > step2 && budgetAmount <= step3) {
+			this.selectedBudgetCategory = this.budgetCategories[2];
+		}
+
+		if (budgetAmount > step3 && budgetAmount <= this.maximumBudget) {
+			this.selectedBudgetCategory = this.budgetCategories[3];
+		}
+		this.requestService.setProperty('budgetCategoryName', this.selectedBudgetCategory.name);
+		this.requestService.setProperty('budgetCategory', this.selectedBudgetCategory.id);
+		//purpose
+		const selectedPurpose = this.purposes.find(p => p.id === this.formGroup.controls['purpose'].value);
+		if (selectedPurpose) {
+			if (selectedPurpose.id === LUTPurpose.Other) {
+				selectedPurpose.name = this.otherPurposeName;
+			}
+			this.requestService.setProperty('purposeName', selectedPurpose.name);
+			this.requestService.setProperty('adultsNumber', selectedPurpose.adultsNumber);
+			this.requestService.setProperty('kidsNumber', selectedPurpose.kidsNumber);
+			this.requestService.setProperty('infantsNumber', selectedPurpose.infantsNumber);
+		}
 		this.trackingService.track('Submit - Travel Info', {
 			...this.formGroup.value,
+			travelingFrom: 'Cairo',
 			departureDate: moment(this.formGroup.get('departureDate').value).format('D / M / Y'),
 			returnDate: moment(this.formGroup.get('returnDate').value).format('D / M / Y'),
 			isFlexibleDates: false,
+			budgetCategoryName: this.selectedBudgetCategory.name,
+			purposeName: selectedPurpose.name,
 		});
 	}
 
-	compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
+	// compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
 
-	openDialog(): void {
-		const dialogRef = this.dialog.open(DialogComponent, {
-			autoFocus: true,
-			maxWidth: 400,
-			data: {
-				title: this.dialogLabels ? this.dialogLabels.title : '',
-				description: this.dialogLabels ? this.dialogLabels.description : '',
-				inputs: [
-					{
-						id: 'destinationName',
-						value: this.requestService.getProperty('destination')
-							? this.requestService.getProperty('destination').name
-							: null,
-						placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
-						validatorOrOpts: [Validators.required],
-					},
-				],
-				buttonsLabel: {
-					ok: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.ok : '',
-					cancel: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.cancel : '',
-				},
-			},
-		});
+	// openDialog(): void {
+	// 	const dialogRef = this.dialog.open(DialogComponent, {
+	// 		autoFocus: true,
+	// 		maxWidth: 400,
+	// 		data: {
+	// 			title: this.dialogLabels ? this.dialogLabels.title : '',
+	// 			description: this.dialogLabels ? this.dialogLabels.description : '',
+	// 			inputs: [
+	// 				{
+	// 					id: 'destinationName',
+	// 					value: this.requestService.getProperty('destination')
+	// 						? this.requestService.getProperty('destination').name
+	// 						: null,
+	// 					placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
+	// 					validatorOrOpts: [Validators.required],
+	// 				},
+	// 			],
+	// 			buttonsLabel: {
+	// 				ok: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.ok : '',
+	// 				cancel: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.cancel : '',
+	// 			},
+	// 		},
+	// 	});
 
-		dialogRef.afterClosed().subscribe(inputs => {
-			if (inputs && inputs[0]) {
-				const destination: Destination = {
-					id: -1,
-					name: inputs[0].value,
-					description: null,
-					ISOCode: inputs[0].value,
-					image: null,
-					visaTypeName: null,
-					minimumTravelBudget: 0,
-					minimumDailyBudget: 0,
-					maximumDailyBudget: 0,
-				};
-				this.formGroup.get('destination').setValue({ ...destination, triggered: true });
-				this.trackingService.track('Submit - Destination', {
-					destinationId: destination.id,
-					destinationName: destination.name,
-				});
-			}
-		});
-	}
+	// 	dialogRef.afterClosed().subscribe(inputs => {
+	// 		if (inputs && inputs[0]) {
+	// 			const destination: Destination = {
+	// 				id: -1,
+	// 				name: inputs[0].value,
+	// 				description: null,
+	// 				ISOCode: inputs[0].value,
+	// 				image: null,
+	// 				visaTypeName: null,
+	// 				minimumTravelBudget: 0,
+	// 				minimumDailyBudget: 0,
+	// 				maximumDailyBudget: 0,
+	// 			};
+	// 			this.formGroup.get('destination').setValue({ ...destination, triggered: true });
+	// 			this.trackingService.track('Submit - Destination', {
+	// 				destinationId: destination.id,
+	// 				destinationName: destination.name,
+	// 			});
+	// 		}
+	// 	});
+	// }
 }

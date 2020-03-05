@@ -325,6 +325,7 @@
 				"title": "Travelers",
 				"value": "{{adultsNumber}} adults"
 			},
+			"date":"Date",
 			"budget": "Budget",
 			"purpose": "Purpose",
 			"preferences": "Preferences",

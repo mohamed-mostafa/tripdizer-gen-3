@@ -1,57 +1,119 @@
 <c-request-form-layout [formGroup]="formGroup" [isBackHidden]="true" (next)="save()">
-	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-		<mat-hint>{{ formGroup.controls['travelingFrom'].errors | errorMessage }}</mat-hint>
-		<mat-error>{{ formGroup.controls['travelingFrom'].errors | errorMessage }}</mat-error>
-		<mat-select
-			formControlName="travelingFrom"
-			[placeholder]="'request.travel_info.traveling_from' | translate"
-			[compareWith]="compareObjects"
-			class="text-yellow font-weight-bold"
-		>
-			<mat-option *ngFor="let airport of 'request.travel_info.airports' | translate" [value]="airport">{{
-				airport.name
-			}}</mat-option>
-		</mat-select>
-	</mat-form-field>
-	<div *ngIf="isHavePlan && (countries | async)" class="mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-		<c-shared-places-select-box
-			classes="form-control-lg"
-			[formGroup]="formGroup"
-			controlName="destination"
-			[places]="countries | async"
-			[selectedPlaces]="selectedCountries"
-		></c-shared-places-select-box>
+	<div class="container containerCss">
+		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+			{{ 'request.nav_bar.date' | translate }} /
+		</h1>
+		<div class="row">
+			<div class="col-sm">
+				<mat-form-field class="form-control-lg">
+					<mat-hint>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-hint>
+					<mat-error>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-error>
+					<input
+						matInput
+						[min]="minDate"
+						[matDatepicker]="departureDatePicker"
+						id="departure-date"
+						class="text-yellow font-weight-bold"
+						[placeholder]="'request.travel_info.departure' | translate"
+						(click)="departureDatePicker.open()"
+						(focus)="departureDatePicker.open()"
+						formControlName="departureDate"
+						(dateChange)="calculateBudget()"
+					/>
+					<mat-datepicker #departureDatePicker [touchUi]="true"></mat-datepicker>
+				</mat-form-field>
+			</div>
+			<div class="col-sm">
+				<mat-form-field class="form-control-lg">
+					<mat-hint>{{ formGroup.controls['returnDate'].errors | errorMessage }}</mat-hint>
+					<mat-error>{{ formGroup.controls['returnDate'].errors | errorMessage }}</mat-error>
+					<input
+						matInput
+						[min]="minDate"
+						[matDatepicker]="returnDatePicker"
+						id="return-date"
+						class="text-yellow font-weight-bold"
+						[placeholder]="'request.travel_info.return' | translate"
+						(click)="returnDatePicker.open()"
+						(focus)="returnDatePicker.open()"
+						formControlName="returnDate"
+						(dateChange)="calculateBudget()"
+					/>
+					<mat-datepicker #returnDatePicker [touchUi]="true"></mat-datepicker>
+				</mat-form-field>
+			</div>
+		</div>
 	</div>
-	<mat-form-field class="form-control-lg mb-1 mb-sm-2 mb-md-3 mb-lg-4">
-		<mat-hint>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-hint>
-		<mat-error>{{ formGroup.controls['departureDate'].errors | errorMessage }}</mat-error>
-		<input
-			matInput
-			[min]="minDate"
-			[matDatepicker]="departureDatePicker"
-			id="departure-date"
-			class="text-yellow font-weight-bold"
-			[placeholder]="'request.travel_info.departure' | translate"
-			(click)="departureDatePicker.open()"
-			(focus)="departureDatePicker.open()"
-			formControlName="departureDate"
-		/>
-		<mat-datepicker #departureDatePicker [touchUi]="true"></mat-datepicker>
-	</mat-form-field>
-	<mat-form-field class="form-control-lg my-1 my-sm-2 my-md-3 my-lg-4">
-		<mat-hint>{{ formGroup.controls['returnDate'].errors | errorMessage }}</mat-hint>
-		<mat-error>{{ formGroup.controls['returnDate'].errors | errorMessage }}</mat-error>
-		<input
-			matInput
-			[min]="minDate"
-			[matDatepicker]="returnDatePicker"
-			id="return-date"
-			class="text-yellow font-weight-bold"
-			[placeholder]="'request.travel_info.return' | translate"
-			(click)="returnDatePicker.open()"
-			(focus)="returnDatePicker.open()"
-			formControlName="returnDate"
-		/>
-		<mat-datepicker #returnDatePicker [touchUi]="true"></mat-datepicker>
-	</mat-form-field>
+	<div class="container containerCss">
+		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+			{{ 'request.budget.budget' | translate }}
+		</h1>
+		<div class="budget-section">
+			<mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
+				<div
+					class="mat-radio-group-label-wrapper text-capitalize col-12"
+					[class.mat-error]="formGroup.controls['budget'].invalid"
+				>
+					<span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
+				</div>
+				<div class="budget-container">
+					<img
+						src="../../../assets/img/budget.svg"
+						class="budget-svg"
+						[class.budget-svg-rtl]="('dir' | translate) === 'rtl'"
+						alt=""
+					/>
+					<mat-slider
+						[min]="minimumBudget"
+						max="{{ maximumBudget }}"
+						step="100"
+						class="col-12"
+						thumbLabel
+						formControlName="budget"
+					>
+					</mat-slider>
+					<div class="budget-categories">
+						<div
+							*ngFor="let budgetCategory of budgetCategories"
+							[hidden]="budgetCategory.id == 1"
+							class="budget-category text-center title-font font-weight-bold"
+							[style.float]="('dir' | translate) === 'rtl' ? 'right' : 'left'"
+						>
+							{{ budgetCategory.name }}
+						</div>
+					</div>
+				</div>
+			</mat-radio-group>
+		</div>
+	</div>
+	<div class="container containerCss">
+		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+			{{ 'request.nav_bar.purpose' | translate }} /
+		</h1>
+		<div class="row">
+			<mat-radio-group class="image form-control-xl row" formControlName="purpose">
+				<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
+					<span *ngIf="purpose.id !== LUTPurpose.Other; else otherPurpose">
+						{{ purpose.name }}
+					</span>
+					<ng-template #otherPurpose>
+						<span class="other-purpose">
+							<input
+								type="text"
+								[value]="otherPurposeName"
+								class="text-capitalize text-center"
+								[placeholder]="'request.purpose.other' | translate"
+								(change)="otherPurposeName = $event.target.value"
+								(focus)="otherPurposeFocused()"
+							/>
+						</span>
+					</ng-template>
+					<span
+						class="label-content-img full-size-background"
+						[style.background]="purpose.image ? 'url(' + purpose.image + ')' : null"
+					></span>
+				</mat-radio-button>
+			</mat-radio-group>
+		</div>
+	</div>
 </c-request-form-layout>
