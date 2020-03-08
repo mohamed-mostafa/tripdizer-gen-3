@@ -27,7 +27,7 @@ const addOrUpdateFromSocial = (
         (res: SuccessResponse<User> | ErrorResponse) => {
           if (!res.success) return res;
 
-          return new SuccessResponse<User>(newUser);
+          return new SuccessResponse<User>((res as SuccessResponse<User>).data);
         }
       );
     }
