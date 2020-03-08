@@ -324,6 +324,7 @@
 				"title": "المسافرين",
 				"value": "{{adultsNumber}} بالغين"
 			},
+			"date": "التاريخ",
 			"budget": "الميزانية",
 			"purpose": "غرض السفر",
 			"preferences": "الإهتمامات",

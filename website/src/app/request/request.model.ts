@@ -331,7 +331,6 @@ export class Request extends CommonFunctions {
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
 							this._departureDate &&
 							this._returnDate
 						)
@@ -358,7 +357,6 @@ export class Request extends CommonFunctions {
 						!(
 							(this._requestType === RequestType.SurpriseMe || this.countries.length) &&
 							this._travelingFrom &&
-							this._travelingFrom.name &&
 							this._departureDate &&
 							this._returnDate
 						)
@@ -492,6 +490,7 @@ export class Request extends CommonFunctions {
 				order: this.getStepOrder('budget'),
 				requiredForRecommendation: true,
 				requiredForEstimateCalc: true,
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('budget')) === -1) {
 						return null;
@@ -520,6 +519,7 @@ export class Request extends CommonFunctions {
 				path: 'purpose',
 				order: this.getStepOrder('purpose'),
 				requiredForRecommendation: true,
+				isDisabled: true,
 				value: ((): string => {
 					if (this._touchedSteps.indexOf(this.getStepOrder('purpose')) === -1) {
 						return null;
@@ -752,8 +752,8 @@ export class Request extends CommonFunctions {
 			departureReturn: 3,
 			purpose: 4,
 			budget: 5,
-			travelers: 6,
-			preferences: this.getOrderByRequestType(8, 7),
+			preferences: 6,
+			travelers: this.getOrderByRequestType(8, 7),
 			destinations: this.getOrderByRequestType(7, 8),
 			estimatedCost: this.getOrderByRequestType(9, 9),
 			summary: 10,

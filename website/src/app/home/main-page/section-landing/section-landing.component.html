@@ -15,9 +15,14 @@
 			></c-shared-places-select-box>
 		</div>
 		<div class="inline">
-			<a class="btn btn-green custom-bs border-white ml-1 startMyPlanButton" (click)="havePlan()" role="button">{{
-				'home.landing.have_plan' | translate
-			}}</a>
+			<button
+				class="btn btn-green custom-bs border-white ml-1 startMyPlanButton"
+				(click)="havePlan()"
+				role="button"
+				[disabled]="selectedCountries && selectedCountries.length > 0 ? false : true"
+			>
+				{{ 'home.landing.have_plan' | translate }}
+			</button>
 		</div>
 		<div>
 			<a class="btn custom-bs btn-rounded btn-light mt-2 helpMeDecideButton" (click)="surpriseMe()" role="button">{{

@@ -36,13 +36,10 @@ export class SectionLandingComponent {
 
 	havePlan() {
 		this.trackingService.track('Submit - Yes, I have a plan');
-
 		this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO } });
 	}
 
 	surpriseMe() {
-		// this.trackingService.track('Submit - NO, Surprise me');
-		// this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO, surprise: true } });
 		const dialogRef = this.dialog.open(LetMeDecideComponent, {
 			width: '300px',
 			data: { name: this.name },
