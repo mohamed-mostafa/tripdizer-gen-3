@@ -6,15 +6,36 @@
 
 	<form class="example row">
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.first_name' | translate" value="{{ user.firstName }}" disabled />
+			<input
+				matInput
+				[placeholder]="'user.user_info.first_name' | translate"
+				[(ngModel)]="user.firstName"
+				name="firstName"
+				value="{{ user.firstName }}"
+				disabled
+			/>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.last_name' | translate" value="{{ user.lastName }}" disabled />
+			<input
+				matInput
+				[placeholder]="'user.user_info.last_name' | translate"
+				[(ngModel)]="user.lastName"
+				name="lastName"
+				value="{{ user.lastName }}"
+				disabled
+			/>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
-			<input matInput [placeholder]="'user.user_info.email' | translate" value="{{ user.email }}" disabled />
+			<input
+				matInput
+				[placeholder]="'user.user_info.email' | translate"
+				[(ngModel)]="user.email"
+				name="email"
+				value="{{ user.email }}"
+				disabled
+			/>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
@@ -46,5 +67,7 @@
 		</mat-form-field>
 	</form>
 
-	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3" (click)="save(user)">Save changes</button>
+	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3" [disabled]="show" (click)="save(user)">
+		Save changes
+	</button>
 </div>

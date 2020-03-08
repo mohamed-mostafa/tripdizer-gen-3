@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '../shared/services/auth.service';
 import { UserBooking } from './user-booking/user-booking.model';
@@ -11,6 +11,7 @@ import { User } from './user.model';
 export class UserService {
 	private endPoint = 'users';
 	private userBookingsEndpoint = 'requests/users/requests';
+	isLoading = new Subject<{ show: boolean; message: string }>();
 
 	private userPlans: Array<UserPlan> = [];
 

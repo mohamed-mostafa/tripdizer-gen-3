@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 export class UserInfoComponent implements OnDestroy {
 	user: User = {} as User;
 	subUser: Subscription;
-
+	show = false;
 	constructor(private authService: AuthService, private userService: UserService) {
 		this.subUser = this.authService.authenticatedUser.subscribe(user => {
 			if (user) {
@@ -22,8 +22,15 @@ export class UserInfoComponent implements OnDestroy {
 	}
 
 	save(user) {
+		this.userService.isLoading.next({ show: true, message: 'Saving data ...' });
+		this.show = true;
 		this.userService.update(user).subscribe(data => {
 			this.authService.updateAuthenticatedUser(data['data']);
+			this.userService.isLoading.next({
+				show: false,
+				message: '',
+			});
+			this.show = false;
 		});
 	}
 	ngOnDestroy() {
