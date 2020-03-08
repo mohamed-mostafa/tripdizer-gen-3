@@ -72,8 +72,8 @@ export class AuthService {
 
 	updateAuthenticatedUser(newUser): void {
 		const user = localStorage.getItem('user');
-		const parsedUser: User = { ...JSON.parse(user), ...newUser };
-		this.storeAuthenticatedUser(parsedUser);
+		localStorage.setItem('user', JSON.stringify({ ...JSON.parse(user), ...newUser }));
+		this.initAuthenticationState();
 	}
 
 	private authenticateUserServerSide(provider: string, token: string): void {
