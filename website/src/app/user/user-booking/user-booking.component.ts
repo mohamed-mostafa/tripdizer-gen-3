@@ -13,7 +13,7 @@ export class UserBookingComponent {
 	userBookings: Observable<Array<UserBooking>>;
 
 	constructor(private sideNavService: SideNavService, private userService: UserService) {
-		this.userBookings = this.userService.getUserBookings();
+		this.userBookings = this.userService.getUserBookings();	
 	}
 
 	openDetails(bookingData) {
