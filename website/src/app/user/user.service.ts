@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from '../shared/services/auth.service';
 import { UserBooking } from './user-booking/user-booking.model';
 import { UserPlan } from './user-plans/user-plan.model';
 import { User } from './user.model';
@@ -12,10 +14,16 @@ export class UserService {
 
 	private userPlans: Array<UserPlan> = [];
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private authService: AuthService) {}
 
 	update(user: User) {
-		return this.http.put(this.endPoint, user);
+		return this.http.put(this.endPoint, user).pipe(
+			tap((res: { success: boolean; data: User }) => {
+				if (res.success) {
+					this.authService.updateAuthenticatedUser(res.data);
+				}
+			})
+		);
 	}
 
 	getUserPlans(): Observable<Array<UserPlan>> {
