@@ -40,8 +40,6 @@ export class SectionLandingComponent {
 	}
 
 	surpriseMe() {
-		// this.trackingService.track('Submit - NO, Surprise me');
-		// this.router.navigate(['request'], { queryParams: { countries: this.selectedCountriesISO, surprise: true } });
 		const dialogRef = this.dialog.open(LetMeDecideComponent, {
 			width: '300px',
 			data: { name: this.name },

@@ -6,15 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-// import { DialogComponent } from '../../shared/components/dialog/dialog.component';
 import { Country } from '../../shared/models/country.model';
 import { TrackingService } from '../../shared/services/tracking.service';
 import { CustomValidators } from '../../shared/utils';
-import { Destination } from '../destinations/destination.model';
 import { RequestType } from '../request-type.enum';
 import { RequestService } from '../request.service';
-// import { TravelingFrom } from '../traveling-from/traveling-from.model';
-
 @Component({
 	selector: 'c-request-travel-info',
 	templateUrl: './travel-info.component.html',
@@ -23,7 +19,6 @@ import { RequestService } from '../request.service';
 export class TravelInfoComponent {
 	formGroup: FormGroup;
 	controls: any = {
-		// travelingFrom: new FormControl('', [Validators.required]),
 		destination: new FormControl('', [
 			CustomValidators.conditionallyRequired(() =>
 				Boolean(!this.isHavePlan || (this.selectedCountries && this.selectedCountries.length))
@@ -41,12 +36,6 @@ export class TravelInfoComponent {
 	countries: Observable<Array<Country>>;
 	selectedCountries: Array<Country> = [];
 	minDate = new Date();
-	// dialogLabels: {
-	// 	title: string;
-	// 	description: string;
-	// 	inputs: { input0: string };
-	// 	buttonsLabel: { ok: string; cancel: string };
-	// };
 	isHavePlan: boolean;
 	//budget
 	budgetCategories: Array<BudgetCategory>;
@@ -72,7 +61,6 @@ export class TravelInfoComponent {
 		translate
 			.stream('request.travel_info.compare_dates')
 			.subscribe(validationMsg => (compareDatesValidationMsg = validationMsg));
-		// translate.get('request.travel_info.dialog').subscribe(labels => (this.dialogLabels = labels));
 		this.formGroup = new FormGroup(
 			{},
 			{
@@ -97,14 +85,12 @@ export class TravelInfoComponent {
 			}
 		});
 		this.countries = requestService.getCountries();
-		// setTimeout(() => {
 		this.selectedCountries = this.requestService.getProperty<Array<Country>>('countries');
 		const selected = [...this.requestService.getProperty<Array<Country>>('countries')];
 		const selected2 = selected;
 		this.selectedCountriesName = selected.map(c => c.name).join(' - ');
 		this.selectedCountryImage = selected2.shift().thumbnail;
 		this.formGroup.get('destination').reset();
-		// }, 0);
 		const departureDate = this.formGroup.get('departureDate').value;
 		if (departureDate) {
 			this.calculateBudget();
@@ -208,52 +194,4 @@ export class TravelInfoComponent {
 			purposeName: selectedPurpose.name,
 		});
 	}
-
-	// compareObjects = (o1: TravelingFrom, o2: TravelingFrom) => o1.iataCode === o2.iataCode;
-
-	// openDialog(): void {
-	// 	const dialogRef = this.dialog.open(DialogComponent, {
-	// 		autoFocus: true,
-	// 		maxWidth: 400,
-	// 		data: {
-	// 			title: this.dialogLabels ? this.dialogLabels.title : '',
-	// 			description: this.dialogLabels ? this.dialogLabels.description : '',
-	// 			inputs: [
-	// 				{
-	// 					id: 'destinationName',
-	// 					value: this.requestService.getProperty('destination')
-	// 						? this.requestService.getProperty('destination').name
-	// 						: null,
-	// 					placeHolder: this.dialogLabels && this.dialogLabels.inputs ? this.dialogLabels.inputs.input0 : '',
-	// 					validatorOrOpts: [Validators.required],
-	// 				},
-	// 			],
-	// 			buttonsLabel: {
-	// 				ok: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.ok : '',
-	// 				cancel: this.dialogLabels && this.dialogLabels.buttonsLabel ? this.dialogLabels.buttonsLabel.cancel : '',
-	// 			},
-	// 		},
-	// 	});
-
-	// 	dialogRef.afterClosed().subscribe(inputs => {
-	// 		if (inputs && inputs[0]) {
-	// 			const destination: Destination = {
-	// 				id: -1,
-	// 				name: inputs[0].value,
-	// 				description: null,
-	// 				ISOCode: inputs[0].value,
-	// 				image: null,
-	// 				visaTypeName: null,
-	// 				minimumTravelBudget: 0,
-	// 				minimumDailyBudget: 0,
-	// 				maximumDailyBudget: 0,
-	// 			};
-	// 			this.formGroup.get('destination').setValue({ ...destination, triggered: true });
-	// 			this.trackingService.track('Submit - Destination', {
-	// 				destinationId: destination.id,
-	// 				destinationName: destination.name,
-	// 			});
-	// 		}
-	// 	});
-	// }
 }
