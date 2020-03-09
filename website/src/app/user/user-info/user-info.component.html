@@ -68,6 +68,6 @@
 	</form>
 
 	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3" [disabled]="show" (click)="save(user)">
-		Save changes
+		<i class="fa fa-spinner fa-spin" *ngIf="show"></i> Save changes
 	</button>
 </div>

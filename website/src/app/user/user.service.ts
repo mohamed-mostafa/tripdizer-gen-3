@@ -1,3 +1,4 @@
+import { LookupsService } from 'src/app/shared/services/lookups.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
@@ -15,13 +16,20 @@ export class UserService {
 
 	private userPlans: Array<UserPlan> = [];
 
-	constructor(private http: HttpClient, private authService: AuthService) {}
+	constructor(private http: HttpClient, private authService: AuthService, private lutService: LookupsService) {
+		this.isLoading = this.lutService.isLoading;
+	}
 
 	update(user: User) {
+		this.isLoading.next({ show: true, message: 'Saving data ...' });
 		return this.http.put(this.endPoint, user).pipe(
 			tap((res: { success: boolean; data: User }) => {
 				if (res.success) {
 					this.authService.updateAuthenticatedUser(res.data);
+					this.isLoading.next({
+						show: false,
+						message: '',
+					});
 				}
 			})
 		);

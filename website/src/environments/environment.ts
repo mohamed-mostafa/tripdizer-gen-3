@@ -4,8 +4,8 @@
 
 export const environment = {
 	production: false,
-	apiUrl: 'https://development-services.tripdizer.com/',
-	// apiUrl: 'http://localhost:8080/',
+	// apiUrl: 'https://development-services.tripdizer.com/',
+	apiUrl: 'http://localhost:8080/',
 	requestSessionExpiration: 15,
 	mixpanelToken: 'f78fd653e6b2cfe1d402f380ca08102f',
 	weAcceptIframeKey: 7284,
