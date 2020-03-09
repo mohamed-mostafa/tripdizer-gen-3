@@ -9,7 +9,7 @@ import { User } from './user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-	private endPoint = 'users';
+	private endPoint = 'users/';
 	private userBookingsEndpoint = 'requests/users/requests';
 	isLoading = new Subject<{ show: boolean; message: string }>();
 
