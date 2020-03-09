@@ -46,12 +46,13 @@
 				[(ngModel)]="user.phone"
 				name="phone"
 				value="{{ user.phone }}"
+				[disabled]="show"
 			/>
 		</mat-form-field>
 
 		<mat-form-field class="form-input col-lg-6 mb-2">
 			<mat-label>Choose a date</mat-label>
-			<input matInput [matDatepicker]="picker" [(ngModel)]="user.birthday" name="birthday" />
+			<input matInput [matDatepicker]="picker" [(ngModel)]="user.birthday" name="birthday" [disabled]="show" />
 			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
@@ -63,11 +64,12 @@
 				[(ngModel)]="user.location"
 				name="location"
 				value="{{ user.location }}"
+				[disabled]="show"
 			/>
 		</mat-form-field>
 	</form>
 
 	<button class="btn btn-primary custom-bs btn-rounded px-4 py-2 mt-3" [disabled]="show" (click)="save(user)">
-		Save changes
+		Save changes <i class="fa fa-spinner fa-spin" *ngIf="show"></i>
 	</button>
 </div>

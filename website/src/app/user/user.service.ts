@@ -11,7 +11,6 @@ import { User } from './user.model';
 export class UserService {
 	private endPoint = 'users/';
 	private userBookingsEndpoint = 'requests/users/requests';
-	isLoading = new Subject<{ show: boolean; message: string }>();
 
 	private userPlans: Array<UserPlan> = [];
 
