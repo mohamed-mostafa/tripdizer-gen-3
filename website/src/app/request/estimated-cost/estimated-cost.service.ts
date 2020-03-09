@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Moment } from 'moment';
-import { Observable, of, BehaviorSubject, zip, Subject } from 'rxjs';
+import { Observable, of, BehaviorSubject, combineLatest } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../shared/models/country.model';
@@ -41,7 +41,8 @@ export class EstimatedCostService {
 
 	currentTabIndex = new BehaviorSubject<number>(0);
 
-	flightAndAccommodationOffersData = new BehaviorSubject<Array<any>>(null);
+	flightOffersData = new BehaviorSubject<Array<any>>(null);
+	accommodationOffersData = new BehaviorSubject<Array<any>>(null);
 
 	constructor(
 		private http: HttpClient,
@@ -58,13 +59,15 @@ export class EstimatedCostService {
 	}
 
 	getFlightsAndAccommodation() {
-		const obs1 = this.getFlightOffers();
-		const obs2 = this.getAccommodationOffers();
+		this.getFlightOffers().subscribe(res => {
+			if (res) {
+				this.flightOffersData.next(res);
+			}
+		});
 
-		const results = zip(obs1, obs2);
-		results.subscribe(val => {
-			if (val) {
-				this.flightAndAccommodationOffersData.next(val);
+		this.getAccommodationOffers().subscribe(res => {
+			if (res) {
+				this.accommodationOffersData.next(res);
 			}
 		});
 	}
