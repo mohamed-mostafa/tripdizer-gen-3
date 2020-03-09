@@ -9,9 +9,9 @@
 </div>
 <c-request-form-layout [formGroup]="formGroup" [isBackHidden]="true" (next)="save()">
 	<div class="container containerCss">
-		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
 			{{ 'request.nav_bar.date' | translate }} /
-		</h1>
+		</h2>
 		<div class="row">
 			<div class="col-sm">
 				<mat-form-field class="form-control-lg">
@@ -54,9 +54,9 @@
 		</div>
 	</div>
 	<div class="container containerCss">
-		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
 			{{ 'request.budget.budget' | translate }}
-		</h1>
+		</h2>
 		<div class="budget-section">
 			<mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
 				<div
@@ -96,9 +96,9 @@
 		</div>
 	</div>
 	<div class="container containerCss">
-		<h1 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
 			{{ 'request.nav_bar.purpose' | translate }} /
-		</h1>
+		</h2>
 		<div class="row">
 			<mat-radio-group class="image form-control-xl row" formControlName="purpose">
 				<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
