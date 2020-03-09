@@ -70,6 +70,12 @@ export class AuthService {
 		this.trackingService.track('Sign out');
 	}
 
+	updateAuthenticatedUser(newUser): void {
+		const user = localStorage.getItem('user');
+		localStorage.setItem('user', JSON.stringify({ ...JSON.parse(user), ...newUser }));
+		this.initAuthenticationState();
+	}
+
 	private authenticateUserServerSide(provider: string, token: string): void {
 		this.trackingService.track(`${provider} client-side authentication`);
 		this.http

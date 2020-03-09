@@ -1,4 +1,4 @@
-<div class="py-5" *ngIf="(userBookings | async)?.length">
+<div class="py-5" *ngIf="(userBookings | async)?.length; else noBooking">
 	<h3 class="title-font page-title text-blue mb-5">
 		<i class="fa fa-paper-plane mr-3"></i
 		><span class="font-weight-bold">{{ 'user.user_bookings.my_bookings' | translate }}</span>
@@ -26,3 +26,6 @@
 		</div>
 	</div>
 </div>
+<ng-template #noBooking>
+	<h3 class="m-5">{{ 'user.booking_details.no_booking' | translate }}</h3>
+</ng-template>

@@ -4,4 +4,6 @@ export type UserProfile = {
   picture: string;
   phone?: string;
   gender?: string;
+  birthday?: Date;
+  location?: string;
 };

@@ -540,7 +540,8 @@
 		"booking_details": {
 			"itinerary_cost": "تكلفة الرحلة",
 			"nights": "ليالى",
-			"total_cost": "إجمالى التكلفة"
+			"total_cost": "إجمالى التكلفة",
+			"no_booking": "ليس لديك أي حجوزات"
 		}
 	},
 	"payment_confirm": {

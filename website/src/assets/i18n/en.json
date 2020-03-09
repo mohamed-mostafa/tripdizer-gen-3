@@ -540,7 +540,8 @@
 		"booking_details": {
 			"itinerary_cost": "Itinerary Cost",
 			"nights": "Nights",
-			"total_cost": "Total cost"
+			"total_cost": "Total cost",
+			"no_booking": "You don't have any bookings"
 		}
 	},
 	"payment_confirm": {
