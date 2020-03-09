@@ -36,7 +36,7 @@ router.use(isAuthenticated);
 
 // Authenticated endpoints
 router.get("/info", getAuthenticatedUser);
-router.put("/", update);
+router.put("", update);
 
 app.use("/users", router);
 
