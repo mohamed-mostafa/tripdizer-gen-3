@@ -18,7 +18,8 @@ export class EstimatedCostHeaderComponent implements AfterViewInit {
 		this.numberOfNights = service.getNumberOfNights();
 		const selectedCountries = [...service.getSelectedCountries()];
 		this.selectedCountriesName = selectedCountries.map(c => c.name).join(' - ');
-		this.selectedCountryImage = selectedCountries.shift().thumbnail;
+		const firstCountry = selectedCountries.shift();
+		this.selectedCountryImage = firstCountry ? firstCountry.thumbnail : null;
 		this.departureDate = service.getDepartureDate();
 		this.returnDate = service.getReturnDate();
 	}
