@@ -3,8 +3,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { User } from '../../user/user.model';
 import { Subscription } from 'rxjs';
-import { NgxSpinnerService } from 'ngx-spinner';
-
 @Component({
 	selector: 'c-app-user-info',
 	templateUrl: './user-info.component.html',
@@ -14,7 +12,7 @@ export class UserInfoComponent implements OnDestroy {
 	user: User = {} as User;
 	subUser: Subscription;
 	show = false;
-	constructor(private authService: AuthService, private userService: UserService, private spinner: NgxSpinnerService) {
+	constructor(private authService: AuthService, private userService: UserService) {
 		this.subUser = this.authService.authenticatedUser.subscribe(user => {
 			if (user) {
 				this.user = user;
