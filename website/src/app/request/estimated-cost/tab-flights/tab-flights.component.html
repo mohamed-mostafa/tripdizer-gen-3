@@ -2,16 +2,7 @@
 	<div class="tab-flights row m-0 m-xs-0 m-sm-1 m-md-2 m-lg-3 m-xl-5">
 		<div class="col-12 col-lg-3 d-none d-lg-block">
 			<div class="flights-route p-2">
-				<c-app-flight-route *ngIf="loadedApiData" [flightOffers]="flightOffers"></c-app-flight-route>
-
-				<div *ngIf="!loadedApiData">
-					<!-- <div class="routes-title-loading loading-gradient"></div> -->
-					<c-shared-loading-gradient [loadingHeight]="35" [loadingWidth]="100"></c-shared-loading-gradient>
-
-					<div class="mt-4" *ngFor="let x of [].constructor(3)">
-						<c-shared-loading-gradient [loadingHeight]="20" [loadingWidth]="70"></c-shared-loading-gradient>
-					</div>
-				</div>
+				<c-app-flight-route [flightOffers]="flightOffers"></c-app-flight-route>
 			</div>
 		</div>
 
@@ -112,14 +103,10 @@
 
 		<div class="col-12 col-lg-3">
 			<div class="map-box p-2">
-				<div *ngIf="loadedApiData && flightPaths?.length" class="row d-lg-block">
+				<div *ngIf="flightPaths?.length" class="row d-lg-block">
 					<div class="col-12">
 						<c-shared-google-map [paths]="flightPaths"></c-shared-google-map>
 					</div>
-				</div>
-
-				<div *ngIf="!loadedApiData">
-					<c-shared-loading-gradient [loadingHeight]="300" [loadingWidth]="100"></c-shared-loading-gradient>
 				</div>
 			</div>
 		</div>
