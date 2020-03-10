@@ -104,10 +104,10 @@
     margin-bottom: -16px;
     line-height: 1.5rem;
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    -o-background-size: cover;
-    -moz-background-size: cover;
-    -webkit-background-size: cover;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 
     .center {
         margin: 0;
