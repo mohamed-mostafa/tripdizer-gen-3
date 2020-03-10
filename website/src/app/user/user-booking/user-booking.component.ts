@@ -10,10 +10,14 @@ import { UserBooking } from './user-booking.model';
 	styleUrls: ['./user-booking.component.scss'],
 })
 export class UserBookingComponent {
-	userBookings: Observable<Array<UserBooking>>;
+	userBookings: Array<UserBooking>;
+	loadedBookingsData: boolean;
 
 	constructor(private sideNavService: SideNavService, private userService: UserService) {
-		this.userBookings = this.userService.getUserBookings();	
+		this.userService.getUserBookings().subscribe(res => {
+			this.loadedBookingsData = true;
+			this.userBookings = res;
+		});
 	}
 
 	openDetails(bookingData) {
