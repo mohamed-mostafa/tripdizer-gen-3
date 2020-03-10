@@ -60,7 +60,8 @@ export class TabCitiesComponent {
 			}
 		}
 		this.service.setCities(this.cities);
-		this.service.flightAndAccommodationOffersData.next(null);
+		this.service.flightOffersData.next(null);
+		this.service.accommodationOffersData.next(null);
 	}
 
 	getSelectedCities(): Array<CityDTO> {

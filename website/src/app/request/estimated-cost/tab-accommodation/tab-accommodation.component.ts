@@ -20,13 +20,10 @@ export class TabAccommodationComponent {
 
 	constructor(private service: EstimatedCostService, private route: ActivatedRoute) {
 		this.currentStepPath = this.route.routeConfig.path;
-		service.flightAndAccommodationOffersData.subscribe(result => {
-			if (result && result.length) {
+		service.accommodationOffersData.subscribe(result => {
+			if (result && Array.isArray(result)) {
 				this.loadedApiData = true;
-
-				if (Array.isArray(result[1])) {
-					this.accommodationOffers = result[1];
-				}
+				this.accommodationOffers = result;
 			}
 		});
 		this.setSliderOptions();
