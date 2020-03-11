@@ -99,10 +99,8 @@
 //header
 @media (max-width: 480px) {
     .header {
-        &:after {
-            // background-attachment: scroll;
-            display: none;
-        }
+        // background-attachment: scroll;
+        display: none;
     }
 
 }
