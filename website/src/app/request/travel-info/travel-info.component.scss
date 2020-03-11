@@ -100,7 +100,8 @@
 @media (max-width: 480px) {
     .header {
         &:after {
-            background-attachment: scroll;
+            // background-attachment: scroll;
+            display: none;
         }
     }
 
