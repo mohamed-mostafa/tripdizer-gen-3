@@ -633,19 +633,19 @@ $color-blue: #2989ff;
                         .mat-radio-outer-circle,
                         .mat-radio-inner-circle,
                         .mat-radio-label-content {
-                            width: 235px;
-                            height: 235px;
+                            width: 160px;
+                            height: 160px;
                         }
 
                         .mat-radio-label-content {
-                            font-size: 1.75rem;
+                            font-size: 1.1rem;
 
                             .label-content-img {
 
                                 &,
                                 &:after {
-                                    width: 235px;
-                                    height: 235px;
+                                    width: 160px;
+                                    height: 160px;
                                 }
                             }
                         }
@@ -977,7 +977,7 @@ $color-blue: #2989ff;
             padding: 0;
 
             .mat-form-field-infix {
-                padding: 0.5em 0 0;
+                // padding: 0.5em 0 0;
                 border-top: 0;
 
                 .mat-form-field-label-wrapper {
