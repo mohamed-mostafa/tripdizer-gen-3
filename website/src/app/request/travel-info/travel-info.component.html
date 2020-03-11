@@ -9,7 +9,7 @@
 </div>
 <c-request-form-layout [formGroup]="formGroup" [isBackHidden]="true" (next)="save()">
 	<div class="container containerCss">
-		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3 font-weight-bold">
 			{{ 'request.nav_bar.date' | translate }} /
 		</h2>
 		<div class="row">
@@ -54,17 +54,11 @@
 		</div>
 	</div>
 	<div class="container containerCss">
-		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3 font-weight-bold">
 			{{ 'request.budget.budget' | translate }}
 		</h2>
 		<div class="budget-section">
 			<mat-radio-group class="text form-control-xl row" formControlName="budgetCategory">
-				<div
-					class="mat-radio-group-label-wrapper text-capitalize col-12"
-					[class.mat-error]="formGroup.controls['budget'].invalid"
-				>
-					<span class="mat-radio-group-subscript">{{ formGroup.controls['budget'].errors | errorMessage }}</span>
-				</div>
 				<div class="budget-container">
 					<img
 						src="../../../assets/img/budget.svg"
@@ -96,33 +90,31 @@
 		</div>
 	</div>
 	<div class="container containerCss">
-		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3">
+		<h2 [ngClass]="('dir' | translate) === 'rtl' ? 'text-right' : 'text-left'" class="color pt-3 font-weight-bold">
 			{{ 'request.nav_bar.purpose' | translate }} /
 		</h2>
-		<div class="row">
-			<mat-radio-group class="image form-control-xl row" formControlName="purpose">
-				<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="m-auto">
-					<span *ngIf="purpose.id !== LUTPurpose.Other; else otherPurpose">
-						{{ purpose.name }}
+		<mat-radio-group class="image form-control-xl row" formControlName="purpose">
+			<mat-radio-button *ngFor="let purpose of purposes" [value]="purpose.id" class="mr-2 ml-2">
+				<span *ngIf="purpose.id !== LUTPurpose.Other; else otherPurpose">
+					{{ purpose.name }}
+				</span>
+				<ng-template #otherPurpose>
+					<span class="other-purpose">
+						<input
+							type="text"
+							[value]="otherPurposeName"
+							class="text-capitalize text-center"
+							[placeholder]="'request.purpose.other' | translate"
+							(change)="otherPurposeName = $event.target.value"
+							(focus)="otherPurposeFocused()"
+						/>
 					</span>
-					<ng-template #otherPurpose>
-						<span class="other-purpose">
-							<input
-								type="text"
-								[value]="otherPurposeName"
-								class="text-capitalize text-center"
-								[placeholder]="'request.purpose.other' | translate"
-								(change)="otherPurposeName = $event.target.value"
-								(focus)="otherPurposeFocused()"
-							/>
-						</span>
-					</ng-template>
-					<span
-						class="label-content-img full-size-background"
-						[style.background]="purpose.image ? 'url(' + purpose.image + ')' : null"
-					></span>
-				</mat-radio-button>
-			</mat-radio-group>
-		</div>
+				</ng-template>
+				<span
+					class="label-content-img full-size-background"
+					[style.background]="purpose.image ? 'url(' + purpose.image + ')' : null"
+				></span>
+			</mat-radio-button>
+		</mat-radio-group>
 	</div>
 </c-request-form-layout>
