@@ -18,6 +18,7 @@ declare const FB: any;
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 	private endPoint = 'users/auth';
+	private usersEndPoint = 'users/info';
 	loading = new Subject<boolean>();
 	authenticatedUser = new BehaviorSubject<User>(null);
 	isAuthenticated = new BehaviorSubject<boolean>(false);
@@ -74,6 +75,20 @@ export class AuthService {
 		const user = localStorage.getItem('user');
 		localStorage.setItem('user', JSON.stringify({ ...JSON.parse(user), ...newUser }));
 		this.initAuthenticationState();
+	}
+
+	getUserInfoFromServer(): void {
+		this.http
+			.get(`${this.usersEndPoint}/`)
+			.pipe(
+				catchError((err: any): any => {
+					this.authenticationFailed(err);
+				})
+			)
+			.subscribe((user: User) => {
+				this.updateAuthenticatedUser(user);
+				this.trackingService.track(`back-end re-authentication`, user);
+			});
 	}
 
 	private authenticateUserServerSide(provider: string, token: string): void {
@@ -138,8 +153,10 @@ export class AuthService {
 					this.isAuthenticated.next(!!parsedUser.firstName);
 					this.authenticatedUser.next(parsedUser);
 				} else if (tokenExpired && parsedUser.provider) {
-					this.signInWithProvider('facebook');
+					this.signInWithProvider(parsedUser.provider);
 				}
+			} else {
+				this.getUserInfoFromServer();
 			}
 		}
 	}
